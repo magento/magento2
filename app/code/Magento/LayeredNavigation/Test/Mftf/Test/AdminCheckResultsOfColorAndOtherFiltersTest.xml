@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckResultsOfColorAndOtherFiltersTest">
+        <!-- Open a category on storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" after="seeSaveProductMessageThird" stepKey="goToCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <!-- Choose First attribute filter -->
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$$createConfigProductAttribute.default_frontend_label$$')}}" stepKey="waitForCartRuleButton"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$$createConfigProductAttribute.default_frontend_label$$')}}" stepKey="expandFirstAttribute"/>
+        <waitForPageLoad stepKey="waitForFilterLoad"/>
+        <click selector="{{LayeredNavigationSection.filterOptionContent('$$createConfigProductAttribute.default_frontend_label$$','option2')}}" stepKey="expandFirstAttributeOption"/>
+        <waitForPageLoad stepKey="waitForAttributeOption"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo('Pants')}}" stepKey="seeFirstProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo('Cardigan')}}" stepKey="seeSecondProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo('Jacket')}}" stepKey="seeThirdProduct"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryPageAgain">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <!-- Choose Second attribute filter -->
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$$createConfigProductAttribute2.default_frontend_label$$')}}" stepKey="expandSecondAttributeOption"/>
+        <waitForPageLoad stepKey="waitForFilterPageLoad"/>
+        <click selector="{{LayeredNavigationSection.filterOptionContent('$$createConfigProductAttribute2.default_frontend_label$$','option1')}}" stepKey="expandSecondAttribute"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo('Jacket')}}" stepKey="seeFourthProduct"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo('Cardigan')}}" stepKey="seeFifthProduct"/>
+    </test>
+</tests>
