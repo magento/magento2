@@ -347,9 +347,7 @@ class CartPromotionsTest extends GraphQlAbstract
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $objectManager->get(ProductRepositoryInterface::class);
         /** @var Product $prod2 */
-        $prod1 = $productRepository->get('simple1');
         $prod2 = $productRepository->get('simple2');
-        $productsInCart = [$prod1, $prod2];
         $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
         $productRepository->save($prod2);
         $skus =['simple1', 'simple2'];
