@@ -195,10 +195,6 @@ class Elasticsearch
     {
         $this->checkIndex($storeId, $mappedIndexerId, true);
         $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
-        if ($this->client->isEmptyIndex($indexName)) {
-            // use existing index if empty
-            return $this;
-        }
 
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
