@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductSourceStockQuantityActionGroup">
+        <annotations>
+            <description>Verify product source and stock quantity on product grid. Starts on product grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="SimpleMsiProduct"/>
+            <argument name="sourceName" type="string" defaultValue="{{_defaultSource.name}}"/>
+            <argument name="sourceQty" type="string" defaultValue="{{defaultProductQty.value}}"/>
+            <argument name="stockName" type="string" defaultValue="{{_defaultStock.name}}"/>
+            <argument name="stockQty" type="string" defaultValue="{{defaultProductQty.value}}"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminGridFilterControls.clearAll}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
+        <fillField userInput="{{product.sku}}" selector="{{AdminProductGridFilterSection.skuFilter}}" stepKey="fillSkuField"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', sourceName)}}" userInput="{{sourceQty}}" stepKey="verifySourceQuantity"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', stockName)}}" userInput="{{stockQty}}" stepKey="verifyStockQuantity"/>
+    </actionGroup>
+</actionGroups>
