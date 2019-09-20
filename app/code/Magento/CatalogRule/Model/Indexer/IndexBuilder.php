@@ -280,8 +280,9 @@ class IndexBuilder
         foreach ($activeRules as $rule) {
             $rule->setProductsFilter($ids);
             $productIds = $rule->getMatchingProductIds();
-            foreach ($productIds as $productId) {
-                $this->assignProductToRule($rule, $productId);
+            foreach ($productIds as $productId => $result) {
+                $websiteIds = array_keys(array_filter($result));
+                $this->assignProductToRule($rule, $productId, $websiteIds);
             }
         }
 
@@ -376,9 +377,10 @@ class IndexBuilder
      *
      * @param Rule $rule
      * @param int $productId
+     * @param array $websiteIds
      * @return void
      */
-    private function assignProductToRule(Rule $rule, int $productId): void
+    private function assignProductToRule(Rule $rule, int $productId, array $websiteIds): void
     {
         $ruleId = (int) $rule->getId();
         $ruleProductTable = $this->getTable('catalogrule_product');
@@ -390,10 +392,6 @@ class IndexBuilder
             ]
         );
 
-        $websiteIds = $rule->getWebsiteIds();
-        if (!is_array($websiteIds)) {
-            $websiteIds = explode(',', $websiteIds);
-        }
         $customerGroupIds = $rule->getCustomerGroupIds();
         $fromTime = strtotime($rule->getFromDate());
         $toTime = strtotime($rule->getToDate());
@@ -430,8 +428,6 @@ class IndexBuilder
         }
     }
 
-
-
     /**
      * Apply rule
      *
@@ -444,7 +440,8 @@ class IndexBuilder
     protected function applyRule(Rule $rule, $product)
     {
         if ($rule->validate($product)) {
-            $this->assignProductToRule($rule, $product->getId());
+            $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
+            $this->assignProductToRule($rule, $product->getId(), $websiteIds);
         }
         $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
         $this->reindexRuleGroupWebsite->execute();

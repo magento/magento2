@@ -156,9 +156,11 @@ class RuleProductsSelectBuilder
             sprintf($joinCondition, $tableAlias, $storeId),
             []
         );
-        $select->columns([
-            'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
-        ]);
+        $select->columns(
+            [
+                'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
+            ]
+        );
 
         return $connection->query($select);
     }

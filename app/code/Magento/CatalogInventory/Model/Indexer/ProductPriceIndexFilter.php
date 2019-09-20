@@ -73,8 +73,17 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         }
 
         $connection = $this->resourceConnection->getConnection($this->connectionName);
-
         $stockSelect = $connection->select();
+        $stockSelect->from(
+            $this->stockItem->getMainTable(),
+            [
+                'product_id',
+            ]
+        );
+        if (!empty($entityIds)) {
+            $stockSelect->where('product_id IN (?)', $entityIds);
+        }
+        $stockSelect->group('product_id');
         if ($this->stockConfiguration->getManageStock()) {
             $stockStatus = $connection->getCheckSql(
                 'use_config_manage_stock = 0 AND manage_stock = 0',
@@ -89,31 +98,12 @@ class ProductPriceIndexFilter implements PriceModifierInterface
             );
         }
         $stockStatus = new \Zend_Db_Expr('MAX(' . $stockStatus . ')');
-        $stockSelect->from(
-            $this->stockItem->getMainTable(),
-            [
-                'product_id' => 'product_id',
-                'stock_status' => $stockStatus,
-            ]
-        );
-        if (!empty($entityIds)) {
-            $stockSelect->where('product_id IN (?)', $entityIds);
+        $stockSelect->having($stockStatus . ' = ' . Stock::STOCK_OUT_OF_STOCK);
+        $productIds = $connection->fetchCol($stockSelect);
+
+        if (!empty($productIds)) {
+            $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];
+            $connection->delete($priceTable->getTableName(), $where);
         }
-        $stockSelect->group('product_id');
-
-        $select = $connection->select();
-        $select->from(
-            ['price_index' => $priceTable->getTableName()],
-            []
-        );
-        $select->joinInner(
-            ['stock_item' => $stockSelect],
-            'stock_item.product_id = price_index.' . $priceTable->getEntityField(),
-            []
-        );
-        $select->where('stock_item.stock_status = ?', Stock::STOCK_OUT_OF_STOCK);
-
-        $query = $select->deleteFromSelect('price_index');
-        $connection->query($query);
     }
 }
