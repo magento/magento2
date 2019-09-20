@@ -12,7 +12,9 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use \Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Authorization for saving a page.
@@ -30,15 +32,31 @@ class Authorization
     private $authorization;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param PageRepositoryInterface $pageRepository
      * @param AuthorizationInterface $authorization
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         PageRepositoryInterface $pageRepository,
-        AuthorizationInterface $authorization
+        AuthorizationInterface $authorization,
+        ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager
     ) {
         $this->pageRepository = $pageRepository;
         $this->authorization = $authorization;
+        $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -47,24 +65,41 @@ class Authorization
      * @param PageInterface $page
      * @param PageInterface|null $oldPage
      * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function hasPageChanged(PageInterface $page, ?PageInterface $oldPage): bool
     {
+        if (!$oldPage) {
+            $oldPageLayout = $this->scopeConfig->getValue(
+                'web/default_layouts/default_cms_layout',
+                ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore()
+            );
+            if ($page->getPageLayout() && $page->getPageLayout() !== $oldPageLayout) {
+                //If page layout is set and it's not a default value - design attributes are changed.
+                return true;
+            }
+            //Otherwise page layout is empty and is OK to save.
+            $oldPageLayout = $page->getPageLayout();
+        } else {
+            //Compare page layout to saved value.
+            $oldPageLayout = $oldPage->getPageLayout();
+        }
+        //Compare new values to saved values or require them to be empty
         $oldUpdateXml = $oldPage ? $oldPage->getLayoutUpdateXml() : null;
-        $oldPageLayout = $oldPage ? $oldPage->getPageLayout() : null;
         $oldCustomTheme = $oldPage ? $oldPage->getCustomTheme() : null;
         $oldLayoutUpdate = $oldPage ? $oldPage->getCustomLayoutUpdateXml() : null;
         $oldThemeFrom = $oldPage ? $oldPage->getCustomThemeFrom() : null;
         $oldThemeTo = $oldPage ? $oldPage->getCustomThemeTo() : null;
 
-        if ($page->getLayoutUpdateXml() !== $oldUpdateXml
-            || $page->getPageLayout() !== $oldPageLayout
-            || $page->getCustomTheme() !== $oldCustomTheme
-            || $page->getCustomLayoutUpdateXml() !== $oldLayoutUpdate
-            || $page->getCustomThemeFrom() !== $oldThemeFrom
-            || $page->getCustomThemeTo() !== $oldThemeTo
+        if ($page->getLayoutUpdateXml() != $oldUpdateXml
+            || $page->getPageLayout() != $oldPageLayout
+            || $page->getCustomTheme() != $oldCustomTheme
+            || $page->getCustomLayoutUpdateXml() != $oldLayoutUpdate
+            || $page->getCustomThemeFrom() != $oldThemeFrom
+            || $page->getCustomThemeTo() != $oldThemeTo
         ) {
             return true;
         }
@@ -78,7 +113,7 @@ class Authorization
      * @param PageInterface $page
      * @return void
      * @throws AuthorizationException
-     * @throws LocalizedException When it is impossible to perform authorization for given page.
+     * @throws \Magento\Framework\Exception\LocalizedException When it is impossible to perform authorization.
      */
     public function authorizeFor(PageInterface $page): void
     {

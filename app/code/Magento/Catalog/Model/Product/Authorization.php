@@ -58,9 +58,25 @@ class Authorization
             'custom_design_to',
             'custom_layout_update_file'
         ];
+        $attributes = null;
+        if (!$oldProduct) {
+            //For default values.
+            $attributes = $product->getAttributes();
+        }
         foreach ($designAttributes as $designAttribute) {
-            $oldValue = $oldProduct ? $oldProduct->getData($designAttribute) : null;
-            if ($product->getData($designAttribute) != $oldValue) {
+            $oldValues = [null];
+            if ($oldProduct) {
+                //New value may only be the saved value
+                $oldValues = [$oldProduct->getData($designAttribute)];
+            } elseif (array_key_exists($designAttribute, $attributes)) {
+                //New value can be empty or default
+                $oldValues[] = $attributes[$designAttribute]->getDefaultValue();
+            }
+            $newValue = $product->getData($designAttribute);
+            if (empty($newValue)) {
+                $newValue = null;
+            }
+            if (!in_array($newValue, $oldValues, true)) {
                 return true;
             }
         }

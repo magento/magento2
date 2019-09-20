@@ -13,6 +13,7 @@ use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -51,6 +52,11 @@ class PageDesignTest extends AbstractBackendController
     private $pageRetriever;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -59,6 +65,7 @@ class PageDesignTest extends AbstractBackendController
 
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
+        $this->scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -76,7 +83,8 @@ class PageDesignTest extends AbstractBackendController
         $requestData = [
             PageInterface::IDENTIFIER => $id,
             PageInterface::TITLE => 'Page title',
-            PageInterface::CUSTOM_THEME => '1'
+            PageInterface::CUSTOM_THEME => '1',
+            PageInterface::PAGE_LAYOUT => 'empty'
         ];
 
         //Creating a new page with design properties without the required permissions.
@@ -117,6 +125,37 @@ class PageDesignTest extends AbstractBackendController
             self::equalTo($sessionMessages),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Check that default design values are accepted without the permissions.
+     *
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testSaveDesignWithDefaults(): void
+    {
+        //Test page data.
+        $id = 'test-page';
+        $defaultLayout = $this->scopeConfig->getValue('web/default_layouts/default_cms_layout');
+        $requestData = [
+            PageInterface::IDENTIFIER => $id,
+            PageInterface::TITLE => 'Page title',
+            PageInterface::PAGE_LAYOUT => $defaultLayout
+        ];
+        //Creating a new page with design properties without the required permissions but with default values.
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->dispatch($this->uri);
+
+        //Validating saved page
+        /** @var Page $page */
+        $page = Bootstrap::getObjectManager()->create(PageInterface::class);
+        $page->load($id, PageInterface::IDENTIFIER);
+        $this->assertNotEmpty($page->getId());
+        $this->assertNotNull($page->getPageLayout());
+        $this->assertEquals($defaultLayout, $page->getPageLayout());
     }
 
     /**

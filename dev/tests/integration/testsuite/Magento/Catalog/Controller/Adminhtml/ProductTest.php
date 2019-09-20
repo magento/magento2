@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
-use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Message\Manager;
@@ -13,9 +12,9 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ProductRepositoryFactory;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Store\Model\Store;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
 /**
  * @magentoAppArea adminhtml
@@ -33,6 +32,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     private $repositoryFactory;
 
     /**
+     * @var ProductResource
+     */
+    private $resourceModel;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -41,6 +45,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
+        $this->resourceModel = Bootstrap::getObjectManager()->get(ProductResource::class);
     }
 
     /**
@@ -444,6 +449,52 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
             self::equalTo($sessionMessages),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Save design without the permissions but with default values.
+     *
+     * @magentoDbIsolation enabled
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesignWithDefaults(): void
+    {
+        $optionsContainerDefault = $this->resourceModel->getAttribute('options_container')->getDefaultValue();
+        $requestData = [
+            'product' => [
+                'type' => 'simple',
+                'sku' => 'simple',
+                'store' => '0',
+                'set' => '4',
+                'back' => 'edit',
+                'product' => [],
+                'is_downloadable' => '0',
+                'affect_configurable_product_attributes' => '1',
+                'new_variation_attribute_set_id' => '4',
+                'use_default' => [
+                    'gift_message_available' => '0',
+                    'gift_wrapping_available' => '0'
+                ],
+                'configurable_matrix_serialized' => '[]',
+                'associated_product_ids_serialized' => '[]',
+                'options_container' => $optionsContainerDefault
+            ]
+        ];
+        $uri = 'backend/catalog/product/save';
+
+        //Updating product's design settings without proper permissions.
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->dispatch($uri);
+
+        //Validating saved entity.
+        /** @var ProductRepository $repo */
+        $repo = $this->repositoryFactory->create();
+        $product = $repo->get('simple');
+        $this->assertNotNull($product->getData('options_container'));
+        $this->assertEquals($optionsContainerDefault, $product->getData('options_container'));
     }
 
     /**

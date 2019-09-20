@@ -483,7 +483,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve all customer attributes
      *
      * @param bool $noDesignAttributes
-     * @return array
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @todo Use with Flat Resource
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */

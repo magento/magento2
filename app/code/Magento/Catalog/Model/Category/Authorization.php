@@ -42,6 +42,37 @@ class Authorization
     }
 
     /**
+     * Determine whether a category has design properties changed.
+     *
+     * @param CategoryModel $category
+     * @param CategoryModel|null $oldCategory
+     * @return bool
+     */
+    private function hasChanges(CategoryModel $category, ?CategoryModel $oldCategory): bool
+    {
+        foreach ($category->getDesignAttributes() as $designAttribute) {
+            $oldValues = [null];
+            if ($oldCategory) {
+                //New value must match saved value exactly
+                $oldValues = [$oldCategory->getData($designAttribute->getAttributeCode())];
+            } else {
+                //New value can be either empty or default value.
+                $oldValues[] = $designAttribute->getDefaultValue();
+            }
+            $newValue = $category->getData($designAttribute->getAttributeCode());
+            if (empty($newValue)) {
+                $newValue = null;
+            }
+
+            if (!in_array($newValue, $oldValues, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Authorize saving of a category.
      *
      * @throws AuthorizationException
@@ -52,36 +83,17 @@ class Authorization
     public function authorizeSavingOf(CategoryInterface $category): void
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_category_design')) {
-            $notAllowed = false;
-            $designAttributeCodes = array_map(
-                function (AttributeInterface $attribute) {
-                    return $attribute->getAttributeCode();
-                },
-                $category->getDesignAttributes()
-            );
-            if (!$category->getId()) {
-                foreach ($designAttributeCodes as $attribute) {
-                    if ($category->getData($attribute)) {
-                        $notAllowed = true;
-                        break;
-                    }
-                }
-            } else {
+            $savedCategory = null;
+            if ($category->getId()) {
                 /** @var CategoryModel $savedCategory */
                 $savedCategory = $this->categoryFactory->create();
                 $savedCategory->load($category->getId());
                 if (!$savedCategory->getName()) {
                     throw NoSuchEntityException::singleField('id', $category->getId());
                 }
-                foreach ($designAttributeCodes as $attribute) {
-                    if ($category->getData($attribute) != $savedCategory->getData($attribute)) {
-                        $notAllowed = true;
-                        break;
-                    }
-                }
             }
 
-            if ($notAllowed) {
+            if ($this->hasChanges($category, $savedCategory)) {
                 throw new AuthorizationException(__('Not allowed to edit the category\'s design attributes'));
             }
         }

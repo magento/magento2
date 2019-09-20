@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Store;
@@ -645,6 +646,68 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             self::equalTo($sessionMessages),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Save design attributes with default values without design permissions.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @return void
+     * @throws \Throwable
+     */
+    public function testSaveDesignWithDefaults(): void
+    {
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+        $attributes = $category->getAttributes();
+        $attributes['custom_design']->setDefaultValue('1');
+        $attributes['custom_design']->save();
+        $requestData = [
+            'name' => 'Test name',
+            'parent_id' => '2',
+            'is_active' => '0',
+            'description' => 'Custom Description',
+            'meta_title' => 'Custom Title',
+            'meta_keywords' => 'Custom keywords',
+            'meta_description' => 'Custom meta description',
+            'include_in_menu' => '0',
+            'url_key' => 'default-test-category-test',
+            'display_mode' => 'PRODUCTS',
+            'landing_page' => '1',
+            'is_anchor' => true,
+            'store_id' => $storeId,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'filter_price_range' => 1,
+            ],
+            'custom_design' => '1',
+            'custom_apply_to_products' => '0'
+        ];
+        $uri = 'backend/catalog/category/save';
+
+        //Updating the category's design settings without proper permissions.
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->dispatch($uri);
+
+        //Verifying that category was saved.
+        /** @var Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(Registry::class);
+        $id = $registry->registry('current_category')->getId();
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load($id);
+        $this->assertNotEmpty($category->getId());
+        $this->assertEquals('1', $category->getData('custom_design'));
     }
 
     /**
