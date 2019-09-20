@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -22,20 +23,22 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 $eavConfig = $objectManager->get(EavConfig::class);
-$attributesToDelete = ['dropdown_without_default'];
+$eavConfig->clear();
 /** @var AttributeRepositoryInterface $attributeRepository */
 $attributeRepository = $objectManager->get(AttributeRepositoryInterface::class);
-/** @var AttributeInterface $attribute */
-$attribute = $attributeRepository->get(ProductAttributeInterface::ENTITY_TYPE_CODE, 'dropdown_without_default');
-$attributeRepository->delete($attribute);
-$eavConfig->clear();
-
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-/** @var ProductInterface $product */
-$product = $productRepository->get('test_attribute_dropdown_without_default');
-if ($product->getId()) {
+try {
+    /** @var AttributeInterface $attribute */
+    $attribute = $attributeRepository->get(ProductAttributeInterface::ENTITY_TYPE_CODE, 'dropdown_without_default');
+    $attributeRepository->delete($attribute);
+} catch (NoSuchEntityException $e) {
+}
+try {
+    /** @var ProductInterface $product */
+    $product = $productRepository->get('test_attribute_dropdown_without_default');
     $productRepository->delete($product);
+} catch (NoSuchEntityException $e) {
 }
 $objectManager->get(ProductEav::class)->executeRow($product->getId());
 
