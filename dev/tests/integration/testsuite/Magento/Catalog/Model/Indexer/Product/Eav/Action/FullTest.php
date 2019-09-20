@@ -82,12 +82,4 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
             $this->assertEquals(1, $product->getWeight());
         }
     }
-
-    /**
-     * teardown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
 }
