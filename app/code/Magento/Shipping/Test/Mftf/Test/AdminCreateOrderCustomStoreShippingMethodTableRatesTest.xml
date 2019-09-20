@@ -22,7 +22,6 @@
         <before>
             <!--Create product and customer-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create website, store group and store view-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
@@ -38,6 +37,14 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <!--Create customer associated to website-->
+            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <grabFromCurrentUrl regex="~/website_id/(\d+)/~" stepKey="grabWebsiteIdFromURL"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer">
+                <field key="website_id">$grabWebsiteIdFromURL</field>
+            </createData>
             <!--Enable Table Rate method and import csv file-->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchDefaultWebsite">
@@ -81,14 +88,6 @@
             <argument name="website" value="{{customWebsite.name}}"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
-        <!--Assign customer to custom website-->
-        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
-            <argument name="customerId" value="$$createCustomer.id$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminAssociateCustomerToCustomWebsiteActionGroup" stepKey="associateCustomerToWebsite">
-            <argument name="websiteName" value="{{customWebsite.name}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="saveAndCheckSuccessMessage"/>
         <!--Create order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
