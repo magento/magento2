@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminSalableProductQtyActionGroup">
+        <annotations>
+            <description>Assert in product grid: products sources and qty.</description>
+        </annotations>
         <arguments>
             <argument name="sourceName" type="string"/>
             <argument name="stockName" type="string"/>
