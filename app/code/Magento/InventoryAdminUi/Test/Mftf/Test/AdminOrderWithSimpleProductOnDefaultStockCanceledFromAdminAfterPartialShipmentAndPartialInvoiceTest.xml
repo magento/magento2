@@ -38,7 +38,7 @@
         </actionGroup>
 
         <remove keyForRemoval="checkProductSourceQty"/>
-        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty">
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty"  after="findProductBySkuToCheckQty">
             <argument name="sourceName" value="{{_defaultSource.name}}"/>
             <argument name="stockName" value="{{_defaultStock.name}}"/>
             <argument name="sourceQty" value="998"/>

@@ -70,11 +70,11 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber" after="seeSuccessMessageOrderPlaced"/>
 
         <remove keyForRemoval="checkProductSourceQtyAfterReorder"/>
-        <remove keyForRemoval="heckSalableQtyAfterReorder"/>
-
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}"
-             userInput="10" stepKey="checkProductSourceQtyAfterReorder" after="findProductBySkuToCheckQtyAfterReorder"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}"
-             userInput="5" stepKey="checkSalableQtyAfterReorder"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty"  after="findProductBySkuToCheckQty">
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="sourceQty" value="10"/>
+            <argument name="stockQty" value="5"/>
+        </actionGroup>
     </test>
 </tests>
