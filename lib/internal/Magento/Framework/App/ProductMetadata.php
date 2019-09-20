@@ -32,7 +32,7 @@ class ProductMetadata implements ProductMetadataInterface
     /**
      * Magento Product Version Cache Key
      */
-    const MAGENTO_PRODUCT_VERSION_CACHE_KEY = 'magento-product-version';
+    private const MAGENTO_PRODUCT_VERSION_CACHE_KEY = 'magento-product-version';
 
     /**
      * Product version
