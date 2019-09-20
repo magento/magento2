@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -17,20 +16,6 @@ use Magento\Quote\Model\Quote;
  */
 class DiscountAggregator
 {
-    /**
-     * @var DataFactory
-     */
-    private $discountFactory;
-
-    /**
-     * @param DataFactory|null $discountDataFactory
-     */
-    public function __construct(
-        DataFactory $discountDataFactory
-    ) {
-        $this->discountFactory = $discountDataFactory;
-    }
-
     /**
      * Aggregate Discount per rule
      *
@@ -50,24 +35,11 @@ class DiscountAggregator
                     $discount = $value['discount'];
                     $rule = $value['rule'];
                     if (isset($discountPerRule[$key])) {
-                        /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $ruleDiscount */
-                        $ruleDiscount = $this->discountFactory->create();
-                        /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
-                        $discountData = $discountPerRule[$key]['discount'];
-                        $ruleDiscount->setAmount($discountData->getAmount()+$discount->getAmount());
-                        $ruleDiscount->setBaseAmount($discountData->getBaseAmount()+$discount->getBaseAmount());
-                        $ruleDiscount->setOriginalAmount(
-                            $discountData->getOriginalAmount()+$discount->getOriginalAmount()
-                        );
-                        $ruleDiscount->setBaseOriginalAmount(
-                            $discountData->getBaseOriginalAmount()+$discount->getBaseOriginalAmount()
-                        );
-                        $discountPerRule[$key]['discount'] = $ruleDiscount;
-                        $discountPerRule[$key]['rule'] = $rule;
+                        $discountPerRule[$key]['discount'] += $discount->getAmount();
                     } else {
-                        $discountPerRule[$key]['discount'] = $discount;
-                        $discountPerRule[$key]['rule'] = $rule;
+                        $discountPerRule[$key]['discount'] = $discount->getAmount();
                     }
+                    $discountPerRule[$key]['rule'] = $rule;
                 }
             }
         }
