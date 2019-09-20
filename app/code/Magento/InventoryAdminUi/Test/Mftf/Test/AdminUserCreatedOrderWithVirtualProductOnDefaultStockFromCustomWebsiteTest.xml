@@ -70,7 +70,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber" after="seeSuccessMessageOrderPlaced"/>
 
         <remove keyForRemoval="checkProductSourceQtyAfterReorder"/>
-        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty"  after="findProductBySkuToCheckQty">
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty"  after="findProductBySkuToCheckQtyAfterReorder">
             <argument name="sourceName" value="{{_defaultSource.name}}"/>
             <argument name="stockName" value="{{_defaultStock.name}}"/>
             <argument name="sourceQty" value="10"/>

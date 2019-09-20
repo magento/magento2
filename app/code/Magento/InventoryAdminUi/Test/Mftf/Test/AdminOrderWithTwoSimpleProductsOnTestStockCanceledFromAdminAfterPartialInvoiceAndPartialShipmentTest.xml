@@ -89,8 +89,8 @@
 
         <remove keyForRemoval="checkProductSourceQty"/>
         <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty">
-            <argument name="sourceName" value="$$createSource.name$$"/>
-            <argument name="stockName" value="$$additionalStock.name$$"/>
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
             <argument name="sourceQty" value="98"/>
             <argument name="stockQty" value="98"/>
         </actionGroup>
