@@ -53,10 +53,11 @@
                      after="shipTheOrder"/>
 
         <remove keyForRemoval="checkProductSourceQty"/>
-        <remove keyForRemoval="checkSalableQty"/>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$createSource.source[name]$$)}}"
-             userInput="95" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}"
-             userInput="95" stepKey="checkSalableQty" after="checkProductSourceQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty">
+            <argument name="sourceName" value="$$createSource.name$$"/>
+            <argument name="stockName" value="$$additionalStock.name$$"/>
+            <argument name="sourceQty" value="95"/>
+            <argument name="stockQty" value="95"/>
+        </actionGroup>
     </test>
 </tests>

@@ -66,9 +66,11 @@
             <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
             <argument name="value" value="$$simpleProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}"
-             userInput="1000" stepKey="checkProductSourceQty"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}"
-             userInput="1000" stepKey="checkSalableQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty">
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="sourceQty" value="1000"/>
+            <argument name="stockQty" value="1000"/>
+        </actionGroup>
     </test>
 </tests>

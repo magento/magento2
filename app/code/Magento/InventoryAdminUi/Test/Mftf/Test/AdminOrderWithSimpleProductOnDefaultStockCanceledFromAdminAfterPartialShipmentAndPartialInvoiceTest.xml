@@ -38,10 +38,11 @@
         </actionGroup>
 
         <remove keyForRemoval="checkProductSourceQty"/>
-        <remove keyForRemoval="checkSalableQty"/>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',_defaultSource.name)}}"
-             userInput="998" stepKey="checkProductSourceQty"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',_defaultStock.name)}}"
-             userInput="998" stepKey="checkSalableQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty">
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="sourceQty" value="998"/>
+            <argument name="stockQty" value="998"/>
+        </actionGroup>
     </test>
 </tests>

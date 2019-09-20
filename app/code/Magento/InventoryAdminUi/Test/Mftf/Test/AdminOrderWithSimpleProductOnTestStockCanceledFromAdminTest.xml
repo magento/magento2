@@ -44,10 +44,11 @@
         <actionGroup ref="saveProductForm" stepKey="saveProduct" after="setCustomSourceQuantity"/>
 
         <remove keyForRemoval="checkProductSourceQty"/>
-        <remove keyForRemoval="checkSalableQty"/>
-        <see selector="{{AdminProductGridSection.productQtyPerSource('1',$$createSource.source[name]$$)}}"
-             userInput="100" stepKey="checkProductSourceQty" before="findProductBySkuToCheckQty"/>
-        <see selector="{{AdminProductGridSection.productSalableQty('1',$$additionalStock.stock[name]$$)}}"
-             userInput="100" stepKey="checkSalableQty" after="checkProductSourceQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty">
+            <argument name="sourceName" value="$$createSource.name$$"/>
+            <argument name="stockName" value="$$additionalStock.name$$"/>
+            <argument name="sourceQty" value="100"/>
+            <argument name="stockQty" value="100"/>
+        </actionGroup>
     </test>
 </tests>
