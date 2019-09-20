@@ -99,7 +99,7 @@ class DtoProcessor
     /**
      * @var bool
      */
-    private $typeCasting;
+    private $typeCasting = true;
 
     /**
      * @param DtoReflection $dtoReflection
@@ -114,7 +114,6 @@ class DtoProcessor
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param AttributeValueFactory $attributeValueFactory
-     * @param bool $typeCasting
      */
     public function __construct(
         DtoReflection $dtoReflection,
@@ -128,8 +127,7 @@ class DtoProcessor
         DataObjectProcessor $dataObjectProcessor,
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
-        AttributeValueFactory $attributeValueFactory,
-        bool $typeCasting = true
+        AttributeValueFactory $attributeValueFactory
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectFactory = $objectFactory;
@@ -143,7 +141,16 @@ class DtoProcessor
         $this->getHydrationStrategy = $getHydrationStrategy;
         $this->typeCaster = $typeCaster;
         $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->typeCasting = $typeCasting;
+    }
+
+    /**
+     * Enable or disable type casting
+     *
+     * @param bool $status
+     */
+    public function setTypeCasting(bool $status): void
+    {
+        $this->typeCasting = $status;
     }
 
     /**
@@ -178,13 +185,11 @@ class DtoProcessor
                 return $this->typeProcessor->processSimpleAndAnyType($value, $type);
             }
 
-            if (!is_array($value)) {
-                throw new LocalizedException(
-                    __('An array was expected for data definition of %type', ['type' => $type])
-                );
+            if (is_array($value)) {
+                return $this->createFromArray($value, $type);
             }
 
-            return $this->createFromArray(is_array($value) ? $value : [], $type);
+            return $value;
         } catch (\Exception $e) {
             throw new LocalizedException(
                 new Phrase(
@@ -276,6 +281,7 @@ class DtoProcessor
                 $type = TypeProcessor::ANY_TYPE;
             }
 
+            $this->setTypeCasting(true); // Backward compatibility for web-API
             try {
                 $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type);
             } catch (\Exception $e) {
@@ -286,6 +292,7 @@ class DtoProcessor
                     )
                 );
             }
+            $this->setTypeCasting(false);
 
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
@@ -313,6 +320,8 @@ class DtoProcessor
         }
 
         $extensionAttributes = $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] ?? [];
+        $extensionAttributes = $this->normalizeExtensionAttributesKeys($extensionAttributes);
+
         $extensionAttributes = array_replace(
             $extensionAttributes,
             $this->injectorProcessor->execute($type, $extensionAttributes)
@@ -497,5 +506,21 @@ class DtoProcessor
     public function getObjectData($sourceObject): array
     {
         return $this->dataObjectProcessor->buildOutputDataArray($sourceObject, get_class($sourceObject));
+    }
+
+    /**
+     * Normalize extension attributes keys
+     *
+     * @param array $extensionAttributes
+     * @return array
+     */
+    private function normalizeExtensionAttributesKeys(array $extensionAttributes): array
+    {
+        $res = [];
+        foreach ($extensionAttributes as $k => $v) {
+            $res[SimpleDataObjectConverter::camelCaseToSnakeCase($k)] = $v;
+        }
+
+        return $res;
     }
 }

@@ -138,6 +138,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
+        $this->dtoProcessor->setTypeCasting(false);
         $inputData = [];
         $inputError = [];
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
@@ -159,6 +160,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 }
             }
         }
+        $this->dtoProcessor->setTypeCasting(true);
 
         $this->processInputError($inputError);
         return $inputData;
@@ -175,10 +177,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @throws \Exception
      * @throws SerializationException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @deprecated
      */
     protected function _createFromArray($className, $data)
     {
-        return $this->dtoProcessor->createFromArray($data, $className, false);
+        return $this->dtoProcessor->createFromArray($data, $className);
     }
 
     /**
@@ -330,7 +333,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $type The type of data object to create
      * @param array $customAttributeValue The data object values
      * @return mixed
+     * @throws LocalizedException
      * @throws SerializationException
+     * @throws \ReflectionException
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
@@ -338,10 +343,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {
-                $attributeValue[] = $this->_createFromArray($type, $value);
+                $attributeValue[] = $this->dtoProcessor->createFromArray($value, $type);
             }
         } else {
-            $attributeValue = $this->_createFromArray($type, $customAttributeValue);
+            $attributeValue = $this->dtoProcessor->createFromArray($customAttributeValue, $type);
         }
 
         return $attributeValue;
@@ -354,6 +359,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $type Convert given value to the this type
      * @return mixed
      * @throws LocalizedException
+     * @throws SerializationException
+     * @throws \ReflectionException
      */
     public function convertValue($data, $type)
     {
@@ -371,11 +378,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $itemType = $this->typeProcessor->getArrayItemType($type);
                 if (is_array($data)) {
                     foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
+                        $result[$key] = $this->dtoProcessor->createFromArray($item, $itemType);
                     }
                 }
             } else {
-                $result = $this->_createFromArray($type, $data);
+                $result = $this->dtoProcessor->createFromArray($data, $type);
             }
         }
         return $result;
