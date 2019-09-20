@@ -7,36 +7,44 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Checkout\Model\Cart;
+use Magento\Framework\App\Action\Action;
+
 /**
  * Turns Off Multishipping mode for Quote.
  */
 class Plugin
 {
     /**
-     * @var \Magento\Checkout\Model\Cart
+     * @var Cart
      */
-    protected $cart;
+    private $cart;
 
     /**
-     * @param \Magento\Checkout\Model\Cart $cart
+     * @param Cart $cart
      */
-    public function __construct(\Magento\Checkout\Model\Cart $cart)
-    {
+    public function __construct(
+        Cart $cart
+    ) {
         $this->cart = $cart;
     }
 
     /**
      * Disable multishipping
      *
-     * @param \Magento\Framework\App\Action\Action $subject
+     * @param Action $subject
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(\Magento\Framework\App\Action\Action $subject)
+    public function beforeExecute(Action $subject)
     {
         $quote = $this->cart->getQuote();
         if ($quote->getIsMultiShipping()) {
             $quote->setIsMultiShipping(0);
+            $extensionAttributes = $quote->getExtensionAttributes();
+            if ($extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+                $extensionAttributes->setShippingAssignments([]);
+            }
             $this->cart->saveQuote();
         }
     }

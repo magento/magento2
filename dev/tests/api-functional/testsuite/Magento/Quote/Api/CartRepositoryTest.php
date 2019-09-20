@@ -42,6 +42,9 @@ class CartRepositoryTest extends WebapiAbstract
      */
     private $filterBuilder;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -59,8 +62,12 @@ class CartRepositoryTest extends WebapiAbstract
     protected function tearDown()
     {
         try {
+            /** @var CartRepositoryInterface $quoteRepository */
+            $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
             $cart = $this->getCart('test01');
-            $cart->delete();
+            $quoteRepository->delete($cart);
+            $cart = $this->getCart('multishipping_quote_id');
+            $quoteRepository->delete($cart);
         } catch (\InvalidArgumentException $e) {
             // Do nothing if cart fixture was not used
         }
@@ -74,18 +81,27 @@ class CartRepositoryTest extends WebapiAbstract
      * @return \Magento\Quote\Model\Quote
      * @throws \InvalidArgumentException
      */
-    protected function getCart($reservedOrderId)
+    private function getCart($reservedOrderId)
     {
-        /** @var $cart \Magento\Quote\Model\Quote */
-        $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
-        $cart->load($reservedOrderId, 'reserved_order_id');
-        if (!$cart->getId()) {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
+            ->create();
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $items = $quoteRepository->getList($searchCriteria)->getItems();
+
+        if (empty($items)) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
         }
-        return $cart;
+
+        return array_pop($items);
     }
 
     /**
+     * Tests successfull get cart web-api call.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetCart()
@@ -130,6 +146,52 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Tests that multishipping quote contains all addresses in shipping assignments.
+     *
+     * @magentoApiDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+     */
+    public function testGetMultishippingCart()
+    {
+        $cart = $this->getCart('multishipping_quote_id');
+        $cartId = $cart->getId();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/' . $cartId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'quoteCartRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'quoteCartRepositoryV1Get',
+            ],
+        ];
+
+        $requestData = ['cartId' => $cartId];
+        $cartData = $this->_webApiCall($serviceInfo, $requestData);
+
+        $shippingAssignments = $cart->getExtensionAttributes()->getShippingAssignments();
+        foreach ($shippingAssignments as $key => $shippingAssignment) {
+            $address = $shippingAssignment->getShipping()->getAddress();
+            $cartItem = $shippingAssignment->getItems()[0];
+            $this->assertEquals(
+                $address->getId(),
+                $cartData['extension_attributes']['shipping_assignments'][$key]['shipping']['address']['id']
+            );
+            $this->assertEquals(
+                $cartItem->getSku(),
+                $cartData['extension_attributes']['shipping_assignments'][$key]['items'][0]['sku']
+            );
+            $this->assertEquals(
+                $cartItem->getQty(),
+                $cartData['extension_attributes']['shipping_assignments'][$key]['items'][0]['qty']
+            );
+        }
+    }
+
+    /**
+     * Tests exception when cartId is not provided.
+     *
      * @expectedException \Exception
      * @expectedExceptionMessage No such entity with
      */
@@ -154,6 +216,8 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Tests carts search.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetList()
@@ -184,6 +248,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilters([$grandTotalFilter, $subtotalFilter]);
         $this->searchCriteriaBuilder->addFilters([$minCreatedAtFilter]);
         $this->searchCriteriaBuilder->addFilters([$maxCreatedAtFilter]);
+        $this->searchCriteriaBuilder->addFilter('reserved_order_id', 'test01');
         /** @var SortOrder $sortOrder */
         $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SortOrder::SORT_ASC)->create();
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
