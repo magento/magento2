@@ -283,36 +283,12 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->with(1, 'product', [])
             ->willReturn('indexName_product_1_v');
 
-        $this->client->expects($this->once())
-            ->method('isEmptyIndex')
-            ->with('indexName_product_1_v')
-            ->willReturn(false);
         $this->client->expects($this->atLeastOnce())
             ->method('indexExists')
             ->willReturn(true);
         $this->client->expects($this->once())
             ->method('deleteIndex')
             ->with('_product_1_v1');
-        $this->assertSame(
-            $this->model,
-            $this->model->cleanIndex(1, 'product')
-        );
-    }
-
-    /**
-     * Test cleanIndex() method isEmptyIndex is true
-     */
-    public function testCleanIndexTrue()
-    {
-        $this->indexNameResolver->expects($this->any())
-            ->method('getIndexName')
-            ->willReturn('indexName_product_1_v');
-
-        $this->client->expects($this->once())
-            ->method('isEmptyIndex')
-            ->with('indexName_product_1_v')
-            ->willReturn(true);
-
         $this->assertSame(
             $this->model,
             $this->model->cleanIndex(1, 'product')
