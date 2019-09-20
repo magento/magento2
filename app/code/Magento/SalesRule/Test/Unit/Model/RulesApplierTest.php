@@ -207,7 +207,7 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Api\ExtensionAttributesInterface::class
         )->setMethods(['setDiscounts', 'getDiscounts'])->getMock();
         $itemExtension->method('getDiscounts')->willReturn([]);
-        $itemExtension->expects($this->once())
+        $itemExtension->expects($this->any())
             ->method('setDiscounts')
             ->willReturn([]);
         $quote = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getStore', '__wakeUp']);
