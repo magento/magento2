@@ -51,6 +51,7 @@ class ProductMetadata implements ProductMetadataInterface
      * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
+
     /**
      * @var CacheInterface
      */
