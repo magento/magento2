@@ -68,6 +68,9 @@ class Authorization
             if ($oldProduct) {
                 //New value may only be the saved value
                 $oldValues = [$oldProduct->getData($designAttribute)];
+                if (empty($oldValues[0])) {
+                    $oldValues[0] = null;
+                }
             } elseif (array_key_exists($designAttribute, $attributes)) {
                 //New value can be empty or default
                 $oldValues[] = $attributes[$designAttribute]->getDefaultValue();

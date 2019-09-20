@@ -55,6 +55,9 @@ class Authorization
             if ($oldCategory) {
                 //New value must match saved value exactly
                 $oldValues = [$oldCategory->getData($designAttribute->getAttributeCode())];
+                if (empty($oldValues[0])) {
+                    $oldValues[0] = null;
+                }
             } else {
                 //New value can be either empty or default value.
                 $oldValues[] = $designAttribute->getDefaultValue();
