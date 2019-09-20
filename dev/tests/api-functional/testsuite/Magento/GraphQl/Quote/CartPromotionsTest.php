@@ -10,7 +10,6 @@ namespace Magento\GraphQl\Quote;
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -31,16 +30,13 @@ class CartPromotionsTest extends GraphQlAbstract
      */
     public function testCartPromotionSingleCartRule()
     {
+        $skus =['simple1', 'simple2'];
         $objectManager = Bootstrap::getObjectManager();
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $objectManager->get(ProductRepositoryInterface::class);
         /** @var Product $prod2 */
         $prod1 = $productRepository->get('simple1');
         $prod2 = $productRepository->get('simple2');
-        $productsInCart = [$prod1, $prod2];
-        $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
-        $productRepository->save($prod2);
-        $skus =['simple1', 'simple2'];
         $categoryId = 66;
         /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
         $categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);
@@ -63,6 +59,7 @@ class CartPromotionsTest extends GraphQlAbstract
         $query = $this->getCartItemPricesQuery($cartId);
         $response = $this->graphQlMutation($query);
         $this->assertCount(2, $response['cart']['items']);
+        $productsInCart = [$prod1, $prod2];
         //validating the line item prices, quantity and discount
         $this->assertLineItemDiscountPrices($response, $productsInCart, $qty, $ruleLabels);
         //total discount on the cart which is the sum of the individual row discounts
@@ -105,7 +102,7 @@ class CartPromotionsTest extends GraphQlAbstract
     }
 
     /**
-     * Test applying multiple cart rules to multiple products in a cart
+     * Apply multiple cart rules to multiple products in a cart
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
@@ -120,8 +117,6 @@ class CartPromotionsTest extends GraphQlAbstract
         $prod1 = $productRepository->get('simple1');
         $prod2 = $productRepository->get('simple2');
         $productsInCart = [$prod1, $prod2];
-        $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
-        $productRepository->save($prod2);
         $skus =['simple1', 'simple2'];
         $categoryId = 66;
         /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
@@ -188,8 +183,8 @@ class CartPromotionsTest extends GraphQlAbstract
     }
 
     /**
-     * Test applying single cart rules to multiple products in a cart with tax settings
-     * Tax settings are : Including and Excluding tax for Price Display and Shopping cart display settings
+     * Apply cart rules to multiple products in a cart with taxes
+     * Tax settings : Including and Excluding tax for Price Display and Shopping cart display
      * Discount on Prices Includes Tax
      * Tax rate = 7.5%
      * Cart rule to apply 50% for products assigned to a specific category
@@ -287,8 +282,7 @@ class CartPromotionsTest extends GraphQlAbstract
         $prod1 = $productRepository->get('simple1');
         $prod2 = $productRepository->get('simple2');
         $productsInCart = [$prod1, $prod2];
-        $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
-        $productRepository->save($prod2);
+
         $skus =['simple1', 'simple2'];
 
         /** @var Collection $ruleCollection */
@@ -343,14 +337,6 @@ class CartPromotionsTest extends GraphQlAbstract
      */
     public function testCartPromotionsWhenNoDiscountIsAvailable()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        /** @var Product $prod2 */
-        $prod1 = $productRepository->get('simple1');
-        $prod2 = $productRepository->get('simple2');
-        $prod2->setVisibility(Visibility::VISIBILITY_BOTH);
-        $productRepository->save($prod2);
         $skus =['simple1', 'simple2'];
         $qty = 2;
         $cartId = $this->createEmptyCart();
