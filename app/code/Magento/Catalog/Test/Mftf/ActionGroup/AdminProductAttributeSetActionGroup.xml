@@ -64,7 +64,7 @@
         <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{label}}" stepKey="fillName"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
     </actionGroup>
-    <actionGroup name="AdminAddUnsignedAttributeToGroup" extends="CreateDefaultAttributeSet">
+    <actionGroup name="AdminAddUnassignedAttributeToGroup" extends="CreateDefaultAttributeSet">
         <arguments>
             <argument name="firstOption" type="string" defaultValue="color"/>
             <argument name="secondOption" type="string" defaultValue="material"/>
