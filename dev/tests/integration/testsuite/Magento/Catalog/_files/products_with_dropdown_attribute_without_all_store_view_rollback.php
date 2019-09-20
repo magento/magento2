@@ -33,12 +33,14 @@ try {
     $attribute = $attributeRepository->get(ProductAttributeInterface::ENTITY_TYPE_CODE, 'dropdown_without_default');
     $attributeRepository->delete($attribute);
 } catch (NoSuchEntityException $e) {
+    //Attribute already deleted
 }
 try {
     /** @var ProductInterface $product */
     $product = $productRepository->get('test_attribute_dropdown_without_default');
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
+    //Product already deleted
 }
 $objectManager->get(ProductEav::class)->executeRow($product->getId());
 
