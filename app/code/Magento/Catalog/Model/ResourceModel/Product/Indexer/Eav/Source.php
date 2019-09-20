@@ -210,12 +210,16 @@ class Source extends AbstractEav
             $selectWithoutDefaultStore = $connection->select()->from(
                 ['wd' => $this->getTable('catalog_product_entity_int')],
                 [
-                    $productIdField,
+                    'cpe.entity_id',
                     'attribute_id',
                     'store_id',
                     'value',
-                    $productIdField
+                    'cpe.entity_id',
                 ]
+            )->joinLeft(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                "cpe.{$productIdField} = wd.{$productIdField}",
+                []
             )->joinLeft(
                 ['d2d' => $this->getTable('catalog_product_entity_int')],
                 sprintf(
@@ -233,7 +237,7 @@ class Source extends AbstractEav
                 ->where("wd.attribute_id IN({$attrIdsFlat})")
                 ->where('wd.value IS NOT NULL')
                 ->where('wd.store_id != 0')
-                ->where("wd.{$productIdField} IN({$ids})");
+                ->where("cpe.entity_id IN({$ids})");
             $select->where("cpe.entity_id IN({$ids})");
             $selects = new UnionExpression(
                 [$select, $selectWithoutDefaultStore],
