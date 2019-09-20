@@ -13,4 +13,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Type">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="grouped" xsi:type="string">\Magento\GroupedProductGraphQl\Model\Resolver\Product\Price\Provider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

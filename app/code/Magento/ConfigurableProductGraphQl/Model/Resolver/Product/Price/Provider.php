@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\Price;
+namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
@@ -13,11 +13,12 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 
 /**
- * Provides product prices
+ * Provides product prices for configurable products
  */
-class Prices
+class Provider implements ProviderInterface
 {
     /**
      * PriceInfo cache
@@ -41,62 +42,43 @@ class Prices
     }
 
     /**
-     * Get the product minimal final price
-     *
-     * @param SaleableInterface $product
-     * @return AmountInterface
+     * @inheritdoc
      */
     public function getMinimalFinalPrice(SaleableInterface $product): AmountInterface
     {
         $priceInfo = $this->getProductPriceInfo($product);
-        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
-        return $finalPrice->getMinimalPrice();
+        return $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getMinimalPrice();
     }
 
     /**
-     * Get the product minimal regular price
-     *
-     * @param SaleableInterface $product
-     * @return AmountInterface
+     * @inheritdoc
      */
     public function getMinimalRegularPrice(SaleableInterface $product): AmountInterface
     {
         $priceInfo = $this->getProductPriceInfo($product);
-        $regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE);
-        return $regularPrice->getMinimalPrice();
+        return $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getMinRegularAmount();
     }
 
     /**
-     * Get the product maximum final price
-     *
-     * @param SaleableInterface $product
-     * @return AmountInterface
+     * @inheritdoc
      */
     public function getMaximalFinalPrice(SaleableInterface $product): AmountInterface
     {
         $priceInfo = $this->getProductPriceInfo($product);
-        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
-        return $finalPrice->getMaximalPrice();
+        return $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getMaximalPrice();
     }
 
     /**
-     * Get the product maximum final price
-     *
-     * @param SaleableInterface $product
-     * @return AmountInterface
+     * @inheritdoc
      */
     public function getMaximalRegularPrice(SaleableInterface $product): AmountInterface
     {
         $priceInfo = $this->getProductPriceInfo($product);
-        $regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE);
-        return $regularPrice->getMaximalPrice();
+        return $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getMaxRegularAmount();
     }
 
     /**
-     * Get the product regular price
-     *
-     * @param SaleableInterface $product
-     * @return AmountInterface
+     * @inheritdoc
      */
     public function getRegularPrice(SaleableInterface $product): AmountInterface
     {

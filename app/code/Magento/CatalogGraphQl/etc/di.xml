@@ -69,4 +69,13 @@
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>
+
+    <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Type">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="default" xsi:type="string">\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
