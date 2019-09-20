@@ -14,6 +14,7 @@ use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 
 /**
  * Provides product prices for configurable products
@@ -33,12 +34,30 @@ class Provider implements ProviderInterface
     private $priceInfoFactory;
 
     /**
+     * @var ConfigurableOptionsProviderInterface
+     */
+    private $optionsProvider;
+
+    /**
+     * @var array
+     */
+    private $minimumFinalAmounts = [];
+
+    /**
+     * @var array
+     */
+    private $maximumFinalAmounts = [];
+
+    /**
      * @param PriceInfoFactory $priceInfoFactory
+     * @param ConfigurableOptionsProviderInterface $optionsProvider
      */
     public function __construct(
-        PriceInfoFactory $priceInfoFactory
+        PriceInfoFactory $priceInfoFactory,
+        ConfigurableOptionsProviderInterface $optionsProvider
     ) {
         $this->priceInfoFactory = $priceInfoFactory;
+        $this->optionsProvider = $optionsProvider;
     }
 
     /**
@@ -46,8 +65,18 @@ class Provider implements ProviderInterface
      */
     public function getMinimalFinalPrice(SaleableInterface $product): AmountInterface
     {
-        $priceInfo = $this->getProductPriceInfo($product);
-        return $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getMinimalPrice();
+        if (!isset($this->minimumFinalAmounts[$product->getId()])) {
+            $minimumAmount = null;
+            foreach ($this->optionsProvider->getProducts($product) as $variant) {
+                $variantAmount = $this->getProductPriceInfo($variant)->getPrice(FinalPrice::PRICE_CODE)->getAmount();
+                if (!$minimumAmount || ($variantAmount->getValue() < $minimumAmount->getValue())) {
+                    $minimumAmount = $variantAmount;
+                    $this->minimumFinalAmounts[$product->getId()] = $variantAmount;
+                }
+            }
+        }
+
+        return $this->minimumFinalAmounts[$product->getId()];
     }
 
     /**
@@ -64,8 +93,18 @@ class Provider implements ProviderInterface
      */
     public function getMaximalFinalPrice(SaleableInterface $product): AmountInterface
     {
-        $priceInfo = $this->getProductPriceInfo($product);
-        return $priceInfo->getPrice(FinalPrice::PRICE_CODE)->getMaximalPrice();
+        if (!isset($this->maximumFinalAmounts[$product->getId()])) {
+            $maximumAmount = null;
+            foreach ($this->optionsProvider->getProducts($product) as $variant) {
+                $variantAmount = $this->getProductPriceInfo($variant)->getPrice(FinalPrice::PRICE_CODE)->getAmount();
+                if (!$maximumAmount || ($variantAmount->getValue() > $maximumAmount->getValue())) {
+                    $maximumAmount = $variantAmount;
+                    $this->maximumFinalAmounts[$product->getId()] = $variantAmount;
+                }
+            }
+        }
+
+        return $this->maximumFinalAmounts[$product->getId()];
     }
 
     /**

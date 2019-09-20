@@ -19,7 +19,24 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 class AttributeProcessor implements CollectionProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * Map GraphQl input fields to product attributes
+     *
+     * @var array
+     */
+    private $fieldToAttributeMap = [
+        'price_range' => 'price'
+    ];
+
+    /**
+     * @param array $fieldToAttributeMap
+     */
+    public function __construct($fieldToAttributeMap = [])
+    {
+        $this->fieldToAttributeMap = array_merge($this->fieldToAttributeMap, $fieldToAttributeMap);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function process(
         Collection $collection,
@@ -27,7 +44,11 @@ class AttributeProcessor implements CollectionProcessorInterface
         array $attributeNames
     ): Collection {
         foreach ($attributeNames as $name) {
-            $collection->addAttributeToSelect($name);
+            $attributeName = $name;
+            if (isset($this->fieldToAttributeMap[$name])) {
+                $attributeName = $this->fieldToAttributeMap[$name];
+            }
+            $collection->addAttributeToSelect($attributeName);
         }
 
         return $collection;

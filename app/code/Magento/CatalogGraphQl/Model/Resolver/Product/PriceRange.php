@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
-use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Type as PriceProviderType;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -29,17 +28,17 @@ class PriceRange implements ResolverInterface
     private $discount;
 
     /**
-     * @var PriceProviderType
+     * @var array
      */
-    private $priceProviderType;
+    private $priceProviders;
 
     /**
-     * @param PriceProviderType $priceProviderType
+     * @param array $priceProviders
      * @param Discount $discount
      */
-    public function __construct(PriceProviderType $priceProviderType, Discount $discount)
+    public function __construct(array $priceProviders, Discount $discount)
     {
-        $this->priceProviderType = $priceProviderType;
+        $this->priceProviders = $priceProviders;
         $this->discount = $discount;
     }
 
@@ -130,7 +129,10 @@ class PriceRange implements ResolverInterface
      */
     private function getPriceProvider(SaleableInterface $product): ProviderInterface
     {
-        return $this->priceProviderType->getProviderByProductType($product->getTypeId());
+        if (isset($this->priceProviders[$product->getTypeId()])) {
+            return $this->priceProviders[$product->getTypeId()];
+        }
+        return $this->priceProviders['default'];
     }
 
 
