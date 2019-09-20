@@ -150,6 +150,8 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check that getTracksCollection() returns only order related tracks.
+     *
+     * @magentoDataFixture Magento/Sales/_files/two_orders_with_order_items.php
      */
     public function testGetTracksCollection()
     {

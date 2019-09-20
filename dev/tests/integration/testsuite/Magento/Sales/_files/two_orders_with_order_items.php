@@ -68,3 +68,44 @@ $order->setIncrementId('100000001')
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 $orderRepository->save($order);
+
+/** @var Payment $payment */
+$payment2 = $objectManager->create(Payment::class);
+$payment2->setMethod('checkmo')
+    ->setAdditionalInformation('last_trans_id', '11122')
+    ->setAdditionalInformation(
+        'metadata',
+        [
+            'type' => 'free',
+            'fraudulent' => false,
+        ]
+    );
+
+/** @var OrderItem $orderItem */
+$orderItem2 = $objectManager->create(OrderItem::class);
+$orderItem2->setProductId($product->getId())
+    ->setQtyOrdered(2)
+    ->setBasePrice($product->getPrice())
+    ->setPrice($product->getPrice())
+    ->setRowTotal($product->getPrice())
+    ->setProductType('simple')
+    ->setName($product->getName())
+    ->setSku($product->getSku());
+
+/** @var Order $order */
+$order2 = $objectManager->create(Order::class);
+$order2->setIncrementId('100000002')
+    ->setState(Order::STATE_PROCESSING)
+    ->setStatus($order2->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING))
+    ->setSubtotal(100)
+    ->setGrandTotal(100)
+    ->setBaseSubtotal(100)
+    ->setBaseGrandTotal(100)
+    ->setCustomerIsGuest(true)
+    ->setCustomerEmail('customer@null.com')
+    ->setBillingAddress($billingAddress)
+    ->setShippingAddress($shippingAddress)
+    ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())
+    ->addItem($orderItem2)
+    ->setPayment($payment2);
+$orderRepository->save($order2);
