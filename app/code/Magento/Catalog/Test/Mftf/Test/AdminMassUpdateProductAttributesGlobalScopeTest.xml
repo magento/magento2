@@ -29,8 +29,11 @@
             <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
         </before>
         <after>
+            <magentoCLI stepKey="setIndexersMode" command="indexer:set-mode" arguments="realtime" />
+            <magentoCLI stepKey="indexerReindex" command="indexer:reindex" />
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
