@@ -75,7 +75,7 @@ $category->setId(
 )->setParentId(
     2
 )->setPath(
-    '1/2/333'
+    '1/2/66'
 )->setLevel(
     2
 )->setAvailableSortBy(
