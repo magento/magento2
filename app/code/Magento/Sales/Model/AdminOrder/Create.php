@@ -2039,7 +2039,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         $email = $this->getData('account/email');
         
-        if ($email || $this->getIsEmailRequired()) {
+        if ($email || $this->isEmailRequired()) {
             return $email;
         }
         
@@ -2051,7 +2051,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @return bool
      */
-    private function getIsEmailRequired(): bool
+    private function isEmailRequired(): bool
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
