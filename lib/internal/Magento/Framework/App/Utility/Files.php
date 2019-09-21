@@ -925,14 +925,12 @@ class Files
         $area = '*';
         $locale = '*';
         $result = [];
-        $moduleWebPath = [];
         $moduleLocalePath = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $moduleWebPath[] = $moduleDir . "/view/{$area}/web";
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
 
-        $this->_accumulateFilesByPatterns($moduleWebPath, $filePattern, $result, '_parseModuleStatic');
+        $this->_accumulateStaticFiles($area, $filePattern, $result);
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
         $this->accumulateThemeStaticFiles($area, $locale, $filePattern, $result);
         self::$_cache[$key] = $result;
@@ -1041,25 +1039,26 @@ class Files
     }
 
     /**
-     * Parse meta-info of a static file in module
+     * Search static files from all modules by the specified pattern and accumulate meta-info
      *
-     * @param string $file
-     * @return array
+     * @param string $area
+     * @param string $filePattern
+     * @param array $result
+     * @return void
      */
-    protected function _parseModuleStatic($file)
+    protected function _accumulateStaticFiles($area, $filePattern, array &$result)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            if (preg_match(
-                '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
-                $file,
-                $matches
-            ) === 1
-            ) {
-                list(, $area, $filePath) = $matches;
-                return [$area, '', '', $moduleName, $filePath, $file];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $moduleWebPath = $moduleDir . "/view/{$area}/web";
+
+            foreach (self::getFiles([$moduleWebPath], $filePattern) as $absolutePath) {
+                $localPath = substr($absolutePath, strlen($moduleDir) + 1);
+                if (preg_match('/^view\/([a-z]+)\/web\/(.+)$/i', $localPath, $matches) === 1) {
+                    list(, $parsedArea, $parsedPath) = $matches;
+                    $result[] = [$parsedArea, '', '', $moduleName, $parsedPath, $absolutePath];
+                }
             }
         }
-        return [];
     }
 
     /**
