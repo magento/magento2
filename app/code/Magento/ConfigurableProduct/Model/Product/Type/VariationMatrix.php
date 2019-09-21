@@ -40,7 +40,7 @@ class VariationMatrix
             for ($attributeIndex = $attributesCount; $attributeIndex--;) {
                 $currentAttribute = $variationalAttributes[$attributeIndex];
                 $currentVariationValue = $currentVariation[$attributeIndex];
-                    if(isset($currentAttribute['id']) && $currentAttribute['id']) {
+                    if(!empty($currentAttribute['id'])) {
                         $filledVariation[$currentAttribute['id']] = $currentAttribute['values'][$currentVariationValue]; 
                     }
             }
