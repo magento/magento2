@@ -488,6 +488,10 @@
         <index referenceId="EAV_ATTRIBUTE_LABEL_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <index referenceId="EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_STORE_ID" indexType="btree">
+            <column name="attribute_id"/>
+            <column name="store_id"/>
+        </index>
     </table>
     <table name="eav_form_type" resource="default" engine="innodb" comment="Eav Form Type">
         <column xsi:type="smallint" name="type_id" padding="5" unsigned="true" nullable="false" identity="true"
