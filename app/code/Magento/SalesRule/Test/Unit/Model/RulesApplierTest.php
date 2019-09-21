@@ -149,8 +149,8 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
          * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $rule
          */
         $rule = $this->createPartialMock(
-             \Magento\SalesRule\Model\Rule::class,
-             ['getStoreLabel', 'getCouponType', 'getRuleId', '__wakeup', 'getActions']
+            \Magento\SalesRule\Model\Rule::class,
+            ['getStoreLabel', 'getCouponType', 'getRuleId', '__wakeup', 'getActions']
          );
 
         $rule->setDescription($ruleDescription);
@@ -168,7 +168,7 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($address->getDiscountDescriptionArray(), $description[$ruleId]);
     }
-    
+
     /**
      * @return array
      */
