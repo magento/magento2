@@ -105,7 +105,6 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         }
 
         $select->where('stock_item.product_id in (?)', $entityIds);
-
         $select->group('stock_item.product_id');
         $select->having('max_is_in_stock = 0');
 
