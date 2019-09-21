@@ -127,6 +127,16 @@ class QuoteAddressValidator
      */
     public function validateForCart(CartInterface $cart, AddressInterface $address): void
     {
-        $this->doValidate($address, $cart->getCustomerIsGuest() ? null : $cart->getCustomer()->getId());
+        $customerId = null;
+        try {
+            if ($cart) {
+                $customerId = $cart->getCustomer()->getId();
+            }
+        } catch (NoSuchEntityException $e) {
+            throw new \Magento\Framework\Exception\NoSuchEntityException(
+                __('Customer record does not exist for quote id %1', $cart->getId())
+            );
+        }
+        $this->doValidate($address, $customerId ? $customerId : false);
     }
 }
