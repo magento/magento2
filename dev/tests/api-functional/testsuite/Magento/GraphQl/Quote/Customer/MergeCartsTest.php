@@ -68,7 +68,11 @@ class MergeCartsTest extends GraphQlAbstract
         $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
 
         $secondQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($secondQuote, 'test_order_with_virtual_product_without_address', 'reserved_order_id');
+        $this->quoteResource->load(
+            $secondQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
 
         $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
         $secondMaskedId = $this->quoteIdToMaskedId->execute((int)$secondQuote->getId());
@@ -101,7 +105,12 @@ class MergeCartsTest extends GraphQlAbstract
         $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
         $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
 
-        $createCartResponse = $this->graphQlMutation($this->getCreateEmptyCartMutation(), [], '', $this->getHeaderMap());
+        $createCartResponse = $this->graphQlMutation(
+            $this->getCreateEmptyCartMutation(),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
         self::assertArrayHasKey('createEmptyCart', $createCartResponse);
         $secondMaskedId = $createCartResponse['createEmptyCart'];
         $this->addSimpleProductToCart($secondMaskedId, $this->getHeaderMap());
@@ -140,7 +149,12 @@ class MergeCartsTest extends GraphQlAbstract
         $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
 
         $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
-        $createCartResponse = $this->graphQlMutation($this->getCreateEmptyCartMutation(), [], '', $this->getHeaderMap('customer_two@example.com'));
+        $createCartResponse = $this->graphQlMutation(
+            $this->getCreateEmptyCartMutation(),
+            [],
+            '',
+            $this->getHeaderMap('customer_two@example.com')
+        );
         self::assertArrayHasKey('createEmptyCart', $createCartResponse);
         $secondMaskedId = $createCartResponse['createEmptyCart'];
         $this->addSimpleProductToCart($secondMaskedId, $this->getHeaderMap('customer_two@example.com'));

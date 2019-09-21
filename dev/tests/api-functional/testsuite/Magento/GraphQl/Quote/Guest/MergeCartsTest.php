@@ -51,7 +51,11 @@ class MergeCartsTest extends GraphQlAbstract
         $this->quoteResource->load($firstQuote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
 
         $secondQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($secondQuote, 'test_order_with_virtual_product_without_address', 'reserved_order_id');
+        $this->quoteResource->load(
+            $secondQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
 
         $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
         $secondMaskedId = $this->quoteIdToMaskedId->execute((int)$secondQuote->getId());
