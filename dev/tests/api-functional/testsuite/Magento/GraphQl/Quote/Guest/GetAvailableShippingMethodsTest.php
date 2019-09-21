@@ -67,6 +67,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
+            'base_amount' => null,
         ];
         self::assertEquals(
             $expectedAddressData,
