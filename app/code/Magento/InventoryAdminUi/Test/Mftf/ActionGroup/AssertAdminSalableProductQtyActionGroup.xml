@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminSalableProductQtyActionGroup">
+        <annotations>
+            <description>Assert in product grid: products sources and qty.</description>
+        </annotations>
+        <arguments>
+            <argument name="sourceName" type="string"/>
+            <argument name="stockName" type="string"/>
+            <argument name="sourceQty" type="string"/>
+            <argument name="stockQty" type="string"/>
+        </arguments>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', sourceName)}}" userInput="{{sourceQty}}" stepKey="checkProductSourceQty"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', stockName)}}" userInput="{{stockQty}}" stepKey="checkSalableQty"/>
+    </actionGroup>
+</actionGroups>
+

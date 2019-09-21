@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="setAutoReturnOn"/>
+            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="setManageStockOn"/>
 
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="_minimalSource" stepKey="customSource"/>
@@ -95,7 +95,7 @@
             <waitForPageLoad time="30" stepKey="waitForStockWithoutSalesChannelsSaved"/>
             <deleteData createDataKey="customStock" stepKey="deleteCustomStock"/>
             <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
-            <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="setAutoReturnOff"/>
+            <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="setManageStockOff"/>
         </after>
 
         <!-- add Product to Cart-->
