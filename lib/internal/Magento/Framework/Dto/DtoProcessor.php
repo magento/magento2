@@ -97,11 +97,6 @@ class DtoProcessor
     private $dataObjectProcessor;
 
     /**
-     * @var bool
-     */
-    private $typeCasting = true;
-
-    /**
      * @param DtoReflection $dtoReflection
      * @param GetHydrationStrategy $getHydrationStrategy
      * @param ObjectFactory $objectFactory
@@ -144,13 +139,34 @@ class DtoProcessor
     }
 
     /**
-     * Enable or disable type casting
+     * Return exception if the given value cannot be casted to the given type
      *
-     * @param bool $status
+     * @param mixed &$value
+     * @param string $type
+     * @return bool
      */
-    public function setTypeCasting(bool $status): void
+    private function processTypeValidation(&$value, string $type): bool
     {
-        $this->typeCasting = $status;
+        $isArrayType = $this->typeProcessor->isArrayType($type) || ($type === 'array');
+
+        if (empty($value) && $isArrayType) {
+            $value = [];
+            return true;
+        }
+
+        if (is_array($value) && !$isArrayType) {
+            return false;
+        }
+
+        if (!empty($value) && !is_numeric($value) && in_array($type, ['int', 'float'])) {
+            return false;
+        }
+
+        if (!settype($value, $type)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -178,11 +194,17 @@ class DtoProcessor
             }
 
             if ($this->typeProcessor->isTypeSimple($type)) {
-                if ($this->typeCasting) {
-                    return $this->typeCaster->castValueToType($value, $type);
+                if (!$this->processTypeValidation($value, $type)) {
+                    throw new SerializationException(
+                        __(
+                            'The "%value" value\'s type is invalid. The "%type" type was expected. '
+                            . 'Verify and try again.',
+                            ['value' => $value, 'type' => $type]
+                        )
+                    );
                 }
 
-                return $this->typeProcessor->processSimpleAndAnyType($value, $type);
+                return $this->typeCaster->castValueToType($value, $type);
             }
 
             if (is_array($value)) {
@@ -281,9 +303,8 @@ class DtoProcessor
                 $type = TypeProcessor::ANY_TYPE;
             }
 
-            $this->setTypeCasting(true); // Backward compatibility for web-API
             try {
-                $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type);
+                $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type, true);
             } catch (\Exception $e) {
                 throw new SerializationException(
                     __(
@@ -292,7 +313,6 @@ class DtoProcessor
                     )
                 );
             }
-            $this->setTypeCasting(false);
 
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
@@ -458,7 +478,11 @@ class DtoProcessor
             $methodName = $info['method'];
             $paramType = $info['type'];
             if ($data[$paramName] !== null) {
-                $resObject->$methodName($this->createObjectByType($paramName, $data[$paramName], $paramType));
+                $resObject->$methodName($this->createObjectByType(
+                    $paramName,
+                    $data[$paramName],
+                    $paramType
+                ));
             }
         }
 

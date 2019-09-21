@@ -138,7 +138,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
-        $this->dtoProcessor->setTypeCasting(false);
         $inputData = [];
         $inputError = [];
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
@@ -160,7 +159,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 }
             }
         }
-        $this->dtoProcessor->setTypeCasting(true);
 
         $this->processInputError($inputError);
         return $inputData;
@@ -192,6 +190,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return AttributeValue[]
      * @throws SerializationException
      * @throws LocalizedException
+     * @throws \ReflectionException
      * @deprecated
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)

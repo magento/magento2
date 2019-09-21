@@ -30,11 +30,6 @@ class DtoProcessorTest extends TestCase
     private $dtoProcessor;
 
     /**
-     * @var DtoProcessor
-     */
-    private $dtoProcessorWithNoTypeCasting;
-
-    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -47,12 +42,6 @@ class DtoProcessorTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);
-        $this->dtoProcessorWithNoTypeCasting = $this->objectManager->create(
-            DtoProcessor::class,
-            [
-                'typeCasting' => false
-            ]
-        );
     }
 
     public function testCreateDtoFromArrayWithCustomAttributesAsKeyValueFormat(): void
@@ -286,7 +275,7 @@ class DtoProcessorTest extends TestCase
         );
 
         /** @var MutableDto $dto */
-        $this->dtoProcessorWithNoTypeCasting->createFromArray(
+        $this->dtoProcessor->createFromArray(
             [
                 'prop1' => 'invalid_format',
                 'prop2' => 'b',
