@@ -11,6 +11,7 @@ use Magento\Security\Model\ResourceModel\UserExpiration\Collection as ExpiredUse
 
 /**
  * Class to handle admin user expirations.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class UserExpirationManager
 {
