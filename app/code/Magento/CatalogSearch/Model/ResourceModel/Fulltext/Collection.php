@@ -485,12 +485,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         return $this->searchCriteriaResolverFactory->create(
             [
-            'builder' => $this->getSearchCriteriaBuilder(),
-            'collection' => $this,
-            'searchRequestName' => $this->searchRequestName,
-            'currentPage' => $this->_curPage,
-            'size' => $this->getPageSize(),
-            'orders' => $this->searchOrders,
+                'builder' => $this->getSearchCriteriaBuilder(),
+                'collection' => $this,
+                'searchRequestName' => $this->searchRequestName,
+                'currentPage' => (int)$this->_curPage,
+                'size' => $this->getPageSize(),
+                'orders' => $this->searchOrders,
             ]
         );
     }
@@ -505,10 +505,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         return $this->searchResultApplierFactory->create(
             [
-            'collection' => $this,
-            'searchResult' => $searchResult,
-            /** This variable sets by serOrder method, but doesn't have a getter method. */
-            'orders' => $this->_orders,
+                'collection' => $this,
+                'searchResult' => $searchResult,
+                /** This variable sets by serOrder method, but doesn't have a getter method. */
+                'orders' => $this->_orders,
+                'size' => $this->getPageSize(),
+                'currentPage' => (int)$this->_curPage,
             ]
         );
     }

@@ -47,7 +47,19 @@ class CloseTransactionHandler implements HandlerInterface
 
         if ($payment instanceof Payment) {
             $payment->setIsTransactionClosed($this->closeTransaction);
-            $payment->setShouldCloseParentTransaction(true);
+            $payment->setShouldCloseParentTransaction($this->shouldCloseParentTransaction($payment));
         }
+    }
+
+    /**
+     * Whether parent transaction should be closed.
+     *
+     * @param Payment $payment
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function shouldCloseParentTransaction(Payment $payment)
+    {
+        return true;
     }
 }

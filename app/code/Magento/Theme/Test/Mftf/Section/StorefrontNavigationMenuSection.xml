@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontNavigationMenuSection">
+        <element name="navigationMenu" type="block" selector=".section-items.nav-sections-items li"/>
+        <element name="subItemLevelHover" type="text" selector=".{{level}} .submenu a:hover" parameterized="true"/>
+        <element name="itemByNameAndLevel" type="text" selector="//a[span[contains(., '{{itemName}}')]]/following-sibling::ul[contains(@class,'{{itemLevel}}')]" parameterized="true"/>
+        <element name="subItemByLevel" type="text" selector="li.{{itemLevel}}.parent ul.{{itemLevel}}" parameterized="true"/>
+        <element name="itemActiveState" type="text" selector=".navigation .level0.active>.level-top"/>
+        <element name="subItemActiveState" type="text" selector=".navigation .level0 .submenu .active>a"/>
+        <element name="submenuLeftDirection" type="text" selector="ul.{{itemLevel}}.submenu-reverse" parameterized="true"/>
+        <element name="submenuRightDirection" type="text" selector="ul.{{itemLevel}}:not(.submenu-reverse)" parameterized="true"/>
+    </section>
+</sections>
