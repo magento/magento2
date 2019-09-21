@@ -15,7 +15,7 @@
             <title value="Enable Qty Increments  applied to Simple product On Configuration Page and checked in admin."/>
             <description
                 value="Enable Qty Increments  applied to Simple product On Configuration Page and checked in admin."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/481999/scenarios/1658513"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/481999/scenarios/1655795"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
