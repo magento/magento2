@@ -140,6 +140,35 @@ class RulesApplierTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($appliedRuleIds, $result);
     }
 
+    public function testAddCouponDescriptionWithRuleDescriptionIsUsed()
+    {
+        $ruleId = 1;
+        $ruleDescription = 'Rule description';
+
+        /**
+         * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject $rule
+         */
+        $rule = $this->createPartialMock(
+             \Magento\SalesRule\Model\Rule::class,
+             ['getStoreLabel', 'getCouponType', 'getRuleId', '__wakeup', 'getActions']
+         );
+
+        $rule->setDescription($ruleDescription);
+
+        /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        $address = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, [
+            'getQuote',
+            'setCouponCode',
+            'setAppliedRuleIds',
+            '__wakeup'
+        ]);
+        $description = $address->getDiscountDescriptionArray();
+        $description[$ruleId] = $rule->getDescription();
+        $address->setDiscountDescriptionArray($description[$ruleId]);
+
+        $this->assertEquals($address->getDiscountDescriptionArray(), $description[$ruleId]);
+    }
+    
     /**
      * @return array
      */
