@@ -117,4 +117,14 @@
         <data key="zip_is_range">0</data>
         <data key="rate">10</data>
     </entity>
+    <entity name="taxRateWithInvalidPostCodeLength" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_region">California</data>
+        <data key="tax_postcode">12345678901</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">100.0000</data>
+    </entity>
 </entities>

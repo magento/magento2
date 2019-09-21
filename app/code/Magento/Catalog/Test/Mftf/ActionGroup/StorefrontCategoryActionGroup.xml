@@ -78,6 +78,15 @@
         <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart"/>
     </actionGroup>
 
+    <actionGroup name="AssertProductOnCategoryPageActionGroup" extends="StorefrontCheckCategorySimpleProduct">
+        <annotations>
+            <description>EXTENDS:StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice', 'moveMouseOverProduct', 'AssertAddToCart'</description>
+        </annotations>
+        <remove keyForRemoval="AssertProductPrice"/>
+        <remove keyForRemoval="moveMouseOverProduct"/>
+        <remove keyForRemoval="AssertAddToCart"/>
+    </actionGroup>
+
     <actionGroup name="StorefrontCheckAddToCartButtonAbsence">
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>

@@ -99,9 +99,32 @@ class Dob extends AbstractWidget
      */
     public function setDate($date)
     {
-        $this->setTime($date ? strtotime($date) : false);
+        $this->setTime($this->filterTime($date));
         $this->setValue($this->applyOutputFilter($date));
         return $this;
+    }
+
+    /**
+     * Sanitizes time
+     *
+     * @param mixed $value
+     * @return bool|int
+     */
+    private function filterTime($value)
+    {
+        $time = false;
+        if ($value) {
+            if ($value instanceof \DateTimeInterface) {
+                $time =  $value->getTimestamp();
+            } elseif (is_numeric($value)) {
+                $time = $value;
+            } elseif (is_string($value)) {
+                $time = strtotime($value);
+                $time = $time === false ? $this->_localeDate->date($value, null, false, false)->getTimestamp() : $time;
+            }
+        }
+
+        return $time;
     }
 
     /**
@@ -200,21 +223,23 @@ class Dob extends AbstractWidget
      */
     public function getFieldHtml()
     {
-        $this->dateElement->setData([
-            'extra_params' => $this->getHtmlExtraParams(),
-            'name' => $this->getHtmlId(),
-            'id' => $this->getHtmlId(),
-            'class' => $this->getHtmlClass(),
-            'value' => $this->getValue(),
-            'date_format' => $this->getDateFormat(),
-            'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
-            'years_range' => '-120y:c+nn',
-            'max_date' => '-1d',
-            'change_month' => 'true',
-            'change_year' => 'true',
-            'show_on' => 'both',
-            'first_day' => $this->getFirstDay()
-        ]);
+        $this->dateElement->setData(
+            [
+                'extra_params' => $this->getHtmlExtraParams(),
+                'name' => $this->getHtmlId(),
+                'id' => $this->getHtmlId(),
+                'class' => $this->getHtmlClass(),
+                'value' => $this->getValue(),
+                'date_format' => $this->getDateFormat(),
+                'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
+                'years_range' => '-120y:c+nn',
+                'max_date' => '-1d',
+                'change_month' => 'true',
+                'change_year' => 'true',
+                'show_on' => 'both',
+                'first_day' => $this->getFirstDay()
+            ]
+        );
         return $this->dateElement->getHtml();
     }
 
