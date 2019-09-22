@@ -60,6 +60,8 @@ class MethodList
     }
 
     /**
+     * Returns all available payment methods for the given quote.
+     *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
      */
