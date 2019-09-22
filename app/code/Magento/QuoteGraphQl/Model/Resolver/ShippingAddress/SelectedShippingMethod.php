@@ -59,15 +59,7 @@ class SelectedShippingMethod implements ResolverInterface
                 'base_amount' => null,
             ];
         } else {
-            $data = [
-                'carrier_code' => null,
-                'method_code' => null,
-                'carrier_title' => $carrierTitle,
-                'method_title' => $methodTitle,
-                'amount' => null,
-                /** @deprecated The field should not be used on the storefront */
-                'base_amount' => null,
-            ];
+            $data = null;
         }
         return $data;
     }
