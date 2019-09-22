@@ -9,6 +9,7 @@
     <default>
         <catalog>
             <review>
+                <active>1</active>
                 <allow_guest>1</allow_guest>
             </review>
         </catalog>

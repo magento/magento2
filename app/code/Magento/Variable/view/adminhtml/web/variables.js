@@ -16,7 +16,8 @@ define([
     'Magento_Variable/js/custom-directive-generator',
     'Magento_Ui/js/lib/spinner',
     'jquery/ui',
-    'prototype'
+    'prototype',
+    'mage/adminhtml/tools'
 ], function (jQuery, notification, $t, wysiwyg, registry, mageApply, utils, configGenerator, customGenerator, loader) {
     'use strict';
 

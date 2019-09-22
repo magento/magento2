@@ -14,3 +14,5 @@ $quote->load('test_order_with_virtual_product_without_address', 'reserved_order_
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = $objectManager->create(\Magento\Quote\Model\QuoteIdMask::class);
 $quoteIdMask->delete($quote->getId());
+
+require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual_rollback.php';

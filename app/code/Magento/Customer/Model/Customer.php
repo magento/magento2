@@ -220,6 +220,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $accountConfirmation;
 
     /**
+     * Caching property to store customer address data models by the address ID.
+     *
+     * @var array
+     */
+    private $storedAddress;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -314,7 +321,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $addressesData = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
-            $addressesData[] = $address->getDataModel();
+            if (!isset($this->storedAddress[$address->getId()])) {
+                $this->storedAddress[$address->getId()] = $address->getDataModel();
+            }
+            $addressesData[] = $this->storedAddress[$address->getId()];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -384,7 +394,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
-        if ($this->getConfirmation() && $this->isConfirmationRequired()) {
+        if ($this->getConfirmation() &&
+            $this->accountConfirmation->isConfirmationRequired($this->getWebsiteId(), $this->getId(), $this->getEmail())
+        ) {
             throw new EmailNotConfirmedException(
                 __("This account isn't confirmed. Verify and try again.")
             );
@@ -405,8 +417,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Load customer by email
      *
-     * @param   string $customerEmail
-     * @return  $this
+     * @param string $customerEmail
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByEmail($customerEmail)
     {
@@ -417,8 +430,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Change customer password
      *
-     * @param   string $newPassword
-     * @return  $this
+     * @param string $newPassword
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changePassword($newPassword)
     {
@@ -430,6 +444,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Get full customer name
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getName()
     {
@@ -452,8 +467,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Add address to address collection
      *
-     * @param   Address $address
-     * @return  $this
+     * @param Address $address
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addAddress(Address $address)
     {
@@ -477,6 +493,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $addressId
      * @return Address
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressItemById($addressId)
     {
@@ -497,6 +514,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Customer addresses collection
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAddressesCollection()
     {
@@ -528,6 +546,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve all customer attributes
      *
      * @return Attribute[]
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributes()
     {
@@ -582,6 +601,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $password
      * @return boolean
+     * @throws \Exception
      */
     public function validatePassword($password)
     {
@@ -795,6 +815,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getRandomConfirmationKey()
     {
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5(uniqid());
     }
 
@@ -1045,17 +1066,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Prepare customer for delete
-     *
-     * @return $this
-     */
-    public function beforeDelete()
-    {
-        //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
-        return parent::beforeDelete();
-    }
-
-    /**
      * Processing object after save data
      *
      * @return $this
@@ -1295,7 +1305,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Create address instance
+     * Create Address from Factory
      *
      * @return Address
      */
@@ -1305,7 +1315,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Create address collection instance
+     * Create Address Collection from Factory
      *
      * @return \Magento\Customer\Model\ResourceModel\Address\Collection
      */
@@ -1315,7 +1325,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Returns templates types
+     * Get Template Types
      *
      * @return array
      */

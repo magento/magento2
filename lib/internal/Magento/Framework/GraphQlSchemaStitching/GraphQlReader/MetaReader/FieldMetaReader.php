@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
-
 /**
  * Reads fields and possible arguments from a meta field
  */
@@ -25,13 +23,33 @@ class FieldMetaReader
     private $docReader;
 
     /**
+     * @var CacheAnnotationReader
+     */
+    private $cacheAnnotationReader;
+
+    /**
+     * @var DeprecatedAnnotationReader
+     */
+    private $deprecatedAnnotationReader;
+
+    /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
+     * @param DeprecatedAnnotationReader|null $deprecatedAnnotationReader
      */
-    public function __construct(TypeMetaWrapperReader $typeMetaReader, DocReader $docReader)
-    {
+    public function __construct(
+        TypeMetaWrapperReader $typeMetaReader,
+        DocReader $docReader,
+        CacheAnnotationReader $cacheAnnotationReader = null,
+        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
+    ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
+        $this->cacheAnnotationReader = $cacheAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheAnnotationReader::class);
+        $this->deprecatedAnnotationReader = $deprecatedAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DeprecatedAnnotationReader::class);
     }
 
     /**
@@ -63,6 +81,14 @@ class FieldMetaReader
             $result['description'] = $this->docReader->read($fieldMeta->astNode->directives);
         }
 
+        if ($this->cacheAnnotationReader->read($fieldMeta->astNode->directives)) {
+            $result['cache'] = $this->cacheAnnotationReader->read($fieldMeta->astNode->directives);
+        }
+
+        if ($this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives)) {
+            $result['deprecated'] = $this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives);
+        }
+
         $arguments = $fieldMeta->args;
         foreach ($arguments as $argumentMeta) {
             $argumentName = $argumentMeta->name;
@@ -73,17 +99,41 @@ class FieldMetaReader
                 $result['arguments'][$argumentName]['defaultValue'] = $argumentMeta->defaultValue;
             }
             $typeMeta = $argumentMeta->getType();
-            $result['arguments'][$argumentName] = array_merge(
-                $result['arguments'][$argumentName],
-                $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
-            );
+            $result['arguments'][$argumentName] = $this->argumentMetaType($typeMeta, $argumentMeta, $result);
 
             if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =
                     $this->docReader->read($argumentMeta->astNode->directives);
             }
+
+            if ($this->deprecatedAnnotationReader->read($argumentMeta->astNode->directives)) {
+                $result['arguments'][$argumentName]['deprecated'] =
+                    $this->deprecatedAnnotationReader->read($argumentMeta->astNode->directives);
+            }
         }
         return $result;
+    }
+
+    /**
+     * Get the argumentMetaType result array
+     *
+     * @param \GraphQL\Type\Definition\InputType $typeMeta
+     * @param \GraphQL\Type\Definition\FieldArgument $argumentMeta
+     * @param array $result
+     * @return array
+     */
+    private function argumentMetaType(
+        \GraphQL\Type\Definition\InputType $typeMeta,
+        \GraphQL\Type\Definition\FieldArgument $argumentMeta,
+        $result
+    ) : array {
+        $argumentName = $argumentMeta->name;
+        $result['arguments'][$argumentName]  = array_merge(
+            $result['arguments'][$argumentName],
+            $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
+        );
+
+        return $result['arguments'][$argumentName];
     }
 
     /**

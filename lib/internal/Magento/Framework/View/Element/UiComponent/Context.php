@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
@@ -95,6 +97,11 @@ class Context implements ContextInterface
     protected $uiComponentFactory;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
      * @param ButtonProviderFactory $buttonProviderFactory
@@ -104,7 +111,8 @@ class Context implements ContextInterface
      * @param Processor $processor
      * @param UiComponentFactory $uiComponentFactory
      * @param DataProviderInterface|null $dataProvider
-     * @param string|null $namespace
+     * @param string $namespace
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,7 +125,8 @@ class Context implements ContextInterface
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
         DataProviderInterface $dataProvider = null,
-        $namespace = null
+        $namespace = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->namespace = $namespace;
         $this->request = $request;
@@ -129,6 +138,9 @@ class Context implements ContextInterface
         $this->urlBuilder = $urlBuilder;
         $this->processor = $processor;
         $this->uiComponentFactory = $uiComponentFactory;
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(
+            AuthorizationInterface::class
+        );
         $this->setAcceptType();
     }
 
@@ -280,6 +292,9 @@ class Context implements ContextInterface
             uasort($buttons, [$this, 'sortButtons']);
 
             foreach ($buttons as $buttonId => $buttonData) {
+                if (isset($buttonData['aclResource']) && !$this->authorization->isAllowed($buttonData['aclResource'])) {
+                    continue;
+                }
                 if (isset($buttonData['url'])) {
                     $buttonData['url'] = $this->getUrl($buttonData['url']);
                 }

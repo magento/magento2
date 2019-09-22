@@ -72,14 +72,31 @@ class StockStateProvider implements StockStateProviderInterface
      */
     public function verifyStock(StockItemInterface $stockItem)
     {
+        // Manage stock, but qty is null
         if ($stockItem->getQty() === null && $stockItem->getManageStock()) {
             return false;
         }
+
+        // Backorders are not allowed and qty reached min qty
         if ($stockItem->getBackorders() == StockItemInterface::BACKORDERS_NO
             && $stockItem->getQty() <= $stockItem->getMinQty()
         ) {
             return false;
         }
+
+        $backordersAllowed = [Stock::BACKORDERS_YES_NONOTIFY, Stock::BACKORDERS_YES_NOTIFY];
+        if (in_array($stockItem->getBackorders(), $backordersAllowed)) {
+            // Infinite - let it be In stock
+            if ($stockItem->getMinQty() == 0) {
+                return true;
+            }
+
+            // qty reached min qty - let it stand Out Of Stock
+            if ($stockItem->getQty() <= $stockItem->getMinQty()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -119,14 +136,12 @@ class StockStateProvider implements StockStateProviderInterface
         $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
         if (!$stockItem->getIsQtyDecimal()) {
             $result->setHasQtyOptionUpdate(true);
-            $qty = (int) $qty;
+            $qty = (int) $qty ?: 1;
             /**
              * Adding stock data to quote item
              */
             $result->setItemQty($qty);
-            $qty = $this->getNumber($qty);
-            $origQty = (int) $origQty;
-            $result->setOrigQty($origQty);
+            $result->setOrigQty((int)$this->getNumber($origQty) ?: 1);
         }
 
         if ($stockItem->getMinSaleQty() && $qty < $stockItem->getMinSaleQty()) {
@@ -247,15 +262,17 @@ class StockStateProvider implements StockStateProviderInterface
         if (!$stockItem->getManageStock()) {
             return true;
         }
-        if ($stockItem->getQty() - $stockItem->getMinQty() - $qty < 0) {
-            switch ($stockItem->getBackorders()) {
-                case \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NONOTIFY:
-                case \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NOTIFY:
-                    break;
-                default:
-                    return false;
-            }
+
+        $backordersAllowed = [Stock::BACKORDERS_YES_NONOTIFY, Stock::BACKORDERS_YES_NOTIFY];
+        // Infinite check
+        if ($stockItem->getMinQty() == 0 && in_array($stockItem->getBackorders(), $backordersAllowed)) {
+            return true;
         }
+
+        if ($stockItem->getQty() - $stockItem->getMinQty() - $qty < 0) {
+            return false;
+        }
+
         return true;
     }
 

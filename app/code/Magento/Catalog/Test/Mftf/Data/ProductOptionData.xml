@@ -38,6 +38,16 @@
         <data key="price_type">percent</data>
         <data key="max_characters">0</data>
     </entity>
+    <entity name="ProductOptionAreaFixed" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionArea</data>
+        <data key="type">area</data>
+        <data key="is_require">false</data>
+        <data key="sort_order">2</data>
+        <data key="price">100</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
     <entity name="ProductOptionFile" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionFile</data>
@@ -59,6 +69,16 @@
         <requiredEntity type="product_option_value">ProductOptionValueDropdown1</requiredEntity>
         <requiredEntity type="product_option_value">ProductOptionValueDropdown2</requiredEntity>
     </entity>
+    <entity name="ProductOptionDropDown2" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDropDown</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">false</data>
+        <requiredEntity type="product_option_value">ProductOptionValueDropdown1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueDropdown3</requiredEntity>
+    </entity>
+
     <entity name="ProductOptionDropDownWithLongValuesTitle" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionDropDownWithLongTitles</data>
@@ -68,6 +88,15 @@
         <requiredEntity type="product_option_value">ProductOptionValueDropdownLongTitle1</requiredEntity>
         <requiredEntity type="product_option_value">ProductOptionValueDropdownLongTitle2</requiredEntity>
     </entity>
+    <entity name="ProductOptionValueDropdown" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDropDown</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueWithSkuDropdown1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueWithSkuDropdown2</requiredEntity>
+    </entity>
     <entity name="ProductOptionRadiobutton" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionRadioButtons</data>
@@ -76,6 +105,24 @@
         <data key="is_require">true</data>
         <requiredEntity type="product_option_value">ProductOptionValueRadioButtons1</requiredEntity>
         <requiredEntity type="product_option_value">ProductOptionValueRadioButtons2</requiredEntity>
+    </entity>
+    <entity name="ProductOptionRadioButton2" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionRadioButtons</data>
+        <data key="type">radio</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">false</data>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons4</requiredEntity>
+    </entity>
+    <entity name="ProductOptionRadiobuttonWithTwoFixedOptions" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionRadioButtons</data>
+        <data key="type">radio</data>
+        <data key="sort_order">5</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons1</requiredEntity>
+        <requiredEntity type="product_option_value">ProductOptionValueRadioButtons3</requiredEntity>
     </entity>
     <entity name="ProductOptionCheckbox" type="product_option">
         <var key="product_sku" entityType="product" entityKey="sku" />
@@ -120,5 +167,19 @@
         <data key="is_require">true</data>
         <data key="price">0.00</data>
         <data key="price_type">percent</data>
+    </entity>
+    <entity name="ProductOptionPercentPriceDropDown" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionDropDown</data>
+        <data key="type">drop_down</data>
+        <data key="sort_order">4</data>
+        <data key="is_require">true</data>
+        <requiredEntity type="product_option_value">ProductOptionPercentPriceValueDropdown</requiredEntity>
+    </entity>
+    <entity name="ProductOptionFieldSecond" extends="ProductOptionField">
+        <data key="title" unique="suffix">fifth option</data>
+    </entity>
+    <entity name="ProductOptionFileSecond" extends="ProductOptionFile">
+        <data key="title" unique="suffix">fourth option</data>
     </entity>
 </entities>

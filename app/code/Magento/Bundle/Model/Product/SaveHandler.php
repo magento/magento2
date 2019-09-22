@@ -58,6 +58,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Perform action on Bundle product relation/extension attribute
+     *
      * @param object $entity
      * @param array $arguments
      *
@@ -83,7 +85,7 @@ class SaveHandler implements ExtensionInterface
             : [];
 
         if (!$entity->getCopyFromView()) {
-            $this->processRemovedOptions($entity->getSku(), $existingOptionsIds, $optionIds);
+            $this->processRemovedOptions($entity, $existingOptionsIds, $optionIds);
             $newOptionsIds = array_diff($optionIds, $existingOptionsIds);
             $this->saveOptions($entity, $bundleProductOptions, $newOptionsIds);
         } else {
@@ -96,6 +98,8 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Remove option product links
+     *
      * @param string $entitySku
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
      * @return void
@@ -154,16 +158,19 @@ class SaveHandler implements ExtensionInterface
     /**
      * Removes old options that no longer exists.
      *
-     * @param string $entitySku
+     * @param ProductInterface $entity
      * @param array $existingOptionsIds
      * @param array $optionIds
      * @return void
      */
-    private function processRemovedOptions(string $entitySku, array $existingOptionsIds, array $optionIds): void
+    private function processRemovedOptions(ProductInterface $entity, array $existingOptionsIds, array $optionIds): void
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $parentId = $entity->getData($metadata->getLinkField());
         foreach (array_diff($existingOptionsIds, $optionIds) as $optionId) {
-            $option = $this->optionRepository->get($entitySku, $optionId);
-            $this->removeOptionLinks($entitySku, $option);
+            $option = $this->optionRepository->get($entity->getSku(), $optionId);
+            $option->setParentId($parentId);
+            $this->removeOptionLinks($entity->getSku(), $option);
             $this->optionRepository->delete($option);
         }
     }

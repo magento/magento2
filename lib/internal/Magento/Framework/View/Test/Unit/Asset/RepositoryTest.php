@@ -165,6 +165,50 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testUpdateDesignParamsWithThemePath()
+    {
+        $params = ['area' => 'AREA'];
+        $result = ['area' => 'AREA', 'themeModel' => 'Theme', 'module' => false, 'locale' => null];
+
+        $this->designMock
+            ->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn('themePath');
+
+        $this->themeProvider
+            ->expects($this->once())
+            ->method('getThemeByFullPath')
+            ->willReturn('Theme');
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals($result, $params);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateDesignParamsWithThemeId()
+    {
+        $params = ['area' => 'AREA'];
+        $result = ['area' => 'AREA', 'themeModel' => 'Theme', 'module' => false, 'locale' => null];
+
+        $this->designMock
+            ->expects($this->once())
+            ->method('getConfigurationDesignTheme')
+            ->willReturn('1');
+
+        $this->themeProvider
+            ->expects($this->once())
+            ->method('getThemeById')
+            ->willReturn('Theme');
+
+        $this->repository->updateDesignParams($params);
+        $this->assertEquals($result, $params);
+    }
+
+    /**
      * @return array
      */
     public function updateDesignParamsDataProvider()

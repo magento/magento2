@@ -39,7 +39,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Manager */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleManagerInterface */
     private $_moduleManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
@@ -47,6 +47,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     /** @var Register */
     private $_block;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\Config */
+    private $newsletterConfig;
 
     protected function setUp()
     {
@@ -58,6 +61,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Session::class,
             ['getCustomerFormData']
         );
+        $this->newsletterConfig = $this->createMock(\Magento\Newsletter\Model\Config::class);
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -70,7 +74,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class),
             $this->_moduleManager,
             $this->_customerSession,
-            $this->_customerUrl
+            $this->_customerUrl,
+            [],
+            $this->newsletterConfig
         );
     }
 
@@ -274,12 +280,13 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $isNewsletterEnabled
-     * @param $expectedValue
+     * @param boolean $isNewsletterEnabled
+     * @param string $isNewsletterActive
+     * @param boolean $expectedValue
      *
      * @dataProvider isNewsletterEnabledProvider
      */
-    public function testIsNewsletterEnabled($isNewsletterEnabled, $expectedValue)
+    public function testIsNewsletterEnabled($isNewsletterEnabled, $isNewsletterActive, $expectedValue)
     {
         $this->_moduleManager->expects(
             $this->once()
@@ -290,6 +297,15 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($isNewsletterEnabled)
         );
+
+        $this->newsletterConfig->expects(
+            $this->any()
+        )->method(
+            'isActive'
+        )->will(
+            $this->returnValue($isNewsletterActive)
+        );
+
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
@@ -298,7 +314,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function isNewsletterEnabledProvider()
     {
-        return [[true, true], [false, false]];
+        return [[true, true, true], [true, false, false], [false, true, false], [false, false, false]];
     }
 
     /**

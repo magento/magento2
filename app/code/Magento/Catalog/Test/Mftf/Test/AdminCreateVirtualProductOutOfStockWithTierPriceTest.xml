@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductOutOfStockWithTierPriceTest">
+        <annotations>
+            <stories value="Create virtual product"/>
+            <title value="Create virtual product out of stock with tier price"/>
+            <description value="Test log in to Create virtual product and Create virtual product out of stock with tier price"/>
+            <testCaseId value="MC-6036"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteVirtualProduct">
+                <argument name="sku" value="{{virtualProductOutOfStock.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilter"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
+        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+
+        <!-- Create virtual product out of stock with tier price -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{virtualProductOutOfStock.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{virtualProductOutOfStock.price}}" stepKey="fillProductPrice"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickCustomerGroupPriceAddButton"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('0')}}" userInput="{{tierPriceOnDefault.website_0}}" stepKey="selectProductTierPriceWebsite"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="{{tierPriceOnDefault.customer_group_0}}" stepKey="selectProductTierPriceCustGroup"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{tierPriceOnDefault.qty_0}}" stepKey="fillProductTierPriceQuantityInput"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{tierPriceOnDefault.price_0}}" stepKey="selectProductTierPriceFixedPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickCustomerGroupPriceAddButtonToAddAnotherRow"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect('1')}}" userInput="{{tierPriceOnDefault.website_1}}" stepKey="clickProductTierPriceWebsite1"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('1')}}" userInput="{{tierPriceOnDefault.customer_group_1}}" stepKey="clickProductTierPriceCustGroup1"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" userInput="{{tierPriceOnDefault.qty_1}}" stepKey="fillProductTierPriceQuantityInput1"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('1')}}" userInput="{{tierPriceOnDefault.price_1}}" stepKey="selectProductTierPriceFixedPrice1"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductOutOfStock.quantity}}" stepKey="fillVirtualProductQuantity"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{virtualProductOutOfStock.status}}" stepKey="selectStockStatusOutOfStock"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductOutOfStock.urlKey}}" stepKey="fillUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
+        <!-- Verify we see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
+
+        <!-- Verify we see created virtual product out of stock with tier price on the storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(virtualProductOutOfStock.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductOutOfStock.sku}}" stepKey="seeVirtualProductSku"/>
+
+        <!--  Verify customer see product tier price on product page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceOnDefault.qty_0)}}" stepKey="firstTierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage1">
+            <expectedResult type="string">Buy {{tierPriceOnDefault.qty_0}} for ${{tierPriceOnDefault.price_0}} each and save 100%</expectedResult>
+            <actualResult type="variable">firstTierPriceText</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', tierPriceOnDefault.qty_1)}}" stepKey="secondTierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage2">
+            <expectedResult type="string">Buy {{tierPriceOnDefault.qty_1}} for ${{tierPriceOnDefault.price_1}} each and save 100%</expectedResult>
+            <actualResult type="variable">secondTierPriceText</actualResult>
+        </assertEquals>
+
+        <!--  Verify customer see product out of stock status on product page -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{virtualProductOutOfStock.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{virtualProductOutOfStock.price}}</expectedResult>
+            <actualResult type="variable">productPriceAmount</actualResult>
+        </assertEquals>
+    </test>
+</tests>

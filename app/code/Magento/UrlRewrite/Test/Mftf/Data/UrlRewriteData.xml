@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="defaultUrlRewrite" type="urlRewrite">
+        <data key="request_path" unique="prefix">test-test-test.html</data>
+        <data key="target_path">http://www.example.com/</data>
+        <data key="redirect_type">302</data>
+        <data key="redirect_type_label">Temporary (302)</data>
+        <data key="store_id">1</data>
+        <data key="store">Default Store View</data>
+        <data key="description">End To End Test</data>
+    </entity>
+    <entity name="updateUrlRewrite" type="urlRewrite">
+        <data key="request_path" unique="prefix">test-aspx-test.aspx</data>
+        <data key="target_path">http://www.example.com/</data>
+        <data key="redirect_type">302</data>
+        <data key="redirect_type_label">Temporary (302)</data>
+        <data key="store_id">1</data>
+        <data key="store">Default Store View</data>
+        <data key="description">Update Url Rewrite</data>
+    </entity>
+    <entity name="customPermanentUrlRewrite" type="urlRewrite">
+        <data key="request_path" unique="prefix">wishlist</data>
+        <data key="target_path">https://marketplace.magento.com/</data>
+        <data key="redirect_type">301</data>
+        <data key="redirect_type_label">Permanent (301)</data>
+        <data key="store_id">1</data>
+        <data key="store">Default Store View</data>
+        <data key="description">test_description_relative path</data>
+    </entity>
+    <entity name="customTemporaryUrlRewrite" type="urlRewrite">
+        <data key="request_path" unique="prefix">wishlist</data>
+        <data key="target_path">https://marketplace.magento.com/</data>
+        <data key="redirect_type">302</data>
+        <data key="redirect_type_label">Temporary (302)</data>
+        <data key="store_id">1</data>
+        <data key="store">Default Store View</data>
+        <data key="description">test_description_relative path</data>
+    </entity>
+</entities>

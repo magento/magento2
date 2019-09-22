@@ -38,6 +38,7 @@
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
@@ -60,9 +61,13 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
-        <see selector="{{CheckoutCartSummarySection.country}}" userInput="$$createCustomer.country_id$$" stepKey="checkCustomerCountry" />
-        <see selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="$$createCustomer.state$$" stepKey="checkCustomerRegion" />
-        <see selector="{{CheckoutCartSummarySection.postcode}}" userInput="$$createCustomer.postcode$$" stepKey="checkCustomerPostcode" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_NY.country}}" stepKey="checkCustomerCountry" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_NY.state}}" stepKey="checkCustomerRegion" />
+        <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
+        <assertEquals  message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
+            <expectedResult type="string">{{US_Address_NY.postcode}}</expectedResult>
+            <actualResult type="variable">grabTextPostCode</actualResult>
+        </assertEquals>
         <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="expandTaxSummary"/>
         <see selector="{{CheckoutCartSummarySection.rate}}" userInput="US-NY-*-Rate 1 (8.375%)" stepKey="checkRateNY" />

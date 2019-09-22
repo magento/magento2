@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Controller\Ipn;
 
@@ -16,6 +17,8 @@ use Magento\Sales\Model\OrderFactory;
 
 /**
  * Unified IPN controller for all supported PayPal methods
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
@@ -73,7 +76,6 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
      * Instantiate IPN model and pass IPN request to it
      *
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -95,6 +97,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
             $this->_logger->critical($e);
             $this->getResponse()->setStatusHeader(503, '1.1', 'Service Unavailable')->sendResponse();
             /** @todo eliminate usage of exit statement */
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit;
         } catch (\Exception $e) {
             $this->_logger->critical($e);

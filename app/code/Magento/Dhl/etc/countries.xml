@@ -83,7 +83,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Austria</name>
         <domestic>1</domestic>
     </AT>
@@ -132,7 +132,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Belgium</name>
         <domestic>1</domestic>
     </BE>
@@ -146,7 +146,7 @@
         <currency>BGN</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Bulgaria</name>
         <domestic>1</domestic>
     </BG>
@@ -257,7 +257,7 @@
         <currency>CHF</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Switzerland</name>
     </CH>
     <CI>
@@ -331,7 +331,7 @@
         <currency>CZK</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Czech Republic, The</name>
         <domestic>1</domestic>
     </CZ>
@@ -339,7 +339,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Germany</name>
         <domestic>1</domestic>
     </DE>
@@ -353,7 +353,7 @@
         <currency>DKK</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Denmark</name>
         <domestic>1</domestic>
     </DK>
@@ -389,7 +389,7 @@
         <currency>EEK</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Estonia</name>
         <domestic>1</domestic>
     </EE>
@@ -410,7 +410,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Spain</name>
         <domestic>1</domestic>
     </ES>
@@ -424,7 +424,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Finland</name>
         <domestic>1</domestic>
     </FI>
@@ -457,7 +457,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>France</name>
         <domestic>1</domestic>
     </FR>
@@ -471,7 +471,7 @@
         <currency>GBP</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>United Kingdom</name>
         <domestic>1</domestic>
     </GB>
@@ -549,7 +549,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Greece</name>
         <domestic>1</domestic>
     </GR>
@@ -612,7 +612,7 @@
         <currency>HUF</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Hungary</name>
         <domestic>1</domestic>
     </HU>
@@ -633,7 +633,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Ireland, Republic Of</name>
         <domestic>1</domestic>
     </IE>
@@ -668,14 +668,14 @@
         <currency>ISK</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Iceland</name>
     </IS>
     <IT>
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Italy</name>
         <domestic>1</domestic>
     </IT>
@@ -834,7 +834,7 @@
         <currency>LTL</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Lithuania</name>
         <domestic>1</domestic>
     </LT>
@@ -842,7 +842,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Luxembourg</name>
         <domestic>1</domestic>
     </LU>
@@ -850,7 +850,7 @@
         <currency>LVL</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Latvia</name>
         <domestic>1</domestic>
     </LV>
@@ -1039,7 +1039,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Netherlands, The</name>
         <domestic>1</domestic>
     </NL>
@@ -1047,7 +1047,7 @@
         <currency>NOK</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Norway</name>
     </NO>
     <NP>
@@ -1127,7 +1127,7 @@
         <currency>PLN</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Poland</name>
         <domestic>1</domestic>
     </PL>
@@ -1142,7 +1142,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Portugal</name>
         <domestic>1</domestic>
     </PT>
@@ -1177,7 +1177,7 @@
         <currency>RON</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Romania</name>
         <domestic>1</domestic>
     </RO>
@@ -1231,7 +1231,7 @@
         <currency>SEK</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Sweden</name>
         <domestic>1</domestic>
     </SE>
@@ -1246,7 +1246,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Slovenia</name>
         <domestic>1</domestic>
     </SI>
@@ -1254,7 +1254,7 @@
         <currency>EUR</currency>
         <weight_unit>KG</weight_unit>
         <measure_unit>CM</measure_unit>
-        <region>EA</region>
+        <region>EU</region>
         <name>Slovakia</name>
         <domestic>1</domestic>
     </SK>

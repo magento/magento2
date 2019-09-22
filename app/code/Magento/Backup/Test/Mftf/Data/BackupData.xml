@@ -20,4 +20,8 @@
         <data key="name" unique="suffix">databaseBackup</data>
         <data key="type">Database</data>
     </entity>
+    <entity name="WebSetupWizardBackup" type="backup">
+        <data key="name">WebSetupWizard</data>
+        <data key="type">Database</data>
+    </entity>
 </entities>

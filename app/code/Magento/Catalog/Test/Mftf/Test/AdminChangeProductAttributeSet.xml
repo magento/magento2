@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeProductAttributeSet">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="The required product attribute is not displayed when change attribute set"/>
+            <title value="Attributes from the selected attribute set should be shown"/>
+            <description value="Attributes from the selected attribute set should be shown"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-98452"/>
+            <useCaseId value="MAGETWO-98357"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="productAttributeWithTwoOptions" stepKey="createProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createProductAttributeOption1">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createProductAttributeOption2">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/" stepKey="onAttributeSetEdit"/>
+            <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$$createProductAttribute.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSet" stepKey="SaveAttributeSet"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+        </after>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+
+        <waitForText userInput="$$createProductAttribute.default_frontend_label$$" stepKey="seeAttributeInForm"/>
+    </test>
+</tests>

@@ -38,4 +38,26 @@
     <entity name="DefaultFlatCatalogProduct" type="flat_catalog_product">
         <data key="value">0</data>
     </entity>
+
+    <entity name="UseFlatCatalogCategoryAndProduct" type="catalog_storefront_config">
+        <requiredEntity type="flat_catalog_product">UseFlatCatalogProduct</requiredEntity>
+        <requiredEntity type="flat_catalog_category">UseFlatCatalogCategory</requiredEntity>
+    </entity>
+
+    <entity name="UseFlatCatalogProduct" type="flat_catalog_product">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="UseFlatCatalogCategory" type="flat_catalog_category">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="DefaultFlatCatalogCategoryAndProduct" type="catalog_storefront_config">
+        <requiredEntity type="flat_catalog_product">DefaultFlatCatalogProduct</requiredEntity>
+        <requiredEntity type="flat_catalog_category">DefaultFlatCatalogCategory</requiredEntity>
+    </entity>
+
+    <entity name="DefaultFlatCatalogCategory" type="flat_catalog_category">
+        <data key="value">0</data>
+    </entity>
 </entities>

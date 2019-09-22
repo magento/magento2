@@ -26,6 +26,18 @@ class Instructions extends \Magento\Payment\Block\Info
     protected $_template = 'Magento_Payment::info/instructions.phtml';
 
     /**
+     * Gets payment method title for appropriate store.
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getTitle()
+    {
+        return $this->getInfo()->getAdditionalInformation('method_title')
+            ?: $this->getMethod()->getConfigData('title', $this->getInfo()->getOrder()->getStoreId());
+    }
+
+    /**
      * Get instructions text from order payment
      * (or from config, if instructions are missed in payment)
      *

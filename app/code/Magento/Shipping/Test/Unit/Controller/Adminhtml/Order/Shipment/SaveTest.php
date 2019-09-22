@@ -142,7 +142,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         $this->messageManager = $this->createPartialMock(
             \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError']
+            ['addSuccessMessage', 'addErrorMessage']
         );
         $this->session = $this->createPartialMock(
             \Magento\Backend\Model\Session::class,
@@ -236,7 +236,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         if (!$formKeyIsValid || !$isPost) {
             $this->messageManager->expects($this->once())
-                ->method('addError');
+                ->method('addErrorMessage');
 
             $this->resultRedirect->expects($this->once())
                 ->method('setPath')
@@ -325,12 +325,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
                 ->method('get')
                 ->with(\Magento\Backend\Model\Session::class)
                 ->will($this->returnValue($this->session));
-            $path = 'sales/order/view';
             $arguments = ['order_id' => $orderId];
             $shipment->expects($this->once())
                 ->method('getOrderId')
                 ->will($this->returnValue($orderId));
-            $this->prepareRedirect($path, $arguments);
+            $this->prepareRedirect($arguments);
 
             $this->shipmentValidatorMock->expects($this->once())
                 ->method('validate')
@@ -360,10 +359,9 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $path
      * @param array $arguments
      */
-    protected function prepareRedirect($path, array $arguments = [])
+    protected function prepareRedirect(array $arguments = [])
     {
         $this->actionFlag->expects($this->any())
             ->method('get')
@@ -372,14 +370,8 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->session->expects($this->any())
             ->method('setIsUrlNotice')
             ->with(true);
-
-        $url = $path . '/' . (!empty($arguments) ? $arguments['order_id'] : '');
-        $this->helper->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->with($path, $arguments)
-            ->will($this->returnValue($url));
-        $this->response->expects($this->atLeastOnce())
-            ->method('setRedirect')
-            ->with($url);
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order/view', $arguments);
     }
 }

@@ -21,4 +21,7 @@
             <column name="message_code"/>
         </constraint>
     </table>
+    <table name="queue_poison_pill" resource="default" engine="innodb" comment="Sequence table for poison pill versions">
+        <column xsi:type="varchar" name="version" length="255" nullable="false" comment="Poison Pill version."/>
+    </table>
 </schema>

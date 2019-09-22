@@ -11,6 +11,9 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
+/**
+ * Provide Select object for retrieve product id with minimal price.
+ */
 class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilderInterface
 {
     /**
@@ -69,7 +72,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build($productId)
     {
@@ -85,7 +88,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
                 []
             )->joinInner(
                 [BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS => $productTable],
-                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS, $linkField),
+                sprintf('%s.entity_id = link.child_id', BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS),
                 ['entity_id']
             )->joinInner(
                 ['t' => $priceAttribute->getBackendTable()],

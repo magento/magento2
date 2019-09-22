@@ -89,6 +89,7 @@ interface ReadInterface
      *
      * @param string $path
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function openFile($path);
 

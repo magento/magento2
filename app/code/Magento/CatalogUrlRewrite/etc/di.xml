@@ -24,11 +24,24 @@
     <type name="Magento\UrlRewrite\Model\StorageInterface">
         <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
     </type>
+    <type name="Magento\CatalogUrlRewrite\Model\Storage\DbStorage">
+        <plugin name="dynamic_storage_plugin" type="Magento\CatalogUrlRewrite\Plugin\DynamicCategoryRewrites"/>
+    </type>
     <type name="Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder">
         <arguments>
             <argument name="urlRewriteClassNames" xsi:type="array">
                 <item name="product" xsi:type="string">Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap</item>
                 <item name="category" xsi:type="string">Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewrite\Model\CompositeUrlFinder">
+        <arguments>
+            <argument name="children" xsi:type="array">
+                <item name="catalog" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
             </argument>
         </arguments>
     </type>

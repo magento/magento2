@@ -27,4 +27,9 @@
         <data key="region_code">NY</data>
         <data key="region_id">43</data>
     </entity>
+    <entity name="RegionUT" type="region">
+        <data key="region">Utah</data>
+        <data key="region_code">UT</data>
+        <data key="region_id">58</data>
+    </entity>
 </entities>

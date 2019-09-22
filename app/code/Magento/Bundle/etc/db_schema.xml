@@ -97,7 +97,7 @@
                 comment="Website Id"/>
         <column xsi:type="smallint" name="selection_price_type" padding="5" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Selection Price Type"/>
-        <column xsi:type="decimal" name="selection_price_value" scale="4" precision="12" unsigned="false"
+        <column xsi:type="decimal" name="selection_price_value" scale="6" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Selection Price Value"/>
         <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Parent Product Id"/>
@@ -125,9 +125,9 @@
                 comment="Website Id"/>
         <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
                 comment="Customer Group ID"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="false"
                 comment="Min Price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="false"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="false"
                 comment="Max Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -181,21 +181,21 @@
                 default="0" comment="Tax Class ID"/>
         <column xsi:type="smallint" name="price_type" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Price Type"/>
-        <column xsi:type="decimal" name="special_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="special_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Special Price"/>
-        <column xsi:type="decimal" name="tier_percent" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_percent" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Percent"/>
-        <column xsi:type="decimal" name="orig_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="orig_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Orig Price"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Min Price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Max Price"/>
-        <column xsi:type="decimal" name="tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
-        <column xsi:type="decimal" name="base_tier" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tier" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Base Tier"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -215,21 +215,21 @@
                 default="0" comment="Tax Class ID"/>
         <column xsi:type="smallint" name="price_type" padding="5" unsigned="true" nullable="false" identity="false"
                 comment="Price Type"/>
-        <column xsi:type="decimal" name="special_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="special_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Special Price"/>
-        <column xsi:type="decimal" name="tier_percent" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_percent" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Percent"/>
-        <column xsi:type="decimal" name="orig_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="orig_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Orig Price"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Min Price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Max Price"/>
-        <column xsi:type="decimal" name="tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
-        <column xsi:type="decimal" name="base_tier" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_tier" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Base Tier"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -253,9 +253,9 @@
                 default="0" comment="Group Type"/>
         <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Required"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
-        <column xsi:type="decimal" name="tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -281,9 +281,9 @@
                 default="0" comment="Group Type"/>
         <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Required"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
-        <column xsi:type="decimal" name="tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -303,15 +303,15 @@
                 comment="Website ID"/>
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option Id"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Min Price"/>
-        <column xsi:type="decimal" name="alt_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="alt_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Alt Price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Max Price"/>
-        <column xsi:type="decimal" name="tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
-        <column xsi:type="decimal" name="alt_tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="alt_tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Alt Tier Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -330,15 +330,15 @@
                 comment="Website ID"/>
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option Id"/>
-        <column xsi:type="decimal" name="min_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Min Price"/>
-        <column xsi:type="decimal" name="alt_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="alt_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Alt Price"/>
-        <column xsi:type="decimal" name="max_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="max_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Max Price"/>
-        <column xsi:type="decimal" name="tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
-        <column xsi:type="decimal" name="alt_tier_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="alt_tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Alt Tier Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>

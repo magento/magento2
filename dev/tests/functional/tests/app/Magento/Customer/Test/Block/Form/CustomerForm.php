@@ -29,7 +29,7 @@ class CustomerForm extends Form
      *
      * @var string
      */
-    protected $customerAttribute = "[name='%s[]']";
+    protected $customerAttribute = "[orig-name='%s[]']";
 
     /**
      * Validation text message for a field.

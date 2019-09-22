@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCategoryAndCheckDefaultUrlKeyOnStoreViewTest">
+        <annotations>
+            <stories value="Update categories"/>
+            <title value="Update category, check default URL key on the custom store view"/>
+            <description value="Login as admin and update category and check default URL Key on custom store view"/>
+            <testCaseId value="MC-6063"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
+            <createData entity="SimpleRootSubCategory" stepKey="category">
+                <requiredEntity createDataKey="rootCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
+                <argument name="storeGroupName" value="customStore.name"/>
+            </actionGroup>
+            <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open Store Page -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+
+        <!--Create Custom Store -->
+        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
+        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
+        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
+        <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+
+        <!--Create Store View-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="StoreGroup" value="customStore"/>
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+
+        <!--Update Category-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="updateCategoryName"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveUpdatedCategory"/>
+        <waitForPageLoad stepKey="waitForCateforyToSave"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeCategoryUrlKey" userInput="{{SimpleRootSubCategory.name_lwr}}2" />
+        <!--Open Category in Store Front  Page-->
+        <amOnPage url="/{{NewRootCategory.name}}/{{_defaultCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
+        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectSecondStoreToSwitchOn"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeUpdatedCatergoryInStoreFront"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategoryOnStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(_defaultCategory.name)}}" stepKey="seeTheUpdatedCategoryTitle"/>
+    </test>
+</tests>

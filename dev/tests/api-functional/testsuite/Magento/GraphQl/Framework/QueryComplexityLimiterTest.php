@@ -393,7 +393,8 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
 QUERY;
 
         self::expectExceptionMessageRegExp('/Max query complexity should be 300 but got 302/');
-        $this->graphQlQuery($query);
+        //Use POST request because request uri is too large for some servers
+        $this->graphQlMutation($query);
     }
 
     /**

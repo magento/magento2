@@ -6,10 +6,14 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
-class Update extends \Magento\Wishlist\Controller\AbstractIndex
+/**
+ * Class Update
+ */
+class Update extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -83,8 +87,6 @@ class Update extends \Magento\Wishlist\Controller\AbstractIndex
                 )->defaultCommentString()
                 ) {
                     $description = '';
-                } elseif (!strlen($description)) {
-                    $description = $item->getDescription();
                 }
 
                 $qty = null;

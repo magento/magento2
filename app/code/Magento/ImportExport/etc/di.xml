@@ -10,6 +10,8 @@
     <preference for="Magento\ImportExport\Model\Export\ConfigInterface" type="Magento\ImportExport\Model\Export\Config" />
     <preference for="Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface" type="Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator" />
     <preference for="Magento\ImportExport\Model\Report\ReportProcessorInterface" type="Magento\ImportExport\Model\Report\Csv" />
+    <preference for="Magento\ImportExport\Api\Data\ExportInfoInterface" type="Magento\ImportExport\Model\Export\Entity\ExportInfo" />
+    <preference for="Magento\ImportExport\Api\ExportManagementInterface" type="Magento\ImportExport\Model\Export\ExportManagement" />
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">

@@ -18,8 +18,7 @@ use PHP_CodeSniffer\Files\File;
  * - Type selectors must be lowercase
  * - Write selector in one line, do not use concatenation
  *
- * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selectors-naming
- *
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#selectors-naming
  */
 class TypeSelectorsSniff implements Sniff
 {
@@ -56,7 +55,7 @@ class TypeSelectorsSniff implements Sniff
     public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function register()
     {
@@ -64,7 +63,7 @@ class TypeSelectorsSniff implements Sniff
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(File $phpcsFile, $stackPtr)
     {
@@ -82,6 +81,7 @@ class TypeSelectorsSniff implements Sniff
             return;
         }
 
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         if ((T_STRING === $tokens[$stackPtr - 1]['code'])
             && in_array($tokens[$stackPtr - 1]['content'], $this->tags)
         ) {

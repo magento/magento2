@@ -310,7 +310,7 @@ define([
          * @private
          *
          * @param {Array} args - An array of arguments to pass to the next delegation call.
-         * @returns {Array} An array of delegation resutls.
+         * @returns {Array} An array of delegation results.
          */
         _delegate: function (args) {
             var result;

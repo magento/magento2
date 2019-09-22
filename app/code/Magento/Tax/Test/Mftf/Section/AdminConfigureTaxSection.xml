@@ -28,6 +28,8 @@
         <element name="taxCalculationPrices" type="select" selector="#tax_calculation_price_includes_tax"/>
         <element name="taxCalculationPricesDisabled" type="select" selector="#tax_calculation_price_includes_tax[disabled='disabled']"/>
         <element name="taxCalculationPricesInherit" type="checkbox" selector="#tax_calculation_price_includes_tax_inherit"/>
+        <element name="taxCalculationApplyTaxOn" type="select" selector="#tax_calculation_apply_tax_on"/>
+        <element name="taxCalculationApplyTaxOnInherit" type="checkbox" selector="#tax_calculation_apply_tax_on_inherit"/>
 
         <element name="defaultDestination" type="block" selector="#tax_defaults-head" timeout="30"/>
         <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>

@@ -79,8 +79,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @var array
      */
     protected $_expectedPrices = [
-        2 => ['option_id' => 2, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 0],
-        3 => ['option_id' => 3, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 2]
+        0 => ['option_id' => 2, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 0],
+        1 => ['option_id' => 3, 'store_id' => 0, 'price_type' => 'fixed', 'price' => 2]
     ];
 
     /**
@@ -702,7 +702,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $rowData = include __DIR__ . '/_files/row_data_no_custom_option.php';
         $this->_bypassModelMethodGetMultiRowFormat($rowData);
-        $this->assertFalse($this->modelMock->validateRow($rowData, 0));
+        $this->assertTrue($this->modelMock->validateRow($rowData, 0));
     }
 
     /**

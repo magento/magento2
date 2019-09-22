@@ -1,6 +1,6 @@
 type Query {
     customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
-    @doc(description: "Returns the attribute type, given an attribute code and entity type")
+    @doc(description: "Returns the attribute type, given an attribute code and entity type") @cache(cacheTag: "cat_test", cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
 }
 
 type CustomAttributeMetadata {
@@ -19,7 +19,6 @@ type Attribute @doc(description: "Attribute contains the attribute_type of the s
 }
 input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
     eq: String @doc(description:"Equal")
-    finset: [String]
     from: String
     gt: String
     gteq: String

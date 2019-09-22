@@ -24,6 +24,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -1231,24 +1232,23 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Returns array of sub-products for specified configurable product
      *
+     * $requiredAttributeIds - one dimensional array, if provided
      * Result array contains all children for specified configurable product
      *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @param  array $requiredAttributeIds
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $requiredAttributeIds
      * @return ProductInterface[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getUsedProducts($product, $requiredAttributeIds = null)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
-        $keyParts = [
-            __METHOD__,
-            $product->getData($metadata->getLinkField()),
-            $product->getStoreId(),
-            $this->getCustomerSession()->getCustomerGroupId(),
-            $requiredAttributeIds
-        ];
-        $cacheKey = $this->getUsedProductsCacheKey($keyParts);
-        return $this->loadUsedProducts($product, $cacheKey);
+        if (!$product->hasData($this->_usedProducts)) {
+            $collection = $this->getConfiguredUsedProductCollection($product, false);
+            $usedProducts = array_values($collection->getItems());
+            $product->setData($this->_usedProducts, $usedProducts);
+        }
+
+        return $product->getData($this->_usedProducts);
     }
 
     /**
@@ -1385,7 +1385,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getUsedProductsCacheKey($keyParts)
     {
-        return md5(implode('_', $keyParts));
+        return sha1(implode('_', $keyParts));
     }
 
     /**

@@ -29,7 +29,7 @@
             <input>select</input>
         </price_rule_type>
         <order_statuses>
-            <selector>[name="order_statuses[]"]</selector>
+            <selector>[name="order_statuses[0]"]</selector>
             <input>multiselect</input>
         </order_statuses>
         <rules_list>

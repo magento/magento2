@@ -30,9 +30,12 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
+        $this->escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
         $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
-        $this->escaper = new Escaper($this->zendEscaper, $this->loggerMock);
+        $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
     }
 
     /**
@@ -40,6 +43,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $codepoint Unicode codepoint in hex notation
      * @return string UTF-8 literal string
+     * @throws \Exception
      */
     protected function codepointToUtf8($codepoint)
     {
@@ -69,9 +73,9 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
         // Exceptions to escaping ranges
         $immune = [',', '.', '_'];
         for ($chr = 0; $chr < 0xFF; $chr++) {
-            if ($chr >= 0x30 && $chr <= 0x39
-                || $chr >= 0x41 && $chr <= 0x5A
-                || $chr >= 0x61 && $chr <= 0x7A
+            if (($chr >= 0x30 && $chr <= 0x39)
+                || ($chr >= 0x41 && $chr <= 0x5A)
+                || ($chr >= 0x61 && $chr <= 0x7A)
             ) {
                 $literal = $this->codepointToUtf8($chr);
                 $this->assertEquals($literal, $this->escaper->escapeJs($literal));
@@ -171,6 +175,11 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
                 'data' => '&<>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
                 'expected' => '&amp;&lt;&gt;&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;'
             ],
+            'text with special characters and allowed tag' => [
+                'data' => '&<br/>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
+                'expected' => '&amp;<br>&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;',
+                'allowedTags' => ['br'],
+            ],
             'text with multiple allowed tags, includes self closing tag' => [
                 'data' => '<span>some text in tags<br /></span>',
                 'expected' => '<span>some text in tags<br></span>',
@@ -257,13 +266,38 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeUrl
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeUrlDataProvider
      */
-    public function testEscapeUrl()
+    public function testEscapeUrl(string $data, string $expected): void
     {
-        $data = 'http://example.com/search?term=this+%26+that&view=list';
-        $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
         $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeUrlDataProvider(): array
+    {
+        return [
+            [
+                'data' => "http://example.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://exam\r\nple.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://&#x65;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;/",
+                'expected' => "http://example.com/",
+            ],
+        ];
     }
 
     /**
@@ -309,6 +343,10 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     public function escapeDataProvider()
     {
         return [
+            [
+                '0',
+                '0',
+            ],
             [
                 'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
                 . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29',

@@ -7,6 +7,9 @@ namespace Magento\PageCache\Test\Unit\Model;
 
 use Magento\PageCache\Model\DepersonalizeChecker;
 
+/**
+ * Depersonalize checker test
+ */
 class DepersonalizeCheckerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -15,7 +18,7 @@ class DepersonalizeCheckerTest extends \PHPUnit\Framework\TestCase
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleManagerMock;
 
@@ -27,7 +30,7 @@ class DepersonalizeCheckerTest extends \PHPUnit\Framework\TestCase
     public function setup()
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\ModuleManagerInterface::class);
         $this->cacheConfigMock = $this->createMock(\Magento\PageCache\Model\Config::class);
     }
 

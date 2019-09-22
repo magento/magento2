@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 
 /**
  * Orders data reslover
@@ -24,20 +25,12 @@ class Orders implements ResolverInterface
     private $collectionFactory;
 
     /**
-     * @var CheckCustomerAccount
-     */
-    private $checkCustomerAccount;
-
-    /**
      * @param CollectionFactoryInterface $collectionFactory
-     * @param CheckCustomerAccount $checkCustomerAccount
      */
     public function __construct(
-        CollectionFactoryInterface $collectionFactory,
-        CheckCustomerAccount $checkCustomerAccount
+        CollectionFactoryInterface $collectionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->checkCustomerAccount = $checkCustomerAccount;
     }
 
     /**
@@ -50,11 +43,13 @@ class Orders implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customerId = $context->getUserId();
-        $this->checkCustomerAccount->execute($customerId, $context->getUserType());
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
 
         $items = [];
-        $orders = $this->collectionFactory->create($customerId);
+        $orders = $this->collectionFactory->create($context->getUserId());
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($orders as $order) {

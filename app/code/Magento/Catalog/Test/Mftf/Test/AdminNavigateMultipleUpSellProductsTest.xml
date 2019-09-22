@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNavigateMultipleUpSellProductsTest">
+        <annotations>
+            <stories value="Up Sell products"/>
+            <title value="Promote Multiple Products (Simple, Configurable) as Up-Sell Products"/>
+            <description value="Login as admin and add simple and configurable Products as Up-Sell products"/>
+            <testCaseId value="MC-8902"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!--Create Simple Products-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory1"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory1"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory2"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory2"/>
+            </createData>
+
+            <!-- Create the configurable product with product Attribute options-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="delete">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <!--Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <!--Logout as admin-->
+            <actionGroup ref="logout" stepKey="logout"/>
+
+            <!--Delete created data-->
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory1" stepKey="deleteSubCategory1"/>
+            <deleteData createDataKey="createCategory2" stepKey="deleteCategory2"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deletecreateConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deletecreateConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+        </after>
+
+        <!--Open Product Index Page-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+
+        <!--Select SimpleProduct -->
+        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <!--Add SimpleProduct1 and ConfigProduct as Up sell products-->
+        <click stepKey="clickOnRelatedProducts" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
+        <click stepKey="clickOnAddUpSellProducts" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterProduct">
+            <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForTheProductToLoad"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheSimpleProduct2"/>
+        <click stepKey="addSelectedProduct" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
+        <waitForPageLoad stepKey="waitForProductToBeAdded"/>
+        <click stepKey="clickOnAddUpSellProductsButton" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterConfigurableProduct">
+            <argument name="sku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForTheConfigProductToLoad"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheConfigProduct"/>
+        <click stepKey="addSelectedProductButton" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
+        <waitForPageLoad stepKey="waitForConfigProductToBeAdded"/>
+        <click stepKey="clickOnRelatedProducts1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
+        <click stepKey="clickOnSaveButton" selector="{{AdminProductFormActionSection.saveButton}}"/>
+        <waitForPageLoad stepKey="waitForLoading1"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Go to Product Index Page -->
+        <click stepKey="clickOnBackButton" selector="{{AdminGridMainControls.back}}"/>
+        <waitForPageLoad stepKey="waitForProductsToBeLoaded"/>
+
+        <!--Select Configurable Product-->
+        <actionGroup ref="filterProductGridBySku" stepKey="findConfigProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <click stepKey="openConfigProduct" selector="{{AdminProductGridSection.productRowBySku($$createConfigProduct.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForConfigProductToLoad"/>
+
+        <!--Add  SimpleProduct1 as Up Sell Product-->
+        <click stepKey="clickOnRelatedProductsHeader" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
+        <click stepKey="clickOnAddUpSellProductsButton1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterSimpleProduct2">
+            <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForTheSimpleProduct2ToBeLoaded"/>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectSimpleProduct1"/>
+        <click stepKey="addSimpleProduct2" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
+        <waitForPageLoad stepKey="waitForSimpleProductToBeAdded"/>
+        <scrollTo selector="{{AdminProductFormActionSection.saveButton}}" stepKey="scrollToTheSaveButton"/>
+        <click stepKey="clickOnSaveButton1" selector="{{AdminProductFormActionSection.saveButton}}"/>
+        <waitForPageLoad stepKey="waitForLoading2"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown1"/>
+        <waitForPageLoad stepKey="waitForUpdatesTobeSaved1"/>
+
+        <!--Go to SimpleProduct store front page-->
+        <amOnPage url="$$createSimpleProduct.sku$$.html" stepKey="goToSimpleProductFrontPage"/>
+        <waitForPageLoad stepKey="waitForProduct"/>
+        <see stepKey="seeProductName" userInput="$$createSimpleProduct.sku$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
+        <scrollTo stepKey="scrollToTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
+
+        <!--Verify Up Sell Products displayed in SimpleProduct page-->
+        <see stepKey="seeTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
+        <see stepKey="seeSimpleProduct1" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createSimpleProduct1.name$$"/>
+        <see stepKey="seeConfigProduct" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createConfigProduct.name$$"/>
+
+        <!--Go to Config Product store front page-->
+        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="goToConfigProductFrontPage"/>
+        <waitForPageLoad stepKey="waitForConfigProductToBeLoaded"/>
+        <scrollTo stepKey="scrollToTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
+
+        <!--Verify Up Sell Products displayed in ConfigProduct page-->
+        <see stepKey="seeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
+        <see stepKey="seeSimpleProduct2" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createSimpleProduct1.name$$"/>
+
+        <!--Go to SimpleProduct1 store front page-->
+        <amOnPage url="$$createSimpleProduct1.sku$$.html" stepKey="goToSimpleProduct1FrontPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProduct1ToBeLoaded"/>
+
+        <!--Verify No Up Sell Products displayed in SimplProduct1 page-->
+        <dontSee stepKey="dontSeeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
+    </test>
+</tests>

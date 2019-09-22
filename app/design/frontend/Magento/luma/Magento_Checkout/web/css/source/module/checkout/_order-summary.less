@@ -118,6 +118,10 @@
 
             .product {
                 position: relative;
+                .item-options {
+                    &:extend(.abs-product-options-list all);
+                    &:extend(.abs-add-clearfix all);
+                }
             }
         }
 
@@ -137,6 +141,10 @@
         }
 
         .product-item {
+            .product-item-details {
+                &:extend(.abs-add-clearfix all);
+            }
+
             .product-item-inner {
                 display: table;
                 margin: 0 0 @indent__s;
@@ -144,14 +152,14 @@
             }
 
             .product-item-name-block {
-                display: table-cell;
+                display: block;
                 padding-right: @indent__xs;
                 text-align: left;
             }
 
             .subtotal {
-                display: table-cell;
-                text-align: right;
+                display: block;
+                text-align: left;
             }
 
             .price {
@@ -165,6 +173,10 @@
                         .lib-font-size(10);
                     }
                 }
+            }
+
+            .message {
+                margin-top: 10px;
             }
         }
 
@@ -215,6 +227,30 @@
         .modal-header {
             .action-close {
                 display: none;
+            }
+        }
+    }
+}
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .opc-block-summary {
+        .product-item {
+            .product-item-inner {
+                display: block;
+            }
+
+            .product-item-name-block {
+                display: block;
+                text-align: left;
+            }
+
+            .subtotal {
+                display: block;
+                text-align: left;
             }
         }
     }

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CaptchaFormsDisplayingTest">
         <annotations>
             <features value="Captcha"/>
@@ -92,6 +92,8 @@
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <waitForText userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="waitForText"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
