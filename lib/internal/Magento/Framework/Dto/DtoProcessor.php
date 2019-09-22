@@ -21,7 +21,6 @@ use Magento\Framework\Dto\DtoProcessor\DtoReflection;
 use Magento\Framework\Dto\DtoProcessor\GetHydrationStrategy;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
-use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\Reflection\TypeProcessor;
@@ -149,8 +148,7 @@ class DtoProcessor
     {
         $isArrayType = $this->typeProcessor->isArrayType($type) || ($type === 'array');
 
-        if (empty($value) && $isArrayType) {
-            $value = [];
+        if ($value === null) {
             return true;
         }
 
@@ -174,7 +172,7 @@ class DtoProcessor
      * @param $value
      * @param string $type
      * @return array|object
-     * @throws LocalizedException
+     * @throws SerializationException
      */
     private function createObjectByType($propertyName, $value, string $type)
     {
@@ -213,8 +211,8 @@ class DtoProcessor
 
             return $value;
         } catch (\Exception $e) {
-            throw new LocalizedException(
-                new Phrase(
+            throw new SerializationException(
+                __(
                     'Error occurred during "%field_name" processing. %details',
                     ['field_name' => $propertyName, 'details' => $e->getMessage()]
                 )
@@ -245,13 +243,13 @@ class DtoProcessor
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(
-                new Phrase('An empty custom attribute is specified. Enter the attribute and try again.')
+                __('An empty custom attribute is specified. Enter the attribute and try again.')
             );
         }
 
         if (!$customAttributeCode) {
             throw new SerializationException(
-                new Phrase(
+                __(
                     'A custom attribute is specified with a missing attribute code. Verify the code and try again.'
                 )
             );
@@ -259,7 +257,7 @@ class DtoProcessor
 
         if (!array_key_exists(AttributeValue::VALUE, $customAttribute)) {
             throw new SerializationException(
-                new Phrase(
+                __(
                     'The "' . $customAttributeCode .
                     '" attribute code doesn\'t have a value set. Enter the value and try again.'
                 )
@@ -275,7 +273,6 @@ class DtoProcessor
      * @param string $dataObjectClassName
      * @param array $customAttributesValueArray
      * @return AttributeValue[]
-     * @throws LocalizedException
      * @throws SerializationException
      */
     private function convertCustomAttributeValue(string $dataObjectClassName, array $customAttributesValueArray): array
@@ -304,7 +301,7 @@ class DtoProcessor
             }
 
             try {
-                $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type, true);
+                $attributeValue = $this->createObjectByType($key, $customAttributeValue, $type);
             } catch (\Exception $e) {
                 throw new SerializationException(
                     __(
@@ -329,7 +326,6 @@ class DtoProcessor
      * @param string $type
      * @param array $data
      * @return array
-     * @throws LocalizedException
      * @throws ReflectionException
      * @throws SerializationException
      */
@@ -397,7 +393,6 @@ class DtoProcessor
      * @param array $data
      * @param string $type
      * @return object
-     * @throws LocalizedException
      * @throws ReflectionException
      * @throws SerializationException
      */

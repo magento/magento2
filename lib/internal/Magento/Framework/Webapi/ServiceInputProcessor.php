@@ -133,8 +133,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
      * @throws Exception
-     * @throws WebapiException
+     * @throws InputException
      * @throws LocalizedException
+     * @throws \ReflectionException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
@@ -148,7 +149,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
 
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
-                } catch (\Exception $e) {
+                } catch (SerializationException $e) {
                     throw new WebapiException(__($e->getMessage()));
                 }
             } else {
