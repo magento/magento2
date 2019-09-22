@@ -5,10 +5,9 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCreateNewUserWithUserExpirationActionGroup">
+    <actionGroup name="AdminCreateNewUserWithExpirationActionGroup">
         <annotations>
             <description>Goes to the Admin Users grid page. Clicks on Create User. Fills in the provided User with an expiration date and saves.</description>
         </annotations>
@@ -28,7 +27,5 @@
         <fillField selector="{{AdminNewUserFormSection.currentPassword}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
         <click selector="{{AdminNewUserFormSection.save}}" stepKey="clickSaveUser" />
         <waitForPageLoad stepKey="waitForSaveTheUser" />
-        <see userInput="You saved the user." stepKey="seeSuccessMessage" />
-
     </actionGroup>
 </actionGroups>

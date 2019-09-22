@@ -8,8 +8,9 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
     <entity name="NewAdminUserWithValidExpiration" type="user">
-        <data key="username" unique="suffix">adminExpired</data>
+        <data key="username" unique="suffix">adminExpiresAt</data>
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
         <data key="email" unique="prefix">admin@example.com</data>
@@ -25,5 +26,9 @@
         <array key="roles">
             <item>1</item>
         </array>
+    </entity>
+
+    <entity name="NewAdminUserWithInvalidExpiration" type="user" extends="NewAdminUserWithValidExpiration">
+        <data key="expires_at">Sep 3, 2000 4:42:36 PM</data>
     </entity>
 </entities>
