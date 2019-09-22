@@ -12,7 +12,7 @@ use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 /**
  * Generate an array with test values for customizable options based on the option type
  */
-class GetCustomOptionsValuesForQueryBySku
+class GetEmptyOptionsValuesForQueryBySku
 {
     /**
      * @var ProductCustomOptionRepositoryInterface
@@ -28,7 +28,7 @@ class GetCustomOptionsValuesForQueryBySku
     }
 
     /**
-     * Returns array of custom options for the product
+     * Returns array of empty options for the product
      *
      * @param string $sku
      * @return array
@@ -43,23 +43,7 @@ class GetCustomOptionsValuesForQueryBySku
             if ($optionType == 'date') {
                 $customOptionsValues[] = [
                     'id' => (int)$customOption->getOptionId(),
-                    'value_string' => '2012-12-12 00:00:00'
-                ];
-            } elseif ($optionType == 'field' || $optionType == 'area') {
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => 'test'
-                ];
-            } elseif ($optionType == 'drop_down') {
-                $optionSelectValues = $customOption->getValues();
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => reset($optionSelectValues)->getOptionTypeId()
-                ];
-            } elseif ($optionType == 'multiple') {
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => '[' . implode(',', array_keys($customOption->getValues())) . ']'
+                    'value_string' => ''
                 ];
             }
         }

@@ -32,6 +32,11 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
     private $getCustomOptionsValuesForQueryBySku;
 
     /**
+     * @var GetEmptyOptionsValuesForQueryBySku
+     */
+    private $getEmptyOptionsValuesForQueryBySku;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -40,6 +45,7 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->productCustomOptionsRepository = $objectManager->get(ProductCustomOptionRepositoryInterface::class);
         $this->getCustomOptionsValuesForQueryBySku = $objectManager->get(GetCustomOptionsValuesForQueryBySku::class);
+        $this->getEmptyOptionsValuesForQueryBySku = $objectManager->get(GetEmptyOptionsValuesForQueryBySku::class);
     }
 
     /**
@@ -96,6 +102,58 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         self::expectExceptionMessage(
             'The product\'s required option(s) weren\'t entered. Make sure the options are entered and try again.'
         );
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Test adding a simple product to the shopping cart with Date customizable option assigned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_option_date.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddSimpleProductWithDateOption()
+    {
+        $sku = 'simple-product-1';
+        $quantity = 1;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+
+        $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
+        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
+        $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
+
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('items', $response['addSimpleProductsToCart']['cart']);
+        self::assertCount(1, $response['addSimpleProductsToCart']['cart']);
+
+        $customizableOptionOutput = $response['addSimpleProductsToCart']['cart']['items'][0]['customizable_options'][0]['values'][0]['value'];
+        $expectedValue = date("M d, Y", strtotime($customOptionsValues[0]['value_string']));
+
+        self::assertEquals($expectedValue, $customizableOptionOutput);
+    }
+
+    /**
+     * Test adding a simple product with empty values for date option
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_option_date.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddSimpleProductWithMissedDateOptionsSet()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'simple-product-1';
+        $quantity = 1;
+
+        $customOptionsValues = $this->getEmptyOptionsValuesForQueryBySku->execute($sku);
+        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
+        $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
+
+        self::expectExceptionMessage(
+            'Invalid format provided. Please use \'Y-m-d H:i:s\' format.'
+        );
+
         $this->graphQlMutation($query);
     }
 
