@@ -166,7 +166,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      */
     protected function updateRegionData(&$attributeValues)
     {
-        if (!empty($attributeValues['region_id'])) {
+        if (isset($attributeValues['region_id'])) {
             $newRegion = $this->regionFactory->create()->load($attributeValues['region_id']);
             $attributeValues['region_code'] = $newRegion->getCode();
             $attributeValues['region'] = $newRegion->getDefaultName();
