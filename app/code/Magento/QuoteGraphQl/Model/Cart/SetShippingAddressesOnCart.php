@@ -49,20 +49,6 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
         $shippingAddressInput = current($shippingAddressesInput);
-        $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
-        $addressInput = $shippingAddressInput['address'] ?? null;
-
-        if (null === $customerAddressId && null === $addressInput) {
-            throw new GraphQlInputException(
-                __('The shipping address must contain either "customer_address_id" or "address".')
-            );
-        }
-
-        if ($customerAddressId && $addressInput) {
-            throw new GraphQlInputException(
-                __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
-            );
-        }
 
         $shippingAddress = $this->getShippingAddress->execute($context, $shippingAddressInput);
 

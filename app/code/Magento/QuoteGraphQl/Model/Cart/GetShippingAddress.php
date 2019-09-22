@@ -32,6 +32,8 @@ class GetShippingAddress
     }
 
     /**
+     * Get Shipping Address based on the input.
+     *
      * @param ContextInterface $context
      * @param array $shippingAddressInput
      * @return Address
@@ -39,13 +41,25 @@ class GetShippingAddress
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(ContextInterface $context, array $shippingAddressInput)
+    public function execute(ContextInterface $context, array $shippingAddressInput): Address
     {
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
+        $addressInput = $shippingAddressInput['address'] ?? null;
 
-        $addressInput = $shippingAddressInput['address'];
         if ($addressInput) {
             $addressInput['customer_notes'] = $shippingAddressInput['customer_notes'] ?? '';
+        }
+
+        if (null === $customerAddressId && null === $addressInput) {
+            throw new GraphQlInputException(
+                __('The shipping address must contain either "customer_address_id" or "address".')
+            );
+        }
+
+        if ($customerAddressId && $addressInput) {
+            throw new GraphQlInputException(
+                __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
+            );
         }
 
         if (null === $customerAddressId) {
