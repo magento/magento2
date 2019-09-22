@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Filesystem;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Magento directories resolver.
@@ -44,12 +45,13 @@ class DirectoryResolver
      *
      * @param string $path
      * @param string $directoryConfig
+     * @param string $driverCode
      * @return bool
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function validatePath($path, $directoryConfig = DirectoryList::MEDIA)
+    public function validatePath($path, $directoryConfig = DirectoryList::MEDIA, $driverCode = DriverPool::FILE)
     {
-        $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
+        $directory = $this->filesystem->getDirectoryWrite($directoryConfig, $driverCode);
         $realPath = $directory->getDriver()->getRealPathSafety($path);
         $root = $this->directoryList->getPath($directoryConfig);
 
