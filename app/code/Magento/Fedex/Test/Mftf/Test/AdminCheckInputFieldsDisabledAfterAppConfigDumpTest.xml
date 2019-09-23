@@ -16,8 +16,6 @@
         <waitForElementVisible selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" stepKey="waitFedExTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActive}}" userInput="disabled" stepKey="grabFedExActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabFedExActiveDisabled" stepKey="assertFedExActiveDisabled"/>
-        <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExActiveRMA}}" userInput="disabled" stepKey="grabFedExActiveRMADisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabFedExActiveRMADisabled" stepKey="assertFedExActiveRMADisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExTitle}}" userInput="disabled" stepKey="grabFedExTitleDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabFedExTitleDisabled" stepKey="assertFedExTitleDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodFedExSection.carriersFedExAccountId}}" userInput="disabled" stepKey="grabFedExAccountIdDisabled"/>
