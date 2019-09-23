@@ -246,6 +246,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoAppArea frontend
+     * @magentoDbIsolation disabled
      */
     public function testFlatAfterDeleted()
     {

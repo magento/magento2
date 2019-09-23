@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Controller;
 /**
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
  */
 class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 {
