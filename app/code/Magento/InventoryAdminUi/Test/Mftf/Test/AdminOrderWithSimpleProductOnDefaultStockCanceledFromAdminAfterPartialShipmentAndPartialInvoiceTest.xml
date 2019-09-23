@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminAfterPartialShipmentAndPartialInvoiceTest"
+          extends="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Order with Simple product on Default stock canceled from Admin after partial shipment and partial invoice."/>
+            <description value="Order with Simple product on Default stock canceled from Admin after partial shipment and partial invoice."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/2613690"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <!-- Invoice the order and assert the status -->
+        <actionGroup ref="goToInvoiceIntoOrder" stepKey="goToInvoiceIntoOrderPage" before="cancelPendingOrder" />
+        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" after="goToInvoiceIntoOrderPage" userInput="2" stepKey="ChangeQtyToInvoice"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity" after="ChangeQtyToInvoice"/>
+        <waitForPageLoad time="20" stepKey="WaitForInvoiceQtyUpdate" after="updateQuantity"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice" after="WaitForInvoiceQtyUpdate"/>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"  after="submitInvoice"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="2" stepKey="ship2Items" after="goToShipment"/>
+        <actionGroup ref="submitShipmentIntoOrder" stepKey="submitShipment" after="ship2Items"/>
+
+        <remove keyForRemoval="cancelPendingOrder"/>
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder" after="assertOrderIdIsNotEmpty">
+            <argument name="orderStatus" value="Complete"/>
+        </actionGroup>
+
+        <remove keyForRemoval="checkProductSourceQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty"  after="findProductBySkuToCheckQty">
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="sourceQty" value="998"/>
+            <argument name="stockQty" value="998"/>
+        </actionGroup>
+    </test>
+</tests>
