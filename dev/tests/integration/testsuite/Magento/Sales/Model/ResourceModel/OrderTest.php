@@ -10,7 +10,11 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,10 +63,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
-        $order->loadByIncrementId($this->orderIncrementId);
-        $order->delete();
+        $orderCollection = $this->objectManager->create(OrderCollectionFactory::class)->create();
+        foreach ($orderCollection as $order) {
+            $order->delete();
+        }
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
@@ -140,11 +144,11 @@ class OrderTest extends \PHPUnit\Framework\TestCase
      * Check that store name with length within 255 chars can be saved in table sales_order
      *
      * @magentoDataFixture Magento/Store/_files/store_with_long_name.php
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testSaveStoreName()
     {
-        $storeName = str_repeat('a', 220);
         $store = $this->storeRepository->get('test_2');
         $this->storeManager->setCurrentStore($store->getId());
         $eventManager = $this->objectManager->get(ManagerInterface::class);
@@ -154,13 +158,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $payment->setMethod('checkmo');
         $order->setStoreId($store->getId())->setPayment($payment);
         $this->resourceModel->save($order);
-        $this->resourceModel->load($order, $storeName, 'store_name');
-        $name = [
-            'Main Website',
-            'Main Website Store',
-            $storeName,
-        ];
-        $expectedStoreName = implode(PHP_EOL, $name);
-        $this->assertEquals($expectedStoreName, $order->getStoreName());
+        $orderRepository = $this->objectManager->create(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        $order = $orderRepository->get($order->getId());
+        $this->assertEquals(255, strlen($order->getStoreName()));
+        $this->assertContains($store->getWebsite()->getName(), $order->getStoreName());
+        $this->assertContains($store->getGroup()->getName(), $order->getStoreName());
     }
 }

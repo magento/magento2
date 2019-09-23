@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 /** @var $store \Magento\Store\Model\Store */
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
-$storeName = str_repeat('a', 220);
+$storeName = str_repeat('a', 255);
 if (!$store->load('test', 'code')->getId()) {
     $store->setData(
         [
