@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillSourceQtyOnProductEditPageActionGroup">
+        <annotations>
+            <description>Fills in the Product edit page, Sources qty.</description>
+        </annotations>
+        <arguments>
+            <argument name="sourceCode"/>
+            <argument name="qty" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminProductSourcesGrid.rowQtyBySourceCode(sourceCode)}}" userInput="{{qty}}" stepKey="fillSourceQtyField"/>
+    </actionGroup>
+</actionGroups>
