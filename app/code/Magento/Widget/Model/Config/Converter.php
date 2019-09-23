@@ -62,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @return array
      * @throws \LogicException
      */
-    private function processWidgetSubNode(\DOMNode $widgetSubNode, array $widgetArray)
+    private function processWidgetSubNode(\DOMNode $widgetSubNode, array $widgetArray) : array
     {
         switch ($widgetSubNode->nodeName) {
             case 'label':
@@ -100,7 +100,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $widgetArray
      * @return array
      */
-    private function processParameters(\DOMNode $widgetSubNode, array $widgetArray)
+    private function processParameters(\DOMNode $widgetSubNode, array $widgetArray) : array
     {
         /** @var $parameter \DOMNode */
         foreach ($widgetSubNode->childNodes as $parameter) {
@@ -122,7 +122,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param array $widgetArray
      * @return array
      */
-    private function processContainers(\DOMNode $widgetSubNode, array $widgetArray)
+    private function processContainers(\DOMNode $widgetSubNode, array $widgetArray) : array
     {
         if (!isset($widgetArray['supported_containers'])) {
             $widgetArray['supported_containers'] = [];
