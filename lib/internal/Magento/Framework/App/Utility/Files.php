@@ -24,44 +24,20 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    /**
-     * Include app code
-     */
     const INCLUDE_APP_CODE = 1;
 
-    /**
-     * Include tests
-     */
     const INCLUDE_TESTS = 2;
 
-    /**
-     * Include dev tools
-     */
     const INCLUDE_DEV_TOOLS = 4;
 
-    /**
-     * Include templates
-     */
     const INCLUDE_TEMPLATES = 8;
 
-    /**
-     * Include lib files
-     */
     const INCLUDE_LIBS = 16;
 
-    /**
-     * Include pub code
-     */
     const INCLUDE_PUB_CODE = 32;
 
-    /**
-     * Include non classes
-     */
     const INCLUDE_NON_CLASSES = 64;
 
-    /**
-     * Include setup
-     */
     const INCLUDE_SETUP = 128;
 
     /**
@@ -397,6 +373,7 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
             }
             self::$_cache[$cacheKey] = $files;
@@ -679,6 +656,7 @@ class Files
                         }
                     }
                 } else {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $files = array_merge($files, $moduleFiles);
                 }
             }
@@ -713,8 +691,10 @@ class Files
                 );
 
                 if ($params['with_metainfo']) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
                 } else {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $files = array_merge($files, $themeFiles);
                 }
             }
