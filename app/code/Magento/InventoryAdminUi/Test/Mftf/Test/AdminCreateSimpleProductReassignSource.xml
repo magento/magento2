@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateSimpleProductReassignSource">
         <annotations>
-            <stories value="Add Simple Product"/>
+            <stories value="Reassign Source"/>
             <title value="Simple Product created and source can be reassigned"/>
             <description value="You should be able to create a New Product via the Admin, then reassign previously assigned source."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/3191702"/>

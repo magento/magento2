@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="GuestCustomerCreateOrderWithSimpleProductOnCustomStockTest">
         <annotations>
-            <stories value="Guest Customer created Order with Simple product"/>
+            <stories value="Order with Simple product"/>
             <title value="Guest Customer created Order with Simple product"/>
             <description value="Guest Customer created Order with Simple product."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/1408754"/>
@@ -32,7 +32,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
-            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct">
                 <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
             <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setCustomSourceQuantity"/>
@@ -43,6 +43,8 @@
         </before>
 
         <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <comment userInput="Assign Default Stock to Main Website " stepKey="assignDefaultStockToMainWebsiteComment"/>
             <amOnPage url="{{AdminManageStockPage.url}}" stepKey="navigateToStockListPage"/>
             <waitForPageLoad time="20" stepKey="waitForStockListPageLoad"/>
@@ -56,10 +58,10 @@
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource1">
                 <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="CustomStockMainWebsite" stepKey="deleteStock"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 
         <!--Place order from homepage-->

@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOutOfStockThresholdAppliedToSimpleInAdvancedInventoryOnProductPageTest">
         <annotations>
-            <stories value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
+            <stories value="Out-of-Stock Threshold"/>
             <title value="Out-of-Stock Threshold applied to Simple product on Product page in admin"/>
             <description value="Out-of-Stock Threshold applied to Simple product on Product page in admin."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/909051/scenarios/1652166"/>
@@ -32,7 +32,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
-            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToCreatedProduct">
                 <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
             <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setCustomSourceQuantity"/>
@@ -42,10 +42,12 @@
             <actionGroup ref="AdminChangeOutOfStockThresholdOnProductEditPageActionGroup" stepKey="setOutOfStockThreshold">
                 <argument name="threshold" value="100"/>
             </actionGroup>
-            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveEditedSimpleProduct"/>
         </before>
 
         <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
@@ -53,12 +55,9 @@
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource1">
                 <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="CustomStockMainWebsite" stepKey="deleteStock"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
-            <waitForPageLoad time="30" stepKey="waitForIndexAndCache"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 

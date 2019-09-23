@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOutOfStockThresholdOnConfigurationPageTest">
         <annotations>
-            <stories value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
+            <stories value="Out-of-Stock Threshold"/>
             <title value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
             <description value="You should be able to set the Out-of-Stock Threshold on the Configuration page."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/1652166"/>
@@ -43,6 +43,10 @@
         </before>
 
         <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <!-- Revert out of stock threshold value in config. -->
+            <magentoCLI command="config:set cataloginventory/item_options/min_qty 0" stepKey="setMinQtyToDefaultValue"/>
             <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
@@ -50,14 +54,9 @@
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource1">
                 <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
             </actionGroup>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="CustomStockMainWebsite" stepKey="deleteStock"/>
-            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <!-- Revert out of stock threshold value in config. -->
-            <magentoCLI command="config:set cataloginventory/item_options/min_qty 0" stepKey="setMinQtyToDefaultValue"/>
             <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
             <magentoCLI command="cache:flush" stepKey="cleanCache"/>
-            <waitForPageLoad time="30" stepKey="waitForIndexAndCache"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
