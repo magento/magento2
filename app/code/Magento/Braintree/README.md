@@ -20,7 +20,7 @@ For information about an event in Magento 2, see [Events and observers](https://
 
 ### Layouts
 
-This module interacts the following layouts and layout handles in the `view/adminhtml/layout` directory:
+This module interacts with the following layouts and layout handles in the `view/adminhtml/layout` directory:
 
 - `braintree_paypal_review`
 - `checkout_index_index`
