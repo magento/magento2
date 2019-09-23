@@ -11,7 +11,6 @@
     <section name="AdminShippingMethodUSPSSection">
         <element name="carriersUSPSTab" type="button" selector="#carriers_usps-head"/>
         <element name="carriersUSPSActive" type="input" selector="#carriers_usps_active_inherit"/>
-        <element name="carriersUSPSActiveRMA" type="select" selector="#carriers_usps_active_rma"/>
         <element name="carriersUSPSGatewayXMLUrl" type="input" selector="#carriers_usps_gateway_url_inherit"/>
         <element name="carriersUSPSGatewaySecureUrl" type="input" selector="#carriers_usps_gateway_secure_url_inherit"/>
         <element name="carriersUSPSTitle" type="input" selector="#carriers_usps_title_inherit"/>
