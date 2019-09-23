@@ -1039,6 +1039,30 @@ class Files
     }
 
     /**
+     * Parse meta-info of a static file in module
+     *
+     * @deprecated Replaced with method _accumulateStaticFiles()
+     *
+     * @param string $file
+     * @return array
+     */
+    protected function _parseModuleStatic($file)
+    {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+            if (preg_match(
+                    '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
+                    $file,
+                    $matches
+                ) === 1
+            ) {
+                list(, $area, $filePath) = $matches;
+                return [$area, '', '', $moduleName, $filePath, $file];
+            }
+        }
+        return [];
+    }
+
+    /**
      * Search static files from all modules by the specified pattern and accumulate meta-info
      *
      * @param string $area
@@ -1046,7 +1070,7 @@ class Files
      * @param array $result
      * @return void
      */
-    protected function _accumulateStaticFiles($area, $filePattern, array &$result)
+    private function _accumulateStaticFiles($area, $filePattern, array &$result)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             $moduleWebPath = $moduleDir . "/view/{$area}/web";
