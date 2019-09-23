@@ -371,12 +371,11 @@ class Files
             }
             $globPaths = [BP . '/app/etc/config.xml', BP . '/app/etc/*/config.xml'];
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
-            $files = [];
+            $files = [[]];
             foreach ($configXmlPaths as $xmlPath) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
+                $files[] = glob($xmlPath, GLOB_NOSORT);
             }
-            self::$_cache[$cacheKey] = $files;
+            self::$_cache[$cacheKey] = array_merge(...$files);
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
