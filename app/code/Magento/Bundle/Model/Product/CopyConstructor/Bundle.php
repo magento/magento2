@@ -8,6 +8,9 @@ namespace Magento\Bundle\Model\Product\CopyConstructor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 
+/**
+ * Provides duplicating bundle options and selections
+ */
 class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
 {
     /**
