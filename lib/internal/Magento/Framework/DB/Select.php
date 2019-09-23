@@ -42,7 +42,7 @@ class Select extends \Zend_Db_Select
     const STRAIGHT_JOIN = 'straightjoin';
 
     /**
-     * Sql straight join
+     * Straight join SQL directive.
      */
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
