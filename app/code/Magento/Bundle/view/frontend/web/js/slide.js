@@ -84,7 +84,12 @@ define([
             $(this.options.bundleOptionsContainer).slideDown(800);
             $('html, body').animate({
                 scrollTop: $(this.options.bundleOptionsContainer).offset().top
-            }, 600);
+            }, 600, function() {
+                $("#product_addtocart_form").css({"display":"inline-block", "width": "100%"});
+                $('#bundleSummary').mage('sticky', {
+                    container: '#maincontent'
+                });
+            });
             $('#product-options-wrapper > fieldset').focus();
         },
 
