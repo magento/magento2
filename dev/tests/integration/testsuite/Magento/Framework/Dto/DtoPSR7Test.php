@@ -31,11 +31,13 @@ class DtoPSR7Test extends TestCase
      */
     protected function setUp()
     {
-        Bootstrap::getObjectManager()->configure([
+        Bootstrap::getObjectManager()->configure(
+            [
             'preferences' => [
-                DtoConfig::class => MockDtoConfig::class
+            DtoConfig::class => MockDtoConfig::class
             ]
-        ]);
+            ]
+        );
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dataProcessor = $this->objectManager->get(DtoProcessor::class);
@@ -45,13 +47,13 @@ class DtoPSR7Test extends TestCase
     {
         /** @var ImmutableDtoTwo $dto */
         $dto = $this->objectManager->create(
-            ImmutableDtoTwo::class, [
+            ImmutableDtoTwo::class,
+            [
                 'propOne' => 1,
                 'propTwo' => 'b',
                 'propThree' => ['abc', 'def', 'ghi'],
                 'propFour' => [1, 2, 3, 4],
-            ],
-            ImmutableDtoTwo::class
+            ]
         );
 
         $dto = $dto

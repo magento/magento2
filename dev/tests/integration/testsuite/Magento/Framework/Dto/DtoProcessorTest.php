@@ -34,11 +34,13 @@ class DtoProcessorTest extends TestCase
      */
     protected function setUp()
     {
-        Bootstrap::getObjectManager()->configure([
-            'preferences' => [
-                DtoConfig::class => MockDtoConfig::class
+        Bootstrap::getObjectManager()->configure(
+            [
+                'preferences' => [
+                    DtoConfig::class => MockDtoConfig::class
+                ]
             ]
-        ]);
+        );
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);

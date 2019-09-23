@@ -91,7 +91,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
      * @param MethodsMap $methodsMap
      * @param ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap
-     * @param $config @deprecated
+     * @param null $config @deprecated
      * @param DtoProcessor|null $dtoProcessor
      * @param array $customAttributePreprocessors
      * @SuppressWarnings(PHPMD.LongVariable)

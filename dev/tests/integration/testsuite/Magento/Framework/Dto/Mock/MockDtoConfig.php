@@ -146,8 +146,8 @@ class MockDtoConfig extends DtoConfig
 
     /**
      * @param string $className
-     * @param bool $mutable
-     * @param array $properties
+     * @param bool   $mutable
+     * @param array  $properties
      */
     private function addDto(
         string $className,

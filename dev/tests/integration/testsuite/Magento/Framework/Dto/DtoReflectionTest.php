@@ -32,11 +32,13 @@ class DtoReflectionTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        $objectManager->configure([
+        $objectManager->configure(
+            [
             'preferences' => [
-                DtoConfig::class => MockDtoConfig::class
+            DtoConfig::class => MockDtoConfig::class
             ]
-        ]);
+            ]
+        );
 
         $this->dtoReflection = $objectManager->get(DtoReflection::class);
     }

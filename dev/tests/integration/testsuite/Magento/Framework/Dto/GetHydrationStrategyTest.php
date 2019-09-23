@@ -30,11 +30,13 @@ class GetHydrationStrategyTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        $objectManager->configure([
+        $objectManager->configure(
+            [
             'preferences' => [
-                DtoConfig::class => MockDtoConfig::class
+            DtoConfig::class => MockDtoConfig::class
             ]
-        ]);
+            ]
+        );
 
         $this->getHydrationStrategy = $objectManager->get(GetHydrationStrategy::class);
     }
@@ -131,8 +133,8 @@ class GetHydrationStrategyTest extends TestCase
     /**
      * @dataProvider hydrationStrategyDataProvider
      * @param string $className
-     * @param array $data
-     * @param array $expected
+     * @param array  $data
+     * @param array  $expected
      * @throws ReflectionException
      */
     public function testHydrationStrategy(string $className, array $data, array $expected): void

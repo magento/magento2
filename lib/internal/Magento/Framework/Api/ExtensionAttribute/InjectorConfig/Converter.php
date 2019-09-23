@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 declare(strict_types=1);
 
 namespace Magento\Framework\Api\ExtensionAttribute\InjectorConfig;
@@ -8,6 +12,9 @@ use DOMNode;
 use DOMNodeList;
 use Magento\Framework\Config\ConverterInterface;
 
+/**
+ * Converter class for attributes extensions injection based on XML declarations
+ */
 class Converter implements ConverterInterface
 {
     /**

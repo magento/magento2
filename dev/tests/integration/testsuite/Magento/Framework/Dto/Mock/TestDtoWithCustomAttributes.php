@@ -25,10 +25,10 @@ class TestDtoWithCustomAttributes extends AbstractExtensibleObject
 
     /**
      * @param ExtensionAttributesFactory $extensionFactory
-     * @param AttributeValueFactory $attributeValueFactory
-     * @param int $paramOne
-     * @param float $paramTwo
-     * @param array $data
+     * @param AttributeValueFactory      $attributeValueFactory
+     * @param int                        $paramOne
+     * @param float                      $paramTwo
+     * @param array                      $data
      */
     public function __construct(
         ExtensionAttributesFactory $extensionFactory,

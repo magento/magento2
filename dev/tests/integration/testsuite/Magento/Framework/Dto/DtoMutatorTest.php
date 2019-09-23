@@ -33,11 +33,13 @@ class DtoMutatorTest extends TestCase
      */
     protected function setUp()
     {
-        Bootstrap::getObjectManager()->configure([
-            'preferences' => [
-                DtoConfig::class => MockDtoConfig::class
+        Bootstrap::getObjectManager()->configure(
+            [
+                'preferences' => [
+                    DtoConfig::class => MockDtoConfig::class
+                ]
             ]
-        ]);
+        );
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);
@@ -46,12 +48,15 @@ class DtoMutatorTest extends TestCase
     public function testDtoMutator(): void
     {
         /** @var ImmutableDto $dto */
-        $dto = $this->objectManager->create(ImmutableDto::class, [
-            'prop1' => 1,
-            'prop2' => 'b',
-            'prop3' => ['abc', 'def', 'ghi'],
-            'prop4' => [1, 2, 3, 4],
-        ]);
+        $dto = $this->objectManager->create(
+            ImmutableDto::class,
+            [
+                'prop1' => 1,
+                'prop2' => 'b',
+                'prop3' => ['abc', 'def', 'ghi'],
+                'prop4' => [1, 2, 3, 4],
+            ]
+        );
 
         /** @var ImmutableDtoMutator $immutableDtoMutator */
         $immutableDtoMutator = $this->objectManager->create(ImmutableDtoMutator::class);
@@ -110,21 +115,29 @@ class DtoMutatorTest extends TestCase
         $dto = $dtoMutator
             ->withId('my-new-id')
             ->withTestDto1(
-                $this->objectManager->create(ImmutableDto::class, [
-                    'prop1' => 5,
-                    'prop2' => 'b1',
-                    'prop3' => ['abc1', 'def1', 'ghi1'],
-                    'prop4' => [113, 114, 115, 116],
-                ])
+                $this->objectManager->create(
+                    ImmutableDto::class,
+                    [
+                        'prop1' => 5,
+                        'prop2' => 'b1',
+                        'prop3' => ['abc1', 'def1', 'ghi1'],
+                        'prop4' => [113, 114, 115, 116],
+                    ]
+                )
             )
-            ->withTestDtoArray([
-                $this->objectManager->create(ImmutableDto::class, [
-                    'prop1' => 6,
-                    'prop2' => 'b2',
-                    'prop3' => ['abc2', 'def2', 'ghi2'],
-                    'prop4' => [213, 214, 215, 216],
-                ])
-            ])
+            ->withTestDtoArray(
+                [
+                    $this->objectManager->create(
+                        ImmutableDto::class,
+                        [
+                            'prop1' => 6,
+                            'prop2' => 'b2',
+                            'prop3' => ['abc2', 'def2', 'ghi2'],
+                            'prop4' => [213, 214, 215, 216],
+                        ]
+                    )
+                ]
+            )
             ->mutate($dto);
 
         $this->assertSame('my-new-id', $dto->getId());

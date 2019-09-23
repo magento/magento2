@@ -23,7 +23,7 @@ class DtoMutatorTest extends TestCase
     private $getMutatorSourceCode;
 
     /**
-     * Prepare test env
+     * @inheritDoc
      */
     protected function setUp()
     {
