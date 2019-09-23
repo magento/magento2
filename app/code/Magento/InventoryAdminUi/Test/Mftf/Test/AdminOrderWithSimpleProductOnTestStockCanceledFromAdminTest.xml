@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test  name="AdminOrderWithSimpleProductOnTestStockCanceledFromAdminTest" extends="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
         <annotations>
-            <stories value="Add Order"/>
+            <stories value="Cancel Order Simple product"/>
             <title value="Order with Simple product on Test stock canceled from Admin."/>
             <description value="Order with Simple product on Test stock canceled from Admin."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/1621263"/>
@@ -20,7 +20,10 @@
         </annotations>
         <before>
             <remove keyForRemoval="additionalStock"/>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!--Assign Default Stock to Default Website.-->

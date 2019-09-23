@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminAfterFullShipmentTest" extends="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
         <annotations>
-            <stories value="Add Order"/>
+            <stories value="Cancel Order Simple product "/>
             <title value="Order with Simple product on Default stock canceled from Admin after full shipment."/>
             <description value="Order with Simple product on Default stock canceled from Admin after full shipment."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/2367500"/>
