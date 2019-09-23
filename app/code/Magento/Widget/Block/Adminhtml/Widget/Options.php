@@ -242,7 +242,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\DataObject $parameter
      * @return string
      */
-    private function getCssClasses($parameter)
+    private function getCssClasses(\Magento\Framework\DataObject $parameter) : string
     {
         $cssClass = 'widget-option';
         $additionalClasses = $parameter->getAdditionalClasses();
