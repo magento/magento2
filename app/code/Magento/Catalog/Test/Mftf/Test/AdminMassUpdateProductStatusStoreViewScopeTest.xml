@@ -117,16 +117,25 @@
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfDefaultViewProduct1IsEnabled"/>
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('2')}}" userInput="Enabled" stepKey="checkIfDefaultViewProduct2IsEnabled"/>
 
-        <!-- Assert on storefront default view -->
+        <!-- Assert on storefront default view with first product -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
-            <argument name="name" value="{{simpleProductForMassUpdate.keyword}}"/>
+            <argument name="name" value="{{simpleProductForMassUpdate.name}}"/>
             <argument name="description" value=""/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
-        <see userInput="2 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
-        <!-- Enable the product in Default store view -->
+        <!-- Assert on storefront default view with second product -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefaultToSearchSecondProduct"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefaultWithSecondProduct">
+            <argument name="name" value="{{simpleProductForMassUpdate2.name}}"/>
+            <argument name="description" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefaultForSecondProduct"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefaultSecondProductResults"/>
+
+        <!--Enable the product in Default store view-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad2"/>
         <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckboxDefaultStoreView"/>

@@ -24,10 +24,12 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
+            <createData entity="ApiProductNameWithNoSpaces" stepKey="createProductThree"/>
         </before>
         <after>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createProductThree" stepKey="deleteProductThree"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
@@ -54,22 +56,17 @@
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
 
-        <!-- Assert on storefront default view -->
+        <!-- Assert on storefront default view with partial word of product name -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
             <argument name="name" value="$$createProductOne.name$$"/>
             <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
-        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
+        <see userInput="2 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
 
-        <!-- Assert on storefront custom view -->
+        <!-- Assert on storefront custom view with partial word of product name  -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameCustom">
@@ -77,6 +74,15 @@
             <argument name="description" value="Updated $$createProductOne.custom_attributes[description]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
-        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
+        <see userInput="2 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
+
+        <!-- Assert Storefront default view with exact product name -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault1"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault1">
+            <argument name="name" value="$$createProductThree.name$$"/>
+            <argument name="description" value="$$createProductThree.custom_attributes[description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault1"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault1"/>
     </test>
 </tests>

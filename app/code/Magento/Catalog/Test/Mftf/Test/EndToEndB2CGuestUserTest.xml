@@ -56,6 +56,9 @@
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
         </after>
 
+        <!--Re-index-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!-- Step 1: User browses catalog -->
         <comment userInput="Start of browsing catalog" stepKey="startOfBrowsingCatalog" />
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
@@ -191,6 +194,8 @@
         <!-- Clear comparison sidebar -->
         <comment userInput="Clear comparison sidebar" stepKey="commentClearComparisonSidebar" after="compareAssertSimpleProduct2ImageNotDefaultInComparison"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="compareClickCategoryBeforeClear" after="commentClearComparisonSidebar"/>
+
+
         <actionGroup ref="StorefrontCheckCategoryActionGroup" stepKey="compareAssertCategory2">
             <argument name="category" value="$$createCategory$$"/>
             <argument name="productCount" value="3"/>

@@ -11,7 +11,7 @@
     <test name="EndToEndB2CGuestUserTest">
         <!-- Step 2: User searches for product -->
         <comment userInput="Start of searching products" stepKey="startOfSearchingProducts" after="endOfBrowsingCatalog"/>
-        <!-- Advanced Search with Product 1 Data -->
+        <!-- Advanced Search with Product Data -->
         <comment userInput="Advanced search" stepKey="commentAdvancedSearch" after="startOfSearchingProducts"/>
         <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="searchOpenAdvancedSearchForm" after="commentAdvancedSearch"/>
         <!-- @TODO: Change to scalar value after MQE-498 is implemented -->
@@ -22,7 +22,7 @@
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="searchClickAdvancedSearchSubmitButton" after="searchAdvancedFillPriceTo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchProductsloaded" after="searchClickAdvancedSearchSubmitButton"/>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="searchCheckAdvancedSearchResult" after="waitForSearchProductsloaded"/>
-        <see userInput="1" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productCount}} span" stepKey="searchAdvancedAssertProductCount" after="searchCheckAdvancedSearchResult"/>
+        <see userInput="4" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productCount}} span" stepKey="searchAdvancedAssertProductCount" after="searchCheckAdvancedSearchResult"/>
         <actionGroup ref="StorefrontCheckCategorySimpleProduct" stepKey="searchAssertSimpleProduct1" after="searchAdvancedAssertProductCount">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>

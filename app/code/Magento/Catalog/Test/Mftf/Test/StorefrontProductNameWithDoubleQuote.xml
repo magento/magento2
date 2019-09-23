@@ -111,11 +111,11 @@
         <waitForPageLoad stepKey="waitforCategoryPageToLoad2"/>
 
         <!--Open product display page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="goToProduct2DisplayPage"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('2')}}" stepKey="goToProduct2DisplayPage"/>
         <!--<click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" stepKey="clickProductToGoProductPage"/>-->
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad3"/>
 
-        <!--Veriy the breadcrumbs on Product Display page-->
+        <!--Verify the breadcrumbs on Product Display page-->
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs2"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategoryOne.name$$" stepKey="seeCorrectBreadCrumbCategory2"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productTwo.name$$" stepKey="seeCorrectBreadCrumbProduct2"/>
