@@ -26,7 +26,7 @@
             <!-- Enable payment method one of "Check/Money Order" and  shipping method one of "Free Shipping" -->
             <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete data -->
