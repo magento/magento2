@@ -134,6 +134,4 @@ class PriceRange implements ResolverInterface
         }
         return $this->priceProviders['default'];
     }
-
-
 }

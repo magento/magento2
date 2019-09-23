@@ -9,9 +9,8 @@ namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
@@ -21,18 +20,6 @@ use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterfa
  */
 class Provider implements ProviderInterface
 {
-    /**
-     * PriceInfo cache
-     *
-     * @var array
-     */
-    private $productPrices = [];
-
-    /**
-     * @var PriceInfoFactory
-     */
-    private $priceInfoFactory;
-
     /**
      * @var ConfigurableOptionsProviderInterface
      */
@@ -49,14 +36,11 @@ class Provider implements ProviderInterface
     private $maximumFinalAmounts = [];
 
     /**
-     * @param PriceInfoFactory $priceInfoFactory
      * @param ConfigurableOptionsProviderInterface $optionsProvider
      */
     public function __construct(
-        PriceInfoFactory $priceInfoFactory,
         ConfigurableOptionsProviderInterface $optionsProvider
     ) {
-        $this->priceInfoFactory = $priceInfoFactory;
         $this->optionsProvider = $optionsProvider;
     }
 
@@ -68,7 +52,7 @@ class Provider implements ProviderInterface
         if (!isset($this->minimumFinalAmounts[$product->getId()])) {
             $minimumAmount = null;
             foreach ($this->optionsProvider->getProducts($product) as $variant) {
-                $variantAmount = $this->getProductPriceInfo($variant)->getPrice(FinalPrice::PRICE_CODE)->getAmount();
+                $variantAmount = $variant->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getAmount();
                 if (!$minimumAmount || ($variantAmount->getValue() < $minimumAmount->getValue())) {
                     $minimumAmount = $variantAmount;
                     $this->minimumFinalAmounts[$product->getId()] = $variantAmount;
@@ -84,8 +68,9 @@ class Provider implements ProviderInterface
      */
     public function getMinimalRegularPrice(SaleableInterface $product): AmountInterface
     {
-        $priceInfo = $this->getProductPriceInfo($product);
-        return $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getMinRegularAmount();
+        /** @var ConfigurableRegularPrice $regularPrice */
+        $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE);
+        return $regularPrice->getMinRegularAmount();
     }
 
     /**
@@ -96,7 +81,7 @@ class Provider implements ProviderInterface
         if (!isset($this->maximumFinalAmounts[$product->getId()])) {
             $maximumAmount = null;
             foreach ($this->optionsProvider->getProducts($product) as $variant) {
-                $variantAmount = $this->getProductPriceInfo($variant)->getPrice(FinalPrice::PRICE_CODE)->getAmount();
+                $variantAmount = $variant->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getAmount();
                 if (!$maximumAmount || ($variantAmount->getValue() > $maximumAmount->getValue())) {
                     $maximumAmount = $variantAmount;
                     $this->maximumFinalAmounts[$product->getId()] = $variantAmount;
@@ -112,8 +97,9 @@ class Provider implements ProviderInterface
      */
     public function getMaximalRegularPrice(SaleableInterface $product): AmountInterface
     {
-        $priceInfo = $this->getProductPriceInfo($product);
-        return $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getMaxRegularAmount();
+        /** @var ConfigurableRegularPrice $regularPrice */
+        $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE);
+        return $regularPrice->getMaxRegularAmount();
     }
 
     /**
@@ -121,22 +107,6 @@ class Provider implements ProviderInterface
      */
     public function getRegularPrice(SaleableInterface $product): AmountInterface
     {
-        $priceInfo = $this->getProductPriceInfo($product);
-        return $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
-    }
-
-    /**
-     * Get price info for product
-     *
-     * @param SaleableInterface $product
-     * @return PriceInfoInterface
-     */
-    private function getProductPriceInfo($product)
-    {
-        if (!isset($this->productPrices[$product->getId()])) {
-            $this->productPrices[$product->getId()] = $this->priceInfoFactory->create($product);
-        }
-
-        return $this->productPrices[$product->getId()];
+        return $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
     }
 }

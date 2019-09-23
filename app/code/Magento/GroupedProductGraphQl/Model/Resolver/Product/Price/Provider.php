@@ -10,8 +10,6 @@ namespace Magento\GroupedProductGraphQl\Model\Resolver\Product\Price;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 
@@ -21,32 +19,11 @@ use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 class Provider implements ProviderInterface
 {
     /**
-     * PriceInfo cache
-     *
-     * @var array
-     */
-    private $productPrices = [];
-
-    /**
-     * @var PriceInfoFactory
-     */
-    private $priceInfoFactory;
-
-    /**
      * Cache product prices so only fetch once
      *
      * @var AmountInterface[]
      */
     private $minimalProductAmounts;
-
-    /**
-     * @param PriceInfoFactory $priceInfoFactory
-     */
-    public function __construct(
-        PriceInfoFactory $priceInfoFactory
-    ) {
-        $this->priceInfoFactory = $priceInfoFactory;
-    }
 
     /**
      * @inheritdoc
@@ -87,8 +64,7 @@ class Provider implements ProviderInterface
      */
     public function getRegularPrice(SaleableInterface $product): AmountInterface
     {
-        $priceInfo = $this->getProductPriceInfo($product);
-        return $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
+        return $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
     }
 
     /**
@@ -104,7 +80,7 @@ class Provider implements ProviderInterface
             $products = $product->getTypeInstance()->getAssociatedProducts($product);
             $minPrice = null;
             foreach ($products as $item) {
-                $price = $this->getProductPriceInfo($item)->getPrice($priceType);
+                $price = $item->getPriceInfo()->getPrice($priceType);
                 $priceValue = $price->getValue();
                 if (($priceValue !== false) && ($priceValue <= ($minPrice === null ? $priceValue : $minPrice))) {
                     $minPrice = $price->getValue();
@@ -114,20 +90,5 @@ class Provider implements ProviderInterface
         }
 
         return $this->minimalProductAmounts[$product->getId()][$priceType];
-    }
-
-    /**
-     * Get price info for product
-     *
-     * @param SaleableInterface $product
-     * @return PriceInfoInterface
-     */
-    private function getProductPriceInfo($product)
-    {
-        if (!isset($this->productPrices[$product->getId()])) {
-            $this->productPrices[$product->getId()] = $this->priceInfoFactory->create($product);
-        }
-
-        return $this->productPrices[$product->getId()];
     }
 }
