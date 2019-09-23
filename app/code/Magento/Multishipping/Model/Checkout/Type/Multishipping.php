@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Multishipping extends \Magento\Framework\DataObject
@@ -526,6 +527,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $quoteItem->setQty($quoteItem->getMultishippingQty());
             try {
                 $address = $this->addressRepository->getById($addressId);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
             }
             if (isset($address)) {
@@ -565,6 +567,7 @@ class Multishipping extends \Magento\Framework\DataObject
         }
         try {
             $address = $this->addressRepository->getById($addressId);
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $e) {
             //
         }
@@ -592,6 +595,7 @@ class Multishipping extends \Magento\Framework\DataObject
         }
         try {
             $address = $this->addressRepository->getById($addressId);
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $e) {
             //
         }
@@ -716,7 +720,7 @@ class Multishipping extends \Magento\Framework\DataObject
             );
             $orderItem = $this->quoteItemToOrderItem->convert($item);
             if ($item->getParentItem()) {
-                $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
+                $orderItem->setParentItem($order->getItemByQuoteItemId($_quoteItem->getParentItem()->getId()));
             }
             $order->addItem($orderItem);
         }
@@ -825,7 +829,7 @@ class Multishipping extends \Magento\Framework\DataObject
                 if ($order->getCanSendNewEmailFlag()) {
                     $this->orderSender->send($order);
                 }
-                $placedAddressItems = array_merge($placedAddressItems, $this->getQuoteAddressItems($order));
+                $placedAddressItems = $this->getPlacedAddressItems($order);
             }
 
             $addressErrors = [];
@@ -1090,10 +1094,14 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     protected function isAddressIdApplicable($addressId)
     {
-        $applicableAddressIds = array_map(function ($address) {
-            /** @var \Magento\Customer\Api\Data\AddressInterface $address */
-            return $address->getId();
-        }, $this->getCustomer()->getAddresses());
+        $applicableAddressIds = array_map(
+            function ($address) {
+                /** @var \Magento\Customer\Api\Data\AddressInterface $address */
+                return $address->getId();
+            },
+            $this->getCustomer()->getAddresses()
+        );
+
         return !is_numeric($addressId) || in_array($addressId, $applicableAddressIds);
     }
 
@@ -1275,6 +1283,22 @@ class Multishipping extends \Magento\Framework\DataObject
         $placedAddressItems = [];
         foreach ($order->getItems() as $orderItem) {
             $placedAddressItems[] = $orderItem->getQuoteItemId();
+        }
+
+        return $placedAddressItems;
+    }
+
+    /**
+     * Returns placed address items
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getPlacedAddressItems(OrderInterface $order): array
+    {
+        $placedAddressItems = [];
+        foreach ($this->getQuoteAddressItems($order) as $key => $quoteAddressItem) {
+            $placedAddressItems[$key] = $quoteAddressItem;
         }
 
         return $placedAddressItems;

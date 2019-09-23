@@ -34,7 +34,7 @@ interface BatchIteratorInterface extends \Iterator
     /**
      * Return the key of the current element
      *
-     * Сan return the number of the current sub-select in the iteration.
+     * Can return the number of the current sub-select in the iteration.
      *
      * @return int
      */

@@ -15,6 +15,9 @@ use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory 
  */
 class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
+    /**
+     * DB Table data
+     */
     const TABLE_NAME = 'tableName';
     const LINK_FIELD = 'linkField';
 
@@ -54,7 +57,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $websiteValidator;
 
     /**
-     * @var AdvancedPricing\Validator\TearPrice |\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedPricing\Validator\TierPrice |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $tierPriceValidator;
 

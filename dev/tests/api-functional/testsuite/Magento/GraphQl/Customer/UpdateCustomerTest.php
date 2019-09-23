@@ -253,6 +253,8 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $existedEmail = 'customer_two@example.com';
+        $firstname = 'Richard';
+        $lastname = 'Rowe';
 
         $query = <<<QUERY
 mutation {
@@ -260,10 +262,40 @@ mutation {
         input: {
             email: "{$existedEmail}"
             password: "{$currentPassword}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
         }
     ) {
         customer {
             firstname
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: First Name
+     */
+    public function testEmptyCustomerName()
+    {
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            email: "{$currentEmail}"
+            password: "{$currentPassword}"
+            firstname: ""
+        }
+    ) {
+        customer {
+            email
         }
     }
 }
