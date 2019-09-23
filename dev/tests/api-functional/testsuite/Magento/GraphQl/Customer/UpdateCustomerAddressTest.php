@@ -78,6 +78,34 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testUpdateCustomerAddressWithCountryCode()
+    {
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $customerId = 1;
+        $addressId = 1;
+
+        $mutation = $this->getMutationWithCountryCode($addressId);
+
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->assertArrayHasKey('updateCustomerAddress', $response);
+        $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
+        $this->assertEquals($customerId, $response['updateCustomerAddress']['customer_id']);
+        $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
+
+        $address = $this->addressRepository->getById($addressId);
+        $this->assertEquals($address->getId(), $response['updateCustomerAddress']['id']);
+        $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress']);
+
+        $updateAddress = $this->getAddressDataCanadaCountry();
+        $this->assertCustomerAddressesFields($address, $updateAddress);
+    }
+
+    /**
      * @expectedException Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
@@ -406,6 +434,35 @@ MUTATION;
     }
 
     /**
+     * @return array
+     */
+    private function getAddressDataCanadaCountry(): array
+    {
+        return [
+            'region' => [
+                'region' => 'Alberta',
+                'region_id' => 66,
+                'region_code' => 'AB'
+            ],
+            'country_id' => 'CA',
+            'street' => ['Line 1 Street', 'Line 2'],
+            'company' => 'Company Name',
+            'telephone' => '123456789',
+            'fax' => '123123123',
+            'postcode' => '7777',
+            'city' => 'City Name',
+            'firstname' => 'Adam',
+            'lastname' => 'Phillis',
+            'middlename' => 'A',
+            'prefix' => 'Mr.',
+            'suffix' => 'Jr.',
+            'vat_id' => '1',
+            'default_shipping' => true,
+            'default_billing' => true
+        ];
+    }
+
+    /**
      * @param int $addressId
      * @return string
      */
@@ -425,6 +482,69 @@ mutation {
         region_code: "{$updateAddress['region']['region_code']}"
     }
     country_id: {$updateAddress['country_id']}
+    street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
+    company: "{$updateAddress['company']}"
+    telephone: "{$updateAddress['telephone']}"
+    fax: "{$updateAddress['fax']}"
+    postcode: "{$updateAddress['postcode']}"
+    city: "{$updateAddress['city']}"
+    firstname: "{$updateAddress['firstname']}"
+    lastname: "{$updateAddress['lastname']}"
+    middlename: "{$updateAddress['middlename']}"
+    prefix: "{$updateAddress['prefix']}"
+    suffix: "{$updateAddress['suffix']}"
+    vat_id: "{$updateAddress['vat_id']}"
+    default_shipping: {$defaultShippingText}
+    default_billing: {$defaultBillingText}
+  }) {
+    id
+    customer_id
+    region {
+      region
+      region_id
+      region_code
+    }
+    country_id
+    street
+    company
+    telephone
+    fax
+    postcode
+    city
+    firstname
+    lastname
+    middlename
+    prefix
+    suffix
+    vat_id
+    default_shipping
+    default_billing
+  }
+}
+MUTATION;
+        return $mutation;
+    }
+
+    /**
+     * @param int $addressId
+     * @return string
+     */
+    private function getMutationWithCountryCode(int $addressId): string
+    {
+        $updateAddress = $this->getAddressDataCanadaCountry();
+        $defaultShippingText = $updateAddress['default_shipping'] ? "true" : "false";
+        $defaultBillingText = $updateAddress['default_billing'] ? "true" : "false";
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(id: {$addressId}, input: {
+    region: {
+        region: "{$updateAddress['region']['region']}"
+        region_id: {$updateAddress['region']['region_id']}
+        region_code: "{$updateAddress['region']['region_code']}"
+    }
+    country_code: {$updateAddress['country_id']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
     telephone: "{$updateAddress['telephone']}"

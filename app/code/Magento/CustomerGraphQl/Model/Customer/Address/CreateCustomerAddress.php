@@ -67,6 +67,9 @@ class CreateCustomerAddress
      */
     public function execute(int $customerId, array $data): AddressInterface
     {
+        if (isset($data['country_code'])) {
+            $data['country_id'] = $data['country_code'];
+        }
         $this->validateData($data);
 
         /** @var AddressInterface $address */
