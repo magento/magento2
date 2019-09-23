@@ -122,8 +122,11 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
 
-        <!--Create Invoice-->
-        <amOnPage url="{{AdminOrderPage.url({$orderNumber})}}" stepKey="navigateToOrderPage"/>
+        <!--Create Shipment-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
         <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
 
         <!--Verify reorder button is not visible-->

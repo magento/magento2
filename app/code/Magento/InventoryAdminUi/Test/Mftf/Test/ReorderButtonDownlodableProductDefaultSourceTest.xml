@@ -73,7 +73,10 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
 
         <!--Create Invoice-->
-        <amOnPage url="{{AdminOrderPage.url({$orderNumber})}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
         <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
 
