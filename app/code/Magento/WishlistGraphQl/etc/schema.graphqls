@@ -5,10 +5,21 @@ type Query {
     wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @doc(description: "The wishlist query returns the contents of a customer's wish list") @cache(cacheable: false)
 }
 
-type WishlistOutput {
+type Customer {
+    wishlists: Wishlist! @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver")  @cache(cacheable: false)
+}
+
+type WishlistOutput @doc(description: "Deprecated: 'Wishlist' type should be used instead") {
+    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "Deprecated: use field `items` from type `Wishlist`"),
+    items_count: Int @doc(description: "Deprecated: use field `items_count` from type `Wishlist`"),
+    name: String @doc(description: "Deprecated."),
+    sharing_code: String @doc(description: "Deprecated: use field `sharing_code` from type `Wishlist`"),
+    updated_at: String @doc(description: "Deprecated: use field `updated_at` from type `Wishlist`")
+}
+
+type Wishlist {
     items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "An array of items in the customer's wish list"),
     items_count: Int @doc(description: "The number of items in the wish list"),
-    name: String @doc(description: "When multiple wish lists are enabled, the name the customer assigns to the wishlist"),
     sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list"),
     updated_at: String @doc(description: "The time of the last modification to the wish list")
 }
