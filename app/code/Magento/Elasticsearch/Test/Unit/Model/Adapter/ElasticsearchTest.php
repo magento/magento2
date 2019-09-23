@@ -77,6 +77,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      * Setup
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
