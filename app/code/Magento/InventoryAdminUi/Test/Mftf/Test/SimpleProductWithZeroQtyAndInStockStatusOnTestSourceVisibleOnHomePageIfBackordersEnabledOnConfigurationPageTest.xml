@@ -17,7 +17,7 @@
                 value="Simple product with 0 qty and 'In stock' status on Test source visible on Home page if backorders enabled on Configuration page"/>
             <description
                 value="Simple product with 0 qty and 'In stock' status on Test source visible on Home page if backorders enabled on Configuration page"/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735256/scenarios/2947625"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735256/scenarios/2943347"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>

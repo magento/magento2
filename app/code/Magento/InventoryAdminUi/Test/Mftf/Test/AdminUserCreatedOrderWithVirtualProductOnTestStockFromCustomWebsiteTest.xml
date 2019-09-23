@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserCreatedOrderWithVirtualProductOnTestStockFromCustomWebsiteTest"
+          extends="StorefrontLoggedInCustomerCreateOrderWithSimpleProductOnTestStockFromCustomWebsiteTest">
+        <annotations>
+            <stories value="Admin user create order."/>
+            <title value="Admin user created order with Virtual product on Test stock from Custom website."/>
+            <description value="Admin user created order with Virtual product on Test stock from Custom website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419536/scenarios/2934395"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="simpleProduct"/>
+            <createData entity="VirtualProduct" stepKey="simpleProduct" before="createWebsite">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+        </before>
+        <after>
+
+        </after>
+        <!-- remove storefront steps -->
+        <remove keyForRemoval="openProductPageUsingStoreCodeInUrl"/>
+        <remove keyForRemoval="fillCorrectQuantity"/>
+        <remove keyForRemoval="addProductToCart"/>
+        <remove keyForRemoval="openMiniCart"/>
+        <remove keyForRemoval="goToCheckout"/>
+        <remove keyForRemoval="waitForCheckoutPage"/>
+        <remove keyForRemoval="fillShippingAddress"/>
+        <remove keyForRemoval="clickNext"/>
+        <remove keyForRemoval="waitForShipmentPageLoad"/>
+        <remove keyForRemoval="placeOrder"/>
+        <remove keyForRemoval="waitUntilOrderPlaced"/>
+        <remove keyForRemoval="grabOrderNumber"/>
+        <remove keyForRemoval="checkOrderPlaceSuccessMessage"/>
+
+        <!--- Place order via Admin -->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer" before="navigateToProductIndexPageForCheckProductQtyAfterReorder">
+            <argument name="customer" value="MsiCustomer1"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <waitForPageLoad time="20" stepKey="waitForPageLoad" after="createNewOrderForCustomer"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder" after="waitForPageLoad">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="5"/>
+        </actionGroup>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo" after="addSimpleProductToOrder">
+            <argument name="customer" value="MsiCustomer1"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <waitForPageLoad time="20" stepKey="waitForPageLoadOrder" after="fillCustomerInfo"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="waitForPageLoadOrder"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." after="clickSubmitOrder" stepKey="seeSuccessMessageOrderPlaced"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber" after="seeSuccessMessageOrderPlaced"/>
+    </test>
+</tests>

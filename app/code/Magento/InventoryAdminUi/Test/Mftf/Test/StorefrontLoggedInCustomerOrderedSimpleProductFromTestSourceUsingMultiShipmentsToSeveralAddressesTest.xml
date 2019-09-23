@@ -14,7 +14,7 @@
             <stories value="Logged in customer create order."/>
             <title value="Logged in customer ordered Simple product from Test source using multi-shipments to several addresses."/>
             <description value="Logged in customer ordered Simple product from Test source using multi-shipments to several addresses."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/2921363"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419534/scenarios/2038852"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
