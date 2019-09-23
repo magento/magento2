@@ -85,4 +85,12 @@
         <data key="path">cataloginventory/item_options/min_qty</data>
         <data key="value">0</data>
     </entity>
+    <entity name="NotifyQuantityBelow">
+        <data key="path">cataloginventory/item_options/notify_stock_qty</data>
+        <data key="value">5</data>
+    </entity>
+    <entity name="RevertNotifyQuantityBelow">
+        <data key="path">cataloginventory/item_options/notify_stock_qty</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

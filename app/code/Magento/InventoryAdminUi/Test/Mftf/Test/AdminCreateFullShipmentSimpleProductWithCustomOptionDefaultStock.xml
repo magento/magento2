@@ -64,7 +64,7 @@
             <argument name="optionTitle" value="ProductOptionDropDown"/>
             <argument name="option" value="ProductOptionValueDropdown1.title"/>
         </actionGroup>
-        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="5" stepKey="fillProductQty"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{fivePiecesAddToCart.value}}" stepKey="fillProductQty"/>
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
         <!--Place order.-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
@@ -87,8 +87,11 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentSuccessMessage"/>
         <!--Verify product quantity.-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPage"/>
-        <actionGroup ref="AdminAssertProductSourceStockQuantityActionGroup" stepKey="verifyProductQuantity">
-            <argument name="product" value="$$product$$"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="verifyProductQuantity">
             <argument name="sourceQty" value="{{defaultProductQtyBoughtWith5Pieces.value}}"/>
             <argument name="stockQty" value="{{defaultProductQtyBoughtWith5Pieces.value}}"/>
         </actionGroup>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeSourceStockStatusActionGroup">
+        <annotations>
+            <description>Change given source status in source grid on product edit page. Starts on product edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="sourceCode" type="string" defaultValue="{{_defaultSource.code}}"/>
+            <argument name="sourceStatus" type="string" defaultValue="{{SourceStatusInStock.value}}"/>
+        </arguments>
+        <selectOption selector="{{AdminProductSourcesGrid.rowStatusBySourceCode(sourceCode)}}" userInput="{{sourceStatus}}" stepKey="changeSourceStatus"/>
+    </actionGroup>
+</actionGroups>
+

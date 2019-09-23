@@ -73,8 +73,10 @@
         <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
         <!--Verify virtual product quantity.-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
-        <actionGroup ref="AdminAssertProductSourceStockQuantityActionGroup" stepKey="verifyProductQuantity">
-            <argument name="product" value="$$product$$"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="verifyProductQuantity"/>
     </test>
 </tests>

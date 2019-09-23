@@ -17,4 +17,19 @@
     <entity name="defaultProductQtyBoughtWith10Pieces">
         <data key="value">90</data>
     </entity>
+    <entity name="minimalProductQty">
+        <data key="value">1</data>
+    </entity>
+    <entity name="fivePiecesAddToCart">
+        <data key="value">5</data>
+    </entity>
+    <entity name="tenPiecesAddToCart">
+        <data key="value">10</data>
+    </entity>
+    <entity name="SourceStatusInStock">
+        <data key="value">In Stock</data>
+    </entity>
+    <entity name="SourceStatusOutOfStock">
+        <data key="value">Out of Stock</data>
+    </entity>
 </entities>

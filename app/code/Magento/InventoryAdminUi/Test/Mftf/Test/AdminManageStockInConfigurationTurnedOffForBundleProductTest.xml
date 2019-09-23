@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminManageStockInConfigurationTurnedOffForBundleProductTest">
+        <annotations>
+            <stories value="Bundle Product Custom Stock."/>
+            <title value="Manage Stock in Configuration turned off for Bundle Product."/>
+            <description value="Verify, admin should be able to turn off manage stock in configuration for bundle product on custom stock.."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457016/scenarios/1699950"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiBundleProduct" stepKey="bundleProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign created source to product and set product sock status to out of stock.-->
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="AdminChangeSourceStockStatusActionGroup" stepKey="setProductStatusToOutOfStock">
+                <argument name="sourceCode" value="{{_defaultSource.source_code}}"/>
+                <argument name="sourceStatus" value="{{SourceStatusOutOfStock.value}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+            <!--Add simple product to bundle and set bundle product to 'Out of Stock'.-->
+            <amOnPage url="{{AdminProductEditPage.url($$bundleProduct.id$$)}}" stepKey="openProductEditPageToAssignOption"/>
+            <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+            <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
+            <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+            <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
+            <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+                <argument name="product" value="$$product$$"/>
+            </actionGroup>
+            <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+            <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+            <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{fivePiecesAddToCart.value}}" stepKey="fillProductDefaultQty"/>
+            <scrollToTopOfPage stepKey="scrollToTheTopOFBundleProductEditPage"/>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+                <argument name="categoryName" value="$category.name$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Turn on Manage Stock.-->
+            <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="enableManageStock"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <!--Delete test data.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Disable created source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Verify product is not visible on storefront.-->
+        <actionGroup ref="StorefrontAssertProductAbsentOnCategoryPageActionGroup" stepKey="verifyProductNotVisibleOnStorefront">
+            <argument name="category" value="$category$"/>
+            <argument name="product" value="$bundleProduct$"/>
+        </actionGroup>
+        <!-- Turn off Manage Stock-->
+        <magentoCLI command="config:set {{TurnOffManageStockConfig.path}} {{TurnOffManageStockConfig.value}}" stepKey="disableManageStock"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!-- Check product is visible on Storefront-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="verifyProductVisibleOnStorefront">
+            <argument name="category" value="$category$"/>
+            <argument name="product" value="$bundleProduct$"/>
+        </actionGroup>
+    </test>
+</tests>

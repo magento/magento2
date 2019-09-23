@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/2581"/>
+            </skip>
         </annotations>
 
         <before>
@@ -33,7 +36,10 @@
             </createData>
             <!--Assign created source to product.-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProduct1EditPageToAssignSource"/>
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceToProduct">
                 <argument name="sourceCode" value="$source.source[source_code]$"/>
             </actionGroup>

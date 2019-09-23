@@ -37,6 +37,14 @@
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
+            </actionGroup>
+            <!--Delete created product.-->
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteDownloadableProduct">
+                <argument name="productName" value="DownloadableProduct.name"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
         </after>
 

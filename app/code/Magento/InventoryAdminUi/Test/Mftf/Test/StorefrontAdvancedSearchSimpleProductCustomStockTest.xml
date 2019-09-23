@@ -24,7 +24,7 @@
             <createData entity="SimpleProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-                <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
             <createData entity="FullSource1" stepKey="source"/>
             <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
                 <requiredEntity createDataKey="stock"/>
@@ -32,7 +32,10 @@
             </createData>
             <!--Assign created source to product.-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProduct1EditPageToAssignSource"/>
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceToProduct">
                 <argument name="sourceCode" value="$$source.source[source_code]$$"/>
             </actionGroup>
