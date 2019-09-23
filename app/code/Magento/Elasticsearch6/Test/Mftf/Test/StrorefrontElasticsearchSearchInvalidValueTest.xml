@@ -22,26 +22,20 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create category-->
-            <comment userInput="Create category" stepKey="commentCreateCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Enable Elasticsearch-->
-            <comment userInput="Enable Elasticsearch" stepKey="commentEnableElasticsearch"/>
             <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticsearch"/>
             <!--Set Minimal Query Length-->
-            <comment userInput="Set Minimal Query Length" stepKey="commentSetMinQueryLength"/>
             <magentoCLI command="config:set catalog/search/min_query_length 2" stepKey="setMinQueryLength"/>
             <!--Reindex indexes and clear cache-->
-            <comment userInput="Reindex indexes and clear cache" stepKey="commentReindexClearCache"/>
             <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
             <magentoCLI command="cache:flush config" stepKey="flushCache"/>
         </before>
         <after>
             <!--Set configs to default-->
-            <comment userInput="Set configs to default" stepKey="commentSetDefault"/>
             <magentoCLI command="config:set catalog/search/min_query_length 3" stepKey="setMinQueryLengthPreviousState"/>
             <magentoCLI command="config:set catalog/search/engine mysql" stepKey="resetSearchEnginePreviousState"/>
             <!--Delete created data-->
-            <comment userInput="Delete created data" stepKey="commentDeleteData"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
                 <argument name="ProductAttributeCode" value="{{textProductAttribute.attribute_code}}"/>
@@ -49,20 +43,18 @@
             <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
             <waitForPageLoad stepKey="waitForAttributePageLoad"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
-                <argument name="sku" value="{{SimpleProduct.sku}}"/>
-            </actionGroup>
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
+            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteProduct"/>
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
-        <comment userInput="Create new searchable product attribute" stepKey="commentCreateAttribute"/>
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
         <actionGroup ref="AdminCreateSearchableProductAttribute" stepKey="createAttribute">
             <argument name="attribute" value="textProductAttribute"/>
         </actionGroup>
         <!--Assign attribute to the Default set-->
-        <comment userInput="Assign attribute to the Default set" stepKey="commentAssignToDefaultSet"/>
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
         <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
@@ -71,14 +63,13 @@
         </actionGroup>
         <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
         <!--Create product and fill new attribute field-->
-        <comment userInput="Create product and fill new attribute field" stepKey="commentCreateProduct"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductForm">
-            <argument name="product" value="SimpleProduct"/>
+            <argument name="product" value="ProductWithSpecialSymbols"/>
         </actionGroup>
         <actionGroup ref="SetCategoryByName" stepKey="addCategoryToProduct">
             <argument name="categoryName" value="$$createCategory.name$$"/>
@@ -88,17 +79,28 @@
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush  catalog_product_attribute " stepKey="flushCache"/>
         <!--Assert search results on storefront-->
-        <comment userInput="Assert search results on storefront" stepKey="commentAssertSearchResult"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
-            <argument name="phrase" value="searchable"/>
+            <argument name="phrase" value="?searchable;"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductName"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForSecondSearchTerm">
+            <argument name="phrase" value="? searchable ;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductNameSecondTime"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForSecondSearchTerm">
             <argument name="phrase" value="?;"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
+            <argument name="phrase" value="?/s\i’m“p:l\$e#@!,.`=%&amp;^;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbols"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbolsSecondTime">
+            <argument name="phrase" value="? /s\i’m“p:l\$e#@!,.`=%&amp;^ ;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbolsSecondTime"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
             <argument name="phrase" value="?anythingcangobetween;"/>
         </actionGroup>
@@ -107,11 +109,13 @@
             <argument name="phrase" value="? anything at all ;"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForForthSearchTerm"/>
-        <!--Search for the product wit special symbols-->
-        <comment userInput="Search for the product wit special symbols" stepKey="commentSearchForProduct"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFifthSearchTerm">
-            <argument name="phrase" value="-+~/\\&lt;&gt;\’“:*$#@()!,.?`=%&amp;^"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSearchableString">
+            <argument name="phrase" value="?searchable string;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForFifthSearchTerm"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSearchableString"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSearchableStringSecondTime">
+            <argument name="phrase" value="? searchable string ;"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSearchableStringSecondTime"/>
     </test>
 </tests>

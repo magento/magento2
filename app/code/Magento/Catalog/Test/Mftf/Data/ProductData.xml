@@ -64,6 +64,9 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ProductWithSpecialSymbols" extends="SimpleProduct" type="product">
+        <data key="name">/s\i’m“p:l\$e&#35;@!,.`=%&amp;^</data>
+    </entity>
     <entity name="SimpleProductAfterImport1" type="product">
         <data key="sku">SimpleProductForTest1</data>
         <data key="type_id">simple</data>
