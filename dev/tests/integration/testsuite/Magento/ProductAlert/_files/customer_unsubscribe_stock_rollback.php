@@ -11,10 +11,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 $objectManager = Bootstrap::getObjectManager();
 $resource = $objectManager->get(Stock::class);
 
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productId = $productRepository->get('simple-out-of-stock')->getId();
 
 $resource->getConnection()->delete(
     $resource->getMainTable(),
-    'product_id = ' . $productId
+    ['product_id = ?' => $productId]
 );
