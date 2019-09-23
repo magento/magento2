@@ -909,7 +909,7 @@ class Files
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
 
-        $this->_accumulateStaticFiles($area, $filePattern, $result);
+        $this->accumulateStaticFiles($area, $filePattern, $result);
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
         $this->accumulateThemeStaticFiles($area, $locale, $filePattern, $result);
         self::$_cache[$key] = $result;
@@ -1020,7 +1020,7 @@ class Files
     /**
      * Parse meta-info of a static file in module
      *
-     * @deprecated Replaced with method _accumulateStaticFiles()
+     * @deprecated Replaced with method accumulateStaticFiles()
      *
      * @param string $file
      * @return array
@@ -1049,7 +1049,7 @@ class Files
      * @param array $result
      * @return void
      */
-    private function _accumulateStaticFiles($area, $filePattern, array &$result)
+    private function accumulateStaticFiles($area, $filePattern, array &$result)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             $moduleWebPath = $moduleDir . "/view/{$area}/web";
