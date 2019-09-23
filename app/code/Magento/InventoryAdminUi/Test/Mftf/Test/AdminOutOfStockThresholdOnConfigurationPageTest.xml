@@ -10,86 +10,74 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOutOfStockThresholdOnConfigurationPageTest">
         <annotations>
-            <stories value="Configuration Settings"/>
+            <stories value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
             <title value="Out-of-Stock Threshold on the Configuration page functions correctly"/>
             <description value="You should be able to set the Out-of-Stock Threshold on the Configuration page."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/409121/scenarios/1500622"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/908790/scenarios/1652166"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <skip>
-                <issueId value="MSI-1588"/>
-            </skip>
         </annotations>
 
         <before>
-            <magentoCLI command="config:set {{TurnOnManageStockConfig.path}} {{TurnOnManageStockConfig.value}}" stepKey="magentoCLI1"/>
-
-            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
-            <createData entity="SimpleMsiProduct" stepKey="simpleProduct1"/>
-            <createData entity="FullSource1" stepKey="createSource1"/>
-            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="createStock1"/>
-
-            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
-                <requiredEntity createDataKey="createStock1"/>
-                <requiredEntity createDataKey="createSource1"/>
+            <createData entity="_minimalSource" stepKey="customSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="CustomStockMainWebsite"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="CustomStockMainWebsite"/>
+                <requiredEntity createDataKey="customSource"/>
             </createData>
-
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-
-            <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setNotifyForQuantityBelowToOne1"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignUSSource1ToCreatedProduct">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setCustomSourceQuantity"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignSource">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
+            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedSimpleProduct"/>
         </before>
+
         <after>
-            <!--Assign Default Stock to Default Website.-->
             <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
                 <argument name="stockName" value="{{_defaultStock.name}}"/>
                 <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
             </actionGroup>
-            <magentoCLI command="config:set cataloginventory/item_options/min_qty 1" stepKey="setNotifyForQuantityBelowToOne"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
-
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource1">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="CustomStockMainWebsite" stepKey="deleteStock"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <!-- Revert out of stock threshold value in config. -->
+            <magentoCLI command="config:set cataloginventory/item_options/min_qty 0" stepKey="setMinQtyToDefaultValue"/>
+            <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <waitForPageLoad time="30" stepKey="waitForIndexAndCache"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
 
-        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
-            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
-            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
-        </actionGroup>
+        <!-- Go to storefront category page, assert product visibility. -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPageOnStorefront"/>
+        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoadOnStorefront"/>
+        <see userInput="$$simpleProduct.product[name]$$" stepKey="assertProductPresentOnCategoryPageOnStorefront"/>
+        <see userInput="$$simpleProduct.product[price]$$" stepKey="assertProductPricePresentOnCategoryPageOnStorefront"/>
 
-        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
-            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
-        </actionGroup>
+        <!-- Set out of stock threshold in admin configuration. -->
+        <magentoCLI command="config:set cataloginventory/item_options/min_qty 100" stepKey="setMinQtyInConfiguration"/>
+        <magentoCLI command="indexer:reindex" stepKey="runIndexerReindex" />
+        <magentoCLI command="cache:flush" stepKey="cleanCacheAfter"/>
+        <waitForPageLoad time="30" stepKey="waitForIndexCache"/>
 
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory1.name$$]" requiredAction="true" stepKey="searchAndSelectCategory1"/>
-        <fillField selector="input[name='sources[assigned_sources][0][quantity]']" userInput="100" stepKey="fillSourceQtyField1"/>
-        <fillField selector="input[name='sources[assigned_sources][1][quantity]']" userInput="100" stepKey="fillSourceQtyField2"/>
-
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndClose1"/>
-
-        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <see userInput="$$simpleProduct1.product[name]$$" stepKey="assertProductPresent1"/>
-        <see userInput="$$simpleProduct1.product[price]$$" stepKey="assertProductPricePresent1"/>
-
-        <magentoCLI command="config:set cataloginventory/item_options/min_qty 100" stepKey="setNotifyForQuantityBelowToOne1"/>
-        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock1"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock1"/>
-
-        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage2"/>
-        <see selector=".empty" userInput="We can't find products matching the selection." stepKey="seeErrorMessage1"/>
-
-        <magentoCLI command="config:set cataloginventory/item_options/min_qty 99" stepKey="setNotifyForQuantityBelowToOne2"/>
-        <magentoCLI command="indexer:reindex" stepKey="performReindexAfterDisableManageStock2"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCacheAfterDisableManageStock2"/>
-
-        <amOnPage url="{{StorefrontCategoryPage.url($$simpleCategory1.name$$)}}" stepKey="navigateToCategoryPage3"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
-        <see userInput="$$simpleProduct1.product[name]$$" stepKey="assertProductPresent2"/>
-        <see userInput="$$simpleProduct1.product[price]$$" stepKey="assertProductPricePresent2"/>
+        <!-- Go to storefront category page, assert product isn't visible. -->
+        <reloadPage stepKey="reloadPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadToNotSeeTheProduct1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPageOnStorefrontToNotSeeTheProduct"/>
+        <dontSee userInput="$$simpleProduct.product[name]$$" stepKey="assertProductNotPresentOnCategoryPageOnStorefront"/>
+        <dontSee userInput="$$simpleProduct.product[price]$$" stepKey="assertProductPriceNotPresentOnCategoryPageOnStorefront"/>
     </test>
 </tests>
