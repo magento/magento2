@@ -194,12 +194,14 @@
         </column>
         <column name="special_price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="130">
             <settings>
+                <visible>false</visible>
                 <filter>textRange</filter>
                 <label translate="true">Special Price</label>
             </settings>
         </column>
         <column name="msrp" class="Magento\Catalog\Ui\Component\Listing\Columns\Price" sortOrder="140">
             <settings>
+                <visible>false</visible>
                 <filter>textRange</filter>
                 <label translate="true">MSRP</label>
             </settings>
