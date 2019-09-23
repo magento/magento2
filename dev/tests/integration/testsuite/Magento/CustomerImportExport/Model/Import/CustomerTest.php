@@ -78,7 +78,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $expectAddedCustomers = 5;
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
-            __DIR__ . '/_files/customers_to_import.csv',
+            __DIR__ . '/_files/customers_with_gender_to_import.csv',
             $this->directoryWrite
         );
 
@@ -132,6 +132,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $existingCustomer->getCreatedAt(),
             $updatedCustomer->getCreatedAt(),
             'Creation date must be changed'
+        );
+        $this->assertEquals(
+            $existingCustomer->getGender(),
+            $updatedCustomer->getGender(),
+            'Gender must be changed'
         );
     }
 
