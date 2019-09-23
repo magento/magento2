@@ -59,7 +59,10 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     public function testExecuteTurnsOffMultishippingModeOnMultishippingQuote(): void
     {
         $subject = $this->createMock(Index::class);
-        $extensionAttributes = $this->createMock(CartExtensionInterface::class);
+        $extensionAttributes = $this->createPartialMock(
+            CartExtensionInterface::class,
+            ['setShippingAssignments', 'getShippingAssignments']
+        );
         $extensionAttributes->method('getShippingAssignments')
             ->willReturn(
                 $this->createMock(ShippingAssignmentInterface::class)
