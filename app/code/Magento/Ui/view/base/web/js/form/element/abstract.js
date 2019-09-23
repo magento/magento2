@@ -42,6 +42,9 @@ define([
             isUseDefault: '',
             serviceDisabled: false,
             valueUpdate: false, // ko binding valueUpdate
+            autocomplete: '',
+            type: 'text', //input type
+            pattern: '',
 
             switcherConfig: {
                 component: 'Magento_Ui/js/form/switcher',

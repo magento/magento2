@@ -26,7 +26,8 @@
                             mageInit: {'mage/trim-input':{}}"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
-                       id="customer-email" />
+                       id="customer-email"
+                       autocomplete="email" />
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
                 <span class="note" data-bind="fadeVisible: isPasswordVisible() == false"><!-- ko i18n: 'You can create an account after checkout.'--><!-- /ko --></span>
             </div>
