@@ -68,14 +68,13 @@ class Dictionary implements ArgumentInterface
      */
     public function getTranslationDictionary(): string
     {
+        $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
         if ($this->appState->getMode() === AppState::MODE_PRODUCTION) {
-            $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
             $staticViewFilePath = $this->filesystem->getDirectoryRead(
                 DirectoryList::STATIC_VIEW
             )->getAbsolutePath();
             $content = $this->filesystemDriver->fileGetContents($staticViewFilePath . $asset->getPath());
         } else {
-            $asset = $this->assetRepo->createAsset(JsConfig::DICTIONARY_FILE_NAME);
             $content = $asset->getContent();
         }
 
