@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Unit\Model\System\Config\Source;
+namespace Magento\SalesRule\Test\Unit\Model\Rule\Action;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\Rule;
@@ -13,7 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers SimpleActionOptionsProvider
+ * @covers Magento\SalesRule\Model\Rule\Action\SimpleActionOptionsProvider
  */
 class SimpleActionOptionsProviderTest extends TestCase
 {

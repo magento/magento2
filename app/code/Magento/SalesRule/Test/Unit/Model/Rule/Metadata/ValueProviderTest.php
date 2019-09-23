@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * @covers ValueProvider
+ * @covers Magento\SalesRule\Model\Rule\Metadata\ValueProvider
  */
 class ValueProviderTest extends TestCase
 {
