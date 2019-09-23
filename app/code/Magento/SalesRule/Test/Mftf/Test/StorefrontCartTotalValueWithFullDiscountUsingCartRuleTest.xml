@@ -40,12 +40,12 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
             <!-- Add tax rule with 20% tax rate -->
             <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
-                <argument name="taxCode" value="SimpleTaxNYSecond"/>
+                <argument name="taxCode" value="SimpleTaxNYRate"/>
             </actionGroup>
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
             <!-- Create cart price rule -->
             <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="createCartPriceRule">
-                <argument name="ruleName" value="TestSalesRuleSecond"/>
+                <argument name="ruleName" value="SalesRuleWithFullDiscount"/>
             </actionGroup>
             <!-- Create 3 simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProductFirst">
@@ -72,11 +72,11 @@
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
             <waitForPageLoad stepKey="waitForRatesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
-                <argument name="name" value="{{SimpleTaxNYSecond.state}}-{{SimpleTaxNYSecond.rate}}"/>
+                <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="{{TestSalesRuleSecond.name}}"/>
+                <argument name="ruleName" value="{{SalesRuleWithFullDiscount.name}}"/>
             </actionGroup>
             <!-- Delete products -->
             <deleteData createDataKey="createSimpleProductFirst" stepKey="deleteSimpleProductFirst"/>
@@ -103,12 +103,12 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductSecond.custom_attributes[url_key]$$)}}" stepKey="goToSecondProductPage"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantityForTheSecondProduct"/>
-        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addPSecondProductToCard">
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addSecondProductToCard">
             <argument name="productName" value="$$createSimpleProductSecond.name$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductThird.custom_attributes[url_key]$$)}}" stepKey="goToThirdProductPage"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantityForTheThirdProduct"/>
-        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addPThirdProductToCard">
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addThirdProductToCard">
             <argument name="productName" value="$$createSimpleProductThird.name$$"/>
         </actionGroup>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="6" stepKey="seeCartQuantity"/>
