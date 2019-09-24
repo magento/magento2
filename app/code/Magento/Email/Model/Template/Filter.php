@@ -956,7 +956,6 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
             $css = '';
         }

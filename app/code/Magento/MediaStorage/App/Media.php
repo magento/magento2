@@ -140,8 +140,6 @@ class Media implements AppInterface
     private function isAllowedResource($resource)
     {
         $allowedResources = $this->mediaStorageConfig->getAllowedResources();
-        var_dump(get_class($this->mediaStorageConfig));
-        var_dump($allowedResources);die;
         foreach ($allowedResources as $allowedResource) {
             if (0 === stripos($resource, $allowedResource)) {
                 return true;
