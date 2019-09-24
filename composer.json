@@ -36,12 +36,11 @@
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.6",
         "elasticsearch/elasticsearch": "~2.0|~5.1|~6.1",
-        "guzzlehttp/guzzle": "^6.3.3",
-        "magento-ecg/coding-standard": "^3.1",
         "magento/composer": "~1.5.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
+        "wikimedia/less.php": "~1.8.0",
         "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^2.0.0",
         "php-amqplib/php-amqplib": "~2.7.0",
@@ -81,7 +80,8 @@
         "zendframework/zend-text": "^2.6.0",
         "zendframework/zend-uri": "^2.5.1",
         "zendframework/zend-validator": "^2.6.0",
-        "zendframework/zend-view": "~2.11.2"
+        "zendframework/zend-view": "~2.11.2",
+        "guzzlehttp/guzzle": "^6.3.3"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
