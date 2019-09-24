@@ -23,9 +23,7 @@ class AttributeProcessor implements CollectionProcessorInterface
      *
      * @var array
      */
-    private $fieldToAttributeMap = [
-        'price_range' => 'price'
-    ];
+    private $fieldToAttributeMap = [];
 
     /**
      * @param array $fieldToAttributeMap
@@ -44,13 +42,32 @@ class AttributeProcessor implements CollectionProcessorInterface
         array $attributeNames
     ): Collection {
         foreach ($attributeNames as $name) {
-            $attributeName = $name;
-            if (isset($this->fieldToAttributeMap[$name])) {
-                $attributeName = $this->fieldToAttributeMap[$name];
-            }
-            $collection->addAttributeToSelect($attributeName);
+            $this->addAttribute($collection, $name);
         }
 
         return $collection;
+    }
+
+    /**
+     * Add attribute to collection select
+     *
+     * @param Collection $collection
+     * @param string $attribute
+     */
+    private function addAttribute(Collection $collection, string $attribute): void
+    {
+        if (isset($this->fieldToAttributeMap[$attribute])) {
+            $attributeMap = $this->fieldToAttributeMap[$attribute];
+            if (is_array($attributeMap)) {
+                foreach ($attributeMap as $attributeName) {
+                    $collection->addAttributeToSelect($attributeName);
+                }
+            } else {
+                $collection->addAttributeToSelect($attributeMap);
+            }
+
+        } else {
+            $collection->addAttributeToSelect($attribute);
+        }
     }
 }

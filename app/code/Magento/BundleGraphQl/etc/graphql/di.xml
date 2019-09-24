@@ -40,4 +40,14 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\AttributeProcessor">
+        <arguments>
+            <argument name="fieldToAttributeMap" xsi:type="array">
+                <item name="price_range" xsi:type="array">
+                    <item name="price_type" xsi:type="string">price_type</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
