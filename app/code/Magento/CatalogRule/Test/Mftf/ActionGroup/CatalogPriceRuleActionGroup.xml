@@ -67,7 +67,7 @@
         <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="scrollToConditionsTab" after="expandConditions"/>
         <waitForElementVisible selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="waitForNewRule" after="scrollToConditionsTab"/>
         <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule" after="waitForNewRule"/>
-        <selectOption selector="{{PriceRuleConditionsSection.conditionsDropdown}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="selectProductAttribute" after="clickNewRule"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionsDropdown}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="selectProductAttribute" after="clickNewRule"/>
         <waitForPageLoad stepKey="waitForAttributeLoad" after="selectProductAttribute"/>
         <!--Assert that attribute contains today date without time-->
         <comment userInput="Assert that attribute contains today date without time" stepKey="assertDate" after="waitForAttributeLoad"/>
