@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ReorderButtonBundleProductDefaultStockTest">
+        <annotations>
+            <stories value="Bundle Product Default Stock."/>
+            <title value="Re-order button for bundle product on default stock."/>
+            <description value="Button 'Reorder' for the Order with Bundle product in customer cabinet on Homepage is not present if product sold out in multi stock mode."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735206/scenarios/1677632"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <!--Assign source to stock.-->
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create  simple products-->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="quantity">1</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="quantity">1</field>
+            </createData>
+            <!--Create Bundle product-->
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+                <field key="qty">1</field>
+                <field key="is_default">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+                <field key="qty">1</field>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableAdditionalSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!--Clean up created data.-->
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="simpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="simpleProduct2"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct1.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillSourceQtyOnProductEditPageActionGroup" stepKey="fillProductQtyPerSource">
+            <argument name="sourceCode" value="_defaultSource.source_code"/>
+            <argument name="qty" value="1" />
+        </actionGroup>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct2">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$simpleProduct2.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillSourceQtyOnProductEditPageActionGroup" stepKey="fillProductQtyPerSource2">
+            <argument name="sourceCode" value="_defaultSource.source_code"/>
+            <argument name="qty" value="1" />
+        </actionGroup>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProduct2"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createBundleProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+            <argument name="productName" value="$createBundleProduct.name$"/>
+            <argument name="productUrlKey" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+
+        <!--Create Shipment-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>
+
+        <!--Verify reorder button is not visible-->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage"/>
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+        <dontSeeElement selector="//td[text()='{$orderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton"/>
+    </test>
+</tests>

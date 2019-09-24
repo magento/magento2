@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ReorderButtonDownlodableProductDefaultSourceTest">
+        <annotations>
+            <stories value="Downloadable Product Default Stock."/>
+            <title value="Re-order button for virtual product on default stock."/>
+            <description value="Button 'Reorder' for the Order with Downloadable product in customer cabinet on Homepage is not present if product sold out."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735204/scenarios/1677007"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStock1" stepKey="additionalStock"/>
+            <!--Assign source to stock.-->
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="DownloadableMsiProduct" stepKey="downloadableProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableAdditionalSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!--Clean up created data.-->
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$downloadableProduct.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillSourceQtyOnProductEditPageActionGroup" stepKey="fillProductQtyPerSource">
+            <argument name="sourceCode" value="_defaultSource.source_code"/>
+            <argument name="qty" value="1" />
+        </actionGroup>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$downloadableProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+
+        <!--Create Invoice-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+
+        <!--Verify reorder button is not visible-->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage"/>
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+        <dontSeeElement selector="//td[text()='{$orderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton"/>
+    </test>
+</tests>
