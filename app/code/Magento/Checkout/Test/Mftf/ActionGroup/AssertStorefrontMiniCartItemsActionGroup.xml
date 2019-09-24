@@ -19,8 +19,7 @@
             <argument name="qty" type="string"/>
         </arguments>
 
-        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}"  stepKey="seeProductNameInMiniCart"/>
-        <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productPrice}}" stepKey="seeProductPriceInMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.productPriceByName(productName)}}" userInput="{{productPrice}}" stepKey="seeProductPriceInMiniCart"/>
         <seeElement selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="seeCheckOutButtonInMiniCart"/>
         <seeElement selector="{{StorefrontMinicartSection.productQuantity(productName, qty)}}" stepKey="seeProductQuantity1"/>
         <seeElement selector="{{StorefrontMinicartSection.productImage}}" stepKey="seeProductImage"/>
@@ -37,7 +36,6 @@
             <argument name="productPrice" type="string"/>
         </arguments>
 
-        <dontSee selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productName}}" stepKey="dontSeeProductNameInMiniCart"/>
-        <dontSee selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{productPrice}}" stepKey="dontSeeProductPriceInMiniCart"/>
+        <dontSee selector="{{StorefrontMinicartSection.productPriceByName(productName)}}" userInput="{{productPrice}}" stepKey="dontSeeProductPriceInMiniCart"/>
     </actionGroup>
 </actionGroups>
