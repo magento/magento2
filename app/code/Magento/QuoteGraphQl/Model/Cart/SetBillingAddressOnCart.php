@@ -116,10 +116,6 @@ class SetBillingAddressOnCart
             if (0 !== $customerId && !empty($addressInput['save_in_address_book'])) {
                 $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
             }
-
-            if (0 === $customerId) {
-                throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-            }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
