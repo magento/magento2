@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
-use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -28,17 +28,17 @@ class PriceRange implements ResolverInterface
     private $discount;
 
     /**
-     * @var array
+     * @var PriceProviderPool
      */
-    private $priceProviders;
+    private $priceProviderPool;
 
     /**
-     * @param array $priceProviders
+     * @param PriceProviderPool $priceProviderPool
      * @param Discount $discount
      */
-    public function __construct(array $priceProviders, Discount $discount)
+    public function __construct(PriceProviderPool $priceProviderPool, Discount $discount)
     {
-        $this->priceProviders = $priceProviders;
+        $this->priceProviderPool = $priceProviderPool;
         $this->discount = $discount;
     }
 
@@ -77,8 +77,9 @@ class PriceRange implements ResolverInterface
      */
     private function getMinimumProductPrice(SaleableInterface $product, StoreInterface $store): array
     {
-        $regularPrice = $this->getPriceProvider($product)->getMinimalRegularPrice($product)->getValue();
-        $finalPrice = $this->getPriceProvider($product)->getMinimalFinalPrice($product)->getValue();
+        $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
+        $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
+        $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
 
         return $this->formatPrice($regularPrice, $finalPrice, $store);
     }
@@ -92,8 +93,9 @@ class PriceRange implements ResolverInterface
      */
     private function getMaximumProductPrice(SaleableInterface $product, StoreInterface $store): array
     {
-        $regularPrice = $this->getPriceProvider($product)->getMaximalRegularPrice($product)->getValue();
-        $finalPrice = $this->getPriceProvider($product)->getMaximalFinalPrice($product)->getValue();
+        $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
+        $regularPrice = $priceProvider->getMaximalRegularPrice($product)->getValue();
+        $finalPrice = $priceProvider->getMaximalFinalPrice($product)->getValue();
 
         return $this->formatPrice($regularPrice, $finalPrice, $store);
     }
@@ -119,19 +121,5 @@ class PriceRange implements ResolverInterface
             ],
             'discount' => $this->discount->getPriceDiscount($regularPrice, $finalPrice),
         ];
-    }
-
-    /**
-     * Get price provider object
-     *
-     * @param SaleableInterface $product
-     * @return ProviderInterface
-     */
-    private function getPriceProvider(SaleableInterface $product): ProviderInterface
-    {
-        if (isset($this->priceProviders[$product->getTypeId()])) {
-            return $this->priceProviders[$product->getTypeId()];
-        }
-        return $this->priceProviders['default'];
     }
 }

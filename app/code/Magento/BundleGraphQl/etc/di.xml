@@ -17,9 +17,9 @@
         </arguments>
     </type>
 
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange">
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool">
         <arguments>
-            <argument name="priceProviders" xsi:type="array">
+            <argument name="providers" xsi:type="array">
                 <item name="bundle" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Product\Price\Provider</item>
             </argument>
         </arguments>

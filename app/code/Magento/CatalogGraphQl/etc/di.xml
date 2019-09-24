@@ -71,9 +71,9 @@
     </type>
 
     <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange">
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool">
         <arguments>
-            <argument name="priceProviders" xsi:type="array">
+            <argument name="providers" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider</item>
             </argument>
         </arguments>

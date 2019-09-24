@@ -44,7 +44,7 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
 type ProductPrices @deprecated(reason: "Use PriceRange instead.") @doc(description: "The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
     minimalPrice: Price @deprecated(reason: "Use PriceRange.minimum_price.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
     maximalPrice: Price @deprecated(reason: "Use PriceRange.maximum_price.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
-    regularPrice: Price @deprecated(reason: "Use regular_price from PriceRange.minimum_price or PriceRange.minimum_price.") @doc(description: "The base price of a product.")
+    regularPrice: Price @deprecated(reason: "Use regular_price from PriceRange.minimum_price or PriceRange.maximum_price.") @doc(description: "The base price of a product.")
 }
 
 type PriceRange @doc(description: "Price range for a product. If the product only has a single price minimum and maximum price will be the same."){
@@ -61,12 +61,6 @@ type ProductPrice @doc(description: "Represents a product price.") {
 type ProductDiscount @doc(description: "Price discount applied to a product.") {
     percent_off: Float @doc(description: "The discount expressed a percent value.")
     amount_off: Float @doc(description: "The discount expressed an absolute value.")
-}
-
-type TierPrice @doc(description: "TierPrice defines a tier price, which is a price offered based on a particular quantity purchased.") {
-    final_price: Money @doc(desription: "The price of the product at this tier.")
-    quantity: Float @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
-    discount: ProductDiscount @doc(description: "The price discount that this tier represents.")
 }
 
 type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
