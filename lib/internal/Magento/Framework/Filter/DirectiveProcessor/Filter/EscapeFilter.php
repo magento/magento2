@@ -32,8 +32,10 @@ class EscapeFilter implements FilterInterface
     /**
      * @inheritDoc
      */
-    public function filterValue(string $value, $type = 'html'): string
+    public function filterValue(string $value, array $params): string
     {
+        $type = $params[0] ?? 'html';
+
         switch ($type) {
             case 'html':
                 return $this->escaper->escapeHtml($value);

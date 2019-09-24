@@ -77,8 +77,8 @@ class StrictResolverTest extends TestCase
             'nested array' => ['foo.bar.baz',['foo' => ['bar' => ['baz' => 123]]], 123],
             'getter data object with mixed array usage' =>
                 ['foo.getBar().baz',['foo' => new DataObject(['bar' => ['baz' => 'abc']])], 'abc'],
-            'deny method' => ['foo.doThing()',['foo' => $classStub], $classStub],
-            'deny getter method' => ['foo.getThing()',['foo' => $classStub], $classStub],
+            'deny method' => ['foo.doThing()',['foo' => $classStub], null],
+            'deny getter method' => ['foo.getThing()',['foo' => $classStub], null],
             'deny normal method for DataObject' => ['foo.doThing()',['foo' => $dataClassStub], null],
             'deny getter method for DataObject' => ['foo.getThing()',['foo' => $dataClassStub], null],
             'convert getter method to getData(foo)' => ['foo.getFoo()',['foo' => $dataClassStub], 'bar'],

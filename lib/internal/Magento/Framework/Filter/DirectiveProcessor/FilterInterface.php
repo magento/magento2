@@ -17,9 +17,10 @@ interface FilterInterface
      * Transform or manipulate value
      *
      * @param string $value
+     * @param array $params
      * @return string
      */
-    public function filterValue(string $value): string;
+    public function filterValue(string $value, array $params): string;
 
     /**
      * This filter's unique name.

@@ -44,11 +44,11 @@ class IfDirective implements DirectiveProcessorInterface
 
         if ($this->variableResolver->resolve($construction[1], $filter, $templateVariables) == '') {
             if (isset($construction[3]) && isset($construction[4])) {
-                return $construction[4];
+                return $filter->filter($construction[4]);
             }
             return '';
         } else {
-            return $construction[2];
+            return $filter->filter($construction[2]);
         }
     }
 

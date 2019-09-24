@@ -19,8 +19,10 @@ class FooFilter implements \Magento\Framework\Filter\DirectiveProcessor\FilterIn
     /**
      * @inheritDoc
      */
-    public function filterValue(string $value, $arg1 = null): string
+    public function filterValue(string $value, array $params): string
     {
+        $arg1 = $params[0] ?? null;
+
         return strtoupper(strrev($value . $arg1 ?? ''));
     }
 

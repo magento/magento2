@@ -10,8 +10,6 @@
 namespace Magento\Framework\Filter;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DataObject;
-use Magento\Framework\Filter\DirectiveProcessor\SimpleDirective;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\ForDirective;
 use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
@@ -30,26 +28,36 @@ class Template implements \Zend_Filter_Interface
 {
     /**
      * Construction regular expression
+     *
+     * @deprecated Use the new Directive processors
      */
-    const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}/si';
+    const CONSTRUCTION_PATTERN = '/{{([a-z]{0,10})(.*?)}}(?:(.*?)(?:{{\/(?:\\1)}}))?/si';
 
     /**
      * Construction `depend` regular expression
+     *
+     * @deprecated Use the new Directive processors
      */
     const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
 
     /**
      * Construction `if` regular expression
+     *
+     * @deprecated Use the new Directive processors
      */
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
     /**
      * Construction `template` regular expression
+     *
+     * @deprecated Use the new Directive processors
      */
     const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
     /**
      * Construction `for` regular expression
+     *
+     * @deprecated Use the new Directive processors
      */
     const LOOP_PATTERN = '/{{for(?P<loopItem>.*? )(in)(?P<loopData>.*?)}}(?P<loopBody>.*?){{\/for}}/si';
 
@@ -90,23 +98,6 @@ class Template implements \Zend_Filter_Interface
      */
     private $variableResolver;
 
-    private $legacyDirectives = [
-        'depend' => true,
-        'if' => true,
-        'template' => true,
-        'var' => true,
-    ];
-
-    private $defaultProcessors = [
-        'depend' => DependDirective::class,
-        'if' => IfDirective::class,
-        'template' => TemplateDirective::class,
-        'for' => ForDirective::class,
-        'var' => VarDirective::class,
-        'simple' => SimpleDirective::class,
-        'legacy' => LegacyDirective::class,
-    ];
-
     /**
      * @param StringUtils $string
      * @param array $variables
@@ -126,14 +117,12 @@ class Template implements \Zend_Filter_Interface
                 ->get(VariableResolverInterface::class);
 
         if (empty($directiveProcessors)) {
-            foreach ($this->defaultProcessors as $name => $defaultProcessor) {
-                $this->directiveProcessors[$name] = ObjectManager::getInstance()->get($defaultProcessor);
-            }
+            $this->directiveProcessors['legacy'] = ObjectManager::getInstance()->get(LegacyDirective::class);
         }
     }
 
     /**
-     * Sets template variables that's can be called through {var ...} statement
+     * Set the template variables available to be resolved in this template via variable resolver directives
      *
      * @param array $variables
      * @return \Magento\Framework\Filter\Template
@@ -141,9 +130,6 @@ class Template implements \Zend_Filter_Interface
     public function setVariables(array $variables)
     {
         foreach ($variables as $name => $value) {
-            if ($this->strictMode && is_object($value) && !$value instanceof DataObject) {
-                continue;
-            }
             $this->templateVars[$name] = $value;
         }
         return $this;
@@ -180,7 +166,7 @@ class Template implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        foreach ($this->directiveProcessors as $name => $directiveProcessor) {
+        foreach ($this->directiveProcessors as $directiveProcessor) {
             if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
                 throw new \InvalidArgumentException(
                     'Directive processors must implement ' . DirectiveProcessorInterface::class
@@ -189,15 +175,7 @@ class Template implements \Zend_Filter_Interface
 
             if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
-                    if (isset($this->legacyDirectives[$name])) {
-                        $callback = [$this, $name . 'Directive'];
-                        if (!is_callable($callback)) {
-                            continue;
-                        }
-                        $replacedValue = call_user_func($callback, $construction);
-                    } else {
-                        $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
-                    }
+                    $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
 
                     $value = str_replace($construction[0], $replacedValue, $value);
                 }
@@ -257,7 +235,7 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Get var directive
+     * Process {{var}} directive regex match
      *
      * @param string[] $construction
      * @return string
@@ -269,6 +247,23 @@ class Template implements \Zend_Filter_Interface
             ->get(VarDirective::class);
 
         return $directive->process($construction, $this, $this->templateVars);
+    }
+
+    /**
+     * Process {{for}} directive regex match
+     *
+     * @param string[] $construction
+     * @return string
+     * @deprecated Use the directive interfaces instead
+     */
+    public function forDirective($construction)
+    {
+        $directive = $this->directiveProcessors['for'] ?? ObjectManager::getInstance()
+            ->get(ForDirective::class);
+
+        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+
+        return $directive->process($specificConstruction, $this, $this->templateVars);
     }
 
     /**
@@ -305,7 +300,9 @@ class Template implements \Zend_Filter_Interface
         $directive = $this->directiveProcessors['depend'] ?? ObjectManager::getInstance()
             ->get(DependDirective::class);
 
-        return $directive->process($construction, $this, $this->templateVars);
+        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+
+        return $directive->process($specificConstruction, $this, $this->templateVars);
     }
 
     /**
@@ -320,7 +317,9 @@ class Template implements \Zend_Filter_Interface
         $directive = $this->directiveProcessors['if'] ?? ObjectManager::getInstance()
             ->get(IfDirective::class);
 
-        return $directive->process($construction, $this, $this->templateVars);
+        preg_match($directive->getRegularExpression(), $construction[0], $specificConstruction);
+
+        return $directive->process($specificConstruction, $this, $this->templateVars);
     }
 
     /**

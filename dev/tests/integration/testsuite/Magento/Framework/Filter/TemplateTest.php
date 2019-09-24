@@ -133,8 +133,10 @@ EXPECTED_RESULT;
             ]
         );
 
-        $template = '{{depend customer.getName()}}foo{{/depend}}{{depend customer.getFoo()}}bar{{/depend}}';
-        $expected = 'foo';
+        $template = '{{depend customer.getName()}}foo{{/depend}}';
+        $template .= '{{depend customer.getName()}}{{var customer.getName()}}{{/depend}}';
+        $template .= '{{depend customer.getFoo()}}bar{{/depend}}';
+        $expected = 'fooJohn Doe';
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 

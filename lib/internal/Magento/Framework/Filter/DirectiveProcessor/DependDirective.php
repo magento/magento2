@@ -46,7 +46,7 @@ class DependDirective implements DirectiveProcessorInterface
         if ($this->variableResolver->resolve($construction[1], $filter, $templateVariables) == '') {
             return '';
         } else {
-            return $construction[2];
+            return $filter->filter($construction[2]);
         }
     }
 

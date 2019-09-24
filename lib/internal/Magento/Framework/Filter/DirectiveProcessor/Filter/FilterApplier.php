@@ -69,7 +69,7 @@ class FilterApplier
                 continue;
             }
 
-            $value = $filter->filterValue($value, ...$params);
+            $value = $filter->filterValue($value, $params);
         }
 
         return $value;

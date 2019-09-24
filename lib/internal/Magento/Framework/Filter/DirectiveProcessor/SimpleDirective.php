@@ -78,7 +78,7 @@ class SimpleDirective implements DirectiveProcessorInterface
         $value = $directiveParser->process(
             $construction['value'] ?? null,
             $parameters,
-            $construction['content'] ?? null,
+            $filter->filter($construction['content']) ?? null,
             $filter,
             $templateVariables
         );
@@ -103,8 +103,8 @@ class SimpleDirective implements DirectiveProcessorInterface
         . '(?P<parameters>.*?)'
         . '(?P<filters>(?:\|[a-z0-9:_-]+)+)?'
         . '}}'
-        . '(?:(?P<content>.*?)'
-        . '{{\/(?P=directiveName)}})?/si';
+        . '(?:(?P<content>.*?){{\/(?P=directiveName)}})?'
+        . '/si';
     }
 
     /**

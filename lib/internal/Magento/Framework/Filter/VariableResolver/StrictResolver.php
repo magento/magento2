@@ -58,7 +58,9 @@ class StrictResolver implements VariableResolverInterface
             }
         }
 
-        if (isset($this->stackArgs[$last]['variable'])) {
+        if (isset($this->stackArgs[$last]['variable'])
+            && (is_scalar($this->stackArgs[$last]['variable']) || is_array($this->stackArgs[$last]['variable']))
+        ) {
             // If value for construction exists set it
             $result = $this->stackArgs[$last]['variable'];
         }

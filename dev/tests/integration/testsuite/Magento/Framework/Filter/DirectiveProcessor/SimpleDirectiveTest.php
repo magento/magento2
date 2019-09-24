@@ -53,7 +53,7 @@ class SimpleDirectiveTest extends TestCase
         $template = 'blah {{mydir "somevalue" param1=yes|foofilter|nl2br|doesntexist|foofilter}}blah '
             . "\n" . '{{var address}} blah{{/mydir}} blah';
         $result = $processor->process($this->createConstruction($processor, $template), $filter, ['foo' => 'foobar']);
-        self::assertEquals('SOMEVALUEYESBLAH ' . "\n" .'>/ RB<{{VAR ADDRESS}} BLAHFOOBAR', $result);
+        self::assertEquals('SOMEVALUEYESBLAH ' . "\n" .'>/ RB< BLAHFOOBAR', $result);
     }
 
     public function testDefaultFiltersAreUsed()
@@ -68,7 +68,7 @@ class SimpleDirectiveTest extends TestCase
         $template = 'blah {{mydir "somevalue" param1=yes}}blah '
             . "\n" . '{{var address}} blah{{/mydir}} blah';
         $result = $processor->process($this->createConstruction($processor, $template), $filter, []);
-        self::assertEquals('HALB }}SSERDDA RAV{{' . "\n" . ' HALBSEYEULAVEMOS', $result);
+        self::assertEquals('HALB ' . "\n" . ' HALBSEYEULAVEMOS', $result);
     }
 
     public function testParametersAreParsed()
