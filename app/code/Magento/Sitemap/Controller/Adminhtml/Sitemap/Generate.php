@@ -49,7 +49,13 @@ class Generate extends Sitemap implements HttpGetActionInterface
         // if sitemap record exists
         if ($sitemap->getId()) {
             try {
+                $this->appEmulation->startEnvironmentEmulation(
+                    $sitemap->getStoreId(),
+                    \Magento\Framework\App\Area::AREA_FRONTEND,
+                    true
+                );
                 $sitemap->generateXml();
+                $this->appEmulation->stopEnvironmentEmulation();
                 $this->messageManager->addSuccessMessage(
                     __('The sitemap "%1" has been generated.', $sitemap->getSitemapFilename())
                 );

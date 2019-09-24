@@ -18,7 +18,7 @@ type Mutation {
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
-    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
+    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
@@ -85,6 +85,7 @@ input SetShippingAddressesOnCartInput {
 input ShippingAddressInput {
     customer_address_id: Int # If provided then will be used address from address book
     address: CartAddressInput
+    customer_notes: String
 }
 
 input SetBillingAddressOnCartInput {
@@ -197,6 +198,8 @@ type Cart {
     available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
+    is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
@@ -209,7 +212,6 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
     postcode: String
     country: CartAddressCountry
     telephone: String
-    customer_notes: String
 }
 
 type ShippingCartAddress implements CartAddressInterface {
@@ -217,9 +219,11 @@ type ShippingCartAddress implements CartAddressInterface {
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
     items_weight: Float
     cart_items: [CartItemQuantity]
+    customer_notes: String
 }
 
 type BillingCartAddress implements CartAddressInterface {
+    customer_notes: String @deprecated (reason: "The field is used only in shipping address")
 }
 
 type CartItemQuantity {
@@ -243,7 +247,7 @@ type SelectedShippingMethod {
     carrier_title: String
     method_title: String
     amount: Money
-    base_amount: Money
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
 }
 
 type AvailableShippingMethod {
@@ -253,7 +257,7 @@ type AvailableShippingMethod {
     method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
     amount: Money!
-    base_amount: Money @doc(description: "Could be null if method is not available")
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
     price_excl_tax: Money!
     price_incl_tax: Money!
     available: Boolean!
