@@ -63,7 +63,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test process() method
      *
-     * @magentoConfigFixture current_store catalog/productalert/allow_price 1     *
+     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
      */
     public function testProcess()
