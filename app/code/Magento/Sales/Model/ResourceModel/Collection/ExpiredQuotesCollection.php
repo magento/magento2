@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Helper;
+namespace Magento\Sales\Model\ResourceModel\Collection;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
