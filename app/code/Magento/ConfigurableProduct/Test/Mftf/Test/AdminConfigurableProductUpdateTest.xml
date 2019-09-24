@@ -34,15 +34,19 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Search for prefix of the 3 products we created via api -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clearAll"/>
         <actionGroup ref="searchProductGridByKeyword" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>
@@ -58,9 +62,9 @@
         <!-- Update the description -->
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToggleDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
-        <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSaveSuccess"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
         <magentoCLI command="cron:run" stepKey="runCronFirstTime"/>
@@ -70,10 +74,13 @@
 
         <!-- Check storefront for description -->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="goToFirstProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeFirstDescription"/>
         <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.custom_attributes[url_key]$$)}}" stepKey="goToSecondProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeSecondDescription"/>
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="goToThirdProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForThirdProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeThirdDescription"/>
     </test>
 
