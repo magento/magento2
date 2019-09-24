@@ -165,7 +165,7 @@ class AttributeMerger
         }
 
         if ($attributeConfig['formElement'] == 'multiline') {
-            return $this->getMultilineFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
+            return $this->getMultilineFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix, $additionalConfig);
         }
 
         $uiComponent = isset($this->formElementMap[$attributeConfig['formElement']])
@@ -269,9 +269,10 @@ class AttributeMerger
      * @param array $attributeConfig
      * @param string $providerName name of the storage container used by UI component
      * @param string $dataScopePrefix
+     * @param array $additionalConfig
      * @return array
      */
-    protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
+    protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix, array $additionalConfig)
     {
         $lines = [];
         unset($attributeConfig['validation']['required-entry']);
@@ -302,20 +303,23 @@ class AttributeMerger
             }
             $lines[] = $line;
         }
-        return [
-            'component' => 'Magento_Ui/js/form/components/group',
-            'label' => $attributeConfig['label'],
-            'required' => (bool)$attributeConfig['required'],
-            'dataScope' => $dataScopePrefix . '.' . $attributeCode,
-            'provider' => $providerName,
-            'sortOrder' => $attributeConfig['sortOrder'],
-            'type' => 'group',
-            'config' => [
-                'template' => 'ui/group/group',
-                'additionalClasses' => $attributeCode
+        return array_replace_recursive(
+            [
+                'component' => 'Magento_Ui/js/form/components/group',
+                'label' => $attributeConfig['label'],
+                'required' => (bool)$attributeConfig['required'],
+                'dataScope' => $dataScopePrefix . '.' . $attributeCode,
+                'provider' => $providerName,
+                'sortOrder' => $attributeConfig['sortOrder'],
+                'type' => 'group',
+                'config' => [
+                    'template' => 'ui/group/group',
+                    'additionalClasses' => $attributeCode
+                ],
+                'children' => $lines,
             ],
-            'children' => $lines,
-        ];
+            $additionalConfig
+        );
     }
 
     /**

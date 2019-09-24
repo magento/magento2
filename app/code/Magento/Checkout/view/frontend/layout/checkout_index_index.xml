@@ -264,6 +264,25 @@
                                                                             <item name="autocomplete" xsi:type="string">family-name</item>
                                                                         </item>
                                                                     </item>
+                                                                    <item name="street" xsi:type="array">
+                                                                        <item name="children" xsi:type="array">
+                                                                            <item name="0" xsi:type="array">
+                                                                                <item name="config" xsi:type="array">
+                                                                                    <item name="autocomplete" xsi:type="string">address-line1</item>
+                                                                                </item>
+                                                                            </item>
+                                                                            <item name="1" xsi:type="array">
+                                                                                <item name="config" xsi:type="array">
+                                                                                    <item name="autocomplete" xsi:type="string">address-line2</item>
+                                                                                </item>
+                                                                            </item>
+                                                                            <item name="2" xsi:type="array">
+                                                                                <item name="config" xsi:type="array">
+                                                                                    <item name="autocomplete" xsi:type="string">address-line3</item>
+                                                                                </item>
+                                                                            </item>
+                                                                        </item>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                         </item>
