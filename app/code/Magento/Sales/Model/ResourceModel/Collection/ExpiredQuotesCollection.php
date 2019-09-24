@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\ResourceModel\Collection;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -57,7 +59,7 @@ class ExpiredQuotesCollection
      * @param StoreInterface $store
      * @return Collection
      */
-    public function getExpiredQuotes(StoreInterface $store)
+    public function getExpiredQuotes(StoreInterface $store): Collection
     {
         $lifetime = $this->config->getValue(
             $this->quoteLifetime,
