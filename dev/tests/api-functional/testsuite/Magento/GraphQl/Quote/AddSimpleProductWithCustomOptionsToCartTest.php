@@ -127,7 +127,8 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         self::assertArrayHasKey('items', $response['addSimpleProductsToCart']['cart']);
         self::assertCount(1, $response['addSimpleProductsToCart']['cart']);
 
-        $customizableOptionOutput = $response['addSimpleProductsToCart']['cart']['items'][0]['customizable_options'][0]['values'][0]['value'];
+        $cartItem = $response['addSimpleProductsToCart']['cart']['items'][0];
+        $customizableOptionOutput = $cartItem['customizable_options'][0]['values'][0]['value'];
         $expectedValue = date("M d, Y", strtotime($customOptionsValues[0]['value_string']));
 
         self::assertEquals($expectedValue, $customizableOptionOutput);
