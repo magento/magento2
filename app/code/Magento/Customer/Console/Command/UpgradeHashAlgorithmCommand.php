@@ -6,13 +6,11 @@
 namespace Magento\Customer\Console\Command;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
@@ -97,25 +95,12 @@ class UpgradeHashAlgorithmCommand extends Command
                 $hash = $this->encryptor->getHash($hash, $salt, $this->encryptor->getLatestHashVersion());
                 list($hash, $salt) = explode(Encryptor::DELIMITER, $hash, 3);
                 $hash = implode(Encryptor::DELIMITER, [$hash, $salt, $version]);
-                $customerDataObject = $this->getCustomerDataObject($customer->getId());
+                $customerDataObject = $this->customerRepository->getById($customer->getId());
                 $this->customerRepository->save($customerDataObject, $hash);
                 $output->write(".");
             }
         }
         $output->writeln(".");
         $output->writeln("<info>Finished</info>");
-    }
-
-    /**
-     * Get customer data object
-     *
-     * @param int $customerId
-     * @return CustomerInterface
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    private function getCustomerDataObject(int $customerId)
-    {
-        return $this->customerRepository->getById($customerId);
     }
 }
