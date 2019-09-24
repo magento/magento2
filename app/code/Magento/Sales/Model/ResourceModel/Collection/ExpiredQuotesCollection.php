@@ -16,18 +16,20 @@ use Magento\Store\Model\ScopeInterface;
  */
 class ExpiredQuotesCollection
 {
-    const SECONDS_IN_DAY = 86400;
-    const QUOTE_LIFETIME = 'checkout/cart/delete_quote_after';
+    /**
+     * @var int
+     */
+    private $secondsInDay = 86400;
+
+    /**
+     * @var string
+     */
+    private $quoteLifetime = 'checkout/cart/delete_quote_after';
 
     /**
      * @var CollectionFactory
      */
     private $quoteCollectionFactory;
-
-    /**
-     * @var array
-     */
-    private $expireQuotesFilterFields = [];
 
     /**
      * @var ScopeConfigInterface
@@ -58,42 +60,17 @@ class ExpiredQuotesCollection
     public function getExpiredQuotes(StoreInterface $store)
     {
         $lifetime = $this->config->getValue(
-            self::QUOTE_LIFETIME,
+            $this->quoteLifetime,
             ScopeInterface::SCOPE_STORE,
             $store->getCode()
         );
-        $lifetime *= self::SECONDS_IN_DAY;
+        $lifetime *= $this->secondsInDay;
 
         /** @var $quotes Collection */
         $quotes = $this->quoteCollectionFactory->create();
         $quotes->addFieldToFilter('store_id', $store->getId());
         $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
 
-        foreach ($this->getExpireQuotesAdditionalFilterFields() as $field => $condition) {
-            $quotes->addFieldToFilter($field, $condition);
-        }
-
         return $quotes;
-    }
-
-    /**
-     * Retrieve expire quotes additional fields to filter
-     *
-     * @return array
-     */
-    private function getExpireQuotesAdditionalFilterFields()
-    {
-        return $this->expireQuotesFilterFields;
-    }
-
-    /**
-     * Set expire quotes additional fields to filter
-     *
-     * @param array $fields
-     * @return void
-     */
-    public function setExpireQuotesAdditionalFilterFields(array $fields)
-    {
-        $this->expireQuotesFilterFields = $fields;
     }
 }
