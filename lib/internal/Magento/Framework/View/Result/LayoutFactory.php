@@ -10,6 +10,9 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ *
+ * @deprecated replaced with more generic ResultFactory
+ * @see \Magento\Framework\Controller\ResultFactory::create
  */
 class LayoutFactory
 {
@@ -29,18 +32,18 @@ class LayoutFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = \Magento\Framework\View\Result\Layout::class
+        $instanceName = Layout::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
     }
 
     /**
-     * @return \Magento\Framework\View\Result\Layout
+     * @return Layout
      */
     public function create()
     {
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        /** @var Layout $resultLayout */
         $resultLayout = $this->objectManager->create($this->instanceName);
         $resultLayout->addDefaultHandle();
         return $resultLayout;

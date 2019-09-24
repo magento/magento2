@@ -34,7 +34,7 @@ class RedirectFactory extends \Magento\Framework\Controller\Result\RedirectFacto
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = \Magento\Backend\Model\View\Result\Redirect::class
+        $instanceName = Redirect::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
@@ -44,7 +44,7 @@ class RedirectFactory extends \Magento\Framework\Controller\Result\RedirectFacto
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function create(array $data = [])
     {

@@ -14,6 +14,9 @@ use Magento\Framework\ObjectManagerInterface;
  * which is by convention is determined from the controller action class
  *
  * @api
+ *
+ * @deprecated replaced with more generic ResultFactory
+ * @see \Magento\Framework\Controller\ResultFactory::create
  */
 class PageFactory
 {
@@ -33,7 +36,7 @@ class PageFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = \Magento\Framework\View\Result\Page::class
+        $instanceName = Page::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
@@ -47,11 +50,11 @@ class PageFactory
      *
      * @param bool $isView
      * @param array $arguments
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      */
     public function create($isView = false, array $arguments = [])
     {
-        /** @var \Magento\Framework\View\Result\Page $page */
+        /** @var Page $page */
         $page = $this->objectManager->create($this->instanceName, $arguments);
         // TODO Temporary solution for compatibility with View object. Will be deleted in MAGETWO-28359
         if (!$isView) {

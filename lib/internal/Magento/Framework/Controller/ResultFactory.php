@@ -7,6 +7,8 @@
 namespace Magento\Framework\Controller;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Result\Layout;
+use Magento\Framework\View\Result\Page;
 
 /**
  * Result Factory
@@ -15,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ResultFactory
 {
-    /**#@+
+    /**
      * Allowed result types
      */
     const TYPE_JSON     = 'json';
@@ -24,16 +26,14 @@ class ResultFactory
     const TYPE_FORWARD  = 'forward';
     const TYPE_LAYOUT   = 'layout';
     const TYPE_PAGE     = 'page';
-    /**#@-*/
 
-    /**#@-*/
     protected $typeMap = [
         self::TYPE_JSON     => Result\Json::class,
         self::TYPE_RAW      => Result\Raw::class,
         self::TYPE_REDIRECT => Result\Redirect::class,
         self::TYPE_FORWARD  => Result\Forward::class,
-        self::TYPE_LAYOUT   => \Magento\Framework\View\Result\Layout::class,
-        self::TYPE_PAGE     => \Magento\Framework\View\Result\Page::class,
+        self::TYPE_LAYOUT   => Layout::class,
+        self::TYPE_PAGE     => Page::class,
     ];
 
     /**
@@ -95,7 +95,7 @@ class ResultFactory
          * Used for knowledge how result page was created, page was created through result factory or it's default page
          * in App\View created in constructor
          */
-        if ($resultInstance instanceof \Magento\Framework\View\Result\Layout) {
+        if ($resultInstance instanceof Layout) {
             // Initialization has to be in constructor of ResultPage
             $resultInstance->addDefaultHandle();
         }
