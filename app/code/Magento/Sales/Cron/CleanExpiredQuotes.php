@@ -6,7 +6,7 @@
 namespace Magento\Sales\Cron;
 
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
-use Magento\Sales\Model\ResourceModel\ExpiredQuotesCollection;
+use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
