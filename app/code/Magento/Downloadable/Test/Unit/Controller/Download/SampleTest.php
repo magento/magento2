@@ -155,7 +155,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($sampleMock);
         $sampleMock->expects($this->once())->method('load')->with('some_sample_id')->willReturnSelf();
         $sampleMock->expects($this->once())->method('getId')->willReturn('some_link_id');
-        $this->salabilityCheckerMock->expects($this->once())->method('isSalable')->willReturn(true);
+        $this->salabilityCheckerMock->expects($this->once())->method('isProductVisible')->willReturn(true);
         $sampleMock->expects($this->once())->method('getSampleType')->willReturn(
             \Magento\Downloadable\Helper\Download::LINK_TYPE_URL
         );
@@ -200,7 +200,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($sampleMock);
         $sampleMock->expects($this->once())->method('load')->with('some_sample_id')->willReturnSelf();
         $sampleMock->expects($this->once())->method('getId')->willReturn('some_sample_id');
-        $this->salabilityCheckerMock->expects($this->once())->method('isSalable')->willReturn(true);
+        $this->salabilityCheckerMock->expects($this->once())->method('isProductVisible')->willReturn(true);
         $sampleMock->expects($this->any())->method('getSampleType')->willReturn(
             \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE
         );
