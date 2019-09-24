@@ -11,7 +11,7 @@
             <magentoCLI stepKey="setSearchEngineToMysql" command="config:set {{SearchEngineMysqlConfigData.path}} {{SearchEngineMysqlConfigData.value}}"/>
         </before>
         <after>
-            <magentoCLI stepKey="restoreSearchEngineToDefault" command="config:set {{SearchEngineDefaultConfigData.path}} {{SearchEngineDefaultConfigData.value}}"/>
+            <magentoCLI stepKey="setSearchEngineToElasticsearch" command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}"/>
         </after>
         <include>
             <group name="SearchEngineMysql" />
