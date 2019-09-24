@@ -5,19 +5,15 @@
  */
 namespace Magento\MediaStorage\Model\File\Storage;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
-use Magento\Framework\Filesystem\File\Write;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\MediaStorage\Model\File\Storage;
 
 /***
- * Class Config
+ * Class MediaStorageConfig
  * @package Magento\MediaStorage\Model\File\Storage
  */
-class Config
+class MediaStorageConfig
 {
     const CACHE_ID = 'config';
 

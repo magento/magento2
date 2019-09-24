@@ -10,12 +10,12 @@ namespace Magento\MediaStorage\App;
 
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\Filesystem;
+use Magento\MediaStorage\Model\File\Storage\MediaStorageConfig;
 use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
-use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
 
@@ -37,9 +37,9 @@ class Media implements AppInterface
     private $response;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Config
+     * @var MediaStorageConfig
      */
-    private $config;
+    private $mediaStorageConfig;
 
     /**
      * @var ProductMediaConfig
@@ -67,7 +67,7 @@ class Media implements AppInterface
     private $filesystem;
 
     /**
-     * @param Config                 $config
+     * @param MediaStorageConfig     $mediaStorageConfig
      * @param SynchronizationFactory $syncFactory
      * @param Response               $response
      * @param string                 $relativeFileName
@@ -77,7 +77,7 @@ class Media implements AppInterface
      * @param ProductMediaConfig     $productMediaConfig
      */
     public function __construct(
-        \Magento\MediaStorage\Model\File\Storage\Config $config,
+        MediaStorageConfig $mediaStorageConfig,
         SynchronizationFactory $syncFactory,
         Response $response,
         $relativeFileName,
@@ -86,7 +86,7 @@ class Media implements AppInterface
         ImageResize $imageResize,
         ProductMediaConfig $productMediaConfig
     ) {
-        $this->config = $config;
+        $this->mediaStorageConfig = $mediaStorageConfig;
         $this->response = $response;
         $this->filesystem = $filesystem;
         $this->relativeFileName = $relativeFileName;
@@ -139,7 +139,9 @@ class Media implements AppInterface
      */
     private function isAllowedResource($resource)
     {
-        $allowedResources = $this->config->getAllowedResources();
+        $allowedResources = $this->mediaStorageConfig->getAllowedResources();
+        var_dump(get_class($this->mediaStorageConfig));
+        var_dump($allowedResources);die;
         foreach ($allowedResources as $allowedResource) {
             if (0 === stripos($resource, $allowedResource)) {
                 return true;
