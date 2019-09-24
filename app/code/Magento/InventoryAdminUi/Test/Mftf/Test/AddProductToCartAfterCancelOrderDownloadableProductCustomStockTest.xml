@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AddProductToCartAfterCancelOrderDownloadableProductCustomStockTest" extends="AdminCreateDownloadableProductWithCustomStockTest">
+    <test name="AddProductToCartAfterCancelOrderDownloadableProductCustomStockTest">
         <annotations>
             <stories value="Downloadable Product Custom Stock."/>
             <title value="Add Downloadable Product after Cancel Order Custom Stock."/>
@@ -20,10 +20,36 @@
         </annotations>
 
         <before>
-            <createData entity="MsiCustomer1" stepKey="customer" after="linkSourceStock1"/>
+            <createData entity="DownloadableMsiProduct" stepKey="product"/>
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Assign source to product.-->
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+            <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceAndSetQty">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         </before>
         <after>
-            <deleteData createDataKey="customer" stepKey="deleteCustomer" after="deleteCustomStock"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteCustomStock"/>
+            <!--Disable source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="deleteSource">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
         </after>
 
         <!-- Login as customer -->
@@ -31,44 +57,28 @@
             <argument name="Customer" value="$$customer$$"/>
         </actionGroup>
         <!-- Add product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$downloadableProduct1.custom_attributes[url_key]$$)}}" stepKey="goToPDP"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
-        <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectLink"/>
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForProductAddedMessage"/>
-        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$downloadableProduct1.name$$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+        <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="navigateToToPDP"/>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToCart">
+            <argument name="productQty" value="{{defaultProductQty.value}}"/>
+        </actionGroup>
         <!--Place order.-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
-        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
         <!--Cancel order-->
         <actionGroup ref="OpenOrderById" stepKey="openOrder">
             <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
-        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
-        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
-        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
         <!--Add downloadable product to cart with improper quantity.-->
-        <amOnPage url="{{StorefrontProductPage.url($$downloadableProduct1.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForProductEditPage"/>
-        <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectLinkToAddProductToCart"/>
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCartDownloadableProduct"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart"/>
-        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$downloadableProduct1.name$$)}}" userInput="101" stepKey="addIncorrectQty"/>
-        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$downloadableProduct1.name$$)}}" stepKey="updateQty"/>
-        <waitForPageLoad stepKey="waitForModal"/>
-        <see selector="{{ModalConfirmationSection.modalContent}}" userInput="The requested qty is not available" stepKey="verifyErrorMessage"/>
-        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="confirmRequestedQuantityIsNotAvailable"/>
-        <waitForPageLoad stepKey="waitForModalClose"/>
+        <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="goToPDP"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{101ProductQty.value}}" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="waitForErrorMessage"/>
+        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="The requested qty is not available" stepKey="verifyErrorMessage"/>
         <!--Add downloadable product with proper quantity.-->
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCartAgain"/>
-        <fillField selector="{{StorefrontMinicartSection.itemQuantity($$downloadableProduct1.name$$)}}" userInput="100" stepKey="addCorrectQty"/>
-        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate($$downloadableProduct1.name$$)}}" stepKey="updateQtyAgain"/>
-        <waitForPageLoad stepKey="waitForPossibleErrorMessage"/>
-        <dontSee userInput="The requested qty is not available" stepKey="verifyErrorMessageNotAppeared"/>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToCartWithProperQty">
+            <argument name="productQty" value="{{defaultProductQty.value}}"/>
+        </actionGroup>
     </test>
 </tests>

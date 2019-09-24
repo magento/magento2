@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AddProductToCartAfterCancelOrderConfigurableProductCustomStockTest">
+    <test name="StorefrontLoggedInCustomerOrderConfigurableProductWithDropDownAttributeAndCustomSourceTest">
         <annotations>
             <stories value="Configurable Product Custom Stock."/>
-            <title value="Add Configurable Product to Cart after Cancel Order on Custom Stock."/>
-            <description value="Verify customer able to add configurable product to cart with correct quantity after cancel order on custom stock."/>
-            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735249/scenarios/1474637"/>
+            <title value="Logged In Customer Order Configurable Product on Custom Stock."/>
+            <description value="Verify customer able to create order with configurable product with drop-down attribute on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419535/scenarios/1432525"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
@@ -39,7 +39,7 @@
                 <requiredEntity createDataKey="configurableProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption"/>
             </createData>
-            <createData entity="ConfigurableProductOneOption" stepKey="configurableProductOption">
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configurableProductOption">
                 <requiredEntity createDataKey="configurableProduct"/>
                 <requiredEntity createDataKey="configurableProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption"/>
@@ -91,31 +91,30 @@
             <argument name="urlKey" value="$configurableProduct.custom_attributes[url_key]$" />
             <argument name="productAttribute" value="$configurableProductAttribute.default_value$"/>
             <argument name="productOption" value="$getConfigAttributeOption.value$"/>
-            <argument name="qty" value="{{defaultProductQty.value}}"/>
+            <argument name="qty" value="{{tenPiecesAddToCart.value}}"/>
         </actionGroup>
         <!--Place order.-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutPage"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
-        <!--Cancel order-->
+        <!--Verify Order.-->
         <actionGroup ref="OpenOrderById" stepKey="openOrder">
             <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
-        <!--Try add product to cart with improper quantity.-->
-        <amOnPage url="$configurableProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage"/>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($configurableProductAttribute.default_value$)}}" userInput="$getConfigAttributeOption.value$" stepKey="selectOption"/>
-        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{101ProductQty.value}}" stepKey="fillQuantity"/>
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="waitForErrorMessage"/>
-        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="The requested qty is not available" stepKey="verifyErrorMessage"/>
-        <!--Add configurable to cart with proper quantity-->
-        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCartWithProperQty">
-            <argument name="urlKey" value="$configurableProduct.custom_attributes[url_key]$" />
-            <argument name="productAttribute" value="$configurableProductAttribute.default_value$"/>
-            <argument name="productOption" value="$getConfigAttributeOption.value$"/>
-            <argument name="qty" value="{{defaultProductQty.value}}"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered {{tenPiecesAddToCart.value}}" stepKey="verifyOrderedQuantity"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findConfigurableProductVariation">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$configurableChildProduct.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="verifyProductQuantity">
+            <argument name="sourceName" value="$source.source[name]$"/>
+            <argument name="sourceQty" value="{{defaultProductQty.value}}"/>
+            <argument name="stockName" value="$stock.stock[name]$"/>
+            <argument name="stockQty" value="{{defaultProductQtyBoughtWith10Pieces.value}}"/>
         </actionGroup>
     </test>
 </tests>

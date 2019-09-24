@@ -35,7 +35,7 @@
         <remove keyForRemoval="clickInvoice"/>
         <remove keyForRemoval="clickSubmitInvoice"/>
         <remove keyForRemoval="checkSuccessMessage"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="clickOrderRowInvoice"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="openOrderForInvoice"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="clickShipAction"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkSuccessMessage" after="waitForPageLoadSuccessMessage"/>
         <!--Remove Credit Memo Creation.-->

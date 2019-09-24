@@ -125,12 +125,9 @@
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
         <comment userInput="Go to order in admin panel for verify data." stepKey="searchAndVerifyOrderDataComment"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrderPage"/>
-        <waitForPageLoad time="30" stepKey="waitForOrdersPageLoad"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderByNumber"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForPageLoad time="30" stepKey="waitForSearchWillBeSubmited"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForOrderPageWillBeOpened"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 1001" stepKey="seeOrderedQty"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemProductName('1')}}" userInput="$$createProduct.product[name]$$" stepKey="seeOrderedProductName"/>

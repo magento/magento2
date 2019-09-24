@@ -20,6 +20,9 @@
     <entity name="minimalProductQty">
         <data key="value">1</data>
     </entity>
+    <entity name="101ProductQty">
+        <data key="value">101</data>
+    </entity>
     <entity name="fivePiecesAddToCart">
         <data key="value">5</data>
     </entity>
