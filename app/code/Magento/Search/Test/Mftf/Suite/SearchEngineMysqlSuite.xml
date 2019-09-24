@@ -7,12 +7,6 @@
 -->
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="SearchEngineMysqlSuite">
-        <before>
-            <magentoCLI stepKey="setSearchEngineToMysql" command="config:set {{SearchEngineMysqlConfigData.path}} {{SearchEngineMysqlConfigData.value}}"/>
-        </before>
-        <after>
-            <magentoCLI stepKey="setSearchEngineToElasticsearch" command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}"/>
-        </after>
         <include>
             <group name="SearchEngineMysql" />
         </include>
