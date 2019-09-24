@@ -57,13 +57,13 @@ class TierPriceBox extends FinalPriceBox
     {
         switch ($this->_scopeConfig->getValue('tax/display/type', \Magento\Store\Model\ScopeInterface::SCOPE_STORES)) {
             case \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX:
-                return $this::DISPLAY_TIER_PRICE_EXCLUDING_TAX;
+                return self::DISPLAY_TIER_PRICE_EXCLUDING_TAX;
                 break;
             case \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX:
-                return $this::DISPLAY_TIER_PRICE_INCLUDING_TAX;
+                return self::DISPLAY_TIER_PRICE_INCLUDING_TAX;
                 break;
             case \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH:
-                return $this::DISPLAY_TIER_PRICE_BOTH;
+                return self::DISPLAY_TIER_PRICE_BOTH;
                 break;
         }
     }

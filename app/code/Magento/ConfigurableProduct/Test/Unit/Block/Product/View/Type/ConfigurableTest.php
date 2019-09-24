@@ -233,9 +233,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null)
     {
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->setMethods([
-                'getCurrentCurrency',
-            ])
+            ->setMethods(
+                [
+                    'getCurrentCurrency',
+                ]
+            )
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCode')
@@ -270,9 +272,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $amountMock = $this->getAmountMock($amount);
 
         $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
-            ->setMethods([
-                'getAmount',
-            ])
+            ->setMethods(
+                [
+                    'getAmount',
+                ]
+            )
             ->getMockForAbstractClass();
         $priceMock->expects($this->any())->method('getAmount')->willReturn($amountMock);
         $tierPriceMock = $this->getTierPriceMock($amountMock, $priceQty, $percentage);
@@ -287,11 +291,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $priceInfoMock->expects($this->any())
             ->method('getPrice')
-            ->willReturnMap([
-                ['regular_price', $priceMock],
-                ['final_price', $priceMock],
-                ['tier_price', $tierPriceMock],
-            ]);
+            ->willReturnMap(
+                [
+                    ['regular_price', $priceMock],
+                    ['final_price', $priceMock],
+                    ['tier_price', $tierPriceMock],
+                ]
+            );
 
         $productMock->expects($this->any())->method('getTypeInstance')->willReturn($productTypeMock);
         $productMock->expects($this->any())->method('getPriceInfo')->willReturn($priceInfoMock);
@@ -422,9 +428,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->willReturn('%s');
 
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
-            ->setMethods([
-                'getCurrentCurrency',
-            ])
+            ->setMethods(
+                [
+                    'getCurrentCurrency',
+                ]
+            )
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
             ->method('getCurrentCurrency')
@@ -476,10 +484,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected function getAmountMock($amount): \PHPUnit_Framework_MockObject_MockObject
     {
         $amountMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountInterface::class)
-            ->setMethods([
-                'getValue',
-                'getBaseAmount',
-            ])
+            ->setMethods(
+                [
+                    'getValue',
+                    'getBaseAmount',
+                ]
+            )
             ->getMockForAbstractClass();
         $amountMock->expects($this->any())
             ->method('getValue')
@@ -508,10 +518,12 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         ];
 
         $tierPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\TierPriceInterface::class)
-            ->setMethods([
-                'getTierPriceList',
-                'getSavePercent',
-            ])
+            ->setMethods(
+                [
+                    'getTierPriceList',
+                    'getSavePercent',
+                ]
+            )
             ->getMockForAbstractClass();
         $tierPriceMock->expects($this->any())
             ->method('getTierPriceList')
