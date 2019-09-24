@@ -377,6 +377,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                             'qty' => $priceQty,
                             'price' => $amount,
                             'percentage' => $percentage,
+                            'priceExclTax' => $amount,
                         ],
                     ],
                     'msrpPrice' => [
