@@ -9,14 +9,12 @@
 namespace Magento\MediaStorage\App;
 
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\Framework\App;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
-use Magento\Framework\App\Area;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
@@ -58,11 +56,6 @@ class Media implements AppInterface
      * @var PlaceholderFactory
      */
     private $placeholderFactory;
-
-    /**
-     * @var State
-     */
-    private $appState;
 
     /**
      * @var ImageResize
