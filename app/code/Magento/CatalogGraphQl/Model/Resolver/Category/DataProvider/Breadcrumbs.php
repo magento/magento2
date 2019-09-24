@@ -41,7 +41,7 @@ class Breadcrumbs
 
         if (count($parentCategoryIds)) {
             $collection = $this->collectionFactory->create();
-            $collection->addAttributeToSelect(['name', 'url_key']);
+            $collection->addAttributeToSelect(['name', 'url_key', 'url_path']);
             $collection->addAttributeToFilter('entity_id', $parentCategoryIds);
 
             foreach ($collection as $category) {
@@ -50,6 +50,7 @@ class Breadcrumbs
                     'category_name' => $category->getName(),
                     'category_level' => $category->getLevel(),
                     'category_url_key' => $category->getUrlKey(),
+                    'category_url_path' => $category->getUrlPath(),
                 ];
             }
         }
