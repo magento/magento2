@@ -80,14 +80,6 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
     position: Int @doc(description: "The position within the list of product links.")
 }
 
-type ProductTierPrices @doc(description: "ProductTierPrices is deprecated and has been replaced by TierPrice. The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
-    customer_group_id: String @deprecated(reason: "customer_group_id is not relevant for storefront.") @doc(description: "The ID of the customer group.")
-    qty: Float @deprecated(reason: "ProductTierPrices is deprecated, use TierPrice.quantity.") @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
-    value: Float @deprecated(reason: "ProductTierPrices is deprecated. Use TierPrice.final_price") @doc(description: "The price of the fixed price item.")
-    percentage_value: Float @decprected(reason: "ProductTierPrices is deprecated. Use TierPrice.discount.") @doc(description: "The percentage discount of the item.")
-    website_id: Float @deprecated(reason: "website_id is not relevant for storefront.") @doc(description: "The ID assigned to the website.")
-}
-
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
     id: Int @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
@@ -115,10 +107,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     websites: [Website] @doc(description: "An array of websites in which the product is available.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
     product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
-    tier_prices: [ProductTierPrices] @deprecated(reason: "Use price_tiers for product tier price information.") @doc(description: "An array of ProductTierPrices objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\TierPrices")
     price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
-    price_tiers: [TierPrice] @doc(description: "An array of TierPrice objects.")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
