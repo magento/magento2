@@ -13,6 +13,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\Price;
 class ProviderPool
 {
     private const DEFAULT = 'default';
+
     /**
      * @var ProviderInterface[]
      */
