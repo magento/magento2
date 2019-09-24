@@ -279,11 +279,7 @@ class IndexBuilder
         $activeRules = $this->getActiveRules()->getItems();
         foreach ($activeRules as $rule) {
             $rule->setProductsFilter($ids);
-            $productIds = $rule->getMatchingProductIds();
-            foreach ($productIds as $productId => $result) {
-                $websiteIds = array_keys(array_filter($result));
-                $this->assignProductToRule($rule, $productId, $websiteIds);
-            }
+            $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
         $this->cleanProductPriceIndex($ids);
@@ -435,6 +431,8 @@ class IndexBuilder
      * @param Product $product
      * @return $this
      * @throws \Exception
+     * @deprecated
+     * @see ReindexRuleProduct::execute
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function applyRule(Rule $rule, $product)
