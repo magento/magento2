@@ -87,6 +87,7 @@
             <argument name="menu" value="My Orders"/>
         </actionGroup>
         <click selector="//td[text()='{$orderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="clickReorderBtn"/>
+        <waitForPageLoad stepKey="waitForCheckoutButtonToLoad"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageLoadCheckoutSelectPaymentToReorder"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrderToReorder"/>
