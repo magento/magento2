@@ -18,7 +18,6 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
-use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Media storage
