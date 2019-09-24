@@ -11,6 +11,7 @@ use Magento\MediaStorage\Model\File\Storage;
 
 /***
  * Class MediaStorageConfig
+ *
  * @package Magento\MediaStorage\Model\File\Storage
  */
 class MediaStorageConfig
@@ -61,7 +62,7 @@ class MediaStorageConfig
 
     /**
      * @param \Magento\MediaStorage\Model\File\Storage $storage
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param SerializerInterface $serializer
      * @param \Magento\MediaStorage\Model\Cache\Type\MediaStorage $cache
      */
     public function __construct(
