@@ -16,6 +16,8 @@ namespace Magento\Config\Model\Config\Backend\Image;
 class Pdf extends \Magento\Config\Model\Config\Backend\Image
 {
     /**
+     * Returns the list of allowed file extensions.
+     *
      * @return string[]
      */
     protected function _getAllowedExtensions()
