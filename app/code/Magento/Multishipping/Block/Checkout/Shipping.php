@@ -158,10 +158,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     public function getCarrierName($carrierCode)
     {
         $name = $this->_scopeConfig->getValue('carriers/' . $carrierCode . '/title', ScopeInterface::SCOPE_STORE);
-        if ($name) {
-            return $name;
-        }
-        return $carrierCode;
+        return $name ?: $carrierCode;
     }
 
     /**
