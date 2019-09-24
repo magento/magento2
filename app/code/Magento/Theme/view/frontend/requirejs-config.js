@@ -44,7 +44,7 @@ var config = {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
             },
-            'jquery/jquery-ui': {
+            'jquery/ui-modules/dialog': {
                 'jquery/patches/jquery-ui': true
             }
         }

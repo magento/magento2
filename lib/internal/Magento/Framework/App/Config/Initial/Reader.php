@@ -108,7 +108,6 @@ class Reader
                 } else {
                     $domDocument->merge($file);
                 }
-                // phpcs:ignore Magento2.Exceptions.ThrowCatch.ThrowCatch
             } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
