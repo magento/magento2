@@ -13,6 +13,10 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\MediaStorage\Model\File\Storage;
 
+/***
+ * Class Config
+ * @package Magento\MediaStorage\Model\File\Storage
+ */
 class Config
 {
     const CACHE_ID = 'config';
@@ -59,11 +63,10 @@ class Config
      */
     private $cache;
 
-
     /**
-     * @param \Magento\MediaStorage\Model\File\Storage            $storage
-     * @param \Magento\Framework\Filesystem                       $filesystem
-     * @param \Magento\MediaStorage\Model\Cache\Type\MediaStorage
+     * @param \Magento\MediaStorage\Model\File\Storage $storage
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\MediaStorage\Model\Cache\Type\MediaStorage $cache
      */
     public function __construct(
         \Magento\MediaStorage\Model\File\Storage $storage,

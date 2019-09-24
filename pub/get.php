@@ -30,6 +30,7 @@ $request = new \Magento\MediaStorage\Model\File\Storage\Request(
 $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getAbsolutePath();
 $relativePath = substr($request->getPathInfo(), strlen(DirectoryList::MEDIA) + 1);
 $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
+
 if (is_readable($mediaAbsPath) && !is_dir($mediaAbsPath)) {
     $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
         new \Magento\Framework\HTTP\PhpEnvironment\Response(),
@@ -37,10 +38,10 @@ if (is_readable($mediaAbsPath) && !is_dir($mediaAbsPath)) {
     );
     $transfer->send($mediaAbsPath);
 } else {
-    $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, array());
+    $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, []);
     /**
- * @var \Magento\MediaStorage\App\Media $app 
-*/
+    * @var \Magento\MediaStorage\App\Media $app
+    */
     $app = $bootstrap->createApplication(
         \Magento\MediaStorage\App\Media::class,
         [

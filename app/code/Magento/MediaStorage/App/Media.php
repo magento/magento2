@@ -157,7 +157,7 @@ class Media implements AppInterface
     }
 
     /***
-     * set placeholderimage as response
+     * Set placeholderimage as response
      */
     private function setPlaceholderImage()
     {
