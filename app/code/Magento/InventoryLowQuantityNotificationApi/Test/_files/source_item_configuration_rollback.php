@@ -27,6 +27,10 @@ $sourceItems = [
     ]),
     $sourceItemInterfaceFactory->create([
         SourceItemInterface::SOURCE_CODE => 'eu-2',
+        SourceItemInterface::SKU => 'SKU-1'
+    ]),
+    $sourceItemInterfaceFactory->create([
+        SourceItemInterface::SOURCE_CODE => 'eu-2',
         SourceItemInterface::SKU => 'SKU-3'
     ])
 ];

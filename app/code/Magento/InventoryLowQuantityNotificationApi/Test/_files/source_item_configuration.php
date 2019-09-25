@@ -32,6 +32,11 @@ $sourceItemConfigurationsData = [
         SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY => 5.6,
     ],
     [
+        // notify_stock_qty is null
+        SourceItemConfigurationInterface::SOURCE_CODE => 'eu-2',
+        SourceItemConfigurationInterface::SKU => 'SKU-1',
+    ],
+    [
         // This should not be showed in status out of stock
         SourceItemConfigurationInterface::SOURCE_CODE => 'eu-2',
         SourceItemConfigurationInterface::SKU => 'SKU-3',

@@ -43,6 +43,28 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
+     * @magentoConfigFixture cataloginventory/item_options/notify_stock_qty 2
+     */
+    public function testGetSourceItemConfigurationFallbackToDefault()
+    {
+        $sourceCode = 'eu-2';
+        $sku = 'SKU-1';
+
+        $sourceItemConfiguration = $this->getSourceItemConfiguration($sourceCode, $sku);
+
+        self::assertInternalType('array', $sourceItemConfiguration);
+        self::assertNotEmpty($sourceItemConfiguration);
+
+        self::assertEquals($sourceCode, $sourceItemConfiguration[SourceItemConfigurationInterface::SOURCE_CODE]);
+        self::assertEquals($sku, $sourceItemConfiguration[SourceItemConfigurationInterface::SKU]);
+        self::assertEquals(2, $sourceItemConfiguration[SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY]);
+    }
+
+    /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
      */
     public function testGetSourceItemConfigurationNonExistingSku()
     {
