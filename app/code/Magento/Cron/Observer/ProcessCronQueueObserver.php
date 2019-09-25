@@ -490,6 +490,8 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         $this->cleanupDisabledJobs($groupId);
 
+        $this->cleanupOrphanJobs($groupId);
+
         $historySuccess = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_SUCCESS);
         $historyFailure = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_FAILURE);
         $historyLifetimes = [
@@ -628,6 +630,41 @@ class ProcessCronQueueObserver implements ObserverInterface
                 $scheduleResource->getMainTable(),
                 [
                     'status = ?' => Schedule::STATUS_PENDING,
+                    'job_code in (?)' => $jobsToCleanup,
+                ]
+            );
+
+            $this->logger->info(sprintf('%d cron jobs were cleaned', $count));
+        }
+    }
+
+    /**
+     * Clean up orphan (running) jobs that somehow lost their parent process
+     *
+     * This can happen when cron process die on the server during runtime (eg. server restart)
+     *
+     * @param string $groupId
+     * @return void
+     */
+    private function cleanupOrphanJobs($groupId)
+    {
+        $jobs = $this->_config->getJobs();
+        $jobsToCleanup = [];
+        foreach ($jobs[$groupId] as $jobCode => $jobConfig) {
+            if (!$this->getCronExpression($jobConfig)) {
+                /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
+                $jobsToCleanup[] = $jobCode;
+            }
+        }
+
+        if (count($jobsToCleanup) > 0) {
+            $scheduleResource = $this->_scheduleFactory->create()->getResource();
+
+            //update table
+            $count = $scheduleResource->getConnection()->delete(
+                $scheduleResource->getMainTable(),
+                [
+                    'status = ?' => Schedule::STATUS_RUNNING,
                     'job_code in (?)' => $jobsToCleanup,
                 ]
             );
