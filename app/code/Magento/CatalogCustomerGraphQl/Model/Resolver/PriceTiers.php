@@ -102,19 +102,16 @@ class PriceTiers implements ResolverInterface
 
         $product = $value['model'];
         $productId = $product->getId();
-        $productPrice = $this->priceProviderPool
-            ->getProviderByProductType($product->getTypeId())
-            ->getMinimalRegularPrice($product)
-            ->getValue();
         $this->tiers->addProductFilter($productId);
 
         return $this->valueFactory->create(
-            function () use ($productId, $productPrice, $context) {
-
+            function () use ($productId, $context) {
                 /** @var StoreInterface $store */
                 $store = $context->getExtensionAttributes()->getStore();
 
+                $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
+
 
                 return $this->formatProductTierPrices($tierPrices, $productPrice, $store);
             }

@@ -12,6 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 
 /**
  * Get product tier price information
@@ -29,6 +30,11 @@ class Tiers
     private $productResource;
 
     /**
+     * @var PriceProviderPool
+     */
+    private $priceProviderPool;
+
+    /**
      * @var bool
      */
     private $loaded = false;
@@ -36,7 +42,7 @@ class Tiers
     /**
      * @var int
      */
-    private $customerGroupId =  GroupManagement::CUST_GROUP_ALL;
+    private $customerGroupId = GroupManagement::CUST_GROUP_ALL;
 
     /**
      * @var array
@@ -51,15 +57,18 @@ class Tiers
     /**
      * @param CollectionFactory $collectionFactory
      * @param ProductResource $productResource
+     * @param PriceProviderPool $priceProviderPool
      * @param int $customerGroupId
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ProductResource $productResource,
+        PriceProviderPool $priceProviderPool,
         $customerGroupId
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->productResource = $productResource;
+        $this->priceProviderPool = $priceProviderPool;
         $this->customerGroupId = $customerGroupId;
     }
 
@@ -92,6 +101,26 @@ class Tiers
     }
 
     /**
+     * Get product regular price by ID
+     *
+     * @param int $productId
+     * @return float|null
+     */
+    public function getProductRegularPrice($productId): ?float
+    {
+        if (!$this->isLoaded()) {
+            $this->load();
+        }
+
+        if (empty($this->products[$productId])) {
+            return null;
+        }
+        $product = $this->products[$productId];
+        $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
+        return $priceProvider->getMinimalRegularPrice($product)->getValue();
+    }
+
+    /**
      * Check if collection has been loaded
      *
      * @return bool
@@ -112,6 +141,8 @@ class Tiers
         /** @var Collection $productCollection */
         $productCollection = $this->collectionFactory->create();
         $productCollection->addFieldToFilter($productIdField, ['in' => $this->filterProductIds]);
+        $productCollection->addAttributeToSelect('price');
+        $productCollection->load();
         $productCollection->addTierPriceDataByGroupId($this->customerGroupId);
 
         foreach ($productCollection as $product) {
