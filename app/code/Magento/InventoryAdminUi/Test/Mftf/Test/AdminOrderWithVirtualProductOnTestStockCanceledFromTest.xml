@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontSalableQuantityOnNonDefaultStockForVirtualProductAfterCancellationOfOrderCountedCorrectlyTest">
+    <test name="AdminSalableQuantityOnNonDefaultStockForVirtualProductAfterCancellationOfOrderCountedCorrectlyTest">
         <annotations>
             <stories value="Virtual product custom stock."/>
             <title value="Order with Virtual product on Test stock canceled from Admin."/>
