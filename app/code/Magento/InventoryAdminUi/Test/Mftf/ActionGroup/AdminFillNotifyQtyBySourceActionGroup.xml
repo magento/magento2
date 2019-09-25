@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillNotifyQtyActionGroup">
+        <annotations>
+            <description>Fills in the Source grid, Notify qty.</description>
+        </annotations>
+        <arguments>
+            <argument name="qty" type="string" defaultValue="1"/>
+            <argument name="rowIndex" type="string" defaultValue="0"/>
+        </arguments>
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault(rowIndex)}}" stepKey="uncheckNotifyQuantityUseDefaultForSecondProduct"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowNotifyQuantity(rowIndex)}}" userInput="{{qty}}" stepKey="fillNotifyQuantityForSimpleProduct"/>
+    </actionGroup>
+</actionGroups>
+

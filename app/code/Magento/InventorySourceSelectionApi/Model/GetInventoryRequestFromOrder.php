@@ -93,10 +93,12 @@ class GetInventoryRequestFromOrder
         $store = $this->storeManager->getStore($order->getStoreId());
         $stock = $this->stockByWebsiteIdResolver->execute((int)$store->getWebsiteId());
 
-        $inventoryRequest = $this->inventoryRequestFactory->create([
-            'stockId' => $stock->getStockId(),
-            'items'   => $requestItems
-        ]);
+        $inventoryRequest = $this->inventoryRequestFactory->create(
+            [
+                'stockId' => $stock->getStockId(),
+                'items' => $requestItems
+            ]
+        );
 
         $address = $this->getAddressFromOrder($order);
         if ($address !== null) {
@@ -112,6 +114,7 @@ class GetInventoryRequestFromOrder
      * Create an address from an order
      *
      * @param OrderInterface $order
+     *
      * @return null|AddressInterface
      */
     private function getAddressFromOrder(OrderInterface $order): ?AddressInterface
@@ -122,12 +125,14 @@ class GetInventoryRequestFromOrder
             return null;
         }
 
-        return $this->addressInterfaceFactory->create([
-            'country' => $shippingAddress->getCountryId(),
-            'postcode' => $shippingAddress->getPostcode(),
-            'street' => implode("\n", $shippingAddress->getStreet()),
-            'region' => $shippingAddress->getRegion() ?? $shippingAddress->getRegionCode() ?? '',
-            'city' => $shippingAddress->getCity()
-        ]);
+        return $this->addressInterfaceFactory->create(
+            [
+                'country' => $shippingAddress->getCountryId(),
+                'postcode' => $shippingAddress->getPostcode() ?? '',
+                'street' => implode("\n", $shippingAddress->getStreet()),
+                'region' => $shippingAddress->getRegion() ?? $shippingAddress->getRegionCode() ?? '',
+                'city' => $shippingAddress->getCity()
+            ]
+        );
     }
 }
