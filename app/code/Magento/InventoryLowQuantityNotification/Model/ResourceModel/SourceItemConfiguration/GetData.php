@@ -29,6 +29,8 @@ class GetData
     }
 
     /**
+     * Get configuration data for specific source item
+     *
      * @param string $sourceCode
      * @param string $sku
      * @return array|null
