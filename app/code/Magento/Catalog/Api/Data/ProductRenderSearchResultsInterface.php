@@ -27,4 +27,35 @@ interface ProductRenderSearchResultsInterface
      * @return $this
      */
     public function setItems(array $items);
+
+    /**
+     * Get search criteria
+     *
+     * @return \Magento\Framework\Api\SearchCriteria
+     */
+    public function getSearchCriteria();
+
+    /**
+     * Set search criteria
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return $this
+     */
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+
+
+    /**
+     * Get total count
+     *
+     * @return int
+     */
+    public function getTotalCount();
+
+    /**
+     * Set total count
+     *
+     * @param int $count
+     * @return $this
+     */
+    public function setTotalCount($count);
 }
