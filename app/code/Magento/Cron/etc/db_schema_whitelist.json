@@ -8,6 +8,8 @@
             "created_at": true,
             "scheduled_at": true,
             "executed_at": true,
+            "pid": true,
+            "pid_host": true,
             "finished_at": true
         },
         "index": {
