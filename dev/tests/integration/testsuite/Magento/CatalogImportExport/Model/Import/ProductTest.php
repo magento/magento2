@@ -862,7 +862,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $hiddenImages = array_filter(
             $images,
             static function (DataObject $image) {
-                return $image->getDisabled() == 1;
+                return $image->getDisabled() === 1;
             }
         );
 
