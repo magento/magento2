@@ -17,13 +17,4 @@ if (!$viewModel->isAppStateProduction()) {
         });
     </script>
     <?php
-} else {
-    ?>
-    <script>
-        define('mageTranslationDictionary', ['text!<?= $viewModel->escapeUrl($viewModel->getTranslationDictionaryUrl()) ?>'], function (dict) {
-            return JSON.parse(dict);
-        });
-    </script>
-    <?php
 }
-?>
