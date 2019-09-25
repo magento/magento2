@@ -17,6 +17,9 @@ use Magento\Catalog\Controller\Adminhtml\Product\Set;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 
+/**
+ * Edit attribute set controller.
+ */
 class Edit extends Set implements HttpGetActionInterface
 {
     /**
@@ -30,7 +33,6 @@ class Edit extends Set implements HttpGetActionInterface
     protected $attributeSetRepository;
 
     /**
-     *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param PageFactory $resultPageFactory
@@ -49,10 +51,7 @@ class Edit extends Set implements HttpGetActionInterface
     }
 
     /**
-     *
-     * @return ResultInterface
-     *
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function execute()
     {
