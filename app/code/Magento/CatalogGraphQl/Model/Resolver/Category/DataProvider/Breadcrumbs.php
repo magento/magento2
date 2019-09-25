@@ -29,8 +29,11 @@ class Breadcrumbs
     }
 
     /**
+     * Get breadcrumbs data
+     *
      * @param string $categoryPath
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getData(string $categoryPath): array
     {
