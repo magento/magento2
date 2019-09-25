@@ -21,7 +21,7 @@ require.config({
     },
     map: {
         '*': {
-            dictionary: '../../../../../../dev/tests/js/jasmine/tests/lib/mage/fake-dictionary'
+            mageTranslationDictionary: '../../../../../../dev/tests/js/jasmine/tests/lib/mage/fake-dictionary'
         }
     },
     shim: {

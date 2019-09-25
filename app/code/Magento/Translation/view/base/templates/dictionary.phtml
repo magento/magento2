@@ -6,12 +6,24 @@
 
 /** @var \Magento\Translation\ViewModel\Dictionary $viewModel */
 $viewModel = $block->getData('dictionary_view_model');
-$dictionary = json_encode($viewModel->getTranslationDictionary(), JSON_HEX_APOS | JSON_UNESCAPED_SLASHES);
+if (!$viewModel->isAppStateProduction()) {
+    $dictionary = json_encode($viewModel->getTranslationDictionary(), JSON_HEX_APOS | JSON_UNESCAPED_SLASHES);
+    // Use of JSON.parse below is intentional as JSON is significantly faster to parse than JavaScript
+    ?>
+    <script>
+        define('mageTranslationDictionary', function () {
+            var dict = <?= /* @noEscape */ $dictionary ?>;
+            return JSON.parse(dict);
+        });
+    </script>
+    <?php
+} else {
+    ?>
+    <script>
+        define('mageTranslationDictionary', ['text!<?= /* @noEscape */ $viewModel->getTranslationDictionaryUrl() ?>'], function (dict) {
+            return JSON.parse(dict);
+        });
+    </script>
+<?php
+}
 ?>
-<script>
-    define('dictionary', function () {
-        var dict = <?= /* @noEscape */ $dictionary ?>;
-        // Use of JSON.parse is intentional as JSON is significantly faster to parse than JavaScript
-        return JSON.parse(dict);
-    });
-</script>
