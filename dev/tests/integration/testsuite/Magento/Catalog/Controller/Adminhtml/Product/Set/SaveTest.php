@@ -182,7 +182,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return string
      */
-    private function getSyslogPath()
+    private function getSyslogPath(): string
     {
         if (!$this->systemLogPath) {
             foreach ($this->logger->getHandlers() as $handler) {
