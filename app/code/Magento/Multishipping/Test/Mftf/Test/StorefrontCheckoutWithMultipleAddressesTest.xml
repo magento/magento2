@@ -66,10 +66,20 @@
         </actionGroup>
         <!--Go to Cart -->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!--Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
         <!-- Select different addresses and click 'Go to Shipping Information' -->
-        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddress">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddress">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
         <!-- Click 'Continue to Billing Information' -->
-        <actionGroup ref="defaultShippingInfoActionGroup" stepKey="useDefaultShippingMethod"/>
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethod"/>
         <!-- Click 'Go to Review Your Order' -->
         <actionGroup ref="SelectBillingInfoActionGroup" stepKey="useDefaultBillingMethod"/>
         <!-- Click 'Place Order' -->
@@ -85,10 +95,24 @@
         </actionGroup>
         <!--Go to Cart -->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartWithIdenticalProducts"/>
+        <!--Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithThreeDifferentAddresses"/>
         <!-- Select different addresses and click 'Go to Shipping Information' -->
-        <actionGroup ref="CheckingWithThreeDifferentAddressesActionGroup" stepKey="checkoutThreeDifferentAddresses"/>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddressFromThree">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddressFromThree">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectThirdAddressFromThree">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="option" value="Jane Doe, 172, Westminster Bridge Rd, London,  SE1 7RW, United Kingdom"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveThreeDifferentAddresses"/>
         <!-- Click 'Continue to Billing Information' -->
-        <actionGroup ref="defaultShippingInfoActionGroup" stepKey="useDefaultShippingMethodForIdenticalProducts"/>
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethodForIdenticalProducts"/>
         <!-- Click 'Go to Review Your Order' -->
         <actionGroup ref="SelectBillingInfoActionGroup" stepKey="UseDefaultBillingMethodForIdenticalProducts"/>
         <!-- Click 'Place Order' -->

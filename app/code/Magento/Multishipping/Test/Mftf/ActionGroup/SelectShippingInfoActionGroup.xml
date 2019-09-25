@@ -29,7 +29,7 @@
         <waitForPageLoad stepKey="waitForRadioOptions"/>
         <click stepKey="goToBillingInformation" selector="{{ShippingMethodSection.goToBillingInfo}}"/>
     </actionGroup>
-    <actionGroup name="defaultShippingInfoActionGroup">
+    <actionGroup name="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup">
         <waitForPageLoad stepKey="waitForShippingInfo"/>
         <click stepKey="goToBillingInformation" selector="{{ShippingMethodSection.goToBillingInfo}}"/>
     </actionGroup>
