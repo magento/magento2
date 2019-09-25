@@ -123,6 +123,7 @@
         "magento/module-captcha": "*",
         "magento/module-cardinal-commerce": "*",
         "magento/module-catalog": "*",
+        "magento/module-catalog-customer-graph-ql": "*",
         "magento/module-catalog-analytics": "*",
         "magento/module-catalog-import-export": "*",
         "magento/module-catalog-inventory": "*",
