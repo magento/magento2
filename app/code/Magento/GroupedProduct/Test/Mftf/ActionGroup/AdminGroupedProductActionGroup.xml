@@ -10,6 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Check that required fields are actually required-->
     <actionGroup name="checkRequiredFieldsInGroupedProductForm">
+        <annotations>
+            <description>Clears the Product Name and SKU fields when adding a Grouped Product and then verifies that they are required after attempting to Save.</description>
+        </annotations>
+        
         <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
         <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
@@ -20,18 +24,26 @@
 
     <!--Fill main fields in grouped product form-->
     <actionGroup name="fillGroupedProductForm">
+        <annotations>
+            <description>Fills in the provided Product Name and SKU on the Grouped Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="GroupedProduct"/>
         </arguments>
+        
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
     </actionGroup>
 
     <!--Filter product grid and see expected grouped product-->
     <actionGroup name="viewGroupedProductInAdminGrid">
+        <annotations>
+            <description>Goes to the Admin Products grid page. Filters the grid for the provided Product. Validates that the provided Product appears in the grid.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="GroupedProduct"/>
         </arguments>
+        
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoadInitial"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
@@ -46,16 +58,23 @@
 
     <!--Fill product min quantity in group products grid-->
     <actionGroup name="fillDefaultQuantityForLinkedToGroupProductInGrid">
+        <annotations>
+            <description>Fills the provided Qty for a Product linked to a Grouped Product.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="qty" type="string"/>
         </arguments>
+        
         <fillField selector="{{AdminAddedProductsToGroupGrid.inputByProductName(productName)}}" userInput="{{qty}}" stepKey="fillDefaultQtyForLinkedProduct"/>
     </actionGroup>
 
     <!-- Assign Specified Product To Grouped Product -->
     <!-- Assumes web client is on grouped product edit page -->
     <actionGroup name="AdminAssignProductToGroup">
+        <annotations>
+            <description>Adds the provided Product to a Grouped Product on an Admin Grouped Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>

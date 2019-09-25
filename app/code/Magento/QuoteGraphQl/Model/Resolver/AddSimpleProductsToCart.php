@@ -59,7 +59,8 @@ class AddSimpleProductsToCart implements ResolverInterface
         }
         $cartItems = $args['input']['cart_items'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->addProductsToCart->execute($cart, $cartItems);
 
         return [

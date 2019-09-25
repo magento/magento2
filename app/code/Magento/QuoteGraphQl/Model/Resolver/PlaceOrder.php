@@ -72,7 +72,8 @@ class PlaceOrder implements ResolverInterface
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
 
         if ((int)$context->getUserId() === 0) {

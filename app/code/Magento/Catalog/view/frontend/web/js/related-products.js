@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/translate'
 ], function ($) {
     'use strict';
@@ -17,7 +17,7 @@ define([
             relatedProductsField: '#related-products-field', // Hidden input field that stores related products.
             selectAllMessage: $.mage.__('select all'),
             unselectAllMessage: $.mage.__('unselect all'),
-            selectAllLink: '[role="button"]',
+            selectAllLink: '[data-role="select-all"]',
             elementsSelector: '.item.product'
         },
 

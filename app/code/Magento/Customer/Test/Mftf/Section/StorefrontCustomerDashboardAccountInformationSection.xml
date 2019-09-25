@@ -12,6 +12,7 @@
         <element name="ContactInformation" type="textarea" selector=".box.box-information .box-content"/>
         <element name="edit" type="block" selector=".action.edit" timeout="15"/>
         <element name="changePassword" type="block" selector=".action.change-password" timeout="15"/>
+        <element name="editLink" type="text" selector=".box-information .edit"/>
     </section>
     <section name="StorefrontCustomerAddressSection">
         <element name="firstName" type="input" selector="#firstname"/>

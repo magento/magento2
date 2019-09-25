@@ -3,12 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Model\Locale;
 
 use Magento\Framework\Locale\Resolver;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\User\Model\User;
 
 /**
  * @magentoAppArea adminhtml
@@ -23,7 +20,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = Bootstrap::getObjectManager()->create(
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Backend\Model\Locale\Resolver::class
         );
     }
@@ -41,12 +38,12 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetLocaleWithBaseInterfaceLocale()
     {
-        $user = Bootstrap::getObjectManager()->create(User::class);
-        $session = Bootstrap::getObjectManager()->get(
+        $user = new \Magento\Framework\DataObject();
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\Auth\Session::class
         );
         $session->setUser($user);
-        Bootstrap::getObjectManager()->get(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\Auth\Session::class
         )->getUser()->setInterfaceLocale(
             'fr_FR'
@@ -59,7 +56,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetLocaleWithSessionLocale()
     {
-        Bootstrap::getObjectManager()->get(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\Session::class
         )->setSessionLocale(
             'es_ES'
@@ -72,7 +69,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetLocaleWithRequestLocale()
     {
-        $request = Bootstrap::getObjectManager()
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\RequestInterface::class);
         $request->setPostValue(['locale' => 'de_DE']);
         $this->_checkSetLocale('de_DE');
