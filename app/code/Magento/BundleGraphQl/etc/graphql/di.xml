@@ -41,6 +41,14 @@
         </arguments>
     </type>
 
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Product\Price\Provider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\AttributeProcessor">
         <arguments>
             <argument name="fieldToAttributeMap" xsi:type="array">
