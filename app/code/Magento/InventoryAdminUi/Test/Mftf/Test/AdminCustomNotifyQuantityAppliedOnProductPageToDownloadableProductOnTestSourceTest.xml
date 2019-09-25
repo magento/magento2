@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomNotifyQuantityAppliedOnProductPageToDownloadableProductOnTestSourceTest">
+        <annotations>
+            <stories value="Downloadable Product Test Stock."/>
+            <title value="Custom 'Notify Quantity' applied on product page to Downloadable Product on Test source in Admin."/>
+            <description value="Custom 'Notify Quantity' applied on product page to Downloadable Product on Test source in Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/2027976"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <!--Assign source to stock.-->
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <createData entity="DownloadableMsiProduct" stepKey="downloadableProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableAdditionalSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <!--Clean up created data.-->
+            <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$downloadableProduct.product[sku]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
+            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
+            <argument name="filter_value" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillSourceQtyOnProductEditPageActionGroup" stepKey="fillProductQtyPerSource1">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            <argument name="qty" value="100" />
+        </actionGroup>
+        <actionGroup ref="AdminFillNotifyQtyActionGroup" stepKey="fillNotifyQty">
+            <argument name="qty" value="10"/>
+            <argument name="rowIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <actionGroup ref="AssertAdminNotifyQtyActionGroup" stepKey="AssertNotifyQty">
+            <argument name="qty" value="10"/>
+            <argument name="rowIndex" value="1"/>
+        </actionGroup>
+    </test>
+</tests>
