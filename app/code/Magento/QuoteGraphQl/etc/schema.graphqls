@@ -150,9 +150,10 @@ type CartPrices {
     grand_total: Money
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
-    discount: CartDiscount
+    discount: CartDiscount @deprecated(reason: "Use discounts instead ")
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
+    discounts: [Discount] @doc(description:"An array of applied discounts") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
 type CartTaxItem {
@@ -191,7 +192,8 @@ type PlaceOrderOutput {
 
 type Cart {
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
-    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon")
+    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
+    applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
@@ -242,11 +244,11 @@ type CartAddressCountry {
 }
 
 type SelectedShippingMethod {
-    carrier_code: String
-    method_code: String
-    carrier_title: String
-    method_title: String
-    amount: Money
+    carrier_code: String!
+    method_code: String!
+    carrier_title: String!
+    method_title: String!
+    amount: Money!
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
 }
 
@@ -321,10 +323,17 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     product: ProductInterface!
 }
 
+type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
+    amount: Money! @doc(description:"The amount of the discount")
+    label: String! @doc(description:"A description of the discount")
+}
+
 type CartItemPrices {
     price: Money!
     row_total: Money!
     row_total_including_tax: Money!
+    discounts: [Discount] @doc(description:"An array of discounts to be applied to the cart item")
+    total_item_discount: Money @doc(description:"The total of all discounts applied to the item")
 }
 
 type SelectedCustomizableOption {

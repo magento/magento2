@@ -282,7 +282,6 @@ QUERY;
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
-        $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
@@ -723,24 +722,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-
-    /**
-     * @param ProductInterface $product
-     * @param $actualResponse
-     */
-    private function assertTierPrices($product, $actualResponse)
-    {
-        $tierPrices = $product->getTierPrices();
-        $this->assertNotEmpty($actualResponse['tier_prices'], "Precondition failed: 'tier_prices' must not be empty");
-        foreach ($actualResponse['tier_prices'] as $tierPriceIndex => $tierPriceArray) {
-            foreach ($tierPriceArray as $key => $value) {
-                /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
-                $tierPrice = $tierPrices[$tierPriceIndex];
-                $this->assertEquals($value, $tierPrice->getData($key));
-            }
-        }
-    }
-
+    
     /**
      * @param ProductInterface $product
      * @param $actualResponse
