@@ -309,7 +309,11 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
         }
 
-        $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))->save();
+        $schedule
+            ->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
+            ->setPid(getmypid())
+            ->setPidHost(gethostname())
+            ->save();
 
         $this->startProfiling();
         try {
@@ -396,6 +400,21 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
+     * Return job collection from data base with status 'running'.
+     *
+     * @param string $groupId
+     * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
+     */
+    private function getRunningJobs($groupId)
+    {
+        $jobs = $this->_config->getJobs();
+        $runningJobs = $this->_scheduleFactory->create()->getCollection();
+        $runningJobs->addFieldToFilter('status', Schedule::STATUS_RUNNING);
+        $runningJobs->addFieldToFilter('job_code', ['in' => array_keys($jobs[$groupId])]);
+        return $runningJobs;
+    }
+
+    /**
      * Generate cron schedule
      *
      * @param string $groupId
@@ -474,6 +493,9 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function cleanupJobs($groupId, $currentTime)
     {
+        //remove orphan jobs marked as running
+        $this->cleanupOrphanJobs($groupId);
+
         // check if history cleanup is needed
         $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
         $historyCleanUp = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_CLEANUP_EVERY);
@@ -489,8 +511,6 @@ class ProcessCronQueueObserver implements ObserverInterface
         );
 
         $this->cleanupDisabledJobs($groupId);
-
-        $this->cleanupOrphanJobs($groupId);
 
         $historySuccess = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_SUCCESS);
         $historyFailure = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_FAILURE);
@@ -648,29 +668,71 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function cleanupOrphanJobs($groupId)
     {
-        $jobs = $this->_config->getJobs();
-        $jobsToCleanup = [];
-        foreach ($jobs[$groupId] as $jobCode => $jobConfig) {
-            if (!$this->getCronExpression($jobConfig)) {
-                /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
-                $jobsToCleanup[] = $jobCode;
+        echo "cleaning orphand\n";
+
+        $runningJobs = $this->getRunningJobs($groupId);
+
+        if ($runningJobs) {
+            $host = gethostname();
+            $pid = getmypid();
+            $count = 0;
+
+            foreach($runningJobs as $runningJob) {
+                var_dump($runningJob->getData());
+                if (!posix_kill(intval($runningJob->getPid()), 0)) {
+
+                }
+                if ($runningJob->getPidHost() != $host) {
+                    echo "\tmismatching host\n";
+                    continue;
+                } else {
+                    if (posix_kill(intval($runningJob->getPid()), 0)) {
+                        echo "\tmatching PID found\n";
+
+                        //implement start time check for process
+                        $startTimeMatch = false;
+
+                        if ($startTimeMatch) {
+                            echo "\tstart time looks good\n";
+                            $this->closeOrphanJob($runningJob);
+                            $count++;
+                        } else {
+                            echo "\tstart time looks off it is orphan\n";
+                            continue;
+
+                        }
+                    } else {
+                        echo "\tno mathcing PID\n";
+                        $this->closeOrphanJob($runningJob);
+                        $count++;
+                    }
+                }
+
+                $processOwner = posix_getpwnam(posix_geteuid());
+
+            if ($count) {
+                $this->logger->info(sprintf('%d cron jobs seems to got stucks and were cleaned', $count));
             }
         }
+    }
 
-        if (count($jobsToCleanup) > 0) {
-            $scheduleResource = $this->_scheduleFactory->create()->getResource();
-
-            //update table
-            $count = $scheduleResource->getConnection()->delete(
-                $scheduleResource->getMainTable(),
-                [
-                    'status = ?' => Schedule::STATUS_RUNNING,
-                    'job_code in (?)' => $jobsToCleanup,
-                ]
-            );
-
-            $this->logger->info(sprintf('%d cron jobs were cleaned', $count));
-        }
+    /**
+     * Mark orphan job as ended with error
+     *
+     * This can happen when cron process die on the server during runtime (eg. server restart)
+     *
+     * @param Schedule $orphanJob
+     * @return Schedule
+     */
+    private function closeOrphanJob($orphanJob) {
+        return $orphanJob
+            ->setStatus(Schedule::STATUS_ERROR)
+            ->setMessages(sprintf(
+                "Owner process (%d) not available on host (%s) any more",
+                $orphanJob->getPid(),
+                $orphanJob->getPidHost()
+            ))
+            ->save();
     }
 
     /**
