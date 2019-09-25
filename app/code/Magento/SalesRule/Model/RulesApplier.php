@@ -11,9 +11,10 @@ use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
+use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 
 /**
- * Class RulesApplier
+ * Rules Applier Model
  *
  * @package Magento\SalesRule\Model\Validator
  */
@@ -42,22 +43,30 @@ class RulesApplier
     private $calculatorFactory;
 
     /**
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
+     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
+     */
+    protected $discountFactory;
+
+    /**
+     * @param CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\SalesRule\Model\Utility $utility
+     * @param Utility $utility
      * @param ChildrenValidationLocator|null $childrenValidationLocator
+     * @param DataFactory $discountDataFactory
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Utility $utility,
-        ChildrenValidationLocator $childrenValidationLocator = null
+        ChildrenValidationLocator $childrenValidationLocator = null,
+        DataFactory $discountDataFactory = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
         $this->childrenValidationLocator = $childrenValidationLocator
             ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
+        $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
     }
 
     /**
@@ -143,10 +152,10 @@ class RulesApplier
     }
 
     /**
-     * Apply Rule
+     * Apply rule
      *
-     * @param AbstractItem $item
-     * @param Rule $rule
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Address $address
      * @param mixed $couponCode
      * @return $this
@@ -176,9 +185,9 @@ class RulesApplier
         $discountCalculator = $this->calculatorFactory->create($rule->getSimpleAction());
         $qty = $discountCalculator->fixQuantity($qty, $rule);
         $discountData = $discountCalculator->calculate($rule, $item, $qty);
-
         $this->eventFix($discountData, $item, $rule, $qty);
         $this->validatorUtility->deltaRoundingFix($discountData, $item);
+        $this->setDiscountBreakdown($discountData, $item, $rule);
 
         /**
          * We can't use row total here because row total not include tax
@@ -191,7 +200,32 @@ class RulesApplier
     }
 
     /**
-     *  Set discount
+     * Set Discount Breakdown
+     *
+     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\SalesRule\Model\Rule $rule
+     * @return $this
+     */
+    private function setDiscountBreakdown($discountData, $item, $rule)
+    {
+        if ($discountData->getAmount() > 0) {
+            /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
+            $discount = $this->discountFactory->create();
+            $discount->setBaseOriginalAmount($discountData->getBaseOriginalAmount());
+            $discount->setAmount($discountData->getAmount());
+            $discount->setBaseAmount($discountData->getBaseAmount());
+            $discount->setOriginalAmount($discountData->getOriginalAmount());
+            $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
+            $discountBreakdown[$rule->getId()]['discount'] = $discount;
+            $discountBreakdown[$rule->getId()]['rule'] = $rule;
+            $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
+        }
+        return $this;
+    }
+
+    /**
+     * Set Discount data
      *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param AbstractItem $item
@@ -262,9 +296,9 @@ class RulesApplier
     }
 
     /**
-     * Set Applied Rule Ids
+     * Set Applied Rule ids
      *
-     * @param AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param int[] $appliedRuleIds
      * @return $this
      */
