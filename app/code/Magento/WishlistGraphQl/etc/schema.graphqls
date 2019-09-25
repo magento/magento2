@@ -6,7 +6,7 @@ type Query {
 }
 
 type Customer {
-    wishlists: Wishlist! @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver")  @cache(cacheable: false)
+    wishlists: [Wishlist]! @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlistsResolver") @doc(description: "The wishlist query returns the contents of a customer's wish lists")  @cache(cacheable: false)
 }
 
 type WishlistOutput @doc(description: "Deprecated: 'Wishlist' type should be used instead") {
