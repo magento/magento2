@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\ResourceModel\Collection;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Store\Api\Data\StoreInterface;
@@ -57,9 +58,9 @@ class ExpiredQuotesCollection
      * of the quote is greater than lifetime threshold
      *
      * @param StoreInterface $store
-     * @return Collection
+     * @return AbstractCollection
      */
-    public function getExpiredQuotes(StoreInterface $store): Collection
+    public function getExpiredQuotes(StoreInterface $store): AbstractCollection
     {
         $lifetime = $this->config->getValue(
             $this->quoteLifetime,
