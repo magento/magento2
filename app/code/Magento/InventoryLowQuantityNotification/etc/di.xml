@@ -35,4 +35,13 @@
         <plugin name="update_legacy_stock_item_configuration_at_source_item_configuration_save"
                 type="Magento\InventoryLowQuantityNotification\Plugin\InventoryLowQuantityNotificationApi\UpdateLegacyStockItemConfigurationAtSourceItemConfigurationSavePlugin"/>
     </type>
+    <type name="Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration\Get">
+        <arguments>
+            <!-- @deprecated following parameters have been deprecated and not used anymore -->
+            <argument name="getDataResourceModel" xsi:type="null"/>
+            <argument name="getDefaultValues" xsi:type="null"/>
+            <argument name="sourceItemConfigurationFactory" xsi:type="null"/>
+            <argument name="dataObjectHelper" xsi:type="null"/>
+        </arguments>
+    </type>
 </config>

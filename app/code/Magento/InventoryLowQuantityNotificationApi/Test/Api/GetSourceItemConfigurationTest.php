@@ -18,6 +18,7 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
     const SERVICE_NAME = 'inventoryLowQuantityNotificationApiGetSourceItemConfigurationV1';
 
     /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
@@ -38,6 +39,7 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
@@ -46,11 +48,12 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
     {
         $sourceCode = 'eu-1';
         $sku = 'NO-Existing';
-        self::throwException(new InputException(__('Sku %1 doesnt exits.', $sku)));
+        self::expectExceptionMessage('Wrong input data');
         $this->getSourceItemConfiguration($sourceCode, $sku);
     }
 
     /**
+     * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
      * @magentoApiDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
@@ -59,7 +62,7 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
     {
         $sourceCode = 'NO-Existing';
         $sku = 'SKU-1';
-        self::throwException(new InputException(__('Source code %1 doesnt exits.', $sourceCode)));
+        self::expectExceptionMessage('Wrong input data');
         $this->getSourceItemConfiguration($sourceCode, $sku);
     }
 
@@ -76,8 +79,8 @@ class GetSourceItemConfigurationTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME_GET,
-                'operation' => self::SERVICE_NAME_GET . 'Execute',
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Execute',
             ],
         ];
         $sourceItemConfiguration = (TESTS_WEB_API_ADAPTER === self::ADAPTER_REST)

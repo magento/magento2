@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\InventoryLowQuantityNotification\Model\SourceItemConfiguration;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\InventoryApi\Api\SourceRepositoryInterface;
-use Magento\InventoryLowQuantityNotification\Model\ResourceModel\SourceItemConfiguration\GetData as GetDataModel;
 use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterface;
-use Magento\InventoryLowQuantityNotificationApi\Api\Data\SourceItemConfigurationInterfaceFactory;
 use Magento\InventoryLowQuantityNotificationApi\Api\GetSourceItemConfigurationInterface;
 use Psr\Log\LoggerInterface;
 
@@ -23,26 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class Get implements GetSourceItemConfigurationInterface
 {
-    /**
-     * @var GetDataModel
-     */
-    private $getDataResourceModel;
-
-    /**
-     * @var GetDefaultValues
-     */
-    private $getDefaultValues;
-
-    /**
-     * @var SourceItemConfigurationInterfaceFactory
-     */
-    private $sourceItemConfigurationFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-
     /**
      * @var LoggerInterface
      */
@@ -59,30 +37,37 @@ class Get implements GetSourceItemConfigurationInterface
     private $sourceRepository;
 
     /**
-     * @param GetDataModel $getDataResourceModel
-     * @param GetDefaultValues $getDefaultValues
-     * @param SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory
-     * @param DataObjectHelper $dataObjectHelper
+     * @var GetConfiguration
+     */
+    private $getConfiguration;
+
+    /**
+     * @param null $getDataResourceModel @deprecated
+     * @param null $getDefaultValues @deprecated
+     * @param null $sourceItemConfigurationFactory @deprecated
+     * @param null $dataObjectHelper @deprecated
      * @param LoggerInterface $logger
-     * @param ProductRepositoryInterface  $productRepository,
+     * @param ProductRepositoryInterface $productRepository
      * @param SourceRepositoryInterface $sourceRepository
+     * @param GetConfiguration $getConfiguration
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        GetDataModel $getDataResourceModel,
-        GetDefaultValues $getDefaultValues,
-        SourceItemConfigurationInterfaceFactory $sourceItemConfigurationFactory,
-        DataObjectHelper $dataObjectHelper,
+        $getDataResourceModel,
+        $getDefaultValues,
+        $sourceItemConfigurationFactory,
+        $dataObjectHelper,
         LoggerInterface $logger,
-        ProductRepositoryInterface  $productRepository,
-        SourceRepositoryInterface $sourceRepository
+        ProductRepositoryInterface $productRepository = null,
+        SourceRepositoryInterface $sourceRepository = null,
+        GetConfiguration $getConfiguration = null
     ) {
-        $this->getDataResourceModel = $getDataResourceModel;
-        $this->getDefaultValues = $getDefaultValues;
-        $this->sourceItemConfigurationFactory = $sourceItemConfigurationFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
-        $this->productRepository = $productRepository;
-        $this->sourceRepository = $sourceRepository;
+        $this->productRepository = $productRepository ??
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->sourceRepository = $sourceRepository ??
+            ObjectManager::getInstance()->get(SourceRepositoryInterface::class);
+        $this->getConfiguration = $getConfiguration ?? ObjectManager::getInstance()->get(GetConfiguration::class);
     }
 
     /**
@@ -93,36 +78,11 @@ class Get implements GetSourceItemConfigurationInterface
         $this->validateInputData($sourceCode, $sku);
 
         try {
-            return $this->getConfiguration($sourceCode, $sku);
+            return $this->getConfiguration->execute($sourceCode, $sku);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             throw new LocalizedException(__('Could not load Source Item Configuration.'), $e);
         }
-    }
-
-    /**
-     * Loads the low quantity notification config from the database.
-     *
-     * @param string $sourceCode
-     * @param string $sku
-     * @return SourceItemConfigurationInterface
-     */
-    private function getConfiguration(string $sourceCode, string $sku): SourceItemConfigurationInterface
-    {
-        $sourceItemConfigurationData = $this->getDataResourceModel->execute($sourceCode, $sku);
-
-        if (null === $sourceItemConfigurationData) {
-            $sourceItemConfigurationData = $this->getDefaultValues->execute($sourceCode, $sku);
-        }
-
-        /** @var SourceItemConfigurationInterface $sourceItem */
-        $sourceItemConfiguration = $this->sourceItemConfigurationFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $sourceItemConfiguration,
-            $sourceItemConfigurationData,
-            SourceItemConfigurationInterface::class
-        );
-        return $sourceItemConfiguration;
     }
 
     /**
@@ -134,26 +94,22 @@ class Get implements GetSourceItemConfigurationInterface
      */
     private function validateInputData(string $sourceCode, string $sku): void
     {
-        if (empty($sourceCode)) {
-            throw new InputException(__('Wrong input data for sourcecode is empty.'));
-        }
-
-        if (empty($sku)) {
-            throw new InputException(__('Wrong input data for sku is empty.'));
+        if (empty($sourceCode) || empty($sku)) {
+            throw new InputException(__('Wrong input data'));
         }
 
         try {
             // validate if the source exits
             $this->sourceRepository->get($sourceCode);
         } catch (LocalizedException $exception) {
-            throw new InputException(__('Source code %1 doesnt exits.', $sourceCode));
+            throw new InputException(__('Wrong input data'));
         }
 
         try {
             // validate if the product exits
             $this->productRepository->get($sku);
         } catch (LocalizedException $exception) {
-            throw new InputException(__('Sku %1 doesnt exits.', $sku));
+            throw new InputException(__('Wrong input data'));
         }
     }
 }
