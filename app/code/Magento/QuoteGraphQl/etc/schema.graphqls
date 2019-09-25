@@ -244,11 +244,11 @@ type CartAddressCountry {
 }
 
 type SelectedShippingMethod {
-    carrier_code: String
-    method_code: String
-    carrier_title: String
-    method_title: String
-    amount: Money
+    carrier_code: String!
+    method_code: String!
+    carrier_title: String!
+    method_title: String!
+    amount: Money!
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
 }
 
