@@ -121,6 +121,7 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     public function save(ShipmentTrackInterface $entity)
     {
         $shipments = $this->shipmentCollection->create()
+            ->addFieldToFilter('order_id', $entity['order_id'])
             ->addFieldToFilter('entity_id', $entity['parent_id'])
             ->toArray();
 

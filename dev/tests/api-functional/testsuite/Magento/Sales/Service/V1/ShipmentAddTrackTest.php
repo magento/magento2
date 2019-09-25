@@ -104,20 +104,22 @@ class ShipmentAddTrackTest extends WebapiAbstract
             ShipmentTrackInterface::TITLE => 'Shipment title',
             ShipmentTrackInterface::CARRIER_CODE => Track::CUSTOM_CARRIER_CODE,
         ];
-        $expectedMessage = 'Could not save the shipment tracking.';
+        $exceptionMessage = '';
 
         try {
             $this->_webApiCall($this->getServiceInfo(), ['entity' => $trackData]);
         } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expectedMessage,
-                $e->getMessage(),
-                'SoapFault does not contain expected message.'
-            );
+            $exceptionMessage = $e->getMessage();
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $exceptionMessage = $errorObj['message'];
         }
+
+        $this->assertContains(
+            $exceptionMessage,
+            'Could not save the shipment tracking.',
+            'SoapFault or CouldNotSaveException does not contain exception message.'
+        );
     }
 
     /**
