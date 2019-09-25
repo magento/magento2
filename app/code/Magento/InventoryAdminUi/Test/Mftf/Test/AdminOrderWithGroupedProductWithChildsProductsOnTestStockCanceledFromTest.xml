@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderWithGroupedProductWithChildsProductsOnTestStockCanceledFromTest">
+        <annotations>
+            <stories value="Grouped Product Custom Stock."/>
+            <title value="Order with Grouped product."/>
+            <description value="Order with Grouped product with childs products on Test stock canceled from Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735227/scenarios/2188740"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional source.-->
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <!--Create grouped and virtual product.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="GroupedProduct" stepKey="groupedProduct"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable created additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="groupedProduct" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock"/>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid1"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct1">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid"  stepKey="openFirstProductForEdit"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillSourceQtyOnProductEditPageActionGroup" stepKey="fillProductQtyPerSource">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            <argument name="qty" value="10" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveVirtualProduct"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid2"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct2">
+            <argument name="product" value="$$groupedProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid"  stepKey="openSecondProductForEdit"/>
+        <actionGroup ref="AdminAssignProductToGroup" stepKey="addFirstSimpleToGroup">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+
+        <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForVirtualProduct">
+            <argument name="productName" value="$$product.name$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+
+        <scrollToTopOfPage stepKey="scrollOnTopOfProductPagePage"/>
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductSimpleOptionToOrder">
+            <argument name="product" value="$$groupedProduct$$"/>
+            <argument name="option" value="$$product$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid3"/>
+
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findVirtualProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty">
+            <argument name="sourceName" value="$$additionalSource.source[name]$$"/>
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+            <argument name="sourceQty" value="10"/>
+            <argument name="stockQty" value="10"/>
+        </actionGroup>
+    </test>
+</tests>

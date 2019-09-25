@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSalableQuantityOnNonDefaultStockForConfigurableProductWithDropDownAttributeAfterPlacingOrderCountedCorrectlyTest">
+        <annotations>
+            <stories value="Salable Quantity on non default stock"/>
+            <title value="Salable Quantity on non default stock for Configurable Product with drop-down attribute after placing order counted correctly."/>
+            <description value="Salable Quantity on non default stock for Configurable Product with drop-down attribute after placing order counted correctly."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735249/scenarios/1473085"/>
+            <severity value="BLOCKER"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <!-- Create first attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createFirstConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+
+            <!-- Create second attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSecondConfigProductAttribute"/>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOptionThree">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOptionFour">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <!--Create additional source and stock.-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock"/>
+            <createData entity="FullSource1" stepKey="createSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="createSource"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$createSource.source[source_code]$$"/>
+            </actionGroup>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ConfigurableMsiProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
+            <deleteData createDataKey="createSecondConfigProductAttribute" stepKey="deleteSecondConfigProductAttribute"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="ConfigurableMsiProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$simpleCategory.name$$]" stepKey="fillCategory"/>
+        <actionGroup ref="createConfigurationsForTwoAttributeCustomSource" stepKey="createConfigurationsWithCustomStock">
+            <argument name="attributeCode" value="$$createFirstConfigProductAttribute.attribute_code$$"/>
+            <argument name="secondAttributeCode" value="$$createSecondConfigProductAttribute.attribute_code$$"/>
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveConfigurableProduct"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddConfigurableProductWithTwoAttributesToTheCartActionGroup" stepKey="addConfigurableProductToCart" >
+            <argument name="urlKey" value="{{ConfigurableMsiProduct.urlKey}}" />
+            <argument name="productAttribute" value="$$createFirstConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="secondProductAttribute" value="$$createSecondConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="productOption" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+            <argument name="secondProductOption" value="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+            <argument name="qty" value="50"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid1"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductBySkuToCheckQtyAfterPlaceOrder">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="{{ConfigurableMsiProduct.sku}}-$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$-$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty">
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+            <argument name="sourceQty" value="100"/>
+            <argument name="stockQty" value="50"/>
+        </actionGroup>
+    </test>
+</tests>
