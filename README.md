@@ -11,6 +11,10 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 *	[Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
+## Learn More About GraphQL in Magento 2
+
+* [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.3/graphql/index.html)
+
 <h2>Contributing to the Magento 2 Code Base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
