@@ -6,6 +6,7 @@
 
 namespace Magento\Translation\ViewModel;
 
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
@@ -29,15 +30,23 @@ class Dictionary implements ArgumentInterface
     private $appState;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @param AssetRepository $assetRepo
      * @param AppState $appState
+     * @param Escaper $escaper
      */
     public function __construct(
         AssetRepository $assetRepo,
-        AppState $appState
+        AppState $appState,
+        Escaper $escaper
     ) {
         $this->assetRepo = $assetRepo;
         $this->appState = $appState;
+        $this->escaper = $escaper;
     }
 
     /**
@@ -75,5 +84,16 @@ class Dictionary implements ArgumentInterface
     public function isAppStateProduction(): bool
     {
         return $this->appState->getMode() === AppState::MODE_PRODUCTION;
+    }
+
+    /**
+     * Escape URL.
+     *
+     * @param string $url
+     * @return string
+     */
+    public function escapeUrl(string $url): string
+    {
+        return $this->escaper->escapeUrl($url);
     }
 }

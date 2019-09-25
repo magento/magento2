@@ -20,10 +20,10 @@ if (!$viewModel->isAppStateProduction()) {
 } else {
     ?>
     <script>
-        define('mageTranslationDictionary', ['text!<?= /* @noEscape */ $viewModel->getTranslationDictionaryUrl() ?>'], function (dict) {
+        define('mageTranslationDictionary', ['text!<?= $viewModel->escapeUrl($viewModel->getTranslationDictionaryUrl()) ?>'], function (dict) {
             return JSON.parse(dict);
         });
     </script>
-<?php
+    <?php
 }
 ?>
