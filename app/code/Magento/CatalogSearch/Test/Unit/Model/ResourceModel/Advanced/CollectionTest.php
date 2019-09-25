@@ -183,6 +183,7 @@ class CollectionTest extends BaseCollection
                     'searchResult' => $searchResult,
                     'orders' => [],
                     'size' => $pageSize,
+                    'currentPage' => 0,
                 ]
             )
             ->willReturn($searchResultApplier);
