@@ -668,8 +668,6 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function cleanupOrphanJobs($groupId)
     {
-        echo "cleaning orphand\n";
-
         $runningJobs = $this->getRunningJobs($groupId);
 
         if ($runningJobs) {
@@ -679,36 +677,30 @@ class ProcessCronQueueObserver implements ObserverInterface
 
             foreach($runningJobs as $runningJob) {
                 var_dump($runningJob->getData());
-                if (!posix_kill(intval($runningJob->getPid()), 0)) {
-
-                }
                 if ($runningJob->getPidHost() != $host) {
-                    echo "\tmismatching host\n";
+                    //job run/ran on a different host
+                    //@todo may need to close orphan job
                     continue;
                 } else {
                     if (posix_kill(intval($runningJob->getPid()), 0)) {
-                        echo "\tmatching PID found\n";
-
-                        //implement start time check for process
-                        $startTimeMatch = false;
+                        //PID active in the host
+                        //@todo implement start time check for process
+                        $startTimeMatch = true;
 
                         if ($startTimeMatch) {
-                            echo "\tstart time looks good\n";
+                            //process and job start time are matching - 99.99% sure that job still active
+                            continue;
+                        } else {
+                            //process and job start time are mismatching
                             $this->closeOrphanJob($runningJob);
                             $count++;
-                        } else {
-                            echo "\tstart time looks off it is orphan\n";
-                            continue;
-
                         }
                     } else {
-                        echo "\tno mathcing PID\n";
                         $this->closeOrphanJob($runningJob);
                         $count++;
                     }
                 }
-
-                $processOwner = posix_getpwnam(posix_geteuid());
+            }
 
             if ($count) {
                 $this->logger->info(sprintf('%d cron jobs seems to got stucks and were cleaned', $count));
