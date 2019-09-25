@@ -412,7 +412,7 @@ define([
          */
         setShippingAsBilling: function (flag) {
             var data,
-                areasToLoad = ['billing_method', 'shipping_method', 'totals', 'giftmessage'];
+                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
 
             this.disableShippingAddress(flag);
             data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
@@ -1174,7 +1174,7 @@ define([
             for (var i = 0; i < this.loadingAreas.length; i++) {
                 var id = this.loadingAreas[i];
                 if ($(this.getAreaId(id))) {
-                    if ('message' != id || response[id]) {
+                    if ('message' != id && response[id]) {
                         $(this.getAreaId(id)).update(response[id]);
                     }
                     if ($(this.getAreaId(id)).callback) {
