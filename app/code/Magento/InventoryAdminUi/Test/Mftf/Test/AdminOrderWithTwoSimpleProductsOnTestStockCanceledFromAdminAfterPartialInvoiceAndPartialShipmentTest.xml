@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderWithTwoSimpleProductsOnTestStockCanceledFromAdminAfterPartialInvoiceAndPartialShipmentTest"
+          extends="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Order with 2 Simple products on non-default stock canceled from Admin after partial invoice and partial shipment."/>
+            <description value="Order with 2 Simple products on non-default stock canceled from Admin after partial invoice and partial shipment."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/1637636"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2" after="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedCustomSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+
+        <!-- assign first simple product to custom source -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage" before="newOrder"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct" after="goToProductIndexPage">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" after="filterProduct" stepKey="openSecondProductForEdit"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct" after="openSecondProductForEdit">
+            <argument name="sourceCode" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="0" after="assignSourceToProduct" stepKey="setDefaultSourceQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" after="setDefaultSourceQuantity" stepKey="setCustomSourceQuantity"/>
+        <!-- Save first product -->
+        <actionGroup ref="saveProductForm" stepKey="saveProduct" after="setCustomSourceQuantity"/>
+
+        <!-- assign second simple product to custom source -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage2" after="saveProduct"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct2" after="goToProductIndexPage2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" after="filterProduct2" stepKey="openSecondProductForEdit2"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct2" after="openSecondProductForEdit2">
+            <argument name="sourceCode" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="0" after="assignSourceToProduct2" stepKey="setDefaultSourceQuantity2"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" after="setDefaultSourceQuantity2" stepKey="setCustomSourceQuantity2"/>
+        <!-- Save second product -->
+        <actionGroup ref="saveProductForm" stepKey="saveProduct2" after="setCustomSourceQuantity2"/>
+
+        <actionGroup ref="AddSimpleProductWithQtyToOrderActionGroup" stepKey="addSecondProductToOrder" after="addFirstProductToOrder">
+            <argument name="product" value="$$simpleProduct2$$"/>
+            <argument name="productQty" value="5"/>
+        </actionGroup>
+
+        <!-- Invoice the order and assert the status -->
+        <actionGroup ref="goToInvoiceIntoOrder" stepKey="goToInvoiceIntoOrderPage" before="cancelPendingOrder" />
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" after="goToInvoiceIntoOrderPage" userInput="2" stepKey="ChangeQtyToInvoice"/>
+        <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('2')}}" after="ChangeQtyToInvoice" userInput="2" stepKey="ChangeQtyToInvoice2"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity" after="ChangeQtyToInvoice2"/>
+        <waitForPageLoad time="20" stepKey="WaitForInvoiceQtyUpdate" after="updateQuantity"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice" after="WaitForInvoiceQtyUpdate"/>
+
+        <!-- Ship the order and assert the status -->
+        <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"  after="submitInvoice"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="2" stepKey="ship2Items" after="goToShipment"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('2')}}" userInput="2" stepKey="ship2ItemsSecondProduct" after="ship2Items"/>
+
+        <actionGroup ref="submitShipmentIntoOrder" stepKey="submitShipment" after="ship2ItemsSecondProduct"/>
+
+        <remove keyForRemoval="cancelPendingOrder"/>
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder" after="assertOrderIdIsNotEmpty">
+            <argument name="orderStatus" value="Complete"/>
+        </actionGroup>
+
+        <remove keyForRemoval="checkProductSourceQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty">
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+            <argument name="sourceQty" value="98"/>
+            <argument name="stockQty" value="98"/>
+        </actionGroup>
+    </test>
+</tests>

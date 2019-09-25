@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test  name="AdminOrderWithSimpleProductOnTestStockCanceledFromAdminTest" extends="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
+        <annotations>
+            <stories value="Add Order"/>
+            <title value="Order with Simple product on Test stock canceled from Admin."/>
+            <description value="Order with Simple product on Test stock canceled from Admin."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/1621263"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="additionalStock"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" before="disableCreatedCustomSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage" before="newOrder"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct" after="goToProductIndexPage">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" after="filterProduct" stepKey="openSecondProductForEdit"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSourceToProduct" after="openSecondProductForEdit">
+            <argument name="sourceCode" value="$$createSource.source[name]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="0" after="assignSourceToProduct" stepKey="setDefaultSourceQuantity"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" after="setDefaultSourceQuantity" stepKey="setCustomSourceQuantity"/>
+        <!-- Save product -->
+        <actionGroup ref="saveProductForm" stepKey="saveProduct" after="setCustomSourceQuantity"/>
+
+        <remove keyForRemoval="checkProductSourceQty"/>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="checkProductSourceQty" after="findProductBySkuToCheckQty">
+            <argument name="sourceName" value="$$createSource.source[name]$$"/>
+            <argument name="stockName" value="$$additionalStock.stock[name]$$"/>
+            <argument name="sourceQty" value="100"/>
+            <argument name="stockQty" value="100"/>
+        </actionGroup>
+    </test>
+</tests>

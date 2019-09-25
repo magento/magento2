@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoggedInCustomerOrderedVirtualProductOnTestStockFromCustomWebsiteTest"
+          extends="StorefrontLoggedInCustomerCreateOrderWithSimpleProductOnTestStockFromCustomWebsiteTest">
+        <annotations>
+            <stories value="Admin user create order."/>
+            <title value="Logged in Customer ordered Virtual product on Test stock from Custom website."/>
+            <description value="Logged in Customer ordered Virtual product on Test stock from Custom website."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419536/scenarios/2942791"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="simpleProduct"/>
+            <createData entity="VirtualProduct" stepKey="simpleProduct" before="createWebsite">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+        </before>
+        <remove keyForRemoval="fillShippingAddress"/>
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress" after="waitForCheckoutPage">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{CustomerAddressSimple.state}}" after="fillBillingAddress" stepKey="selectRegion"/>
+        <remove keyForRemoval="clickNext"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton" before="placeOrder"/>
+        <waitForPageLoad after="clickOnUpdateButton" stepKey="waitForUpdateButton" />
+    </test>
+</tests>
