@@ -231,9 +231,11 @@ class RulesApplierTest extends TestCase
      */
     protected function getPreparedItem()
     {
-        /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /**
+         * @var Address|PHPUnit_Framework_MockObject_MockObject $address
+        */
         $address = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
+            Address::class,
             [
                 'getQuote',
                 'setCouponCode',
@@ -241,9 +243,11 @@ class RulesApplierTest extends TestCase
                 '__wakeup'
             ]
         );
-        /** @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /**
+         * @var AbstractItem|PHPUnit_Framework_MockObject_MockObject $item
+        */
         $item = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Item::class,
+            Item::class,
             [
                 'setDiscountAmount',
                 'setBaseDiscountAmount',

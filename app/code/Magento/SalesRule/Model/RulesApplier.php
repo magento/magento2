@@ -14,7 +14,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 
 /**
- * Rules Applier Model
+ * Class RulesApplier
  *
  * @package Magento\SalesRule\Model\Validator
  */
@@ -65,7 +65,7 @@ class RulesApplier
         $this->validatorUtility = $utility;
         $this->_eventManager = $eventManager;
         $this->childrenValidationLocator = $childrenValidationLocator
-            ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
+             ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
         $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
     }
 
@@ -152,10 +152,10 @@ class RulesApplier
     }
 
     /**
-     * Apply rule
+     * Apply Rule
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param AbstractItem $item
+     * @param Rule $rule
      * @param \Magento\Quote\Model\Quote\Address $address
      * @param mixed $couponCode
      * @return $this
@@ -296,9 +296,9 @@ class RulesApplier
     }
 
     /**
-     * Set Applied Rule ids
+     * Set Applied Rule Ids
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param AbstractItem $item
      * @param int[] $appliedRuleIds
      * @return $this
      */
