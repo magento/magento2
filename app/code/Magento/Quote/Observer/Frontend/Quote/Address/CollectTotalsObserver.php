@@ -111,10 +111,11 @@ class CollectTotalsObserver implements ObserverInterface
         if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) {
             $customerAddress = $this->addressRepository->getById($customer->getDefaultShipping());
 
-            $address->setCountryId($customerAddress->getCountryId());
-            $address->setVatId($customerAddress->getVatId());
             $customerCountryCode = $customerAddress->getCountryId();
             $customerVatNumber = $customerAddress->getVatId();
+            $address->setCountryId($customerCountryCode);
+            $address->setVatId($customerVatNumber);
+
         }
 
         $groupId = null;
