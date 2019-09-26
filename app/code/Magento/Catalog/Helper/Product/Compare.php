@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 
 /**
@@ -297,12 +298,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
                 $this->_itemCollection->setVisitorId($this->_customerVisitor->getId());
             }
 
-            /* $this->_itemCollection->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds()); */
-
-            /* Price data is added to consider item stock status using price index */
-            /* $this->_itemCollection->addPriceData(); */
-
-            $this->_itemCollection->addAttributeToSelect('name')->addUrlRewrite()->load();
+            $this->_itemCollection
+                ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+                ->addAttributeToSelect('name')->addUrlRewrite()->load();
 
             /* update compare items count */
             $this->_catalogSession->setCatalogCompareItemsCount(count($this->_itemCollection));
@@ -321,13 +319,20 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         /** @var $collection Collection */
         $collection = $this->_itemCollectionFactory->create()
+            ->setFlag('has_stock_status_filter', false)
             ->useProductItem();
         if (!$logout && $this->_customerSession->isLoggedIn()) {
-            $collection->setCustomerId($this->_customerSession->getCustomerId());
+            $collection
+                ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+                ->setCustomerId($this->_customerSession->getCustomerId());
         } elseif ($this->_customerId) {
-            $collection->setCustomerId($this->_customerId);
+            $collection
+                ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+                ->setCustomerId($this->_customerId);
         } else {
-            $collection->setVisitorId($this->_customerVisitor->getId());
+            $collection
+                ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+                ->setVisitorId($this->_customerVisitor->getId());
         }
 
         $count = $collection->getSize();
