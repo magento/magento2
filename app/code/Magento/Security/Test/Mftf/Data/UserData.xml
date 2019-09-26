@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+
+    <entity name="NewAdminUserWithValidExpiration" type="user">
+        <data key="username" unique="suffix">adminExpiresAt</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="interface_local_label">English (United States)</data>
+        <data key="is_active">true</data>
+        <data key="is_active_label">Active</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
+        <data key="expires_at">Sep 3, 2030 4:42:36 PM</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
+
+    <entity name="NewAdminUserWithInvalidExpiration" type="user" extends="NewAdminUserWithValidExpiration">
+        <data key="expires_at">Sep 3, 2000 4:42:36 PM</data>
+    </entity>
+</entities>
