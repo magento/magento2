@@ -32,6 +32,9 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertContains('Den gesamten Shop durchsuchen...', $responseBody);
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testIndexActionXSSQueryVerification()
     {
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

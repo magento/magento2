@@ -16,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class for testing fulltext index rebuild
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
