@@ -20,12 +20,13 @@
                      ->getAttributeValidationClass('telephone')
             );
             ?>
-        <input type="text"
+        <input type="tel"
                name="telephone"
                id="telephone"
                value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
                class="input-text <?= $_validationClass ?: '' ?>"
+               autocomplete="tel"
         >
     </div>
 </div>

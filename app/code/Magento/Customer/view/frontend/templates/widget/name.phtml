@@ -41,7 +41,8 @@ $suffix = $block->showSuffix();
                            name="<?= $block->escapeHtmlAttr($block->getFieldName('prefix')) ?>"
                            value="<?= $block->escapeHtmlAttr($block->getObject()->getPrefix()) ?>"
                            title="<?= $block->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
-                           class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?= $block->isPrefixRequired() ? ' data-validate="{required:true}"' : '' ?>>
+                           class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?= $block->isPrefixRequired() ? ' data-validate="{required:true}"' : '' ?>
+                           autocomplete="honorific-prefix">
                 <?php else : ?>
                     <select id="<?= $block->escapeHtmlAttr($block->getFieldId('prefix')) ?>"
                             name="<?= $block->escapeHtmlAttr($block->getFieldName('prefix')) ?>"
@@ -64,7 +65,8 @@ $suffix = $block->showSuffix();
                        name="<?= $block->escapeHtmlAttr($block->getFieldName('firstname')) ?>"
                        value="<?= $block->escapeHtmlAttr($block->getObject()->getFirstname()) ?>"
                        title="<?= $block->escapeHtmlAttr($block->getStoreLabel('firstname')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('firstname')) ?>" <?= ($block->getAttributeValidationClass('firstname') == 'required-entry') ? ' data-validate="{required:true}"' : '' ?>>
+                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('firstname')) ?>" <?= ($block->getAttributeValidationClass('firstname') == 'required-entry') ? ' data-validate="{required:true}"' : '' ?>
+                       autocomplete="given-name">
             </div>
         </div>
     <?php if ($middle) : ?>
@@ -76,7 +78,8 @@ $suffix = $block->showSuffix();
                        name="<?= $block->escapeHtmlAttr($block->getFieldName('middlename')) ?>"
                        value="<?= $block->escapeHtmlAttr($block->getObject()->getMiddlename()) ?>"
                        title="<?= $block->escapeHtmlAttr($block->getStoreLabel('middlename')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('middlename')) ?>" <?= $isMiddlenameRequired ? ' data-validate="{required:true}"' : '' ?>>
+                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('middlename')) ?>" <?= $isMiddlenameRequired ? ' data-validate="{required:true}"' : '' ?>
+                       autocomplete="additional-name">
             </div>
         </div>
     <?php endif; ?>
@@ -87,7 +90,8 @@ $suffix = $block->showSuffix();
                        name="<?= $block->escapeHtmlAttr($block->getFieldName('lastname')) ?>"
                        value="<?= $block->escapeHtmlAttr($block->getObject()->getLastname()) ?>"
                        title="<?= $block->escapeHtmlAttr($block->getStoreLabel('lastname')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('lastname')) ?>" <?= ($block->getAttributeValidationClass('lastname') == 'required-entry') ? ' data-validate="{required:true}"' : '' ?>>
+                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('lastname')) ?>" <?= ($block->getAttributeValidationClass('lastname') == 'required-entry') ? ' data-validate="{required:true}"' : '' ?>
+                       autocomplete="family-name">
             </div>
         </div>
     <?php if ($suffix) : ?>
@@ -99,7 +103,8 @@ $suffix = $block->showSuffix();
                            name="<?= $block->escapeHtmlAttr($block->getFieldName('suffix')) ?>"
                            value="<?= $block->escapeHtmlAttr($block->getObject()->getSuffix()) ?>"
                            title="<?= $block->escapeHtmlAttr($block->getStoreLabel('suffix')) ?>"
-                           class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?= $block->isSuffixRequired() ? ' data-validate="{required:true}"' : '' ?>>
+                           class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?= $block->isSuffixRequired() ? ' data-validate="{required:true}"' : '' ?>
+                           autocomplete="honorific-suffix">
                 <?php else : ?>
                     <select id="<?= $block->escapeHtmlAttr($block->getFieldId('suffix')) ?>"
                             name="<?= $block->escapeHtmlAttr($block->getFieldName('suffix')) ?>"
