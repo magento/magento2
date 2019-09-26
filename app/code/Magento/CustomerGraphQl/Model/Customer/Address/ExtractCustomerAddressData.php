@@ -125,6 +125,8 @@ class ExtractCustomerAddressData
         }
         $addressData = array_merge($addressData, $customAttributes);
 
+        $addressData['customer_id'] = null;
+
         return $addressData;
     }
 }
