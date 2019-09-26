@@ -11,8 +11,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
- * Class MessageValidator to validate message with topic schema
- *
+ * Class MessageValidator to validate message with topic schema.
  */
 class MessageValidator
 {
@@ -90,6 +89,8 @@ class MessageValidator
     }
 
     /**
+     * Validate queue message.
+     *
      * @param string $message
      * @param string $messageType
      * @param string $topic
@@ -105,6 +106,8 @@ class MessageValidator
     }
 
     /**
+     * Validate message primitive type.
+     *
      * @param string $message
      * @param string $messageType
      * @param string $topic
@@ -136,6 +139,8 @@ class MessageValidator
     }
 
     /**
+     * Validate class type
+     *
      * @param string $message
      * @param string $messageType
      * @param string $topic
@@ -168,6 +173,8 @@ class MessageValidator
     }
 
     /**
+     * Returns message real type
+     *
      * @param string $message
      * @return string
      */
