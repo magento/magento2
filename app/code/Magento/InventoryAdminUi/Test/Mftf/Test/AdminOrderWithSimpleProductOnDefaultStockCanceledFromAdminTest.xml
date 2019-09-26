@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOrderWithSimpleProductOnDefaultStockCanceledFromAdminTest">
         <annotations>
-            <stories value="Add Order"/>
+            <stories value="Cancel Order Simple product"/>
             <title value="Order with Simple product on Default stock canceled from Admin."/>
             <description value="Order with Simple product on Default stock canceled from Admin."/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735223/scenarios/2605764"/>
@@ -19,6 +19,7 @@
             <group value="multi_mode"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="MsiCustomer1" stepKey="customer"/>
             <!--Create additional source and stock.-->
             <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
@@ -28,7 +29,13 @@
                 <requiredEntity createDataKey="additionalStock"/>
                 <requiredEntity createDataKey="createSource"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <magentoCLI stepKey="flushCache" command="cache:flush"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
