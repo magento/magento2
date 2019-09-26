@@ -53,7 +53,7 @@ class Store extends AbstractExtensibleModel implements
     const ENTITY = 'store';
 
     /**
-     * Custom entry point param
+     * Parameter used to determine app context.
      */
     const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
 
@@ -104,7 +104,7 @@ class Store extends AbstractExtensibleModel implements
     const ADMIN_CODE = 'admin';
 
     /**
-     * Cache tag
+     * Tag to use to cache stores.
      */
     const CACHE_TAG = 'store';
 
@@ -423,6 +423,9 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -435,6 +438,9 @@ class Store extends AbstractExtensibleModel implements
      * Init not serializable fields
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
