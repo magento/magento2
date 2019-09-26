@@ -56,6 +56,7 @@ class LegacyDirectiveTest extends TestCase
         return [
             'protected method' => ['{{cool "blah" foo bar baz=bash}}', [], 'value1: cool: "blah" foo bar baz=bash'],
             'public method' => ['{{cooler "blah" foo bar baz=bash}}', [], 'value2: cooler: "blah" foo bar baz=bash'],
+            'simple directive' => ['{{mydir "blah" param1=bash}}foo{{/mydir}}', [], 'OOFHSABHALB'],
         ];
     }
 

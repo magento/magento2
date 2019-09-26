@@ -30,11 +30,9 @@ class MyDirProcessor implements ProcessorInterface
     public function process(
         $value,
         array $parameters,
-        ?string $html,
-        Template $filter,
-        array $templateVariables
+        ?string $html
     ): string {
-        return $value . $parameters['param1'] . $html . ($templateVariables['foo'] ?? '');
+        return $value . $parameters['param1'] . $html;
     }
 
     /**

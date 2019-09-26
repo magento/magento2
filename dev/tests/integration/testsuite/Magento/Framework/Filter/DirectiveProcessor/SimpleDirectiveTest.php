@@ -53,7 +53,7 @@ class SimpleDirectiveTest extends TestCase
         $template = 'blah {{mydir "somevalue" param1=yes|foofilter|nl2br|doesntexist|foofilter}}blah '
             . "\n" . '{{var address}} blah{{/mydir}} blah';
         $result = $processor->process($this->createConstruction($processor, $template), $filter, ['foo' => 'foobar']);
-        self::assertEquals('SOMEVALUEYESBLAH ' . "\n" .'>/ RB< BLAHFOOBAR', $result);
+        self::assertEquals('SOMEVALUEYESBLAH ' . "\n" .'>/ RB< BLAH', $result);
     }
 
     public function testDefaultFiltersAreUsed()

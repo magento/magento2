@@ -12,6 +12,8 @@ use Magento\Framework\Filter\Template;
 
 /**
  * An easier mechanism to implement custom directives rather than parsing the whole directive manually
+ *
+ * @api
  */
 interface ProcessorInterface
 {
@@ -28,16 +30,12 @@ interface ProcessorInterface
      * @param mixed $value Template var, scalar or null if nothing has been passed to the directive.
      * @param string[] $parameters Additional parameters.
      * @param string|null $html HTML inside the directive.
-     * @param Template $filter The filter that is processing the template
-     * @param array $templateVariables The dataset available to the template
      * @return string
      */
     public function process(
         $value,
         array $parameters,
-        ?string $html,
-        Template $filter,
-        array $templateVariables
+        ?string $html
     ): string;
 
     /**

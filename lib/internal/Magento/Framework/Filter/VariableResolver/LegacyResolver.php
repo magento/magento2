@@ -22,24 +22,6 @@ use Magento\Framework\Stdlib\StringUtils;
 class LegacyResolver implements VariableResolverInterface
 {
     /**
-     * @var string[]
-     */
-    private $restrictedMethods = [
-        'addafterfiltercallback',
-        'getresourcecollection',
-        'load',
-        'save',
-        'getcollection',
-        'getresource',
-        'getconfig',
-        'setvariables',
-        'settemplateprocessor',
-        'gettemplateprocessor',
-        'vardirective',
-        'delete'
-    ];
-
-    /**
      * @var StringUtils
      */
     private $stringUtils;
@@ -107,46 +89,6 @@ class LegacyResolver implements VariableResolverInterface
     }
 
     /**
-     * Validate method call initiated in a template.
-     *
-     * Deny calls for methods that may disrupt template processing.
-     *
-     * @param object $object
-     * @param Template $filter
-     * @param string $method
-     * @return void
-     */
-    private function validateVariableMethodCall($object, Template $filter, string $method): void
-    {
-        if ($object === $filter) {
-            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
-                throw new \InvalidArgumentException("Method $method cannot be called from template.");
-            }
-        }
-    }
-
-    /**
-     * Check allowed methods for data objects.
-     *
-     * Deny calls for methods that may disrupt template processing.
-     *
-     * @param object $object
-     * @param string $method
-     * @return bool
-     * @throws \InvalidArgumentException
-     */
-    private function isAllowedDataObjectMethod($object, string $method): bool
-    {
-        if ($object instanceof AbstractExtensibleModel || $object instanceof AbstractModel) {
-            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
-                throw new \InvalidArgumentException("Method $method cannot be called from template.");
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Loops over a set of stack args to process variables into array argument values
      *
      * @param array $stack
@@ -207,12 +149,10 @@ class LegacyResolver implements VariableResolverInterface
                 $templateVariables
             );
 
-            if ($this->isAllowedDataObjectMethod($this->stackArgs[$i - 1]['variable'], $this->stackArgs[$i]['name'])) {
-                $this->stackArgs[$i]['variable'] = call_user_func_array(
-                    [$this->stackArgs[$i - 1]['variable'], $this->stackArgs[$i]['name']],
-                    $this->stackArgs[$i]['args']
-                );
-            }
+            $this->stackArgs[$i]['variable'] = call_user_func_array(
+                [$this->stackArgs[$i - 1]['variable'], $this->stackArgs[$i]['name']],
+                $this->stackArgs[$i]['args']
+            );
         }
     }
 
@@ -229,7 +169,6 @@ class LegacyResolver implements VariableResolverInterface
         $method = $this->stackArgs[$i]['name'];
         if (method_exists($object, $method)) {
             $args = $this->getStackArgs($this->stackArgs[$i]['args'], $filter, $templateVariables);
-            $this->validateVariableMethodCall($object, $filter, $method);
             $this->stackArgs[$i]['variable'] = call_user_func_array([$object, $method], $args);
         }
     }

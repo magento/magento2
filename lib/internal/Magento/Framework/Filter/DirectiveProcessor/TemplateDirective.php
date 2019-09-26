@@ -22,8 +22,6 @@ use Magento\Framework\Filter\VariableResolverInterface;
  *
  * <PATH> equals the XPATH to the system configuration value that contains the value of the template.
  * This directive is useful to include things like a global header/footer.
- *
- * @api
  */
 class TemplateDirective implements DirectiveProcessorInterface
 {
@@ -78,7 +76,7 @@ class TemplateDirective implements DirectiveProcessorInterface
      * @param array $templateVariables
      * @return array
      */
-    private function getParameters($value, Template $filter, array $templateVariables)
+    private function getParameters($value, Template $filter, array $templateVariables): array
     {
         $tokenizer = new Template\Tokenizer\Parameter();
         $tokenizer->setString($value);

@@ -17,18 +17,34 @@ use Magento\Framework\Filter\Template;
 class LegacyDirective implements DirectiveProcessorInterface
 {
     /**
+     * @var SimpleDirective
+     */
+    private $simpleDirective;
+
+    /**
+     * @param SimpleDirective $simpleDirective
+     */
+    public function __construct(SimpleDirective $simpleDirective)
+    {
+        $this->simpleDirective = $simpleDirective;
+    }
+
+    /**
      * @inheritdoc
      */
-    public function process(array $construction, Template $template, array $templateVariables): string
+    public function process(array $construction, Template $filter, array $templateVariables): string
     {
         try {
-            $reflectionClass = new \ReflectionClass($template);
+            $reflectionClass = new \ReflectionClass($filter);
             $method = $reflectionClass->getMethod($construction[1] . 'Directive');
             $method->setAccessible(true);
 
-            return (string)$method->invokeArgs($template, [$construction]);
+            return (string)$method->invokeArgs($filter, [$construction]);
         } catch (\ReflectionException $e) {
-            return $construction[0];
+            // The legacy parser may be the only parser loaded so make sure the simple directives still process
+            preg_match($this->simpleDirective->getRegularExpression(), $construction[0], $simpleConstruction);
+
+            return $this->simpleDirective->process($simpleConstruction, $filter, $templateVariables);
         }
     }
 

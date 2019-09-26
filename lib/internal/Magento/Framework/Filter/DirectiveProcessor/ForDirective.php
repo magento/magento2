@@ -11,17 +11,13 @@ namespace Magento\Framework\Filter\DirectiveProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\DirectiveProcessorInterface;
 use Magento\Framework\Filter\Template;
-use Magento\Framework\Filter\Template\Tokenizer\ParameterFactory;
 use Magento\Framework\Filter\VariableResolverInterface;
-use function React\Promise\resolve;
 
 /**
  * Allows a a directive to iterate content with the value of variables
  *
  * @example syntax {{for item in order.items}} name: {{var item.name}} {{/for}} order items collection.
  * @example syntax {{for thing in things}} {{var thing.whatever}} {{/for}} e.g.:custom collection.
- *
- * @api
  */
 class ForDirective implements DirectiveProcessorInterface
 {
@@ -31,20 +27,12 @@ class ForDirective implements DirectiveProcessorInterface
     private $variableResolver;
 
     /**
-     * @var ParameterFactory
-     */
-    private $parameterFactory;
-
-    /**
      * @param VariableResolverInterface $variableResolver
-     * @param ParameterFactory $parameterFactory
      */
     public function __construct(
-        VariableResolverInterface $variableResolver,
-        ParameterFactory $parameterFactory
+        VariableResolverInterface $variableResolver
     ) {
         $this->variableResolver = $variableResolver;
-        $this->parameterFactory = $parameterFactory;
     }
 
     /**
@@ -109,11 +97,11 @@ class ForDirective implements DirectiveProcessorInterface
      */
     private function getLoopReplacementText(
         array $loopData,
-        $loopItemVariableName,
-        $loopTextToReplace,
+        string $loopItemVariableName,
+        string $loopTextToReplace,
         Template $filter,
         array $templateVariables
-    ) {
+    ): string {
         $loopText = [];
         $loopIndex = 0;
         $loopDataObject = new DataObject();

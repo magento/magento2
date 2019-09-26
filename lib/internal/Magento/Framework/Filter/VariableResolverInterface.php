@@ -10,6 +10,8 @@ namespace Magento\Framework\Filter;
 
 /**
  * Responsible for obtaining the value of variables defined in the template
+ *
+ * @api
  */
 interface VariableResolverInterface
 {

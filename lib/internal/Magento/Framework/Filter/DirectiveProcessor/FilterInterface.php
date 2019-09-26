@@ -10,6 +10,8 @@ namespace Magento\Framework\Filter\DirectiveProcessor;
 
 /**
  * Transforms the output of a directive processor
+ *
+ * @api
  */
 interface FilterInterface
 {
@@ -17,7 +19,7 @@ interface FilterInterface
      * Transform or manipulate value
      *
      * @param string $value
-     * @param array $params
+     * @param string[] $params
      * @return string
      */
     public function filterValue(string $value, array $params): string;

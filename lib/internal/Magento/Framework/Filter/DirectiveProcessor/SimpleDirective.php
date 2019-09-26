@@ -18,8 +18,6 @@ use Magento\Framework\Filter\VariableResolverInterface;
 
 /**
  * Serves as the default
- *
- * @api
  */
 class SimpleDirective implements DirectiveProcessorInterface
 {
@@ -78,9 +76,7 @@ class SimpleDirective implements DirectiveProcessorInterface
         $value = $directiveParser->process(
             $construction['value'] ?? null,
             $parameters,
-            $filter->filter($construction['content']) ?? null,
-            $filter,
-            $templateVariables
+            !empty($construction['content']) ? $filter->filter($construction['content']) : null
         );
 
         $value = $this->filterApplier->applyFromRawParam(

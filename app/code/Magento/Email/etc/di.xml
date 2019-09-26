@@ -75,7 +75,8 @@
     <type name="Magento\Framework\Filter\Template">
         <arguments>
             <argument name="directiveProcessors" xsi:type="array">
-                <item name="legacy" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
+                <item name="simple" sortOrder="100" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\SimpleDirective</item>
+                <item name="legacy" sortOrder="200" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
             </argument>
         </arguments>
     </type>

@@ -14,8 +14,6 @@ use Magento\Framework\Filter\VariableResolverInterface;
 
 /**
  * Will only render the the content of the directive if the condition is truthy
- *
- * @api
  */
 class DependDirective implements DirectiveProcessorInterface
 {

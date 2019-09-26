@@ -15,8 +15,6 @@ use Magento\Framework\Filter\VariableResolverInterface;
 
 /**
  * Resolves var directives
- *
- * @api
  */
 class VarDirective implements DirectiveProcessorInterface
 {
