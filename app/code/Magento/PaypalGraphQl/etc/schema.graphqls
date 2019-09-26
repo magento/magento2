@@ -8,7 +8,7 @@ type Query {
 
 type Mutation {
     createPaypalExpressToken(input: PaypalExpressTokenInput!): PaypalExpressToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PaypalExpressToken") @doc(description:"Initiates an Express Checkout transaction and receives a token. Use this mutation for Express Checkout and Payments Standard payment methods.")
-    createPayflowProToken(input: PayflowProTokenInput!): PayflowProToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiates a transaction and receives a token. Use this mutation for Payflow Pro and Payments Pro payment methods")
+    createPayflowProToken(input: PayflowProTokenInput!): CreatePayflowProTokenOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProToken") @doc(description: "Initiates a transaction and receives a token. Use this mutation for Payflow Pro and Payments Pro payment methods")
     handlePayflowProResponse(input: PayflowProResponseInput!): PayflowProResponseOutput @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowProResponse") @doc(description: "Handles payment response and saves payment in Quote. Use this mutations for Payflow Pro and Payments Pro payment methods.")
 }
 
@@ -112,7 +112,15 @@ input PayflowProUrlInput @doc(description:"A set of relative URLs that PayPal wi
     error_url: String! @doc(description:"The relative URL of the transaction error page that PayPal will redirect to upon payment error. If the full URL to this page is https://www.example.com/paypal/action/error.html, the relative URL is paypal/action/error.html.")
 }
 
-type PayflowProToken @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
+type PayflowProToken @deprecated(reason: "Use CreatePayflowProTokenOutput instead.") @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
+    secure_token: String!
+    secure_token_id: String!
+    response_message: String!
+    result: Int!
+    result_code: Int!
+}
+
+type CreatePayflowProTokenOutput @doc(description: "Contains the secure information used to authorize transaction. Applies to Payflow Pro and Payments Pro payment methods.") {
     secure_token: String!
     secure_token_id: String!
     response_message: String!
