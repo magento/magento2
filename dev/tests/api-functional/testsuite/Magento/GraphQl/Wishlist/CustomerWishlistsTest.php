@@ -67,11 +67,10 @@ QUERY;
             $this->getCustomerAuthHeaders('customer@example.com', 'password')
         );
 
-        $this->assertEquals($wishlistItem->getItemsCount(), $response['wishlists'][0]['items_count']);
-        $this->assertEquals($wishlistItem->getSharingCode(), $response['wishlists'][0]['sharing_code']);
-        $this->assertEquals($wishlistItem->getUpdatedAt(), $response['wishlists'][0]['updated_at']);
-        $this->assertEquals('simple', $response['wishlists'][0]['items'][0]['product']['sku']);
-
+        $this->assertEquals($wishlistItem->getItemsCount(), $response['customer']['wishlists'][0]['items_count']);
+        $this->assertEquals($wishlistItem->getSharingCode(), $response['customer']['wishlists'][0]['sharing_code']);
+        $this->assertEquals($wishlistItem->getUpdatedAt(), $response['customer']['wishlists'][0]['updated_at']);
+        $this->assertEquals('simple', $response['customer']['wishlists'][0]['items'][0]['product']['sku']);
     }
 
     /**
