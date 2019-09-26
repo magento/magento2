@@ -51,7 +51,7 @@
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
-            <createData entity="ApiGroupedProduct" stepKey="product"/>
+            <createData entity="ApiGroupedProductAndUnderscoredSku" stepKey="product"/>
             <createData entity="OneSimpleProductLink" stepKey="addProductOne">
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple1"/>

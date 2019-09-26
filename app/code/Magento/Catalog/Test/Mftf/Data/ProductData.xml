@@ -438,6 +438,20 @@
         <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
         <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
     </entity>
+    <entity name="ApiProductWithDescriptionAndUnderscoredSku" type="product">
+        <data key="sku" unique="suffix">api_simple_product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
     <entity name="_newDefaultProduct" type="product">
         <data key="sku" unique="suffix">testSku</data>
         <data key="type_id">simple</data>
@@ -519,6 +533,20 @@
     </entity>
     <entity name="ApiVirtualProductWithDescription" type="product">
         <data key="sku" unique="suffix">api-virtual-product</data>
+        <data key="type_id">virtual</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Virtual Product</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">api-virtual-product</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductShortDescription</requiredEntity>
+    </entity>
+    <entity name="ApiVirtualProductWithDescriptionAndUnderscoredSku" type="product">
+        <data key="sku" unique="suffix">api_virtual_product</data>
         <data key="type_id">virtual</data>
         <data key="attribute_set_id">4</data>
         <data key="visibility">4</data>

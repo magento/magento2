@@ -104,7 +104,7 @@
             </createData>
 
             <!-- TODO: Move configurable product creation to an actionGroup when MQE-697 is fixed -->
-            <createData entity="ApiConfigurableProductWithDescription" stepKey="product"/>
+            <createData entity="ApiConfigurableProductWithDescriptionUnderscoredSku" stepKey="product"/>
 
             <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
 
