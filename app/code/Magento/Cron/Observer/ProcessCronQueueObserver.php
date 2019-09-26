@@ -311,8 +311,9 @@ class ProcessCronQueueObserver implements ObserverInterface
 
         $schedule
             ->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
-            ->setPid(getmypid())
-            ->setPidHost(gethostname())
+            ->setProcessId(getmypid())
+            ->setProcessHostname(gethostname())
+            ->setProcessStartedAt(strftime('%Y-%m-%d %H:%M', $currentTime))
             ->save();
 
         $this->startProfiling();
@@ -666,39 +667,51 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return void
      */
-    private function cleanupOrphanJobs($groupId)
+    public function cleanupOrphanJobs($groupId)
     {
         $runningJobs = $this->getRunningJobs($groupId);
 
         if ($runningJobs) {
             $host = gethostname();
-            $pid = getmypid();
             $count = 0;
 
             foreach($runningJobs as $runningJob) {
-                var_dump($runningJob->getData());
-                if ($runningJob->getPidHost() != $host) {
-                    //job run/ran on a different host
-                    //@todo may need to close orphan job
-                    continue;
-                } else {
-                    if (posix_kill(intval($runningJob->getPid()), 0)) {
-                        //PID active in the host
-                        //@todo implement start time check for process
-                        $startTimeMatch = true;
 
-                        if ($startTimeMatch) {
-                            //process and job start time are matching - 99.99% sure that job still active
-                            continue;
-                        } else {
-                            //process and job start time are mismatching
-                            $this->closeOrphanJob($runningJob);
-                            $count++;
-                        }
+                if ($runningJob->getProcessHostname() != $host) {
+                    //job run/ran on a different host
+                    //@todo setting on backend to verify hostname
+                    continue;
+                }
+
+                if (posix_kill(intval($runningJob->getProcessId()), 0)) {
+                    //Process with given ID still active on the host
+
+                    //need to collect ps output to file because php trims the output otherwise
+                    exec(
+                        "ps aux | grep --color=none " . $runningJob->getProcessId()
+                        . " > /tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt"
+                    );
+                    $execOutput = explode(
+                        "\n",
+                        file_get_contents("/tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt")
+                    );
+                    unlink("/tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt");
+
+                    if ($execOutput && $this->isTheSameProcess($execOutput, $runningJob)) {
+                        //process and job start time are matching - 99.99% sure that job still active
+                        continue;
                     } else {
-                        $this->closeOrphanJob($runningJob);
+                        //different process or start time are mismatching
+                        $this->closeOrphanJob(
+                            $runningJob,
+                            "Mismatching owner process or process starting time"
+                        );
                         $count++;
                     }
+                } else {
+                    //Process not exists on host
+                    $this->closeOrphanJob($runningJob);
+                    $count++;
                 }
             }
 
@@ -709,20 +722,75 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
+     * Check if process (on OS) and Schedule is the same (start time and command)
+     *
+     * @param array $execOutput
+     *  @param Schedule $runningJob
+     * @return boolean
+     */
+    private function isTheSameProcess(array $execOutput, Schedule $runningJob) {
+        foreach($execOutput as $a => $line) {
+            if (!$line) {
+                continue;
+            }
+            $line = preg_split('/\s+/', $line, 11);
+            if ((int) trim($line[1]) == $runningJob->getProcessId() &&
+                $this->isCronCommand(trim($line[10]))) {
+
+                $processStartTime = trim($line[9]) == "0:00"
+                    ? strtotime(trim($line[8]))
+                    : strtotime(trim($line[8])." ".trim($line[9]));
+
+                if (trim($line[9]) == "0:00") {
+                    $processStartTime = strftime(
+                        '%Y-%m-%d %H:%M:00',strtotime(trim($line[8]))
+                    );
+                } else {
+                    $processStartTime = strftime(
+                        '%Y-%m-%d %H:%M:00',strtotime(trim($line[8])." ".trim($line[9]))
+                    );
+                }
+
+                //@todo implement
+                if ($processStartTime == $runningJob->getProcessStartedAt()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if command is one of Magento2 cron processes
+     *
+     * @param string $command
+     * $return boolean
+     */
+    public function isCronCommand(string $command) {
+        if (preg_match('(magento.+cron\:run|magento2\/update\/cron.php)', $command) === 1) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Mark orphan job as ended with error
      *
      * This can happen when cron process die on the server during runtime (eg. server restart)
      *
      * @param Schedule $orphanJob
+     * @param string $message
      * @return Schedule
      */
-    private function closeOrphanJob($orphanJob) {
+    protected function closeOrphanJob($orphanJob, string $message = "") {
         return $orphanJob
             ->setStatus(Schedule::STATUS_ERROR)
-            ->setMessages(sprintf(
+            ->setMessages($message ? : sprintf(
                 "Owner process (%d) not available on host (%s) any more",
-                $orphanJob->getPid(),
-                $orphanJob->getPidHost()
+                $orphanJob->getProcessId(),
+                $orphanJob->getProcessHostname()
             ))
             ->save();
     }

@@ -17,8 +17,12 @@
                 comment="Created At"/>
         <column xsi:type="timestamp" name="scheduled_at" on_update="false" nullable="true" comment="Scheduled At"/>
         <column xsi:type="timestamp" name="executed_at" on_update="false" nullable="true" comment="Executed At"/>
-        <column xsi:type="int" name="pid" padding="10" unsigned="true" nullable="false" comment="Process Id of host process"/>
-        <column xsi:type="varchar" name="pid_host" nullable="false" length="255" default="" comment="Host name where the process run "/>
+        <column xsi:type="int" name="process_id" padding="10" unsigned="true" nullable="false"
+                comment="Process Id of host process"/>
+        <column xsi:type="varchar" name="process_hostname" nullable="false" length="255" default=""
+                comment="Host name where the process run "/>
+        <column xsi:type="timestamp" name="process_started_at" on_update="false" nullable="true"
+                comment="Process started at"/>
         <column xsi:type="timestamp" name="finished_at" on_update="false" nullable="true" comment="Finished At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="schedule_id"/>
