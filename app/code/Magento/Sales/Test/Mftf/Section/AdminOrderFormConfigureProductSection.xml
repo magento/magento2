@@ -9,7 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormConfigureProductSection">
-        <element name="configure" type="button" selector="//a[@product_id='{{productId}}']" parameterized="true"/>
         <element name="optionSelect" type="select" selector="//div[contains(@class,'product-options')]//select[//label[text() = '{{option}}']]" parameterized="true"/>
         <element name="optionSelectNew" type="select" selector="//label[text()='{{option1}}']/following-sibling::div/select" parameterized="true"/>
         <element name="quantity" type="input" selector="#product_composite_configure_input_qty"/>

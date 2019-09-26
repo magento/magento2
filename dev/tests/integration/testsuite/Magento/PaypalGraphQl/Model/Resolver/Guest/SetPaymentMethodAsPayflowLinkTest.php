@@ -72,9 +72,9 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
       payment_method: {
           code: "$paymentMethod"
             payflow_link: {           
-               return_url:"http://magento.com/paypal/payflow/link/success"
-               cancel_url:"http://magento.com/paypal/payflow/link/cancel"
-               error_url:"http://magento.com/paypal/payflow/link/error"
+               return_url:"paypal/payflow/link/success"
+               cancel_url:"paypal/payflow/link/cancel"
+               error_url:"paypal/payflow/link/error"
             }
       }
   }) {    
@@ -105,15 +105,15 @@ QUERY;
 
         $payment = $quote->getPayment();
         $this->assertEquals(
-            "http://magento.com/paypal/payflow/link/cancel",
+            "paypal/payflow/link/cancel",
             $payment->getAdditionalInformation('cancel_url')
         );
         $this->assertEquals(
-            "http://magento.com/paypal/payflow/link/success",
+            "paypal/payflow/link/success",
             $payment->getAdditionalInformation('return_url')
         );
         $this->assertEquals(
-            "http://magento.com/paypal/payflow/link/error",
+            "paypal/payflow/link/error",
             $payment->getAdditionalInformation('error_url')
         );
     }
@@ -146,9 +146,9 @@ QUERY;
       payment_method: {
           code: "$paymentMethod"
             payflow_link: {           
-               return_url:"http://magento.com/paypal/payflow/link/sucess"
-               cancel_url:"http://magento.com/paypal/payflow/link/cancel"
-               error_url:"/not/a/validUrl"
+               return_url:"http://magento.com/paypal/payflow/link/success"
+               cancel_url:"paypal/payflow/link/cancel"
+               error_url:"paypal/payflow/link/error"
             }
       }
   }) {    
@@ -165,9 +165,9 @@ QUERY;
         $responseData = $this->json->unserialize($response->getContent());
 
         $this->assertArrayHasKey('errors', $responseData);
-        $expectedExceptionMessage = "Invalid URL '/not/a/validUrl'.";
+        $expectedExceptionMessage = "Invalid Url.";
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

@@ -11,6 +11,10 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 *	[Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
+## Learn More About GraphQL in Magento 2
+
+* [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.3/graphql/index.html)
+
 <h2>Contributing to the Magento 2 Code Base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
@@ -20,10 +24,10 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html>
-[2]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report>
-[3]: <https://github.com/magento/magento2/issues>
-[4]: <https://devdocs.magento.com>
+[1]: https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html
+[2]: https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report
+[3]: https://github.com/magento/magento2/issues
+[4]: https://devdocs.magento.com
 
 <h3>Community Maintainers</h3>
 The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.

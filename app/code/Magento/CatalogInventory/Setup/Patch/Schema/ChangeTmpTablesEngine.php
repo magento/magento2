@@ -35,7 +35,10 @@ class ChangeTmpTablesEngine implements SchemaPatchInterface
     {
         $this->schemaSetup->startSetup();
 
-        $this->schemaSetup->getConnection()->changeTableEngine('cataloginventory_stock_status_tmp', 'InnoDB');
+        $tableName = $this->schemaSetup->getTable('cataloginventory_stock_status_tmp');
+        if ($this->schemaSetup->getConnection()->isTableExists($tableName)) {
+            $this->schemaSetup->getConnection()->changeTableEngine($tableName, 'InnoDB');
+        }
 
         $this->schemaSetup->endSetup();
     }
