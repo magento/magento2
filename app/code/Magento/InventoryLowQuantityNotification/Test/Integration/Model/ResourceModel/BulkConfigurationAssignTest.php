@@ -40,25 +40,6 @@ class BulkConfigurationAssignTest extends TestCase
      * @magentoDbIsolation enabled
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testAssign()
-    {
-        $this->bulkConfigurationAssign->execute(['SKU-1'], ['us-1']);
-        $sourceConfig = $this->getSourceItemConfiguration->execute('us-1', 'SKU-1');
-
-        self::assertNull(
-            $sourceConfig->getNotifyStockQty(),
-            'Low stock notification configuration was not defaulted during assign'
-        );
-    }
-
-    /**
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/sources.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/products.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryApi/Test/_files/source_items.php
-     * @magentoDataFixture ../../../../app/code/Magento/InventoryLowQuantityNotificationApi/Test/_files/source_item_configuration.php
-     * @magentoDbIsolation enabled
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function testAssignOnExisting()
     {
         $this->bulkConfigurationAssign->execute(['SKU-1'], ['eu-1']);

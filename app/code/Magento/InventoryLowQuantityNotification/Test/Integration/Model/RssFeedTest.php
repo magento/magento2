@@ -127,18 +127,19 @@ class RssFeedTest extends TestCase
     public function getRssDataDataProvider(): array
     {
         return [
-            ['SKU-1', 'eu-disabled', 12, 3],
-            ['SKU-1', 'eu-disabled', 6, 2],
-            ['SKU-1', 'eu-disabled', null, 2],
-            ['SKU-1', 'eu-1', 6, 3],
-            ['SKU-1', 'eu-1', 5.4, 2],
-            ['SKU-1', 'eu-1', null, 3],
-            ['SKU-2', 'us-1', 8, 4],
-            ['SKU-2', 'us-1', 1, 3],
-            ['SKU-2', 'us-1', null, 4],
-            ['SKU-3', 'eu-2', 10, 3],
-            ['SKU-3', 'eu-2', 5, 2],
-            ['SKU-3', 'eu-2', null, 3],
+            ['SKU-1', 'eu-disabled', 12, 4],
+            ['SKU-1', 'eu-disabled', 6, 3],
+            ['SKU-1', 'eu-disabled', null, 3],
+            ['SKU-1', 'eu-1', 6, 4],
+            ['SKU-1', 'eu-1', 5.4, 3],
+            ['SKU-1', 'eu-1', null, 4],
+            ['SKU-1', 'eu-2', 2, 3],
+            ['SKU-2', 'us-1', 8, 5],
+            ['SKU-2', 'us-1', 1, 4],
+            ['SKU-2', 'us-1', null, 5],
+            ['SKU-3', 'eu-2', 10, 4],
+            ['SKU-3', 'eu-2', 5, 3],
+            ['SKU-3', 'eu-2', null, 4],
         ];
     }
 }
