@@ -105,7 +105,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @throws \Exception if metadataPool doesn't contain metadata for ProductInterface
      * @throws \DomainException
      */
-    private function getProductIdsWithParents(array $childProductIds)
+    private function getProductIdsWithParents(array $childProductIds): array
     {
         /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
         $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
@@ -220,28 +220,28 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * Returns a list of category ids which are assigned to product ids in the index
      *
      * @param array $productIds
-     * @return \Magento\Framework\Indexer\CacheContext
+     * @return array
      */
-    private function getCategoryIdsFromIndex(array $productIds)
+    private function getCategoryIdsFromIndex(array $productIds): array
     {
         $categoryIds = [];
         foreach ($this->storeManager->getStores() as $store) {
-            $categoryIds = array_merge(
-                $categoryIds,
-                $this->connection->fetchCol(
-                    $this->connection->select()
-                        ->from($this->getIndexTable($store->getId()), ['category_id'])
-                        ->where('product_id IN (?)', $productIds)
-                        ->distinct()
-                )
+            $storeCategories = $this->connection->fetchCol(
+                $this->connection->select()
+                    ->from($this->getIndexTable($store->getId()), ['category_id'])
+                    ->where('product_id IN (?)', $productIds)
+                    ->distinct()
             );
+            $categoryIds[] = $storeCategories;
         }
-        $parentCategories = $categoryIds;
+        $categoryIds = array_merge(...$categoryIds);
+
+        $parentCategories = [$categoryIds];
         foreach ($categoryIds as $categoryId) {
             $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));
-            $parentCategories = array_merge($parentCategories, $parentIds);
+            $parentCategories[] = $parentIds;
         }
-        $categoryIds = array_unique($parentCategories);
+        $categoryIds = array_unique(array_merge(...$parentCategories));
 
         return $categoryIds;
     }
