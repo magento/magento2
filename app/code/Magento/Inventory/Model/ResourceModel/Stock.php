@@ -33,5 +33,11 @@ class Stock extends AbstractDb
     protected function _construct()
     {
         $this->_init(self::TABLE_NAME_STOCK, StockInterface::STOCK_ID);
+        $this->addUniqueField(
+            [
+                'field' => StockInterface::NAME,
+                'title' => 'Name'
+            ]
+        );
     }
 }
