@@ -72,7 +72,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                         </strong>
                         <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
                         <?= /* @noEscape */ $block->getProductPrice($_product) ?>
-                        <?php if ($_product->isAvailable()): ?>
+                        <?php if ($_product->isAvailable()) :?>
                             <?= $block->getProductDetailsHtml($_product) ?>
                         <?php endif; ?>
 
