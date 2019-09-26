@@ -127,6 +127,11 @@ class Tiers
      */
     public function isLoaded(): bool
     {
+        $numFilterProductIds = count(array_unique($this->filterProductIds));
+        if ($numFilterProductIds > count($this->products)) {
+            //New products were added to the filter after load, so we should reload
+            return false;
+        }
         return $this->loaded;
     }
 
@@ -146,10 +151,26 @@ class Tiers
         $productCollection->load();
         $productCollection->addTierPriceDataByGroupId($this->customerGroupId);
 
+        $this->setProducts($productCollection);
+        $this->loaded = true;
+    }
+
+    /**
+     * Set products from collection
+     *
+     * @param Collection $productCollection
+     */
+    private function setProducts(Collection $productCollection): void
+    {
+        $this->products = [];
+
         foreach ($productCollection as $product) {
             $this->products[$product->getId()] = $product;
         }
 
-        $this->loaded = true;
+        $missingProducts = array_diff($this->filterProductIds, array_keys($this->products));
+        foreach (array_unique($missingProducts) as $missingProductId) {
+            $this->products[$missingProductId] = null;
+        }
     }
 }
