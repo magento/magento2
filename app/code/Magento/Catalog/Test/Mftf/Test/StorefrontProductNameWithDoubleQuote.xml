@@ -41,6 +41,9 @@
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Check product in category listing-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc(SimpleProductNameWithDoubleQuote.name, ProductImage.fileName)}}" stepKey="seeCorrectImageCategoryPage"/>
@@ -88,6 +91,9 @@
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategory"/>
         </after>
 
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Check product in category listing-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategoryOne.name$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitforCategoryPageToLoad"/>
@@ -111,7 +117,7 @@
         <waitForPageLoad stepKey="waitforCategoryPageToLoad2"/>
 
         <!--Open product display page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('2')}}" stepKey="goToProduct2DisplayPage"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="goToProduct2DisplayPage"/>
         <!--<click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" stepKey="clickProductToGoProductPage"/>-->
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad3"/>
 
