@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Block\Product\Compare;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Model\Context;
 use Magento\Framework\App\Action\Action;
 
@@ -163,7 +164,9 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 
             $this->_items->addAttributeToSelect(
                 $this->_catalogConfig->getProductAttributes()
-            )->loadComparableAttributes();
+            )
+                ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+                ->loadComparableAttributes();
         }
 
         return $this->_items;
