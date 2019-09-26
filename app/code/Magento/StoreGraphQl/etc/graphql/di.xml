@@ -23,4 +23,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="store_name" xsi:type="string">store/information/name</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -27,7 +27,6 @@
         <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToConfigGeneralPage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
     </actionGroup>
-
     <actionGroup name="SelectTopDestinationsCountry">
         <annotations>
             <description>Selects the provided Countries under 'Top destinations' on the 'General' section of the 'Configuration' page. Clicks on the Save button.</description>
