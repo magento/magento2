@@ -313,7 +313,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             ->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
             ->setProcessId(getmypid())
             ->setProcessHostname(gethostname())
-            ->setProcessStartedAt(strftime('%Y-%m-%d %H:%M', $currentTime))
+            ->setProcessStartedAt(strftime('%Y-%m-%d %H:%M:00', $currentTime))
             ->save();
 
         $this->startProfiling();
@@ -406,7 +406,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
      */
-    private function getRunningJobs($groupId)
+    public function getRunningJobs($groupId)
     {
         $jobs = $this->_config->getJobs();
         $runningJobs = $this->_scheduleFactory->create()->getCollection();
@@ -672,14 +672,13 @@ class ProcessCronQueueObserver implements ObserverInterface
         $runningJobs = $this->getRunningJobs($groupId);
 
         if ($runningJobs) {
-            $host = gethostname();
             $count = 0;
 
             foreach($runningJobs as $runningJob) {
 
-                if ($runningJob->getProcessHostname() != $host) {
-                    //job run/ran on a different host
-                    //@todo setting on backend to verify hostname
+                if ($this->getCheckHostConfigurationValue() &&
+                    $runningJob->getProcessHostname() != gethostname()) {
+                    //job run/ran on a different host but do not need to check
                     continue;
                 }
 
@@ -751,7 +750,6 @@ class ProcessCronQueueObserver implements ObserverInterface
                     );
                 }
 
-                //@todo implement
                 if ($processStartTime == $runningJob->getProcessStartedAt()) {
                     return true;
                 } else {
@@ -848,6 +846,20 @@ class ProcessCronQueueObserver implements ObserverInterface
     {
         return $this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . $path,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Get CheckHost Configuration Value. Used to determine if need to clean
+     * orphan jobs if they ar running on different host
+     *
+     * @return int
+     */
+    private function getCheckHostConfigurationValue()
+    {
+        return $this->_scopeConfig->getValue(
+            'system/cron/additional_settings/check_host',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
