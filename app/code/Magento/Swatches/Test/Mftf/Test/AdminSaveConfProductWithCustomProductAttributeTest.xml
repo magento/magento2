@@ -18,6 +18,7 @@
             <testCaseId value="MC-13641"/>
             <useCaseId value="MC-10968"/>
             <group value="developer_mode_only"/>
+            <group value="Swatches"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
