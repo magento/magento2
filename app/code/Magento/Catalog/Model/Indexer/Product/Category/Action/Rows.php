@@ -123,8 +123,12 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             );
 
         $parentProductIds = $this->connection->fetchCol($select);
+        $ids = array_unique(array_merge($childProductIds, $parentProductIds));
+        foreach ($ids as $key => $id) {
+            $ids[$key] = (int) $id;
+        }
 
-        return array_unique(array_merge($childProductIds, $parentProductIds));
+        return $ids;
     }
 
     /**
@@ -175,7 +179,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         $select = parent::getNonAnchorCategoriesSelect($store);
-        return $select->where('ccp.product_id IN (?) OR relation.child_id IN (?)', $this->limitationByProducts);
+        return $select->where('ccp.product_id IN (?)', $this->limitationByProducts);
     }
 
     /**
