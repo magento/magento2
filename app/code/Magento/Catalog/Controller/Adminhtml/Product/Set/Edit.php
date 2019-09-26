@@ -30,7 +30,7 @@ class Edit extends Set implements HttpGetActionInterface
     /**
      * @var AttributeSetRepositoryInterface
      */
-    protected $attributeSetRepository;
+    private $attributeSetRepository;
 
     /**
      * @param Context $context
