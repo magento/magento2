@@ -31,7 +31,7 @@ class DiscountTest extends TestCase
      */
     public function testGetPriceDiscount($regularPrice, $finalPrice, $expectedAmountOff, $expectedPercentOff)
     {
-        $discountResult = $this->discount->getPriceDiscount($regularPrice, $finalPrice);
+        $discountResult = $this->discount->getDiscountByDifference($regularPrice, $finalPrice);
 
         $this->assertEquals($expectedAmountOff, $discountResult['amount_off']);
         $this->assertEquals($expectedPercentOff, $discountResult['percent_off']);

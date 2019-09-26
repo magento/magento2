@@ -24,11 +24,26 @@ class Discount
      * @param float $finalPrice
      * @return array
      */
-    public function getPriceDiscount(float $regularPrice, float $finalPrice): array
+    public function getDiscountByDifference(float $regularPrice, float $finalPrice): array
     {
         return [
             'amount_off' => $this->getPriceDifferenceAsValue($regularPrice, $finalPrice),
             'percent_off' => $this->getPriceDifferenceAsPercent($regularPrice, $finalPrice)
+        ];
+    }
+
+    /**
+     * Get formatted discount based on percent off
+     *
+     * @param float $regularPrice
+     * @param float $percentOff
+     * @return array
+     */
+    public function getDiscountByPercent(float $regularPrice, float $percentOff): array
+    {
+        return [
+            'amount_off' => $this->getPercentDiscountAsValue($regularPrice, $percentOff),
+            'percent_off' => $percentOff
         ];
     }
 
@@ -64,5 +79,20 @@ class Discount
         }
 
         return round(($difference / $regularPrice) * 100, 2);
+    }
+
+    /**
+     * Get amount difference that percentOff represents
+     *
+     * @param float $regularPrice
+     * @param float $percentOff
+     * @return float
+     */
+    private function getPercentDiscountAsValue(float $regularPrice, float $percentOff): float
+    {
+        $percentDecimal = $percentOff / 100;
+        $valueDiscount = $regularPrice * $percentDecimal;
+
+        return round($valueDiscount, 2);
     }
 }

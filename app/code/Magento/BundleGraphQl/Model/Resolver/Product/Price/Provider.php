@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\BundleGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Bundle\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
@@ -55,6 +57,9 @@ class Provider implements ProviderInterface
      */
     public function getRegularPrice(SaleableInterface $product): AmountInterface
     {
+        if ($product->getPriceType() == Price::PRICE_TYPE_FIXED) {
+            return $product->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
+        }
         return $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
     }
 }

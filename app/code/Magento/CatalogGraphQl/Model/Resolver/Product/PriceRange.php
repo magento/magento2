@@ -119,7 +119,7 @@ class PriceRange implements ResolverInterface
                 'value' => $finalPrice,
                 'currency' => $store->getCurrentCurrencyCode()
             ],
-            'discount' => $this->discount->getPriceDiscount($regularPrice, $finalPrice),
+            'discount' => $this->discount->getDiscountByDifference($regularPrice, $finalPrice),
         ];
     }
 }

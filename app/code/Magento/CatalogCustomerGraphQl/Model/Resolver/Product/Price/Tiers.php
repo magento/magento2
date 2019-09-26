@@ -117,7 +117,7 @@ class Tiers
         }
         $product = $this->products[$productId];
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
-        return $priceProvider->getMinimalRegularPrice($product)->getValue();
+        return $priceProvider->getRegularPrice($product)->getValue();
     }
 
     /**
@@ -142,6 +142,7 @@ class Tiers
         $productCollection = $this->collectionFactory->create();
         $productCollection->addFieldToFilter($productIdField, ['in' => $this->filterProductIds]);
         $productCollection->addAttributeToSelect('price');
+        $productCollection->addAttributeToSelect('price_type');
         $productCollection->load();
         $productCollection->addTierPriceDataByGroupId($this->customerGroupId);
 

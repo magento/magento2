@@ -112,7 +112,6 @@ class PriceTiers implements ResolverInterface
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
 
-
                 return $this->formatProductTierPrices($tierPrices, $productPrice, $store);
             }
         );
@@ -131,8 +130,15 @@ class PriceTiers implements ResolverInterface
         $tiers = [];
 
         foreach ($tierPrices as $tierPrice) {
+            $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
+            if ($percentValue && is_numeric($percentValue)) {
+                $discount = $this->discount->getDiscountByPercent($productPrice, (float)$percentValue);
+            } else {
+                $discount = $this->discount->getDiscountByDifference($productPrice, (float)$tierPrice->getValue());
+            }
+
             $tiers[] = [
-                "discount" => $this->discount->getPriceDiscount($productPrice, (float)$tierPrice->getValue()),
+                "discount" => $discount,
                 "quantity" => $tierPrice->getQty(),
                 "final_price" => [
                     "value" => $tierPrice->getValue(),
