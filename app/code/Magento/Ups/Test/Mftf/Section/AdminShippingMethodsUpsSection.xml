@@ -13,7 +13,6 @@
         <element name="carriersUpsType" type="select" selector="#carriers_ups_type"/>
         <element name="selectedUpsType" type="text" selector="#carriers_ups_type option[selected]"/>
         <element name="carriersUPSActive" type="input" selector="#carriers_ups_active_inherit"/>
-        <element name="carriersUPSActiveRMA" type="select" selector="#carriers_ups_active_rma"/>
         <element name="carriersUPSTypeSystem" type="input" selector="#carriers_ups_type_inherit"/>
         <element name="carriersUPSAccountLive" type="input" selector="#carriers_ups_is_account_live_inherit"/>
         <element name="carriersUPSGatewayXMLUrl" type="input" selector="#carriers_ups_gateway_xml_url_inherit"/>

@@ -16,8 +16,6 @@
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="waitDHLTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" userInput="disabled" stepKey="grabDHLActiveDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveDisabled" stepKey="assertDHLActiveDisabled"/>
-        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActiveRMA}}" userInput="disabled" stepKey="grabDHLActiveRMADisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveRMADisabled" stepKey="assertDHLActiveRMADisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLTitle}}" userInput="disabled" stepKey="grabDHLTitleDisabled"/>
         <assertEquals expected='true' expectedType="string" actual="$grabDHLTitleDisabled" stepKey="assertDHLTitleDisabled"/>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="disabled" stepKey="grabDHLAccessIdDisabled"/>
