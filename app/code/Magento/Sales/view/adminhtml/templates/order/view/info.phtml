@@ -23,6 +23,7 @@ $orderStoreDate = $block->formatDate(
 );
 
 $customerUrl = $block->getCustomerViewUrl();
+
 $allowedAddressHtmlTags = ['b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul'];
 ?>
 
@@ -99,7 +100,7 @@ $allowedAddressHtmlTags = ['b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub
                         <td><?= $block->escapeHtml($order->getBaseToGlobalRate()) ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) : ?>
+                <?php if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode() && $order->getGlobalCurrencyCode() != $order->getOrderCurrencyCode()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('%1 / %2 rate:', $order->getOrderCurrencyCode(), $order->getBaseCurrencyCode())) ?></th>
                         <td><?= $block->escapeHtml($order->getBaseToOrderRate()) ?></td>
