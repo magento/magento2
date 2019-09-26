@@ -52,6 +52,9 @@ class Role extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -61,6 +64,9 @@ class Role extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
