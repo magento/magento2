@@ -9,11 +9,6 @@
     <body>
         <referenceBlock name="head.additional">
             <block class="Magento\Translation\Block\Html\Head\Config" name="translate-config"/>
-            <block name="translation_dictionary" template="Magento_Translation::dictionary.phtml" before="-">
-                <arguments>
-                    <argument name="dictionary_view_model" xsi:type="object">Magento\Translation\ViewModel\Dictionary</argument>
-                </arguments>
-            </block>
         </referenceBlock>
     </body>
 </page>
