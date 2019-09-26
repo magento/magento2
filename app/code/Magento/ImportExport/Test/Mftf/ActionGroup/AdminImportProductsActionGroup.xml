@@ -60,16 +60,4 @@
         <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
-    <actionGroup name="AdminCheckDataForImportProductsActionGroup" extends="AdminImportProductsActionGroup">
-        <arguments>
-            <argument name="noteMessage" type="string" defaultValue="File must be saved in UTF-8 encoding for proper import"/>
-        </arguments>
-        <remove keyForRemoval="clickImportButton"/>
-        <remove keyForRemoval="AdminImportMainSectionLoad2"/>
-        <remove keyForRemoval="assertSuccessMessage"/>
-        <remove keyForRemoval="AdminMessagesSection"/>
-        <remove keyForRemoval="seeImportMessage"/>
-        <see selector="{{AdminImportHeaderSection.messageNote}}" userInput="{{noteMessage}}" after="attachFileForImport" stepKey="seeNoteMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="{{importMessage}}" stepKey="seeSuccessMessage"/>
-    </actionGroup>
 </actionGroups>
