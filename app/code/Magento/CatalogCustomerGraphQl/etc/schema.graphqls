@@ -1,0 +1,14 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    tier_prices: [ProductTierPrices] @doc(description: "An array of ProductTierPrices objects.") @resolver(class: "Magento\\CatalogCustomerGraphQl\\Model\\Resolver\\TierPrices")
+}
+
+type ProductTierPrices @doc(description: "The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
+    customer_group_id: String @doc(description: "The ID of the customer group.")
+    qty: Float @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
+    value: Float @doc(description: "The price of the fixed price item.")
+    percentage_value: Float @doc(description: "The percentage discount of the item.")
+    website_id: Float @doc(description: "The ID assigned to the website.")
+}

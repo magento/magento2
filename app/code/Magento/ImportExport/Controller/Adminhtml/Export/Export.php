@@ -5,13 +5,13 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\ImportExport\Model\Export as ExportModel;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
+use Magento\ImportExport\Model\Export as ExportModel;
 use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 
 /**
@@ -76,11 +76,16 @@ class Export extends ExportController implements HttpPostActionInterface
             try {
                 $params = $this->getRequest()->getParams();
 
+                if (!array_key_exists('skip_attr', $params)) {
+                    $params['skip_attr'] = [];
+                }
+
                 /** @var ExportInfoFactory $dataObject */
                 $dataObject = $this->exportInfoFactory->create(
                     $params['file_format'],
                     $params['entity'],
-                    $params['export_filter']
+                    $params['export_filter'],
+                    $params['skip_attr']
                 );
 
                 $this->messagePublisher->publish('import_export.export', $dataObject);

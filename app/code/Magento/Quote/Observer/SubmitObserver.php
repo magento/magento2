@@ -5,10 +5,13 @@
  */
 namespace Magento\Quote\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Sales\Model\Order\Invoice;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class responsive for sending order and invoice emails when it's created through storefront.
@@ -16,7 +19,7 @@ use Magento\Sales\Model\Order\Invoice;
 class SubmitObserver implements ObserverInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -31,12 +34,12 @@ class SubmitObserver implements ObserverInterface
     private $invoiceSender;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param OrderSender $orderSender
      * @param InvoiceSender $invoiceSender
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         OrderSender $orderSender,
         InvoiceSender $invoiceSender
     ) {
@@ -48,15 +51,15 @@ class SubmitObserver implements ObserverInterface
     /**
      * Send order and invoice email.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      *
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var  \Magento\Quote\Model\Quote $quote */
+        /** @var  Quote $quote */
         $quote = $observer->getEvent()->getQuote();
-        /** @var  \Magento\Sales\Model\Order $order */
+        /** @var  Order $order */
         $order = $observer->getEvent()->getOrder();
 
         /**
@@ -66,10 +69,9 @@ class SubmitObserver implements ObserverInterface
         if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
             try {
                 $this->orderSender->send($order);
-                foreach ($order->getInvoiceCollection()->getItems() as $invoice) {
-                    if ($invoice->getState() === Invoice::STATE_PAID) {
-                        $this->invoiceSender->send($invoice);
-                    }
+                $invoice = current($order->getInvoiceCollection()->getItems());
+                if ($invoice) {
+                    $this->invoiceSender->send($invoice);
                 }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
