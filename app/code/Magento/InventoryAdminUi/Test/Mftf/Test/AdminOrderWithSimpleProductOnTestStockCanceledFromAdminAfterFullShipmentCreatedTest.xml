@@ -21,7 +21,10 @@
         </annotations>
         <before>
             <remove keyForRemoval="additionalStock"/>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!--Assign Default Stock to Default Website.-->
