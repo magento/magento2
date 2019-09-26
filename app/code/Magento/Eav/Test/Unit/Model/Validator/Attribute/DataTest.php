@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Validator\Attribute;
 
 /**
@@ -22,10 +24,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->attrDataFactory = $this->getMockBuilder(\Magento\Eav\Model\AttributeDataFactory::class)
             ->setMethods(['create'])
             ->setConstructorArgs(
@@ -36,8 +44,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
 
-        $this->model = new \Magento\Eav\Model\Validator\Attribute\Data(
-            $this->attrDataFactory
+        $this->model = $this->objectManager->getObject(
+            \Magento\Eav\Model\Validator\Attribute\Data::class,
+            [
+                '_attrDataFactory' => $this->attrDataFactory
+            ]
         );
     }
 
@@ -468,7 +479,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $dataModel = $this->getMockBuilder(
             \Magento\Eav\Model\Attribute\Data\AbstractData::class
         )->disableOriginalConstructor()->setMethods(
-            ['validateValue']
+            ['setExtractedData', 'validateValue']
         )->getMockForAbstractClass();
         if ($argument) {
             $dataModel->expects(
@@ -509,24 +520,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $attributeData = ['attribute_code' => 'attribute', 'frontend_input' => 'text', 'is_visible' => true];
         $entity = $this->_getEntityMock();
         $attribute = $this->_getAttributeMock($attributeData);
-        $this->model->setAttributes([$attribute])->setData([]);
-        $dataModel = $this->getMockBuilder(\Magento\Eav\Model\Attribute\Data\AbstractData::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['validateValue'])
-            ->getMockForAbstractClass();
-        $dataModel->expects($this->once())
-            ->method('validateValue')
-            // only empty string
-            ->with(
-                $this->logicalAnd(
-                    $this->isEmpty(),
-                    $this->isType('string')
-                )
-            )->willReturn(true);
+        $dataModel = $this->_getDataModelMock(true, $this->logicalAnd($this->isEmpty(), $this->isType('string')));
+        $dataModel->expects($this->once())->method('setExtractedData')->with([])->willReturnSelf();
         $this->attrDataFactory->expects($this->once())
             ->method('create')
             ->with($attribute, $entity)
             ->willReturn($dataModel);
-        $this->assertEquals(true, $this->model->isValid($entity));
+        $this->model->setAttributes([$attribute])->setData([]);
+        $this->assertTrue($this->model->isValid($entity));
     }
 }
