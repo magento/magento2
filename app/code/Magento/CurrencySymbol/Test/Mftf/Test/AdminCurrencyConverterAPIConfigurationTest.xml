@@ -24,12 +24,10 @@
         </annotations>
         <before>
             <!--Set currency allow config-->
-            <comment userInput="Set currency allow config" stepKey="commentSetCurrencyAllowConfig"/>
             <magentoCLI command="config:set currency/options/allow RHD,CHW,CHE,AMD,EUR,USD" stepKey="setCurrencyAllow"/>
             <!--TODO: Add Api key-->
             <magentoCLI command="cache:flush" stepKey="clearCache"/>
             <!--Create product-->
-            <comment userInput="Create product" stepKey="commentCreateProduct"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -38,16 +36,13 @@
         </before>
         <after>
             <!--Set currency allow previous config-->
-            <comment userInput="Set currency allow previous config" stepKey="commentSetCurrencyAllowPreviousConfig"/>
             <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="setCurrencyAllow"/>
             <!--Delete created data-->
-            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Import rates from Currency Converter API-->
-        <comment userInput="Import rates from Currency Converter API" stepKey="commentImportRates"/>
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRates">
             <argument name="rateService" value="Currency Converter API"/>
@@ -61,7 +56,6 @@
         <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => RHD" rate' stepKey="seeRHDMessageAfterSave"/>
         <see selector="{{AdminMessagesSection.warningMessage}}" userInput='Please correct the input data for "USD => CHW" rate' stepKey="seeCHWMessageAfterSave"/>
         <!--Go to the Storefront and check currency rates-->
-        <comment userInput="Go to the Storefront and check currency rates" stepKey="commentCheckRatesStorefront"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchAMDCurrency">
@@ -73,11 +67,9 @@
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURInPrice"/>
         <!--Set allowed currencies greater then 10-->
-        <comment userInput="Set allowed currencies greater then 10" stepKey="commentSetAllowCurrency"/>
         <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setCurrencyAllow"/>
         <magentoCLI command="cache:flush" stepKey="clearCache"/>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
-        <comment userInput="Import rates from Currency Converter API with currencies greater then 10" stepKey="commentImportCurrencyRates"/>
         <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePageSecondTime"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
             <argument name="rateService" value="Currency Converter API"/>
