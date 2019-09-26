@@ -43,6 +43,7 @@
                 </field>
                 <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
             </group>
             <group id="currencyconverterapi" translate="label" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -54,6 +55,7 @@
                 </field>
                 <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
             </group>
             <group id="import" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">

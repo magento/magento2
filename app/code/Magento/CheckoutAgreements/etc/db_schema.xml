@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="checkout_agreement" resource="default" engine="innodb" comment="Checkout Agreement">
         <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Agreement Id"/>
+                comment="Agreement ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="text" name="content" nullable="true" comment="Content"/>
         <column xsi:type="varchar" name="content_height" nullable="true" length="25" comment="Content Height"/>
@@ -26,9 +26,9 @@
     </table>
     <table name="checkout_agreement_store" resource="default" engine="innodb" comment="Checkout Agreement Store">
         <column xsi:type="int" name="agreement_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Agreement Id"/>
+                comment="Agreement ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="agreement_id"/>
             <column name="store_id"/>
