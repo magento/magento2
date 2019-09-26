@@ -67,10 +67,9 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCronFirstTime"/>
-        <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="cronSchedule"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="cronRun"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Check storefront for description -->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="goToFirstProductPageOnStorefront"/>
