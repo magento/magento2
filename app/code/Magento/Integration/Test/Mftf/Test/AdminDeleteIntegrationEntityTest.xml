@@ -30,6 +30,7 @@
             <!-- Create New Integration -->
             <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createIntegration">
                 <argument name="name" value="Integration1"/>
+                <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
         </before>
         <after>
@@ -55,5 +56,6 @@
             <actionGroup ref="AssertDeletedIntegrationIsNotInGridActionGroup" stepKey="dontSeeIntegration">
                 <argument name="name" value="Integration1"/>
             </actionGroup>
+        <!-- END TEST BODY -->
     </test>
 </tests>

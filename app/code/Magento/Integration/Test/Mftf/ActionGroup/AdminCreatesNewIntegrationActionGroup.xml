@@ -13,9 +13,10 @@
     <actionGroup name="AdminCreatesNewIntegrationActionGroup">
         <arguments>
             <argument name="name" type="string"/>
+            <argument name="password" type="string"/>
         </arguments>
         <fillField stepKey="fillNameField" selector="{{AddNewIntegrationSection.name}}" userInput="{{name}}"/>
-        <fillField stepKey="fillAdminPasswordField" selector="{{AddNewIntegrationSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <fillField stepKey="fillAdminPasswordField" selector="{{AddNewIntegrationSection.password}}" userInput="{{password}}"/>
         <!--Click the "Save" Button -->
         <click stepKey="clickSaveButton" selector="{{AddNewIntegrationSection.saveButton}}"/>
     </actionGroup>
