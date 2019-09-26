@@ -10,7 +10,7 @@ Provides implementation for [JSON Web Tokens](https://tools.ietf.org/html/rfc751
 
 A custom private key generator and claims checkers can be configured via `di.xml` like in the following example:
 ```xml
-<virtualType name="Magento\CustomModule\Model\VirtualClaimCheckerManager" type="Magento\Framework\Jwt\ClaimCheckerManager">
+<virtualType name="Magento\CustomModule\Model\ClaimChecker\VirtualManager" type="Magento\Framework\Jwt\ClaimChecker\Manager">
     <arguments>
         <argument name="checkers" xsi:type="array">
             <item name="errorNumber" xsi:type="string">Magento\CustomModule\Model\Response\ClaimChecker\ErrorNumber</item>
@@ -26,7 +26,7 @@ A custom private key generator and claims checkers can be configured via `di.xml
 <virtualType name="Magento\CustomModule\Model\VirtualJwsManagement" type="Magento\Framework\Jwt\Jws\Management">
     <arguments>
         <argument name="keyGenerator" xsi:type="object">Magento\CustomModule\Model\ApiKeyGenerator</argument>
-        <argument name="claimCheckerManager" xsi:type="object">Magento\CustomModule\Model\VirtualClaimCheckerManager</argument>
+        <argument name="claimCheckerManager" xsi:type="object">Magento\CustomModule\Model\ClaimChecker\VirtualManager</argument>
     </arguments>
 </virtualType>
 ```

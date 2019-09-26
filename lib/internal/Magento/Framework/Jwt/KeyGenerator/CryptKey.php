@@ -40,7 +40,7 @@ class CryptKey implements KeyGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function create(): Jwk
+    public function generate(): Jwk
     {
         $secret = (string) $this->deploymentConfig->get('crypt/key');
         return $this->keyFactory->create($secret);

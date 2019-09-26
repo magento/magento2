@@ -39,7 +39,7 @@ class ApiKeyGenerator implements KeyGeneratorInterface
     /**
      * @inheritdoc
      */
-    public function create(): Jwk
+    public function generate(): Jwk
     {
         $key = $this->config->getApiKey();
         return $this->keyFactory->create($key);

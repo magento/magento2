@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Jwt;
+namespace Magento\Framework\Jwt\ClaimChecker;
 
 use Jose\Component\Checker\ExpirationTimeChecker;
 use Jose\Component\Checker\IssuedAtChecker;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Contains scenarios for testing claims validation.
  */
-class ClaimCheckerManagerTest extends TestCase
+class ManagerTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -46,9 +46,9 @@ class ClaimCheckerManagerTest extends TestCase
             'key' => 'value'
         ];
 
-        /** @var ClaimCheckerManager $claimCheckerManager */
+        /** @var Manager $claimCheckerManager */
         $claimCheckerManager = $this->objectManager->create(
-            ClaimCheckerManager::class,
+            Manager::class,
             [
                 'checkers' => [
                     IssuerChecker::class,
@@ -83,9 +83,9 @@ class ClaimCheckerManagerTest extends TestCase
             'exp' => 1593100372,
         ];
 
-        /** @var ClaimCheckerManager $claimCheckerManager */
+        /** @var Manager $claimCheckerManager */
         $claimCheckerManager = $this->objectManager->create(
-            ClaimCheckerManager::class,
+            Manager::class,
             [
                 'checkers' => [
                     IssuerChecker::class,
@@ -110,9 +110,9 @@ class ClaimCheckerManagerTest extends TestCase
             'exp' => 1561564380,
         ];
 
-        /** @var ClaimCheckerManager $claimCheckerManager */
+        /** @var Manager $claimCheckerManager */
         $claimCheckerManager = $this->objectManager->create(
-            ClaimCheckerManager::class,
+            Manager::class,
             [
                 'checkers' => [
                     ExpirationTimeChecker::class,

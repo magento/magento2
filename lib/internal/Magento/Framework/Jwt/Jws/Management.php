@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Jwt\Jws;
 
-use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Core\JWT as CoreJwt;
 use Jose\Component\Signature\JWSVerifier as NativeVerifier;
 use Magento\Framework\Jwt\AlgorithmFactory;
-use Magento\Framework\Jwt\ClaimCheckerManager;
+use Magento\Framework\Jwt\ClaimChecker\Manager;
 use Magento\Framework\Jwt\Data\Jwt;
 use Magento\Framework\Jwt\KeyGeneratorInterface;
 use Magento\Framework\Jwt\ManagementInterface;
@@ -48,29 +48,37 @@ class Management implements ManagementInterface
     private $json;
 
     /**
-     * @var ClaimCheckerManager
+     * @var Manager
      */
     private $claimCheckerManager;
+
+    /**
+     * @var BuilderFactory
+     */
+    private $builderFactory;
 
     /**
      * @param KeyGeneratorInterface $keyGenerator
      * @param SerializerInterface $serializer
      * @param AlgorithmFactory $algorithmFactory
      * @param Json $json
-     * @param ClaimCheckerManager $claimCheckerManager
+     * @param Manager $claimCheckerManager
+     * @param BuilderFactory $builderFactory
      */
     public function __construct(
         KeyGeneratorInterface $keyGenerator,
         SerializerInterface $serializer,
         AlgorithmFactory $algorithmFactory,
         Json $json,
-        ClaimCheckerManager $claimCheckerManager
+        Manager $claimCheckerManager,
+        BuilderFactory $builderFactory
     ) {
         $this->keyGenerator = $keyGenerator;
         $this->serializer = $serializer;
         $this->algorithmFactory = $algorithmFactory;
         $this->json = $json;
         $this->claimCheckerManager = $claimCheckerManager;
+        $this->builderFactory = $builderFactory;
     }
 
     /**
@@ -83,11 +91,11 @@ class Management implements ManagementInterface
         ksort($claims);
         $payload = $this->json->serialize($claims);
 
-        $jwsBuilder = new JWSBuilder($this->algorithmFactory->getAlgorithmManager());
+        $jwsBuilder = $this->builderFactory->create($this->algorithmFactory->getAlgorithmManager());
         $jws = $jwsBuilder->create()
             ->withPayload($payload)
             ->addSignature(
-                $this->keyGenerator->create()->getKey(),
+                $this->keyGenerator->generate()->getKey(),
                 [
                     'alg' => $this->algorithmFactory->getAlgorithmName(),
                     'typ' => 'JWT'
@@ -103,20 +111,27 @@ class Management implements ManagementInterface
      */
     public function decode(string $token): array
     {
-        $decoded = $this->serializer->unserialize($token);
-        return $this->json->unserialize($decoded->getToken()->getPayload());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function verify(string $token): bool
-    {
-        $verifier = $this->getVerifier();
         $jws = $this->serializer->unserialize($token)
             ->getToken();
 
-        if (!$verifier->verifyWithKey($jws, $this->keyGenerator->create()->getKey(), 0)) {
+        if (!$this->verify($jws)) {
+            throw new \InvalidArgumentException('JWT signature verification failed');
+        }
+
+        return $this->json->unserialize($jws->getPayload());
+    }
+
+    /**
+     * Verifies JWS.
+     *
+     * @param CoreJwt $jws
+     * @return bool
+     * @throws \InvalidArgumentException in case if claims validation fails
+     */
+    private function verify(CoreJwt $jws): bool
+    {
+        $verifier = $this->getVerifier();
+        if (!$verifier->verifyWithKey($jws, $this->keyGenerator->generate()->getKey(), 0)) {
             return false;
         };
 

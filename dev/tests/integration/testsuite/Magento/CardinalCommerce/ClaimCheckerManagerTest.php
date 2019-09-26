@@ -12,7 +12,7 @@ use Magento\CardinalCommerce\Model\Response\ClaimChecker\EciFlag;
 use Magento\CardinalCommerce\Model\Response\ClaimChecker\ErrorNumber;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Jwt\ClaimChecker\ExpirationTime;
-use Magento\Framework\Jwt\ClaimCheckerManager;
+use Magento\Framework\Jwt\ClaimChecker\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class ClaimCheckerManagerTest extends TestCase
     private $objectManager;
 
     /**
-     * @var ClaimCheckerManager
+     * @var Manager
      */
     private $claimCheckerManager;
 
@@ -39,7 +39,7 @@ class ClaimCheckerManagerTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->claimCheckerManager = $this->objectManager->create(
-            ClaimCheckerManager::class,
+            Manager::class,
             [
                 'checkers' => [
                     ActionCode::class,

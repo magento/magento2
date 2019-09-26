@@ -13,7 +13,7 @@ use Jose\Component\Core\Algorithm;
 use Jose\Component\Signature\Algorithm\HS256;
 use Jose\Component\Signature\Algorithm\HS512;
 use Magento\Framework\Jwt\AlgorithmFactory;
-use Magento\Framework\Jwt\ClaimCheckerManager;
+use Magento\Framework\Jwt\ClaimChecker\Manager;
 use Magento\Framework\Jwt\KeyGenerator\StringKey;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -162,21 +162,50 @@ class ManagementTest extends TestCase
 
     /**
      * Tests JWT verification
-     *
-     * @param string $token
-     * @param string $key
-     * @param bool $expected
-     * @dataProvider tokenVerificationDataProvider
      */
-    public function testVerify(string $token, string $key, bool $expected): void
+    public function testVerify(): void
     {
         $claimCheckerManager = $this->objectManager->create(
-            ClaimCheckerManager::class,
+            Manager::class,
             [
                 'checkers' => [
                     ExpirationTimeChecker::class,
                     IssuedAtChecker::class
-                ]
+                ],
+                'mandatoryClaims' => ['iat', 'exp'],
+            ]
+        );
+        $keyGenerator = $this->objectManager->create(StringKey::class, ['key' => self::KEY]);
+        /** @var Management $management */
+        $management = $this->objectManager->create(
+            Management::class,
+            [
+                'keyGenerator' => $keyGenerator,
+                'claimCheckerManager' => $claimCheckerManager
+            ]
+        );
+        $result = $management->decode($this->getSh256Jwt());
+        self::assertNotEmpty($result);
+    }
+
+    /**
+     * Tests verification for invalid JWT.
+     *
+     * @param string $token
+     * @param string $key
+     * @dataProvider tokenVerificationDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage JWT signature verification failed
+     */
+    public function testVerifyInvalidToken(string $token, string $key): void
+    {
+        $claimCheckerManager = $this->objectManager->create(
+            Manager::class,
+            [
+                'checkers' => [
+                    ExpirationTimeChecker::class,
+                    IssuedAtChecker::class
+                ],
             ]
         );
         $keyGenerator = $this->objectManager->create(StringKey::class, ['key' => $key]);
@@ -188,8 +217,7 @@ class ManagementTest extends TestCase
                 'claimCheckerManager' => $claimCheckerManager
             ]
         );
-        $result = $management->verify($token, ['iat', 'exp']);
-        self::assertEquals($expected, $result, 'Mismatched verification result.');
+        $management->decode($token);
     }
 
     /**
@@ -202,20 +230,13 @@ class ManagementTest extends TestCase
         return [
             [
                 'token' => $this->getSh256Jwt(),
-                'key' => self::KEY,
-                'expected' => true
-            ],
-            [
-                'token' => $this->getSh256Jwt(),
-                'key' => 's11TrujqWuoYyYiRWWHldMKunGW5cQGv',
-                'expected' => false
+                'key' => 's11TrujqWuoYyYiRWWHldMKunGW5cQGv'
             ],
             [
                 'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNYWdlbnRvIiwiaWF0IjoxNTYxNTY0MzcyLCJleH' .
                     'AiOjE1OTMxMDAzNzIsImF1ZCI6ImRldiIsInN1YiI6InRlc3QiLCJrZXkiOiJ2YWx1ZSJ9.J0zj5NyntWBZfit7mG00O7G' .
                     '1oN91Dzc3m12rKv1o',
-                'key' => self::KEY,
-                'expected' => false
+                'key' => self::KEY
             ],
         ];
     }

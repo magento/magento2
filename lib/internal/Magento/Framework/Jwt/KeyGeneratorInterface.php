@@ -19,5 +19,5 @@ interface KeyGeneratorInterface
      *
      * @return Jwk
      */
-    public function create(): Jwk;
+    public function generate(): Jwk;
 }

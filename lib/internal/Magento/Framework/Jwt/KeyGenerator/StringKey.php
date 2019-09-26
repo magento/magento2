@@ -40,7 +40,7 @@ class StringKey implements KeyGeneratorInterface
      *
      * @return Jwk
      */
-    public function create(): Jwk
+    public function generate(): Jwk
     {
         return $this->keyFactory->create($this->key);
     }

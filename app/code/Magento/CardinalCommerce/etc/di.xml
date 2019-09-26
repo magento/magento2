@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CardinalCommerce\Model\Response\JwtParserInterface" type="Magento\CardinalCommerce\Model\Response\JwtParser" />
-    <virtualType name="Magento\CardinalCommerce\Model\VirtualClaimCheckerManager" type="Magento\Framework\Jwt\ClaimCheckerManager">
+    <virtualType name="Magento\CardinalCommerce\Model\ClaimChecker\VirtualManager" type="Magento\Framework\Jwt\ClaimChecker\Manager">
         <arguments>
             <argument name="checkers" xsi:type="array">
                 <item name="errorNumber" xsi:type="string">Magento\CardinalCommerce\Model\Response\ClaimChecker\ErrorNumber</item>
@@ -26,7 +26,7 @@
     <virtualType name="Magento\CardinalCommerce\Model\VirtualJwsManagement" type="Magento\Framework\Jwt\Jws\Management">
         <arguments>
             <argument name="keyGenerator" xsi:type="object">Magento\CardinalCommerce\Model\ApiKeyGenerator</argument>
-            <argument name="claimCheckerManager" xsi:type="object">Magento\CardinalCommerce\Model\VirtualClaimCheckerManager</argument>
+            <argument name="claimCheckerManager" xsi:type="object">Magento\CardinalCommerce\Model\ClaimChecker\VirtualManager</argument>
         </arguments>
     </virtualType>
     <type name="Magento\CardinalCommerce\Model\JwtManagement">

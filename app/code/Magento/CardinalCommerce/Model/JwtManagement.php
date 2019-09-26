@@ -42,10 +42,6 @@ class JwtManagement
             throw new \InvalidArgumentException('JWT is empty');
         }
 
-        if (!$this->management->verify($jwt)) {
-            throw new \InvalidArgumentException('JWT signature verification failed');
-        }
-
         return $this->management->decode($jwt);
     }
 

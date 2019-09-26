@@ -28,15 +28,4 @@ interface ManagementInterface
      * @return array
      */
     public function decode(string $token): array;
-
-    /**
-     * Verifies JWT signature and claims.
-     *
-     * Throws \InvalidArgumentException if claims verification fails.
-     *
-     * @param string $token
-     * @return bool
-     * @throws \InvalidArgumentException
-     */
-    public function verify(string $token): bool;
 }

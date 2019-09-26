@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Jwt;
+namespace Magento\Framework\Jwt\ClaimChecker;
 
 use Jose\Component\Checker\ClaimChecker;
-use Jose\Component\Checker\ClaimCheckerManager as Manager;
+use Jose\Component\Checker\ClaimCheckerManager as CoreManager;
 use Jose\Component\Checker\ClaimCheckerManagerFactory;
 use Jose\Component\Checker\InvalidClaimException;
 use Jose\Component\Checker\MissingMandatoryClaimException;
@@ -19,7 +19,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
  *
  * Each claim checker should implement \Magento\Framework\Jwt\ClaimCheckerInterface.
  */
-class ClaimCheckerManager
+class Manager
 {
     /**
      * @var array
@@ -27,7 +27,7 @@ class ClaimCheckerManager
     private $checkers;
 
     /**
-     * @var Manager
+     * @var CoreManager
      */
     private $manager;
 
@@ -91,9 +91,9 @@ class ClaimCheckerManager
     /**
      * Initializes claim checker manager.
      *
-     * @return Manager
+     * @return CoreManager
      */
-    private function getManager(): Manager
+    private function getManager(): CoreManager
     {
         if ($this->manager === null) {
             $aliases = [];
@@ -127,6 +127,7 @@ class ClaimCheckerManager
         $result = [];
         foreach ($original as $key => $value) {
             if (is_array($value)) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $result = array_merge($result, $this->convertMultiToSingle($value));
             } else {
                 $result[$key] = $value;
