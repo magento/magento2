@@ -265,6 +265,7 @@ class Categories extends AbstractModifier
                                 'chipsEnabled' => true,
                                 'disableLabel' => true,
                                 'levelsVisibility' => '1',
+                                'disabled' => $fieldIsDisabled,
                                 'elementTmpl' => 'ui/grid/filters/elements/ui-select',
                                 'options' => $this->getCategoriesTree(),
                                 'disabled' => $fieldIsDisabled,
