@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelOrderWithGroupedProductDefaultStockTest">
+        <annotations>
+            <stories value="Grouped Product Default Stock."/>
+            <title value="Cancel order with grouped product on default stock from admin area"/>
+            <description value="Check, admin user able to cancel order with grouped product on default stock from admin area."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735227/scenarios/1446964"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
+            <createData entity="GroupedProduct" stepKey="groupedProduct"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <!--Delete created test data.-->
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="groupedProduct" stepKey="deleteGroupedProduct"/>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <!--Set product quantity.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openproductEditPage"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQtyBySourceCode(_defaultSource.source_code)}}" userInput="{{defaultProductQty.value}}" stepKey="setProductQuantity"/>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        <!--Assign virtual product to grouped.-->
+        <amOnPage url="{{AdminProductEditPage.url($$groupedProduct.id$$)}}" stepKey="openGroupedProductEditPage"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedOptions">
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkProduct"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+        <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultProductQty">
+            <argument name="productName" value="$$product.name$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
+        <!--Create order with grouped product.-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderForCustomer">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <conditionalClick selector="#store_1" dependentSelector="#order-store-selector" visible="true" stepKey="clickOnDefaultStoreViewIfPresent"/>
+        <actionGroup ref="addGroupedProductOptionToOrderMsi" stepKey="addGroupedProductVirtualOptionToOrder">
+            <argument name="product" value="GroupedProduct"/>
+            <argument name="option" value="$$product$$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="verifyOrderHasBeenPlaced"/>
+        <!--Cancel created order-->
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+        <!--Verify virtual product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="verifyProductQuantity"/>
+    </test>
+</tests>

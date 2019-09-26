@@ -102,14 +102,9 @@
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
 
         <!-- Admin area check ordered quantity -->
-        <comment userInput="Admin - Check ordered quantity" stepKey="AdminCheckOrderedQuantity"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCheckOrderAfterCustomerSubmits"/>
-        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 5" stepKey="orderedQuantity"/>
 

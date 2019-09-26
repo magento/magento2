@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateFullShipmentSimpleProductWithCustomOptionDefaultStock">
+        <annotations>
+            <stories value="Simple Product Default Stock."/>
+            <title value="Create Full Shipment with Simple Product With Custom Options on Default Stock."/>
+            <description value="Verify, admin able to create full shipment with simple product with custom option on custom default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/2370258"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Add custom option to product.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQtyBySourceCode(_defaultSource.source_code)}}" userInput="{{defaultProductQty.value}}" stepKey="setProductQuantity"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createOption">
+            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
+            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        <!--Login To storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <amOnPage url="{{StorefrontProductPage.url($$product.name$$)}}" stepKey="navigateToPDP"/>
+        <actionGroup ref="StorefrontSelectOptionDropDownActionGroup" stepKey="selectOption">
+            <argument name="optionTitle" value="ProductOptionDropDown"/>
+            <argument name="option" value="ProductOptionValueDropdown1.title"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{fivePiecesAddToCart.value}}" stepKey="fillProductQty"/>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <click selector=".continue" stepKey="clickOnNextPaymentPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadCheckoutSelectPayment"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Process full shipment.-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkShipmentSuccessMessage"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPage"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="verifyProductQuantity">
+            <argument name="sourceQty" value="{{defaultProductQtyBoughtWith5Pieces.value}}"/>
+            <argument name="stockQty" value="{{defaultProductQtyBoughtWith5Pieces.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

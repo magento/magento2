@@ -85,12 +85,9 @@
 
         <!--Admin Area Process and Verify Partial Invoice-->
         <comment userInput="Admin - Process Partial invoice" stepKey="PartialInvoice"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoaded"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSearchApplied"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoicePage"/>
         <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty"/>

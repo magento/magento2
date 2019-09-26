@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCacheValidationBundleProductSoldOutDefaultStocks">
+        <annotations>
+            <stories value="Bundle Product Default Stock."/>
+            <title value="Cache Validation With Bundle Product on Default Stock."/>
+            <description value="Verify cache validation for bundle product totally sold on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457016/scenarios/2200368"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="ApiBundleProduct" stepKey="bundleProduct"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Set virtual product quantity-->
+            <amOnPage url="{{AdminProductEditPage.url($product.id$)}}" stepKey="openVirtualProductEditPage"/>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{minimalProductQty.value}}" stepKey="setQty"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveVirtualProduct"/>
+            <!--Add virtual product to bundle-->
+            <amOnPage url="{{AdminProductEditPage.url($$bundleProduct.id$$)}}" stepKey="openProductEditPageToAssignOption"/>
+            <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+            <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
+            <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+            <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+            <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
+            <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+            <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+                <argument name="product" value="$product$"/>
+            </actionGroup>
+            <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+            <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+            <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{minimalProductQty.value}}" stepKey="fillProductDefaultQty"/>
+            <scrollToTopOfPage stepKey="scrollToTheTopOFBundleProductEditPage"/>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+                <argument name="categoryName" value="$category.name$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete test data.-->
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Disable created sources.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Login To storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="product" value="$bundleProduct$"/>
+            <argument name="quantity" value="{{minimalProductQty.value}}"/>
+        </actionGroup>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <!--Process full invoice.-->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderById">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <!--Verify Grouped product is not visible on category page on frontend-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="navigateToCategoryPageToVerifyProduct"/>
+        <see selector=".empty" userInput="We can't find products matching the selection." stepKey="verifyProductIsAbsentOnCategoryPage"/>
+    </test>
+</tests>

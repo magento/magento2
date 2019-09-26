@@ -102,16 +102,13 @@
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
         <seeElement selector="{{AdminOrderDetailsMessagesSection.successMessage}}" stepKey="seeSuccessMessage1"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage2"/>
-        <grabTextFrom selector=".page-title" stepKey="grabTheOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!--Admin create full Invoice-->
         <comment userInput="Admin - Process invoice for full order" stepKey="InvoiceFullOrder"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabTheOrderId}" stepKey="searchOrderNumInvoice"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoadSubmitInvoice"/>
@@ -129,7 +126,6 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab"/>
         <waitForLoadingMaskToDisappear stepKey="waitToSeeInvoiceCreated"/>
         <seeElement selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" stepKey="seeInvoiceInGrid"/>
-
     </test>
 </tests>
 

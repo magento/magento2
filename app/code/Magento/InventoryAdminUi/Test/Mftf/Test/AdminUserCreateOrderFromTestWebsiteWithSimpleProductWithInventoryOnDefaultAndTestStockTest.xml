@@ -10,13 +10,9 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUserCreateOrderFromTestWebsiteWithSimpleProductWithInventoryOnDefaultAndTestStockTest">
         <annotations>
-            <skip>
-                <issueId value="MAGETWO-72172" />
-            </skip>
             <stories value="InventoryAdminUi stock option"/>
             <title value="Admin user create order from Test website with Simple product with inventory on Default and Test stock"/>
-            <description
-                    value="Check, correct website code is passed to check stock quantity when order is created using backoffice"/>
+            <description value="Check, correct website code is passed to check stock quantity when order is created using backoffice"/>
             <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735286/scenarios/3041899"/>
             <severity value="CRITICAL"/>
             <group value="msi"/>

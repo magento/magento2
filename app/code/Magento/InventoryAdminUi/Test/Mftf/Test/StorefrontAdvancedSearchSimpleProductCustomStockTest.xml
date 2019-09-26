@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchSimpleProductCustomStockTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Advanced Search Simple Product on Custom Stock."/>
+            <description value="Verify customer able to search simple product with advanced search on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/1515050"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <!--Assign created source to product.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+            <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+                <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceToProduct">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <!--Delete test data.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteStock"/>
+            <!--Disable created source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Advanced search product by name.-->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="navigateToAdvancedSearchToSearchByName"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="searchProductByName">
+            <argument name="name" value="$product.name$"/>
+        </actionGroup>
+        <!--Verify searched product by name.-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="verifyProductSearchedByName">
+            <argument name="productName" value="$product.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <!--Advanced search product by sku.-->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="navigateToAdvancedSearchToSearchBySku"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="searchProductBySku">
+            <argument name="sku" value="$product.sku$"/>
+        </actionGroup>
+        <!--Verify searched product by sku.-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="verifyProductSearchedBySku">
+            <argument name="productName" value="$product.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

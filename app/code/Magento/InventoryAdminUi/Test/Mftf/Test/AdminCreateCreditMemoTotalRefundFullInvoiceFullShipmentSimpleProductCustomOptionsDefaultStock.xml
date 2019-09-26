@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoTotalRefundFullInvoiceFullShipmentSimpleProductCustomOptionsDefaultStock">
+        <annotations>
+            <stories value="Simple Product Default Stock."/>
+            <title value="Create Total Refund Credit Memo after Full Invoice and Full Shipment with simple product with custom options on default stock."/>
+            <description value="Verify, admin able to create total refund credit memo after full invoice and full shipment with simple product with custom option on default source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735149/scenarios/2418129"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="additionalSource"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
+            <!--Create customer.-->
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Set product quantity.-->
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="100" stepKey="setProductQuantity"/>
+        <!--Create custom option.-->
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createOption">
+            <argument name="customOptionName" value="Test Option"/>
+            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
+            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        <!--Login to storefront.-->
+        <comment userInput="Login to storefront as customer." stepKey="loginToStorefrontComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <amOnPage url="{{StorefrontProductPage.url($$product.name$$)}}" stepKey="navigateToPDP"/>
+        <selectOption selector="//select[contains(@class,' required product-custom-option admin__control-select')]" userInput="{{ProductOptionValueDropdown1.title}} +${{ProductOptionValueDropdown1.price}}" stepKey="selectOption"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="10" stepKey="fillProductQty"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <!--Place order.-->
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad time="30" stepKey="waitForCheckoutPage"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="chooseBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad time="30" stepKey="waitForOrderPlacement"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Verify order-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 10" stepKey="orderedQuantity"/>
+        <!--Process full invoice-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="checkSuccessMessage"/>
+        <!--Process credit memo.-->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmit"/>
+        <!--Verify product quantity after credit memo.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageForCheckProductQtyAfterCreditMemo"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProductBySkuToCheckQtyAfterCreditMemo">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$product.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', _defaultSource.name)}}" userInput="100" stepKey="verifyProductSourceQuantity"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="100" stepKey="verifyProductStockQuantity"/>
+    </test>
+</tests>

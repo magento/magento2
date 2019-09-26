@@ -191,8 +191,8 @@
         <click selector=".data-grid-search-control-wrap button" stepKey="clickOnApplyFilters1"/>
         <waitForPageLoad time="5" stepKey="waitForPageLoad18"/>
 
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.firstname}}" stepKey="seeFirstName1"/>
-        <see selector="{{AdminGridRow.rowOne}}" userInput="{{MsiCustomer1.lastname}}" stepKey="seeLastName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.firstname$$" stepKey="seeFirstName1"/>
+        <see selector="{{AdminGridRow.rowOne}}" userInput="$$createCustomer1.lastname$$" stepKey="seeLastName1"/>
         <see selector="{{AdminGridRow.rowOne}}" userInput="Pending" stepKey="seeFirstName3"/>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>

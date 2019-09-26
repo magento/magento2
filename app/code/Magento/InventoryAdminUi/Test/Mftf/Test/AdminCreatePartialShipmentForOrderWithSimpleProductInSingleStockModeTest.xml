@@ -70,13 +70,9 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Source Selection -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}"
-                   stepKey="searchOrderNum"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 

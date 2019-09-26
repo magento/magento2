@@ -90,23 +90,14 @@
         <see selector="{{AdminGridRow.rowOne}}" userInput="95" stepKey="seeUpdatedQuantity3"/>
 
         <!--Create Invoice-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$orderNumber}" stepKey="searchOrderNumInvoice"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
-
+        <waitForPageLoad stepKey="waitForInvoiceSubmitted"/>
         <!-- Create partial shipment -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMask"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$orderNumber}" stepKey="searchOrderNum"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchShipping"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMask"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
         <waitForLoadingMaskToDisappear stepKey="waitForShipLoadingMask"/>
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="3" stepKey="shipPartialQuantity"/>
@@ -114,12 +105,6 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
 
         <!--Admin Area Create Partial Credit Memo-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateCreditMemo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskCreditMemo"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$orderNumber}" stepKey="searchOrderNumCreditMemo"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCreditMemo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskCreditMemo"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowCreditMemo"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
         <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox"/>
         <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund"/>

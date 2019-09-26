@@ -77,4 +77,20 @@
         <data key="path">cataloginventory/item_options/qty_increments</data>
         <data key="scope_id">0</data>
     </entity>
+    <entity name="SetOutOfStockThreshold">
+        <data key="path">cataloginventory/item_options/min_qty</data>
+        <data key="value">101</data>
+    </entity>
+    <entity name="RevertOutOfStockThreshold">
+        <data key="path">cataloginventory/item_options/min_qty</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="NotifyQuantityBelow">
+        <data key="path">cataloginventory/item_options/notify_stock_qty</data>
+        <data key="value">5</data>
+    </entity>
+    <entity name="RevertNotifyQuantityBelow">
+        <data key="path">cataloginventory/item_options/notify_stock_qty</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

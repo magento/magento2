@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelOrderDownloadableProductCustomStockTest" extends="AdminCreateDownloadableProductWithCustomStockTest">
+        <annotations>
+            <stories value="Downloadable Product Custom Stock."/>
+            <title value="Admin Cancel Order with Downloadable Product Custom Stock."/>
+            <description value="Verify admin able to cancel order with downloadable product on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735225/scenarios/1679878"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="MsiCustomer1" stepKey="customer" after="linkSourceStock1"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer" after="deleteCustomStock"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Add product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$downloadableProduct1.custom_attributes[url_key]$$)}}" stepKey="goToPDP"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectLink"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForProductAddedMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$downloadableProduct1.name$$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
+        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
+        <!--Cancel order-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <click selector="{{AdminOrderDetailsMainActionsSection.cancel}}" stepKey="clickCancelOrder"/>
+        <waitForElement selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForCancelConfirmation"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to cancel this order?" stepKey="seeConfirmationMessage"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmOrderCancel"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You canceled the order." stepKey="seeCancelSuccessMessage"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findProduct">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$$downloadableProduct1.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$createSource1.source[name]$$)}}" userInput="100" stepKey="verifySourceQuantity"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$createStock1.stock[name]$$)}}" userInput="100" stepKey="verifyStockQuantity"/>
+    </test>
+</tests>

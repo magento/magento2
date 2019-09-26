@@ -19,3 +19,4 @@
         <selectOption selector="{{AdminProductSourcesGrid.rowStatusBySourceCode(sourceCode)}}" userInput="{{sourceStatus}}" stepKey="changeSourceStatus"/>
     </actionGroup>
 </actionGroups>
+
