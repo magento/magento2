@@ -252,7 +252,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
         );
         $resourceMock->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue('catalog_product_entity_tear_price'));
+            ->will($this->returnValue('catalog_product_entity_tier_price'));
         $backendModelMock->expects($this->any())
             ->method('getResource')
             ->will($this->returnValue($resourceMock));
