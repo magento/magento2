@@ -73,6 +73,9 @@ QUERY;
         $this->assertEquals('simple', $response['customer']['wishlists'][0]['items'][0]['product']['sku']);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
     public function testCustomerWithoutWishlists(): void
     {
         $query =
