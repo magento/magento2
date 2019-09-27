@@ -73,6 +73,9 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
+            <magentoCLI command="config:set customer/online_customers/section_data_lifetime 1"
+                        stepKey="setConfigForCartLifetime"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache" />
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -116,6 +119,7 @@
         </actionGroup>
         <closeTab stepKey="closeTab"/>
         <!-- Check cart -->
+        <wait time="60" stepKey="waitForCartToBeUpdated"/>
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart"/>
@@ -143,6 +147,7 @@
         </actionGroup>
         <closeTab stepKey="closeTab2"/>
         <!--Check cart-->
+        <wait time="60" stepKey="waitForCartToBeUpdated2"/>
         <reloadPage stepKey="reloadPage2"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload2"/>
         <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart2"/>

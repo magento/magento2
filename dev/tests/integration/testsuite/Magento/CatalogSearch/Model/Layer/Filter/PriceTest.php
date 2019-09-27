@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -35,10 +37,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $category->load(4);
         $layer = $this->objectManager->get(\Magento\Catalog\Model\Layer\Category::class);
         $layer->setCurrentCategory($category);
+        /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Entity\Attribute::class
+        );
+        $attribute->loadByCode('catalog_product', 'price');
         $this->_model = $this->objectManager->create(
             \Magento\CatalogSearch\Model\Layer\Filter\Price::class,
             ['layer' => $layer]
         );
+        $this->_model->setAttributeModel($attribute);
     }
 
     public function testApplyNothing()

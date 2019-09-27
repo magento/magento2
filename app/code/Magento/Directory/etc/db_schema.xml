@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="directory_country" resource="default" engine="innodb" comment="Directory Country">
-        <column xsi:type="varchar" name="country_id" nullable="false" length="2" comment="Country Id in ISO-2"/>
+        <column xsi:type="varchar" name="country_id" nullable="false" length="2" comment="Country ID in ISO-2"/>
         <column xsi:type="varchar" name="iso2_code" nullable="true" length="2" comment="Country ISO-2 format"/>
         <column xsi:type="varchar" name="iso3_code" nullable="true" length="3" comment="Country ISO-3"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -17,8 +17,8 @@
     </table>
     <table name="directory_country_format" resource="default" engine="innodb" comment="Directory Country Format">
         <column xsi:type="int" name="country_format_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Country Format Id"/>
-        <column xsi:type="varchar" name="country_id" nullable="true" length="2" comment="Country Id in ISO-2"/>
+                comment="Country Format ID"/>
+        <column xsi:type="varchar" name="country_id" nullable="true" length="2" comment="Country ID in ISO-2"/>
         <column xsi:type="varchar" name="type" nullable="true" length="30" comment="Country Format Type"/>
         <column xsi:type="text" name="format" nullable="false" comment="Country Format"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -31,9 +31,9 @@
     </table>
     <table name="directory_country_region" resource="default" engine="innodb" comment="Directory Country Region">
         <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Region Id"/>
+                comment="Region ID"/>
         <column xsi:type="varchar" name="country_id" nullable="false" length="4" default="0"
-                comment="Country Id in ISO-2"/>
+                comment="Country ID in ISO-2"/>
         <column xsi:type="varchar" name="code" nullable="true" length="32" comment="Region code"/>
         <column xsi:type="varchar" name="default_name" nullable="true" length="255" comment="Region Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -47,7 +47,7 @@
            comment="Directory Country Region Name">
         <column xsi:type="varchar" name="locale" nullable="false" length="8" comment="Locale"/>
         <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Region Id"/>
+                default="0" comment="Region ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Region Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="locale"/>

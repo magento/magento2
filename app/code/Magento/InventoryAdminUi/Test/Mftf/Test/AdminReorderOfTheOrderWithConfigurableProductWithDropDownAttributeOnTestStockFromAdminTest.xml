@@ -23,6 +23,7 @@
         </annotations>
         <before>
             <remove keyForRemoval="additionalStock"/>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
             <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" before="createSource"/>
         </before>
         <after>

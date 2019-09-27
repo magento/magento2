@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchVirtualProductCustomStockTest" extends="StorefrontAdvancedSearchSimpleProductCustomStockTest">
+        <annotations>
+            <stories value="Virtual Product Custom Stock."/>
+            <title value="Advanced Search Virtual Product on Custom Stock."/>
+            <description value="Verify customer able to search virtual product with advanced search on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/1899867"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Replace simple product with virtual.-->
+            <remove keyForRemoval="product"/>
+            <createData entity="VirtualProduct" stepKey="product" before="stock"/>
+        </before>
+    </test>
+</tests>

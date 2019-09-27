@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontQuickSearchGroupedProductCustomStockTest">
+        <annotations>
+            <stories value="Grouped Product Custom Stock."/>
+            <title value="Quick Search Grouped Product on Custom Stock."/>
+            <description value="Verify customer able to search grouped product with quick search on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/1517611"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="GroupedProduct" stepKey="groupedProduct"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <!--Assign created source to product.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProduct1EditPageToAssignSource"/>
+            <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceToProduct">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+            <!--Add simple product to grouped.-->
+            <amOnPage url="{{AdminProductEditPage.url($groupedProduct.id$)}}" stepKey="openGroupedProductEditPage"/>
+            <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+            <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedOptions">
+                <argument name="product" value="$product$"/>
+            </actionGroup>
+            <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkProduct"/>
+            <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+            <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultProductQty">
+                <argument name="productName" value="$product.name$"/>
+                <argument name="qty" value="2"/>
+            </actionGroup>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseCreatedGroupedProduct"/>
+        </before>
+        <after>
+            <!--Delete test data.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="groupedProduct" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteStock"/>
+            <!--Disable created source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Quick search product by name.-->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="navigateToStorefront"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchProductByName">
+            <argument name="phrase" value="$groupedProduct.name$"/>
+        </actionGroup>
+        <!--Verify searched product by name.-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="verifyProductSearchedByName">
+            <argument name="productName" value="$groupedProduct.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

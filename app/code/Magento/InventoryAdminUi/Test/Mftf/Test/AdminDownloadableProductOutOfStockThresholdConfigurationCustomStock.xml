@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDownloadableProductOutOfStockThresholdConfigurationCustomStock">
+        <annotations>
+            <stories value="Downloadable Product Custom Stock."/>
+            <title value="Downloadable Product with 'Out Of Stock' Threshold applied in Configuration on Custom Stock."/>
+            <description value="Verify 'Out Of Stock' threshold applied in configuration for downloadable product on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/1698353"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="_minimalSource" stepKey="source"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="SourceStockLinked1" stepKey="stockSourceLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="DownloadableProductWithTwoLink100" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="downloadableLink1" stepKey="addLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="downloadableLink2" stepKey="addLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created data.-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <!--Revert 'Out of Stock' configuration.-->
+            <magentoCLI command="config:set {{RevertOutOfStockThreshold.path}} {{RevertOutOfStockThreshold.value}}" stepKey="revertOutOfStockThreshold"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteStock"/>
+            <!--Disable additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Assign source to product.-->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+        <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceAndSetQty">
+            <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        <!--Verify product is visible on storefront.-->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="checkConfigurableIsPresentOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+        <!--Set out of stock threshold greater than product quantity.-->
+        <magentoCLI command="config:set {{SetOutOfStockThreshold.path}} {{SetOutOfStockThreshold.value}}" stepKey="setOutOfStockThreshold"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+        <!--Verify product is absent on category page.-->
+        <actionGroup ref="StorefrontAssertProductAbsentOnCategoryPageActionGroup" stepKey="verifyProductIsAbsentOnCategoryPage">
+            <argument name="category" value="$$category$$"/>
+            <argument name="product" value="$$product$$"/>
+        </actionGroup>
+    </test>
+</tests>

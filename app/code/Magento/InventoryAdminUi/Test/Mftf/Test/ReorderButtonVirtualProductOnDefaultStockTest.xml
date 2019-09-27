@@ -64,14 +64,9 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
         <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="checkOrderPlaceSuccessMessage"/>
         <!--Create Invoice-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$orderNumber}" stepKey="searchOrderNumInvoice"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
@@ -81,6 +76,6 @@
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
-        <dontSeeElement selector="//td[text()='{$orderNumber}']/following-sibling::td[@class='col actions']/a[contains(@class, 'order')]" stepKey="verifyReorderButton"/>
+        <dontSeeElement selector="{{StorefrontCustomerOrdersGridSection.reorderBtn($orderNumber)}}" stepKey="verifyReorderButton"/>
     </test>
 </tests>

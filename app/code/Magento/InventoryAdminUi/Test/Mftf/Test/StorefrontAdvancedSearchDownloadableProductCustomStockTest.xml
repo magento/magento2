@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchDownloadableProductCustomStockTest" extends="StorefrontAdvancedSearchSimpleProductCustomStockTest">
+        <annotations>
+            <stories value="Downloadable Product Custom Stock."/>
+            <title value="Advanced Search Downloadable Product on Custom Stock."/>
+            <description value="Verify customer able to search downloadable product with advanced search on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/1899873"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/2581"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!--Replace simple product with downloadable.-->
+            <remove keyForRemoval="product"/>
+            <createData entity="MsiDownloadableProduct" stepKey="product" before="stock">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+    </test>
+</tests>

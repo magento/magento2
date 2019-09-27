@@ -17,45 +17,41 @@
             <severity value="CRITICAL"/>
             <group value="msi"/>
             <group value="multi_mode"/>
-            <skip>
-                <issueId value="MSI-1588"/>
-            </skip>
         </annotations>
 
         <before>
-            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
             <createData entity="SimpleProduct" stepKey="simpleProduct1">
-                <requiredEntity createDataKey="simpleCategory1"/>
+                <requiredEntity createDataKey="simpleCategory"/>
             </createData>
             <createData entity="FullSource1" stepKey="createSource1"/>
             <createData entity="FullSource2" stepKey="createSource2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-
-            <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
-                <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
-                <argument name="filter_value" value="SimpleProduct.sku"/>
-            </actionGroup>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
-            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory1"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource1">
+                <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource2">
+                <argument name="sourceCode" value="$$createSource2.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
-
-        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct1">
-            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="filter_value" value="$$createSource1.source[source_code]$$"/>
+        <!--Assign created product to additional sources-->
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1.id$$)}}" stepKey="openProductEditPageToAssignSource"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource1ToCreatedProduct">
+            <argument name="sourceCode" value="$$createSource1.source[source_code]$$"/>
         </actionGroup>
-
-        <actionGroup ref="AdminOnProductEditPageAssignSourceToProduct" stepKey="AdminOnProductEditPageAssignSourceToProduct2">
-            <argument name="filter_selector" value="AdminManageSourcesGridFilterControls.code"/>
-            <argument name="filter_value" value="$$createSource2.source[source_code]$$"/>
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignSource2ToCreatedProduct">
+            <argument name="sourceCode" value="$$createSource2.source[source_code]$$"/>
         </actionGroup>
-
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[source_code]$$" stepKey="seeSourceIdInGrid1"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceNameInGrid1"/>
-
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[source_code]$$" stepKey="seeSourceIdInGrid2"/>
-        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceNameInGrid2"/>
+        <!--Verify additional sources assigned-->
+        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        <amOnPage url="{{AdminProductEditPage.url($$simpleProduct1.id$$)}}" stepKey="openProductEditPageToVerifySources"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('0')}}" userInput="{{_defaultSource.name}}" stepKey="seeSourceIdInGrid1"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('1')}}" userInput="$$createSource1.source[name]$$" stepKey="seeSourceIdInGrid2"/>
+        <see selector="{{AdminProductSourcesGrid.rowByIndex('2')}}" userInput="$$createSource2.source[name]$$" stepKey="seeSourceIdInGrid3"/>
     </test>
 </tests>

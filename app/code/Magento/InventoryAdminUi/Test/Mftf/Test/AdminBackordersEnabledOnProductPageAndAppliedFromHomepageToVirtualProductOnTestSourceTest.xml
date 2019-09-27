@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBackordersEnabledOnProductPageAndAppliedFromHomepageToVirtualProductOnTestSourceTest">
+        <annotations>
+            <stories value="Virtual product custom stock."/>
+            <title value="Backorders enabled on Product page and applied from Homepage to Virtual product on Test source"/>
+            <description value="Backorders enabled on Product page and applied from Homepage to Virtual product on Test source"/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735257/scenarios/2126256"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="_minimalSource" stepKey="customSource"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="customStock"/>
+            <createData entity="Msi_US_Customer" stepKey="customer"/>
+            <createData entity="VirtualProduct" stepKey="virtualProduct">
+                <field key="quantity">2</field>
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1">
+                <requiredEntity createDataKey="customStock"/>
+                <requiredEntity createDataKey="customSource"/>
+            </createData>
+            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableThirdCreatedSource">
+                <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="AdminGoToProductGridFilterResultsByInputEditProduct" stepKey="goToProductGridFilterResultsByInputEditProduct1">
+            <argument name="filter_selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="filter_value" value="$$virtualProduct.product[sku]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignTestSourceToProduct">
+            <argument name="sourceCode" value="$$customSource.source[source_code]$$"/>
+            <argument name="sourceQty" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnableBackordersOnProductEditPageActionGroup" stepKey="enableBackorders"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$virtualProduct$$"/>
+            <argument name="quantity" value="3"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+
+        <actionGroup ref="filterOrderGridById" stepKey="filterByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderNumber" stepKey="seeOrderIdInGrid"/>
+    </test>
+</tests>

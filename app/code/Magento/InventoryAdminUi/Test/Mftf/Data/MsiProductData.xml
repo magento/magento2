@@ -21,6 +21,21 @@
         <data key="attribute_set_id">4</data>
         <data key="visibility">4</data>
     </entity>
+    <!--Notice: This product created for specific test. Has no unique suffix in sku.-->
+    <entity name="SimpleMsiProductWithNumericSku" type="product">
+        <data key="name" unique="suffix">Simple MSI Product </data>
+        <data key="sku">123456789</data>
+        <data key="type_id">simple</data>
+        <data key="price">10.00</data>
+        <data key="quantity">100</data>
+        <data key="weight">1</data>
+        <data key="urlKey" unique="suffix">simple-msi-product-</data>
+        <data key="status">1</data>
+        <data key="notifyQuantity">1</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="ConfigurableMsiProduct" type="product">
         <data key="name" unique="suffix">Configurable MSI Product </data>
         <data key="sku" unique="suffix">Configurable-MSI-Product-</data>

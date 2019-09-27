@@ -33,7 +33,7 @@ class VariablesSupportQueryTest extends GraphQlAbstract
 
         $query
             = <<<'QUERY'
-query GetProductsQuery($pageSize: Int, $filterInput: ProductFilterInput, $priceSort: SortEnum) {
+query GetProductsQuery($pageSize: Int, $filterInput: ProductAttributeFilterInput, $priceSort: SortEnum) {
   products(
     pageSize: $pageSize
     filter: $filterInput
@@ -58,8 +58,8 @@ QUERY;
             'pageSize' => 1,
             'priceSort' => 'ASC',
             'filterInput' => [
-                'min_price' => [
-                    'gt' => 150,
+                'price' => [
+                    'from' => 150,
                 ],
             ],
         ];

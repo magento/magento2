@@ -75,7 +75,9 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Cancel order -->
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
         <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
 
