@@ -39,7 +39,13 @@ class RequestPathProviderTest extends TestCase
     /** {@inheritDoc} */
     public function tearDown()
     {
-        unset($this->provider);
+        unset(
+            $this->provider,
+            $this->resourceConnection,
+            $this->adapter,
+            $this->select
+        );
+
         parent::tearDown();
     }
 
@@ -47,6 +53,8 @@ class RequestPathProviderTest extends TestCase
      * @param string      $targetPath
      * @param array       $returnedResult
      * @param null|string $expectedResult
+     *
+     * @dataProvider getRequestPathProvider
      */
     public function testGetRequestPath($targetPath, $returnedResult, $expectedResult)
     {
@@ -81,7 +89,7 @@ class RequestPathProviderTest extends TestCase
         $this->resourceConnection
             ->expects($this->once())
             ->method('getConnection')
-            ->will($this->adapter);
+            ->willReturn($this->adapter);
 
         $this->adapter
             ->expects($this->once())
