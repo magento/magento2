@@ -313,7 +313,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             ->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
             ->setProcessId(getmypid())
             ->setProcessHostname(gethostname())
-            ->setProcessStartedAt(strftime('%Y-%m-%d %H:%M:00', $currentTime))
+            ->setProcessStartedAt(strftime('%Y-%m-%d %H:%M:%S', $currentTime))
             ->save();
 
         $this->startProfiling();
@@ -500,7 +500,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         } catch (\Exception $e) {
             if ($this->state->getMode() === State::MODE_DEVELOPER
             ) {
-                $this->logger->info($e->getMessages());
+                $this->logger->info($e->getMessage());
             } else {
                 $this->logger->critical($e);
             }
@@ -697,7 +697,7 @@ class ProcessCronQueueObserver implements ObserverInterface
 
                     //need to collect ps output to file because php trims the output otherwise
                     exec(
-                        "ps aux | grep --color=none " . $runningJob->getProcessId()
+                        "ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId()
                         . " > /tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt"
                     );
                     $execOutput = explode(
@@ -742,23 +742,25 @@ class ProcessCronQueueObserver implements ObserverInterface
             if (!$line) {
                 continue;
             }
-            $line = preg_split('/\s+/', $line, 11);
-            if ((int) trim($line[1]) == $runningJob->getProcessId() &&
-                $this->isCronCommand(trim($line[10]))) {
+            $line = preg_split('/\s+/', trim($line), 7);
+            if ((int) trim($line[0]) == $runningJob->getProcessId() &&
+                $this->isCronCommand(trim($line[6]))) {
 
-                $processStartTime = trim($line[9]) == "0:00"
-                    ? strtotime(trim($line[8]))
-                    : strtotime(trim($line[8])." ".trim($line[9]));
-
-                if (trim($line[9]) == "0:00") {
-                    $processStartTime = strftime(
-                        '%Y-%m-%d %H:%M:00',strtotime(trim($line[8]))
-                    );
-                } else {
-                    $processStartTime = strftime(
-                        '%Y-%m-%d %H:%M:00',strtotime(trim($line[8])." ".trim($line[9]))
-                    );
-                }
+                $processStartTime = strftime(
+                    '%Y-%m-%d %H:%M:%S',
+                    strtotime(implode(
+                        ' ',
+                        array_map(
+                            function ($value, $key) {
+                                if ($key > 1 && $key < 6) {
+                                    return $value;
+                                }
+                            },
+                            $line,
+                            array_keys($line)
+                        )
+                    ))
+                );
 
                 if ($processStartTime == $runningJob->getProcessStartedAt()) {
                     return true;
