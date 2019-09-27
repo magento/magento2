@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Format product's pricing information for price_range field
@@ -80,8 +81,9 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
-
-        return $this->formatPrice($regularPrice, $finalPrice, $store);
+        $minPriceArray = $this->formatPrice($regularPrice, $finalPrice, $store);
+        $minPriceArray['model'] = $product;
+        return $minPriceArray;
     }
 
     /**
@@ -96,8 +98,9 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMaximalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMaximalFinalPrice($product)->getValue();
-
-        return $this->formatPrice($regularPrice, $finalPrice, $store);
+        $maxPriceArray = $this->formatPrice($regularPrice, $finalPrice, $store);
+        $maxPriceArray['model'] = $product;
+        return $maxPriceArray;
     }
 
     /**
