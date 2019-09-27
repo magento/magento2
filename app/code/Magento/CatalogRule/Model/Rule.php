@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
@@ -13,6 +15,7 @@ use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Helper\Data;
 use Magento\CatalogRule\Model\Data\Condition\Converter;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 use Magento\CatalogRule\Model\ResourceModel\Rule as RuleResourceModel;
 use Magento\CatalogRule\Model\Rule\Action\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule\Condition\CombineFactory;
@@ -33,7 +36,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 
 /**
  * Catalog Rule data model
@@ -499,7 +501,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
         } else {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
-        $dateTs = $this->_localeDate->scopeTimeStamp($storeId);
+        $currentDateTime = new \DateTime();
+        $dateTs = $currentDateTime->getTimestamp();
         $cacheKey = date('Y-m-d', $dateTs) . "|{$websiteId}|{$customerGroupId}|{$productId}|{$price}";
 
         if (!array_key_exists($cacheKey, self::$_priceRulesData)) {
@@ -894,5 +897,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
     public function getIdentities()
     {
         return ['price'];
+    }
+
+    /**
+     * Clear price rules cache.
+     */
+    public function clearPriceRulesData(): void
+    {
+        self::$_priceRulesData = [];
     }
 }

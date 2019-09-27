@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
-use \Magento\Catalog\Model\Product\Option\Value;
-
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Model\ActionValidator\RemoveAction;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+
+/**
+ * Test for \Magento\Catalog\Model\Product\Option\Value class.
+ */
 class ValueTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -24,6 +30,11 @@ class ValueTest extends \PHPUnit\Framework\TestCase
      */
     private $customOptionPriceCalculatorMock;
 
+    /**
+     * @var CalculateCustomOptionCatalogRule|MockObject
+     */
+    private $CalculateCustomOptionCatalogRule;
+
     protected function setUp()
     {
         $mockedResource = $this->getMockedResource();
@@ -33,6 +44,10 @@ class ValueTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator::class
         );
 
+        $this->CalculateCustomOptionCatalogRule = $this->createMock(
+            CalculateCustomOptionCatalogRule::class
+        );
+
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
             \Magento\Catalog\Model\Product\Option\Value::class,
@@ -40,6 +55,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
                 'customOptionPriceCalculator' => $this->customOptionPriceCalculatorMock,
+                'CalculateCustomOptionCatalogRule' => $this->CalculateCustomOptionCatalogRule
             ]
         );
         $this->model->setOption($this->getMockedOption());
@@ -66,11 +82,11 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $this->model->setPriceType(Value::TYPE_PERCENT);
         $this->assertEquals($price, $this->model->getPrice(false));
 
-        $percentPice = 100;
-        $this->customOptionPriceCalculatorMock->expects($this->atLeastOnce())
-            ->method('getOptionPriceByPriceCode')
-            ->willReturn($percentPice);
-        $this->assertEquals($percentPice, $this->model->getPrice(true));
+        $percentPrice = 100;
+        $this->CalculateCustomOptionCatalogRule->expects($this->atLeastOnce())
+            ->method('execute')
+            ->willReturn($percentPrice);
+        $this->assertEquals($percentPrice, $this->model->getPrice(true));
     }
 
     public function testGetValuesCollection()
