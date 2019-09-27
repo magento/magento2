@@ -10,6 +10,7 @@ namespace Magento\Framework\Dto;
 use Magento\Framework\Config\CacheInterface\Proxy as CacheInterface;
 use Magento\Framework\Config\Data;
 use Magento\Framework\Dto\Config\Reader\Proxy as Reader;
+use Magento\Framework\ObjectManager\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface\Proxy as SerializerInterface;
 
 /**
@@ -23,18 +24,51 @@ class DtoConfig extends Data
     private const CACHE_ID = 'dto_config';
 
     /**
+     * @var ConfigInterface
+     */
+    private $omConfig;
+
+    /**
      * @param Reader $reader
      * @param CacheInterface $cache
-     * @param string $cacheId|null
+     * @param ConfigInterface $omConfig
+     * @param string $cacheId |null
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
         Reader $reader,
         CacheInterface $cache,
+        ConfigInterface $omConfig,
         $cacheId = self::CACHE_ID,
         SerializerInterface $serializer = null
     ) {
+        $this->omConfig = $omConfig;
         parent::__construct($reader, $cache, $cacheId, $serializer);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function merge(array $config)
+    {
+        parent::merge($config);
+        $this->setPreferences();
+    }
+
+    /**
+     * Create preferences for DTOs
+     */
+    private function setPreferences(): void
+    {
+        $classes = $this->get('class');
+        $preferences = [];
+        foreach ($classes as $class => $interface) {
+            $preferences[$interface] = $class;
+        }
+
+        if (!empty($preferences)) {
+            $this->omConfig->extend(['preferences' => $preferences]);
+        }
     }
 
     /**
