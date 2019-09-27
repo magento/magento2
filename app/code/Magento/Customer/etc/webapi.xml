@@ -182,8 +182,15 @@
             <parameter name="customerId" force="true">%customer_id%</parameter>
         </data>
     </route>
+    <!-- @deprecated @see validateResetPasswordLinkByToken -->
     <route url="/V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkToken"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/customers/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkByToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
