@@ -24,10 +24,13 @@ class ConfigureTestDtos
         $config = Bootstrap::getObjectManager()->get(DtoConfig::class);
 
         self::addImmutableDto($config);
-        self::addImmutableDtoWithExtensionAttributes($config);
         self::addImmutableDto2($config);
         self::addImmutableNestedDto($config);
         self::addMutableDto($config);
+
+        self::addImmutableDtoWithExtensionAttributes($config);
+        self::addMutableDtoWithExtensionAttributes($config);
+        self::addMutableDtoWithImmutableExtensionAttributes($config);
     }
 
     /**
@@ -71,7 +74,7 @@ class ConfigureTestDtos
     {
         /** @var Config $config */
         $eaConfig = Bootstrap::getObjectManager()->get(Config::class);
-        $eaConfig->merge(['Magento\Framework\Dto\Mock\ImmutableDtoWithExtensionAttributes' => [
+        $eaConfig->merge(['Magento\Framework\Dto\Mock\ImmutableDtoWithEaInterface' => [
             'attribute1' => [
                 'type' => 'string',
                 'resourceRefs' => '',
@@ -83,7 +86,7 @@ class ConfigureTestDtos
                 'join' => null
             ],
             'attribute3' => [
-                'type' => 'Magento\Framework\Dto\Mock\ImmutableDtoInterface[]',
+                'type' => '\Magento\Framework\Dto\Mock\ImmutableDtoInterface',
                 'resourceRefs' => '',
                 'join' => null
             ]
@@ -91,7 +94,7 @@ class ConfigureTestDtos
 
         self::addDto(
             $config,
-            'Magento\Framework\Dto\Mock\ImmutableDtoWithExtensionAttributes',
+            'Magento\Framework\Dto\Mock\ImmutableDtoWithEa',
             false,
             [
                 'prop1' => [
@@ -160,6 +163,114 @@ class ConfigureTestDtos
         self::addDto(
             $config,
             'Magento\Framework\Dto\Mock\MutableDto',
+            true,
+            [
+                'prop1' => [
+                    'type' => 'int',
+                    'nullable' => false,
+                    'optional' => false
+                ],
+                'prop2' => [
+                    'type' => 'string',
+                    'nullable' => false,
+                    'optional' => true
+                ],
+                'prop3' => [
+                    'type' => 'array',
+                    'nullable' => true,
+                    'optional' => false
+                ],
+                'prop4' => [
+                    'type' => 'int[]',
+                    'nullable' => true,
+                    'optional' => true
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addMutableDtoWithExtensionAttributes(DtoConfig $config): void
+    {
+        /** @var Config $config */
+        $eaConfig = Bootstrap::getObjectManager()->get(Config::class);
+        $eaConfig->merge(['Magento\Framework\Dto\Mock\MutableDtoWithEaInterface' => [
+            'attribute1' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute2' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute3' => [
+                'type' => '\Magento\Framework\Dto\Mock\MutableDtoInterface',
+                'resourceRefs' => '',
+                'join' => null
+            ]
+        ]]);
+
+        self::addDto(
+            $config,
+            'Magento\Framework\Dto\Mock\MutableDtoWithEa',
+            true,
+            [
+                'prop1' => [
+                    'type' => 'int',
+                    'nullable' => false,
+                    'optional' => false
+                ],
+                'prop2' => [
+                    'type' => 'string',
+                    'nullable' => false,
+                    'optional' => true
+                ],
+                'prop3' => [
+                    'type' => 'array',
+                    'nullable' => true,
+                    'optional' => false
+                ],
+                'prop4' => [
+                    'type' => 'int[]',
+                    'nullable' => true,
+                    'optional' => true
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addMutableDtoWithImmutableExtensionAttributes(DtoConfig $config): void
+    {
+        /** @var Config $config */
+        $eaConfig = Bootstrap::getObjectManager()->get(Config::class);
+        $eaConfig->merge(['Magento\Framework\Dto\Mock\MutableDtoWithIeaInterface' => [
+            'attribute1' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute2' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute3' => [
+                'type' => '\Magento\Framework\Dto\Mock\ImmutableDtoInterface',
+                'resourceRefs' => '',
+                'join' => null
+            ]
+        ]]);
+
+        self::addDto(
+            $config,
+            'Magento\Framework\Dto\Mock\MutableDtoWithIea',
             true,
             [
                 'prop1' => [

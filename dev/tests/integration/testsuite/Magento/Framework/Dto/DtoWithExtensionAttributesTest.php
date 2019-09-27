@@ -7,48 +7,109 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Dto\DtoProcessor\DtoReflection;
-use Magento\Framework\Dto\Mock\ImmutableDto;
-use Magento\Framework\Dto\Mock\ImmutableNestedDto;
-use Magento\Framework\Dto\Mock\MockDtoConfig;
-use Magento\Framework\Dto\Mock\TestSimpleObject;
+use Magento\Framework\Dto\Mock\ConfigureTestDtos;
+use Magento\Framework\Dto\Mock\ImmutableDtoWithEa;
+use Magento\Framework\Dto\Mock\MutableDtoWithEa;
+use Magento\Framework\Dto\Mock\MutableDtoWithIea;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 
 class DtoWithExtensionAttributesTest extends TestCase
 {
+    /**
+     * @var DtoProcessor
+     */
+    private $dtoProcessor;
+
     /* @inheritDoc
      */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
 
+        ConfigureTestDtos::execute();
 
+        $this->dtoProcessor = $objectManager->get(DtoProcessor::class);
     }
 
-    private function mockExtensionAttributes(): void
+    public function testCreateImmutableDtoWithExtensionAttributes(): void
     {
-        /** @var Config $config */
-        $config = Bootstrap::getObjectManager()->get(Config::class);
-        $config->merge([TestDataInterface::class => [
-            'attribute1' => [
-                'type' => 'string',
-                'resourceRefs' => '',
-                'join' => null
+        /** @var ImmutableDtoWithEa $dto */
+        $dto = $this->dtoProcessor->createFromArray(
+            [
+                'prop1' => 1,
+                'prop2' => 'b',
+                'prop3' => ['abc', 'def', 'ghi'],
+                'prop4' => [1, 2, 3, 4],
+                'extension_attributes' => [
+                    'attribute1' => 'test1',
+                    'attribute2' => 'test2',
+                    'attribute3' =>[
+                        'prop1' => 2,
+                        'prop2' => 'abc',
+                        'prop3' => ['jkl', 'mno'],
+                        'prop4' => [5, 6, 7, 8]
+                    ]
+                ]
             ],
-            'attribute2' => [
-                'type' => 'string',
-                'resourceRefs' => '',
-                'join' => null
+            ImmutableDtoWithEa::class
+        );
+
+        self::assertSame('test1', $dto->getExtensionAttributes()->getAttribute1());
+        self::assertSame(['jkl', 'mno'], $dto->getExtensionAttributes()->getAttribute3()->getProp3());
+    }
+
+    public function testCreateMutableDtoWithExtensionAttributes(): void
+    {
+        /** @var MutableDtoWithEa $dto */
+        $dto = $this->dtoProcessor->createFromArray(
+            [
+                'prop1' => 1,
+                'prop2' => 'b',
+                'prop3' => ['abc', 'def', 'ghi'],
+                'prop4' => [1, 2, 3, 4],
+                'extension_attributes' => [
+                    'attribute1' => 'test1',
+                    'attribute2' => 'test2',
+                    'attribute3' =>[
+                        'prop1' => 2,
+                        'prop2' => 'abc',
+                        'prop3' => ['jkl', 'mno'],
+                        'prop4' => [5, 6, 7, 8]
+                    ]
+                ]
             ],
-            'attribute3' => [
-                'type' => TestDataObjectSub::class . '[]',
-                'resourceRefs' => '',
-                'join' => null
-            ]
-        ]]);
+            MutableDtoWithEa::class
+        );
+
+        self::assertSame('test1', $dto->getExtensionAttributes()->getAttribute1());
+        self::assertSame(['jkl', 'mno'], $dto->getExtensionAttributes()->getAttribute3()->getProp3());
+    }
+
+    public function testCreateMutableDtoWithImmutableExtensionAttributes(): void
+    {
+        /** @var MutableDtoWithIea $dto */
+        $dto = $this->dtoProcessor->createFromArray(
+            [
+                'prop1' => 1,
+                'prop2' => 'b',
+                'prop3' => ['abc', 'def', 'ghi'],
+                'prop4' => [1, 2, 3, 4],
+                'extension_attributes' => [
+                    'attribute1' => 'test1',
+                    'attribute2' => 'test2',
+                    'attribute3' =>[
+                        'prop1' => 2,
+                        'prop2' => 'abc',
+                        'prop3' => ['jkl', 'mno'],
+                        'prop4' => [5, 6, 7, 8]
+                    ]
+                ]
+            ],
+            MutableDtoWithIea::class
+        );
+
+        self::assertSame('test1', $dto->getExtensionAttributes()->getAttribute1());
+        self::assertSame(['jkl', 'mno'], $dto->getExtensionAttributes()->getAttribute3()->getProp3());
     }
 }
