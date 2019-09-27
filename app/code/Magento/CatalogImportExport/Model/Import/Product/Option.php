@@ -336,6 +336,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * @var array
      */
+    private $optionTypeSkus;
+
+    /**
+     * @var array
+     */
     private $lastOptionTitle;
 
     /**
@@ -1606,8 +1611,14 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($typeValues as $optionId => &$optionTypes) {
             foreach ($optionTypes as &$optionType) {
                 $optionTypeId = $optionType['option_type_id'];
+                $optionSku = $optionType['sku'];
                 foreach ($typeTitles[$optionTypeId] as $storeId => $optionTypeTitle) {
-                    $existingTypeId = $this->getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle);
+                    $existingTypeId = $this->getExistingOptionTypeId(
+                        $optionId,
+                        $storeId,
+                        $optionTypeTitle,
+                        $optionSku
+                    );
                     if ($existingTypeId) {
                         $optionType['option_type_id'] = $existingTypeId;
                         $typeTitles[$existingTypeId] = $typeTitles[$optionTypeId];
@@ -1625,14 +1636,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Identify ID of the provided option type by its title in the specified store.
+     * Identify ID of the provided option type by its title or sku in the specified store.
      *
      * @param int $optionId
      * @param int $storeId
      * @param string $optionTypeTitle
+     * @param string $optionSku
      * @return int|null
      */
-    private function getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle)
+    private function getExistingOptionTypeId($optionId, $storeId, $optionTypeTitle, $optionSku)
     {
         if (!isset($this->optionTypeTitles[$storeId])) {
             /** @var ProductOptionValueCollection $optionTypeCollection */
@@ -1641,6 +1653,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             /** @var \Magento\Catalog\Model\Product\Option\Value $type */
             foreach ($optionTypeCollection as $type) {
                 $this->optionTypeTitles[$storeId][$type->getOptionId()][$type->getId()] = $type->getTitle();
+                $this->optionTypeSkus[$storeId][$type->getOptionId()][$type->getId()] = $type->getSku();
             }
         }
         if (isset($this->optionTypeTitles[$storeId][$optionId])
@@ -1648,6 +1661,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ) {
             foreach ($this->optionTypeTitles[$storeId][$optionId] as $optionTypeId => $currentTypeTitle) {
                 if ($optionTypeTitle === $currentTypeTitle) {
+                    return $optionTypeId;
+                }
+            }
+            foreach ($this->optionTypeSkus[$storeId][$optionId] as $optionTypeId => $currentOptionSku) {
+                if ($optionSku === $currentOptionSku) {
                     return $optionTypeId;
                 }
             }
