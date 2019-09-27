@@ -1,0 +1,8 @@
+<IfVersion < 2.4>
+    order allow,deny
+    deny from all
+</IfVersion>
+<IfVersion >= 2.4>
+    Require all denied
+</IfVersion>
+
