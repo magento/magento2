@@ -105,7 +105,7 @@ class ExtractCustomerData
         $customerData['group_id'] = null;
         $customerData['model'] = $customer;
         $customerData['id'] = null;
-
+        $customerData['date_of_birth'] = $customerData['dob'];
         return $customerData;
     }
 }
