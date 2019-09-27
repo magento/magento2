@@ -145,7 +145,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage The child product do not belong to the parent product.
+     * @expectedExceptionMessage Could not find specified product.
      */
     public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
     {
@@ -173,7 +173,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage The child product do not belong to the parent product.
+     * @expectedExceptionMessage Could not find specified product.
      */
     public function testAddVariationFromAnotherConfigurableProductWithDifferentSuperAttributeToCart()
     {

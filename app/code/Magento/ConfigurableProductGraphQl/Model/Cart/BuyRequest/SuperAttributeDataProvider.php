@@ -79,7 +79,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
         }
         $configurableProductLinks = $parentProduct->getExtensionAttributes()->getConfigurableProductLinks();
         if (!in_array($product->getId(), $configurableProductLinks)) {
-            throw new GraphQlInputException(__('The child product do not belong to the parent product.'));
+            throw new GraphQlInputException(__('Could not find specified product.'));
         }
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $this->optionCollection->addProductId((int)$parentProduct->getData($linkField));
