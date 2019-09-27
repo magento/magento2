@@ -25,9 +25,9 @@
         <see userInput="{{MinMaxQueryLength.Hint}}" selector="{{AdminCatalogSearchConfigurationSection.maxQueryLengthHint}}" stepKey="seeHint2"/>
         <uncheckOption selector="{{AdminCatalogSearchConfigurationSection.minQueryLengthInherit}}" stepKey="uncheckSystemValue"/>
         <fillField selector="{{AdminCatalogSearchConfigurationSection.minQueryLength}}" userInput="{{minLength}}" stepKey="setMinQueryLength"/>
+        <waitForPageLoad stepKey="waitForTextToBeFilled"/>
         <!--Scrolling till Category Permissions to make sure the collapse tab for Catalog Search is visible-->
         <scrollTo selector="{{AdminCatalogSearchConfigurationSection.categoryPermissions}}" stepKey="scrollToCatalogSearchTab1"/>
-        <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.categoryPermissions}}" stepKey="waitForElementVisibleWhileScrolling"/>
         <click selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="collapseTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForConfigSaved"/>
