@@ -9,13 +9,13 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="newsletter_subscriber" resource="default" engine="innodb" comment="Newsletter Subscriber">
         <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Subscriber Id"/>
+                comment="Subscriber ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="timestamp" name="change_status_at" on_update="false" nullable="true"
                 comment="Change Status At"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Customer Id"/>
+                default="0" comment="Customer ID"/>
         <column xsi:type="varchar" name="subscriber_email" nullable="true" length="150" comment="Subscriber Email"/>
         <column xsi:type="int" name="subscriber_status" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Subscriber Status"/>
@@ -69,7 +69,7 @@
     </table>
     <table name="newsletter_queue" resource="default" engine="innodb" comment="Newsletter Queue">
         <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Queue Id"/>
+                comment="Queue ID"/>
         <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Template ID"/>
         <column xsi:type="int" name="newsletter_type" padding="11" unsigned="false" nullable="true" identity="false"
@@ -98,11 +98,11 @@
     </table>
     <table name="newsletter_queue_link" resource="default" engine="innodb" comment="Newsletter Queue Link">
         <column xsi:type="int" name="queue_link_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Queue Link Id"/>
+                comment="Queue Link ID"/>
         <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Queue Id"/>
+                default="0" comment="Queue ID"/>
         <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Subscriber Id"/>
+                default="0" comment="Subscriber ID"/>
         <column xsi:type="timestamp" name="letter_sent_at" on_update="false" nullable="true" comment="Letter Sent At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="queue_link_id"/>
@@ -123,9 +123,9 @@
     </table>
     <table name="newsletter_queue_store_link" resource="default" engine="innodb" comment="Newsletter Queue Store Link">
         <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Queue Id"/>
+                default="0" comment="Queue ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="queue_id"/>
             <column name="store_id"/>
@@ -142,11 +142,11 @@
     </table>
     <table name="newsletter_problem" resource="default" engine="innodb" comment="Newsletter Problems">
         <column xsi:type="int" name="problem_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Problem Id"/>
+                comment="Problem ID"/>
         <column xsi:type="int" name="subscriber_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Subscriber Id"/>
+                comment="Subscriber ID"/>
         <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Queue Id"/>
+                default="0" comment="Queue ID"/>
         <column xsi:type="int" name="problem_error_code" padding="10" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Problem Error Code"/>
         <column xsi:type="varchar" name="problem_error_text" nullable="true" length="200" comment="Problem Error Text"/>
