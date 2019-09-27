@@ -89,7 +89,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
     public function prepareExportData()
     {
         try {
-            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
 
             $this->prepareDirectory($tmpDirectory, $this->getTmpFilesDirRelativePath());
             $this->reportWriter->write($tmpDirectory, $this->getTmpFilesDirRelativePath());
