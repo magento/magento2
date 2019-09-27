@@ -140,6 +140,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
+     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
      */
     public function testCreateCustomerIfEmailMissed()
     {
