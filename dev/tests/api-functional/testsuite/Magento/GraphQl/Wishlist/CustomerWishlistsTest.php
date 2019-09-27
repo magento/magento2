@@ -73,6 +73,37 @@ QUERY;
         $this->assertEquals('simple', $response['customer']['wishlists'][0]['items'][0]['product']['sku']);
     }
 
+    public function testCustomerWithoutWishlists(): void
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+ {
+  wishlists {
+   items_count
+   sharing_code
+   updated_at
+   items {
+    product {
+      sku 
+    }
+   }
+  }
+ }
+}
+QUERY;
+
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer@example.com', 'password')
+        );
+
+        $this->assertEquals([], $response['customer']['wishlists']);
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage The current customer isn't authorized.
