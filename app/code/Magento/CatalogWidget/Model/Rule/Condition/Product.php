@@ -11,6 +11,7 @@ namespace Magento\CatalogWidget\Model\Rule\Condition;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Store\Model\Store;
 
 /**
  * Class Product
@@ -164,6 +165,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Adds Attributes that belong to Global Scope
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
@@ -200,6 +203,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Adds Attributes that don't belong to Global Scope
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
@@ -208,7 +213,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
-        $storeId =  $this->storeManager->getStore()->getId();
+        $storeId = $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);
         $validEntities = [];
         if ($values) {
@@ -218,7 +223,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                         $validEntities[] = $entityId;
                     }
                 } else {
-                    if ($this->validateAttribute($storeValues[\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
+                    if (
+                        isset($storeValues[Store::DEFAULT_STORE_ID]) &&
+                        $this->validateAttribute($storeValues[Store::DEFAULT_STORE_ID])
+                    ) {
                         $validEntities[] = $entityId;
                     }
                 }
