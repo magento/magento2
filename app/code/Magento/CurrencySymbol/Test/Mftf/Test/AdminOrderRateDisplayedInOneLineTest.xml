@@ -24,28 +24,28 @@
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <!--Set price scope website-->
-            <magentoCLI command="config:set catalog/price/scope 1" stepKey="setCatalogPriceScopeWebsite"/>
+            <magentoCLI command="config:set {{CatalogPriceScopeConfigData.path}} {{CatalogPriceScopeConfigData.value_website}}" stepKey="setCatalogPriceScopeWebsite"/>
             <!--Set Currency options for Default Config-->
-            <magentoCLI command="config:set  currency/options/base EUR" stepKey="setCurrencyBaseEUR"/>
-            <magentoCLI command="config:set  currency/options/allow EUR,USD" stepKey="setAllowedCurrencyEUR"/>
-            <magentoCLI command="config:set  currency/options/default EUR" stepKey="setCurrencyDefaultEUR"/>
+            <magentoCLI command="config:set {{SetCurrencyBaseConfig.path}} {{SetCurrencyBaseConfig.value_eur}}" stepKey="setCurrencyBaseEUR"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfig.path}} {{SetAllowedCurrenciesConfig.value_two_currencies}}" stepKey="setAllowedCurrencyEUR"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyConfig.path}} {{SetDefaultCurrencyConfig.value_eur}}" stepKey="setCurrencyDefaultEUR"/>
             <!--Set Currency options for Website-->
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/base USD" stepKey="setCurrencyBaseEURWebsites"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/allow EUR,USD" stepKey="setAllowedCurrencyEURWebsites"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/default EUR" stepKey="setCurrencyDefaultEURWebsites"/>
+            <magentoCLI command="config:set --scope={{SetCurrencyBaseConfig.scope}} --scope-code={{SetCurrencyBaseConfig.scope_code}} {{SetCurrencyBaseConfig.path}} {{SetCurrencyBaseConfig.value_usd}}" stepKey="setCurrencyBaseEURWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfig.scope}} --scope-code={{SetAllowedCurrenciesConfig.scope_code}} {{SetAllowedCurrenciesConfig.path}} {{SetAllowedCurrenciesConfig.value_two_currencies}}" stepKey="setAllowedCurrencyWebsites"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyConfig.scope}} --scope-code={{SetDefaultCurrencyConfig.scope_code}} {{SetDefaultCurrencyConfig.path}} {{SetDefaultCurrencyConfig.value_eur}}" stepKey="setCurrencyDefaultEURWebsites"/>
         </before>
         <after>
             <!--Delete created product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Reset configurations-->
-            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setCatalogPriceScopeGlobal"/>
-            <magentoCLI command="config:set  currency/options/base USD" stepKey="setCurrencyBaseUSD"/>
-            <magentoCLI command="config:set  currency/options/default USD" stepKey="setCurrencyDefaultUSD"/>
-            <magentoCLI command="config:set  currency/options/allow USD" stepKey="setAllowedCurrencyUSD"/>
+            <magentoCLI command="config:set {{CatalogPriceScopeConfigData.path}} {{CatalogPriceScopeConfigData.value_global}}" stepKey="setCatalogPriceScopeGlobal"/>
+            <magentoCLI command="config:set {{SetCurrencyBaseConfig.path}} {{SetCurrencyBaseConfig.value_usd}}" stepKey="setCurrencyBaseUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyConfig.path}} {{SetDefaultCurrencyConfig.value_usd}}" stepKey="setCurrencyDefaultUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfig.path}} {{SetAllowedCurrenciesConfig.value_usd}}" stepKey="setAllowedCurrencyUSD"/>
             <!--Set Currency options for Website-->
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/base USD" stepKey="setCurrencyBaseUSDWebsites"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/default USD" stepKey="setCurrencyDefaultUSDWebsites"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/allow USD" stepKey="setAllowedCurrencyUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetCurrencyBaseConfig.scope}} --scope-code={{SetCurrencyBaseConfig.scope_code}} {{SetCurrencyBaseConfig.path}} {{SetCurrencyBaseConfig.value_usd}}" stepKey="setCurrencyBaseUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyConfig.scope}} --scope-code={{SetDefaultCurrencyConfig.scope_code}} {{SetDefaultCurrencyConfig.path}} {{SetDefaultCurrencyConfig.value_usd}}" stepKey="setCurrencyDefaultUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfig.scope}} --scope-code={{SetAllowedCurrenciesConfig.scope_code}} {{SetAllowedCurrenciesConfig.path}} {{SetAllowedCurrenciesConfig.value_usd}}" stepKey="setAllowedCurrencyUSDWebsites"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Open created product on Storefront and place for order-->

@@ -24,9 +24,9 @@
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createNewProduct"/>
             <!--Set Currency options for Website-->
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/base USD" stepKey="setCurrencyBaseUSDWebsites"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/allow EUR,USD,RUB" stepKey="setAllowedCurrencyWebsites"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base currency/options/default EUR" stepKey="setCurrencyDefaultUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetCurrencyBaseConfig.scope}} --scope-code={{SetCurrencyBaseConfig.scope_code}} {{SetCurrencyBaseConfig.path}} {{SetCurrencyBaseConfig.value_usd}}" stepKey="setCurrencyBaseUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfig.scope}} --scope-code={{SetAllowedCurrenciesConfig.scope_code}} {{SetAllowedCurrenciesConfig.path}} {{SetAllowedCurrenciesConfig.value_three_currencies}}" stepKey="setAllowedCurrencyWebsites"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyConfig.scope}} --scope-code={{SetDefaultCurrencyConfig.scope_code}} {{SetDefaultCurrencyConfig.path}} {{SetDefaultCurrencyConfig.value_eur}}" stepKey="setCurrencyDefaultEURWebsites"/>
         </before>
         <after>
             <!--Delete created product-->
