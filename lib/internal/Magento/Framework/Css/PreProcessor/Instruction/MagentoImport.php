@@ -13,6 +13,7 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\File\CollectorInterface;
+use Magento\Framework\Module\ModuleManagerInterface;
 
 /**
  * @magento_import instruction preprocessor
@@ -58,24 +59,32 @@ class MagentoImport implements PreProcessorInterface
     private $themeProvider;
 
     /**
+     * @var ModuleManagerInterface
+     */
+    private $moduleManager;
+
+    /**
      * @param DesignInterface $design
      * @param CollectorInterface $fileSource
      * @param ErrorHandlerInterface $errorHandler
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
+     * @param ModuleManagerInterface $moduleManager
      */
     public function __construct(
         DesignInterface $design,
         CollectorInterface $fileSource,
         ErrorHandlerInterface $errorHandler,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Design\Theme\ListInterface $themeList
+        \Magento\Framework\View\Design\Theme\ListInterface $themeList,
+        ModuleManagerInterface $moduleManager
     ) {
         $this->design = $design;
         $this->fileSource = $fileSource;
         $this->errorHandler = $errorHandler;
         $this->assetRepo = $assetRepo;
         $this->themeList = $themeList;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -108,6 +117,9 @@ class MagentoImport implements PreProcessorInterface
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
+                if ($importFile->getModule() && !$this->moduleManager->isEnabled($importFile->getModule())) {
+                    continue;
+                }
                 $referenceString = $isReference ? '(reference) ' : '';
                 $importsContent .= $importFile->getModule()
                     ? "@import $referenceString'{$importFile->getModule()}::{$resolvedPath}';\n"
