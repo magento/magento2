@@ -116,7 +116,7 @@ class Data
     /**
      * Get customer token lifetime from config.
      *
-     * @return string hours
+     * @return numeric hours
      */
     public function getCustomerTokenLifetime()
     {
@@ -127,7 +127,7 @@ class Data
     /**
      * Get customer token lifetime from config.
      *
-     * @return string hours
+     * @return numeric hours
      */
     public function getAdminTokenLifetime()
     {
