@@ -1265,6 +1265,7 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
+
                 if (gallery) {
                     gallery.first();
                 }
