@@ -273,7 +273,7 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <waitForPageLoad stepKey="waitForGridLoad"/>
     </actionGroup>
-    <!--Filter and select the the product  -->
+    <!--Filter and select the product  -->
     <actionGroup name="filterAndSelectProduct">
         <arguments>
             <argument name="productSku" type="string"/>
