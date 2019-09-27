@@ -108,7 +108,7 @@ class Reader
         } else {
             $configFiles = $this->getFiles();
             foreach ($configFiles as $file) {
-                $configFile = $path . DIRECTORY_SEPARATOR . $file;
+                $configFile = $path . '/' . $file;
                 if ($fileDriver->isExists($configFile)) {
                     $fileData = include $configFile;
                     if (!is_array($fileData)) {
