@@ -97,7 +97,7 @@ input BillingAddressInput {
     customer_address_id: Int
     address: CartAddressInput
     use_for_shipping: Boolean @doc(description: "Deprecated. Use same_as_shipping")
-    same_as_shipping: Boolean
+    same_as_shipping: Boolean @doc(description: "Set billing address same as shipping")
 }
 
 input CartAddressInput {
