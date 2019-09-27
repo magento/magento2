@@ -9,9 +9,9 @@
     <default>
         <system>
             <cron>
-                <additional_settings>
-                    <check_host>0</check_host>
-                </additional_settings>
+                <settings>
+                    <check_host>1</check_host>
+                </settings>
             </cron>
         </system>
     </default>

@@ -495,7 +495,17 @@ class ProcessCronQueueObserver implements ObserverInterface
     private function cleanupJobs($groupId, $currentTime)
     {
         //remove orphan jobs marked as running
-        $this->cleanupOrphanJobs($groupId);
+        try {
+            $this->cleanupOrphanJobs($groupId);
+        } catch (\Exception $e) {
+            if ($this->state->getMode() === State::MODE_DEVELOPER
+            ) {
+                $this->logger->info($e->getMessages());
+            } else {
+                $this->logger->critical($e);
+            }
+        }
+
 
         // check if history cleanup is needed
         $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
@@ -674,7 +684,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         if ($runningJobs) {
             $count = 0;
 
-            foreach($runningJobs as $runningJob) {
+           foreach($runningJobs as $runningJob) {
 
                 if ($this->getCheckHostConfigurationValue() &&
                     $runningJob->getProcessHostname() != gethostname()) {
@@ -859,7 +869,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     private function getCheckHostConfigurationValue()
     {
         return $this->_scopeConfig->getValue(
-            'system/cron/additional_settings/check_host',
+            'system/cron/settings/check_host',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }

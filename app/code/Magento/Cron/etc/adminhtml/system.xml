@@ -36,11 +36,11 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
-                <group id="additional_settings" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Additional Cron settings: </label>
+                <group id="settings" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Settings</label>
                     <field id="check_host" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Checking host</label>
-                        <comment>during resetting orphan jobs on database level<![CDATA[<br /><i>If job on cron_schedule table is running, no other job with the code will be start again. Sometimes could happen that runnind of the cron job has been terminated (eg. server restart). The status of these orphan jobs need to be reset, otherwise the affected cron jobs never run again.</i>]]></comment>
+                        <comment><![CDATA[during resetting orphan jobs on database level<br /><i>If job in cron_schedule table is marked as <b>running</b>, no other job with the same job code will be start again. Sometimes could happen that the running of the cron job has been terminated (eg. server restart). The status of these orphan jobs need to be reset, otherwise the affected cron jobs never run again.</i>]]></comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
