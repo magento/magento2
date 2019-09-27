@@ -27,6 +27,10 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
      * @var \Magento\Directory\Setup\DataInstallerFactory
      */
     private $dataInstallerFactory;
+    /**
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
+     */
+    private $regionCollectionFactory;
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup
@@ -45,12 +49,17 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        /** @var DataInstaller $dataInstaller */
-        $dataInstaller = $this->dataInstallerFactory->create();
-        $dataInstaller->addCountryRegions(
-            $this->moduleDataSetup->getConnection(),
-            $this->getDataForAustralia()
-        );
+        /** @var \Magento\Directory\Model\ResourceModel\Region\Collection $collection */
+        $collection = $this->regionCollectionFactory->create();
+        $collection->addCountryFilter('AU');
+        if ($collection->getSize() == 0) {
+            /** @var DataInstaller $dataInstaller */
+            $dataInstaller = $this->dataInstallerFactory->create();
+            $dataInstaller->addCountryRegions(
+                $this->moduleDataSetup->getConnection(),
+                $this->getDataForAustralia()
+            );
+        }
     }
 
     /**
