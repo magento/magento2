@@ -173,8 +173,10 @@
                 default="0" comment="Base Grand Total"/>
         <column xsi:type="text" name="customer_notes" nullable="true" comment="Customer Notes"/>
         <column xsi:type="text" name="applied_taxes" nullable="true" comment="Applied Taxes"/>
-        <column xsi:type="varchar" name="discount_description" nullable="true" length="255"
+        <column xsi:type="varchar" name="discount_description" nullable="true" length="25500"
                 comment="Discount Description"/>
+        <column xsi:type="text" name="discount_breakdown" nullable="true" length="255"
+                comment="Discount Breakdown"/>
         <column xsi:type="decimal" name="shipping_discount_amount" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Shipping Discount Amount"/>
         <column xsi:type="decimal" name="base_shipping_discount_amount" scale="4" precision="20" unsigned="false"
@@ -234,6 +236,7 @@
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="text" name="applied_rule_ids" nullable="true" comment="Applied Rule Ids"/>
+        <column xsi:type="text" name="discounts" nullable="true" comment="Discounts"/>
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="smallint" name="is_qty_decimal" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Is Qty Decimal"/>

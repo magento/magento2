@@ -131,6 +131,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $this->calculator->prepareDescription($address);
         $total->setDiscountDescription($address->getDiscountDescription());
+        $total->setDiscountBreakdown($this->aggregateDiscountPerRule($quote));
         $total->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
         $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
 
@@ -217,5 +218,35 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             ];
         }
         return $result;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return array
+     */
+    private function aggregateDiscountPerRule(
+        \Magento\Quote\Model\Quote $quote
+    ) {
+        $items = $quote->getItems();
+        $discountPerRule = [];
+        if ($items) {
+            foreach ($items as $item) {
+                $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
+                if ($discountBreakdown) {
+                    foreach ($discountBreakdown as $key => $value) {
+                        /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
+                        $discount = $value['discount'];
+                        $ruleLabel = $value['rule'];
+                        if (isset($discountPerRule[$key])) {
+                            $discountPerRule[$key]['discount'] += $discount;
+                        } else {
+                            $discountPerRule[$key]['discount'] = $discount;
+                        }
+                        $discountPerRule[$key]['rule'] = $ruleLabel;
+                    }
+                }
+            }
+        }
+        return $discountPerRule;
     }
 }

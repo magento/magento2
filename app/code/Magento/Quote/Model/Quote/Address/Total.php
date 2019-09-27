@@ -200,4 +200,19 @@ class Total extends \Magento\Framework\DataObject
         }
         return $fullInfo;
     }
+
+    public function getDiscountBreakdown() {
+        $fullInfo = $this->getData('discount_breakdown');
+        if (is_string($fullInfo)) {
+            $fullInfo = $this->serializer->unserialize($fullInfo);
+        }
+        return $fullInfo;
+    }
+
+    public function setDiscountBreakdown($discount) {
+        if (isset($discount)) {
+            $this->setData('discount_breakdown', $this->serializer->serialize($discount));
+        }
+        return $this;
+    }
 }
