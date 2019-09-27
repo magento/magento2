@@ -133,8 +133,6 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $oldSuperMode = $this->getQuote()->getIsSuperMode();
         $this->getQuote()->setIsSuperMode(false);
         foreach ($items as $item) {
-            // To dispatch inventory event sales_quote_item_qty_set_after, set item qty
-            $item->setQty($item->getQty());
 
             if (!$item->getMessage()) {
                 //Getting product ids for stock item last quantity validation before grid display
