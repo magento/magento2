@@ -66,7 +66,7 @@ class Block
         }
 
         $renderedContent = $this->state->emulateAreaCode(
-            'frontend',
+            \Magento\Framework\App\Area::AREA_FRONTEND,
             [$this, 'getRenderedBlockContent'],
             [$block->getContent()]
         );
@@ -81,6 +81,8 @@ class Block
     }
 
     /**
+     * Get block data as it rendered on frontend
+     *
      * @param string $blockContent
      *
      * @return string
