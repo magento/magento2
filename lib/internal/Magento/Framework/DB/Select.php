@@ -42,7 +42,7 @@ class Select extends \Zend_Db_Select
     const STRAIGHT_JOIN = 'straightjoin';
 
     /**
-     * Sql straight join
+     * Straight join SQL directive.
      */
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
@@ -400,7 +400,7 @@ class Select extends \Zend_Db_Select
     /**
      * Render STRAIGHT_JOIN clause
      *
-     * @param string   $sql SQL query
+     * @param string $sql SQL query
      * @return string
      */
     protected function _renderStraightjoin($sql)
@@ -452,7 +452,7 @@ class Select extends \Zend_Db_Select
     /**
      * Render FOR UPDATE clause
      *
-     * @param string   $sql SQL query
+     * @param string $sql SQL query
      * @return string
      */
     protected function _renderForupdate($sql)
@@ -509,10 +509,13 @@ class Select extends \Zend_Db_Select
     }
 
     /**
-     * Sleep magic method.
+     * Remove links to other objects.
      *
      * @return string[]
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -532,6 +535,9 @@ class Select extends \Zend_Db_Select
      *
      * @return void
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
