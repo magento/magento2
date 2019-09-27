@@ -64,7 +64,7 @@ class RequestPathProvider implements RequestPathProviderInterface
         $select = $this->getConnection()->select();
         $select->from($this->resource->getTableName(DbStorage::TABLE_NAME));
 
-        $select->where($this->connection->quoteIdentifier('target_path') . ' IN (?)', $targetPath);
+        $select->where($this->getConnection()->quoteIdentifier('target_path') . ' IN (?)', $targetPath);
 
         return $select;
     }
