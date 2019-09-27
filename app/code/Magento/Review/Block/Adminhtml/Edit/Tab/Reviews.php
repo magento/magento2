@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
+namespace Magento\Review\Block\Adminhtml\Edit\Tab;
 
 /**
  * @api
@@ -28,6 +28,6 @@ class Reviews extends \Magento\Review\Block\Adminhtml\Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('customer/*/productReviews', ['_current' => true]);
+        return $this->getUrl('review/customer/productReviews', ['_current' => true]);
     }
 }

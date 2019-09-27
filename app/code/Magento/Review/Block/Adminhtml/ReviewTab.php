@@ -67,6 +67,6 @@ class ReviewTab extends TabWrapper
      */
     public function getTabUrl()
     {
-        return $this->getUrl('customer/*/productReviews', ['_current' => true]);
+        return $this->getUrl('review/customer/productReviews', ['_current' => true]);
     }
 }

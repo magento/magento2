@@ -19,7 +19,6 @@
         "magento/module-newsletter": "*",
         "magento/module-page-cache": "*",
         "magento/module-quote": "*",
-        "magento/module-review": "*",
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
