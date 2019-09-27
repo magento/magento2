@@ -78,8 +78,6 @@ class DtoGeneratorTest extends TestCase
                 'dtoClass' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDto',
                 'file' => 'SimpleImmutableDto.txt',
                 'config' => [
-                    'type' => 'class',
-                    'interface' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface',
                     'mutable' => false,
                     'properties' => $properties
                 ]
@@ -88,8 +86,6 @@ class DtoGeneratorTest extends TestCase
                 'dtoClass' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDto',
                 'file' => 'SimpleDto.txt',
                 'config' => [
-                    'type' => 'class',
-                    'interface' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface',
                     'mutable' => true,
                     'properties' => $properties
                 ]
@@ -98,8 +94,6 @@ class DtoGeneratorTest extends TestCase
                 'dtoClass' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface',
                 'file' => 'SimpleImmutableDtoInterface.txt',
                 'config' => [
-                    'type' => 'interface',
-                    'class' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDto',
                     'mutable' => false,
                     'properties' => $properties
                 ]
@@ -108,8 +102,6 @@ class DtoGeneratorTest extends TestCase
                 'dtoClass' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface',
                 'file' => 'SimpleDtoInterface.txt',
                 'config' => [
-                    'type' => 'interface',
-                    'class' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDto',
                     'mutable' => true,
                     'properties' => $properties
                 ]
@@ -118,8 +110,6 @@ class DtoGeneratorTest extends TestCase
                 'dtoClass' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDto',
                 'file' => 'ComplexDto.txt',
                 'config' => [
-                    'type' => 'class',
-                    'interface' => 'Magento\Framework\Dto\Test\Unit\Code\Generator\TestDtoInterface',
                     'mutable' => false,
                     'properties' => [
                         'prop1' => [
@@ -157,8 +147,20 @@ class DtoGeneratorTest extends TestCase
             ->with($dtoClass)
             ->willReturn(true);
 
+        $baseClassName = preg_replace('/Interface$/', '', $dtoClass);
+
         $this->dtoConfig
-            ->method('get')
+            ->method('isInterface')
+            ->with($dtoClass)
+            ->willReturn(strpos($dtoClass, 'Interface') !== false);
+
+        $this->dtoConfig
+            ->method('getInterfaceName')
+            ->with($dtoClass)
+            ->willReturn($baseClassName . 'Interface');
+
+        $this->dtoConfig
+            ->method('getConfiguration')
             ->with($dtoClass)
             ->willReturn($config);
 
