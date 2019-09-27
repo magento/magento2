@@ -696,7 +696,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 if (posix_kill(intval($runningJob->getProcessId()), 0)) {
                     //process with given ID still active
 
-                    //to avoid shell_exec output trunkcate
+                    //to avoid shell_exec output truncate
                     $tempFile = tmpfile();
                     fwrite(
                         $tempFile,
