@@ -72,10 +72,13 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             $this->productFactoryMock
         );
 
-        $this->setProperties($this->_model, [
-            'optionRepository' => $this->optionRepositoryMock,
-            'metadataPool' => $metadataPool,
-        ]);
+        $this->setProperties(
+            $this->_model,
+            [
+                'optionRepository' => $this->optionRepositoryMock,
+                'metadataPool' => $metadataPool,
+            ]
+        );
     }
 
     /**
@@ -105,10 +108,12 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('getStoreId')->willReturn(0);
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
-        $this->productMock->expects($this->any())->method('getData')->willReturnMap([
-            ['', null, $productData],
-            ['linkField', null, '1'],
-        ]);
+        $this->productMock->expects($this->any())->method('getData')->willReturnMap(
+            [
+                ['', null, $productData],
+                ['linkField', null, '1'],
+            ]
+        );
 
         $entityMock = $this->getMockForAbstractClass(
             \Magento\Eav\Model\Entity\AbstractEntity::class,
@@ -193,9 +198,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
 
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');
 
-        $duplicateMock->expects($this->any())->method('getData')->willReturnMap([
-            ['linkField', null, '2'],
-        ]);
+        $duplicateMock->expects($this->any())->method('getData')->willReturnMap(
+            [
+                ['linkField', null, '2'],
+            ]
+        );
         $this->optionRepositoryMock->expects($this->once())
             ->method('duplicate')
             ->with($this->productMock, $duplicateMock);
