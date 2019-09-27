@@ -33,9 +33,9 @@ class DtoPSR7Test extends TestCase
     {
         Bootstrap::getObjectManager()->configure(
             [
-            'preferences' => [
-            DtoConfig::class => MockDtoConfig::class
-            ]
+                'preferences' => [
+                    DtoConfig::class => MockDtoConfig::class
+                ]
             ]
         );
 

@@ -34,9 +34,9 @@ class DtoReflectionTest extends TestCase
 
         $objectManager->configure(
             [
-            'preferences' => [
-            DtoConfig::class => MockDtoConfig::class
-            ]
+                'preferences' => [
+                    DtoConfig::class => MockDtoConfig::class
+                ]
             ]
         );
 
