@@ -696,10 +696,18 @@ class ProcessCronQueueObserver implements ObserverInterface
                 if (posix_kill(intval($runningJob->getProcessId()), 0)) {
                     //process with given ID still active
 
-                    $execOutput = explode(
-                        "\n",
+                    //to avoid shell_exec output trunkcate
+                    $tempFile = tmpfile();
+                    fwrite(
+                        $tempFile,
                         shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
                     );
+                    fseek($tempFile, 0);
+                    $execOutput = explode(
+                        "\n",
+                        fread($tempFile, 5012)
+                    );
+                    fclose($tempFile);
 
                     if ($execOutput && $this->isTheSameProcess($execOutput, $runningJob)) {
                         //process and job start time are matching - 99.99% sure that job still active
