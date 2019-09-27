@@ -172,15 +172,16 @@ class ApiConfigFixture extends ConfigFixture
                 $value,
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             );
-        } else {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\TestFramework\App\ApiMutableScopeConfig::class
-            )->setValue(
-                $configPath,
-                $value,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeCode
-            );
+
+            return;
         }
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\TestFramework\App\ApiMutableScopeConfig::class
+        )->setValue(
+            $configPath,
+            $value,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeCode
+        );
     }
 }
