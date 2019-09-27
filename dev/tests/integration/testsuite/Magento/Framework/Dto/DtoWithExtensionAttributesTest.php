@@ -21,7 +21,8 @@ class DtoWithExtensionAttributesTest extends TestCase
      */
     private $dtoProcessor;
 
-    /* @inheritDoc
+    /**
+     * @inheritDoc
      */
     protected function setUp()
     {

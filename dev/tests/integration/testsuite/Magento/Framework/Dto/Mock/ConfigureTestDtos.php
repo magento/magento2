@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\Dto\Mock;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
+use Magento\Framework\Api\ExtensionAttribute\InjectorConfig;
 use Magento\Framework\Dto\DtoConfig;
+use Magento\Framework\Dto\Injector\TestInjector;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -31,6 +33,8 @@ class ConfigureTestDtos
         self::addImmutableDtoWithExtensionAttributes($config);
         self::addMutableDtoWithExtensionAttributes($config);
         self::addMutableDtoWithImmutableExtensionAttributes($config);
+
+        self::addImmutableDtoWithEaInjectors($config);
     }
 
     /**
@@ -324,6 +328,48 @@ class ConfigureTestDtos
                 ],
                 'testDtoArray' => [
                     'type' => 'Magento\Framework\Dto\Mock\ImmutableDto[]',
+                    'nullable' => false,
+                    'optional' => false
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addImmutableDtoWithEaInjectors(DtoConfig $config): void
+    {
+        /** @var Config $config */
+        $eaConfig = Bootstrap::getObjectManager()->get(Config::class);
+        $eaConfig->merge(['Magento\Framework\Dto\Mock\ImmutableDtoWithInjectorsInterface' => [
+            'attribute1' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ]
+        ]]);
+
+        /** @var InjectorConfig $config */
+        $injectorConfig = Bootstrap::getObjectManager()->get(InjectorConfig::class);
+        $injectorConfig->merge(
+            [
+                'Magento\Framework\Dto\Mock\ImmutableDtoWithInjectorsInterface' => [
+                    'test-injector' => TestInjector::class
+                ],
+                'Magento\Framework\Dto\Mock\ImmutableDtoWithInjectors' => [
+                    'test-injector' => TestInjector::class
+                ]
+            ]
+        );
+
+        self::addDto(
+            $config,
+            'Magento\Framework\Dto\Mock\ImmutableDtoWithInjectors',
+            false,
+            [
+                'prop1' => [
+                    'type' => 'int',
                     'nullable' => false,
                     'optional' => false
                 ]

@@ -11,12 +11,26 @@ use DOMDocument;
 use DOMNode;
 use DOMNodeList;
 use Magento\Framework\Config\ConverterInterface;
+use Magento\Framework\ObjectManager\ConfigInterface\Proxy as ConfigInterface;
 
 /**
  * Converter class for attributes extensions injection based on XML declarations
  */
 class Converter implements ConverterInterface
 {
+    /**
+     * @var ConfigInterface
+     */
+    private $omConfig;
+
+    /**
+     * @param ConfigInterface $omConfig
+     */
+    public function __construct(ConfigInterface $omConfig)
+    {
+        $this->omConfig = $omConfig;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -37,17 +51,25 @@ class Converter implements ConverterInterface
         foreach ($types as $type) {
             $typeConfig = [];
             $typeName = $type->getAttribute('for');
-
             $injectors = $type->getElementsByTagName('injector');
-            foreach ($injectors as $injector) {
-                $code = $injector->getAttribute('code');
-                $codeType = $injector->getAttribute('type');
 
-                $typeConfig[$code] = $codeType;
+            if (!empty($injectors)) {
+                foreach ($injectors as $injector) {
+                    $code = $injector->getAttribute('code');
+                    $type = $injector->getAttribute('type');
+
+                    $typeConfig[$code] = $type;
+                }
+
+                $output[ltrim($typeName, '\\')] = $typeConfig;
+
+                $preferenceFor = $this->omConfig->getPreference($typeName);
+                if ($preferenceFor !== $typeName) {
+                    $output[ltrim($preferenceFor, '\\')] = $typeConfig;
+                }
             }
-
-            $output[$typeName] = $typeConfig;
         }
+
         return $output;
     }
 }
