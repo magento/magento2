@@ -320,6 +320,6 @@
         <data key="password">pwdTest123!</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
-        <requiredEntity type="address">US_Address_AFE</requiredEntity>
+        <requiredEntity type="address">US_Address_AE</requiredEntity>
     </entity>
 </entities>
