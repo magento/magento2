@@ -35,7 +35,7 @@
         <remove keyForRemoval="clickInvoice"/>
         <remove keyForRemoval="clickSubmitInvoice"/>
         <remove keyForRemoval="checkSuccessMessage"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="clickOrderRowInvoice"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction" after="openOrderForInvoice"/>
         <fillField selector=".order-shipment-table tbody:nth-of-type(1) .col-qty input" userInput="1" stepKey="shipOneItem" after="clickShipAction"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment" after="shipOneItem"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="checkSuccessMessage" after="waitForPageLoadSuccessMessage"/>

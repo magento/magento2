@@ -92,12 +92,9 @@
 
         <!--Admin Area Check ordered quantity-->
         <comment userInput="Admin - Check ordered quantity" stepKey="AdminCheckOrderedQuantity"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderListPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitOrderListPageLoad"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrder"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCheckOrderAfterCustomerSubmits"/>
-        <waitForLoadingMaskToDisappear stepKey="waitFilteredOrderListPageLoad"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="navigateToOrderViewPage"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered 5" stepKey="orderedQuantity"/>
 
@@ -113,12 +110,9 @@
 
         <!--Admin Area Process Full Invoice-->
         <comment userInput="Admin - Process invoice for full order" stepKey="InvoiceFullOrder"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNumInvoice"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrderToInvoice">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoadSubmitInvoice"/>
@@ -129,12 +123,6 @@
 
         <!--Admin Area Create Partial Credit Memo-->
         <comment userInput="Admin - Create credit memo for one item of invoiced order" stepKey="AdminCreateCreditMemoPartialOrder"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateCreditMemo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskCreditMemo"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNumCreditMemo"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCreditMemo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskCreditMemo"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowCreditMemo"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
         <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox"/>
         <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund"/>

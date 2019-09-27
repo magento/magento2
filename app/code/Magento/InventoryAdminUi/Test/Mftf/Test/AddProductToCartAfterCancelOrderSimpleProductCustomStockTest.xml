@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddProductToCartAfterCancelOrderSimpleProductCustomStockTest">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Add Simple Product after Cancel Order Custom Stock."/>
+            <description value="Verify, customer able to add simple product to cart with correct quantity after order cancel on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735243/scenarios/1454513"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <createData entity="MsiCustomer1" stepKey="customer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Assign source to product.-->
+            <amOnPage url="{{AdminProductEditPage.url($$product.id$$)}}" stepKey="openProductEditPage"/>
+            <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceAndSetQty">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteCustomStock"/>
+            <!--Disable source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="deleteSource">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Add product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="navigateToToPDP"/>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToCart">
+            <argument name="productQty" value="{{fivePiecesAddToCart.value}}"/>
+        </actionGroup>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <click selector=".continue" stepKey="clickOnNextPaymentPage"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <!--Cancel order-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+        <!--Add simple product to cart with improper quantity.-->
+        <amOnPage url="{{StorefrontProductPage.url($product.custom_attributes[url_key]$)}}" stepKey="goToPDP"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{101ProductQty.value}}" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="waitForErrorMessage"/>
+        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="The requested qty is not available" stepKey="verifyErrorMessage"/>
+        <!--Add simple product with proper quantity.-->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToCartWithProperQty">
+            <argument name="productQty" value="{{defaultProductQty.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchConfigurableProductCustomStockTest">
+        <annotations>
+            <stories value="Configurable Product Custom Stock."/>
+            <title value="Advanced Search Configurable Product on Custom Stock."/>
+            <description value="Verify customer able to search configurable product with advanced search on custom stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/441590/scenarios/1518023"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/2581"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="ConfigurableMsiProduct" stepKey="product"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <!--Generate configurable variations.-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <amOnPage url="{{AdminProductEditPage.url($product.id$)}}" stepKey="openConfigurableProductEditPage"/>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButton"/>
+            <waitForElementVisible selector="{{AdminConfigurableProductSelectAttributesSlideOut.grid}}" time="30" stepKey="waitForGridPresents"/>
+            <click selector="{{AdminGridRow.checkboxByValue('color')}}" stepKey="selectColorAttribute"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="addNewColorWhite"/>
+            <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="setNameWhite"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveWhiteColor"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="openSelectSourcesModalWindow"/>
+            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearSourcesFilter"/>
+            <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchCustomSourceByNameForAssignment">
+                <argument name="keyword" value="$source.source[name]$"/>
+            </actionGroup>
+            <click selector="{{AdminGridRow.checkboxByValue($source.source[name]$)}}" stepKey="selectCustomSource"/>
+            <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="daneAssignSources"/>
+            <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="{{defaultProductQty.value}}" stepKey="fillQuantityForCustomSource"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariations"/>
+            <click selector="{{AdminProductFormSection.save}}" stepKey="saveConfigurableProduct"/>
+            <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+            <!--Set configurable product stock status.-->
+            <amOnPage url="{{AdminProductEditPage.url($product.id$)}}" stepKey="openProductEditPage"/>
+            <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="setProductStockStatus"/>
+            <actionGroup ref="AdminFormSaveAndClose" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <!--Delete test data.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteStock"/>
+            <!--Disable created source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Advanced search product by name.-->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="navigateToAdvancedSearchToSearchByName"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="searchProductByName">
+            <argument name="name" value="$product.name$"/>
+        </actionGroup>
+        <!--Verify searched product by name.-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="verifyProductSearchedByName">
+            <argument name="productName" value="$product.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <!--Advanced search product by sku.-->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="navigateToAdvancedSearchToSearchBySku"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="searchProductBySku">
+            <argument name="sku" value="$product.sku$"/>
+        </actionGroup>
+        <!--Verify searched product by sku.-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="verifyProductSearchedBySku">
+            <argument name="productName" value="$product.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

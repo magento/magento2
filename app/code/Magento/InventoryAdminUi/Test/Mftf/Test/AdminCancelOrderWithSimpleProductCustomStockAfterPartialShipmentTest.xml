@@ -100,13 +100,9 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Creating Partial Shipment from Admin -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateShipment"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageToCreateShipmentLoaded"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSearchApplied"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShip"/>
         <waitForLoadingMaskToDisappear stepKey="waitForShipmentPageLoaded"/>
 

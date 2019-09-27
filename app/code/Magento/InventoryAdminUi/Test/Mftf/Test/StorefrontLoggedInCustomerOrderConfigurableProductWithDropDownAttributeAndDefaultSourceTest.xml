@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoggedInCustomerOrderConfigurableProductWithDropDownAttributeAndDefaultSourceTest">
+        <annotations>
+            <stories value="Configurable Product Default Stock."/>
+            <title value="Logged In Customer Order Configurable Product on Default Stock."/>
+            <description value="Verify customer able to create order with configurable product with drop-down attribute on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/419535/scenarios/2627820"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="ApiConfigurableProduct" stepKey="configurableProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="configurableProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="configurableProductAttributeOption">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="configurableChildProduct">
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configurableProductOption">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="configurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configurableProductAddChild">
+                <requiredEntity createDataKey="configurableProduct"/>
+                <requiredEntity createDataKey="configurableChildProduct"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <createData entity="_minimalSource" stepKey="source"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+            <!--Assign Default Stock to Main Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Assign additional source to configurable product.-->
+            <amOnPage url="{{AdminProductEditPage.url($configurableChildProduct.id$)}}" stepKey="openProductEditPage"/>
+            <fillField selector="{{AdminProductSourcesGrid.rowQty('0')}}" userInput="{{defaultProductQty.value}}" stepKey="setDefaultSourceQuantity"/>
+            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="configurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="configurableChildProduct" stepKey="deleteConfigurableProductVariation"/>
+            <deleteData createDataKey="configurableProductAttribute" stepKey="deleteConfigurableProductAttribute"/>
+            <!--Disable source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <!--Add configurable product to cart.-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$customer$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$configurableProduct.custom_attributes[url_key]$" />
+            <argument name="productAttribute" value="$configurableProductAttribute.default_value$"/>
+            <argument name="productOption" value="$getConfigAttributeOption.value$"/>
+            <argument name="qty" value="{{tenPiecesAddToCart.value}}"/>
+        </actionGroup>
+        <!--Place order.-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutPage"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <!--Verify Order.-->
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" stepKey="waitForViewOrderedQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Ordered {{tenPiecesAddToCart.value}}" stepKey="verifyOrderedQuantity"/>
+        <!--Verify product quantity.-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductGrid"/>
+        <actionGroup ref="AdminGridFilterSearchResultsByInput" stepKey="findConfigurableProductVariation">
+            <argument name="selector" value="AdminProductGridFilterSection.skuFilter"/>
+            <argument name="value" value="$configurableChildProduct.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSalableProductQtyActionGroup" stepKey="verifyProductQuantity">
+            <argument name="sourceName" value="{{_defaultSource.name}}"/>
+            <argument name="sourceQty" value="{{defaultProductQty.value}}"/>
+            <argument name="stockName" value="{{_defaultStock.name}}"/>
+            <argument name="stockQty" value="{{defaultProductQtyBoughtWith10Pieces.value}}"/>
+        </actionGroup>
+    </test>
+</tests>

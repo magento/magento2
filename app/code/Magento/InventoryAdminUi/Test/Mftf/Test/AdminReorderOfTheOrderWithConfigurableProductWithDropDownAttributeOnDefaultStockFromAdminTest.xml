@@ -54,6 +54,11 @@
                 <requiredEntity createDataKey="createSource"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedSource">

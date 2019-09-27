@@ -20,12 +20,9 @@
         </annotations>
 
         <!--Create partial invoice.-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToProcessInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskInvoice"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNumInvoice"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchInvoice"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskGridForInvoice"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowInvoice"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrderToInvoice">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <scrollTo selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="scrollToQty"/>
         <fillField selector="{{AdminInvoiceItemsSection.itemQtyToInvoice('1')}}" userInput="1" stepKey="InvoiceQuantityPartial"/>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCatalogNavigationMenuUIDesktopTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Storefront Catalog Navigation Menu UI"/>
+            <title value="Storefront Catalog Navigation Menu UI, desktop"/>
+            <description value="Verify UI of Navigation Menu functionality on Storefront"/>
+            <testCaseId value="MC-11329"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="theme"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteDefaultCategoryChildren" stepKey="deleteRootCategoryChildren"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteDefaultCategoryChildren" stepKey="deleteRootCategoryChildren"/>
+            <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToDefault">
+                <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
+            </actionGroup>
+            <!-- Admin log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to Content > Themes. Change theme to Blank -->
+        <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToBlank">
+            <argument name="theme" value="{{MagentoBlankTheme.name}}"/>
+        </actionGroup>
+
+        <!-- Open storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+
+        <!-- Assert no category - no menu -->
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.navigationMenu}}" stepKey="dontSeeMenu"/>
+
+        <!-- Assert single row - no hover state -->
+        <createData entity="ApiCategory" stepKey="createFirstCategoryBlank">
+            <field key="name">Category A</field>
+        </createData>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForBlankSingleRowAppear"/>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFirstCategoryBlank.name$$)}}" stepKey="hoverFirstCategoryBlank"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.subItemLevelHover('level0')}}" stepKey="assertNoHoverState"/>
+
+        <!-- Create categories -->
+        <createData entity="ApiCategory" stepKey="createSecondCategoryBlank">
+            <field key="name">TEST</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createThirdCategoryBlank">
+            <field key="name">_test2</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createFourthCategoryBlank">
+            <field key="name">test 3</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createFifthCategoryBlank">
+            <field key="name">Category with several products</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createSixthCategoryBlank">
+            <field key="name">test 5</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createSeventhCategoryBlank">
+            <field key="name">test 8</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createEighthCategoryBlank">
+            <field key="name">This is a very very very very very looong title</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createNinthCategoryBlank">
+            <field key="name">test 6</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createTenthCategoryBlank">
+            <field key="name">test 7</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createEleventhCategoryBlank">
+            <field key="name">test 4</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createTwelfthCategoryBlank">
+            <field key="name">Category with image</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createThirteenthCategoryBlank">
+            <field key="name">test 0</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createCategoryWithoutChildrenBlank">
+            <field key="name">Category with description &amp; custom title</field>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createCategoryWithChildrenBlank">
+            <field key="name">Category with children</field>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createFirstCategoryLevelOneBlank">
+            <field key="name">level 1 test category very very very long name</field>
+            <requiredEntity createDataKey="createCategoryWithChildrenBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createSecondCategoryLevelOneBlank">
+            <field key="name">level 1 test category name</field>
+            <requiredEntity createDataKey="createCategoryWithChildrenBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createThirdCategoryLevelOneBlank">
+            <field key="name">level 1 with children</field>
+            <requiredEntity createDataKey="createCategoryWithChildrenBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createCategoryLevelTwoBlank">
+            <field key="name">level 2 with children</field>
+            <requiredEntity createDataKey="createThirdCategoryLevelOneBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createCategoryLevelThreeBlank">
+            <field key="name">level 3 test</field>
+            <requiredEntity createDataKey="createCategoryLevelTwoBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createFirstCategoryLevelFourBlank">
+            <field key="name">level 4</field>
+            <requiredEntity createDataKey="createCategoryLevelThreeBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createSecondCategoryLevelFourBlank">
+            <field key="name">level 4 test</field>
+            <requiredEntity createDataKey="createCategoryLevelThreeBlank"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createCategoryLevelFiveBlank">
+            <field key="name">level 5</field>
+            <requiredEntity createDataKey="createSecondCategoryLevelFourBlank"/>
+        </createData>
+
+        <!-- Several rows. Hover on category without children -->
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForBlankSeveralRowsAppear"/>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryWithoutChildrenBlank.name$$)}}" stepKey="hoverCategoryWithoutChildren"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createCategoryWithoutChildrenBlank.name$$, 'level0')}}" stepKey="dontSeeChildrenInCategory"/>
+
+        <!-- Nested level 1. No hover state -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryWithChildrenBlank.name$$)}}" stepKey="hoverCategoryWithChildrenTopLevel"/>
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkNoHoverState">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemByLevel('level0')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.white}}"/>
+        </actionGroup>
+
+        <!-- Nested level 1. Hover state on 1st item -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFirstCategoryLevelOneBlank.name$$)}}" stepKey="hoverCategoryLevelOneFirstItem"/>
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkHighlightedAfterHoverFirstItem">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemLevelHover('level0')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.gray}}"/>
+        </actionGroup>
+
+        <!-- Nested level 1 & 2. Hover state on the last item -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createThirdCategoryLevelOneBlank.name$$)}}" stepKey="hoverCategoryLevelOneLastItem"/>
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkHighlightedAfterHoverLastItem">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemLevelHover('level0')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.gray}}"/>
+        </actionGroup>
+
+        <!-- Submenu appears rightward -->
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level0')}}" stepKey="assertTopLevelMenuLeftDirection"/>
+
+        <!-- Nested level 1 & 5 -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryLevelTwoBlank.name$$)}}" stepKey="hoverCategoryLevelTwo"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuLeftDirection('level1')}}" stepKey="seeLevelOneMenuLeftDirection"/>
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryLevelThreeBlank.name$$)}}" stepKey="hoverCategoryLevelThree"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuLeftDirection('level2')}}" stepKey="seeLevelTwoMenuRightDirection"/>
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategoryLevelFourBlank.name$$)}}" stepKey="hoverCategoryLevelFour"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level3')}}" stepKey="seeLevelThreeMenuRightDirection"/>
+
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkSubcategoryHighlighted">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemLevelHover('level3')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.gray}}"/>
+        </actionGroup>
+
+        <!-- Delete all creation for Blank theme -->
+        <deleteData createDataKey="createFirstCategoryBlank" stepKey="deleteFirstCategoryBlank"/>
+        <deleteData createDataKey="createSecondCategoryBlank" stepKey="deleteSecondCategoryBlank"/>
+        <deleteData createDataKey="createThirdCategoryBlank" stepKey="deleteThirdCategoryBlank"/>
+        <deleteData createDataKey="createFourthCategoryBlank" stepKey="deleteFourthCategoryBlank"/>
+        <deleteData createDataKey="createFifthCategoryBlank" stepKey="deleteFifthCategoryBlank"/>
+        <deleteData createDataKey="createSixthCategoryBlank" stepKey="deleteSixthCategoryBlank"/>
+        <deleteData createDataKey="createSeventhCategoryBlank" stepKey="deleteSeventhCategoryBlank"/>
+        <deleteData createDataKey="createEighthCategoryBlank" stepKey="deleteEighthCategoryBlank"/>
+        <deleteData createDataKey="createNinthCategoryBlank" stepKey="deleteNinthCategoryBlank"/>
+        <deleteData createDataKey="createTenthCategoryBlank" stepKey="deleteTenthCategoryBlank"/>
+        <deleteData createDataKey="createEleventhCategoryBlank" stepKey="deleteEleventhCategoryBlank"/>
+        <deleteData createDataKey="createTwelfthCategoryBlank" stepKey="deleteTwelfthCategoryBlank"/>
+        <deleteData createDataKey="createThirteenthCategoryBlank" stepKey="deleteThirteenthCategoryBlank"/>
+        <deleteData createDataKey="createCategoryWithChildrenBlank" stepKey="deleteCategoryWithChildrenBlank"/>
+        <deleteData createDataKey="createCategoryWithoutChildrenBlank" stepKey="deleteCategoryWithoutChildrenBlank"/>
+
+        <!--  Go to Content > Themes. Change theme to Luma -->
+        <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="changeThemeToLuma">
+            <argument name="theme" value="{{MagentoLumaTheme.name}}"/>
+        </actionGroup>
+
+        <!-- Open storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefront"/>
+
+        <!-- Assert no category - no menu -->
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.navigationMenu}}" stepKey="dontSeeMenuOnStorefront"/>
+
+        <!-- Create categories -->
+        <createData entity="ApiCategory" stepKey="createFirstCategoryLuma"/>
+        <createData entity="ApiCategory" stepKey="createSecondCategoryLuma"/>
+        <createData entity="ApiCategory" stepKey="createThirdCategoryLuma"/>
+        <createData entity="ApiCategory" stepKey="createFourthCategoryLuma"/>
+
+        <!-- Single row. No hover state -->
+        <reloadPage stepKey="reload"/>
+        <waitForPageLoad stepKey="waitForLumaSingleRowAppear"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createFirstCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateInFirstCategory"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createSecondCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateInSecondCategory"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createThirdCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateThirdCategory"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createFourthCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateInFourthCategory"/>
+
+        <!-- Create categories for testing Luma theme -->
+        <createData entity="ApiCategory" stepKey="createFifthCategoryLuma"/>
+        <createData entity="ApiCategory" stepKey="createCategoryWithChildrenLuma"/>
+        <createData entity="SubCategoryWithParent" stepKey="createFirstCategoryLevelOneLuma">
+            <requiredEntity createDataKey="createCategoryWithChildrenLuma"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createSecondCategoryLevelOneLuma">
+            <requiredEntity createDataKey="createCategoryWithChildrenLuma"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createThirdCategoryLevelOneLuma">
+            <requiredEntity createDataKey="createCategoryWithChildrenLuma"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createFirstCategoryLevelTwoLuma">
+            <requiredEntity createDataKey="createThirdCategoryLevelOneLuma"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createSecondCategoryLevelTwoLuma">
+            <requiredEntity createDataKey="createThirdCategoryLevelOneLuma"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createCategoryLevelThreeLuma">
+            <requiredEntity createDataKey="createSecondCategoryLevelTwoLuma"/>
+        </createData>
+        <createData entity="SubCategoryWithParent" stepKey="createCategoryLevelFourLuma">
+            <requiredEntity createDataKey="createCategoryLevelThreeLuma"/>
+        </createData>
+        <createData entity="ApiCategory" stepKey="createSixthCategoryLuma"/>
+        <createData entity="ApiCategory" stepKey="createSeventhCategoryLuma"/>
+        <createData entity="ApiCategory" stepKey="createEighthCategoryLuma"/>
+
+        <!-- Several rows. Hover on Category without children -->
+        <reloadPage stepKey="refresh"/>
+        <waitForPageLoad stepKey="waitForLumaSeveralRowsAppear"/>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFifthCategoryLuma.name$$)}}" stepKey="hoverOnCategoryWithoutChildren"/>
+        <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createFifthCategoryLuma.name$$, 'level0')}}" stepKey="dontSeeSubcategoriesInCategory"/>
+
+        <!-- Nested level 1. No hover state -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryWithChildrenLuma.name$$)}}" stepKey="hoverOnCategoryWithChildren"/>
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkNoHighlightedInSubmenuAfterHover">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemByLevel('level0')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.white}}"/>
+        </actionGroup>
+
+        <!-- Nested level 1. Hover state on first item -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFirstCategoryLevelOneLuma.name$$)}}" stepKey="hoverOnFirstItemLevelOne"/>
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkHighlightedAfterHoverOnFirstItem">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemLevelHover('level0')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.gray}}"/>
+        </actionGroup>
+
+        <!-- Nested levels 1 & 2. Hover state on last item -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createThirdCategoryLevelOneLuma.name$$)}}" stepKey="hoverOnLastItemLevelOne"/>
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkHighlightedAfterHoverOnLastItem">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemLevelHover('level0')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.gray}}"/>
+        </actionGroup>
+
+        <!-- Submenu appears rightward -->
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level0')}}" stepKey="seeTopLevelRightDirection"/>
+
+        <!-- Nested levels 1 & 5 -->
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategoryLevelTwoLuma.name$$)}}" stepKey="hoverThirdCategoryLevelTwo"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level1')}}" stepKey="seeFirstLevelRightDirection"/>
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryLevelThreeLuma.name$$)}}" stepKey="hoverOnCategoryLevelThree"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level2')}}" stepKey="seeSecondLevelRightDirection"/>
+
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryLevelFourLuma.name$$)}}" stepKey="hoverOnCategoryLevelFour"/>
+        <seeElement selector="{{StorefrontNavigationMenuSection.submenuRightDirection('level3')}}" stepKey="seeThirdLevelRightDirection"/>
+
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkSubcategoryHighlightedAfterHover">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemLevelHover('level3')}}"/>
+            <argument name="property" value="background-color"/>
+            <argument name="color" value="{{NavigationMenuColor.gray}}"/>
+        </actionGroup>
+
+        <!-- Selected 1st level category -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryWithChildrenLuma.name$$)}}" stepKey="openTopLevelCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoaded"/>
+
+        <!-- Assert category active state -->
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkCategoryActiveState">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.itemActiveState}}"/>
+            <argument name="property" value="border-color"/>
+            <argument name="color" value="{{NavigationMenuColor.orange}}"/>
+        </actionGroup>
+
+        <!-- Selected subcategory. Assert active state -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openSubcategory">
+            <argument name="categoryName" value="$$createCategoryWithChildrenLuma.name$$"/>
+            <argument name="subCategoryName" value="$$createThirdCategoryLevelOneLuma.name$$"/>
+        </actionGroup>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryWithChildrenLuma.name$$)}}" stepKey="hoverOnCategory"/>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createThirdCategoryLevelOneLuma.name$$)}}" stepKey="hoverOnSubcategory"/>
+
+        <!-- Assert subcategory active state -->
+        <actionGroup ref="StorefrontCheckElementColorActionGroup" stepKey="checkSubitemActiveState">
+            <argument name="selector" value="{{StorefrontNavigationMenuSection.subItemActiveState}}"/>
+            <argument name="property" value="border-color"/>
+            <argument name="color" value="{{NavigationMenuColor.orange}}"/>
+        </actionGroup>
+
+        <!-- Delete created category -->
+        <deleteData createDataKey="createFirstCategoryLuma" stepKey="deleteFirstCategoryLuma"/>
+        <deleteData createDataKey="createSecondCategoryLuma" stepKey="deleteSecondCategoryLuma"/>
+        <deleteData createDataKey="createThirdCategoryLuma" stepKey="deleteThirdCategoryLuma"/>
+        <deleteData createDataKey="createFourthCategoryLuma" stepKey="deleteFourthCategoryLuma"/>
+        <deleteData createDataKey="createFifthCategoryLuma" stepKey="deleteFifthCategoryLuma"/>
+        <deleteData createDataKey="createSixthCategoryLuma" stepKey="deleteSixthCategoryLuma"/>
+        <deleteData createDataKey="createSeventhCategoryLuma" stepKey="deleteSeventhCategoryLuma"/>
+        <deleteData createDataKey="createEighthCategoryLuma" stepKey="deleteEighthCategoryLuma"/>
+        <deleteData createDataKey="createCategoryWithChildrenLuma" stepKey="deleteCategoryWithChildrenLuma"/>
+    </test>
+</tests>

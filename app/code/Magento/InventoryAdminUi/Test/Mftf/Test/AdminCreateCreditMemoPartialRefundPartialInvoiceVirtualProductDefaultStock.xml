@@ -22,13 +22,10 @@
         <!--Get order Id.-->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId" after="clickSubmitOrder" />
         <!--Admin Area Total Refund Credit Memo-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPageToCreateCreditMemo" after="checkSalableQtyAfterInvoiceCreated"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForOrdersPageLoadingMaskCreditMemo" after="onOrdersPageToCreateCreditMemo"/>
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$orderId}" stepKey="searchOrderNumCreditMemo" after="waitForOrdersPageLoadingMaskCreditMemo"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchCreditMemo" after="searchOrderNumCreditMemo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSubmitSearchLoadingMaskCreditMemo" after="submitSearchCreditMemo"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowCreditMemo" after="waitForSubmitSearchLoadingMaskCreditMemo"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo" after="clickOrderRowCreditMemo"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="{$orderId}"/>
+        </actionGroup>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo" after="openOrder"/>
         <click selector="{{AdminCreditMemoItemsSection.itemReturnToStock('1')}}" stepKey="returnToStockCheckbox" after="clickCreditMemo"/>
         <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund" after="returnToStockCheckbox"/>
         <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund" after="partialRefund"/>

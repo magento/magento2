@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoPartialRefundFullInvoiceFullShipmentSimpleProductCustomOptionsCustomStock" extends="AdminCreateCreditMemoTotalRefundFullInvoiceFullShipmentSimpleProductCustomOptionsDefaultStock">
+        <annotations>
+            <stories value="Simple Product Custom Stock."/>
+            <title value="Create Partial Refund Credit Memo after Full Invoice and Full Shipment with simple product with custom options on custom stock."/>
+            <description value="Verify, admin able to create partial refund credit memo after full invoice and full shipment with simple product with custom option on custom source."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/735149/scenarios/2419355"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create additional stock.-->
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="additionalStock" after="additionalSource"/>
+            <createData entity="SourceStockLinked1" stepKey="linkSourceStock1" after="additionalStock">
+                <requiredEntity createDataKey="additionalStock"/>
+                <requiredEntity createDataKey="additionalSource"/>
+            </createData>
+            <remove keyForRemoval="assignMainWebsiteToDefaultStock"/>
+        </before>
+        <after>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock" after="disableSource">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="additionalStock" stepKey="deleteStock" after="deleteProduct"/>
+        </after>
+        <!--Assign additional source to product.-->
+        <actionGroup ref="AssignSourceToProductActionGroup" stepKey="assignTestSourceToCreatedProduct" after="openProductEditPage">
+            <argument name="sourceCode" value="$$additionalSource.source[source_code]$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductSourcesGrid.rowQty('1')}}" userInput="100" stepKey="setCustomSourceQuantity" after="assignTestSourceToCreatedProduct"/>
+        <!--Process partial credit memo.-->
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="5" stepKey="partialRefund" after="returnToStockCheckbox"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund" after="partialRefund"/>
+        <waitForLoadingMaskToDisappear stepKey="updateQuantityLoadingMask" after="updateQuantityToRefund"/>
+        <!--Verify product quantity after credit memo.-->
+        <remove keyForRemoval="verifyProductSourceQuantity"/>
+        <remove keyForRemoval="verifyProductStockQuantity"/>
+        <see selector="{{AdminProductGridSection.productQtyPerSource('1', $$additionalSource.source[name]$$)}}" userInput="95" stepKey="verifyProductSourceQuantity" after="findProductBySkuToCheckQtyAfterCreditMemo"/>
+        <see selector="{{AdminProductGridSection.productSalableQty('1', $$additionalStock.stock[name]$$)}}" userInput="95" stepKey="verifyProductStockQuantity" after="verifyProductSourceQuantity"/>
+    </test>
+</tests>

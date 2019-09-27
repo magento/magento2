@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyNotifyQtyInConfigurationDownloadableProductCustomStockTest">
+        <annotations>
+            <stories value="Downloadable Product Custom Stock."/>
+            <title value="Notify Quantity 'Use Default' Applied for Downloadable Product on Custom Stock after Notify Quantity Changed in Configuration."/>
+            <description value="Verify, admin able to apply Notify Quantity 'Use Default' to downloadable product on custom stock after notify quantity has been changed in configuration."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457024/scenarios/1698334"/>
+            <severity value="MAJOR"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+            <skip>
+                <issueId value="https://github.com/magento/inventory/issues/2583"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <!--Set "Notify Quantity Below" configuration.-->
+            <magentoCLI command="config:set {{NotifyQuantityBelow.path}} {{NotifyQuantityBelow.value}}" stepKey="setNotifyQuantityBelow"/>
+            <!--Create test data.-->
+            <createData entity="DownloadableMsiProduct" stepKey="product"/>
+            <createData entity="FullSource1" stepKey="source"/>
+            <createData entity="BasicMsiStockWithMainWebsite1" stepKey="stock"/>
+            <createData entity="SourceStockLinked1" stepKey="sourceStockLink">
+                <requiredEntity createDataKey="stock"/>
+                <requiredEntity createDataKey="source"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <!--Revert "Notify Quantity Below" configuration.-->
+            <magentoCLI command="config:set {{RevertNotifyQuantityBelow.path}} {{RevertNotifyQuantityBelow.value}}" stepKey="revertNotifyQtyBelow"/>
+            <!--Delete test data.-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="stock" stepKey="deleteStock"/>
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableCreatedCustomSource">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Assign source to product and set quantity.-->
+        <amOnPage url="{{AdminProductEditPage.url($product.id$)}}" stepKey="openProductEditPage"/>
+        <actionGroup ref="UnassignSourceFromProductActionGroup" stepKey="unassignDefaultSourceFromProduct">
+            <argument name="sourceCode" value="{{_defaultSource.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignSourceToProductAndSetSourceQuantityActionGroup" stepKey="assignSourceAndSetQty">
+            <argument name="sourceCode" value="$$source.source[source_code]$$"/>
+        </actionGroup>
+        <!--Uncheck notify quantity use default.-->
+        <uncheckOption selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="uncheckNotifyQtyUseDefault"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!--Verify Notify Quantity has changed.-->
+        <dontSeeCheckboxIsChecked selector="{{AdminProductSourcesGrid.rowNotifyQuantityUseDefault('0')}}" stepKey="verifyNotifyQuantityUseDefaultIsNotUsed"/>
+        <seeInField selector="{{AdminProductSourcesGrid.rowNotifyQuantity('0')}}" userInput="{{RevertNotifyQuantityBelow.value}}" stepKey="verifyNotifyQuantityValue"/>
+    </test>
+</tests>

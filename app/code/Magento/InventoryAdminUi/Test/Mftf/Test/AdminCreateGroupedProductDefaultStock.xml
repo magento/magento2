@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateGroupedProductDefaultStock">
+        <annotations>
+            <stories value="Grouped Product Default Stock."/>
+            <title value="Create Grouped Product on Default Stock."/>
+            <description value="Verify admin able to create grouped product on default stock."/>
+            <testCaseId value="https://app.hiptest.com/projects/69435/test-plan/folders/457017/scenarios/1699954"/>
+            <severity value="CRITICAL"/>
+            <group value="msi"/>
+            <group value="multi_mode"/>
+        </annotations>
+
+        <before>
+            <!--Create test data.-->
+            <createData entity="FullSource1" stepKey="source"/>
+            <!--Create grouped and virtual product.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="GroupedProduct" stepKey="groupedProduct"/>
+            <createData entity="VirtualProduct" stepKey="product"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Assign Default Stock to Default Website.-->
+            <actionGroup ref="AssignWebsiteToStockActionGroup" stepKey="assignMainWebsiteToDefaultStock">
+                <argument name="stockName" value="{{_defaultStock.name}}"/>
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="groupedProduct" stepKey="deleteGroupedProduct"/>
+            <!--Disable created additional source.-->
+            <actionGroup ref="DisableSourceActionGroup" stepKey="disableSource">
+                <argument name="sourceCode" value="$source.source[source_code]$"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Assign virtual to grouped product.-->
+        <amOnPage url="{{AdminProductEditPage.url($$groupedProduct.id$$)}}" stepKey="openGroupedProductEditPage"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterGroupedProductOptionsBySimple">
+            <argument name="product" value="$product$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkProductFilterResult"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductsAssignedToGroupedProduct" after="clickAddSelectedGroupProducts"/>
+        <actionGroup ref="fillDefaultQuantityForLinkedToGroupProductInGrid" stepKey="fillDefaultQtyForVirtualProduct">
+            <argument name="productName" value="$product.name$"/>
+            <argument name="qty" value="{{minimalProductQty.value}}"/>
+        </actionGroup>
+        <!--Assign product to category and save.-->
+        <scrollToTopOfPage stepKey="scrollOnTopOfProductPagePage"/>
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+            <argument name="categoryName" value="$category.name$"/>
+        </actionGroup>
+        <!--Verify product on storefront.-->
+        <amOnPage url="{{StorefrontCategoryPage.url($category.name$)}}" stepKey="navigateToCategoryPageAgain"/>
+        <see userInput="$groupedProduct.name$" stepKey="assertProductPresent"/>
+        <see userInput="$product.price$" stepKey="assertProductPricePresent"/>
+    </test>
+</tests>

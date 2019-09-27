@@ -785,6 +785,24 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Check if column data type is numeric
+     *
+     * Based on column description
+     *
+     * @param array $columnDescription
+     * @return bool
+     */
+    private function isNumericValue(array $columnDescription): bool
+    {
+        $result = true;
+        if (!empty($columnDescription['DATA_TYPE'])
+            && in_array($columnDescription['DATA_TYPE'], ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'])) {
+            $result = false;
+        }
+        return $result;
+    }
+
+    /**
      * Update existing object
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -793,29 +811,35 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $connection = $this->getConnection();
+        $tableDescription = $connection->describeTable($this->getMainTable());
+        $preparedValue = $connection->prepareColumnValue($tableDescription[$this->getIdFieldName()], $object->getId());
+        $condition  = (!$this->isNumericValue($tableDescription[$this->getIdFieldName()]))
+            ? sprintf('%s=%d', $this->getIdFieldName(), $preparedValue)
+            : $connection->quoteInto($this->getIdFieldName() . '=?', $preparedValue);
+
         /**
          * Not auto increment primary key support
          */
         if ($this->_isPkAutoIncrement) {
             $data = $this->prepareDataForUpdate($object);
             if (!empty($data)) {
-                $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                $connection->update($this->getMainTable(), $data, $condition);
             }
         } else {
-            $select = $this->getConnection()->select()->from(
+            $select = $connection->select()->from(
                 $this->getMainTable(),
                 [$this->getIdFieldName()]
             )->where(
                 $condition
             );
-            if ($this->getConnection()->fetchOne($select) !== false) {
+            if ($connection->fetchOne($select) !== false) {
                 $data = $this->prepareDataForUpdate($object);
                 if (!empty($data)) {
-                    $this->getConnection()->update($this->getMainTable(), $data, $condition);
+                    $connection->update($this->getMainTable(), $data, $condition);
                 }
             } else {
-                $this->getConnection()->insert(
+                $connection->insert(
                     $this->getMainTable(),
                     $this->_prepareDataForSave($object)
                 );
