@@ -43,6 +43,7 @@ class MinqtyTest extends TestCase
      */
     public function testBeforeSave(string $value, array $fieldSetData, string $expected): void
     {
+        $this->markTestSkipped("MC-19872");
         $this->minQtyConfig->setData('fieldset_data', $fieldSetData);
         $this->minQtyConfig->setValue($value);
         $this->minQtyConfig->beforeSave();
