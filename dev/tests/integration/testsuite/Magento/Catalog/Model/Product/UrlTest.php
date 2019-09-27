@@ -49,6 +49,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @magentoDbIsolation disabled
      * @dataProvider getUrlsWithSecondStoreProvider
      * @magentoAppArea adminhtml
      */
