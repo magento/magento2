@@ -12,7 +12,9 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var Magento\Cms\Api\PageRepositoryInterface $pageRepository */
-$pageRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Magento\Cms\Api\PageRepositoryInterface::class);
+$pageRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    Magento\Cms\Api\PageRepositoryInterface::class
+);
 
 $pageRepository->deleteById('page-a');
 $pageRepository->deleteById('page-b');

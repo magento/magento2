@@ -157,6 +157,11 @@
             <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Block\SectionNamesProvider">
+        <arguments>
+            <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface"
                 type="Magento\Customer\CustomerData\JsLayoutDataProviderPool"/>
     <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">

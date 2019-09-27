@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -137,6 +138,67 @@ QUERY;
                 self::assertEquals($quantityTwo, $cartItem['quantity']);
             }
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage You need to choose options for your item.
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
+    {
+        $this->markTestSkipped(
+            'Magento automatically selects the correct child product according to the super attribute
+             https://github.com/magento/graphql-ce/issues/940'
+        );
+
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_different_super_attribute.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessage You need to choose options for your item.
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithDifferentSuperAttributeToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+        $this->graphQlMutation($query);
     }
 
     /**
