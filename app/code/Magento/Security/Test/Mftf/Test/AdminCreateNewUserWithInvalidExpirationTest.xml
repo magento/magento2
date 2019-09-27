@@ -15,18 +15,21 @@
             <description value="Create new user with invalid expiration date."/>
             <testCaseId value="" />
             <severity value="CRITICAL"/>
-            <group value="security_userexpiration"/>
+            <group value="security_userexpire"/>
         </annotations>
+
         <before>
-            <!-- Log in to Admin Panel -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
 
-        <!-- Create new user with user expiration set -->
-        <actionGroup ref="AdminCreateNewUserWithExpirationActionGroup" stepKey="fillInNewUserWithInvalidExpiration">
-            <argument name="user" value="NewAdminUserWithInvalidExpiration" />
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
+        <generateDate date="-5 day" format="M d, Y h:i:s" stepKey="expiresDateTime"/>
+        <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
+            <argument name="expires_at" value="{$expiresDateTime}"/>
         </actionGroup>
-
         <actionGroup ref="AdminSaveUserInvalidExpirationActionGroup" stepKey="saveNewUserWithInvalidExpirationError" />
     </test>
 </tests>

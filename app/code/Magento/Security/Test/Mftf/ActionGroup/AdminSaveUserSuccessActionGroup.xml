@@ -11,6 +11,8 @@
         <annotations>
             <description>Success message for saving an admin user successfully.</description>
         </annotations>
+        <click selector="{{AdminNewUserFormSection.save}}" stepKey="clickSaveUser" />
+        <waitForPageLoad stepKey="waitForSaveTheUser" />
         <see userInput="You saved the user." stepKey="seeSuccessMessage" />
     </actionGroup>
 </actionGroups>
