@@ -140,7 +140,8 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Field CustomerInput.email of required type String! was not provided
+     * @expectedExceptionMessage
+     * GraphQL response contains errors: Field CustomerInput.email of required type String! was not provided
      */
     public function testCreateCustomerIfEmailMissed()
     {
