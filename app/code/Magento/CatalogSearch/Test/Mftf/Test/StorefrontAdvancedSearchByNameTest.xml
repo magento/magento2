@@ -22,7 +22,7 @@
             <createData entity="ABC_123_SimpleProduct" stepKey="createProduct"/>
         </before>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
-            <argument name="productName" value="adc_123"/>
+            <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
     </test>
 </tests>

@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
-            <argument name="productName" value="abc_dfj"/>
+            <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="sku" value="abc_dfj"/>
             <argument name="description" value="adc_Full"/>
             <argument name="short_description" value="abc_short"/>
