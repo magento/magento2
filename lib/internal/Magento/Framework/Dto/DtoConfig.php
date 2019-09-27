@@ -40,23 +40,67 @@ class DtoConfig extends Data
     /**
      * Return true if a class is defined in the dto.xml config
      *
-     * @param string $className
+     * @param string $name
      * @return bool
      */
-    public function isDto(string $className): bool
+    public function isDto(string $name): bool
     {
-        return (bool) $this->get($className, false);
+        $config = $config = $this->getConfiguration($name);
+        return $config !== null;
+    }
+
+    /**
+     * Return true if the given name represents a DTO interface
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function isInterface(string $name): bool
+    {
+        return (bool) $this->get('interface/' . $name, false);
+    }
+
+    /**
+     * Get interface configuration for given DTO class/interface.
+     *
+     * @param string $name
+     * @return array|null
+     */
+    public function getConfiguration(string $name): ?array
+    {
+        $interfaceName = $this->getInterfaceName($name);
+        if ($interfaceName === null) {
+            return null;
+        }
+
+        return $this->get('interface/' . $interfaceName);
+    }
+
+    /**
+     * Get interface name for given DTO class.
+     * If the name passed is an interface, the same value is returned.
+     *
+     * @param string $name
+     * @return string|null
+     */
+    public function getInterfaceName(string $name): ?string
+    {
+        if ($this->isInterface($name)) {
+            return $name;
+        }
+
+        return $this->get('class/' . $name);
     }
 
     /**
      * Return true if a class is defined as immutable DTO
      *
-     * @param string $className
+     * @param string $name
      * @return bool
      */
-    public function isImmutable(string $className): bool
+    public function isImmutable(string $name): bool
     {
-        $config = $this->get($className);
+        $config = $this->getConfiguration($name);
         if (!$config) {
             return false;
         }

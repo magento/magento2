@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto;
 
+use Magento\Framework\Dto\Mock\ConfigureTestDtos;
 use Magento\Framework\Dto\Mock\ImmutableDtoTwo;
-use Magento\Framework\Dto\Mock\MockDtoConfig;
 use Magento\Framework\Dto\Mock\MutableDto;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -31,13 +31,7 @@ class DtoPSR7Test extends TestCase
      */
     protected function setUp()
     {
-        Bootstrap::getObjectManager()->configure(
-            [
-                'preferences' => [
-                    DtoConfig::class => MockDtoConfig::class
-                ]
-            ]
-        );
+        ConfigureTestDtos::execute();
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dataProcessor = $this->objectManager->get(DtoProcessor::class);

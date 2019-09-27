@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\Dto;
 
 use Magento\Framework\Dto\DtoProcessor\GetHydrationStrategy;
+use Magento\Framework\Dto\Mock\ConfigureTestDtos;
 use Magento\Framework\Dto\Mock\ImmutableDto;
 use Magento\Framework\Dto\Mock\MutableDto;
-use Magento\Framework\Dto\Mock\MockDtoConfig;
 use Magento\Framework\Dto\Mock\TestSimpleObject;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -29,14 +29,7 @@ class GetHydrationStrategyTest extends TestCase
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-
-        $objectManager->configure(
-            [
-                'preferences' => [
-                    DtoConfig::class => MockDtoConfig::class
-                ]
-            ]
-        );
+        ConfigureTestDtos::execute();
 
         $this->getHydrationStrategy = $objectManager->get(GetHydrationStrategy::class);
     }

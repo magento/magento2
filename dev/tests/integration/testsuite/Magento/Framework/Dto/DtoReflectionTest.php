@@ -10,9 +10,9 @@ namespace Magento\Framework\Dto;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Dto\DtoProcessor\DtoReflection;
+use Magento\Framework\Dto\Mock\ConfigureTestDtos;
 use Magento\Framework\Dto\Mock\ImmutableDto;
 use Magento\Framework\Dto\Mock\ImmutableNestedDto;
-use Magento\Framework\Dto\Mock\MockDtoConfig;
 use Magento\Framework\Dto\Mock\TestSimpleObject;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -32,13 +32,7 @@ class DtoReflectionTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        $objectManager->configure(
-            [
-                'preferences' => [
-                    DtoConfig::class => MockDtoConfig::class
-                ]
-            ]
-        );
+        ConfigureTestDtos::execute();
 
         $this->dtoReflection = $objectManager->get(DtoReflection::class);
     }

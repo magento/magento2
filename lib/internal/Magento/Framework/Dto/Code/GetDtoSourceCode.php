@@ -64,14 +64,15 @@ class GetDtoSourceCode
             throw new LogicException('Unknown DTO ' . $className);
         }
 
-        $config = $this->dtoConfig->get($className);
-        $config = $this->injectExtensionAttributes($className, $config);
+        $config = $this->dtoConfig->getConfiguration($className);
+        $config = $this->addExtensionAttributes($className, $config);
 
-        if ($config['type'] === 'interface') {
+        if ($this->dtoConfig->isInterface($className)) {
             return $this->generateInterfaceSource($className, $config);
         }
 
-        return $this->generateDtoSource($config['interface'], $className, $config);
+        $interfaceName = $this->dtoConfig->getInterfaceName($className);
+        return $this->generateDtoSource($interfaceName, $className, $config);
     }
 
     /**
@@ -93,7 +94,7 @@ class GetDtoSourceCode
 
         /** @var ClassGenerator $classGenerator */
         $classGenerator = new ClassGenerator();
-        $classGenerator->setImplementedInterfaces([$config['interface']]);
+        $classGenerator->setImplementedInterfaces([$interfaceName]);
         $classGenerator->setName($className);
         $classGenerator->addProperties($this->getClassProperties($config));
         $classGenerator->addMethods($methods);
@@ -137,9 +138,9 @@ class GetDtoSourceCode
      * @param array $config
      * @return array
      */
-    private function injectExtensionAttributes(string $className, array $config): array
+    private function addExtensionAttributes(string $className, array $config): array
     {
-        $interface = $config['type'] === 'class' ? $config['interface'] : $className;
+        $interface = $this->dtoConfig->getInterfaceName($className);
         $interface = preg_replace('/Interface$/', '', $interface);
 
         $config['properties']['extensionAttributes'] = [

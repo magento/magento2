@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto;
 
+use Magento\Framework\Dto\Mock\ConfigureTestDtos;
 use Magento\Framework\Dto\Mock\ImmutableDto;
 use Magento\Framework\Dto\Mock\ImmutableDtoTwo;
 use Magento\Framework\Dto\Mock\ImmutableNestedDto;
-use Magento\Framework\Dto\Mock\MockDtoConfig;
 use Magento\Framework\Dto\Mock\MutableDto;
 use Magento\Framework\Dto\Mock\TestDtoWithCustomAttributes;
 use Magento\Framework\ObjectManagerInterface;
@@ -34,13 +34,7 @@ class DtoProcessorTest extends TestCase
      */
     protected function setUp()
     {
-        Bootstrap::getObjectManager()->configure(
-            [
-                'preferences' => [
-                    DtoConfig::class => MockDtoConfig::class
-                ]
-            ]
-        );
+        ConfigureTestDtos::execute();
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);

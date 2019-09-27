@@ -23,70 +23,65 @@ class Converter implements ConverterInterface
      */
     public function convert($source)
     {
-        $output = [];
+        $output = [
+            'interface' => [],
+            'class' => [],
+        ];
         if (!$source instanceof DOMDocument) {
             return $output;
         }
 
-        /** @var DOMNodeList $dtos */
-        $dtos = $source->getElementsByTagName('dto');
+        /** @var DOMNodeList $interfaceNodes */
+        $interfaceNodes = $source->getElementsByTagName('interface');
 
-        /** @var DOMNode $dto */
-        foreach ($dtos as $dto) {
-            $dtoId = $dto->getAttribute('id');
+        /** @var DOMNodeList $classNodes */
+        $classNodes = $source->getElementsByTagName('class');
 
-            $dtoClassNodes = $dto->getElementsByTagName('class');
-            $dtoInterfaceNodes = $dto->getElementsByTagName('interface');
+        /** @var DOMNode $interfaceNode */
+        foreach ($interfaceNodes as $interfaceNode) {
+            $interfaceName = (string) $interfaceNode->getAttribute('name');
+            $isMutable = filter_var($interfaceNode->getAttribute('mutable'), FILTER_VALIDATE_BOOLEAN);
 
-            if (count($dtoClassNodes) !== 1) {
-                throw new InvalidArgumentException('DTO ' . $dtoId . ' must have a class definition');
-            }
-            if (count($dtoInterfaceNodes) !== 1) {
-                throw new InvalidArgumentException('DTO ' . $dtoId . ' must have an interface definition');
+            if (isset($output[$interfaceName])) {
+                throw new InvalidArgumentException('Multiple definitions of ' . $interfaceName . ' exist');
             }
 
-            $dtoClass = $dtoClassNodes[0]->nodeValue;
-            $dtoInterface = $dtoInterfaceNodes[0]->nodeValue;
-
-            $isMutable = filter_var($dto->getAttribute('mutable'), FILTER_VALIDATE_BOOLEAN);
-
-            $output[$dtoClass] = [
+            $output['interface'][$interfaceName] = [
+                'type' => 'interface',
                 'mutable' => $isMutable,
-                'type' => 'class',
-                'interface' => $dtoInterface,
                 'properties' => []
             ];
 
-            if ($dtoInterface) {
-                $output[$dtoInterface] = [
-                    'type' => 'interface',
-                    'mutable' => $isMutable,
-                    'class' => $dtoClass,
-                    'properties' => []
-                ];
-            }
-
-            $properties = $dto->getElementsByTagName('property');
+            $properties = $interfaceNode->getElementsByTagName('property');
             foreach ($properties as $property) {
                 $propertyId = SimpleDataObjectConverter::snakeCaseToCamelCase($property->getAttribute('name'));
                 $propertyType = $property->getAttribute('type');
                 $propertyOptional = filter_var($property->getAttribute('optional'), FILTER_VALIDATE_BOOLEAN);
                 $propertyNullable = filter_var($property->getAttribute('nullable'), FILTER_VALIDATE_BOOLEAN);
 
-                $output[$dtoClass]['properties'][$propertyId] = [
+                $output['interface'][$interfaceName]['properties'][$propertyId] = [
                     'type' => $propertyType,
                     'optional' => $propertyOptional,
                     'nullable' => $propertyNullable
                 ];
-
-                if ($dtoInterface) {
-                    $output[$dtoInterface]['properties'][$propertyId] = [
-                        'type' => $propertyType,
-                        'optional' => $propertyOptional,
-                        'nullable' => $propertyNullable
-                    ];
-                }
             }
+        }
+
+        foreach ($classNodes as $classNode) {
+            $className = (string) $classNode->getAttribute('name');
+            $forInterface = (string) $classNode->getAttribute('for');
+
+            if (isset($output['class'][$className])) {
+                throw new InvalidArgumentException('Multiple definitions of ' . $className . ' exist');
+            }
+
+            if (!isset($output['interface'][$forInterface])) {
+                throw new InvalidArgumentException(
+                    'DTO interface definition for ' . $forInterface . ' is missing'
+                );
+            }
+
+            $output['class'][$className] = $forInterface;
         }
 
         return $output;

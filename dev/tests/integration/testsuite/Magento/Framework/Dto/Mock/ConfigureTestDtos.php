@@ -7,26 +7,36 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto\Mock;
 
+use Magento\Framework\Api\ExtensionAttribute\Config;
 use Magento\Framework\Dto\DtoConfig;
+use Magento\TestFramework\Helper\Bootstrap;
 
-class MockDtoConfig extends DtoConfig
+/**
+ * Configure test dtos for integration tests
+ */
+class ConfigureTestDtos
 {
     /**
      * @inheritDoc
      */
-    protected function initData()
+    public static function execute(): void
     {
-        parent::initData();
+        $config = Bootstrap::getObjectManager()->get(DtoConfig::class);
 
-        $this->addImmutableDto();
-        $this->addImmutableDto2();
-        $this->addImmutableNestedDto();
-        $this->addMutableDto();
+        self::addImmutableDto($config);
+        self::addImmutableDtoWithExtensionAttributes($config);
+        self::addImmutableDto2($config);
+        self::addImmutableNestedDto($config);
+        self::addMutableDto($config);
     }
 
-    private function addImmutableDto(): void
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addImmutableDto(DtoConfig $config): void
     {
-        $this->addDto(
+        self::addDto(
+            $config,
             'Magento\Framework\Dto\Mock\ImmutableDto',
             false,
             [
@@ -54,9 +64,67 @@ class MockDtoConfig extends DtoConfig
         );
     }
 
-    private function addImmutableDto2(): void
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addImmutableDtoWithExtensionAttributes(DtoConfig $config): void
     {
-        $this->addDto(
+        /** @var Config $config */
+        $eaConfig = Bootstrap::getObjectManager()->get(Config::class);
+        $eaConfig->merge(['Magento\Framework\Dto\Mock\ImmutableDtoWithExtensionAttributes' => [
+            'attribute1' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute2' => [
+                'type' => 'string',
+                'resourceRefs' => '',
+                'join' => null
+            ],
+            'attribute3' => [
+                'type' => 'Magento\Framework\Dto\Mock\ImmutableDtoInterface[]',
+                'resourceRefs' => '',
+                'join' => null
+            ]
+        ]]);
+
+        self::addDto(
+            $config,
+            'Magento\Framework\Dto\Mock\ImmutableDtoWithExtensionAttributes',
+            false,
+            [
+                'prop1' => [
+                    'type' => 'int',
+                    'nullable' => false,
+                    'optional' => false
+                ],
+                'prop2' => [
+                    'type' => 'string',
+                    'nullable' => false,
+                    'optional' => true
+                ],
+                'prop3' => [
+                    'type' => 'array',
+                    'nullable' => true,
+                    'optional' => false
+                ],
+                'prop4' => [
+                    'type' => 'int[]',
+                    'nullable' => true,
+                    'optional' => true
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addImmutableDto2(DtoConfig $config): void
+    {
+        self::addDto(
+            $config,
             'Magento\Framework\Dto\Mock\ImmutableDtoTwo',
             false,
             [
@@ -84,9 +152,13 @@ class MockDtoConfig extends DtoConfig
         );
     }
 
-    private function addMutableDto(): void
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addMutableDto(DtoConfig $config): void
     {
-        $this->addDto(
+        self::addDto(
+            $config,
             'Magento\Framework\Dto\Mock\MutableDto',
             true,
             [
@@ -114,9 +186,13 @@ class MockDtoConfig extends DtoConfig
         );
     }
 
-    private function addImmutableNestedDto(): void
+    /**
+     * @param DtoConfig $config
+     */
+    private static function addImmutableNestedDto(DtoConfig $config): void
     {
-        $this->addDto(
+        self::addDto(
+            $config,
             'Magento\Framework\Dto\Mock\ImmutableNestedDto',
             false,
             [
@@ -145,28 +221,34 @@ class MockDtoConfig extends DtoConfig
     }
 
     /**
+     * @param DtoConfig $config
      * @param string $className
-     * @param bool   $mutable
-     * @param array  $properties
+     * @param bool $mutable
+     * @param array $properties
      */
-    private function addDto(
+    private static function addDto(
+        DtoConfig $config,
         string $className,
         bool $mutable,
         array $properties
     ): void {
         $interfaceName = $className . 'Interface';
 
-        $this->_data[$className] = [
-            'mutable' => $mutable,
-            'type' => 'class',
-            'interface' => $interfaceName,
-            'properties' => $properties
-        ];
-        $this->_data[$interfaceName] = [
-            'mutable' => $mutable,
-            'type' => 'interface',
-            'class' => $className,
-            'properties' => $properties
-        ];
+        $config->merge([
+            'interface' => [
+                $interfaceName => [
+                    'mutable' => $mutable,
+                    'type' => 'class',
+                    'interface' => $interfaceName,
+                    'properties' => $properties
+                ]
+            ]
+        ]);
+
+        $config->merge([
+            'class' => [
+                $className => $interfaceName
+            ]
+        ]);
     }
 }
