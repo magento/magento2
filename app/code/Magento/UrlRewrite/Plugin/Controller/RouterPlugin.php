@@ -13,6 +13,8 @@ use Magento\Framework\App\Router\PathConfigInterface;
 use Magento\UrlRewrite\Provider\RequestPathProviderInterface;
 
 /**
+ * @TODO transfer logit frome here to Magento\UrlRewrite\Controller\Router
+ *
  * Class RouterPlugin
  * @package Magento\UrlRewrite\Plugin\Controller
  */
