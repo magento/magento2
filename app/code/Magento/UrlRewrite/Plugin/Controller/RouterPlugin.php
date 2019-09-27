@@ -10,7 +10,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\UrlRewrite\Controller\Router as Subject;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Router\PathConfigInterface;
-use Magento\UrlRewrite\Api\Provider\RequestPathProviderInterface;
+use Magento\UrlRewrite\Provider\RequestPathProviderInterface;
 
 /**
  * Class RouterPlugin
