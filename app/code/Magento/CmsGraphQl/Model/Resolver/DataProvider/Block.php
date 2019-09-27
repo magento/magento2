@@ -11,6 +11,7 @@ use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Widget\Model\Template\FilterEmulate;
+use Magento\Framework\App\State;
 
 /**
  * Cms block data provider
@@ -28,15 +29,23 @@ class Block
     private $widgetFilter;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param BlockRepositoryInterface $blockRepository
      * @param FilterEmulate $widgetFilter
+     * @param State $state
      */
     public function __construct(
         BlockRepositoryInterface $blockRepository,
-        FilterEmulate $widgetFilter
+        FilterEmulate $widgetFilter,
+        State $state
     ) {
         $this->blockRepository = $blockRepository;
         $this->widgetFilter = $widgetFilter;
+        $this->state = $state;
     }
 
     /**
@@ -56,7 +65,11 @@ class Block
             );
         }
 
-        $renderedContent = $this->widgetFilter->filter($block->getContent());
+        $renderedContent = $this->state->emulateAreaCode(
+            'frontend',
+            [$this, 'getRenderedBlockContent'],
+            [$block->getContent()]
+        );
 
         $blockData = [
             BlockInterface::BLOCK_ID => $block->getId(),
@@ -65,5 +78,15 @@ class Block
             BlockInterface::CONTENT => $renderedContent,
         ];
         return $blockData;
+    }
+
+    /**
+     * @param string $blockContent
+     *
+     * @return string
+     */
+    public function getRenderedBlockContent(string $blockContent) : string
+    {
+        return $this->widgetFilter->filter($blockContent);
     }
 }
