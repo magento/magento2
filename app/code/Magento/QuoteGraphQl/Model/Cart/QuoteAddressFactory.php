@@ -66,6 +66,10 @@ class QuoteAddressFactory
             $addressInput['country_id'] = $addressInput['country_code'];
         }
 
+        if (isset($addressInput['region'])) {
+            $addressInput['region_code'] = $addressInput['region'];
+        }
+
         $maxAllowedLineCount = $this->addressHelper->getStreetLines();
         if (is_array($addressInput['street']) && count($addressInput['street']) > $maxAllowedLineCount) {
             throw new GraphQlInputException(

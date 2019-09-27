@@ -77,7 +77,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -136,7 +136,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -297,7 +297,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -379,7 +379,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -573,7 +573,7 @@ mutation {
 QUERY;
 
         $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -590,7 +590,23 @@ QUERY;
             'missed_cart_id' => [
                 'billing_address: {}',
                 'Required parameter "cart_id" is missing'
-            ]
+            ],
+            'missed_region' => [
+                'cart_id: "cart_id_value"
+                 billing_address: {
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        city: "test city"
+                        postcode: "887766"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }',
+                '"regionId" is required. Enter and try again.'
+            ],
         ];
     }
 
@@ -616,7 +632,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2", "test street 3"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -659,7 +675,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AZ"
           postcode: "887766"
           country_code: "us"
           telephone: "88776655"

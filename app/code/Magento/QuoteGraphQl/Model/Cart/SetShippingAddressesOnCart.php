@@ -82,6 +82,32 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
 
+        $errors = $shippingAddress->validate();
+
+        if (true !== $errors) {
+            throw new GraphQlInputException(
+                __('Shipping address error: %message', ['message' => $this->getAddressErrors($errors)])
+            );
+        }
+
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+    }
+
+    /**
+     * Collecting errors.
+     *
+     * @param array $errors
+     * @return string
+     */
+    private function getAddressErrors(array $errors): string
+    {
+        $errorMessages = [];
+
+        /** @var \Magento\Framework\Phrase $error */
+        foreach ($errors as $error) {
+            $errorMessages[] = $error->render();
+        }
+
+        return implode(PHP_EOL, $errorMessages);
     }
 }

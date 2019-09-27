@@ -111,6 +111,33 @@ class SetBillingAddressOnCart
                 (int)$context->getUserId()
             );
         }
+
+        $errors = $billingAddress->validate();
+
+        if (true !== $errors) {
+            throw new GraphQlInputException(
+                __('Shipping address error: %message', ['message' => $this->getAddressErrors($errors)])
+            );
+        }
+
         return $billingAddress;
+    }
+
+    /**
+     * Collecting errors.
+     *
+     * @param array $errors
+     * @return string
+     */
+    private function getAddressErrors(array $errors): string
+    {
+        $errorMessages = [];
+
+        /** @var \Magento\Framework\Phrase $error */
+        foreach ($errors as $error) {
+            $errorMessages[] = $error->render();
+        }
+
+        return implode(PHP_EOL, $errorMessages);
     }
 }
