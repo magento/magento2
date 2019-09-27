@@ -19,3 +19,6 @@ Monthly,Monthly
 "Success History Lifetime","Success History Lifetime"
 "Failure History Lifetime","Failure History Lifetime"
 "Use Separate Process","Use Separate Process"
+"Settings","Settings"
+"Check hostname","Check hostname"
+"<![CDATA[during resetting orphan jobs on database level<br /><i>If job in cron_schedule table is marked as <b>running</b>, no other job with the same job code will be start again. Sometimes could happen that the running of the cron job has been terminated (eg. server restart). The status of these orphan jobs need to be reset, otherwise the affected cron jobs never run again.</i>]]","<![CDATA[during resetting orphan jobs on database level<br /><i>If job in cron_schedule table is marked as <b>running</b>, no other job with the same job code will be start again. Sometimes could happen that the running of the cron job has been terminated (eg. server restart). The status of these orphan jobs need to be reset, otherwise the affected cron jobs never run again.</i>]]"

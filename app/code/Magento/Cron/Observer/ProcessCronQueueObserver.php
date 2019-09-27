@@ -686,25 +686,20 @@ class ProcessCronQueueObserver implements ObserverInterface
 
            foreach($runningJobs as $runningJob) {
 
-                if ($this->getCheckHostConfigurationValue() &&
+                if ($this->getCheckHostnameConfigurationValue() &&
                     $runningJob->getProcessHostname() != gethostname()) {
                     //job run/ran on a different host but do not need to check
                     continue;
                 }
 
+                //check if process exists
                 if (posix_kill(intval($runningJob->getProcessId()), 0)) {
-                    //Process with given ID still active on the host
+                    //process with given ID still active
 
-                    //need to collect ps output to file because php trims the output otherwise
-                    exec(
-                        "ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId()
-                        . " > /tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt"
-                    );
                     $execOutput = explode(
                         "\n",
-                        file_get_contents("/tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt")
+                        shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
                     );
-                    unlink("/tmp/ps_output_for_pid_".$runningJob->getProcessId().".txt");
 
                     if ($execOutput && $this->isTheSameProcess($execOutput, $runningJob)) {
                         //process and job start time are matching - 99.99% sure that job still active
@@ -718,7 +713,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                         $count++;
                     }
                 } else {
-                    //Process not exists on host
+                    //process not exists on host
                     $this->closeOrphanJob($runningJob);
                     $count++;
                 }
@@ -868,10 +863,10 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @return int
      */
-    private function getCheckHostConfigurationValue()
+    private function getCheckHostnameConfigurationValue()
     {
         return $this->_scopeConfig->getValue(
-            'system/cron/settings/check_host',
+            'system/cron/settings/check_hostname',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }

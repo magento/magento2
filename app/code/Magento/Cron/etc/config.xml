@@ -10,7 +10,7 @@
         <system>
             <cron>
                 <settings>
-                    <check_host>1</check_host>
+                    <check_hostname>1</check_hostname>
                 </settings>
             </cron>
         </system>

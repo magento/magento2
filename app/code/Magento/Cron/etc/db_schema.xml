@@ -20,7 +20,7 @@
         <column xsi:type="int" name="process_id" padding="10" unsigned="true" nullable="false"
                 comment="Process Id of host process"/>
         <column xsi:type="varchar" name="process_hostname" nullable="false" length="255" default=""
-                comment="Host name where the process run "/>
+                comment="Hostname where the process run "/>
         <column xsi:type="timestamp" name="process_started_at" on_update="false" nullable="true"
                 comment="Process started at"/>
         <column xsi:type="timestamp" name="finished_at" on_update="false" nullable="true" comment="Finished At"/>
