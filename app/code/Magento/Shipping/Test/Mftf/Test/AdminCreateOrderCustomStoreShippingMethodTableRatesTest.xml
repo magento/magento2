@@ -61,7 +61,7 @@
                 <argument name="status" value="1"/>
             </actionGroup>
             <actionGroup ref="AdminImportFileTableRatesShippingMethodActionGroup" stepKey="importCSVFile">
-                <argument name="file" value="test_tablerates.csv"/>
+                <argument name="file" value="usa_tablerates.csv"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
