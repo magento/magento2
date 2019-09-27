@@ -97,7 +97,7 @@
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
-            <createData entity="ApiBundleProduct" stepKey="product"/>
+            <createData entity="ApiBundleProductUnderscoredSku" stepKey="product"/>
             <createData entity="DropDownBundleOption" stepKey="bundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
