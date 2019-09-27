@@ -18,7 +18,7 @@
         </arguments>
     </type>
     <type name="Magento\UrlRewrite\Controller\Router">
-        <plugin name="checkDefaultPagePath" type="Magento\UrlRewrite\Plugin\Controller\RouterPlugin" />
+        <plugin name="urlPathModifier" type="Magento\UrlRewrite\Plugin\Controller\RouterPlugin" />
     </type>
     <preference for="Magento\UrlRewrite\Model\UrlFinderInterface" type="Magento\UrlRewrite\Model\CompositeUrlFinder"/>
 </config>

@@ -3,10 +3,8 @@
 
 namespace Magento\UrlRewrite\Provider;
 
-use Magento\Framework\DB\Select as DbSelect;
-
-use Magento\UrlRewrite\Api\Provider\RequestPathProviderInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select as DbSelect;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 

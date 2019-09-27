@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\UrlRewrite\Api\Provider;
+namespace Magento\UrlRewrite\Provider;
 
 /**
  * Interface RequestPathProviderInterface
