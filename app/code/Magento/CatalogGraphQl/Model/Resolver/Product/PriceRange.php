@@ -16,7 +16,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Format product's pricing information for price_range field
@@ -63,10 +62,16 @@ class PriceRange implements ResolverInterface
         $product = $value['model'];
         $product->unsetData('minimal_price');
 
-        return [
-            'minimum_price' => $this->getMinimumProductPrice($product, $store),
-            'maximum_price' => $this->getMaximumProductPrice($product, $store)
-        ];
+        $requestedFields = $info->getFieldSelection(10);
+        $returnArray = [];
+
+        if (isset($requestedFields['minimum_price'])) {
+            $returnArray['minimum_price'] =  $this->getMinimumProductPrice($product, $store);
+        }
+        if (isset($requestedFields['maximum_price'])) {
+            $returnArray['maximum_price'] =  $this->getMaximumProductPrice($product, $store);
+        }
+        return $returnArray;
     }
 
     /**
