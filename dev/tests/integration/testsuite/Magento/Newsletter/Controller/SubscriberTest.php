@@ -8,10 +8,13 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Controller;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AccountConfirmation;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberLoader;
 use Magento\Newsletter\Model\Subscriber;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -76,10 +79,17 @@ class SubscriberTest extends AbstractController
     /**
      * Check that Customer still subscribed for newsletters emails after registration.
      *
-     * @magentoConfigFixture ccustomer/create/account_confirm 1
+     * @magentoDbIsolation enabled
      */
     public function testCreatePosWithSubscribeEmailAction()
     {
+        $config = Bootstrap::getObjectManager()->get(MutableScopeConfigInterface::class);
+        $accountConfirmationRequired = $config->getValue(
+            AccountConfirmation::XML_PATH_IS_CONFIRM,
+            ScopeInterface::SCOPE_WEBSITES
+        );
+        $config->setValue(AccountConfirmation::XML_PATH_IS_CONFIRM, 1, ScopeInterface::SCOPE_WEBSITES);
+
         $subscriber = Bootstrap::getObjectManager()->create(Subscriber::class);
         $customerEmail = 'subscribeemail@example.com';
         // Subscribe by email
@@ -100,6 +110,12 @@ class SubscriberTest extends AbstractController
 
         // check customer subscribed to newsletter
         $this->assertTrue($subscriberResource->loadByCustomerData($customer)['subscriber_status'] === "1");
+
+        $config->setValue(
+            AccountConfirmation::XML_PATH_IS_CONFIRM,
+            $accountConfirmationRequired,
+            ScopeInterface::SCOPE_WEBSITES
+        );
     }
 
     /**
