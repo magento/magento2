@@ -101,6 +101,8 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             'product data' => ['product data'],
             ProductInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributes,
         ];
+
+        $this->productMock->expects($this->once())->method('getStoreId')->willReturn(0);
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
         $this->productMock->expects($this->any())->method('getData')->willReturnMap([

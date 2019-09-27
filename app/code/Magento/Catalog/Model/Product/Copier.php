@@ -50,6 +50,7 @@ class Copier
     /**
      * @param CopyConstructorInterface $copyConstructor
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
