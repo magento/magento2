@@ -103,6 +103,38 @@ class StoreViewService
     }
 
     /**
+     * Retrieve entity overridden url key for specific store
+     *
+     * @param int $storeId
+     * @param int $entityId
+     * @param string $entityType
+     * @throws \InvalidArgumentException
+     * @return string
+     */
+    public function getEntityOverriddenUrlKeyForStore($storeId, $entityId, $entityType)
+    {
+        $attribute = $this->eavConfig->getAttribute($entityType, 'url_key');
+            if (!$attribute) {
+                throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', $entityType));
+        }
+        $linkFieldName = $attribute->getEntity()->getLinkField();
+        if (!$linkFieldName) {
+            $linkFieldName = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        }
+        $select = $this->connection->select()
+            ->from(['e' => $attribute->getEntity()->getEntityTable()], [])
+            ->join(
+                ['e_attr' => $attribute->getBackendTable()],
+                        "e.{$linkFieldName} = e_attr.{$linkFieldName}",
+                'value'
+            )->where('e_attr.attribute_id = ?', $attribute->getId())
+            ->where('e.entity_id = ?', $entityId)
+            ->where('e_attr.store_id = ?', $storeId);
+
+        return $this->connection->fetchOne($select);
+    }
+
+    /**
      * Get product metadata pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool

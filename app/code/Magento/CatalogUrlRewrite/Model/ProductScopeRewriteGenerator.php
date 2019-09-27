@@ -141,15 +141,23 @@ class ProductScopeRewriteGenerator
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
 
         foreach ($product->getStoreIds() as $id) {
-            if (!$this->isGlobalScope($id) &&
-                !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            if (!$this->isGlobalScope($id)) {
+                $storeId = $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
                     $id,
                     $productId,
                     Product::ENTITY
-                )) {
-                $mergeDataProvider->merge(
-                    $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId)
+                ) ? $id : Store::DEFAULT_STORE_ID;
+                $urlKey = $this->storeViewService->getEntityOverriddenUrlKeyForStore(
+                    $storeId,
+                    $productId,
+                    Product::ENTITY
                 );
+                if ($urlKey && is_string($urlKey)) {
+                    $product->setUrlKey($urlKey);
+                    $mergeDataProvider->merge(
+                        $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId)
+                    );
+                }
             }
         }
 
