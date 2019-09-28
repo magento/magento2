@@ -1729,6 +1729,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check is product available for sale
      *
      * @return bool
+     * @deprecated
+     * @see https://devdocs.magento.com/guides/v2.3/inventory/inventory-api-reference.html
      */
     public function isSalable()
     {
