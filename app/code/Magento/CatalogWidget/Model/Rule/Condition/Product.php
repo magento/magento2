@@ -107,7 +107,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param array &$attributes
      * @return void
@@ -223,8 +223,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                         $validEntities[] = $entityId;
                     }
                 } else {
-                    if (
-                        isset($storeValues[Store::DEFAULT_STORE_ID]) &&
+                    if (isset($storeValues[Store::DEFAULT_STORE_ID]) &&
                         $this->validateAttribute($storeValues[Store::DEFAULT_STORE_ID])
                     ) {
                         $validEntities[] = $entityId;
@@ -244,7 +243,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return string
      */
@@ -265,7 +264,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
