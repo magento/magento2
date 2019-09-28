@@ -39,6 +39,29 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Save a new UserExpiration; used to validate that date conversion is working correctly.
+     *
+     * @magentoDataFixture Magento/User/_files/dummy_user.php
+     */
+    public function testSaveNewUserExpirationInMinutes()
+    {
+        $adminUserNameFromFixture = 'dummy_username';
+        $testDate = $this->getFutureDateInStoreTime('+2 minutes');
+        $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
+        $user->loadByUsername($adminUserNameFromFixture);
+        $user->setExpiresAt($testDate);
+        $user->save();
+
+        $userExpirationFactory =
+            Bootstrap::getObjectManager()->create(\Magento\Security\Model\UserExpirationFactory::class);
+        /** @var \Magento\Security\Model\UserExpiration $userExpiration */
+        $userExpiration = $userExpirationFactory->create();
+        $userExpiration->load($user->getId());
+        static::assertNotNull($userExpiration->getId());
+        static::assertEquals($userExpiration->getExpiresAt(), $testDate);
+    }
+
+    /**
      * Remove the UserExpiration record
      *
      * @magentoDataFixture Magento/Security/_files/expired_users.php
@@ -87,15 +110,16 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param string $timeToAdd Amount of time to add
      * @return string
      * @throws \Exception
      */
-    private function getFutureDateInStoreTime()
+    private function getFutureDateInStoreTime($timeToAdd = '+20 days')
     {
         /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $locale */
         $locale = Bootstrap::getObjectManager()->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $testDate = new \DateTime();
-        $testDate->modify('+20 days');
+        $testDate->modify($timeToAdd);
         $storeDate = $locale->date($testDate);
         return $storeDate->format('Y-m-d H:i:s');
     }
