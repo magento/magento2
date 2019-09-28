@@ -6,9 +6,8 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Api\ExtensionAttribute;
+namespace Magento\Framework\Dto;
 
-use Magento\Framework\Dto\DtoProcessor;
 use Magento\Framework\Dto\Mock\ConfigureTestDtos;
 use Magento\Framework\Dto\Mock\ImmutableDtoWithInjectors;
 use Magento\TestFramework\Helper\Bootstrap;
