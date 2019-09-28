@@ -172,22 +172,9 @@ interface AccountManagementInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer doesn't exist
      * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated
-     * @see \Magento\Customer\Api\AccountManagementInterface::validateResetPasswordLinkByToken()
+     * @see \Magento\Customer\Api\PasswordManagementInterface::validateResetPasswordLinkByToken()
      */
     public function validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
-
-    /**
-     * Check if password reset token is valid.
-     *
-     * @param string $resetPasswordLinkToken
-     *
-     * @return bool True if the token is valid
-     * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
-     * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
-     * @throws \Magento\Framework\Exception\InputException If token is invalid
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function validateResetPasswordLinkByToken($resetPasswordLinkToken);
 
     /**
      * Gets the account confirmation status.

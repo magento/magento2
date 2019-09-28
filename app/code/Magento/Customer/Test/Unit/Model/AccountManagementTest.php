@@ -1334,61 +1334,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "resetPasswordLinkToken" is required. Enter and try again.
-     */
-    public function testValidateResetPasswordByTokenEmptyResetPasswordLinkToken()
-    {
-        $this->accountManagement->validateResetPasswordLinkByToken('');
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
-     * @expectedExceptionMessage The password token is mismatched. Reset and try again.
-     */
-    public function testValidateResetPasswordByTokenTokenMismatch()
-    {
-        $this->customerRegistry->expects($this->atLeastOnce())
-            ->method('retrieveSecureData')
-            ->willReturn($this->customerSecure);
-
-        $this->accountManagement->validateResetPasswordLinkByToken('newStringToken');
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\State\ExpiredException
-     * @expectedExceptionMessage The password token is expired. Reset and try again.
-     */
-    public function testValidateResetPasswordByTokenTokenExpired()
-    {
-        $this->reInitModel();
-        $this->customerRegistry->expects($this->atLeastOnce())
-            ->method('retrieveSecureData')
-            ->willReturn($this->customerSecure);
-
-        $this->accountManagement->validateResetPasswordLinkByToken('newStringToken');
-    }
-
-    /**
-     * return bool
-     */
-    public function testValidateResetPasswordByToken()
-    {
-        $this->reInitModel();
-
-        $this->customer
-            ->expects($this->once())
-            ->method('getResetPasswordLinkExpirationPeriod')
-            ->willReturn(100000);
-
-        $this->customerRegistry->expects($this->atLeastOnce())
-            ->method('retrieveSecureData')
-            ->willReturn($this->customerSecure);
-
-        $this->assertTrue($this->accountManagement->validateResetPasswordLinkByToken('newStringToken'));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Invalid value of "0" provided for the customerId field
      */
     public function testValidateResetPasswordTokenBadCustomerId()

@@ -190,7 +190,7 @@
         </resources>
     </route>
     <route url="/V1/customers/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
-        <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkByToken"/>
+        <service class="Magento\Customer\Api\PasswordManagementInterface" method="validateResetPasswordLinkByToken"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

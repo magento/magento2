@@ -13,6 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
+use Magento\Customer\Api\PasswordManagementInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
@@ -629,15 +630,6 @@ class AccountManagement implements AccountManagementInterface
     /**
      * @inheritdoc
      */
-    public function validateResetPasswordLinkByToken($resetPasswordLinkToken)
-    {
-        $this->validateResetPasswordByToken($resetPasswordLinkToken);
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function initiatePasswordReset($email, $template, $websiteId = null)
     {
         if ($websiteId === null) {
@@ -1159,7 +1151,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws NoSuchEntityException If customer doesn't exist
      * @SuppressWarnings(PHPMD.LongVariable)
      * @deprecated
-     * @see validateResetPasswordByToken()
+     * @see PasswordManagementInterface::validateResetPasswordByToken()
      */
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
@@ -1178,38 +1170,6 @@ class AccountManagement implements AccountManagementInterface
                 ->execute($resetPasswordLinkToken)
                 ->getId();
         }
-        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
-            $params = ['fieldName' => 'resetPasswordLinkToken'];
-            throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
-        }
-        $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
-        $rpToken = $customerSecureData->getRpToken();
-        $rpTokenCreatedAt = $customerSecureData->getRpTokenCreatedAt();
-        if (!Security::compareStrings($rpToken, $resetPasswordLinkToken)) {
-            throw new InputMismatchException(__('The password token is mismatched. Reset and try again.'));
-        } elseif ($this->isResetPasswordLinkTokenExpired($rpToken, $rpTokenCreatedAt)) {
-            throw new ExpiredException(__('The password token is expired. Reset and try again.'));
-        }
-        return true;
-    }
-
-    /**
-     * Validate the Reset Password Token for a customer.
-     *
-     * @param string $resetPasswordLinkToken
-     *
-     * @return bool
-     * @throws ExpiredException
-     * @throws InputException
-     * @throws InputMismatchException
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     */
-    private function validateResetPasswordByToken($resetPasswordLinkToken)
-    {
-        $customerId = $this->getByToken
-            ->execute($resetPasswordLinkToken)
-            ->getId();
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
