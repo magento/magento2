@@ -43,8 +43,8 @@ class BulkConfigurationTransferTest extends TestCase
     public function testTransfer()
     {
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2');
-        $destinationConfig = $this->getSourceItemConfiguration->execute('eu-2', 'SKU-1');
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-3');
+        $destinationConfig = $this->getSourceItemConfiguration->execute('eu-3', 'SKU-1');
 
         self::assertEquals(
             $sourceConfig->getNotifyStockQty(),
@@ -64,8 +64,8 @@ class BulkConfigurationTransferTest extends TestCase
     public function testTransferWithUnassign()
     {
         $sourceConfig = $this->getSourceItemConfiguration->execute('eu-1', 'SKU-1');
-        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-2');
-        $destinationConfig = $this->getSourceItemConfiguration->execute('eu-2', 'SKU-1');
+        $this->bulkConfigurationTransfer->execute(['SKU-1'], 'eu-1', 'eu-3');
+        $destinationConfig = $this->getSourceItemConfiguration->execute('eu-3', 'SKU-1');
 
         self::assertEquals(
             $sourceConfig->getNotifyStockQty(),

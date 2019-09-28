@@ -29,6 +29,8 @@ class GetData
     }
 
     /**
+     * Get configuration data for specific source item
+     *
      * @param string $sourceCode
      * @param string $sku
      * @return array|null
@@ -42,7 +44,8 @@ class GetData
         $select = $connection->select()
             ->from($sourceItemConfigurationTable)
             ->where(SourceItemConfigurationInterface::SOURCE_CODE . ' = ?', $sourceCode)
-            ->where(SourceItemConfigurationInterface::SKU . ' = ?', $sku);
+            ->where(SourceItemConfigurationInterface::SKU . ' = ?', $sku)
+            ->where(SourceItemConfigurationInterface::INVENTORY_NOTIFY_QTY . ' IS NOT NULL');
 
         $row = $connection->fetchRow($select);
         return $row ? $row : null;

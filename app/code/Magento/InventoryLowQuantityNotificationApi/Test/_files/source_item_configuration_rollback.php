@@ -17,18 +17,30 @@ $deleteSourceItemsConfiguration = Bootstrap::getObjectManager()->get(DeleteSourc
 $sourceItemInterfaceFactory = Bootstrap::getObjectManager()->get(SourceItemInterfaceFactory::class);
 
 $sourceItems = [
-    $sourceItemInterfaceFactory->create([
-        SourceItemInterface::SOURCE_CODE => 'eu-1',
-        SourceItemInterface::SKU => 'SKU-1'
-    ]),
-    $sourceItemInterfaceFactory->create([
-        SourceItemInterface::SOURCE_CODE => 'eu-disabled',
-        SourceItemInterface::SKU => 'SKU-1'
-    ]),
-    $sourceItemInterfaceFactory->create([
-        SourceItemInterface::SOURCE_CODE => 'eu-2',
-        SourceItemInterface::SKU => 'SKU-3'
-    ])
+    $sourceItemInterfaceFactory->create(
+        [
+            SourceItemInterface::SOURCE_CODE => 'eu-1',
+            SourceItemInterface::SKU => 'SKU-1'
+        ]
+    ),
+    $sourceItemInterfaceFactory->create(
+        [
+            SourceItemInterface::SOURCE_CODE => 'eu-disabled',
+            SourceItemInterface::SKU => 'SKU-1'
+        ]
+    ),
+    $sourceItemInterfaceFactory->create(
+        [
+            SourceItemInterface::SOURCE_CODE => 'eu-2',
+            SourceItemInterface::SKU => 'SKU-1'
+        ]
+    ),
+    $sourceItemInterfaceFactory->create(
+        [
+            SourceItemInterface::SOURCE_CODE => 'eu-2',
+            SourceItemInterface::SKU => 'SKU-3'
+        ]
+    )
 ];
 
 $deleteSourceItemsConfiguration->execute($sourceItems);
