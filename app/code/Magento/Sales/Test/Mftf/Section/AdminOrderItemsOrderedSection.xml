@@ -24,6 +24,7 @@
         <element name="productNameColumn" type="text" selector=".edit-order-table .col-product .product-title"/>
         <element name="productNameOptions" type="text" selector=".edit-order-table .col-product .item-options"/>
         <element name="productName" type="text" selector="#order-items_grid  span[id*=order_item]"/>
+        <element name="productPrice" type="text" selector=".order-tables  tbody td:nth-child({{row}}) .price" parameterized="true"/>
         <element name="productNameOptionsLink" type="text" selector="//table[contains(@class, 'edit-order-table')]//td[contains(@class, 'col-product')]//a[text() = '{{var1}}']" parameterized="true"/>
         <element name="productSkuColumn" type="text" selector=".edit-order-table .col-product .product-sku-block"/>
         <element name="productTotal" type="text" selector="#order-items_grid .col-total"/>

@@ -38,6 +38,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
+    // phpcs:disable
     public static function setUpBeforeClass()
     {
         self::$_baseDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -48,10 +49,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         }
         touch(self::$_baseDir . '/1.swf');
     }
+    // phpcs:enable
 
     /**
      * @inheritdoc
      */
+    // phpcs:ignore
     public static function tearDownAfterClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -107,11 +110,37 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testDeleteDirectory(): void
+    {
+        $path = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath();
+        $dir = 'testDeleteDirectory';
+        $fullPath = $path . $dir;
+        $this->storage->createDirectory($dir, $path);
+        $this->assertFileExists($fullPath);
+        $this->storage->deleteDirectory($fullPath);
+        $this->assertFileNotExists($fullPath);
+    }
+
+    /**
+     * @return void
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We cannot delete directory /downloadable.
+     */
+    public function testDeleteDirectoryWithExcludedDirPath(): void
+    {
+        $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
+        $this->storage->deleteDirectory($dir);
+    }
+
+    /**
+     * @return void
+     */
     public function testUploadFile(): void
     {
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
         $fixtureDir = realpath(__DIR__ . '/../../../../Catalog/_files');
         copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
 
@@ -125,31 +154,84 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->storage->uploadFile(self::$_baseDir);
         $this->assertTrue(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
      * @return void
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We can't upload the file to current folder right now. Please try another folder.
      */
-    public function testUploadFileWithWrongExtension(): void
+    public function testUploadFileWithExcludedDirPath(): void
     {
-        $fileName = 'text.txt';
+        $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
-        $file = fopen($filePath, "wb");
-        fwrite($file, 'just a text');
+        // phpcs:disable
+        $fixtureDir = realpath(__DIR__ . '/../../../../Catalog/_files');
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
 
         $_FILES['image'] = [
             'name' => $fileName,
-            'type' => 'text/plain',
+            'type' => 'image/jpeg',
             'tmp_name' => $filePath,
             'error' => 0,
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
+        $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
+        $this->storage->uploadFile($dir);
+        // phpcs:enable
+    }
+
+    /**
+     * @param string $fileName
+     * @param string $fileType
+     * @param string|null $storageType
+     *
+     * @return void
+     * @dataProvider testUploadFileWithWrongExtensionDataProvider
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage File validation failed.
+     */
+    public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
+    {
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
+        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
+        $fixtureDir = realpath(__DIR__ . '/../../../_files');
+        copy($fixtureDir . DIRECTORY_SEPARATOR . $fileName, $filePath);
+
+        $_FILES['image'] = [
+            'name' => $fileName,
+            'type' => $fileType,
+            'tmp_name' => $filePath,
+            'error' => 0,
+            'size' => 12500,
+        ];
+
+        $this->storage->uploadFile(self::$_baseDir, $storageType);
         $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
+    }
+
+    /**
+     * @return array
+     */
+    public function testUploadFileWithWrongExtensionDataProvider(): array
+    {
+        return [
+            [
+                'fileName' => 'text.txt',
+                'fileType' => 'text/plain',
+                'storageType' => null,
+            ],
+            [
+                'fileName' => 'test.swf',
+                'fileType' => 'application/x-shockwave-flash',
+                'storageType' => 'media',
+            ],
+        ];
     }
 
     /**
@@ -162,6 +244,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        // phpcs:disable
         $file = fopen($filePath, "wb");
         fwrite($file, 'just a text');
 
@@ -175,5 +258,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->storage->uploadFile(self::$_baseDir);
         $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        // phpcs:enable
     }
 }

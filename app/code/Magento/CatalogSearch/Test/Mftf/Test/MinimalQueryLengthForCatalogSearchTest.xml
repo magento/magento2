@@ -11,6 +11,7 @@
     <test name="MinimalQueryLengthForCatalogSearchTest">
         <annotations>
             <features value="CatalogSearch"/>
+            <stories value="Catalog search"/>
             <title value="Minimal query length for catalog search"/>
             <description value="Minimal query length for catalog search"/>
             <severity value="AVERAGE"/>

@@ -53,9 +53,6 @@
             <testCaseId value="MC-10930"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MSI-2110"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -93,10 +90,6 @@
             <useCaseId value="MAGETWO-44165"/>
             <testCaseId value="MAGETWO-29398"/>
             <group value="catalog"/>
-            <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MSI-2110"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -139,9 +132,6 @@
             <testCaseId value="MAGETWO-29398"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MSI-2110"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>

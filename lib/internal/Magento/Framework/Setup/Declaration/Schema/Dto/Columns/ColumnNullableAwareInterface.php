@@ -7,7 +7,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto\Columns;
 
 /**
  * Provides nullable flag for element.
- * If column element implement this interface, than it will have NULL or NOT NULL flag in column definition.
+ * If column element implement this interface, then it will have NULL or NOT NULL flag in column definition.
  */
 interface ColumnNullableAwareInterface
 {

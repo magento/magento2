@@ -9,7 +9,7 @@ use Magento\Deploy\Source\SourcePool;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFactory;
 use Magento\Deploy\Package\PackageFile;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
 /**
@@ -46,7 +46,7 @@ class Collector implements CollectorInterface
      */
     private $packageFactory;
     
-    /** @var \Magento\Framework\Module\Manager */
+    /** @var \Magento\Framework\Module\ModuleManagerInterface */
     private $moduleManager;
 
     /**
@@ -66,19 +66,19 @@ class Collector implements CollectorInterface
      * @param SourcePool $sourcePool
      * @param FileNameResolver $fileNameResolver
      * @param PackageFactory $packageFactory
-     * @param Manager|null $moduleManager
+     * @param ModuleManagerInterface|null $moduleManager
      */
     public function __construct(
         SourcePool $sourcePool,
         FileNameResolver $fileNameResolver,
         PackageFactory $packageFactory,
-        Manager $moduleManager = null
+        ModuleManagerInterface $moduleManager = null
     ) {
         $this->sourcePool = $sourcePool;
         $this->fileNameResolver = $fileNameResolver;
         $this->packageFactory = $packageFactory;
         $this->moduleManager = $moduleManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Module\Manager::class);
+            ->get(\Magento\Framework\Module\ModuleManagerInterface::class);
     }
 
     /**

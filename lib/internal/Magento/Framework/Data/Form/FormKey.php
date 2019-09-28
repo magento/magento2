@@ -3,10 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Form;
 
 /**
+ * Class FormKey
+ *
  * @api
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class FormKey
 {
@@ -50,24 +56,29 @@ class FormKey
      * Retrieve Session Form Key
      *
      * @return string A 16 bit unique key for forms
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFormKey()
     {
         if (!$this->isPresent()) {
             $this->set($this->mathRandom->getRandomString(16));
         }
-        return $this->escaper->escapeHtmlAttr($this->session->getData(self::FORM_KEY));
+        return $this->escaper->escapeJs($this->session->getData(self::FORM_KEY));
     }
 
     /**
+     * Determine if the form key is present in the session
+     *
      * @return bool
      */
     public function isPresent()
     {
-        return (bool)$this->session->getData(self::FORM_KEY);
+        return (bool) $this->session->getData(self::FORM_KEY);
     }
 
     /**
+     * Set the value of the form key
+     *
      * @param string $value
      * @return void
      */

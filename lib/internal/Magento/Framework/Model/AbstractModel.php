@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -199,7 +200,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -225,8 +226,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -254,8 +253,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
 

@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\FieldTranslator;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * @inheritdoc
@@ -32,23 +31,23 @@ class Product implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var FieldTranslator
+     * @var ProductFieldsSelector
      */
-    private $fieldTranslator;
+    private $productFieldsSelector;
 
     /**
      * @param ProductDataProvider $productDataProvider
      * @param ValueFactory $valueFactory
-     * @param FieldTranslator $fieldTranslator
+     * @param ProductFieldsSelector $productFieldsSelector
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
         ValueFactory $valueFactory,
-        FieldTranslator $fieldTranslator
+        ProductFieldsSelector $productFieldsSelector
     ) {
         $this->productDataProvider = $productDataProvider;
         $this->valueFactory = $valueFactory;
-        $this->fieldTranslator = $fieldTranslator;
+        $this->productFieldsSelector = $productFieldsSelector;
     }
 
     /**
@@ -60,7 +59,7 @@ class Product implements ResolverInterface
             throw new GraphQlInputException(__('No child sku found for product link.'));
         }
         $this->productDataProvider->addProductSku($value['sku']);
-        $fields = $this->getProductFields($info);
+        $fields = $this->productFieldsSelector->getProductFieldsFromInfo($info);
         $this->productDataProvider->addEavAttributes($fields);
 
         $result = function () use ($value) {
@@ -85,35 +84,5 @@ class Product implements ResolverInterface
         };
 
         return $this->valueFactory->create($result);
-    }
-
-    /**
-     * Return field names for all requested product fields.
-     *
-     * @param ResolveInfo $info
-     * @return string[]
-     */
-    private function getProductFields(ResolveInfo $info) : array
-    {
-        $fieldNames = [];
-        foreach ($info->fieldNodes as $node) {
-            if ($node->name->value !== 'product') {
-                continue;
-            }
-            foreach ($node->selectionSet->selections as $selectionNode) {
-                if ($selectionNode->kind === 'InlineFragment') {
-                    foreach ($selectionNode->selectionSet->selections as $inlineSelection) {
-                        if ($inlineSelection->kind === 'InlineFragment') {
-                            continue;
-                        }
-                        $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
-                    }
-                    continue;
-                }
-                $fieldNames[] = $this->fieldTranslator->translate($selectionNode->name->value);
-            }
-        }
-
-        return $fieldNames;
     }
 }

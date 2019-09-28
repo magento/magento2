@@ -41,7 +41,7 @@
         <waitForPageLoad stepKey="wait3"/>
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Product Link" stepKey="selectCatalogProductLink" />
@@ -71,10 +71,19 @@
         <!--see widget on Storefront-->
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>
         <see userInput="$$createPreReqProduct.name$$" stepKey="seeProductLink"/>
+        <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
+        <waitForPageLoad stepKey="wait8" />
+        <!--see widget on Storefront-->
+        <grabAttributeFrom selector=".widget a" userInput="href" stepKey="dataHref" />
+        <assertRegExp expected="|$$createPreReqCategory.name$$/$$createPreReqProduct.name$$.html|i"
+                      expectedType="string" actual="$dataHref" actualType="variable"
+                      stepKey="seeProductLinkInCategory"/>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

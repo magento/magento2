@@ -53,8 +53,8 @@ class Processor
     /**
      * Initialize quote item object
      *
-     * @param DataObject $request
      * @param Product $product
+     * @param DataObject $request
      *
      * @return Item
      */
@@ -97,6 +97,7 @@ class Processor
         $item->addQty($candidate->getCartQty());
 
         $customPrice = $request->getCustomPrice();
+        $item->setPrice($candidate->getFinalPrice());
         if (!empty($customPrice)) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);

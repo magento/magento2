@@ -3,59 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // @deprecated
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /* @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Downloadable */ ?>
 <?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
-<?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
-<?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()):?>
+<?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
+<?php if (($block->getProduct()->isSaleable() || $_skipSaleableCheck) && $block->hasLinks()) :?>
 
 <fieldset id="catalog_product_composite_configure_fields_downloadable"
           class="fieldset admin__fieldset downloadable information<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
-    <legend class="legend admin__legend"><span><?= /* @escapeNotVerified */ __('Downloadable Information') ?></span></legend><br />
+    <legend class="legend admin__legend">
+        <span><?= $block->escapeHtml(__('Downloadable Information')) ?></span>
+    </legend><br />
     <?php $_links = $block->getLinks(); ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <div class="field admin__field link<?php if ($_isRequired) echo ' required _required' ?>">
-        <label class="label admin__field-label"><span><?= /* @escapeNotVerified */ $block->getLinksTitle() ?></span></label>
+    <div class="field admin__field link <?php if ($_isRequired) { echo ' required _required'; } ?>">
+        <label class="label admin__field-label"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></label>
         <div class="control admin__field-control" id="downloadable-links-list">
-            <?php foreach ($_links as $_link): ?>
+            <?php foreach ($_links as $_link) : ?>
                 <div class="nested admin__field-option">
-                <?php if ($_linksPurchasedSeparately): ?>
+                <?php if ($_linksPurchasedSeparately) : ?>
                     <input type="checkbox"
-                           class="admin__control-checkbox checkbox<?php if ($_isRequired):?> validate-one-required-by-name<?php endif; ?> product downloadable link"
-                           name="links[]" id="links_<?= /* @escapeNotVerified */ $_link->getId() ?>"
-                           value="<?= /* @escapeNotVerified */ $_link->getId() ?>" <?= /* @escapeNotVerified */ $block->getLinkCheckedValue($_link) ?>
-                           price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_link->getPrice()) ?>"/>
+                           class="admin__control-checkbox checkbox<?php if ($_isRequired) :?> validate-one-required-by-name<?php endif; ?> product downloadable link"
+                           name="links[]" id="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>"
+                           value="<?= $block->escapeHtmlAttr($_link->getId()) ?>"
+                           <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?>
+                           price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_link->getPrice())) ?>"/>
                     <?php endif; ?>
-                    <label for="links_<?= /* @escapeNotVerified */ $_link->getId() ?>" class="label admin__field-label">
+                    <label for="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>" class="label admin__field-label">
                         <?= $block->escapeHtml($_link->getTitle()) ?>
-                        <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
-                            &nbsp;(<a href="<?= /* @escapeNotVerified */ $block->getLinkSampleUrl($_link) ?>" <?= $block->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':'' ?>><?= /* @escapeNotVerified */ __('sample') ?></a>)
+                        <?php if ($_link->getSampleFile() || $_link->getSampleUrl()) : ?>
+                            &nbsp;(<a href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>"
+                                <?= /* @noEscape */ $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : '' ?>>
+                                <?= $block->escapeHtml(__('sample')) ?>
+                            </a>)
                         <?php endif; ?>
-                        <?php if ($_linksPurchasedSeparately): ?>
-                        <?= /* @escapeNotVerified */ $block->getFormattedLinkPrice($_link) ?>
+                        <?php if ($_linksPurchasedSeparately) : ?>
+                            <?= /* @noEscape */ $block->getFormattedLinkPrice($_link) ?>
                             <br />
-                            <?= /* @escapeNotVerified */ $block->getLinkPrice($_link) ?>
+                            <?= /* @noEscape */ $block->getLinkPrice($_link) ?>
                         <?php endif; ?>
                     </label>
-                <?php if ($_isRequired): ?>
+                <?php if ($_isRequired) : ?>
                     <script>
-require(['prototype'], function(){
+                        require(['prototype'], function(){
 
-    //<![CDATA[
-    $('links_<?= /* @escapeNotVerified */ $_link->getId() ?>').advaiceContainer = 'links-advice-container';
-    $('links_<?= /* @escapeNotVerified */ $_link->getId() ?>').callbackFunction = 'validateDownloadableCallback';
-    //]]>
-                    
-});
-</script>
+                            //<![CDATA[
+                            $('links_<?= $block->escapeJs($_link->getId()) ?>').advaiceContainer = 'links-advice-container';
+                            $('links_<?= $block->escapeJs($_link->getId()) ?>').callbackFunction = 'validateDownloadableCallback';
+                            //]]>
+
+                        });
+                    </script>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
-        <?php if ($_isRequired): ?>
+        <?php if ($_isRequired) : ?>
             <span id="links-advice-container"></span>
         <?php endif;?>
         </div>

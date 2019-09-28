@@ -5,14 +5,19 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCustomerGroupOnCustomerFormActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer Group is selected on the Admin Customer edit page.</description>
+        </annotations>
         <arguments>
-            <argument name="customerGroup" type="entity" />
+            <argument name="customerGroup" type="entity"/>
         </arguments>
-        <click selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="clickOnAccountInfoTab" />
-        <waitForPageLoad stepKey="waitForPageLoad" />
-        <seeOptionIsSelected userInput="{{customerGroup.code}}" selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="verifyNeededCustomerGroupSelected" />
+        
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="clickOnAccountInfoTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeOptionIsSelected userInput="{{customerGroup.code}}" selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="verifyNeededCustomerGroupSelected"/>
     </actionGroup>
 </actionGroups>

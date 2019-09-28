@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Update Product Name and Description attribute -->
+    <actionGroup name="AdminUpdateProductNameAndDescriptionAttributes">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox"/>
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
+        <waitForPageLoad stepKey="waitForUploadPage"/>
+        <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
+        <click selector="{{AdminUpdateAttributesSection.toggleName}}" stepKey="clickToChangeName"/>
+        <fillField selector="{{AdminUpdateAttributesSection.name}}" userInput="{{product.name}}" stepKey="fillFieldName"/>
+        <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToChangeDescription"/>
+        <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="{{product.description}}" stepKey="fillFieldDescription"/>
+        <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitVisibleSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

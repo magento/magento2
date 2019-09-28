@@ -13,8 +13,10 @@
             <features value="Bundle"/>
             <stories value="View bundle products"/>
             <title value="Check tier prices for bundle options"/>
+            <description value="Check tier prices for bundle options"/>
             <testCaseId value="MAGETWO-98968"/>
             <useCaseId value="MAGETWO-98603"/>
+            <severity value="AVERAGE"/>
             <group value="catalog"/>
             <group value="bundle"/>
         </annotations>

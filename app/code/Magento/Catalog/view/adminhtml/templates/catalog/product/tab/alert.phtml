@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -14,7 +12,7 @@
 ?>
 <div id="alert_messages_block"><?= $block->getMessageHtml() ?></div>
 <div>
-    <h4 class="icon-head head-edit-form"><?= /* @escapeNotVerified */ __('Product Alerts') ?></h4>
+    <h4 class="icon-head head-edit-form"><?= $block->escapeHtml(__('Product Alerts')) ?></h4>
 </div>
 <div class="clear"></div>
 <?= $block->getAccordionHtml() ?>

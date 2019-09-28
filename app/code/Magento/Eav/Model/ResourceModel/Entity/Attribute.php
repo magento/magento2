@@ -457,6 +457,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
                 $connection->delete($table, ['option_id = ?' => $intOptionId]);
+                $this->clearSelectedOptionInEntities($object, $intOptionId);
             }
             return false;
         }
@@ -473,6 +474,41 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $intOptionId;
+    }
+
+    /**
+     * Clear selected option in entities
+     *
+     * @param EntityAttribute|AbstractModel $object
+     * @param int $optionId
+     * @return void
+     */
+    private function clearSelectedOptionInEntities(AbstractModel $object, int $optionId)
+    {
+        $backendTable = $object->getBackendTable();
+        $attributeId = $object->getAttributeId();
+        if (!$backendTable || !$attributeId) {
+            return;
+        }
+
+        $connection = $this->getConnection();
+        $where = $connection->quoteInto('attribute_id = ?', $attributeId);
+        $update = [];
+
+        if ($object->getBackendType() === 'varchar') {
+            $where.= ' AND ' . $connection->prepareSqlCondition('value', ['finset' => $optionId]);
+            $concat = $connection->getConcatSql(["','", 'value', "','"]);
+            $expr = $connection->quoteInto(
+                "TRIM(BOTH ',' FROM REPLACE($concat,',?,',','))",
+                $optionId
+            );
+            $update['value'] = new \Zend_Db_Expr($expr);
+        } else {
+            $where.= $connection->quoteInto(' AND value = ?', $optionId);
+            $update['value'] = null;
+        }
+
+        $connection->update($backendTable, $update, $where);
     }
 
     /**
@@ -731,8 +767,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = parent::__sleep();
         $properties = array_diff($properties, ['_storeManager']);
         return $properties;
@@ -749,8 +783,6 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);

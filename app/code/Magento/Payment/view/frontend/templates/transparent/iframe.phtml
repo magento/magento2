@@ -4,30 +4,28 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
 $params = $block->getParams();
 ?>
 <html>
     <head>
         <script>
-        <?php if (isset($params['redirect'])): ?>
+        <?php if (isset($params['redirect'])) : ?>
             window.location="<?= $block->escapeUrl($params['redirect']) ?>";
-        <?php elseif (isset($params['redirect_parent'])): ?>
-            var require = window.top.require;
+        <?php elseif (isset($params['redirect_parent'])) : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery'
                 ],
                 function($) {
-                    var parent = window.top;
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
                     parent.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
                 }
             );
-        <?php elseif (isset($params['error_msg'])): ?>
-            var require = window.top.require;
+        <?php elseif (isset($params['error_msg'])) : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery',
@@ -36,7 +34,7 @@ $params = $block->getParams();
                     'Magento_Checkout/js/model/full-screen-loader'
                 ],
                 function($, globalMessageList, $t, fullScreenLoader) {
-                    var parent = window.top;
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
@@ -44,22 +42,22 @@ $params = $block->getParams();
                     });
                 }
             );
-        <?php elseif (isset($params['multishipping'])): ?>
-            var require = window.top.require;
+        <?php elseif (isset($params['multishipping'])) : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery'
                 ],
                 function($) {
-                    var parent = window.top;
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
                     $(parent.document).find('#multishipping-billing-form').submit();
                 }
             );
-        <?php elseif (isset($params['order_success'])): ?>
-            window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
-        <?php else: ?>
-            var require = window.top.require;
+        <?php elseif (isset($params['order_success'])) : ?>
+            window.parent.location = "<?= $block->escapeUrl($params['order_success']) ?>";
+        <?php else : ?>
+            var require = window.parent.require;
             require(
                 [
                     'jquery',
@@ -69,7 +67,7 @@ $params = $block->getParams();
                     'Magento_Checkout/js/model/full-screen-loader'
                 ],
                 function($, quote, placeOrderAction, redirectOnSuccessAction, fullScreenLoader) {
-                    var parent = window.top;
+                    var parent = window.parent;
 
                     $(parent).trigger('clearTimeout');
                     $.when(
@@ -80,7 +78,7 @@ $params = $block->getParams();
                         }
                     ).fail(
                         function () {
-                            var parent = window.top;
+                            var parent = window.parent;
                             $(parent).trigger('clearTimeout');
                             fullScreenLoader.stopLoader();
                         }

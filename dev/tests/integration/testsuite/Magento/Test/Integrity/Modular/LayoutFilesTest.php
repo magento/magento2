@@ -77,9 +77,8 @@ class LayoutFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected function isSkippedArgument(array $argumentData)
     {
-        // Do not take into account argument name and parameters
-        unset($argumentData['name']);
-        unset($argumentData['param']);
+        // Do not take into account argument name, shared and parameters
+        unset($argumentData['name'], $argumentData['param'], $argumentData['shared']);
 
         $isUpdater = isset($argumentData['updater']);
         unset($argumentData['updater']);

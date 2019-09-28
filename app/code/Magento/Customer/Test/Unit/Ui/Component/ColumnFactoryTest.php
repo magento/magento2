@@ -7,6 +7,9 @@ namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\ColumnFactory;
 
+/**
+ * Test ColumnFactory Class
+ */
 class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -90,6 +93,7 @@ class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                     'component' => 'Magento_Ui/js/grid/columns/column',
+                    '__disableTmpl' => 'true'
                 ],
             ],
             'context' => $this->context,
