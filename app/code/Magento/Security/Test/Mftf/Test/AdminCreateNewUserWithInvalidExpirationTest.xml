@@ -15,7 +15,7 @@
             <description value="Create new user with invalid expiration date."/>
             <testCaseId value="" />
             <severity value="CRITICAL"/>
-            <group value="security_userexpire"/>
+            <group value="security"/>
         </annotations>
 
         <before>

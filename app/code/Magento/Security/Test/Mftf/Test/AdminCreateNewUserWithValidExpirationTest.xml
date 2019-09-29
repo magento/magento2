@@ -15,7 +15,7 @@
             <description value="Create new user with valid expiration date."/>
             <testCaseId value="" />
             <severity value="CRITICAL"/>
-            <group value="security_userexpire"/>
+            <group value="security"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -29,8 +29,6 @@
         <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
             <argument name="expires_at" value="{$expiresDateTime}"/>
         </actionGroup>
-
-        <!-- TODO: get proper date format to match above -->
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess" />
     </test>
 </tests>

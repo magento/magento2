@@ -20,15 +20,21 @@ class Validator extends AbstractValidator
     /**@var \Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     private $timezone;
 
+    /**@var \Magento\Framework\Stdlib\DateTime\DateTime */
+    private $dateTime;
+
     /**
      * Validator constructor.
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
     ) {
         $this->timezone = $timezone;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -45,7 +51,7 @@ class Validator extends AbstractValidator
         $expiresAt = $value;
         $label = 'Expiration date';
         if (\Zend_Validate::is($expiresAt, 'NotEmpty')) {
-            $currentTime = $this->timezone->date()->getTimestamp();
+            $currentTime = $this->dateTime->gmtTimestamp();
             $utcExpiresAt = $this->timezone->convertConfigTimeToUtc($expiresAt);
             $expiresAt = $this->timezone->date($utcExpiresAt)->getTimestamp();
             if ($expiresAt < $currentTime) {
