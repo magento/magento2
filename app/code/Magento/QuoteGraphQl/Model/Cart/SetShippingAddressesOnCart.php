@@ -11,6 +11,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -82,6 +83,20 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
 
+        $this->validateAddress($shippingAddress);
+
+        $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+    }
+
+    /**
+     * Validate quote address.
+     *
+     * @param Address $shippingAddress
+     *
+     * @throws GraphQlInputException
+     */
+    private function validateAddress(Address $shippingAddress)
+    {
         $errors = $shippingAddress->validate();
 
         if (true !== $errors) {
@@ -89,8 +104,6 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
                 __('Shipping address error: %message', ['message' => $this->getAddressErrors($errors)])
             );
         }
-
-        $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 
     /**

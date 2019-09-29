@@ -112,15 +112,27 @@ class SetBillingAddressOnCart
             );
         }
 
-        $errors = $billingAddress->validate();
+        $this->validateAddress($billingAddress);
+
+        return $billingAddress;
+    }
+
+    /**
+     * Validate quote address.
+     *
+     * @param Address $shippingAddress
+     *
+     * @throws GraphQlInputException
+     */
+    private function validateAddress(Address $shippingAddress)
+    {
+        $errors = $shippingAddress->validate();
 
         if (true !== $errors) {
             throw new GraphQlInputException(
                 __('Shipping address error: %message', ['message' => $this->getAddressErrors($errors)])
             );
         }
-
-        return $billingAddress;
     }
 
     /**
