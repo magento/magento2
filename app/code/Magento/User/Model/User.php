@@ -216,6 +216,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Removing dependencies and leaving only entity's properties.
      *
      * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -244,6 +247,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Restoring required objects after serialization.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -413,6 +419,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function getRole()
     {
+        if ($this->getData('extracted_role')) {
+            $this->_role = $this->getData('extracted_role');
+            $this->unsetData('extracted_role');
+        }
         if (null === $this->_role) {
             $this->_role = $this->_roleFactory->create();
             $roles = $this->getRoles();
@@ -665,6 +675,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $data = $this->getResource()->loadByUsername($username);
         if ($data !== false) {
+            if (is_string($data['extra'])) {
+                $data['extra'] = $this->serializer->unserialize($data['extra']);
+            }
+
             $this->setData($data);
             $this->setOrigData();
         }

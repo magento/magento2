@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="adminnotification_inbox" resource="default" engine="innodb" comment="Adminnotification Inbox">
         <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Notification id"/>
+                comment="Notification ID"/>
         <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Problem type"/>
         <column xsi:type="timestamp" name="date_added" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -35,7 +35,7 @@
         </index>
     </table>
     <table name="admin_system_messages" resource="default" engine="innodb" comment="Admin System Messages">
-        <column xsi:type="varchar" name="identity" nullable="false" length="100" comment="Message id"/>
+        <column xsi:type="varchar" name="identity" nullable="false" length="100" comment="Message ID"/>
         <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Problem type"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
