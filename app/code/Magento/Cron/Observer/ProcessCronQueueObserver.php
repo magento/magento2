@@ -832,12 +832,13 @@ class ProcessCronQueueObserver implements ObserverInterface
     {
         return $orphanJob
             ->setStatus(Schedule::STATUS_ERROR)
-            ->setMessages($message
-                ?
-                : sprintf(
-                    "Owner process (%d) not available on host (%s) any more",
-                    $orphanJob->getProcessId(),
-                    $orphanJob->getProcessHostname()
+            ->setMessages(
+                $message
+                    ?
+                    : sprintf(
+                        "Owner process (%d) not available on host (%s) any more",
+                        $orphanJob->getProcessId(),
+                        $orphanJob->getProcessHostname()
                 )
             )
             ->save();
