@@ -537,7 +537,6 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
         }
 
-
         // check if history cleanup is needed
         $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
         $historyCleanUp = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_CLEANUP_EVERY);
@@ -715,8 +714,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         if ($runningJobs) {
             $count = 0;
 
-            foreach($runningJobs as $runningJob) {
-
+            foreach ($runningJobs as $runningJob) {
                 if ($this->getCheckHostnameConfigurationValue() &&
                     $runningJob->getProcessHostname() != gethostname()) {
                     //job run/ran on a different host but do not need to check
@@ -726,13 +724,13 @@ class ProcessCronQueueObserver implements ObserverInterface
                 //to avoid shell_exec output truncate using a temporary file to catch it
                 $tempFile = tmpfile();
                 fwrite(
-                   $tempFile,
-                   shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
+                    $tempFile,
+                    shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
                 );
                 fseek($tempFile, 0);
                 $execOutput = explode(
-                   "\n",
-                   fread($tempFile, 1024)
+                    "\n",
+                    fread($tempFile, 1024)
                 );
                 fclose($tempFile);
 
@@ -742,11 +740,13 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
 
             if ($count) {
-                $this->logger->info(sprintf(
-                    '%d cron jobs seems to got stuck in group %s and were cleaned',
-                    $count,
-                    $groupId
-                ));
+                $this->logger->info(
+                    sprintf(
+                        '%d cron jobs seems to got stuck in group %s and were cleaned',
+                        $count,
+                        $groupId
+                    )
+                );
             }
         }
     }
@@ -758,29 +758,31 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $execOutput
      * @return boolean has Schedule been processed?
      */
-    private function processRunningJob(Schedule $runningJob, array $execOutput) {
-        foreach($execOutput as $a => $line) {
+    private function processRunningJob(Schedule $runningJob, array $execOutput)
+    {
+        foreach ($execOutput as $line) {
             if (!$line) {
                 continue;
             }
             $line = preg_split('/\s+/', trim($line), 7);
             if ((int) trim($line[0]) == $runningJob->getProcessId() &&
                 $isCron /* !!!assigning value!!!*/ = $this->isCronCommand(trim($line[6]))) {
-
                 $processStartTime = strftime(
                     '%Y-%m-%d %H:%M:%S',
-                    strtotime(implode(
-                        ' ',
-                        array_map(
-                            function ($value, $key) {
-                                if ($key > 1 && $key < 6) {
-                                    return $value;
-                                }
-                            },
-                            $line,
-                            array_keys($line)
+                    strtotime(
+                        implode(
+                            ' ',
+                            array_map(
+                                function ($value, $key) {
+                                    if ($key > 1 && $key < 6) {
+                                        return $value;
+                                    }
+                                },
+                                $line,
+                                array_keys($line)
+                            )
                         )
-                    ))
+                    )
                 );
 
                 if ($processStartTime == $runningJob->getProcessStartedAt()) {
@@ -809,7 +811,8 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $command
      * @return boolean
      */
-    public function isCronCommand(string $command) {
+    public function isCronCommand(string $command)
+    {
         if (preg_match('(magento.+cron\:run|magento2\/update\/cron.php)', $command) === 1) {
             return true;
         }
@@ -825,14 +828,18 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $message
      * @return Schedule
      */
-    protected function closeOrphanJob($orphanJob, string $message = "") {
+    protected function closeOrphanJob($orphanJob, string $message = "")
+    {
         return $orphanJob
             ->setStatus(Schedule::STATUS_ERROR)
-            ->setMessages($message ? : sprintf(
-                "Owner process (%d) not available on host (%s) any more",
-                $orphanJob->getProcessId(),
-                $orphanJob->getProcessHostname()
-            ))
+            ->setMessages($message
+                ?
+                : sprintf(
+                    "Owner process (%d) not available on host (%s) any more",
+                    $orphanJob->getProcessId(),
+                    $orphanJob->getProcessHostname()
+                )
+            )
             ->save();
     }
 
@@ -897,8 +904,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * Get CheckHost Configuration Value. Used to determine if need to clean
-     * orphan jobs if they ar running on different host
+     * Get CheckHost Configuration Value.
      *
      * @return int
      */
