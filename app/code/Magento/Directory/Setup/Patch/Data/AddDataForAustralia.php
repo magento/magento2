@@ -12,6 +12,7 @@ use Magento\Directory\Setup\DataInstaller;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
 
 /**
  * Adds Australian States
@@ -27,21 +28,27 @@ class AddDataForAustralia implements DataPatchInterface, PatchVersionInterface
      * @var \Magento\Directory\Setup\DataInstallerFactory
      */
     private $dataInstallerFactory;
+
     /**
      * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     private $regionCollectionFactory;
 
     /**
+     * AddDataForAustralia constructor.
+     *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+        \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory,
+        CollectionFactory $regionCollectionFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->dataInstallerFactory = $dataInstallerFactory;
+        $this->regionCollectionFactory = $regionCollectionFactory;
     }
 
     /**
