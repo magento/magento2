@@ -80,6 +80,7 @@ QUERY;
         $resolvedCategoryIds = array_merge($resolvedCategoryIds, [$baseCategoryId]);
         foreach ($resolvedCategoryIds as $categoryId) {
             $category = $categoryRepository->get($categoryId);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $productIdsFromCategory= array_merge(
                 $productIdsFromCategory,
                 $category->getProductCollection()->getAllIds()
