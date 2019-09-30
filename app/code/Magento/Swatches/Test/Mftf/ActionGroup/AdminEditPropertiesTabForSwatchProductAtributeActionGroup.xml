@@ -20,6 +20,14 @@
         <fillField selector="{{AdminNewAttributePanel.lastVisualSwatchOptionAdminValue}}" userInput="{{swatchOption.admin_label}}" stepKey="fillAdminLabel"/>
         <fillField selector="{{AdminNewAttributePanel.lastVisualSwatchOptionDefaultStoreValue}}" userInput="{{swatchOption.default_label}}" stepKey="fillDefaultStoreLabel"/>
     </actionGroup>
+    <actionGroup name="AdminAddPreviewImageSwatchOption">
+        <arguments>
+            <argument name="image" type="entity" defaultValue="MagentoLogo"/>
+            <argument name="index" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile(index)}}" stepKey="clickUploadFile"/>
+        <attachFile selector="{{AdminManageSwatchSection.file}}" userInput="{{image.file}}" stepKey="attachFile"/>
+    </actionGroup>
 
     <!--You are on ProductAttributePage-->
     <!--Select value for option "Update Product Preview Image"-->
