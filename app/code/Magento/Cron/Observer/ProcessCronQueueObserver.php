@@ -692,18 +692,18 @@ class ProcessCronQueueObserver implements ObserverInterface
                     continue;
                 }
 
-               //to avoid shell_exec output truncate using a temporary file to catch it
-               $tempFile = tmpfile();
-               fwrite(
+                //to avoid shell_exec output truncate using a temporary file to catch it
+                $tempFile = tmpfile();
+                fwrite(
                    $tempFile,
                    shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
-               );
-               fseek($tempFile, 0);
-               $execOutput = explode(
+                );
+                fseek($tempFile, 0);
+                $execOutput = explode(
                    "\n",
                    fread($tempFile, 1024)
-               );
-               fclose($tempFile);
+                );
+                fclose($tempFile);
 
                 if ($this->processRunningJob($runningJob, $execOutput) === true) {
                     $count++;
@@ -776,7 +776,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * Check if command is one of Magento2 cron processes
      *
      * @param string $command
-     * $return boolean
+     * @return boolean
      */
     public function isCronCommand(string $command) {
         if (preg_match('(magento.+cron\:run|magento2\/update\/cron.php)', $command) === 1) {
