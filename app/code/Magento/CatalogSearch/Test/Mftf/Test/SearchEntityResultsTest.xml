@@ -74,6 +74,7 @@
     </test>
     <test name="QuickSearchEmptyResults">
         <annotations>
+            <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
             <title value="User should not get search results on query that doesn't return anything"/>
             <description value="Use invalid query to return no products"/>
@@ -89,8 +90,8 @@
             </createData>
         </before>
         <after>
-            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
-            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
@@ -99,6 +100,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmpty"/>
     </test>
+
     <test name="QuickSearchWithTwoCharsEmptyResults" extends="QuickSearchEmptyResults">
         <annotations>
             <features value="CatalogSearch"/>
@@ -110,19 +112,30 @@
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
         </annotations>
-        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" before="searchStorefront" stepKey="getFirstTwoLetters"/>
-        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,3); return ret;" before="searchStorefront" stepKey="getFirstThreeLetters"/>
 
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" after="checkEmpty" stepKey="searchStorefrontThreeLetters">
-            <argument name="phrase" value="$getFirstThreeLetters"/>
+        <before>
+            <magentoCLI command="config:set {{MinimalQueryLengthFourConfigData.path}} {{MinimalQueryLengthFourConfigData.value}}" after="createSimpleProduct" stepKey="setMinimalQueryLengthToFour"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{MinimalQueryLengthDefaultConfigData.path}} {{MinimalQueryLengthDefaultConfigData.value}}" after="deleteCategory" stepKey="setMinimalQueryLengthToFour"/>
+        </after>
+
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" before="searchStorefront" stepKey="getFirstTwoLetters"/>
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,{{MinimalQueryLengthFourConfigData.value}}); return ret;" after="getFirstTwoLetters" stepKey="getFirstConfigLetters"/>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" after="checkEmpty" stepKey="searchStorefrontConfigLetters">
+            <argument name="phrase" value="$getFirstConfigLetters"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchTooShortStringActionGroup" after="searchStorefrontThreeLetters" stepKey="checkCannotSearchWithTooShortString">
+        <actionGroup ref="StorefrontQuickSearchTooShortStringActionGroup" after="searchStorefrontConfigLetters" stepKey="checkCannotSearchWithTooShortString">
             <argument name="phrase" value="$getFirstTwoLetters"/>
+            <argument name="minQueryLength" value="{{MinimalQueryLengthFourConfigData.value}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup" after="checkCannotSearchWithTooShortString" stepKey="checkRelatedSearchTerm">
-            <argument name="term" value="$getFirstThreeLetters"/>
+            <argument name="term" value="$getFirstConfigLetters"/>
         </actionGroup>
     </test>
+
     <test name="QuickSearchProductByNameWithThreeLetters" extends="QuickSearchProductBySku">
         <annotations>
             <stories value="Search Product on Storefront"/>
