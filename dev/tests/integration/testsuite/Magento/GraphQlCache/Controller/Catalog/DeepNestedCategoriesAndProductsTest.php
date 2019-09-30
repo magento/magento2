@@ -69,12 +69,14 @@ QUERY;
 
         $productIdsFromCategory = $category->getProductCollection()->getAllIds();
         foreach ($productIdsFromCategory as $productId) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $resolvedCategoryIds = array_merge(
                 $resolvedCategoryIds,
                 $productRepository->getById($productId)->getCategoryIds()
             );
         }
 
+        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
         $resolvedCategoryIds = array_merge($resolvedCategoryIds, [$baseCategoryId]);
         foreach ($resolvedCategoryIds as $categoryId) {
             $category = $categoryRepository->get($categoryId);
@@ -88,9 +90,11 @@ QUERY;
         $uniqueCategoryIds = array_unique($resolvedCategoryIds);
         $expectedCacheTags = ['cat_c', 'cat_p', 'FPC'];
         foreach ($uniqueProductIds as $uniqueProductId) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $expectedCacheTags = array_merge($expectedCacheTags, ['cat_p_' . $uniqueProductId]);
         }
         foreach ($uniqueCategoryIds as $uniqueCategoryId) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $expectedCacheTags = array_merge($expectedCacheTags, ['cat_c_' . $uniqueCategoryId]);
         }
 
