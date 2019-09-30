@@ -23,11 +23,13 @@
             <createData entity="SimpleProductInStockQuantityZero" stepKey="createProduct"/>
 
             <!-- Configure Magento to show out of stock products and to allow backorders -->
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
             <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersEnable.path}} {{CatalogInventoryItemOptionsBackordersEnable.value}}" stepKey="setConfigAllowBackordersTrue"/>
         </before>
 
         <after>
             <!-- Set Magento back to default configuration -->
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersDisable.path}} {{CatalogInventoryItemOptionsBackordersDisable.value}}" stepKey="setConfigAllowBackordersFalse"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
