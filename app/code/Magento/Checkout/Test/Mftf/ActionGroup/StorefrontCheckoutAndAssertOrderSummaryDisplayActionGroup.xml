@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCheckoutAndAssertOrderSummaryDisplayActionGroup">
+        <annotations>
+            <description>Clicks on 'Go To Checkout' in the Storefront Mini Shopping Cart modal. Validates that the provided Items in Cart Text is present and correct on the Storefront Checkout page under the 'Summary' section.</description>
+        </annotations>
         <arguments>
             <argument name="itemsText" type="string"/>
         </arguments>
+        
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickOnCheckOutButtonInMiniCart"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <see selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" userInput="{{itemsText}}" stepKey="seeOrderSummaryText"/>

@@ -8,12 +8,15 @@ namespace Magento\Weee\Observer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Tax\Helper\Data as TaxHelper;
 
+/**
+ * Customer logged in.
+ */
 class CustomerLoggedIn implements ObserverInterface
 {
     /**
@@ -49,13 +52,13 @@ class CustomerLoggedIn implements ObserverInterface
 
     /**
      * @param Data $weeeHelper
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         Data $weeeHelper,
-        Manager $moduleManager,
+        ModuleManagerInterface $moduleManager,
         Config $cacheConfig,
         TaxAddressManagerInterface $addressManager
     ) {
@@ -66,6 +69,8 @@ class CustomerLoggedIn implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

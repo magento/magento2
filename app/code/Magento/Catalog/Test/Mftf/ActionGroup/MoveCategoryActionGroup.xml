@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="MoveCategoryActionGroup">
+        <annotations>
+            <description>Move a Category on the Backend Category page.</description>
+        </annotations>
         <arguments>
             <argument name="childCategory"/>
             <argument name="parentCategory"/>
         </arguments>
+
         <click stepKey="expandAllCategoriesTree" selector="{{AdminCategorySidebarTreeSection.expandAll}}"/>
         <waitForAjaxLoad stepKey="waitForCategoriesExpand"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree('childCategory')}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('parentCategory')}}" stepKey="moveCategory"/>

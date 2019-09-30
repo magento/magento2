@@ -36,9 +36,11 @@
             <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
 
             <!--Configure Auth.net-->
+            <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
             <actionGroup ref="ConfigureAuthorizenetAcceptjs" stepKey="configureAuthorizenetAcceptjs">
                 <argument name="paymentAction" value="Authorize and Capture"/>
             </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
 
         </before>
         <after>
@@ -55,8 +57,10 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForCartToFill"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCartAgain"/>
         <waitForPageLoad stepKey="waitForCartToFillAgain"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
 
         <!--Checkout steps-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>

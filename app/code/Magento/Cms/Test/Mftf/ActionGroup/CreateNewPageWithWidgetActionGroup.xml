@@ -5,15 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateNewPageWithWidget">
+        <annotations>
+            <description>Goes to Admin CMS Page creation page. Adds the provided Title, Category, Conditions and Widget. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="pageTitle" type="string" defaultValue="{{defaultCmsPage.title}}"/>
             <argument name="category" type="string"/>
             <argument name="condition" type="string"/>
             <argument name="widgetType" type="string"/>
         </arguments>
+        
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="fillFieldTitle"/>
@@ -30,7 +35,7 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickToAddRuleParam"/>
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickToSelectFromList"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <click selector="{{WidgetSection.PreCreateCategory(category)}}" stepKey="selectPreCategory" />
+        <click selector="{{WidgetSection.PreCreateCategory(category)}}" stepKey="selectPreCategory"/>
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickToSaveInsertedWidget"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <click selector="{{CmsNewBlockBlockActionsSection.savePage}}" stepKey="saveCMSPage"/>

@@ -3,16 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /** @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn $block */
-
 $_item = $block->getItem();
 ?>
-
 <div class="price-excl-tax">
-    <?= /* @escapeNotVerified */ $block->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
+    <?= /* @noEscape */ $block->displayPrices($_item->getBaseRowTotal(), $_item->getRowTotal()) ?>
 </div>

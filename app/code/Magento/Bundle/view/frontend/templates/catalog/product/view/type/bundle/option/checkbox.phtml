@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox */ ?>
@@ -17,34 +14,34 @@
     </label>
     <div class="control">
         <div class="nested options-list">
-            <?php if ($block->showSingle()): ?>
-                <?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
+            <?php if ($block->showSingle()) : ?>
+                <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
                 <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
                 <input type="hidden"
-                       class="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>  product bundle option"
-                       name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>]"
-                       value="<?= /* @escapeNotVerified */ $_selections[0]->getSelectionId() ?>"/>
-            <?php else:?>
-                <?php foreach($_selections as $_selection): ?>
+                       class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>  product bundle option"
+                       name="bundle_option[<?= $block->escapeHtml($_option->getId()) ?>]"
+                       value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
+            <?php else :?>
+                <?php foreach ($_selections as $_selection) : ?>
                     <div class="field choice">
-                        <input class="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?> checkbox product bundle option change-container-classname"
-                               id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"
+                        <input class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> checkbox product bundle option change-container-classname"
+                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                type="checkbox"
-                               <?php if ($_option->getRequired()) /* @escapeNotVerified */ echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $_option->getId() . ']&quot;]:checked\'}"'?>
-                               name="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>][<?= /* @escapeNotVerified */ $_selection->getId() ?>]"
-                               data-selector="bundle_option[<?= /* @escapeNotVerified */ $_option->getId() ?>][<?= /* @escapeNotVerified */ $_selection->getId() ?>]"
-                               <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
-                               <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
-                               value="<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>"/>
+                               <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"'; } ?>
+                               name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
+                               data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
+                               <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
+                               <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
+                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
                         <label class="label"
-                               for="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-<?= /* @escapeNotVerified */ $_selection->getSelectionId() ?>">
-                            <span><?= /* @escapeNotVerified */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
+                               for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
+                            <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
                             <br/>
                             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
                         </label>
                     </div>
                 <?php endforeach; ?>
-                <div id="bundle-option-<?= /* @escapeNotVerified */ $_option->getId() ?>-container"></div>
+                <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
             <?php endif; ?>
         </div>
     </div>

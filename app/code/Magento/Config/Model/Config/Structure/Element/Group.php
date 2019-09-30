@@ -7,6 +7,8 @@
 namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
+ * Group element.
+ *
  * @api
  * @since 100.0.2
  */
@@ -27,14 +29,14 @@ class Group extends AbstractComposite
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param Iterator\Field $childrenIterator
      * @param \Magento\Config\Model\Config\BackendClone\Factory $cloneModelFactory
      * @param Dependency\Mapper $dependencyMapper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Config\Model\Config\Structure\Element\Iterator\Field $childrenIterator,
         \Magento\Config\Model\Config\BackendClone\Factory $cloneModelFactory,
         \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper

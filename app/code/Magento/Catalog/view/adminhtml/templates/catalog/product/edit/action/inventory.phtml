@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /** @var Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory $block */
 ?>
 <script>
@@ -40,326 +39,363 @@ if (!is_numeric($defaultMinSaleQty)) {
 <div class="fieldset-wrapper form-inline advanced-inventory-edit">
     <div class="fieldset-wrapper-title">
         <strong class="title">
-            <span><?= /* @escapeNotVerified */ __('Advanced Inventory') ?></span>
+            <span><?= $block->escapeHtml(__('Advanced Inventory')) ?></span>
         </strong>
     </div>
     <div class="fieldset-wrapper-content">
         <fieldset class="fieldset" id="table_cataloginventory">
         <div class="field">
             <label class="label" for="inventory_manage_stock">
-                <span><?= /* @escapeNotVerified */ __('Manage Stock') ?></span>
+                <span><?= $block->escapeHtml(__('Manage Stock')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
-                        <select id="inventory_manage_stock" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[manage_stock]"
+                        <select id="inventory_manage_stock" name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[manage_stock]"
                                 class="select" disabled="disabled">
-                            <option value="1"><?= /* @escapeNotVerified */ __('Yes') ?></option>
-                            <option
-                                value="0"<?php if ($block->getFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('No') ?></option>
+                            <option value="1"><?= $block->escapeHtml(__('Yes')) ?></option>
+                            <option value="0"
+                                <?php if ($block->getFieldValue('manage_stock') == 0) :?>
+                                    selected="selected"
+                                <?php endif; ?>><?= $block->escapeHtml(__('No')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
-                        <input name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox"
+                        <input name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox"
                                id="inventory_use_config_manage_stock" data-role="toggle-editability" value="1"
                                checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_manage_stock"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_manage_stock_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_manage_stock_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field required">
             <label class="label" for="inventory_qty">
-                <span><?= /* @escapeNotVerified */ __('Qty') ?></span>
+                <span><?= $block->escapeHtml(__('Qty')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text required-entry validate-number" id="inventory_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[qty]"
-                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[qty]"
+                               value="<?= $block->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_qty_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field with-addon">
             <label class="label" for="inventory_min_qty">
-                <span><?= /* @escapeNotVerified */ __('Out-of-Stock Threshold') ?></span>
+                <span><?= $block->escapeHtml(__('Out-of-Stock Threshold')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[min_qty]"
-                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[min_qty]"
+                               value="<?= $block->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_min_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_min_qty]" value="1"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_min_qty]" value="1"
                                data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_min_qty" class="label">
-                            <span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span>
+                            <span><?= $block->escapeHtml(__('Use Config Settings')) ?></span>
                         </label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_min_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_min_qty_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_min_sale_qty">
-                <span><?= /* @escapeNotVerified */ __('Minimum Qty Allowed in Shopping Cart') ?></span>
+                <span><?= $block->escapeHtml(__('Minimum Qty Allowed in Shopping Cart')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[min_sale_qty]"
-                               value="<?= /* @escapeNotVerified */ $defaultMinSaleQty ?>"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[min_sale_qty]"
+                               value="<?= $defaultMinSaleQty * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_min_sale_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_min_sale_qty]"
+                               value="1"
+                               data-role="toggle-editability"
+                               checked="checked"
+                               disabled="disabled"/>
                         <label for="inventory_use_config_min_sale_qty"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_min_sale_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_min_sale_qty_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_max_sale_qty">
-                <span><?= /* @escapeNotVerified */ __('Maximum Qty Allowed in Shopping Cart') ?></span>
+                <span><?= $block->escapeHtml(__('Maximum Qty Allowed in Shopping Cart')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_max_sale_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[max_sale_qty]"
-                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('max_sale_qty') * 1 ?>"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[max_sale_qty]"
+                               value="<?= $block->getDefaultConfigValue('max_sale_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_use_config_max_sale_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <input type="checkbox"
+                               id="inventory_use_config_max_sale_qty"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_max_sale_qty]"
+                               value="1"
+                               data-role="toggle-editability"
+                               checked="checked"
+                               disabled="disabled"/>
                         <label for="inventory_use_config_max_sale_qty"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_max_sale_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_max_sale_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_is_qty_decimal">
-                <span><?= /* @escapeNotVerified */ __('Qty Uses Decimals') ?></span>
+                <span><?= $block->escapeHtml(__('Qty Uses Decimals')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <select id="inventory_is_qty_decimal"
-                                name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[is_qty_decimal]" class="select"
+                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[is_qty_decimal]"
+                                class="select"
                                 disabled="disabled">
-                            <option value="0"><?= /* @escapeNotVerified */ __('No') ?></option>
-                            <option
-                                value="1"<?php if ($block->getDefaultConfigValue('is_qty_decimal') == 1): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('Yes') ?></option>
+                            <option value="0"><?= $block->escapeHtml(__('No')) ?></option>
+                            <option value="1"
+                                <?php if ($block->getDefaultConfigValue('is_qty_decimal') == 1) :?>
+                                    selected="selected"
+                                <?php endif; ?>><?= $block->escapeHtml(__('Yes')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_is_qty_decimal_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_is_qty_decimal_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_backorders">
-                <span><?= /* @escapeNotVerified */ __('Backorders') ?></span>
+                <span><?= $block->escapeHtml(__('Backorders')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
-                        <select id="inventory_backorders" name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[backorders]"
-                                class="select" disabled="disabled">
-                            <?php foreach ($block->getBackordersOption() as $option): ?>
+                        <select id="inventory_backorders"
+                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[backorders]"
+                                class="select"
+                                disabled="disabled">
+                            <?php foreach ($block->getBackordersOption() as $option) :?>
                                 <?php $_selected = ($option['value'] == $block->getDefaultConfigValue('backorders')) ? ' selected="selected"' : '' ?>
                                 <option
-                                    value="<?= /* @escapeNotVerified */ $option['value'] ?>"<?= /* @escapeNotVerified */ $_selected ?>><?= /* @escapeNotVerified */ $option['label'] ?></option>
+                                    value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($option['label']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_backorders"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_backorders]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_backorders]"
+                               value="1"
+                               data-role="toggle-editability"
+                               checked="checked"
+                               disabled="disabled"/>
                         <label for="inventory_use_config_backorders"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_backorders_checkbox" data-role="toggle-editability-all"/>
-                        <label for="inventory_backorders_checkbox" class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                        <label for="inventory_backorders_checkbox"
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
 
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_notify_stock_qty">
-                <span><?= /* @escapeNotVerified */ __('Notify for Quantity Below') ?></span>
+                <span><?= $block->escapeHtml(__('Notify for Quantity Below')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[notify_stock_qty]"
-                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[notify_stock_qty]"
+                               value="<?= $block->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_use_config_notify_stock_qty"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <input type="checkbox"
+                               id="inventory_use_config_notify_stock_qty"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_notify_stock_qty]"
+                               value="1"
+                               data-role="toggle-editability"
+                               checked="checked"
+                               disabled="disabled"/>
                         <label for="inventory_use_config_notify_stock_qty"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_notify_stock_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_notify_stock_qty_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_enable_qty_increments">
-                <span><?= /* @escapeNotVerified */ __('Enable Qty Increments') ?></span>
+                <span><?= $block->escapeHtml(__('Enable Qty Increments')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <select id="inventory_enable_qty_increments"
-                                name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[enable_qty_increments]" class="select"
+                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[enable_qty_increments]"
+                                class="select"
                                 disabled="disabled">
-                            <option value="1"><?= /* @escapeNotVerified */ __('Yes') ?></option>
-                            <option
-                                value="0"<?php if ($block->getDefaultConfigValue('enable_qty_increments') == 0): ?> selected="selected"<?php endif; ?>><?= /* @escapeNotVerified */ __('No') ?></option>
+                            <option value="1"><?= $block->escapeHtml(__('Yes')) ?></option>
+                            <option value="0"
+                                <?php if ($block->getDefaultConfigValue('enable_qty_increments') == 0) :?>
+                                    selected="selected"
+                                <?php endif; ?>><?= $block->escapeHtml(__('No')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_enable_qty_increments"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_enable_qty_increments]"
+                               value="1"
+                               data-role="toggle-editability"
+                               checked="checked"
+                               disabled="disabled"/>
                         <label for="inventory_use_config_enable_qty_increments"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_enable_qty_increments_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_enable_qty_increments_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_qty_increments">
-                <span><?= /* @escapeNotVerified */ __('Qty Increments') ?></span>
+                <span><?= $block->escapeHtml(__('Qty Increments')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <input type="text" class="input-text validate-number" id="inventory_qty_increments"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[qty_increments]"
-                               value="<?= /* @escapeNotVerified */ $block->getDefaultConfigValue('qty_increments') * 1 ?>"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[qty_increments]"
+                               value="<?= $block->getDefaultConfigValue('qty_increments') * 1 ?>"
                                disabled="disabled"/>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_use_config_qty_increments"
-                               name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[use_config_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <input type="checkbox"
+                               id="inventory_use_config_qty_increments"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_qty_increments]"
+                               value="1"
+                               data-role="toggle-editability"
+                               checked="checked"
+                               disabled="disabled"/>
                         <label for="inventory_use_config_qty_increments"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Use Config Settings') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_qty_increments_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_qty_increments_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_stock_availability">
-                <span><?= /* @escapeNotVerified */ __('Stock Availability') ?></span>
+                <span><?= $block->escapeHtml(__('Stock Availability')) ?></span>
             </label>
 
             <div class="control">
                 <div class="fields-group-2">
                     <div class="field">
                         <select id="inventory_stock_availability"
-                                name="<?= /* @escapeNotVerified */ $block->getFieldSuffix() ?>[is_in_stock]" class="select"
+                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[is_in_stock]" class="select"
                                 disabled="disabled">
-                            <option value="1"><?= /* @escapeNotVerified */ __('In Stock') ?></option>
-                            <option
-                                value="0"<?php if ($block->getDefaultConfigValue('is_in_stock') == 0): ?> selected<?php endif; ?>><?= /* @escapeNotVerified */ __('Out of Stock') ?></option>
+                            <option value="1"><?= $block->escapeHtml(__('In Stock')) ?></option>
+                            <option value="0"<?php if ($block->getDefaultConfigValue('is_in_stock') == 0) :?> selected<?php endif; ?>><?= $block->escapeHtml(__('Out of Stock')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_stock_availability_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_stock_availability_checkbox"
-                               class="label"><span><?= /* @escapeNotVerified */ __('Change') ?></span></label>
+                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= /* @escapeNotVerified */ __('[GLOBAL]') ?>"></div>
+            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
         </fieldset>
     </div>

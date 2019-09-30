@@ -52,7 +52,6 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme i
                 \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE
             );
             $result = ['error' => false, 'files' => $customization->generateFileInfo($customJsFiles)];
-            // phpcs:disable Magento2.Exceptions.ThrowCatch
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {

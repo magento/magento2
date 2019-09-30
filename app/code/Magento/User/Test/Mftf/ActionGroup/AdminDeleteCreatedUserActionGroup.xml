@@ -5,20 +5,42 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteCreatedUserActionGroup">
+        <annotations>
+            <description>Goes to the Admin Users grid page. Edits the provided User. Deletes the User. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="user"/>
         </arguments>
+        
         <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
         <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.username)}}"/>
-        <waitForPageLoad stepKey="waitForSingleUserPageToLoad" />
+        <waitForPageLoad stepKey="waitForSingleUserPageToLoad"/>
         <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
         <waitForPageLoad stepKey="waitForConfirmationPopup"/>
         <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
         <see stepKey="seeDeleteMessageForUser" userInput="You deleted the user."/>
+    </actionGroup>
+    <!--Delete User-->
+    <actionGroup name="AdminDeleteNewUserActionGroup">
+        <annotations>
+            <description>Deletes a User that contains the name 'John'. PLEASE NOTE: The Action Group values are Hardcoded.</description>
+        </annotations>
+        <arguments>
+            <argument name="userName" type="string" defaultValue="John"/>
+        </arguments>
+        <click stepKey="clickOnUser" selector="{{AdminDeleteUserSection.theUser(userName)}}"/>
+        <fillField stepKey="typeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForDeletePopupOpen" time="5"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
+        <see userInput="You deleted the user." stepKey="seeSuccessMessage" />
     </actionGroup>
 </actionGroups>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Login New User-->
+    <actionGroup name="LoginNewUser">
+        <annotations>
+            <description>Goes to the Backend Admin Login page. Fill Username and Password. Click on Sign In.</description>
+        </annotations>
+        <arguments>
+            <argument name="user" defaultValue="NewAdmin"/>
+        </arguments>
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}" stepKey="navigateToAdmin"/>
+        <fillField userInput="{{user.username}}" selector="{{LoginFormSection.username}}" stepKey="fillUsername"/>
+        <fillField userInput="{{user.password}}" selector="{{LoginFormSection.password}}" stepKey="fillPassword"/>
+        <click selector="{{LoginFormSection.signIn}}" stepKey="clickLogin"/>
+    </actionGroup>
+</actionGroups>

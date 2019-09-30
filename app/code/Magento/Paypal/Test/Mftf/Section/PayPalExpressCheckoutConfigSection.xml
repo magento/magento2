@@ -45,6 +45,9 @@
         <element name="color" type="text" selector=".paypal-button-color-{{color}}" parameterized="true"/>
     </section>
     <section name="CheckoutPaymentSection">
+        <element name="email" type="input" selector="#checkout-customer-email"/>
+        <element name="payPalPaymentBraintree" type="radio" selector="#braintree_paypal"/>
+        <element name="payPalFrame" type="iframe" selector="//iframe[contains(@class, 'zoid-component-frame zoid-visible')]" timeout="5"/>
         <element name="PayPalPaymentRadio" type="radio" selector="input#paypal_express.radio" timeout="30"/>
         <element name="PayPalBtn" type="radio" selector=".paypal-button.paypal-button-number-0" timeout="30"/>
     </section>
@@ -58,5 +61,7 @@
         <element name="cartIcon" type="text" selector="#transactionCart"/>
         <element name="itemName" type="text" selector="//span[@title='{{productName}}']" parameterized="true"/>
         <element name="PayPalSubmitBtn" type="text" selector="//input[@type='submit']"/>
+        <element name="nextButton" type="button" selector="#btnNext"/>
+        <element name="continueButton" type="button" selector=".continueButton"/>
     </section>
 </sections>
