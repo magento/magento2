@@ -77,8 +77,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
                     'option_id' => 1
                 ]
             ]
-
-            ]
+        ]
     );
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
