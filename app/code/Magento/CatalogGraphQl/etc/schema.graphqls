@@ -58,13 +58,6 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
     position: Int @doc(description: "The position within the list of product links.")
 }
 
-type ProductTierPrices @doc(description: "The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
-    customer_group_id: String @doc(description: "The ID of the customer group.")
-    qty: Float @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
-    value: Float @doc(description: "The price of the fixed price item.")
-    percentage_value: Float @doc(description: "The percentage discount of the item.")
-    website_id: Float @doc(description: "The ID assigned to the website.")
-}
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
     id: Int @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
@@ -93,7 +86,6 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     websites: [Website] @doc(description: "An array of websites in which the product is available.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
     product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
-    tier_prices: [ProductTierPrices] @doc(description: "An array of ProductTierPrices objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\TierPrices")
     price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
@@ -231,6 +223,7 @@ type Breadcrumb @doc(description: "Breadcrumb item."){
     category_name: String @doc(description: "Category name.")
     category_level: Int @doc(description: "Category level.")
     category_url_key: String @doc(description: "Category URL key.")
+    category_url_path: String @doc(description: "Category URL path.")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface @doc(description: "CustomizableRadioOption contains information about a set of radio buttons that are defined as part of a customizable option.") {

@@ -33,9 +33,7 @@ class Generator extends AbstractSchemaGenerator
      */
     const ERROR_SCHEMA = '#/definitions/error-response';
 
-    /**
-     * Unauthorized description
-     */
+    /** Unauthorized description */
     const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
 
     /** Array signifier */
@@ -759,7 +757,8 @@ class Generator extends AbstractSchemaGenerator
                 $subPrefix
             );
         }
-        return array_merge(...$queryNames);
+
+        return empty($queryNames) ? [] : array_merge(...$queryNames);
     }
 
     /**
