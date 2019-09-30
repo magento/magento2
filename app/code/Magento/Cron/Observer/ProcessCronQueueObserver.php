@@ -670,9 +670,9 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * Clean up orphan (running) jobs that somehow lost their parent process
+     * Clean up orphan (running) jobs that somehow lost their process in the server
      *
-     * This can happen when cron process die on the server during runtime (eg. server restart)
+     * This can happen when cron process die on the server during runtime (eg. server restart, crash)
      *
      * @param string $groupId
      * @return void
@@ -684,7 +684,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         if ($runningJobs) {
             $count = 0;
 
-           foreach($runningJobs as $runningJob) {
+            foreach($runningJobs as $runningJob) {
 
                 if ($this->getCheckHostnameConfigurationValue() &&
                     $runningJob->getProcessHostname() != gethostname()) {
@@ -692,37 +692,20 @@ class ProcessCronQueueObserver implements ObserverInterface
                     continue;
                 }
 
-                //check if process exists
-                if (posix_kill(intval($runningJob->getProcessId()), 0)) {
-                    //process with given ID still active
+               //to avoid shell_exec output truncate using a temporary file to catch it
+               $tempFile = tmpfile();
+               fwrite(
+                   $tempFile,
+                   shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
+               );
+               fseek($tempFile, 0);
+               $execOutput = explode(
+                   "\n",
+                   fread($tempFile, 1024)
+               );
+               fclose($tempFile);
 
-                    //to avoid shell_exec output truncate
-                    $tempFile = tmpfile();
-                    fwrite(
-                        $tempFile,
-                        shell_exec("ps -eo pid,lstart,cmd | grep --color=none " . $runningJob->getProcessId())
-                    );
-                    fseek($tempFile, 0);
-                    $execOutput = explode(
-                        "\n",
-                        fread($tempFile, 5012)
-                    );
-                    fclose($tempFile);
-
-                    if ($execOutput && $this->isTheSameProcess($execOutput, $runningJob)) {
-                        //process and job start time are matching - 99.99% sure that job still active
-                        continue;
-                    } else {
-                        //different process or start time are mismatching
-                        $this->closeOrphanJob(
-                            $runningJob,
-                            "Mismatching owner process or process starting time"
-                        );
-                        $count++;
-                    }
-                } else {
-                    //process not exists on host
-                    $this->closeOrphanJob($runningJob);
+                if ($this->processRunningJob($runningJob, $execOutput) === true) {
                     $count++;
                 }
             }
@@ -734,20 +717,20 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * Check if process (on OS) and Schedule is the same (start time and command)
+     * Processing a running Schedule object depending of the output of a ps command
      *
+     * @param Schedule $runningJob
      * @param array $execOutput
-     *  @param Schedule $runningJob
-     * @return boolean
+     * @return boolean has Schedule been processed?
      */
-    private function isTheSameProcess(array $execOutput, Schedule $runningJob) {
+    private function processRunningJob(Schedule $runningJob, array $execOutput) {
         foreach($execOutput as $a => $line) {
             if (!$line) {
                 continue;
             }
             $line = preg_split('/\s+/', trim($line), 7);
             if ((int) trim($line[0]) == $runningJob->getProcessId() &&
-                $this->isCronCommand(trim($line[6]))) {
+                $isCron /* !!!assigning value!!!*/ = $this->isCronCommand(trim($line[6]))) {
 
                 $processStartTime = strftime(
                     '%Y-%m-%d %H:%M:%S',
@@ -766,13 +749,23 @@ class ProcessCronQueueObserver implements ObserverInterface
                 );
 
                 if ($processStartTime == $runningJob->getProcessStartedAt()) {
-                    return true;
-                } else {
                     return false;
+                } else {
+                    $this->closeOrphanJob(
+                        $runningJob,
+                        $isCron
+                            ? "Mismatching process starting time"
+                            : "Process exists but already not aProcess already not cron job magento cron job"
+                    );
+                    return true;
                 }
             }
         }
-        return false;
+        $this->closeOrphanJob(
+            $runningJob,
+            "Process not running on server"
+        );
+        return true;
     }
 
     /**
