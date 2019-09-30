@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StrorefrontElasticsearchSearchInvalidValueTest">
+    <test name="StorefrontElasticsearchSearchInvalidValueTest">
         <annotations>
             <features value="Search"/>
             <stories value="Search Product on Storefront"/>
@@ -47,6 +47,8 @@
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
             <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteProduct"/>
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
+            <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCache"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
@@ -94,11 +96,11 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
-            <argument name="phrase" value="?/s\i’m“p:l\$e#@!,.`=%&amp;^;"/>
+            <argument name="phrase" value="?SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^"/>
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbols"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbolsSecondTime">
-            <argument name="phrase" value="? /s\i’m“p:l\$e#@!,.`=%&amp;^ ;"/>
+            <argument name="phrase" value="? SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^ ;"/>
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbolsSecondTime"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
