@@ -11,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$productIds = range(10, 12, 1);
+$productIds = [10, 11, 12];
 foreach ($productIds as $productId) {
     /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
     $stockItem = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
