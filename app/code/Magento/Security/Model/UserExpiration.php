@@ -9,6 +9,8 @@ namespace Magento\Security\Model;
 
 /**
  * Admin User Expiration model.
+ * @method string getUserId()
+ * @method \Magento\Security\Model\UserExpiration setUserId($userId)
  * @method string getExpiresAt()
  * @method \Magento\Security\Model\UserExpiration setExpiresAt($value)
  */

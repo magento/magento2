@@ -9,7 +9,7 @@ namespace Magento\Security\Model;
 
 /**
  * Tests for \Magento\Security\Model\UserExpirationManager
- *
+ * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
@@ -42,8 +42,6 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
         $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
         $this->adminSessionInfo = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
@@ -59,7 +57,7 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
     {
         $adminUserNameFromFixture = 'adminUserExpired';
         $user = $this->loadUserByUsername($adminUserNameFromFixture);
-        static::assertTrue($this->userExpirationManager->userIsExpired($user));
+        static::assertTrue($this->userExpirationManager->isUserExpired($user->getId()));
     }
 
     /**

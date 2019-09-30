@@ -25,22 +25,22 @@ class AdminUserAuthenticateBefore implements ObserverInterface
     private $userExpirationManager;
 
     /**
-     * @var \Magento\User\Model\User
+     * @var \Magento\User\Model\UserFactory
      */
-    private $user;
+    private $userFactory;
 
     /**
      * AdminUserAuthenticateBefore constructor.
      *
      * @param UserExpirationManager $userExpirationManager
-     * @param \Magento\User\Model\User $user
+     * @param \Magento\User\Model\UserFactory $userFactory
      */
     public function __construct(
         \Magento\Security\Model\UserExpirationManager $userExpirationManager,
-        \Magento\User\Model\User $user
+        \Magento\User\Model\UserFactory $userFactory
     ) {
         $this->userExpirationManager = $userExpirationManager;
-        $this->user = $user;
+        $this->userFactory = $userFactory;
     }
 
     /**
@@ -53,10 +53,11 @@ class AdminUserAuthenticateBefore implements ObserverInterface
     public function execute(Observer $observer)
     {
         $username = $observer->getEvent()->getUsername();
+        $user = $this->userFactory->create();
         /** @var \Magento\User\Model\User $user */
-        $user = $this->user->loadByUsername($username);
+        $user->loadByUsername($username);
 
-        if ($user->getId() && $this->userExpirationManager->userIsExpired($user)) {
+        if ($user->getId() && $this->userExpirationManager->isUserExpired($user->getId())) {
             $this->userExpirationManager->deactivateExpiredUsers([$user->getId()]);
             throw new AuthenticationException(
                 __(

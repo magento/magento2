@@ -35,7 +35,7 @@ class UserExpiration extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        $connectionName = null
+        ?string $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->timezone = $timezone;

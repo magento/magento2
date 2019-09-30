@@ -33,21 +33,18 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Filter for expired, active users.
      *
-     * @param string $now
      * @return $this
      */
-    public function addActiveExpiredUsersFilter($now = null): Collection
+    public function addActiveExpiredUsersFilter(): Collection
     {
-        if ($now === null) {
-            $now = new \DateTime();
-            $now->format('Y-m-d H:i:s');
-        }
+        $currentTime = new \DateTime();
+        $currentTime->format('Y-m-d H:i:s');
         $this->getSelect()->joinLeft(
             ['user' => $this->getTable('admin_user')],
             'main_table.user_id = user.user_id',
             ['is_active']
         );
-        $this->addFieldToFilter('expires_at', ['lt' => $now])
+        $this->addFieldToFilter('expires_at', ['lt' => $currentTime])
             ->addFieldToFilter('user.is_active', 1);
 
         return $this;
@@ -59,7 +56,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int[] $userIds
      * @return Collection
      */
-    public function addUserIdsFilter($userIds = []): Collection
+    public function addUserIdsFilter(array $userIds = []): Collection
     {
         return $this->addFieldToFilter('main_table.user_id', ['in' => $userIds]);
     }

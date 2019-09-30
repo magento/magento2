@@ -12,7 +12,7 @@ namespace Magento\Security\Test\Unit\Observer;
  *
  * @package Magento\Security\Test\Unit\Observer
  */
-class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
+class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -28,6 +28,11 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
      * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User
      */
     private $userMock;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\UserFactory
+     */
+    private $userFactoryMock;
 
     /**
      * @var \Magento\Security\Observer\AdminUserAuthenticateBefore
@@ -60,14 +65,15 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpirationManager::class,
-            ['userIsExpired', 'deactivateExpiredUsers']
+            ['isUserExpired', 'deactivateExpiredUsers']
         );
+        $this->userFactoryMock = $this->createPartialMock(\Magento\User\Model\UserFactory::class, ['create']);
         $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['loadByUsername', 'getId']);
         $this->observer = $this->objectManager->getObject(
             \Magento\Security\Observer\AdminUserAuthenticateBefore::class,
             [
                 'userExpirationManager' => $this->userExpirationManagerMock,
-                'user' => $this->userMock,
+                'userFactory' => $this->userFactoryMock,
             ]
         );
         $this->eventObserverMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
@@ -85,17 +91,18 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
      */
     public function testWithExpiredUser()
     {
-        $adminUserId = 123;
+        $adminUserId = '123';
         $username = 'testuser';
         $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects(static::once())->method('getUsername')->willReturn($username);
-        $this->userMock->expects(static::once())->method('loadByUsername')->willReturn($this->userMock);
+        $this->userFactoryMock->expects(static::once())->method('create')->willReturn($this->userMock);
+        $this->userMock->expects(static::once())->method('loadByUsername')->willReturnSelf();
 
         $this->userExpirationManagerMock->expects(static::once())
-            ->method('userIsExpired')
-            ->with($this->userMock)
+            ->method('isUserExpired')
+            ->with($adminUserId)
             ->willReturn(true);
-        $this->userMock->expects(static::exactly(2))->method('getId')->willReturn($adminUserId);
+        $this->userMock->expects(static::exactly(3))->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
             ->method('deactivateExpiredUsers')
             ->with([$adminUserId])
@@ -105,15 +112,16 @@ class BeforeAdminUserAuthenticateTest extends \PHPUnit\Framework\TestCase
 
     public function testWithNonExpiredUser()
     {
-        $adminUserId = 123;
+        $adminUserId = '123';
         $username = 'testuser';
         $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects(static::once())->method('getUsername')->willReturn($username);
-        $this->userMock->expects(static::once())->method('loadByUsername')->willReturn($this->userMock);
-        $this->userMock->expects(static::once())->method('getId')->willReturn($adminUserId);
+        $this->userFactoryMock->expects(static::once())->method('create')->willReturn($this->userMock);
+        $this->userMock->expects(static::once())->method('loadByUsername')->willReturnSelf();
+        $this->userMock->expects(static::exactly(2))->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
-            ->method('userIsExpired')
-            ->with($this->userMock)
+            ->method('isUserExpired')
+            ->with($adminUserId)
             ->willReturn(false);
         $this->observer->execute($this->eventObserverMock);
     }

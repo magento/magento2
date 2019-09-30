@@ -79,7 +79,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpirationManager::class,
-            ['userIsExpired']
+            ['isUserExpired']
         );
 
         $this->userMock = $this->createMock(\Magento\User\Model\User::class);
@@ -183,6 +183,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             return $result;
         };
 
+        $adminUserId = '12345';
         $this->currentSessionMock->expects($this->once())
             ->method('isLoggedInStatus')
             ->willReturn(true);
@@ -191,9 +192,13 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             ->method('getUser')
             ->willReturn($this->userMock);
 
+        $this->userMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($adminUserId);
+
         $this->userExpirationManagerMock->expects($this->once())
-            ->method('userIsExpired')
-            ->with($this->userMock)
+            ->method('isUserExpired')
+            ->with($adminUserId)
             ->willReturn(true);
 
         $this->authSessionMock->expects($this->once())
@@ -225,6 +230,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             return $result;
         };
 
+        $adminUserId = '12345';
         $this->currentSessionMock->expects($this->any())
             ->method('isLoggedInStatus')
             ->willReturn(true);
@@ -233,9 +239,13 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             ->method('getUser')
             ->willReturn($this->userMock);
 
+        $this->userMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($adminUserId);
+
         $this->userExpirationManagerMock->expects($this->once())
-            ->method('userIsExpired')
-            ->with($this->userMock)
+            ->method('isUserExpired')
+            ->with($adminUserId)
             ->willReturn(false);
 
         $this->adminSessionsManagerMock->expects($this->any())

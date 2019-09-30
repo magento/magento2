@@ -10,7 +10,9 @@ namespace Magento\Security\Model;
 use Magento\Security\Model\ResourceModel\UserExpiration\Collection as ExpiredUsersCollection;
 
 /**
- * Class to handle admin user expirations.
+ * Class to handle admin user expirations. Temporary admin users can be created with an expiration
+ * date that, once past, will not allow them to login to the admin. A cron is run to periodically check for expired
+ * users and, if found, will deactivate them.
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class UserExpirationManager
@@ -98,26 +100,26 @@ class UserExpirationManager
 
         // delete expired records
         $expiredRecordIds = $expiredRecords->getAllIds();
-        $expiredRecords->walk('delete');
 
         // set user is_active to 0
         $users = $this->userCollectionFactory->create()
             ->addFieldToFilter('main_table.user_id', ['in' => $expiredRecordIds]);
         $users->setDataToAll('is_active', 0)->save();
+        $expiredRecords->walk('delete');
     }
 
     /**
      * Check if the given user is expired.
      *
-     * @param \Magento\User\Model\User $user
+     * @param string $userId
      * @return bool
      */
-    public function userIsExpired(\Magento\User\Model\User $user): bool
+    public function isUserExpired(string $userId): bool
     {
         $isExpired = false;
         /** @var \Magento\Security\Model\UserExpiration $expiredRecord */
         $expiredRecord = $this->userExpirationCollectionFactory->create()
-            ->addExpiredRecordsForUserFilter($user->getId())
+            ->addExpiredRecordsForUserFilter($userId)
             ->getFirstItem();
         if ($expiredRecord && $expiredRecord->getId()) {
             $expiresAt = $this->dateTime->timestamp($expiredRecord->getExpiresAt());
