@@ -24,9 +24,9 @@
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createNewProduct"/>
             <!--Set Currency options for Website-->
-            <magentoCLI command="config:set --scope={{SetCurrencyBaseConfig.scope}} --scope-code={{SetCurrencyBaseConfig.scope_code}} {{SetCurrencyBaseConfig.path}} {{SetCurrencyBaseConfig.value_usd}}" stepKey="setCurrencyBaseUSDWebsites"/>
-            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfig.scope}} --scope-code={{SetAllowedCurrenciesConfig.scope_code}} {{SetAllowedCurrenciesConfig.path}} {{SetAllowedCurrenciesConfig.value_three_currencies}}" stepKey="setAllowedCurrencyWebsites"/>
-            <magentoCLI command="config:set --scope={{SetDefaultCurrencyConfig.scope}} --scope-code={{SetDefaultCurrencyConfig.scope_code}} {{SetDefaultCurrencyConfig.path}} {{SetDefaultCurrencyConfig.value_eur}}" stepKey="setCurrencyDefaultEURWebsites"/>
+            <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForThree.scope}} --scope-code={{SetAllowedCurrenciesConfigForThree.scope_code}} {{SetAllowedCurrenciesConfigForThree.path}} {{SetAllowedCurrenciesConfigForThree.value}}" stepKey="setAllowedCurrencyWebsites"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyEURConfig.scope}} --scope-code={{SetDefaultCurrencyEURConfig.scope_code}} {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEURWebsites"/>
         </before>
         <after>
             <!--Delete created product-->
