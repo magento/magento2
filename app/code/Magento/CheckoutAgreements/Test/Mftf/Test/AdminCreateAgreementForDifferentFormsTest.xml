@@ -15,6 +15,7 @@
             <title value="Admin should be able to add/edit agreements"/>
             <description value="Admin should be able to add/edit agreements"/>
             <group value="Agreements"/>
+            <severity value="MAJOR"/>
         </annotations>
 
         <before>
