@@ -239,6 +239,7 @@ type Breadcrumb @doc(description: "Breadcrumb item."){
     category_name: String @doc(description: "Category name.")
     category_level: Int @doc(description: "Category level.")
     category_url_key: String @doc(description: "Category URL key.")
+    category_url_path: String @doc(description: "Category URL path.")
 }
 
 type CustomizableRadioOption implements CustomizableOptionInterface @doc(description: "CustomizableRadioOption contains information about a set of radio buttons that are defined as part of a customizable option.") {
