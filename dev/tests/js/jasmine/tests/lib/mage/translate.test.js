@@ -9,6 +9,7 @@ define([
 ], function ($) {
     'use strict';
 
+    // be careful with test variation order as one variation can affect another one
     describe('Test for mage/translate jQuery plugin', function () {
         it('works with one string as parameter', function () {
             $.mage.translate.add('Hello World!');
