@@ -1,6 +1,6 @@
 # Magento_BraintreeGraphQl module
 
-The Magento_BraintreeGraphQl module provides type and resolver information for the GraphQl module to pass payment information data from the client to Magento.
+The Magento_BraintreeGraphQl module provides type and resolver information for the GraphQL module to pass payment information data from the client to Magento.
 
 ## Extensibility
 
