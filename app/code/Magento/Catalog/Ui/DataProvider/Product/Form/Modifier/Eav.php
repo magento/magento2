@@ -47,6 +47,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @since 101.0.0
  */
 class Eav extends AbstractModifier
@@ -1054,6 +1055,10 @@ class Eav extends AbstractModifier
      */
     private function getAttributeModel($attribute)
     {
+        // The statement below solves performance issue related to loading same attribute options on different models
+        if ($attribute instanceof EavAttribute) {
+            return $attribute;
+        }
         $attributeId = $attribute->getAttributeId();
 
         if (!array_key_exists($attributeId, $this->attributesCache)) {
