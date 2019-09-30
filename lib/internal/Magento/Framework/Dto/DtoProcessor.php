@@ -518,13 +518,18 @@ class DtoProcessor
      * Merge data into object data
      *
      * @param $sourceObject
+     * @param string|null $type
      * @return array
      * @throws ReflectionException
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function getObjectData($sourceObject): array
+    public function getObjectData($sourceObject, ?string $type = null): array
     {
-        return $this->dataObjectProcessor->buildOutputDataArray($sourceObject, get_class($sourceObject));
+        if ($type === null) {
+            $type = get_class($sourceObject);
+        }
+
+        return $this->dataObjectProcessor->buildOutputDataArray($sourceObject, $type);
     }
 
     /**

@@ -20,8 +20,9 @@ class Reader extends Filesystem
      * @var array
      */
     protected $_idAttributes = [
-        '/config/interface' => 'name',
-        '/config/class' => 'name',
+        '/config/interface' => 'type',
+        '/config/class' => 'type',
+        '/config/projection' => 'for',
     ];
 
     /**
