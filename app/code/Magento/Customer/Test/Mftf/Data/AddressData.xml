@@ -291,7 +291,6 @@
         <data key="company">Magento</data>
         <array key="street">
             <item>Augsburger Strabe 41</item>
-            <item>Augsburger Strabe 42</item>
         </array>
         <data key="city">Berlin</data>
         <data key="country_id">DE</data>
