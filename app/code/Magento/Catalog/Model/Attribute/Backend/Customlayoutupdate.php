@@ -38,10 +38,9 @@ class Customlayoutupdate extends AbstractBackend
      * Extract an attribute value.
      *
      * @param AbstractModel $object
-     * @param string|null $attributeCode
      * @return mixed
      */
-    private function extractValue(AbstractModel $object, ?string $attributeCode = null)
+    private function extractValue(AbstractModel $object)
     {
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
         $value = $object->getData($attributeCode);
@@ -98,14 +97,7 @@ class Customlayoutupdate extends AbstractBackend
     {
         //Validate first, validation might have been skipped.
         $this->validate($object);
-        $value = $this->extractValue($object);
-        //If custom file was selected we need to remove this attribute
-        $file = $this->extractValue($object, 'custom_layout_update_file');
-        if ($file && $file !== AbstractLayoutUpdate::VALUE_USE_UPDATE_XML) {
-            $this->putValue($object, null);
-        } else {
-            $this->putValue($object, $value);
-        }
+        $this->putValue($object, $this->extractValue($object));
 
         return parent::beforeSave($object);
     }

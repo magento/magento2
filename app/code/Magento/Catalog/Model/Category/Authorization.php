@@ -11,10 +11,10 @@ namespace Magento\Catalog\Model\Category;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 
 /**
  * Additional authorization for category operations.
@@ -63,7 +63,11 @@ class Authorization
                 $oldValues[] = $designAttribute->getDefaultValue();
             }
             $newValue = $category->getData($designAttribute->getAttributeCode());
-            if (empty($newValue)) {
+            if (empty($newValue)
+                || ($designAttribute->getBackend() instanceof LayoutUpdate
+                    && ($newValue === LayoutUpdate::VALUE_USE_UPDATE_XML || $newValue === LayoutUpdate::VALUE_NO_UPDATE)
+                )
+            ) {
                 $newValue = null;
             }
 

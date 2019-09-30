@@ -628,7 +628,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         //Trying again with the permissions.
         $requestData['custom_layout_update_file'] = null;
-        $requestData['custom_design'] = 'test-theme';
+        $requestData['page_layout'] = '2columns-left';
         $this->aclBuilder->getAcl()
             ->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
         $this->getRequest()->setDispatched(false);
@@ -639,8 +639,28 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         /** @var CategoryModel $category */
         $category = $this->categoryFactory->create();
         $category->load(2);
-        $this->assertNotEmpty($category->getCustomDesign());
-        $this->assertEquals('test-theme', $category->getCustomDesign());
+        $this->assertEquals('2columns-left', $category->getData('page_layout'));
+        //No new error messages
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+
+        //Trying to save special value without the permissions.
+        $requestData['custom_layout_update_file'] = CategoryModel\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
+        $requestData['description'] = 'test';
+        $this->aclBuilder->getAcl()->deny(null, ['Magento_Catalog::edit_category_design']);
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+        $this->assertEquals('2columns-left', $category->getData('page_layout'));
+        $this->assertEmpty($category->getData('custom_layout_update_file'));
+        $this->assertEquals('test', $category->getData('description'));
         //No new error messages
         $this->assertSessionMessages(
             self::equalTo($sessionMessages),

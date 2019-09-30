@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate;
 
 /**
  * Additional authorization for product operations.
@@ -58,12 +59,13 @@ class Authorization
             'custom_design_to',
             'custom_layout_update_file'
         ];
-        $attributes = null;
-        if (!$oldProduct) {
-            //For default values.
-            $attributes = $product->getAttributes();
-        }
+        $attributes = $product->getAttributes();
+
         foreach ($designAttributes as $designAttribute) {
+            $attribute = $attributes[$designAttribute];
+            if (!array_key_exists($designAttribute, $attributes)) {
+                continue;
+            }
             $oldValues = [null];
             if ($oldProduct) {
                 //New value may only be the saved value
@@ -71,12 +73,16 @@ class Authorization
                 if (empty($oldValues[0])) {
                     $oldValues[0] = null;
                 }
-            } elseif (array_key_exists($designAttribute, $attributes)) {
+            } else {
                 //New value can be empty or default
-                $oldValues[] = $attributes[$designAttribute]->getDefaultValue();
+                $oldValues[] = $attribute->getDefaultValue();
             }
             $newValue = $product->getData($designAttribute);
-            if (empty($newValue)) {
+            if (empty($newValue)
+                || ($attribute->getBackend() instanceof LayoutUpdate
+                    && ($newValue === LayoutUpdate::VALUE_USE_UPDATE_XML || $newValue === LayoutUpdate::VALUE_NO_UPDATE)
+                )
+            ) {
                 $newValue = null;
             }
             if (!in_array($newValue, $oldValues, true)) {

@@ -19,6 +19,8 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
 {
     public const VALUE_USE_UPDATE_XML = '__existing__';
 
+    public const VALUE_NO_UPDATE = '__no_update__';
+
     /**
      * Extract attribute value.
      *
@@ -52,15 +54,10 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
         $value = $this->extractAttributeValue($model);
         if ($value
             && $value !== self::VALUE_USE_UPDATE_XML
+            && $value !== self::VALUE_NO_UPDATE
             && !in_array($value, $this->listAvailableValues($model), true)
         ) {
             throw new LocalizedException(__('Selected layout update is not available'));
-        }
-        if ($value === self::VALUE_USE_UPDATE_XML) {
-            $value = null;
-        }
-        if (!$value) {
-            $value = null;
         }
 
         return $value;
@@ -71,11 +68,12 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
      *
      * @param string|null $value
      * @param AbstractModel $forObject
+     * @param string|null $attrCode
      * @return void
      */
-    private function setAttributeValue(?string $value, AbstractModel $forObject): void
+    private function setAttributeValue(?string $value, AbstractModel $forObject, ?string $attrCode = null): void
     {
-        $attrCode = $this->getAttribute()->getAttributeCode();
+        $attrCode = $attrCode ?? $this->getAttribute()->getAttributeCode();
         if ($forObject->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {
             $forObject->setCustomAttribute($attrCode, $value);
         }
@@ -104,7 +102,14 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
      */
     public function beforeSave($object)
     {
-        $this->setAttributeValue($this->prepareValue($object), $object);
+        $value = $this->prepareValue($object);
+        if ($value && ($value === self::VALUE_NO_UPDATE || $value !== self::VALUE_USE_UPDATE_XML)) {
+            $this->setAttributeValue(null, $object, 'custom_layout_update');
+        }
+        if (!$value || $value === self::VALUE_USE_UPDATE_XML || $value === self::VALUE_NO_UPDATE) {
+            $value = null;
+        }
+        $this->setAttributeValue($value, $object);
 
         return $this;
     }

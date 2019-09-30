@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Message\Manager;
@@ -485,6 +486,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 
         //Updating product's design settings without proper permissions.
         $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+        //Testing that special "No Update" value is treated as no change.
+        $requestData['product']['custom_layout_update_file'] = LayoutUpdate::VALUE_NO_UPDATE;
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
         $this->dispatch($uri);

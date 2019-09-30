@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate as Backend;
 
 /**
  * List of layout updates available for a product.
@@ -41,7 +42,7 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
      */
     public function getAllOptions()
     {
-        $default = '';
+        $default = Backend::VALUE_NO_UPDATE;
         $defaultText = 'No update';
         $this->optionsText[$default] = $defaultText;
 
@@ -67,7 +68,7 @@ class LayoutUpdate extends AbstractSource implements SpecificSourceInterface
     {
         $options = $this->getAllOptions();
         if ($entity->getCustomAttribute('custom_layout_update')) {
-            $existingValue = \Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
+            $existingValue = Backend::VALUE_USE_UPDATE_XML;
             $existingLabel = 'Use existing';
             $options[] = ['label' => $existingLabel, 'value' => $existingValue];
             $this->optionsText[$existingValue] = $existingLabel;
