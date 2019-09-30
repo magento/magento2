@@ -282,4 +282,35 @@ class FileTest extends \PHPUnit\Framework\TestCase
             $this->fileBackend->getValue()
         );
     }
+
+    /**
+     * Test for getRelativeMediaPath method.
+     *
+     * @param string $path
+     * @param string $filename
+     * @dataProvider getRelativeMediaPathDataProvider
+     */
+    public function testGetRelativeMediaPath(string $path, string $filename)
+    {
+        $reflection = new \ReflectionClass($this->fileBackend);
+        $method = $reflection->getMethod('getRelativeMediaPath');
+        $method->setAccessible(true);
+        $this->assertEquals(
+            $filename,
+            $method->invoke($this->fileBackend, $path . $filename)
+        );
+    }
+
+    /**
+     * Data provider for testGetRelativeMediaPath.
+     *
+     * @return array
+     */
+    public function getRelativeMediaPathDataProvider(): array
+    {
+        return [
+            'Normal path' => ['pub/media/', 'filename.jpg'],
+            'Complex path' => ['somepath/pub/media/', 'filename.jpg'],
+        ];
+    }
 }

@@ -168,7 +168,7 @@ class Total extends \Magento\Framework\DataObject
     {
         return $this->baseTotalAmounts;
     }
-    
+
     //@codeCoverageIgnoreEnd
 
     /**
