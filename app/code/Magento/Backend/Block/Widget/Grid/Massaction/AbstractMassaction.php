@@ -17,8 +17,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Quote\Model\Quote;
-use function count;
-use function is_array;
 
 /**
  * Grid widget massaction block
