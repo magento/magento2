@@ -77,14 +77,14 @@ class MagentoImport implements PreProcessorInterface
         ErrorHandlerInterface $errorHandler,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList,
-        ModuleManagerInterface $moduleManager
+        ModuleManagerInterface $moduleManager = null
     ) {
         $this->design = $design;
         $this->fileSource = $fileSource;
         $this->errorHandler = $errorHandler;
         $this->assetRepo = $assetRepo;
         $this->themeList = $themeList;
-        $this->moduleManager = $moduleManager;
+        $this->moduleManager = $moduleManager ?: ObjectManager::getInstance()->get(ModuleManagerInterface::class);
     }
 
     /**
