@@ -25,7 +25,7 @@
         </before>
 
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
-        <generateDate date="+1 minute" format="M d, Y h:i:s" stepKey="expiresDateTime"/>
+        <generateDate date="+2 minute" format="M d, Y h:i:s" stepKey="expiresDateTime"/>
         <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
             <argument name="expires_at" value="{$expiresDateTime}"/>
         </actionGroup>
@@ -33,7 +33,7 @@
         <grabValueFrom selector="{{AdminNewUserFormSection.password}}" stepKey="grabPassword"/>
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
         <actionGroup ref="logout" stepKey="logout"/>
-        <wait time="60" stepKey="waitForUserToExpire"/>
+        <wait time="120" stepKey="waitForUserToExpire"/>
         <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="loginAsNewAdmin">
             <argument name="adminUser" value="{$grabUsername}"/>
             <argument name="adminPassword" value="{$grabPassword}"/>
