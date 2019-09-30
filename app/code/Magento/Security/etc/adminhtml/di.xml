@@ -31,4 +31,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\User\Block\User\Edit\Tab\Main">
+        <plugin name="user_expiration_user_form_field" type="Magento\Security\Model\Plugin\AdminUserForm"/>
+    </type>
 </config>

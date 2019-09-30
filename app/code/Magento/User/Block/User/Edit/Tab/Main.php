@@ -170,25 +170,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             );
         }
 
-        $dateFormat = $this->_localeDate->getDateFormat(
-            \IntlDateFormatter::MEDIUM
-        );
-        $timeFormat = $this->_localeDate->getTimeFormat(
-            \IntlDateFormatter::MEDIUM
-        );
-        $baseFieldset->addField(
-            'expires_at',
-            'date',
-            [
-                'name' => 'expires_at',
-                'label' => __('Expiration Date'),
-                'title' => __('Expiration Date'),
-                'date_format' => $dateFormat,
-                'time_format' => $timeFormat,
-                'class' => 'validate-date',
-            ]
-        );
-
         $baseFieldset->addField('user_roles', 'hidden', ['name' => 'user_roles', 'id' => '_user_roles']);
 
         $currentUserVerificationFieldset = $form->addFieldset(
