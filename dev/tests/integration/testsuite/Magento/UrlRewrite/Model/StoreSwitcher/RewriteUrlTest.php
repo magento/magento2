@@ -62,6 +62,8 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -71,7 +73,7 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $fromStore = $this->getStoreByCode('default');
         $toStore = $this->getStoreByCode('fixture_second_store');
 
-        $this->setBaseUrl($toStore);
+        $this->setBaseUrl($toStore, 'http://domain.com/');
 
         $product = $this->productRepository->get('simple333');
 
@@ -79,12 +81,14 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
         $expectedUrl = $toStore->getBaseUrl();
 
         $this->assertEquals($expectedUrl, $this->storeSwitcher->switch($fromStore, $toStore, $redirectUrl));
+        $this->setBaseUrl($toStore, 'http://localhost/');
     }
 
     /**
      * Testing store switching with existing cms pages
      *
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDbIsolation disabled
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -120,13 +124,13 @@ class RewriteUrlTest extends \PHPUnit\Framework\TestCase
      * Set base url to store.
      *
      * @param StoreInterface $targetStore
+     * @param string $baseUrl
      * @return void
      */
-    private function setBaseUrl(StoreInterface $targetStore): void
+    private function setBaseUrl(StoreInterface $targetStore, string $baseUrl): void
     {
         $configValue = $this->objectManager->create(Value::class);
         $configValue->load('web/unsecure/base_url', 'path');
-        $baseUrl = 'http://domain.com/';
         if (!$configValue->getPath()) {
             $configValue->setPath('web/unsecure/base_url');
         }

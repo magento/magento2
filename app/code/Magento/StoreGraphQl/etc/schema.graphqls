@@ -30,4 +30,5 @@ type StoreConfig @doc(description: "The type contains information about a store 
     secure_base_link_url : String @doc(description: "Secure base link URL for the store")
     secure_base_static_url : String @doc(description: "Secure base static URL for the store")
     secure_base_media_url : String @doc(description: "Secure base media URL for the store")
+    store_name : String @doc(description: "Name of the store")
 }
