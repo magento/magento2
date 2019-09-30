@@ -711,7 +711,11 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
 
             if ($count) {
-                $this->logger->info(sprintf('%d cron jobs seems to got stucks and were cleaned', $count));
+                $this->logger->info(sprintf(
+                    '%d cron jobs seems to got stuck in group %s and were cleaned',
+                    $count,
+                    $groupId
+                ));
             }
         }
     }
