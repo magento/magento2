@@ -18,6 +18,8 @@ define([
             event.preventDefault();
 
             if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
+                // set URL for redirect on successful login/registration. It's postprocessed on backend.
+                $.cookie('login_redirect', config.checkoutUrl);
                 authenticationPopup.showModal();
 
                 return false;
