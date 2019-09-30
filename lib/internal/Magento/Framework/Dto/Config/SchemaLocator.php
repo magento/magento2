@@ -16,7 +16,7 @@ class SchemaLocator implements SchemaLocatorInterface
     /**
      * @var UrnResolver
      */
-    protected $urnResolver;
+    private $urnResolver;
 
     /**
      * @param UrnResolver $urnResolver
