@@ -55,7 +55,6 @@ class AreasPluginList
                 } else {
                     $this->plugins[$scope] = clone $defaultScopePluginList;
                     $this->plugins[$scope]->setScope(new StaticScope($scope));
-                    //$this->plugins[$scope]->getNext('dummy', 'dummy');
                 }
             }
             $this->plugins[$defaultScope] = $defaultScopePluginList;
