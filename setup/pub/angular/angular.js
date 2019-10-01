@@ -30391,7 +30391,7 @@
      *
      * A different issue with objects or collections is that ngModel won't detect if an object property or
      * a collection item changes. For that reason, `ngOptions` additionally watches the model using
-     * `$watchCollection`, when the expression contains a `track by` clause or the the select has the `multiple` attribute.
+     * `$watchCollection`, when the expression contains a `track by` clause or the select has the `multiple` attribute.
      * This allows ngOptions to trigger a re-rendering of the options even if the actual object/collection
      * has not changed identity, but only a property on the object or an item in the collection changes.
      *
