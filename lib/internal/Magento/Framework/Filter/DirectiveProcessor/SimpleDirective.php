@@ -80,9 +80,9 @@ class SimpleDirective implements DirectiveProcessorInterface
         );
 
         $value = $this->filterApplier->applyFromRawParam(
-            $construction['filters'],
+            $construction['filters'] ?? '',
             $value,
-            $directiveParser->getDefaultFilters()
+            $directiveParser->getDefaultFilters() ?? []
         );
 
         return $value;
