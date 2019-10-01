@@ -63,9 +63,21 @@ class PageRepositoryTest extends TestCase
         }
         $this->assertTrue($forbidden);
 
+        //New value is not accepted.
+        $page->setLayoutUpdateXml($page->getLayoutUpdateXml() .'TEST');
+        $forbidden = false;
+        try {
+            $page = $this->repo->save($page);
+        } catch (CouldNotSaveException $exception) {
+            $forbidden = true;
+        }
+        $this->assertTrue($forbidden);
+
         //Can be removed
         $page->setCustomLayoutUpdateXml(null);
+        $page->setLayoutUpdateXml(null);
         $page = $this->repo->save($page);
         $this->assertEmpty($page->getCustomLayoutUpdateXml());
+        $this->assertEmpty($page->getLayoutUpdateXml());
     }
 }

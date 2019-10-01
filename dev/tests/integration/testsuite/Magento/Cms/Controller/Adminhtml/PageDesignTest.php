@@ -173,6 +173,7 @@ class PageDesignTest extends AbstractBackendController
             PageInterface::IDENTIFIER => 'test_custom_layout_page_1',
             PageInterface::TITLE => 'Page title',
             PageInterface::CUSTOM_LAYOUT_UPDATE_XML => $page->getCustomLayoutUpdateXml(),
+            PageInterface::LAYOUT_UPDATE_XML => $page->getLayoutUpdateXml(),
             'layout_update_selected' => '_existing_'
         ];
 
@@ -183,12 +184,14 @@ class PageDesignTest extends AbstractBackendController
 
         $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
         $this->assertEquals($updated->getCustomLayoutUpdateXml(), $page->getCustomLayoutUpdateXml());
+        $this->assertEquals($updated->getLayoutUpdateXml(), $page->getLayoutUpdateXml());
 
         $requestData = [
             Page::PAGE_ID => $page->getId(),
             PageInterface::IDENTIFIER => 'test_custom_layout_page_1',
             PageInterface::TITLE => 'Page title',
             PageInterface::CUSTOM_LAYOUT_UPDATE_XML => $page->getCustomLayoutUpdateXml(),
+            PageInterface::LAYOUT_UPDATE_XML => $page->getLayoutUpdateXml(),
             'layout_update_selected' => ''
         ];
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -198,5 +201,6 @@ class PageDesignTest extends AbstractBackendController
 
         $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
         $this->assertEmpty($updated->getCustomLayoutUpdateXml());
+        $this->assertEmpty($updated->getLayoutUpdateXml());
     }
 }

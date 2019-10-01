@@ -109,7 +109,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         /** @var $page \Magento\Cms\Model\Page */
         foreach ($items as $page) {
             $this->loadedData[$page->getId()] = $page->getData();
-            if ($page->getCustomLayoutUpdateXml()) {
+            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
                 //Deprecated layout update exists.
                 $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
             }
@@ -120,7 +120,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             $page = $this->collection->getNewEmptyItem();
             $page->setData($data);
             $this->loadedData[$page->getId()] = $page->getData();
-            if ($page->getCustomLayoutUpdateXml()) {
+            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
                 $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
             }
             $this->dataPersistor->clear('cms_page');
@@ -175,7 +175,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             }
             //If custom layout XML is set then displaying this special option.
             if ($found) {
-                if ($found->getCustomLayoutUpdateXml()) {
+                if ($found->getCustomLayoutUpdateXml() || $found->getLayoutUpdateXml()) {
                     $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
                 }
                 foreach ($this->customLayoutManager->fetchAvailableFiles($found) as $layoutFile) {

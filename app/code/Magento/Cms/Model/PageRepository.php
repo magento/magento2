@@ -136,6 +136,11 @@ class PageRepository implements PageRepositoryInterface
             ) {
                 throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
             }
+            if ($page->getLayoutUpdateXml()
+                && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
+            ) {
+                throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+            }
 
             $this->resource->save($page);
             $this->identityMap->add($page);

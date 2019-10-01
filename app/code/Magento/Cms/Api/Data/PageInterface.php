@@ -125,6 +125,7 @@ interface PageInterface
      * Get layout update xml
      *
      * @return string|null
+     * @deprecated Existing updates are applied, new are not accepted.
      */
     public function getLayoutUpdateXml();
 
@@ -274,6 +275,7 @@ interface PageInterface
      *
      * @param string $layoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
+     * @deprecated Existing updates are applied, new are not accepted.
      */
     public function setLayoutUpdateXml($layoutUpdateXml);
 

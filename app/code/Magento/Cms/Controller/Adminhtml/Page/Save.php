@@ -102,6 +102,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $customLayoutFile = (string)$this->getRequest()->getParam('layout_update_selected');
             if ($customLayoutFile !== '_existing_') {
                 $data['custom_layout_update_xml'] = null;
+                $data['layout_update_xml'] = null;
             } else {
                 $customLayoutFile = null;
             }

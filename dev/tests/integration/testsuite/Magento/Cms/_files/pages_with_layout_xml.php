@@ -17,6 +17,7 @@ $page = $pageFactory->create();
 $page->setIdentifier('test_custom_layout_page_1');
 $page->setTitle('Test Page');
 $page->setCustomLayoutUpdateXml('tst');
+$page->setLayoutUpdateXml('tst_current');
 $page->setIsActive(true);
 $page->setStoreId(0);
 $page->save();
