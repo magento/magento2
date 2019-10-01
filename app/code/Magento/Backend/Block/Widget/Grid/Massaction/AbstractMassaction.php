@@ -21,6 +21,7 @@ use Magento\Quote\Model\Quote;
 /**
  * Grid widget massaction block
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @method Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
