@@ -7,18 +7,32 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Api\LinkManagementInterface;
+use Magento\ConfigurableProduct\Model\LinkManagement;
 use Magento\Customer\Model\Group;
+use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ProductPriceTest extends GraphQlAbstract
 {
+    /** @var ObjectManager $objectManager */
+    private $objectManager;
+
+    /** @var ProductRepositoryInterface $productRepository */
+    private $productRepository;
+
+    protected function setUp() :void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        /** @var ProductRepositoryInterface $productRepository */
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
@@ -27,7 +41,6 @@ class ProductPriceTest extends GraphQlAbstract
     {
         $skus = ['simple'];
         $query = $this->getProductQuery($skus);
-
         $result = $this->graphQlQuery($query);
 
         $this->assertArrayNotHasKey('errors', $result);
@@ -66,7 +79,7 @@ class ProductPriceTest extends GraphQlAbstract
     }
 
     /**
-     * Pricing for Simple, Grouped and Configurable products
+     * Pricing for Simple, Grouped and Configurable products with no special or tier prices configured
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_12345.php
      * @magentoApiDataFixture Magento/GroupedProduct/_files/product_grouped_with_simple.php
@@ -173,16 +186,15 @@ class ProductPriceTest extends GraphQlAbstract
      * Simple products with special price and tier price with % discount
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSimpleProductsWithSpecialPriceAndTierPrice()
     {
         $skus = ["simple1", "simple2"];
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        $tierPriceFactory = $objectManager->get(ProductTierPriceInterfaceFactory::class);
-        /** @var  $tpExtensionAttributes */
-        $tierPriceExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
+        $tierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
+
+        /** @var  $tierPriceExtensionAttributesFactory */
+        $tierPriceExtensionAttributesFactory = $this->objectManager->create(ProductTierPriceExtensionFactory::class);
         $tierPriceExtensionAttribute = $tierPriceExtensionAttributesFactory->create()->setPercentageValue(10);
 
         $tierPrices[] = $tierPriceFactory->create(
@@ -195,9 +207,9 @@ class ProductPriceTest extends GraphQlAbstract
         )->setExtensionAttributes($tierPriceExtensionAttribute);
         foreach ($skus as $sku) {
             /** @var Product $simpleProduct */
-            $simpleProduct = $productRepository->get($sku);
+            $simpleProduct = $this->productRepository->get($sku);
             $simpleProduct->setTierPrices($tierPrices);
-            $productRepository->save($simpleProduct);
+            $this->productRepository->save($simpleProduct);
         }
         $query = $this->getProductQuery($skus);
         $result = $this->graphQlQuery($query);
@@ -298,13 +310,9 @@ class ProductPriceTest extends GraphQlAbstract
     public function testGroupedProductsWithSpecialPriceAndTierPrices()
     {
         $groupedProductSku = 'grouped';
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        $grouped = $productRepository->get($groupedProductSku);
+        $grouped = $this->productRepository->get($groupedProductSku);
         //get the associated products
         $groupedProductLinks = $grouped->getProductLinks();
-        $associatedProductSkus = [];
         $tierPriceData = [
             [
                 'customer_group_id' => Group::CUST_GROUP_ALL,
@@ -313,58 +321,50 @@ class ProductPriceTest extends GraphQlAbstract
                 'value'=> 87
             ]
         ];
+        $associatedProductSkus = [];
         foreach ($groupedProductLinks as $groupedProductLink) {
-            $associatedProductSkus[] = $groupedProductLink ->getLinkedProductSku();
+            $associatedProductSkus[] = $groupedProductLink->getLinkedProductSku();
         }
-        $associatedProduct = [];
+
         foreach ($associatedProductSkus as $associatedProductSku) {
-            $associatedProduct = $productRepository->get($associatedProductSku);
+            $associatedProduct = $this->productRepository->get($associatedProductSku);
             $associatedProduct->setSpecialPrice('95.75');
-            $productRepository->save($associatedProduct);
+            $this->productRepository->save($associatedProduct);
             $this->saveProductTierPrices($associatedProduct, $tierPriceData);
         }
-
-        //select one of the simple associated products and add a special price
-       // $associatedProductSku = $groupedProductLinks[0]->getLinkedProductSku();
-        /** @var Product $associatedProduct */
-//        $associatedProduct = $productRepository->get($associatedProductSku);
-//        $associatedProduct->setSpecialPrice('95.75');
-//        $productRepository->save($associatedProduct);
         $skus = ['grouped'];
         $query = $this->getProductQuery($skus);
-
         $result = $this->graphQlQuery($query);
 
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertNotEmpty($result['products']['items']);
         $product = $result['products']['items'][0];
         $this->assertNotEmpty($product['price_range']);
-        $discountAmount = $associatedProduct->getPrice() - $associatedProduct->getSpecialPrice();
-        $percentageDiscount = $discountAmount;
 
         $expectedPriceRange = [
             "minimum_price" => [
                 "regular_price" => [
-                    "value" => $associatedProduct->getPrice()
+                    "value" => 100
                 ],
                 "final_price" => [
-                    "value" => $associatedProduct->getSpecialPrice()
+                    "value" => 95.75
                 ],
                 "discount" => [
-                    "amount_off" => $discountAmount,
-                    "percent_off" => $percentageDiscount
+                    "amount_off" => 100 - 95.75,
+                    //difference between original and final over original price
+                    "percent_off" => (100 - 95.75)*100/100
                 ]
             ],
             "maximum_price" => [
                 "regular_price" => [
-                    "value" => $associatedProduct->getPrice()
+                    "value" => 100
                 ],
                 "final_price" => [
-                    "value" => $associatedProduct->getSpecialPrice()
+                    "value" => 95.75
                 ],
                 "discount" => [
-                    "amount_off" => $discountAmount,
-                    "percent_off" => $percentageDiscount
+                    "amount_off" => 100 - 95.75,
+                    "percent_off" => (100 - 95.75)*100/100
                 ]
             ]
         ];
@@ -375,7 +375,7 @@ class ProductPriceTest extends GraphQlAbstract
         foreach ($groupedProductLinks as $groupedProductLink) {
             $groupedProductLink->getExtensionAttributes()->setQty(3);
         }
-        $productRepository->save($grouped);
+        $this->productRepository->save($grouped);
         $result = $this->graphQlQuery($query);
         $product = $result['products']['items'][0];
         $this->assertPrices($expectedPriceRange, $product['price_range']);
@@ -383,44 +383,54 @@ class ProductPriceTest extends GraphQlAbstract
     }
 
     /**
-     * Check pricing for bundled product with one of bundle items having special price set and no dynamic price type set
+     * Check pricing for bundled product with one item having special price set and dynamic price turned off
      *
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_1.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testBundledProductWithSpecialPriceAndTierPrice()
     {
         $bundledProductSku = 'bundle-product';
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
         /** @var Product $bundled */
-        $bundled = $productRepository->get($bundledProductSku);
+        $bundled = $this->productRepository->get($bundledProductSku);
         $skus = ['bundle-product'];
-        $query = $this->getProductQuery($skus);
         $bundled->setSpecialPrice(10);
-        // Price view set to price_range
-        $bundled->setPriceView(0);
-        $productRepository->save($bundled);
-        $bundleRegularPrice = $bundled->getPrice();
-        /** @var OptionList $optionList */
-        $optionList = $objectManager->get(\Magento\Bundle\Model\Product\OptionList::class);
-        $options = $optionList->getItems($bundled);
-        $option = $options[0];
-        /** @var \Magento\Bundle\Api\Data\LinkInterface $bundleProductLinks */
-        $bundleProductLinks = $option->getProductLinks();
-        $firstOptionPrice = $bundleProductLinks[0]->getPrice();
-        $secondOptionPrice = $bundleProductLinks[1]->getPrice();
 
+       // set the tier price for the bundled product
+        $tierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
+       /** @var  $tierPriceExtensionAttributesFactory */
+        $tierPriceExtensionAttributesFactory = $this->objectManager->create(ProductTierPriceExtensionFactory::class);
+        $tierPriceExtensionAttribute = $tierPriceExtensionAttributesFactory->create()->setPercentageValue(10);
+        $tierPrices[] = $tierPriceFactory->create(
+            [
+                'data' => [
+                    'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+                    'qty' => 2
+                ]
+            ]
+        )->setExtensionAttributes($tierPriceExtensionAttribute);
+        $bundled->setTierPrices($tierPrices);
+        // Set Price view to PRICE RANGE
+        $bundled->setPriceView(0);
+        $this->productRepository->save($bundled);
+
+        //Bundled product with dynamic prices turned OFF
+        $query = $this->getProductQuery($skus);
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertNotEmpty($result['products']['items']);
         $product = $result['products']['items'][0];
         $this->assertNotEmpty($product['price_range']);
+        $this->assertNotEmpty($product['price_tiers']);
 
-        //special price of 10% discount
+        $bundleRegularPrice = 10;
+        $firstOptionPrice = 2.75;
+        $secondOptionPrice = 6.75;
+
         $minRegularPrice = $bundleRegularPrice + $firstOptionPrice ;
-        //10% discount(caused by special price) of minRegular price
+        //Apply special price of 10% on minRegular price
         $minFinalPrice = round($minRegularPrice * 0.1, 2);
+
         $maxRegularPrice = $bundleRegularPrice + $secondOptionPrice;
         $maxFinalPrice = round($maxRegularPrice* 0.1, 2);
 
@@ -451,25 +461,238 @@ class ProductPriceTest extends GraphQlAbstract
             ]
         ];
         $this->assertPrices($expectedPriceRange, $product['price_range']);
+        $this->assertResponseFields(
+            $product['price_tiers'],
+            [
+                0 => [
+                    'discount' =>[
+                        'amount_off' => 1,
+                        'percent_off' => 10
+                    ],
+                    'final_price' =>['value'=> 9],
+                    'quantity' => 2
+                ]
+            ]
+        );
     }
 
     /**
-     * Check the pricing for bundled product with one of bundle items having special price set
+     * Check pricing for bundled product with spl price, tier price with dynamic price turned on
+     *
+     * @magentoApiDataFixture Magento/Bundle/_files/dynamic_bundle_product_with_multiple_options.php
+     */
+    public function testBundledWithSpecialPriceAndTierPriceWithDynamicPrice()
+    {
+        $skus = ['bundle-product'];
+        $query = $this->getProductQuery($skus);
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertNotEmpty($product['price_range']);
+        $this->assertNotEmpty($product['price_tiers']);
+
+        $minRegularPrice = 10;
+        $maxRegularPrice = 20;
+
+        //Apply 10% special price on the cheapest simple product in bundle
+        $minFinalPrice = round(5.99 * 0.1, 2);
+        //Apply 10% special price on the expensive product in bundle
+        $maxFinalPrice = round(15.99 * 0.1, 2);
+
+        $expectedPriceRange = [
+            "minimum_price" => [
+                "regular_price" => [
+                    "value" => $minRegularPrice
+                ],
+                "final_price" => [
+                    "value" => $minFinalPrice
+                ],
+                "discount" => [
+                    "amount_off" => $minRegularPrice - $minFinalPrice,
+                    "percent_off" => round(($minRegularPrice - $minFinalPrice)*100/$minRegularPrice, 2)
+                ]
+            ],
+            "maximum_price" => [
+                "regular_price" => [
+                    "value" => $maxRegularPrice
+                ],
+                "final_price" => [
+                    "value" => $maxFinalPrice
+                ],
+                "discount" => [
+                    "amount_off" => $maxRegularPrice - $maxFinalPrice,
+                    "percent_off" => round(($maxRegularPrice - $maxFinalPrice)*100/$maxRegularPrice, 2)
+                ]
+            ]
+        ];
+        $this->assertPrices($expectedPriceRange, $product['price_range']);
+        $this->assertResponseFields(
+            $product['price_tiers'],
+            [
+                0 => [
+                    'discount' =>[
+                        'amount_off' => 1,
+                        'percent_off' => 10
+                    ],
+                    'final_price' =>['value'=> 0],
+                    'quantity' => 2
+                ]
+            ]
+        );
+    }
+
+    /**
+     * Check pricing for Configurable product with each variants having special price and tier prices
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_12345.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testConfigurableProductWithVariantsHavingSpecialAndTierPrices()
+    {
+        $configurableProductSku ='12345';
+        /** @var LinkManagementInterface $configurableProductLink */
+        $configurableProductLinks = $this->objectManager->get(LinkManagement::class);
+        $configurableProductVariants = $configurableProductLinks->getChildren($configurableProductSku);
+        $tierPriceData = [
+            [
+                'customer_group_id' => Group::CUST_GROUP_ALL,
+                'percentage_value'=> null,
+                'qty'=> 2,
+                'value'=> 20
+            ]
+        ];
+        foreach ($configurableProductVariants as $configurableProductVariant) {
+            $configurableProductVariant->setSpecialPrice('25.99');
+            $this->productRepository->save($configurableProductVariant);
+            $this->saveProductTierPrices($configurableProductVariant, $tierPriceData);
+        }
+        $sku = ['12345'];
+        $query = $this->getQueryConfigurableProductAndVariants($sku);
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertNotEmpty($product['price_range']);
+        $regularPrice = [];
+        $finalPrice = [];
+        foreach ($configurableProductVariants as $configurableProductVariant) {
+            $regularPrice[] = $configurableProductVariant->getPrice();
+            $finalPrice[] = $configurableProductVariant->getSpecialPrice();
+        }
+        $regularPriceCheapestVariant = 30;
+        $specialPrice = 25.99;
+        $regularPriceExpensiveVariant = 40;
+
+        $expectedPriceRange = [
+            "minimum_price" => [
+                "regular_price" => [
+                    "value" => $regularPriceCheapestVariant
+                ],
+                "final_price" => [
+                    "value" => $specialPrice
+                ],
+                "discount" => [
+                    "amount_off" => $regularPriceCheapestVariant - $specialPrice,
+                    "percent_off" => round(
+                        ($regularPriceCheapestVariant - $specialPrice)*100/$regularPriceCheapestVariant,
+                        2
+                    )
+                ]
+            ],
+            "maximum_price" => [
+                "regular_price" => [
+                    "value" => $regularPriceExpensiveVariant
+                ],
+                "final_price" => [
+                    "value" => $specialPrice
+                ],
+                "discount" => [
+                    "amount_off" => $regularPriceExpensiveVariant - $specialPrice,
+                    "percent_off" => round(
+                        ($regularPriceExpensiveVariant - $specialPrice)*100/$regularPriceExpensiveVariant,
+                        2
+                    )
+                ]
+            ]
+        ];
+        $this->assertPrices($expectedPriceRange, $product['price_range']);
+        //configurable product's tier price is empty
+        $this->assertEmpty($product['price_tiers']);
+        $this->assertCount(2, $product['variants']);
+
+        $configurableVariantsInResponse = array_map(null, $product['variants'], $configurableProductVariants);
+
+        foreach ($configurableVariantsInResponse as $key => $configurableVariantPriceData) {
+            //validate that the tier prices and price range for each configurable variants are not empty
+            $this->assertNotEmpty($configurableVariantPriceData[0]['product']['price_range']);
+            $this->assertNotEmpty($configurableVariantPriceData[0]['product']['price_tiers']);
+            $this->assertResponseFields(
+                $configurableVariantsInResponse[$key][0]['product']['price_range'],
+                [
+                "minimum_price" => [
+                    "regular_price" => [
+                        "value" => $configurableProductVariants[$key]->getPrice()
+                    ],
+                    "final_price" => [
+                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                    ],
+                    "discount" => [
+                        "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
+                        "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
+                    ]
+                ],
+                "maximum_price" => [
+                    "regular_price" => [
+                        "value" => $configurableProductVariants[$key]->getPrice()
+                    ],
+                    "final_price" => [
+                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                    ],
+                    "discount" => [
+                        "amount_off" => $regularPrice[$key] - $finalPrice[$key],
+                        "percent_off" => round(($regularPrice[$key] - $finalPrice[$key])*100/$regularPrice[$key], 2)
+                    ]
+                ]
+                ]
+            );
+
+            $this->assertResponseFields(
+                $configurableVariantsInResponse[$key][0]['product']['price_tiers'],
+                [
+                    0 => [
+                        'discount' =>[
+                            'amount_off' => $regularPrice[$key] - $tierPriceData[0]['value'],
+                            'percent_off' => round(
+                                (
+                                    $regularPrice[$key] - $tierPriceData[0]['value']
+                                    ) * 100/$regularPrice[$key],
+                                2
+                            )
+                        ],
+                        'final_price' =>['value'=> $tierPriceData[0]['value']],
+                        'quantity' => 2
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Check the pricing for downloadable product type
      *
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     *
      */
     public function testDownloadableProductWithSpecialPriceAndTierPrices()
     {
         $downloadableProductSku = 'downloadable-product';
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
         /** @var Product $downloadableProduct */
-        $downloadableProduct = $productRepository->get($downloadableProductSku);
+        $downloadableProduct = $this->productRepository->get($downloadableProductSku);
         //setting the special price for the product
         $downloadableProduct->setSpecialPrice('5.75');
-        $productRepository->save($downloadableProduct);
+        $this->productRepository->save($downloadableProduct);
         //setting the tier price data for the product
         $tierPriceData = [
             [
@@ -489,32 +712,31 @@ class ProductPriceTest extends GraphQlAbstract
         $product = $result['products']['items'][0];
         $this->assertNotEmpty($product['price_range']);
         $this->assertNotEmpty($product['price_tiers']);
-        $discountAmount = $downloadableProduct->getPrice() - $downloadableProduct->getSpecialPrice();
-        $percentageDiscount = ($discountAmount/$downloadableProduct->getPrice())*100;
 
         $expectedPriceRange = [
             "minimum_price" => [
                 "regular_price" => [
-                    "value" => $downloadableProduct->getPrice()
+                    "value" => 10
                 ],
                 "final_price" => [
-                    "value" => $downloadableProduct->getSpecialPrice()
+                    "value" => 5.75
                 ],
                 "discount" => [
-                    "amount_off" => $discountAmount,
-                    "percent_off" => $percentageDiscount
+                    "amount_off" => 4.25,
+                    //discount amount over regular price value
+                    "percent_off" => (4.25/10)*100
                 ]
             ],
             "maximum_price" => [
                 "regular_price" => [
-                    "value" => $downloadableProduct->getPrice()
+                    "value" => 10
                 ],
                 "final_price" => [
-                    "value" => $downloadableProduct->getSpecialPrice()
+                    "value" => 5.75
                 ],
                 "discount" => [
-                    "amount_off" => $discountAmount,
-                    "percent_off" => $percentageDiscount
+                    "amount_off" => 4.25,
+                    "percent_off" => (4.25/10)*100
                 ]
             ]
         ];
@@ -524,6 +746,7 @@ class ProductPriceTest extends GraphQlAbstract
             [
                 0 => [
                     'discount' =>[
+                        //regualr price - tier price value
                          'amount_off' => 3,
                          'percent_off' => 30
                     ],
@@ -671,6 +894,109 @@ QUERY;
     }
 
     /**
+     * Get GraphQl query to fetch Configurable product and its variants by sku
+     *
+     * @param array $sku
+     * @return string
+     */
+    private function getQueryConfigurableProductAndVariants(array $sku): string
+    {
+        $stringSku = '"' . implode('","', $sku) . '"';
+        return <<<QUERY
+{
+   products(filter: {sku: {in: [$stringSku]}}, sort: {name: ASC}) {
+    items {
+      name
+      sku
+      price_range {
+        minimum_price {regular_price 
+        {
+         value
+         currency
+         }
+          final_price {
+            value
+           currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+        }
+        maximum_price {
+          regular_price {
+            value
+           currency
+          }
+          final_price {
+            value
+            currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+        }
+      }
+      price_tiers{
+              discount{
+                amount_off
+                percent_off
+              }
+              final_price{value}
+                quantity
+              }
+      ... on ConfigurableProduct{
+        variants{
+          product{
+           
+            sku
+            price_range {
+        minimum_price {regular_price {value}
+          final_price {
+            value
+            
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+        }
+        maximum_price {
+          regular_price {
+            value
+           
+          }
+          final_price {
+            value
+            
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+        }
+      }
+            price_tiers{
+              discount{
+                amount_off
+                percent_off
+              }
+              final_price{value}
+                quantity
+              }
+            
+            }
+          }
+        }
+      }
+    }
+  }
+
+QUERY;
+    }
+
+    /**
      * Check prices from graphql response
      *
      * @param $expectedPrices
@@ -706,12 +1032,13 @@ QUERY;
     private function saveProductTierPrices(ProductInterface $product, array $tierPriceData)
     {
         $tierPrices =[];
-        $objectManager = Bootstrap::getObjectManager();
-        $tierPriceFactory = $objectManager->get(ProductTierPriceInterfaceFactory::class);
+        $tierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
         foreach ($tierPriceData as $tierPrice) {
-            $tierPrices[] = $tierPriceFactory->create([
+            $tierPrices[] = $tierPriceFactory->create(
+                [
                 'data' => $tierPrice
-            ]);
+                ]
+            );
             /** ProductInterface $product */
             $product->setTierPrices($tierPrices);
             $product->save();
