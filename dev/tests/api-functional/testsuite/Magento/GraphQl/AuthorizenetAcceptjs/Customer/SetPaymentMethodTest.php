@@ -139,7 +139,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $this->expectExceptionMessage($expectedMessage);
         $this->graphQlMutation($setPaymentMutation, [], '', $this->getHeaderMap());
     }
-    
+
     /**
      * Data provider for testSetPaymentInvalidInput
      *
