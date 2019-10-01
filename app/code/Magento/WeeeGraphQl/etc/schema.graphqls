@@ -3,7 +3,7 @@
 
 enum PriceAdjustmentCodesEnum {
     WEEE
-    WEEETAX
+    WEEE_TAX
 }
 
 type ProductPrice {

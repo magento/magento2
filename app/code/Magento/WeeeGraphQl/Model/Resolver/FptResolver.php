@@ -14,6 +14,7 @@ use Magento\Weee\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Tax\Model\Config;
 
 class FptResolver implements ResolverInterface
 {
@@ -58,21 +59,15 @@ class FptResolver implements ResolverInterface
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
 
-
-        if (!$this->weeeHelper->isEnabled($store)) {
-            return $fptArray;
-        }
-
-
-        if ($this->weeeHelper->isDisplayInclDesc($store) || $this->weeeHelper->isDisplayExclDescIncl($store)) {
+        if ($this->weeeHelper->isEnabled($store)) {
             $attributes = $this->weeeHelper->getProductWeeeAttributesForDisplay($product);
             foreach ($attributes as $attribute) {
                 $displayInclTaxes = $this->taxHelper->getPriceDisplayType($store);
                 $amount = $attribute->getData('amount');
                 //add display mode for WEE to not return WEE if excluded
-                if ($displayInclTaxes === 1) {
+                if ($displayInclTaxes === Config::DISPLAY_TYPE_EXCLUDING_TAX) {
                     $amount = $attribute->getData('amount_excl_tax');
-                } elseif ($displayInclTaxes === 2) {
+                } elseif ($displayInclTaxes === Config::DISPLAY_TYPE_INCLUDING_TAX) {
                     $amount = $attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount');
                 }
                 $fptArray[] = [
@@ -84,6 +79,7 @@ class FptResolver implements ResolverInterface
                 ];
             }
         }
+
         return $fptArray;
     }
 }
