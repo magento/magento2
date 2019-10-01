@@ -112,12 +112,12 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * JS components in data-mage-init attributes should be initialized not in php.
-         * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
-         *
-         * @param string $file
-         */
+            /**
+             * JS components in data-mage-init attributes should be initialized not in php.
+             * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
+             *
+             * @param string $file
+             */
             function ($file) {
                 $whiteList = $this->getWhiteList();
                 if (!in_array($file, $whiteList, true)
@@ -167,12 +167,12 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * JS components in x-magento-init attributes should be initialized not in php.
-         * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
-         *
-         * @param string $file
-         */
+            /**
+             * JS components in x-magento-init attributes should be initialized not in php.
+             * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
+             *
+             * @param string $file
+             */
             function ($file) {
                 if (strpos($file, '/view/frontend/templates/') !== false
                     || strpos($file, '/view/base/templates/') !== false
