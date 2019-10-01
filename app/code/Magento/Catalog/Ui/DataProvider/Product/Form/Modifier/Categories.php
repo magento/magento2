@@ -234,6 +234,7 @@ class Categories extends AbstractModifier
         $fieldCode = 'category_ids';
         $elementPath = $this->arrayManager->findPath($fieldCode, $meta, null, 'children');
         $containerPath = $this->arrayManager->findPath(static::CONTAINER_PREFIX . $fieldCode, $meta, null, 'children');
+        $fieldIsDisabled = $this->locator->getProduct()->isLockedAttribute($fieldCode);
 
         if (!$elementPath) {
             return $meta;
@@ -250,7 +251,6 @@ class Categories extends AbstractModifier
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/group',
                         'scopeLabel' => __('[GLOBAL]'),
-                        'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
                     ],
                 ],
             ],
@@ -268,6 +268,7 @@ class Categories extends AbstractModifier
                                 'levelsVisibility' => '1',
                                 'elementTmpl' => 'ui/grid/filters/elements/ui-select',
                                 'options' => $this->getCategoriesTree(),
+                                'disabled' => $fieldIsDisabled,
                                 'listens' => [
                                     'index=create_category:responseData' => 'setParsed',
                                     'newOption' => 'toggleOptionSelected'
@@ -315,6 +316,7 @@ class Categories extends AbstractModifier
                             'displayArea' => 'insideGroup',
                             'sortOrder' => 20,
                             'dataScope'  => $fieldCode,
+                            'disabled' => $fieldIsDisabled,
                         ],
                     ],
                 ]
