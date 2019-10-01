@@ -34,9 +34,10 @@ class ProcessProjection
      *
      * @param array $data
      * @param ProcessorInterface[] $processors
+     * @param array $originalData
      * @return array
      */
-    public function execute(array $data, array $processors): array
+    public function execute(array $data, array $processors, array $originalData): array
     {
         foreach ($processors as $processorClassName) {
             $processor = $this->objectManager->get($processorClassName);
@@ -46,7 +47,7 @@ class ProcessProjection
                 );
             }
 
-            $data = $processor->execute($data);
+            $data = $processor->execute($data, $originalData);
         }
 
         return $data;

@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Dto\Test\Unit\DtoProjection;
 
-use Magento\Framework\Dto\DtoProjection\ProcessStraightMapping;
+use Magento\Framework\Dto\DtoProjection\ProcessMapping;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
-class ProcessStraightMappingTest extends TestCase
+class ProcessMappingTest extends TestCase
 {
     /**
-     * @var ProcessStraightMapping
+     * @var ProcessMapping
      */
     private $processStraightMapping;
 
@@ -25,7 +25,7 @@ class ProcessStraightMappingTest extends TestCase
     protected function setUp()
     {
         $this->processStraightMapping = (new ObjectManager($this))->getObject(
-            ProcessStraightMapping::class
+            ProcessMapping::class
         );
     }
 

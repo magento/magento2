@@ -12,6 +12,9 @@ use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ValidationStateInterface;
 
+/**
+ * Read dto.xml configuration files
+ */
 class Reader extends Filesystem
 {
     /**

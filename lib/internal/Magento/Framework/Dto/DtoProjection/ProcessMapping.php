@@ -11,9 +11,9 @@ namespace Magento\Framework\Dto\DtoProjection;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
- * Perform DTO straight mapping
+ * Perform DTO mapping
  */
-class ProcessStraightMapping
+class ProcessMapping
 {
     /**
      * Run straight mapping

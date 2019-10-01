@@ -17,9 +17,9 @@ class TestPreprocessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function execute(array $source): array
+    public function execute(array $data, array $originalData): array
     {
-        $source['prop1']++;
-        return $source;
+        $data['prop1']++;
+        return $data;
     }
 }

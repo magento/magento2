@@ -33,7 +33,7 @@ class ConfigureTestProjections
                         'preprocessor' => [
                             TestPreprocessor::class,
                         ],
-                        'straight' => [
+                        'map' => [
                             'prop_one' => 'prop1',
                             'prop_two' => 'prop2',
                             'propThree' => 'prop3',
@@ -46,7 +46,7 @@ class ConfigureTestProjections
                 ],
                 'Magento\Framework\Dto\Mock\ImmutableNestedDtoInterface' => [
                     'Magento\Framework\Dto\Mock\ImmutableDtoInterface' => [
-                        'straight' => [
+                        'map' => [
                             'id' => 'prop1',
                             'test_dto1.prop1' => 'prop1',
                             'test_dto1.prop2' => 'prop2',
@@ -64,7 +64,7 @@ class ConfigureTestProjections
                 ],
                 'Magento\Framework\Dto\Mock\ImmutableDtoInterface' => [
                     'Magento\Framework\Dto\Mock\ImmutableNestedDtoInterface' => [
-                        'straight' => [
+                        'map' => [
                             'prop1' => 'test_dto1.prop1',
                             'prop2' => 'test_dto1.prop2',
                             'prop3' => 'testDto1.prop3',

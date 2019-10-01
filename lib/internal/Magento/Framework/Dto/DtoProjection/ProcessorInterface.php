@@ -16,8 +16,9 @@ interface ProcessorInterface
     /**
      * Perform processor mapping
      *
-     * @param array $source
+     * @param array $data
+     * @param array $originalData
      * @return array
      */
-    public function execute(array $source): array;
+    public function execute(array $data, array $originalData): array;
 }

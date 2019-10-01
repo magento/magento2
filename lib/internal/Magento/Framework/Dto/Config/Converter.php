@@ -156,20 +156,20 @@ class Converter implements ConverterInterface
                 $type = (string) $fromNode->getAttribute('type');
                 $preprocessorNodes = $fromNode->getElementsByTagName('preprocessor');
                 $postprocessorNodes = $fromNode->getElementsByTagName('postprocessor');
-                $straightNodes = $fromNode->getElementsByTagName('straight');
+                $mapNodes = $fromNode->getElementsByTagName('map');
 
-                $straightMapping = [];
-                foreach ($straightNodes as $straightNode) {
-                    $from = (string) $straightNode->getAttribute('from');
-                    $to = (string) $straightNode->getAttribute('to');
+                $mapMapping = [];
+                foreach ($mapNodes as $mapNode) {
+                    $from = (string) $mapNode->getAttribute('from');
+                    $to = (string) $mapNode->getAttribute('to');
 
-                    $straightMapping[$to] = $from;
+                    $mapMapping[$to] = $from;
                 }
 
                 $output[$forInterface][$type] = [
                     'preprocessor' => $this->extractProcessor($preprocessorNodes),
                     'postprocessor' => $this->extractProcessor($postprocessorNodes),
-                    'straight' => $straightMapping,
+                    'map' => $mapMapping,
                 ];
             }
         }

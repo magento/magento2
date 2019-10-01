@@ -59,7 +59,7 @@
         <xs:sequence>
             <xs:choice maxOccurs="unbounded">
                 <xs:element name="preprocessor" type="dtoProjectionProcessorType" minOccurs="0" maxOccurs="unbounded" />
-                <xs:element name="straight" type="dtoProjectionStraightType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="map" type="dtoProjectionMapType" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="postprocessor" type="dtoProjectionProcessorType" minOccurs="0"
                             maxOccurs="unbounded" />
             </xs:choice>
@@ -83,7 +83,7 @@
         <xs:attribute name="nullable" type="xs:boolean"/>
     </xs:complexType>
 
-    <xs:complexType name="dtoProjectionStraightType">
+    <xs:complexType name="dtoProjectionMapType">
         <xs:attribute name="from" type="xs:string" use="required"/>
         <xs:attribute name="to" type="xs:string" use="required"/>
     </xs:complexType>

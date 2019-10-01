@@ -17,9 +17,9 @@ class TestPostProcessorNestedDto implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function execute(array $source): array
+    public function execute(array $data, array $originalData): array
     {
-        $source['test_dto_array'] = [$source['test_dto1']];
-        return $source;
+        $data['test_dto_array'] = [$data['test_dto1']];
+        return $data;
     }
 }

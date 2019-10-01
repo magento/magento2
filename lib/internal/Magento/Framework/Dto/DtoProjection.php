@@ -10,7 +10,7 @@ namespace Magento\Framework\Dto;
 
 use InvalidArgumentException;
 use Magento\Framework\Dto\DtoProjection\ProcessProjection;
-use Magento\Framework\Dto\DtoProjection\ProcessStraightMapping;
+use Magento\Framework\Dto\DtoProjection\ProcessMapping;
 use Magento\Framework\Exception\SerializationException;
 use ReflectionException;
 
@@ -37,26 +37,26 @@ class DtoProjection
     private $processProjection;
 
     /**
-     * @var ProcessStraightMapping
+     * @var ProcessMapping
      */
-    private $processStraightMapping;
+    private $processMapping;
 
     /**
      * @param DtoProcessor $dtoProcessor
      * @param DtoConfig $dtoConfig
      * @param ProcessProjection $processProjection
-     * @param ProcessStraightMapping $processStraightMapping
+     * @param ProcessMapping $processStraightMapping
      */
     public function __construct(
         DtoProcessor $dtoProcessor,
         DtoConfig $dtoConfig,
         ProcessProjection $processProjection,
-        ProcessStraightMapping $processStraightMapping
+        ProcessMapping $processStraightMapping
     ) {
         $this->dtoProcessor = $dtoProcessor;
         $this->dtoConfig = $dtoConfig;
         $this->processProjection = $processProjection;
-        $this->processStraightMapping = $processStraightMapping;
+        $this->processMapping = $processStraightMapping;
     }
 
     /**
@@ -79,17 +79,18 @@ class DtoProjection
         }
 
         $myProjectionConfig = $projectionConfig[$toType][$fromType];
+        $originalData = $data;
 
         if (isset($myProjectionConfig['preprocessor'])) {
-            $data = $this->processProjection->execute($data, $myProjectionConfig['preprocessor']);
+            $data = $this->processProjection->execute($data, $myProjectionConfig['preprocessor'], $originalData);
         }
 
-        if (isset($myProjectionConfig['straight'])) {
-            $data = $this->processStraightMapping->execute($data, $myProjectionConfig['straight']);
+        if (isset($myProjectionConfig['map'])) {
+            $data = $this->processMapping->execute($data, $myProjectionConfig['map']);
         }
 
         if (isset($myProjectionConfig['postprocessor'])) {
-            $data = $this->processProjection->execute($data, $myProjectionConfig['postprocessor']);
+            $data = $this->processProjection->execute($data, $myProjectionConfig['postprocessor'], $originalData);
         }
 
         return $this->dtoProcessor->createFromArray($data, $toType);

@@ -17,9 +17,9 @@ class TestPostprocessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function execute(array $source): array
+    public function execute(array $data, array $originalData): array
     {
-        $source['prop_two'] .= 'z';
-        return $source;
+        $data['prop_two'] .= 'z';
+        return $data;
     }
 }
