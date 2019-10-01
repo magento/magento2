@@ -155,7 +155,6 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTracksCollection()
     {
-        $trackCount = 1;
         $order = $this->getOrder('100000001');
         $items = [];
         foreach ($order->getItems() as $item) {
@@ -197,25 +196,10 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $this->shipmentRepository->save($secondOrderShipment);
         $secondShipmentTrackCollection = $secondOrderShipment->getTracksCollection();
 
-        $shipmentId = $shipment->getId();
-        $shipmentTrackIds = $shipmentTracksCollection->getColumnValues('parent_id');
-        foreach ($shipmentTrackIds as $trackShipmentId) {
-            self::assertEquals($shipmentId, $trackShipmentId);
-        }
-        self::assertCount($trackCount, $shipmentTrackIds);
-
-        $secondShipmentId = $secondOrderShipment->getId();
-        $secondShipmentTrackIds = $secondShipmentTrackCollection->getColumnValues('parent_id');
-        foreach ($secondShipmentTrackIds as $trackShipmentId) {
-            self::assertEquals($secondShipmentId, $trackShipmentId);
-        }
-        self::assertCount($trackCount, $secondShipmentTrackIds);
-
-        self::assertEmpty(
-            array_intersect(
-                $shipmentTracksCollection->getColumnValues('id'),
-                $secondShipmentTrackCollection->getColumnValues('id')
-            )
+        self::assertEquals($shipmentTracksCollection->getColumnValues('id'), [$track->getEntityId()]);
+        self::assertEquals(
+            $secondShipmentTrackCollection->getColumnValues('id'),
+            [$secondShipmentTrack->getEntityId()]
         );
     }
 }
