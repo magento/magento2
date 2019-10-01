@@ -12,9 +12,11 @@ type Query {
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
      id: Int @doc(description: "Id of the category.")
-     filter: CategoryFilterInput @doc(description: "Identifies which Category inputs to search for and return."),
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @deprecated(reason: "Use 'categoryList' query instead of 'category' query") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    categoryList(
+    filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
+    ): [CategoryList] @doc(description: "Categories filter.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList")
 }
 
 type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
@@ -278,10 +280,11 @@ input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput
     category_id: FilterEqualTypeInput @doc(description: "Filter product by category id")
 }
 
-input CategoryFilterInput @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
-    id: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies and filters the category."),
-    url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category"),
-    name: FilterEqualTypeInput @doc(description: "Filter by the display name of the category.")
+input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
+{
+    ids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies and filters the category.")
+    url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category")
+    name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
 }
 
 input ProductFilterInput @doc(description: "ProductFilterInput is deprecated, use @ProductAttributeFilterInput instead. ProductFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
