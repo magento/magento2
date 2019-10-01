@@ -32,6 +32,7 @@ class AdminUserForm
 
     /**
      * Add the `expires_at` field to the admin user edit form.
+     *
      * @param \Magento\User\Block\User\Edit\Tab\Main $subject
      * @param \Closure $proceed
      * @return mixed
