@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Model\Page;
 
+use Magento\Cms\Model\Page;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -85,6 +86,20 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
+     * Find requested page.
+     *
+     * @return Page|null
+     */
+    private function findCurrentPage(): ?Page
+    {
+        if ($this->getRequestFieldName() && ($pageId = (int)$this->request->getParam($this->getRequestFieldName()))) {
+            return $this->collection->getItemById($pageId);
+        }
+
+        return null;
+    }
+
+    /**
      * Prepares Meta
      *
      * @param array $meta
@@ -162,25 +177,14 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
         //List of custom layout files available for current page.
         $options = [['label' => 'No update', 'value' => '']];
-        if ($this->getRequestFieldName() && ($pageId = (int)$this->request->getParam($this->getRequestFieldName()))) {
+        if ($page = $this->findCurrentPage()) {
             //We must have a specific page selected.
-            //Finding our page.
-            $found  = null;
-            /** @var \Magento\Cms\Model\Page  $page */
-            foreach ($this->collection->getItems() as $page) {
-                if ($page->getId() == $pageId) {
-                    $found = $page;
-                    break;
-                }
-            }
             //If custom layout XML is set then displaying this special option.
-            if ($found) {
-                if ($found->getCustomLayoutUpdateXml() || $found->getLayoutUpdateXml()) {
-                    $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
-                }
-                foreach ($this->customLayoutManager->fetchAvailableFiles($found) as $layoutFile) {
-                    $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
-                }
+            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
+                $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
+            }
+            foreach ($this->customLayoutManager->fetchAvailableFiles($page) as $layoutFile) {
+                $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
             }
         }
         $customLayoutMeta = [

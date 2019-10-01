@@ -114,6 +114,30 @@ class PageRepository implements PageRepositoryInterface
     }
 
     /**
+     * Validate new layout update values.
+     *
+     * @param Data\PageInterface $page
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    private function validateLayoutUpdate(Data\PageInterface $page): void
+    {
+        //Persisted data
+        $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
+        //Custom layout update can be removed or kept as is.
+        if ($page->getCustomLayoutUpdateXml()
+            && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
+        ) {
+            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+        }
+        if ($page->getLayoutUpdateXml()
+            && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
+        ) {
+            throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
+        }
+    }
+
+    /**
      * Save Page data
      *
      * @param \Magento\Cms\Api\Data\PageInterface|Page $page
@@ -127,21 +151,7 @@ class PageRepository implements PageRepositoryInterface
             $page->setStoreId($storeId);
         }
         try {
-            //Persisted data
-            $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
-
-            //Custom layout update must be selected from available files
-            if ($page->getCustomLayoutUpdateXml()
-                && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
-            ) {
-                throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
-            }
-            if ($page->getLayoutUpdateXml()
-                && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
-            ) {
-                throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
-            }
-
+            $this->validateLayoutUpdate($page);
             $this->resource->save($page);
             $this->identityMap->add($page);
         } catch (\Exception $exception) {

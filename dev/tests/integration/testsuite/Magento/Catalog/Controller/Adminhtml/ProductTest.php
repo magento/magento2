@@ -19,6 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {

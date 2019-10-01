@@ -61,6 +61,7 @@ class CustomlayoutupdateTest extends TestCase
      *
      * @return void
      * @throws \Throwable
+     * @magentoDbIsolation enabled
      */
     public function testImmutable(): void
     {
@@ -94,5 +95,30 @@ class CustomlayoutupdateTest extends TestCase
         $this->category->setOrigData('custom_layout_update', 'test');
         $this->attribute->beforeSave($this->category);
         $this->assertNull($this->category->getCustomAttribute('custom_layout_update')->getValue());
+
+        //Using old stored value
+        //Saving old value 1st
+        $this->recreateCategory();
+        $this->category->setOrigData('custom_layout_update', 'test');
+        $this->category->setData('custom_layout_update', 'test');
+        $this->category->save();
+        $this->recreateCategory();
+        $this->category = $this->categoryFactory->create(['data' => $this->category->getData()]);
+
+        //Trying the same value.
+        $this->category->setData('custom_layout_update', 'test');
+        $this->attribute->beforeSave($this->category);
+        //Trying new value
+        $this->category->setData('custom_layout_update', 'test2');
+        $caughtException = false;
+        try {
+            $this->attribute->beforeSave($this->category);
+        } catch (LocalizedException $exception) {
+            $caughtException = true;
+        }
+        $this->assertTrue($caughtException);
+        //Empty value
+        $this->category->setData('custom_layout_update', null);
+        $this->attribute->beforeSave($this->category);
     }
 }

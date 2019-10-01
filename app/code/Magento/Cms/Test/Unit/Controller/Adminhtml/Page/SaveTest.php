@@ -295,7 +295,10 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')
-            ->with('cms_page', ['page_id' => $this->pageId, 'custom_layout_update_xml' => null]);
+            ->with(
+                'cms_page',
+                ['page_id' => $this->pageId, 'custom_layout_update_xml' => null, 'layout_update_xml' => null]
+            );
 
         $this->resultRedirect->expects($this->atLeastOnce())
             ->method('setPath')

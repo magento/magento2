@@ -52,6 +52,31 @@ class Customlayoutupdate extends AbstractBackend
     }
 
     /**
+     * Extract old attribute value.
+     *
+     * @param AbstractModel $object
+     * @return mixed Old value or null.
+     */
+    private function extractOldValue(AbstractModel $object)
+    {
+        if (!empty($object->getId())) {
+            $attr = $this->getAttribute()->getAttributeCode();
+
+            if ($object->getOrigData()) {
+                return $object->getOrigData($attr);
+            }
+
+            $oldObject = clone $object;
+            $oldObject->unsetData();
+            $oldObject->load($object->getId());
+
+            return $oldObject->getData($attr);
+        }
+
+        return null;
+    }
+
+    /**
      * @inheritDoc
      *
      * @param AbstractModel $object
@@ -59,10 +84,10 @@ class Customlayoutupdate extends AbstractBackend
     public function validate($object)
     {
         if (parent::validate($object)) {
-            $attrCode = $this->getAttribute()->getAttributeCode();
             if ($object instanceof AbstractModel) {
                 $value = $this->extractValue($object);
-                if ($value && $object->getOrigData($attrCode) !== $value) {
+                $oldValue = $this->extractOldValue($object);
+                if ($value && $oldValue !== $value) {
                     throw new LocalizedException(__('Custom layout update text cannot be changed, only removed'));
                 }
             }
