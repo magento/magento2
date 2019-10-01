@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Area;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
@@ -125,6 +126,24 @@ class LayoutUpdateManager
     }
 
     /**
+     * Extract custom layout attribute value.
+     *
+     * @param ProductInterface $product
+     * @return mixed
+     */
+    private function extractAttributeValue(ProductInterface $product)
+    {
+        if ($product instanceof Product && $product->hasData('custom_layout_update_file')) {
+            return $product->getData('custom_layout_update_file');
+        }
+        if ($attr = $product->getCustomAttribute('custom_layout_update_file')) {
+            return $attr->getValue();
+        }
+
+        return null;
+    }
+
+    /**
      * Extract selected custom layout settings.
      *
      * If no update is selected none will apply.
@@ -135,11 +154,11 @@ class LayoutUpdateManager
      */
     public function extractCustomSettings(ProductInterface $product, DataObject $intoSettings): void
     {
-        if ($product->getSku() && $attribute = $product->getCustomAttribute('custom_layout_update_file')) {
+        if ($product->getSku() && $value = $this->extractAttributeValue($product)) {
             $handles = $intoSettings->getPageLayoutHandles() ?? [];
             $handles = array_merge_recursive(
                 $handles,
-                ['selectable' => $this->sanitizeSku($product) . '_' . $attribute->getValue()]
+                ['selectable' => $this->sanitizeSku($product) . '_' . $value]
             );
             $intoSettings->setPageLayoutHandles($handles);
         }

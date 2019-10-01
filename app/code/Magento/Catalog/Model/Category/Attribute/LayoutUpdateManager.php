@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Category\Attribute;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Area;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\Model\Layout\Merge as LayoutProcessor;
 use Magento\Framework\View\Model\Layout\MergeFactory as LayoutProcessorFactory;
-use Magento\Framework\View\Result\Page as PageLayout;
 
 /**
  * Manage available layout updates for categories.
@@ -114,6 +114,24 @@ class LayoutUpdateManager
     }
 
     /**
+     * Extract custom layout attribute value.
+     *
+     * @param CategoryInterface $category
+     * @return mixed
+     */
+    private function extractAttributeValue(CategoryInterface $category)
+    {
+        if ($category instanceof Category && $category->hasData('custom_layout_update_file')) {
+            return $category->getData('custom_layout_update_file');
+        }
+        if ($attr = $category->getCustomAttribute('custom_layout_update_file')) {
+            return $attr->getValue();
+        }
+
+        return null;
+    }
+
+    /**
      * Extract selected custom layout settings.
      *
      * If no update is selected none will apply.
@@ -124,13 +142,11 @@ class LayoutUpdateManager
      */
     public function extractCustomSettings(CategoryInterface $category, DataObject $intoSettings): void
     {
-        if ($category->getId()
-            && $attribute = $category->getCustomAttribute('custom_layout_update_file')
-        ) {
+        if ($category->getId() && $value = $this->extractAttributeValue($category)) {
             $handles = $intoSettings->getPageLayoutHandles() ?? [];
             $handles = array_merge_recursive(
                 $handles,
-                ['selectable' => $category->getId() . '_' . $attribute->getValue()]
+                ['selectable' => $category->getId() . '_' . $value]
             );
             $intoSettings->setPageLayoutHandles($handles);
         }

@@ -12,6 +12,7 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface;
 use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
+use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\DesignInterface;
@@ -50,21 +51,29 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
     private $layoutProcessor;
 
     /**
+     * @var IdentityMap
+     */
+    private $identityMap;
+
+    /**
      * @param FlyweightFactory $themeFactory
      * @param DesignInterface $design
      * @param PageRepositoryInterface $pageRepository
      * @param LayoutProcessorFactory $layoutProcessorFactory
+     * @param IdentityMap $identityMap
      */
     public function __construct(
         FlyweightFactory $themeFactory,
         DesignInterface $design,
         PageRepositoryInterface $pageRepository,
-        LayoutProcessorFactory $layoutProcessorFactory
+        LayoutProcessorFactory $layoutProcessorFactory,
+        IdentityMap $identityMap
     ) {
         $this->themeFactory = $themeFactory;
         $this->design = $design;
         $this->pageRepository = $pageRepository;
         $this->layoutProcessorFactory = $layoutProcessorFactory;
+        $this->identityMap = $identityMap;
     }
 
     /**
@@ -132,7 +141,10 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
      */
     public function applyUpdate(PageLayout $layout, CustomLayoutSelectedInterface $layoutSelected): void
     {
-        $page = $this->pageRepository->getById($layoutSelected->getPageId());
+        $page = $this->identityMap->get($layoutSelected->getPageId());
+        if (!$page) {
+            $page = $this->pageRepository->getById($layoutSelected->getPageId());
+        }
 
         $layout->addPageLayoutHandles(
             ['selectable' => $this->sanitizeIdentifier($page) .'_' .$layoutSelected->getLayoutFileId()]

@@ -7,6 +7,7 @@ namespace Magento\Cms\Helper;
 
 use Magento\Cms\Model\Page\CustomLayoutManagerInterface;
 use Magento\Cms\Model\Page\CustomLayoutRepositoryInterface;
+use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -91,6 +92,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     private $customLayoutRepo;
 
     /**
+     * @var IdentityMap
+     */
+    private $identityMap;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -104,6 +110,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param CustomLayoutManagerInterface|null $customLayoutManager
      * @param CustomLayoutRepositoryInterface|null $customLayoutRepo
+     * @param IdentityMap|null $identityMap
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,7 +124,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         ?CustomLayoutManagerInterface $customLayoutManager = null,
-        ?CustomLayoutRepositoryInterface $customLayoutRepo = null
+        ?CustomLayoutRepositoryInterface $customLayoutRepo = null,
+        ?IdentityMap $identityMap = null
     ) {
         $this->messageManager = $messageManager;
         $this->_page = $page;
@@ -131,6 +139,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
             ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
         $this->customLayoutRepo = $customLayoutRepo
             ?? ObjectManager::getInstance()->get(CustomLayoutRepositoryInterface::class);
+        $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
         parent::__construct($context);
     }
 
@@ -158,6 +167,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->_page->getId()) {
             return false;
         }
+        $this->identityMap->add($this->_page);
 
         $inRange = $this->_localeDate->isScopeDateInInterval(
             null,
