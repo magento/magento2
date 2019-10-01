@@ -50,6 +50,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         foreach ($filters as $field => $value) {
             $fulltextCollection->addFieldToFilter($field, $value);
         }
+        if (isset($filters['search_term'])) {
+            $fulltextCollection->addSearchFilter($filters['search_term']);
+        }
         $fulltextCollection->loadWithFilter();
         $items = $fulltextCollection->getItems();
         $this->assertCount($expectedCount, $items);
