@@ -5,13 +5,15 @@
  */
 namespace Magento\SalesRule\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface RuleInterface
  *
  * @api
  * @since 100.0.2
  */
-interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface RuleInterface extends ExtensibleDataInterface
 {
     const FREE_SHIPPING_NONE = 'NONE';
     const FREE_SHIPPING_MATCHING_ITEMS_ONLY = 'MATCHING_ITEMS_ONLY';
@@ -59,14 +61,14 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get display label
      *
-     * @return \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null
+     * @return RuleLabelInterface[]|null
      */
     public function getStoreLabels();
 
     /**
      * Set display label
      *
-     * @param \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null $storeLabels
+     * @param RuleLabelInterface[]|null $storeLabels
      * @return $this
      */
     public function setStoreLabels(array $storeLabels = null);
@@ -173,21 +175,21 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set whether the coupon is active
      *
      * @param bool $isActive
-     * @return bool
+     * @return $this
      */
     public function setIsActive($isActive);
 
     /**
      * Get condition for the rule
      *
-     * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
+     * @return ConditionInterface|null
      */
     public function getCondition();
 
     /**
      * Set condition for the rule
      *
-     * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $condition
+     * @param ConditionInterface|null $condition
      * @return $this
      */
     public function setCondition(ConditionInterface $condition = null);
@@ -195,14 +197,14 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get action condition
      *
-     * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
+     * @return ConditionInterface|null
      */
     public function getActionCondition();
 
     /**
      * Set action condition
      *
-     * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $actionCondition
+     * @param ConditionInterface|null $actionCondition
      * @return $this
      */
     public function setActionCondition(ConditionInterface $actionCondition = null);
@@ -436,15 +438,15 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
+     * @return RuleExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
+     * @param RuleExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(RuleExtensionInterface $extensionAttributes);
 }
