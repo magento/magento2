@@ -277,7 +277,11 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormatWithLongYear();
+        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        /** Escape RTL characters which are present in some locales and corrupt formatting */
+        $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
+
+        return $escapedDateFormat;
     }
 
     /**
