@@ -268,7 +268,6 @@ class Categories extends AbstractModifier
                                 'disabled' => $fieldIsDisabled,
                                 'elementTmpl' => 'ui/grid/filters/elements/ui-select',
                                 'options' => $this->getCategoriesTree(),
-                                'disabled' => $fieldIsDisabled,
                                 'listens' => [
                                     'index=create_category:responseData' => 'setParsed',
                                     'newOption' => 'toggleOptionSelected'
@@ -322,11 +321,7 @@ class Categories extends AbstractModifier
                 ]
             ];
         }
-        $meta = $this->arrayManager->merge(
-            $containerPath,
-            $meta,
-            $value
-        );
+        $meta = $this->arrayManager->merge($containerPath, $meta, $value);
 
         return $meta;
     }
