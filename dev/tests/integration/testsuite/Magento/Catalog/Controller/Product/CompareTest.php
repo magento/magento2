@@ -149,7 +149,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect();
         $restProduct = $this->productRepository->get('simple_product_2');
-        $this->_assertCompareListEquals([$product->getEntityId(), $restProduct->getEntityId()]);
+        $this->_assertCompareListEquals([$restProduct->getEntityId()]);
     }
 
     /**
@@ -428,7 +428,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $compareItems = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection::class
         );
-        $compareItems->useProductItem(true);
+        $compareItems->useProductItem();
         // important
         $compareItems->setVisitorId(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
