@@ -51,30 +51,39 @@ class FptResolver implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+
         $fptArray = [];
         $product = $value['model'];
 
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
 
-        $attributes = $this->weeeHelper->getProductWeeeAttributesForDisplay($product);
-        foreach ($attributes as $attribute) {
-            $displayInclTaxes = $this->taxHelper->getPriceDisplayType($store);
-            $amount = $attribute->getData('amount');
-            if ($displayInclTaxes === 1) {
-                $amount = $attribute->getData('amount_excl_tax');
-            } elseif ($displayInclTaxes === 2) {
-                $amount = $attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount');
-            }
-            $fptArray[] = [
-                'amount' => [
-                    'value' =>  $amount,
-                    'currency' => $value['final_price']['currency'],
-                    ],
-                    'label' => $attribute->getData('name')
-            ];
+
+        if (!$this->weeeHelper->isEnabled($store)) {
+            return $fptArray;
         }
 
+
+        if ($this->weeeHelper->isDisplayInclDesc($store) || $this->weeeHelper->isDisplayExclDescIncl($store)) {
+            $attributes = $this->weeeHelper->getProductWeeeAttributesForDisplay($product);
+            foreach ($attributes as $attribute) {
+                $displayInclTaxes = $this->taxHelper->getPriceDisplayType($store);
+                $amount = $attribute->getData('amount');
+                //add display mode for WEE to not return WEE if excluded
+                if ($displayInclTaxes === 1) {
+                    $amount = $attribute->getData('amount_excl_tax');
+                } elseif ($displayInclTaxes === 2) {
+                    $amount = $attribute->getData('amount_excl_tax') + $attribute->getData('tax_amount');
+                }
+                $fptArray[] = [
+                    'amount' => [
+                        'value' => $amount,
+                        'currency' => $value['final_price']['currency'],
+                    ],
+                    'label' => $attribute->getData('name')
+                ];
+            }
+        }
         return $fptArray;
     }
 }
