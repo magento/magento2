@@ -156,9 +156,25 @@ class SetPaymentMethodTest extends GraphQlAbstract
             ],
             [
                 function (string $maskedQuoteId) {
-                    return $this->getInvalidAcceptJsInput($maskedQuoteId);
+                    return $this->getEmptyAcceptJsInput($maskedQuoteId);
                 },
-                'for "authorizenet_acceptjs" is missing.'
+                'for "authorizenet_acceptjs" is missing.',
+            ],
+            [
+                function (string $maskedQuoteId) {
+                    return $this->getMissingCcLastFourAcceptJsInput(
+                        $maskedQuoteId,
+                        static::VALID_DESCRIPTOR,
+                        static::VALID_NONCE
+                    );
+                },
+                'parameter "cc_last_4" for "authorizenet_acceptjs" is missing',
+            ],
+            [
+                function (string $maskedQuoteId) {
+                    return $this->getMissingOpaqueDataValueAcceptJsInput($maskedQuoteId, static::VALID_DESCRIPTOR);
+                },
+                'parameter "opaque_data_value" for "authorizenet_acceptjs" is missing',
             ],
         ];
     }
@@ -190,12 +206,12 @@ QUERY;
     }
 
     /**
-     * Get setPaymentMethodOnCart missing require additional data properties
+     * Get setPaymentMethodOnCart missing required additional data properties
      *
      * @param string $maskedQuoteId
      * @return string
      */
-    private function getInvalidAcceptJsInput(string $maskedQuoteId): string
+    private function getEmptyAcceptJsInput(string $maskedQuoteId): string
     {
         return <<<QUERY
 mutation {
@@ -216,6 +232,66 @@ mutation {
 QUERY;
     }
 
+    /**
+     * Get setPaymentMethodOnCart missing required additional data properties
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getMissingCcLastFourAcceptJsInput(string $maskedQuoteId, string $descriptor, string $nonce): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"authorizenet_acceptjs"
+      authorizenet_acceptjs:{
+        opaque_data_descriptor: "{$descriptor}"
+        opaque_data_value: "{$nonce}"
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get setPaymentMethodOnCart missing required additional data properties
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getMissingOpaqueDataValueAcceptJsInput(string $maskedQuoteId, string $descriptor): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"authorizenet_acceptjs"
+      authorizenet_acceptjs:{
+        opaque_data_descriptor: "{$descriptor}"
+        cc_last_4: 1111
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+    
     private function assertPlaceOrderResponse(array $response, string $reservedOrderId): void
     {
         self::assertArrayHasKey('placeOrder', $response);
