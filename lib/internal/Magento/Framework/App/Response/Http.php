@@ -1,10 +1,9 @@
 <?php
 /**
- * HTTP response
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Response;
 
 use Magento\Framework\App\Http\Context;
@@ -17,7 +16,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
- * HTTP response
+ * HTTP Response.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
@@ -182,10 +181,13 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
-     * Sleep magic method.
+     * Remove links to other objects.
      *
      * @return string[]
      * @codeCoverageIgnore
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -197,6 +199,9 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @return void
      * @codeCoverageIgnore
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
