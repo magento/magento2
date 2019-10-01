@@ -44,7 +44,7 @@ class Customlayoutupdate extends AbstractBackend
     {
         $attributeCode = $attributeCode ?? $this->getAttribute()->getName();
         $value = $object->getData($attributeCode);
-        if (!$value) {
+        if (!$value || !is_string($value)) {
             $value = null;
         }
 

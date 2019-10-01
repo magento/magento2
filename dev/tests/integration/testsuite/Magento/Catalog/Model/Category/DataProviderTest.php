@@ -186,7 +186,11 @@ class DataProviderTest extends TestCase
         $meta = $this->dataProvider->getMeta();
         $list = $this->extractCustomLayoutOptions($meta);
         $expectedList = [
-            ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
+            [
+                'label' => 'No update',
+                'value' => \Magento\Catalog\Model\Attribute\Backend\AbstractLayoutUpdate::VALUE_NO_UPDATE,
+                '__disableTmpl' => true
+            ],
             ['label' => 'test1', 'value' => 'test1', '__disableTmpl' => true],
             ['label' => 'test2', 'value' => 'test2', '__disableTmpl' => true]
         ];
@@ -200,7 +204,11 @@ class DataProviderTest extends TestCase
 
         $meta = $this->dataProvider->getMeta();
         $expectedList = [
-            ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
+            [
+                'label' => 'No update',
+                'value' => \Magento\Catalog\Model\Attribute\Backend\AbstractLayoutUpdate::VALUE_NO_UPDATE,
+                '__disableTmpl' => true
+            ],
             [
                 'label' => 'Use existing',
                 'value' => LayoutUpdate::VALUE_USE_UPDATE_XML,

@@ -65,7 +65,7 @@ class CustomlayoutupdateTest extends TestCase
     public function testImmutable(): void
     {
         //Value is empty
-        $this->category->setCustomAttribute('custom_layout_update', null);
+        $this->category->setCustomAttribute('custom_layout_update', false);
         $this->category->setOrigData('custom_layout_update', null);
         $this->attribute->beforeSave($this->category);
 

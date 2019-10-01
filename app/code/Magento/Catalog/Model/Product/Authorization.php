@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -42,6 +43,60 @@ class Authorization
     }
 
     /**
+     * Extract attribute value from the model.
+     *
+     * @param ProductModel $product
+     * @param AttributeInterface $attr
+     * @return mixed
+     * @throws \RuntimeException When no new value is present.
+     */
+    private function extractAttributeValue(ProductModel $product, AttributeInterface $attr)
+    {
+        if ($product->hasData($attr->getAttributeCode())) {
+            $newValue = $product->getData($attr->getAttributeCode());
+        } elseif ($product->hasData(ProductModel::CUSTOM_ATTRIBUTES)
+            && $attrValue = $product->getCustomAttribute($attr->getAttributeCode())
+        ) {
+            $newValue = $attrValue->getValue();
+        } else {
+            throw new \RuntimeException('No new value is present');
+        }
+
+        if (empty($newValue)
+            || ($attr->getBackend() instanceof LayoutUpdate
+                && ($newValue === LayoutUpdate::VALUE_USE_UPDATE_XML || $newValue === LayoutUpdate::VALUE_NO_UPDATE)
+            )
+        ) {
+            $newValue = null;
+        }
+
+        return $newValue;
+    }
+
+    /**
+     * Prepare old values to compare to.
+     *
+     * @param AttributeInterface $attribute
+     * @param ProductModel|null $oldProduct
+     * @return array
+     */
+    private function fetchOldValues(AttributeInterface $attribute, ?ProductModel $oldProduct): array
+    {
+        if ($oldProduct) {
+            //New value may only be the saved value
+            $oldValues = [$oldProduct->getData($attribute->getAttributeCode())];
+            if (empty($oldValues[0])) {
+                $oldValues[0] = null;
+            }
+        } else {
+            //New value can be empty or default
+            $oldValues[] = $attribute->getDefaultValue();
+        }
+
+        return $oldValues;
+    }
+
+    /**
      * Check whether the product has changed.
      *
      * @param ProductModel $product
@@ -62,28 +117,16 @@ class Authorization
         $attributes = $product->getAttributes();
 
         foreach ($designAttributes as $designAttribute) {
-            $attribute = $attributes[$designAttribute];
             if (!array_key_exists($designAttribute, $attributes)) {
                 continue;
             }
-            $oldValues = [null];
-            if ($oldProduct) {
-                //New value may only be the saved value
-                $oldValues = [$oldProduct->getData($designAttribute)];
-                if (empty($oldValues[0])) {
-                    $oldValues[0] = null;
-                }
-            } else {
-                //New value can be empty or default
-                $oldValues[] = $attribute->getDefaultValue();
-            }
-            $newValue = $product->getData($designAttribute);
-            if (empty($newValue)
-                || ($attribute->getBackend() instanceof LayoutUpdate
-                    && ($newValue === LayoutUpdate::VALUE_USE_UPDATE_XML || $newValue === LayoutUpdate::VALUE_NO_UPDATE)
-                )
-            ) {
-                $newValue = null;
+            $attribute = $attributes[$designAttribute];
+            $oldValues = $this->fetchOldValues($attribute, $oldProduct);
+            try {
+                $newValue = $this->extractAttributeValue($product, $attribute);
+            } catch (\RuntimeException $exception) {
+                //No new value
+                continue;
             }
             if (!in_array($newValue, $oldValues, true)) {
                 return true;
@@ -108,9 +151,13 @@ class Authorization
             if ($product->getId()) {
                 /** @var ProductModel $savedProduct */
                 $savedProduct = $this->productFactory->create();
-                $savedProduct->load($product->getId());
-                if (!$savedProduct->getSku()) {
-                    throw NoSuchEntityException::singleField('id', $product->getId());
+                if ($product->getOrigData()) {
+                    $savedProduct->setData($product->getOrigData());
+                } else {
+                    $savedProduct->load($product->getId());
+                    if (!$savedProduct->getSku()) {
+                        throw NoSuchEntityException::singleField('id', $product->getId());
+                    }
                 }
             }
             if ($this->hasProductChanged($product, $savedProduct)) {

@@ -1678,6 +1678,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         foreach ($productSaved['custom_attributes'] as $customAttribute) {
             if ($customAttribute['attribute_code'] === 'custom_design') {
                 $savedCustomDesign = $customAttribute['value'];
+                break;
             }
         }
         $this->assertEquals('1', $savedCustomDesign);
@@ -1690,16 +1691,21 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $rules->setResources(['Magento_Catalog::products']);
         $rules->saveRel();
         //Updating the product but with the same design properties values.
+        //Removing the design attribute and keeping existing value.
+        $attributes = $productData['custom_attributes'];
+        foreach ($attributes as $i => $attribute) {
+            if ($attribute['attribute_code'] === 'custom_design') {
+                unset($productData['custom_attributes'][$i]);
+                break;
+            }
+        }
+        unset($attributes, $attribute, $i);
         $result = $this->updateProduct($productData, $token);
         //We haven't changed the design so operation is successful.
         $this->assertArrayHasKey('id', $result);
 
         //Changing a design property.
-        foreach ($productData['custom_attributes'] as &$customAttribute) {
-            if ($customAttribute['attribute_code'] === 'custom_design') {
-                $customAttribute['value'] = '2';
-            }
-        }
+        $productData['custom_attributes'][] = ['attribute_code' => 'custom_design', 'value' => '2'];
         $exceptionMessage = null;
         try {
             $this->updateProduct($productData, $token);

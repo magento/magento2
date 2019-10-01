@@ -52,6 +52,9 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
     private function prepareValue(AbstractModel $model): ?string
     {
         $value = $this->extractAttributeValue($model);
+        if (!is_string($value)) {
+            $value = null;
+        }
         if ($value
             && $value !== self::VALUE_USE_UPDATE_XML
             && $value !== self::VALUE_NO_UPDATE

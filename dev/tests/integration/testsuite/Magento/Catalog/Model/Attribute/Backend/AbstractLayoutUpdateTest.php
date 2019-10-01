@@ -105,5 +105,17 @@ class AbstractLayoutUpdateTest extends TestCase
         );
         $this->attribute->beforeSave($this->category);
         $this->assertEmpty($this->category->getData('custom_layout_update'));
+
+        //Empty value doesn't change the old attribute. Any non-string value can be used to represent an empty value.
+        $this->recreateCategory();
+        $this->category->setData('custom_layout_update', 'test');
+        $this->category->setOrigData('custom_layout_update', 'test');
+        $this->category->setData(
+            'custom_layout_update_file',
+            false
+        );
+        $this->attribute->beforeSave($this->category);
+        $this->assertEquals('test', $this->category->getData('custom_layout_update'));
+        $this->assertNull($this->category->getData('custom_layout_update_file'));
     }
 }

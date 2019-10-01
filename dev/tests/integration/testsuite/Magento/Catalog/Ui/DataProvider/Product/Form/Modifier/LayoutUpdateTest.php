@@ -149,7 +149,11 @@ class LayoutUpdateTest extends TestCase
         $meta = $this->eavModifier->modifyMeta([]);
         $list = $this->extractCustomLayoutOptions($meta);
         $expectedList = [
-            ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
+            [
+                'label' => 'No update',
+                'value' => \Magento\Catalog\Model\Attribute\Backend\AbstractLayoutUpdate::VALUE_NO_UPDATE,
+                '__disableTmpl' => true
+            ],
             ['label' => 'testOne', 'value' => 'testOne', '__disableTmpl' => true],
             ['label' => 'test_two', 'value' => 'test_two', '__disableTmpl' => true]
         ];
@@ -164,7 +168,11 @@ class LayoutUpdateTest extends TestCase
         $meta = $this->eavModifier->modifyMeta([]);
         $list = $this->extractCustomLayoutOptions($meta);
         $expectedList = [
-            ['label' => 'No update', 'value' => '', '__disableTmpl' => true],
+            [
+                'label' => 'No update',
+                'value' => \Magento\Catalog\Model\Attribute\Backend\AbstractLayoutUpdate::VALUE_NO_UPDATE,
+                '__disableTmpl' => true
+            ],
             [
                 'label' => 'Use existing',
                 'value' => LayoutUpdateAttribute::VALUE_USE_UPDATE_XML,

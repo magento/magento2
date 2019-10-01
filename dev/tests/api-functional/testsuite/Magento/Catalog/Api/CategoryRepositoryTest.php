@@ -423,16 +423,21 @@ class CategoryRepositoryTest extends WebapiAbstract
         //Updating our role to remove design properties access.
         $this->updateRoleResources($roleName, ['Magento_Catalog::categories']);
         //Updating the category but with the same design properties values.
+        //Omitting existing design attribute and keeping it's existing value
+        $attributes = $categoryData['custom_attributes'];
+        foreach ($attributes as $index => $attrData) {
+            if ($attrData['attribute_code'] === 'custom_design') {
+                unset($categoryData['custom_attributes'][$index]);
+                break;
+            }
+        }
+        unset($attributes, $index, $attrData);
         $result = $this->updateCategory($categoryData['id'], $categoryData, $token);
         //We haven't changed the design so operation is successful.
         $this->assertArrayHasKey('id', $result);
 
         //Changing a design property.
-        foreach ($categoryData['custom_attributes'] as &$customAttribute) {
-            if ($customAttribute['attribute_code'] === 'custom_design') {
-                $customAttribute['value'] = 'test2';
-            }
-        }
+        $categoryData['custom_attributes'][] = ['attribute_code' => 'custom_design', 'value' => 'test2'];
         $exceptionMessage = null;
         try {
             $this->updateCategory($categoryData['id'], $categoryData, $token);
