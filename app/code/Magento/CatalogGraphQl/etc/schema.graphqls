@@ -16,7 +16,7 @@ type Query {
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @deprecated(reason: "Use 'categoryList' query instead of 'category' query") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
     categoryList(
     filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
-    ): [CategoryList] @doc(description: "Categories filter.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList")
+    ): [CategoryTree] @doc(description: "Categories filter.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList")
 }
 
 type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
