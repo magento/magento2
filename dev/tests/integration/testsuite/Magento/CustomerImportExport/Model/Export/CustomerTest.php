@@ -4,48 +4,61 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test for customer export model
- */
 namespace Magento\CustomerImportExport\Model\Export;
 
+use Magento\Framework\Registry;
+use Magento\Customer\Model\Attribute;
+use Magento\ImportExport\Model\Export;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\ImportExport\Model\Export\Adapter\Csv;
+use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\CustomerImportExport\Model\Export\Customer;
+use Magento\Customer\Model\ResourceModel\Attribute\Collection;
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+
+/**
+ * Tests for customer export model.
+ */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CustomerImportExport\Model\Export\Customer
+     * @var Customer
      */
     protected $_model;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\CustomerImportExport\Model\Export\Customer::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager->create(Customer::class);
     }
 
     /**
-     * Test export method
+     * Export "Customer Main File".
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
      */
     public function testExport()
     {
         $expectedAttributes = [];
-        /** @var $collection \Magento\Customer\Model\ResourceModel\Attribute\Collection */
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
-        );
-        /** @var $attribute \Magento\Customer\Model\Attribute */
+        /** @var $collection Collection */
+        $collection = $this->objectManager->create(Collection::class);
+        /** @var $attribute Attribute */
         foreach ($collection as $attribute) {
             $expectedAttributes[] = $attribute->getAttributeCode();
         }
         $expectedAttributes = array_diff($expectedAttributes, $this->_model->getDisabledAttributes());
 
-        $this->_model->setWriter(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\ImportExport\Model\Export\Adapter\Csv::class
-            )
-        );
+        $this->_model->setWriter($this->objectManager->get(Csv::class));
         $data = $this->_model->export();
         $this->assertNotEmpty($data);
 
@@ -54,30 +67,43 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             count($expectedAttributes),
             count(array_intersect($expectedAttributes, $lines['header'])),
-            'Expected attribute codes were not exported'
+            'Expected attribute codes were not exported.'
         );
 
-        $this->assertNotEmpty($lines['data'], 'No data was exported');
+        $this->assertNotEmpty($lines['data'], 'No data was exported.');
 
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $customers \Magento\Customer\Model\Customer[] */
-        $customers = $objectManager->get(
-            \Magento\Framework\Registry::class
-        )->registry(
-            '_fixture/Magento_ImportExport_Customer_Collection'
-        );
-        foreach ($customers as $key => $customer) {
-            foreach ($expectedAttributes as $code) {
-                if (!in_array($code, $this->_model->getDisabledAttributes()) && isset($lines[$key][$code])) {
-                    $this->assertEquals(
-                        $customer->getData($code),
-                        $lines[$key][$code],
-                        'Attribute "' . $code . '" is not equal'
-                    );
+        /** @var $customers CustomerModel[] */
+        $customers = $this->objectManager->create(CustomerCollection::class)->getItems();
+        foreach ($customers as $customer) {
+            $data = $customer->getData();
+            $exportData = $lines['data'][$data['email']];
+            $exportData = $this->unsetDuplicateData($exportData);
+            array_walk(
+                $exportData,
+                function (&$value) {
+                    if (is_string($value) && $value === '') {
+                        $value = null;
+                    }
                 }
-            }
+            );
+
+            $this->assertArraySubset($exportData, $data);
         }
+    }
+
+    /**
+     * Unset non-useful or duplicate data from exported file data.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function unsetDuplicateData(array $data): array
+    {
+        unset($data['_website']);
+        unset($data['_store']);
+        unset($data['password']);
+
+        return $data;
     }
 
     /**
@@ -93,10 +119,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAttributeCollection()
     {
-        $this->assertInstanceOf(
-            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class,
-            $this->_model->getAttributeCollection()
-        );
+        $this->assertInstanceOf(Collection::class, $this->_model->getAttributeCollection());
     }
 
     /**
@@ -104,14 +127,14 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilterAttributeCollection()
     {
-        /** @var $collection \Magento\Customer\Model\ResourceModel\Attribute\Collection */
+        /** @var $collection Collection */
         $collection = $this->_model->getAttributeCollection();
         $collection = $this->_model->filterAttributeCollection($collection);
         /**
          * Check that disabled attributes is not existed in attribute collection
          */
         $existedAttributes = [];
-        /** @var $attribute \Magento\Customer\Model\Attribute */
+        /** @var $attribute Attribute */
         foreach ($collection as $attribute) {
             $existedAttributes[] = $attribute->getAttributeCode();
         }
@@ -127,7 +150,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
          * Check that all overridden attributes were affected during filtering process
          */
         $overriddenAttributes = $this->_model->getOverriddenAttributes();
-        /** @var $attribute \Magento\Customer\Model\Attribute */
+        /** @var $attribute Attribute */
         foreach ($collection as $attribute) {
             if (isset($overriddenAttributes[$attribute->getAttributeCode()])) {
                 foreach ($overriddenAttributes[$attribute->getAttributeCode()] as $propertyKey => $property) {
@@ -150,27 +173,22 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $createdAtDate = '2038-01-01';
 
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $objectManager ObjectManagerInterface */
+        $objectManager = $this->objectManager;
 
         /**
          * Change created_at date of first customer for future filter test.
          */
-        $customers = $objectManager->get(
-            \Magento\Framework\Registry::class
-        )->registry(
-            '_fixture/Magento_ImportExport_Customer_Collection'
-        );
+        $customers = $objectManager->get(Registry::class)
+            ->registry('_fixture/Magento_ImportExport_Customer_Collection');
         $customers[0]->setCreatedAt($createdAtDate);
         $customers[0]->save();
         /**
          * Change type of created_at attribute. In this case we have possibility to test date rage filter
          */
-        $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
-        );
+        $attributeCollection = $this->objectManager->create(Collection::class);
         $attributeCollection->addFieldToFilter('attribute_code', 'created_at');
-        /** @var $createdAtAttribute \Magento\Customer\Model\Attribute */
+        /** @var $createdAtAttribute Attribute */
         $createdAtAttribute = $attributeCollection->getFirstItem();
         $createdAtAttribute->setBackendType('datetime');
         $createdAtAttribute->save();
@@ -178,19 +196,17 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
          * Prepare filter.asd
          */
         $parameters = [
-            \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
+            Export::FILTER_ELEMENT_GROUP => [
                 'email' => 'example.com',
                 'created_at' => [$createdAtDate, ''],
-                'store_id' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    \Magento\Store\Model\StoreManagerInterface::class
-                )->getStore()->getId()
+                'store_id' => $this->objectManager->get(StoreManagerInterface::class)->getStore()->getId()
             ]
         ];
         $this->_model->setParameters($parameters);
-        /** @var $customers \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customers Collection */
         $collection = $this->_model->filterEntityCollection(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            $this->objectManager->create(
+                CustomerCollection::class
             )
         );
         $collection->load();
