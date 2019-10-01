@@ -107,6 +107,7 @@ class Image implements ProductRenderCollectorInterface
         $images = [];
         /** @var ThemeInterface $currentTheme */
         $currentTheme = $this->design->getDesignTheme();
+        $this->design->setDesignTheme($currentTheme);
 
         foreach ($this->imageCodes as $imageCode) {
             /** @var ImageInterface $image */
@@ -135,7 +136,6 @@ class Image implements ProductRenderCollectorInterface
             $images[] = $image;
         }
 
-        $this->design->setDesignTheme($currentTheme);
         $productRender->setImages($images);
     }
 
