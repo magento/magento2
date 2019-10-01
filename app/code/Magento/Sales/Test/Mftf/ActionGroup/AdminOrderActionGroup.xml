@@ -94,7 +94,10 @@
         </annotations>
         
         <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.emailRequiredToCreateOrder('1')}}" stepKey="selectEmailRequiredOption"/>
         <seeElement selector="{{AdminOrderFormAccountSection.requiredEmail}}" stepKey="seeEmailRequired"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.emailRequiredToCreateOrder('0')}}" stepKey="unselectEmailRequiredOption"/>
+        <seeElement selector="{{AdminOrderFormAccountSection.noRequiredEmail}}" stepKey="seeNoEmailRequired"/>
         <clearField selector="{{AdminOrderFormAccountSection.email}}" stepKey="clearEmailField"/>
         <clearField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" stepKey="clearFirstNameField"/>
         <clearField selector="{{AdminOrderFormBillingAddressSection.LastName}}" stepKey="clearLastNameField"/>
