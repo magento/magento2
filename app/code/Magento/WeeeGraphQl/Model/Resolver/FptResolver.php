@@ -16,6 +16,9 @@ use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Tax\Model\Config;
 
+/**
+ * Resolver for FixedProductTax object that retrieves an array of FPT attributes with prices
+ */
 class FptResolver implements ResolverInterface
 {
 
