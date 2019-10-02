@@ -20,21 +20,21 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
-    <entity name="SetAllowedCurrenciesConfigForThree">
-        <data key="path">currency/options/allow</data>
-        <data key="value">EUR,USD,RUB</data>
-        <data key="scope">websites</data>
-        <data key="scope_code">base</data>
-    </entity>
-    <entity name="SetAllowedCurrenciesConfigForTwo">
-        <data key="path">currency/options/allow</data>
-        <data key="value">EUR,USD</data>
-        <data key="scope">websites</data>
-        <data key="scope_code">base</data>
-    </entity>
-    <entity name="SetAllowedCurrenciesConfigForOne">
+    <entity name="SetAllowedCurrenciesConfigForUSD">
         <data key="path">currency/options/allow</data>
         <data key="value">USD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForEUR">
+        <data key="path">currency/options/allow</data>
+        <data key="value">EUR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForRUB">
+        <data key="path">currency/options/allow</data>
+        <data key="value">RUB</data>
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>

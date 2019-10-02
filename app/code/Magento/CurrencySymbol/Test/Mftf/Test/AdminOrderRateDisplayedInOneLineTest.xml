@@ -27,11 +27,11 @@
             <magentoCLI command="config:set {{CatalogPriceScopeWebsiteConfigData.path}} {{CatalogPriceScopeWebsiteConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
             <!--Set Currency options for Default Config-->
             <magentoCLI command="config:set {{SetCurrencyEURBaseConfig.path}} {{SetCurrencyEURBaseConfig.value}}" stepKey="setCurrencyBaseEUR"/>
-            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForTwo.path}} {{SetAllowedCurrenciesConfigForTwo.value}}" stepKey="setAllowedCurrencyEUR"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
             <magentoCLI command="config:set {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
             <!--Set Currency options for Website-->
             <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseEURWebsites"/>
-            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForTwo.scope}} --scope-code={{SetAllowedCurrenciesConfigForTwo.scope_code}} {{SetAllowedCurrenciesConfigForTwo.path}} {{SetAllowedCurrenciesConfigForTwo.value}}" stepKey="setAllowedCurrencyWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyWebsitesForEURandUSD"/>
             <magentoCLI command="config:set --scope={{SetDefaultCurrencyEURConfig.scope}} --scope-code={{SetDefaultCurrencyEURConfig.scope_code}} {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEURWebsites"/>
         </before>
         <after>
@@ -41,11 +41,11 @@
             <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeGlobal"/>
             <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
             <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSD"/>
-            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForOne.path}} {{SetAllowedCurrenciesConfigForOne.value}}" stepKey="setAllowedCurrencyUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSD"/>
             <!--Set Currency options for Website-->
             <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
             <magentoCLI command="config:set --scope={{SetDefaultCurrencyUSDConfig.scope}} --scope-code={{SetDefaultCurrencyUSDConfig.scope_code}} {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSDWebsites"/>
-            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForOne.scope}} --scope-code={{SetAllowedCurrenciesConfigForOne.scope_code}} {{SetAllowedCurrenciesConfigForOne.path}} {{SetAllowedCurrenciesConfigForOne.value}}" stepKey="setAllowedCurrencyUSDWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSDWebsites"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Open created product on Storefront and place for order-->

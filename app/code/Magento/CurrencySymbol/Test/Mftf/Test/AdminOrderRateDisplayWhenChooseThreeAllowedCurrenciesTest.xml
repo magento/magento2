@@ -25,7 +25,7 @@
             <createData entity="SimpleProduct2" stepKey="createNewProduct"/>
             <!--Set Currency options for Website-->
             <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
-            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForThree.scope}} --scope-code={{SetAllowedCurrenciesConfigForThree.scope_code}} {{SetAllowedCurrenciesConfigForThree.path}} {{SetAllowedCurrenciesConfigForThree.value}}" stepKey="setAllowedCurrencyWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}},{{SetAllowedCurrenciesConfigForRUB.value}}" stepKey="setAllowedCurrencyWebsitesEURandRUBandUSD"/>
             <magentoCLI command="config:set --scope={{SetDefaultCurrencyEURConfig.scope}} --scope-code={{SetDefaultCurrencyEURConfig.scope_code}} {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEURWebsites"/>
         </before>
         <after>
