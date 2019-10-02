@@ -144,7 +144,6 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     (int)$entityId
                 );
 
-
             $order = ['weeeTax.state ' . \Magento\Framework\DB\Select::SQL_DESC,
                 'weeeTax.website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
             $attributeSelect->order($order);
