@@ -83,6 +83,18 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
     }
 
     /**
+     * Check whether the page can use this layout.
+     *
+     * @param PageModel $page
+     * @param string $layoutFile
+     * @return bool
+     */
+    private function isLayoutValidFor(PageModel $page, string $layoutFile): bool
+    {
+        return in_array($layoutFile, $this->manager->fetchAvailableFiles($page), true);
+    }
+
+    /**
      * Save new custom layout file value for a page.
      *
      * @param int $pageId
@@ -94,7 +106,7 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
     private function saveLayout(int $pageId, ?string $layoutFile): void
     {
         $page = $this->findPage($pageId);
-        if ($layoutFile !== null && !in_array($layoutFile, $this->manager->fetchAvailableFiles($page), true)) {
+        if ($layoutFile !== null && !$this->isLayoutValidFor($page, $layoutFile)) {
             throw new \InvalidArgumentException(
                 $layoutFile .' is not available for page #' .$pageId
             );
@@ -112,6 +124,21 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
     public function save(CustomLayoutSelectedInterface $layout): void
     {
         $this->saveLayout($layout->getPageId(), $layout->getLayoutFileId());
+    }
+
+    /**
+     * Validate layout update of given page model.
+     *
+     * @param PageModel $page
+     * @return void
+     * @throws LocalizedException
+     */
+    public function validateLayoutSelectedFor(PageModel $page): void
+    {
+        $layoutFile = $page->getData('layout_update_selected');
+        if ($layoutFile && !$this->isLayoutValidFor($page, $layoutFile)) {
+            throw new LocalizedException(__('Invalid Custom Layout Update selected'));
+        }
     }
 
     /**

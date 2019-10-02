@@ -49,6 +49,11 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $customLayoutManager;
 
     /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -76,6 +81,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         ?CustomLayoutManagerInterface $customLayoutManager = null
     ) {
         $this->collection = $pageCollectionFactory->create();
+        $this->collectionFactory = $pageCollectionFactory;
         $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
@@ -93,6 +99,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private function findCurrentPage(): ?Page
     {
         if ($this->getRequestFieldName() && ($pageId = (int)$this->request->getParam($this->getRequestFieldName()))) {
+            //Loading data for the collection.
+            $this->getData();
             return $this->collection->getItemById($pageId);
         }
 
@@ -120,6 +128,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
+        $this->collection = $this->collectionFactory->create();
         $items = $this->collection->getItems();
         /** @var $page \Magento\Cms\Model\Page */
         foreach ($items as $page) {
@@ -176,7 +185,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         }
 
         //List of custom layout files available for current page.
-        $options = [['label' => 'No update', 'value' => '']];
+        $options = [['label' => 'No update', 'value' => '_no_update_']];
         if ($page = $this->findCurrentPage()) {
             //We must have a specific page selected.
             //If custom layout XML is set then displaying this special option.

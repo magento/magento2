@@ -49,25 +49,18 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     private $pageRepository;
 
     /**
-     * @var CustomLayoutRepositoryInterface
-     */
-    private $customLayoutRepository;
-
-    /**
      * @param Action\Context $context
      * @param PostDataProcessor $dataProcessor
      * @param DataPersistorInterface $dataPersistor
      * @param \Magento\Cms\Model\PageFactory|null $pageFactory
      * @param \Magento\Cms\Api\PageRepositoryInterface|null $pageRepository
-     * @param CustomLayoutRepositoryInterface|null $customLayoutRepository
      */
     public function __construct(
         Action\Context $context,
         PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
         \Magento\Cms\Model\PageFactory $pageFactory = null,
-        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null,
-        ?CustomLayoutRepositoryInterface $customLayoutRepository = null
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository = null
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
@@ -98,14 +91,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             if (empty($data['page_id'])) {
                 $data['page_id'] = null;
             }
-            //Either use existing custom layout XML or use a file.
-            $customLayoutFile = (string)$this->getRequest()->getParam('layout_update_selected');
-            if ($customLayoutFile !== '_existing_') {
-                $data['custom_layout_update_xml'] = null;
-                $data['layout_update_xml'] = null;
-            } else {
-                $customLayoutFile = null;
-            }
 
             /** @var \Magento\Cms\Model\Page $model */
             $model = $this->pageFactory->create();
@@ -128,7 +113,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                     ['page' => $model, 'request' => $this->getRequest()]
                 );
 
-                $this->savePage($model, $customLayoutFile);
+                $this->savePage($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 return $this->processResultRedirect($model, $resultRedirect, $data);
             } catch (LocalizedException $e) {
@@ -147,21 +132,15 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * Save the page.
      *
      * @param Page $page
-     * @param string|null $customLayoutFile
      * @return void
      * @throws \Throwable
      */
-    private function savePage(Page $page, ?string $customLayoutFile): void
+    private function savePage(Page $page): void
     {
         if (!$this->dataProcessor->validate($page->getData())) {
             throw new \InvalidArgumentException('Page is invalid');
         }
         $this->pageRepository->save($page);
-        if ($customLayoutFile) {
-            $this->customLayoutRepository->save(new CustomLayoutSelected($page->getId(), $customLayoutFile));
-        } else {
-            $this->customLayoutRepository->deleteFor($page->getId());
-        }
     }
 
     /**

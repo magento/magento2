@@ -63,7 +63,6 @@ class PostDataProcessor
      */
     public function filter($data)
     {
-        unset($data['layout_update_selected']);
         $filterRules = [];
 
         foreach (['custom_theme_from', 'custom_theme_to'] as $dateField) {
@@ -140,7 +139,7 @@ class PostDataProcessor
             if (!empty($data['layout_update_xml']) && !$layoutXmlValidator->isValid($data['layout_update_xml'])) {
                 return false;
             }
-            
+
             if (!empty($data['custom_layout_update_xml']) &&
                 !$layoutXmlValidator->isValid($data['custom_layout_update_xml'])
             ) {
