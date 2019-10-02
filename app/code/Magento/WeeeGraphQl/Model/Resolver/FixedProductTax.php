@@ -19,9 +19,8 @@ use Magento\Tax\Model\Config;
 /**
  * Resolver for FixedProductTax object that retrieves an array of FPT attributes with prices
  */
-class FptResolver implements ResolverInterface
+class FixedProductTax implements ResolverInterface
 {
-
     /**
      * @var Data
      */

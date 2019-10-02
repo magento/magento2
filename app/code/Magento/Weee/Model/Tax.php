@@ -13,6 +13,8 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Catalog\Model\Product\Type;
 
 /**
+ * Weee tax model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -144,6 +146,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get the weee amount
+     *
      * @param Product $product
      * @param null|false|\Magento\Framework\DataObject $shipping
      * @param null|false|\Magento\Framework\DataObject $billing
@@ -173,6 +177,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get the weee amount excluding tax
+     *
      * @param Product $product
      * @param null|false|\Magento\Framework\DataObject $shipping
      * @param null|false|\Magento\Framework\DataObject $billing
@@ -203,6 +209,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get the weee attribute codes
+     *
      * @param bool $forceEnabled
      * @return array
      */
@@ -214,8 +222,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Wee tax attribute codes
      *
-     * @param  null|string|bool|int|Store $store
-     * @param  bool $forceEnabled
+     * @param null|string|bool|int|Store $store
+     * @param bool $forceEnabled
      * @return array
      */
     public function getWeeeTaxAttributeCodes($store = null, $forceEnabled = false)
@@ -231,6 +239,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve the relevant wee tax attributes assigned to a product by location
+     *
      * @param Product $product
      * @param null|false|\Magento\Quote\Model\Quote\Address $shipping
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
@@ -241,6 +251,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getProductWeeeAttributes(
         $product,
@@ -283,7 +294,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 return $result;
             }
 
-            /** @var \Magento\Tax\Model\Calculation $calculator */
+            /** @var Calculation $calculator */
             $calculator = $this->_calculationFactory->create();
 
             $customerId = $this->_customerSession->getCustomerId();
@@ -332,7 +343,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                     $amount = $value;
                     $amountExclTax = $value;
                     if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
-                        /** @var \Magento\Tax\Model\Calculation $calculator */
+                        /** @var Calculation $calculator */
                         $defaultPercent = $calculator->getRate(
                             $defaultRateRequest->setProductClassId($product->getTaxClassId())
                         );
@@ -392,6 +403,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Is there a weee attribute available for the location provided
+     *
      * @param int $countryId
      * @param int $regionId
      * @param int $websiteId

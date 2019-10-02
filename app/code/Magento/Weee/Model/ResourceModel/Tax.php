@@ -5,9 +5,6 @@
  */
 namespace Magento\Weee\Model\ResourceModel;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Condition\ConditionInterface;
-
 /**
  * Wee tax resource model
  *
@@ -51,7 +48,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Fetch one
+     * Fetch one calculated weee attribute from a select criteria
      *
      * @param \Magento\Framework\DB\Select|string $select
      * @return string
@@ -62,6 +59,8 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Is there a weee attribute available for the location provided
+     *
      * @param int $countryId
      * @param int $regionId
      * @param int $websiteId
@@ -96,6 +95,8 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Fetch calculated weee attributes by location, store and entity
+     *
      * @param int $countryId
      * @param int $regionId
      * @param int $websiteId

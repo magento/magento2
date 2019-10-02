@@ -4,12 +4,12 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*"
-    },
-    "suggest": {
+        "magento/framework": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-weee": "*",
+        "magento/module-weee": "*"
+    },
+    "suggest": {
         "magento/module-catalog-graph-ql": "*"
     },
     "license": [
