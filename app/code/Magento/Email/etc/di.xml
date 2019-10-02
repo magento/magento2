@@ -75,8 +75,10 @@
     <type name="Magento\Framework\Filter\Template">
         <arguments>
             <argument name="directiveProcessors" xsi:type="array">
-                <item name="simple" sortOrder="100" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\SimpleDirective</item>
-                <item name="legacy" sortOrder="200" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
+                <item name="depend" sortOrder="100" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\DependDirective</item>
+                <item name="if" sortOrder="200" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\IfDirective</item>
+                <item name="template" sortOrder="300" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\TemplateDirective</item>
+                <item name="legacy" sortOrder="400" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
             </argument>
         </arguments>
     </type>

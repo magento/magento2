@@ -117,7 +117,12 @@ class Template implements \Zend_Filter_Interface
                 ->get(VariableResolverInterface::class);
 
         if (empty($directiveProcessors)) {
-            $this->directiveProcessors['legacy'] = ObjectManager::getInstance()->get(LegacyDirective::class);
+            $this->directiveProcessors = [
+                'depend' => ObjectManager::getInstance()->get(DependDirective::class),
+                'if' => ObjectManager::getInstance()->get(IfDirective::class),
+                'template' => ObjectManager::getInstance()->get(TemplateDirective::class),
+                'legacy' => ObjectManager::getInstance()->get(LegacyDirective::class),
+            ];
         }
     }
 

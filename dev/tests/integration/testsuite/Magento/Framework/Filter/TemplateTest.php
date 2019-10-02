@@ -370,52 +370,6 @@ EXPECTED_RESULT;
         );
     }
 
-    /**
-     * Test adding callbacks when already filtering.
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInappropriateCallbacks()
-    {
-        $this->templateFilter->setVariables(['filter' => $this->templateFilter]);
-        $this->templateFilter->filter('Test {{var filter.addAfterFilterCallback(\'mb_strtolower\')}}');
-    }
-
-    /**
-     * Test adding callbacks when already filtering.
-     *
-     * @expectedException \InvalidArgumentException
-     * @dataProvider disallowedMethods
-     */
-    public function testDisallowedMethods($method)
-    {
-        $store = \Magento\Framework\App\ObjectManager::getInstance()->get(Store::class);
-        $this->templateFilter->setVariables(['store' => $store, 'filter' => $this->templateFilter]);
-        $this->templateFilter->filter('{{var store.' . $method . '()}} {{var filter.' . $method .'()}}');
-    }
-
-    /**
-     * Data for testDisallowedMethods method
-     *
-     * @return array
-     */
-    public function disallowedMethods()
-    {
-        return [
-            ['getResourceCollection'],
-            ['load'],
-            ['save'],
-            ['getCollection'],
-            ['getResource'],
-            ['getConfig'],
-            ['setVariables'],
-            ['setTemplateProcessor'],
-            ['getTemplateProcessor'],
-            ['varDirective'],
-            ['delete']
-        ];
-    }
-
     public function strictModeTrueFalseProvider()
     {
         return [
