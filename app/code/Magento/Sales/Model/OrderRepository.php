@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model;
 
@@ -247,8 +248,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Perform persist operations for one entity
      *
-     * @param \Magento\Sales\Api\Data\OrderInterface $entity
-     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @param OrderInterface $entity
+     * @return OrderInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
@@ -262,6 +266,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
                 $entity->setShippingMethod($shipping->getMethod());
             }
         }
+
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
         return $this->registry[$entity->getEntityId()];

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <actionGroup name="ReviewOrderForSingleShipmentActionGroup">
+        <waitForPageLoad stepKey="waitForReviewOrderPageLoad"/>
+        <grabTextFrom selector="{{ReviewOrderSection.shippingMethodBasePrice}}" stepKey="shippingMethodBasePrice"/>
+        <grabTextFrom selector="{{ReviewOrderSection.shippingMethodSubtotalPrice}}" stepKey="shippingMethodSubtotalPrice"/>
+        <assertEquals stepKey="assertShippingMethodPrice">
+            <expectedResult type="string">$shippingMethodSubtotalPrice</expectedResult>
+            <actualResult type="string">$shippingMethodBasePrice</actualResult>
+        </assertEquals>
+    </actionGroup>
+    <actionGroup name="ReviewOrderForMultiShipmentActionGroup">
+        <waitForPageLoad stepKey="waitForFirstShippingMethod" />
+        <!--Check First Shipping Method Price-->
+        <grabTextFrom selector="{{ReviewOrderSection.firstShippingMethodBasePrice}}" stepKey="firstShippingMethodBasePrice"/>
+        <grabTextFrom selector="{{ReviewOrderSection.firstShippingMethodSubtotalPrice}}" stepKey="firstShippingMethodSubtotalPrice"/>
+        <assertEquals stepKey="assertShippingMethodPrice">
+            <expectedResult type="string">$firstShippingMethodSubtotalPrice</expectedResult>
+            <actualResult type="string">$firstShippingMethodBasePrice</actualResult>
+        </assertEquals>
+        <!--Check Second Shipping Method Price-->
+        <grabTextFrom selector="{{ReviewOrderSection.secondShippingMethodBasePrice}}" stepKey="secondShippingMethodBasePrice" />
+        <grabTextFrom selector="{{ReviewOrderSection.secondShippingMethodSubtotalPrice}}" stepKey="secondShippingMethodSubtotalPrice" />
+        <assertEquals stepKey="assertSecondShippingMethodPrice" >
+            <expectedResult type="string">$secondShippingMethodSubtotalPrice</expectedResult>
+            <actualResult type="string">$secondShippingMethodBasePrice</actualResult>
+        </assertEquals>
+
+    </actionGroup>
+</actionGroups>
+

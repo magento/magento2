@@ -11,5 +11,8 @@
     <section name="StorefrontProductPageDesignSection">
         <element name="layoutTwoColumnsLeft" type="block" selector=".page-layout-2columns-left"/>
         <element name="layoutEmpty" type="block" selector=".page-layout-empty"/>
+        <element name="layoutThreeColumns" type="block" selector=".page-layout-3columns"/>
+        <element name="layoutOneColumn" type="block" selector=".page-layout-1column"/>
+        <element name="layoutTwoColumnsRight" type="block" selector=".page-layout-2columns-right"/>
     </section>
 </sections>
