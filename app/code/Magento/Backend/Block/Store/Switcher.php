@@ -586,18 +586,9 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl($url)
-                . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . $this->escapeHtmlAttr(
-                    __(
-                        'What is this?'
-                    )
-                )
-                . '"' . ' class="admin__field-tooltip-action action-help"><span>' . $this->escapeHtmlAttr(
-                    __(
-                        'What is this?'
-                    )
-                )
-                . '</span></a></span>' . ' </div>';
+            $html = '<div class="admin__field-tooltip tooltip">';
+            $html .= '<a href="' . $this->escapeUrl($url) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . $this->escapeHtmlAttr(__('What is this?'));
+            $html .= '"' . 'class="admin__field-tooltip-action action-help"><span>' . $this->escapeHtmlAttr(__('What is this?')).'</span></a></span></div>';
         }
         return $html;
     }
