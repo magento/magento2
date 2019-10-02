@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Eav\Model\Config as EavConfig;
 
 /**
  * Provides customer address data.
@@ -26,15 +27,24 @@ class CustomAttributesProcessor
     private $attributeOptionManager;
 
     /**
+     * @var EavConfig
+     */
+    private $eavConfig;
+
+    /**
+     * CustomAttributesProcessor constructor.
      * @param AddressMetadataInterface $addressMetadata
      * @param AttributeOptionManagementInterface $attributeOptionManager
+     * @param EavConfig $eavConfig
      */
     public function __construct(
         AddressMetadataInterface $addressMetadata,
-        AttributeOptionManagementInterface $attributeOptionManager
+        AttributeOptionManagementInterface $attributeOptionManager,
+        EavConfig $eavConfig
     ) {
         $this->addressMetadata = $addressMetadata;
         $this->attributeOptionManager = $attributeOptionManager;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -104,6 +114,25 @@ class CustomAttributesProcessor
         foreach ($attributesMetadata as $attributeMetadata) {
             if (!$attributeMetadata->isVisible()) {
                 unset($attributes[$attributeMetadata->getAttributeCode()]);
+                continue;
+            }
+
+            $attribute = $this->eavConfig->getAttribute(
+                'customer_address',
+                $attributeMetadata->getAttributeCode()
+            );
+
+            $attributeForms = $attribute->getUsedInForms();
+
+            if ($attributeForms) {
+                $isAllowedOnFront = array_intersect(
+                    ['customer_register_address', 'customer_address_edit'],
+                    $attributeForms
+                );
+
+                if (!$isAllowedOnFront) {
+                    unset($attributes[$attributeMetadata->getAttributeCode()]);
+                }
             }
         }
 
