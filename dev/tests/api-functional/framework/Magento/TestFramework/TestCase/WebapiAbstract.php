@@ -103,9 +103,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 
     /**
      * Initialize fixture namespaces.
+     * //phpcs:disable
      */
     public static function setUpBeforeClass()
     {
+        //phpcs:enable
         parent::setUpBeforeClass();
         self::_setFixtureNamespace();
     }
@@ -114,9 +116,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * Run garbage collector for cleaning memory
      *
      * @return void
+     * //phpcs:disable
      */
     public static function tearDownAfterClass()
     {
+        //phpcs:enable
         //clear garbage in memory
         gc_collect_cycles();
 
@@ -134,8 +138,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Call safe delete for models which added to delete list
-     * Restore config values changed during the test
+     * Call safe delete for models which added to delete list, Restore config values changed during the test
      *
      * @return void
      */
@@ -179,6 +182,8 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 
     /**
      * Mark test to be executed for SOAP adapter only.
+     *
+     * @param ?string $message
      */
     protected function _markTestAsSoapOnly($message = null)
     {
@@ -189,6 +194,8 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 
     /**
      * Mark test to be executed for REST adapter only.
+     *
+     * @param ?string $message
      */
     protected function _markTestAsRestOnly($message = null)
     {
@@ -204,9 +211,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @param mixed $fixture
      * @param int $tearDown
      * @return void
+     * //phpcs:disable
      */
     public static function setFixture($key, $fixture, $tearDown = self::AUTO_TEAR_DOWN_AFTER_METHOD)
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         if (!isset(self::$_fixtures[$fixturesNamespace])) {
             self::$_fixtures[$fixturesNamespace] = [];
@@ -232,9 +241,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @param string $key
      * @return mixed
+     * //phpcs:disable
      */
     public static function getFixture($key)
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         if (array_key_exists($key, self::$_fixtures[$fixturesNamespace])) {
             return self::$_fixtures[$fixturesNamespace][$key];
@@ -248,9 +259,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @param \Magento\Framework\Model\AbstractModel $model
      * @param bool $secure
      * @return \Magento\TestFramework\TestCase\WebapiAbstract
+     * //phpcs:disable
      */
     public static function callModelDelete($model, $secure = false)
     {
+        //phpcs:enable
         if ($model instanceof \Magento\Framework\Model\AbstractModel && $model->getId()) {
             if ($secure) {
                 self::_enableSecureArea();
@@ -301,9 +314,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * Set fixtures namespace
      *
      * @throws \RuntimeException
+     * //phpcs:disable
      */
     protected static function _setFixtureNamespace()
     {
+        //phpcs:enable
         if (self::$_fixturesNamespace !== null) {
             throw new \RuntimeException('Fixture namespace is already set.');
         }
@@ -312,9 +327,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 
     /**
      * Unset fixtures namespace
+     * //phpcs:disable
      */
     protected static function _unsetFixtureNamespace()
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         unset(self::$_fixtures[$fixturesNamespace]);
         self::$_fixturesNamespace = null;
@@ -325,9 +342,12 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @throws \RuntimeException
      * @return string
+     * //phpcs:disable
      */
     protected static function _getFixtureNamespace()
     {
+        //phpcs:enable
+
         $fixtureNamespace = self::$_fixturesNamespace;
         if ($fixtureNamespace === null) {
             throw new \RuntimeException('Fixture namespace must be set.');
@@ -340,9 +360,12 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @param bool $flag
      * @return void
+     * //phpcs:disable
      */
     protected static function _enableSecureArea($flag = true)
     {
+        //phpcs:enable
+
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -389,9 +412,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * Delete array of fixtures
      *
      * @param array $fixtures
+     * //phpcs:disable
      */
     protected static function _deleteFixtures($fixtures)
     {
+        //phpcs:enable
         foreach ($fixtures as $fixture) {
             self::deleteFixture($fixture, true);
         }
@@ -403,9 +428,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @param string $key
      * @param bool $secure
      * @return void
+     * //phpcs:disable
      */
     public static function deleteFixture($key, $secure = false)
     {
+        //phpcs:enable
         $fixturesNamespace = self::_getFixtureNamespace();
         if (array_key_exists($key, self::$_fixtures[$fixturesNamespace])) {
             self::callModelDelete(self::$_fixtures[$fixturesNamespace][$key], $secure);
@@ -457,11 +484,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     /**
      * Update application config data
      *
-     * @param string $path              Config path with the form "section/group/node"
-     * @param string|int|null $value    Value of config item
-     * @param bool $cleanAppCache       If TRUE application cache will be refreshed
-     * @param bool $updateLocalConfig   If TRUE local config object will be updated too
-     * @param bool $restore             If TRUE config value will be restored after test run
+     * @param string $path Config path with the form "section/group/node"
+     * @param string|int|null $value Value of config item
+     * @param bool $cleanAppCache If TRUE application cache will be refreshed
+     * @param bool $updateLocalConfig If TRUE local config object will be updated too
+     * @param bool $restore If TRUE config value will be restored after test run
      * @return \Magento\TestFramework\TestCase\WebapiAbstract
      * @throws \RuntimeException
      */
@@ -521,6 +548,8 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Process rest exception result.
+     *
      * @param \Exception $e
      * @return array
      * <pre> ex.
@@ -667,6 +696,8 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Get actual wrapped errors.
+     *
      * @param \stdClass $errorNode
      * @return array
      */
@@ -695,6 +726,8 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Assert webapi errors.
+     *
      * @param array $serviceInfo
      * @param array $data
      * @param array $expectedErrorData
