@@ -22,9 +22,9 @@
     <preference for="Magento\Eav\Api\AttributeOptionManagementInterface" type="Magento\Eav\Model\Entity\Attribute\OptionManagement" />
     <preference for="Magento\Eav\Api\Data\AttributeOptionLabelInterface" type="Magento\Eav\Model\Entity\Attribute\OptionLabel" />
     <preference for="Magento\Eav\Api\Data\AttributeValidationRuleInterface" type="Magento\Eav\Model\Entity\Attribute\ValidationRule" />
-    <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Eav\Model\AttributeSearchResults" />
+    <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Eav\Model\AttributeSetSearchResults" />
+    <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Eav\Model\AttributeGroupSearchResults" />
     <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\TypeLocator" />
 
     <type name="Magento\Eav\Model\Entity\Attribute\Config">
