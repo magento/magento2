@@ -149,8 +149,11 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $actualResult = $this->model->getData($themePath);
         $this->assertEquals($expectedResult, $actualResult);
-        $this->assertEquals(json_encode($expectedResult), json_encode($actualResult),
-            "Translations should be sorted by key");
+        $this->assertEquals(
+            json_encode($expectedResult),
+            json_encode($actualResult),
+            "Translations should be sorted by key"
+        );
     }
 
     /**
