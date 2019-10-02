@@ -15,36 +15,17 @@ use Magento\Mtf\Fixture\FixtureFactory;
  */
 class UsedInForms extends DataSource
 {
-    /**
-     * used in forms fixture.
-     *
-     * @var Forms[]
-     */
-    public $forms;
 
     /**
      * @constructor
-     * @param FixtureFactory $fixtureFactory
      * @param array $data
      * @param array $params [optional]
      */
-    public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
+    public function __construct(array $data, array $params = [])
     {
         $this->params = $params;
         if (isset($data['dataset'])) {
-            foreach ($data['dataset'] as $forms) {
                 $this->data[] = 'Checkout';
-            }
         }
-    }
-
-    /**
-     * Return array.
-     *
-     * @return Store[]
-     */
-    public function getStores()
-    {
-        return $this->stores;
     }
 }
