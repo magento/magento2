@@ -481,7 +481,7 @@
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>Specify URL or {{base_url}} placeholder.</comment>
+                    <comment><![CDATA[Specify URL or {{base_url}} placeholder.]]></comment>
                 </field>
                 <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Base Link URL</label>
@@ -505,7 +505,7 @@
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.</comment>
+                    <comment><![CDATA[Specify URL or {{base_url}}, or {{unsecure_base_url}} placeholder.]]></comment>
                 </field>
                 <field id="base_link_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Secure Base Link URL</label>
