@@ -156,6 +156,7 @@
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="validateWholeGroup" xsi:type="boolean">true</item>
+                    <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                 </item>
             </argument>
             <field name="group_id" formElement="select">

@@ -221,6 +221,7 @@ class AdvancedInventory extends AbstractModifier
                 'component' => "Magento_Ui/js/form/components/group",
                 'label' => $labelField,
                 'breakLine' => false,
+                'additionalClasses' => 'admin__control-grouped',
                 'dataScope' => $fieldCode,
                 'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',

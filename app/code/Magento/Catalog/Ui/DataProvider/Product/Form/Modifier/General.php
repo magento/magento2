@@ -315,7 +315,7 @@ class General extends AbstractModifier
                 $meta,
                 [
                     'label' => __('Set Product as New From'),
-                    'additionalClasses' => 'admin__control-grouped-date',
+                    'additionalClasses' => 'admin__control-grouped-date admin__control-grouped',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
                 ]

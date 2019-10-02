@@ -38,6 +38,7 @@
                         <item name="label" xsi:type="string" translate="true">Manage Stock</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="manage_stock" formElement="select">
@@ -123,6 +124,7 @@
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="min_qty" formElement="input">
@@ -293,6 +295,7 @@
                         <item name="label" xsi:type="string" translate="true">Maximum Qty Allowed in Shopping Cart</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="max_sale_qty" formElement="input">
@@ -405,6 +408,7 @@
                         <item name="exports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.name}.backorders:visible</item>
                         </item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="backorders" formElement="select">
@@ -471,6 +475,7 @@
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="notify_stock_qty" formElement="input">
@@ -529,6 +534,7 @@
                         <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="enable_qty_increments" formElement="select">
@@ -595,6 +601,7 @@
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.enable_qty_increments</item>
                         </item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="qty_increments" component="Magento_CatalogInventory/js/components/qty-validator-changer" formElement="input">
@@ -660,6 +667,7 @@
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
+                        <item name="additionalClasses" xsi:type="string">admin__control-fields</item>
                     </item>
                 </argument>
                 <field name="is_in_stock" formElement="select">

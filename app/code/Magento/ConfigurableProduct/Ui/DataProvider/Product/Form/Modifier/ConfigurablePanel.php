@@ -591,6 +591,7 @@ class ConfigurablePanel extends AbstractModifier
             'componentType' => Container::NAME,
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
+            'additionalClasses' => 'admin__control-fields',
             'label' => $label,
             'dataScope' => '',
             'showLabel' => false

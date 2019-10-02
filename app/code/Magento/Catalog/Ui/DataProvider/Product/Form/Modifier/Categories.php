@@ -246,6 +246,7 @@ class Categories extends AbstractModifier
                         'label' => __('Categories'),
                         'dataScope' => '',
                         'breakLine' => false,
+                        'additionalClasses' => 'admin__control-grouped',
                         'formElement' => 'container',
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/group',

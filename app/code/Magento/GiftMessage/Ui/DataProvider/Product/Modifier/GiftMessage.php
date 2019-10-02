@@ -112,6 +112,7 @@ class GiftMessage extends AbstractModifier
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/group',
                         'label' => $groupConfig['arguments']['data']['config']['label'],
+                        'additionalClasses' => 'admin__control-grouped',
                         'breakLine' => false,
                         'sortOrder' => $fieldConfig['arguments']['data']['config']['sortOrder'],
                         'dataScope' => '',

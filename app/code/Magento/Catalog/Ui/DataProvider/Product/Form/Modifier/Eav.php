@@ -847,6 +847,7 @@ class Eav extends AbstractModifier
             [
                 'formElement' => 'container',
                 'componentType' => 'container',
+                'additionalClasses' => 'admin__control-grouped',
                 'breakLine' => false,
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'required' => $attribute->getIsRequired(),

@@ -311,7 +311,6 @@ class AttributeMerger
             'sortOrder' => $attributeConfig['sortOrder'],
             'type' => 'group',
             'config' => [
-                'hideAdminClasses' => true,
                 'template' => 'ui/group/group',
                 'additionalClasses' => $attributeCode
             ],

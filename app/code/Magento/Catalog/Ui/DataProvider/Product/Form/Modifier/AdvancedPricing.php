@@ -574,7 +574,7 @@ class AdvancedPricing extends AbstractModifier
                 $this->meta,
                 [
                     'label' => __('Special Price From'),
-                    'additionalClasses' => 'admin__control-grouped-date',
+                    'additionalClasses' => 'admin__control-grouped-date admin__control-grouped',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
                     'scopeLabel' =>
@@ -647,6 +647,13 @@ class AdvancedPricing extends AbstractModifier
                 ],
             ],
         ];
+
+        $path = $this->arrayManager->findPath(
+            static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_PRICE,
+            $this->meta,
+            null,
+            'children'
+        );
 
         $this->meta = $this->arrayManager->merge(
             $this->arrayManager->findPath(

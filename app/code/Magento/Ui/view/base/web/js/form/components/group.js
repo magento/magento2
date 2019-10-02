@@ -21,7 +21,6 @@ define([
             template: 'ui/group/group',
             fieldTemplate: 'ui/form/field',
             breakLine: true,
-            hideAdminClasses: false,
             validateWholeGroup: false,
             additionalClasses: {}
         },
@@ -72,8 +71,6 @@ define([
             }
 
             _.extend(this.additionalClasses, {
-                'admin__control-grouped': !this.breakLine && !this.hideAdminClasses,
-                'admin__control-fields': this.breakLine && !this.hideAdminClasses,
                 required:   this.required,
                 _error:     this.error,
                 _disabled:  this.disabled
