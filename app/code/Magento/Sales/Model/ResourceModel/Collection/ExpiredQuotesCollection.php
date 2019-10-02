@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\ResourceModel\Collection;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
+use Magento\Sales\Model\ExpireQuotesFilterFieldsProvider;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -40,15 +42,24 @@ class ExpiredQuotesCollection
     private $config;
 
     /**
+     * @var ExpireQuotesFilterFieldsProvider
+     */
+    private $expireQuotesFilterFieldsProvider;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param CollectionFactory $collectionFactory
+     * @param ExpireQuotesFilterFieldsProvider $expireQuotesFilterFieldsProvider
      */
     public function __construct(
         ScopeConfigInterface $config,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        ExpireQuotesFilterFieldsProvider $expireQuotesFilterFieldsProvider = null
     ) {
         $this->config = $config;
         $this->quoteCollectionFactory = $collectionFactory;
+        $this->expireQuotesFilterFieldsProvider = $expireQuotesFilterFieldsProvider
+            ?? ObjectManager::getInstance()->get(ExpireQuotesFilterFieldsProvider::class);
     }
 
     /**
@@ -73,6 +84,10 @@ class ExpiredQuotesCollection
         $quotes = $this->quoteCollectionFactory->create();
         $quotes->addFieldToFilter('store_id', $store->getId());
         $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
+
+        foreach ($this->expireQuotesFilterFieldsProvider->getFields() as $field => $condition) {
+            $quotes->addFieldToFilter($field, $condition);
+        }
 
         return $quotes;
     }
