@@ -12,11 +12,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
-        <after>
-            <magentoCLI stepKey="setSearchEngineToMysql" command="config:set {{SearchEngineMysqlConfigData.path}} {{SearchEngineMysqlConfigData.value}}"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        </after>
+        <after></after>
         <include>
             <group name="SearchEngineElasticsearch" />
         </include>
