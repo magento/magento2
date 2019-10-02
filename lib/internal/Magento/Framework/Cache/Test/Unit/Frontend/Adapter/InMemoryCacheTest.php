@@ -9,6 +9,9 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 use Magento\Framework\Cache\Frontend\Adapter\InMemoryCache;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Tests for InMemory cache frontend
+ */
 class InMemoryCacheTest extends TestCase
 {
     /** @var InMemoryCache */
@@ -199,7 +202,6 @@ class InMemoryCacheTest extends TestCase
 
         $this->assertEquals('non_expired_data', $this->frontend->load('not_expired_cache_key'));
     }
-
 
     /** @test */
     public function throwsNotSupportedErrorWhenBackendIsAccessed()

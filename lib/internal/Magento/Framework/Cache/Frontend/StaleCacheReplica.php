@@ -6,38 +6,40 @@
 
 namespace Magento\Framework\Cache\Frontend;
 
-
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Lock\LockManagerInterface;
 
+/**
+ * Stale cache replication frontend
+ *
+ * Stores cache in both master and slave adapters. But reads
+ * from slave when master is cache is not available.
+ */
 class StaleCacheReplica implements FrontendInterface
 {
-    /**
-     * @var FrontendInterface
-     */
+    /** @var FrontendInterface */
     private $masterCache;
 
-    /**
-     * @var FrontendInterface
-     */
+    /** @var FrontendInterface */
     private $slaveCache;
 
-    /**
-     * @var LockManagerInterface
-     */
+    /** @var LockManagerInterface */
     private $lockManager;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $lockId;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $masterOnlyIdentifiers;
 
-
+    /**
+     * StaleCacheReplica constructor.
+     * @param FrontendInterface $masterCache
+     * @param FrontendInterface $slaveCache
+     * @param LockManagerInterface $lockManager
+     * @param string $lockId
+     * @param array $masterOnlyIdentifiers
+     */
     public function __construct(
         FrontendInterface $masterCache,
         FrontendInterface $slaveCache,
@@ -53,7 +55,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function test($identifier)
     {
@@ -61,7 +63,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function load($identifier)
     {
@@ -80,7 +82,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -91,7 +93,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function remove($identifier)
     {
@@ -99,7 +101,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
@@ -107,7 +109,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getBackend()
     {
@@ -115,7 +117,7 @@ class StaleCacheReplica implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getLowLevelFrontend()
     {

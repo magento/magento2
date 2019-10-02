@@ -9,8 +9,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
- * InMemory cache adapter for tests
- * and long running applications
+ * InMemory cache adapter for tests and long running applications
  */
 class InMemoryCache implements FrontendInterface
 {
@@ -28,7 +27,7 @@ class InMemoryCache implements FrontendInterface
     private $dataExpires = [];
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function test($identifier)
     {
@@ -36,7 +35,7 @@ class InMemoryCache implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function load($identifier)
     {
@@ -46,7 +45,7 @@ class InMemoryCache implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -61,7 +60,7 @@ class InMemoryCache implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function remove($identifier)
     {
@@ -70,7 +69,7 @@ class InMemoryCache implements FrontendInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function clean($mode = self::CLEAN_ALL, array $tags = [])
     {

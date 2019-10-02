@@ -255,7 +255,6 @@ class System implements ConfigTypeInterface
         );
     }
 
-
     /**
      * Loads all cache data for configuration
      *
@@ -361,12 +360,20 @@ class System implements ConfigTypeInterface
         );
     }
 
+    /**
+     * Retrieves available data scopes from cache
+     *
+     * @return string[]
+     */
     private function getAvailableDataScopes(): array
     {
         if ($this->availableDataScopes === null) {
-            $this->loadFromCacheAndDecode($this->configType . '_scopes', function ($scopes) {
-                $this->availableDataScopes = $scopes;
-            });
+            $this->loadFromCacheAndDecode(
+                $this->configType . '_scopes',
+                function ($scopes) {
+                    $this->availableDataScopes = $scopes;
+                }
+            );
         }
 
         return $this->availableDataScopes ?? [];
@@ -473,5 +480,4 @@ class System implements ConfigTypeInterface
             $cleanAction
         );
     }
-
 }

@@ -174,7 +174,6 @@ class StaleCacheReplicaTest extends TestCase
         $this->assertEquals(false, $this->cache->load('master_only_identifier'));
     }
 
-
     /** @test */
     public function returnsTrueWhenCacheEntryIsAvailableInMaster()
     {
@@ -196,9 +195,11 @@ class StaleCacheReplicaTest extends TestCase
     {
         $zendCache = Zend_Cache::factory('core', 'test');
         $replica = $this->createCache(
-            new Zend(function () use ($zendCache) {
-                return $zendCache;
-            })
+            new Zend(
+                function () use ($zendCache) {
+                    return $zendCache;
+                }
+            )
         );
 
         $this->assertEquals($zendCache->getBackend(), $replica->getBackend());
@@ -209,9 +210,11 @@ class StaleCacheReplicaTest extends TestCase
     {
         $zendCache = Zend_Cache::factory('core', 'test');
         $replica = $this->createCache(
-            new Zend(function () use ($zendCache) {
-                return $zendCache;
-            })
+            new Zend(
+                function () use ($zendCache) {
+                    return $zendCache;
+                }
+            )
         );
 
         $this->assertEquals($zendCache, $replica->getLowLevelFrontend());

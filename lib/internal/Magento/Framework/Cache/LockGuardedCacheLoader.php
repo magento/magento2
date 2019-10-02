@@ -104,7 +104,7 @@ class LockGuardedCacheLoader
      * @param callable $dataLoader
      * @param callable $dataCollector
      * @param callable $dataSaver
-     * @param callable $staleDataLoader
+     * @param callable|null $dataFormatter
      * @return mixed
      */
     public function nonBlockingLockedLoadData(

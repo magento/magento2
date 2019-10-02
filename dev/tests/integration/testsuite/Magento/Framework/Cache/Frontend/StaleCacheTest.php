@@ -46,7 +46,6 @@ class StaleCacheTest extends TestCase
         );
     }
 
-
     /** @test */
     public function loadsCacheByUsingFormattedIdentifier()
     {

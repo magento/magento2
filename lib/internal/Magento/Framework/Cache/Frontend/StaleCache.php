@@ -12,7 +12,6 @@ use Magento\Framework\Config\CacheInterface;
 
 /**
  * Stale config cache instance
- *
  */
 class StaleCache implements CacheInterface
 {
@@ -24,16 +23,20 @@ class StaleCache implements CacheInterface
 
     /** @var string */
     private $identifierFormat;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $cacheType;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $cacheTag;
 
-
+    /**
+     * StaleCache constructor.
+     * @param FrontendPool $cacheFrontendPool
+     * @param string $cacheType
+     * @param string $identifierFormat
+     * @param string $cacheTag
+     */
     public function __construct(
         FrontendPool $cacheFrontendPool,
         string $cacheType,
@@ -46,6 +49,9 @@ class StaleCache implements CacheInterface
         $this->cacheTag = $cacheTag;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
         $tags[] = $this->cacheTag;
@@ -59,7 +65,7 @@ class StaleCache implements CacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function test($identifier)
     {
@@ -67,7 +73,7 @@ class StaleCache implements CacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function load($identifier)
     {
@@ -75,7 +81,7 @@ class StaleCache implements CacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function remove($identifier)
     {
@@ -83,7 +89,7 @@ class StaleCache implements CacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
@@ -96,7 +102,6 @@ class StaleCache implements CacheInterface
 
             return $result;
         }
-
 
         $tags[] = $this->cacheTag;
         return $this->findFrontend()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tags);
@@ -135,10 +140,12 @@ class StaleCache implements CacheInterface
     }
 
     /**
-     * @param $identifier
+     * Formats cache identifier for stale cache storage
+     *
+     * @param string $identifier
      * @return string
      */
-    private function formatCacheIdentifier($identifier): string
+    private function formatCacheIdentifier(string $identifier): string
     {
         return sprintf($this->identifierFormat, $identifier);
     }

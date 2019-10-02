@@ -61,15 +61,19 @@ class LockGuardedCacheLoaderTest extends TestCase
     /** @test */
     public function blockingLoaderWaitsForCacheBeingUnlockedBeforeLoadingData()
     {
-        $this->addLoadSequence(function () {
-            $this->lockManager->lock('lock1');
-            return false;
-        });
+        $this->addLoadSequence(
+            function () {
+                $this->lockManager->lock('lock1');
+                return false;
+            }
+        );
 
-        $this->addLoadSequence(function () {
-            $this->lockManager->unlock('lock1');
-            return ['cached'];
-        });
+        $this->addLoadSequence(
+            function () {
+                $this->lockManager->unlock('lock1');
+                return ['cached'];
+            }
+        );
 
         $result = $this->lockGuard->lockedLoadData(
             'lock1',
@@ -84,15 +88,19 @@ class LockGuardedCacheLoaderTest extends TestCase
     /** @test */
     public function blockingLoaderWaitsForLockReleaseBeforeLoadingUnCachedData()
     {
-        $this->addLoadSequence(function () {
-            $this->lockManager->lock('lock1');
-            return false;
-        });
+        $this->addLoadSequence(
+            function () {
+                $this->lockManager->lock('lock1');
+                return false;
+            }
+        );
 
-        $this->addLoadSequence(function () {
-            $this->lockManager->unlock('lock1');
-            return false;
-        });
+        $this->addLoadSequence(
+            function () {
+                $this->lockManager->unlock('lock1');
+                return false;
+            }
+        );
 
         $result = $this->lockGuard->lockedLoadData(
             'lock1',
@@ -107,15 +115,19 @@ class LockGuardedCacheLoaderTest extends TestCase
     /** @test */
     public function blockingLoaderStoresDataViaSaveHandle()
     {
-        $this->addLoadSequence(function () {
-            $this->lockManager->lock('lock1');
-            return false;
-        });
+        $this->addLoadSequence(
+            function () {
+                $this->lockManager->lock('lock1');
+                return false;
+            }
+        );
 
-        $this->addLoadSequence(function () {
-            $this->lockManager->unlock('lock1');
-            return false;
-        });
+        $this->addLoadSequence(
+            function () {
+                $this->lockManager->unlock('lock1');
+                return false;
+            }
+        );
 
         $this->lockGuard->lockedLoadData(
             'lock1',

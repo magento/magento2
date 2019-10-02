@@ -109,7 +109,6 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-
     public function testClearingDefaultCacheAndLockingItReturnsStaleCachedValue()
     {
         // First uncached call to configuration
