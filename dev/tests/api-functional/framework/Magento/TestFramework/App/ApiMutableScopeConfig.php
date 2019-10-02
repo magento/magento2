@@ -89,13 +89,12 @@ class ApiMutableScopeConfig implements MutableScopeConfigInterface
     {
         $pathParts = explode('/', $path);
         $store = 0;
-        if ($scopeType === \Magento\Store\Model\ScopeInterface::SCOPE_STORE) {
-            if ($scopeCode !== null) {
-                $store = ObjectManager::getInstance()
+        if ($scopeType === \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            && $scopeCode !== null) {
+            $store = ObjectManager::getInstance()
                     ->get(\Magento\Store\Api\StoreRepositoryInterface::class)
                     ->get($scopeCode)
                     ->getId();
-            }
         }
         $configData = [
             'section' => $pathParts[0],
