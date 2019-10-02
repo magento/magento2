@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontElasticsearchSearchInvalidValueTest">
+    <test name="StorefrontElasticsearch6SearchInvalidValueTest">
         <annotations>
             <features value="Search"/>
             <stories value="Search Product on Storefront"/>
@@ -96,11 +96,11 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
-            <argument name="phrase" value="?SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^"/>
+            <argument name="phrase" value="?{{ProductWithSpecialSymbols.name}};"/>
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbols"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbolsSecondTime">
-            <argument name="phrase" value="? SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^ ;"/>
+            <argument name="phrase" value="? {{ProductWithSpecialSymbols.name}} ;"/>
         </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbolsSecondTime"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
@@ -111,13 +111,5 @@
             <argument name="phrase" value="? anything at all ;"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForForthSearchTerm"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSearchableString">
-            <argument name="phrase" value="?searchable string;"/>
-        </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSearchableString"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSearchableStringSecondTime">
-            <argument name="phrase" value="? searchable string ;"/>
-        </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSearchableStringSecondTime"/>
     </test>
 </tests>
