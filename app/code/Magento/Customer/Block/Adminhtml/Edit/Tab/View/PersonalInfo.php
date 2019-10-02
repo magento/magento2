@@ -314,11 +314,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
         try {
             $address = $this->accountManagement->getDefaultBillingAddress($this->getCustomer()->getId());
         } catch (NoSuchEntityException $e) {
-            return __('The customer does not have default billing address.');
+            return $this->escapeHtml(__('The customer does not have default billing address.'));
         }
 
         if ($address === null) {
-            return __('The customer does not have default billing address.');
+            return $this->escapeHtml(__('The customer does not have default billing address.'));
         }
 
         return $this->addressHelper->getFormatTypeRenderer(
