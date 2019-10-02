@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Authorizenet\Test\Unit\Model;
 
@@ -306,7 +307,9 @@ class DirectpostTest extends TestCase
     }
 
     /**
-     * @@expectedException \Magento\Framework\Exception\LocalizedException
+     * Test capture has parent transaction id.
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCaptureHasParentTransactionId()
     {
@@ -550,13 +553,10 @@ class DirectpostTest extends TestCase
     /**
      * Checks response failures behaviour.
      *
-     * @param int $responseCode
-     * @param int $failuresHandlerCalls
      * @return void
-     *
      * @expectedException \Magento\Framework\Exception\LocalizedException
      */
-    public function testCheckResponseCodeFailureDefault(): void
+    public function testCheckResponseCodeFailureDefault()
     {
         $responseCode = 999999;
         $this->responseMock->expects($this->once())->method('getXResponseCode')->willReturn($responseCode);
