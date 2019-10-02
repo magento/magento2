@@ -27,6 +27,8 @@ $attribute->setAttributeCode(
     $groupId
 )->setAttributeSetId(
     $attributeSetId
+)->setFrontendLabel(
+    'fpt_for_all_front_label'
 )->setFrontendInput(
     'weee'
 )->setIsUserDefined(
