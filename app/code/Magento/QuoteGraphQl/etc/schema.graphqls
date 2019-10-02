@@ -358,5 +358,6 @@ type CartItemSelectedOptionValuePrice {
 }
 
 type Order {
-    order_id: String
+    order_number: String!
+    order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
 }
