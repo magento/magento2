@@ -46,7 +46,6 @@ class Memory
     public function getRealMemoryUsage()
     {
         $pid = getmypid();
-
         try {
             // try to use the Windows command line
             // some ports of Unix commands on Windows, such as MinGW, have limited capabilities and cannot be used
