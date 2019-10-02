@@ -5,12 +5,15 @@
  */
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Multishipping\Controller\Checkout\Address;
+
 /**
  * Class NewShipping
  *
- * @package Magento\Multishipping\Controller\Checkout\Address
+ * @package Address
  */
-class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
+class NewShipping extends Address implements HttpGetActionInterface
 {
     /**
      * Create New Shipping address Form
