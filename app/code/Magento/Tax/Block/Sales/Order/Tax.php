@@ -107,7 +107,7 @@ class Tax extends \Magento\Framework\View\Element\Template
         $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
         $totals = $this->getParentBlock()->getTotals();
         if ($totals['grand_total']) {
-            $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
+            $this->getParentBlock()->addTotal($taxTotal, 'grand_total');
         }
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
@@ -320,7 +320,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                 ]
             );
             $parent->addTotal($totalExcl, 'grand_total');
-            $parent->addTotal($totalIncl, 'tax');
+            $parent->addTotal($totalIncl, 'grand_total');
             $this->_addTax('grand_total');
         }
         return $this;
