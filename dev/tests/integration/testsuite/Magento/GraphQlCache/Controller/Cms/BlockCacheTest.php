@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Controller\Cms;
 
+use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\BlockRepository;
-use Magento\GraphQl\Controller\GraphQl;
+use Magento\Framework\App\Response\HttpInterface as HttpResponse;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
@@ -20,23 +21,27 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
  */
 class BlockCacheTest extends AbstractGraphqlCacheTest
 {
-    /**
-     * @var GraphQl
-     */
-    private $graphqlController;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
+    private function assertPageCacheMissWithTagsForCmsBlock(HttpResponse $response, BlockInterface $block): void
     {
-        parent::setUp();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
+        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $this->assertCmsBlockCacheTags($response, $block);
+    }
+
+    private function assertPageCacheHitWithTagsForCmsBlock(HttpResponse $response, BlockInterface $block): void
+    {
+        $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $this->assertCmsBlockCacheTags($response, $block);
+    }
+
+    private function assertCmsBlockCacheTags(HttpResponse $response, BlockInterface $block): void
+    {
+        $expectedCacheTags  = ['cms_b', 'cms_b_' . $block->getId(), 'cms_b_' . $block->getIdentifier(), 'FPC'];
+        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
+        $actualCacheTags    = explode(',', $rawActualCacheTags);
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 
     /**
-     * Test that the correct cache tags get added to request for cmsBlocks
-     *
      * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Cms/_files/blocks.php
      */
@@ -46,9 +51,9 @@ class BlockCacheTest extends AbstractGraphqlCacheTest
         $blockRepository = $this->objectManager->get(BlockRepository::class);
 
         $block1Identifier = 'fixture_block';
-        $block1 = $blockRepository->getById($block1Identifier);
+        $block1           = $blockRepository->getById($block1Identifier);
         $block2Identifier = 'enabled_block';
-        $block2 = $blockRepository->getById($block2Identifier);
+        $block2           = $blockRepository->getById($block2Identifier);
 
         $queryBlock1
             = <<<QUERY
@@ -77,60 +82,30 @@ QUERY;
 QUERY;
 
         // check to see that the first entity gets a MISS when called the first time
-        $request = $this->prepareRequest($queryBlock1);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block1->getId(), 'cms_b_' . $block1->getIdentifier(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $queryBlock1]);
+        $this->assertPageCacheMissWithTagsForCmsBlock($response, $block1);
 
-        // check to see that the second entity gets a miss when called the first time
-        $request = $this->prepareRequest($queryBlock2);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block2->getId(), 'cms_b_' . $block2->getIdentifier(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+        // check to see that the second entity gets a MISS when called the first time
+        $response = $this->dispatchGraphQlGETRequest(['query' => $queryBlock2]);
+        $this->assertPageCacheMissWithTagsForCmsBlock($response, $block2);
 
         // check to see that the first entity gets a HIT when called the second time
-        $request = $this->prepareRequest($queryBlock1);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block1->getId(), 'cms_b_' . $block1->getIdentifier(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $queryBlock1]);
+        $this->assertPageCacheHitWithTagsForCmsBlock($response, $block1);
 
         // check to see that the second entity gets a HIT when called the second time
-        $request = $this->prepareRequest($queryBlock2);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block2->getId(), 'cms_b_' . $block2->getIdentifier(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $queryBlock2]);
+        $this->assertPageCacheHitWithTagsForCmsBlock($response, $block2);
 
         $block1->setTitle('something else that causes invalidation');
         $blockRepository->save($block1);
 
         // check to see that the first entity gets a MISS and it was invalidated
-        $request = $this->prepareRequest($queryBlock1);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block1->getId(), 'cms_b_' . $block1->getIdentifier(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $queryBlock1]);
+        $this->assertPageCacheMissWithTagsForCmsBlock($response, $block1);
 
         // check to see that the first entity gets a HIT when called the second time
-        $request = $this->prepareRequest($queryBlock1);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_b', 'cms_b_' . $block1->getId(), 'cms_b_' . $block1->getIdentifier(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $queryBlock1]);
+        $this->assertPageCacheHitWithTagsForCmsBlock($response, $block1);
     }
 }
