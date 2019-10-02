@@ -6,9 +6,8 @@
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
 /**
- * New Shipping
- * 
  * Class NewShipping
+ *
  * @package Magento\Multishipping\Controller\Checkout\Address
  */
 class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
