@@ -32,12 +32,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Set Attribute Set Filter
      *
-     * @param \Magento\Framework\Api\Filter $filter
+     * @param \Magento\Framework\Api\Filter $setId
      * @return $this
      */
-    public function setAttributeSetFilter($filter)
+    public function setAttributeSetFilter($setId)
     {
-        $this->addFieldToFilter('attribute_set_id', [$filter->getConditionType() => $filter->getValue()]);
+        $this->addFieldToFilter('attribute_set_id', [$setId->getConditionType() => $setId->getValue()]);
         $this->setOrder('sort_order');
         return $this;
     }
