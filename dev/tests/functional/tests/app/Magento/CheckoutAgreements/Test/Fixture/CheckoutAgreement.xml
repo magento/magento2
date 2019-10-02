@@ -19,6 +19,7 @@
         <field name="is_active" is_required="" />
         <field name="is_html" is_required="" />
         <field name="mode" is_required="" />
+        <field name="used_in_forms" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\UsedInForms" />
         <field name="stores" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores" />
     </fixture>
 </config>

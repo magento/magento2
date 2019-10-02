@@ -21,6 +21,10 @@
             <selector>[name="stores[0]"]</selector>
             <input>multiselectgrouplist</input>
         </stores>
+        <used_in_forms>
+            <selector>[name="used_in_forms[1]"]</selector>
+            <input>multiselectgrouplist</input>
+        </used_in_forms>
         <checkbox_text />
         <content />
         <content_height />

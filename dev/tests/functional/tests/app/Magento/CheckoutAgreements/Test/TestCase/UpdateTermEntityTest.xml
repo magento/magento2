@@ -17,6 +17,7 @@
             <data name="agreementUpdated/data/is_html" xsi:type="string">HTML</data>
             <data name="agreementUpdated/data/mode" xsi:type="string">Manually</data>
             <data name="agreementUpdated/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/used_in_forms/dataset/0" xsi:type="string">checkout</data>
             <data name="agreementUpdated/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
             <data name="agreementUpdated/data/content" xsi:type="string">TestMessage%isolation%</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -36,6 +37,7 @@
             <data name="agreementUpdated/data/is_html" xsi:type="string">Text</data>
             <data name="agreementUpdated/data/mode" xsi:type="string">Manually</data>
             <data name="agreementUpdated/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/used_in_forms/dataset/0" xsi:type="string">checkout</data>
             <data name="agreementUpdated/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
             <data name="agreementUpdated/data/content" xsi:type="string">&lt;html&gt;</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
@@ -55,6 +57,7 @@
             <data name="agreementUpdated/data/is_html" xsi:type="string">HTML</data>
             <data name="agreementUpdated/data/mode" xsi:type="string">Manually</data>
             <data name="agreementUpdated/data/stores/dataset/0" xsi:type="string">default</data>
+            <data name="agreement/data/used_in_forms/dataset/0" xsi:type="string">checkout</data>
             <data name="agreementUpdated/data/checkbox_text" xsi:type="string">test_checkbox%isolation%</data>
             <data name="agreementUpdated/data/content" xsi:type="string">TestMessage%isolation%</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
