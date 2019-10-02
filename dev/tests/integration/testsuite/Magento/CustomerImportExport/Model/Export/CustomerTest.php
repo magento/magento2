@@ -9,6 +9,7 @@ namespace Magento\CustomerImportExport\Model\Export;
 use Magento\Framework\Registry;
 use Magento\Customer\Model\Attribute;
 use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Import;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -20,6 +21,8 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollecti
 
 /**
  * Tests for customer export model.
+ *
+ * @magentoAppArea adminhtml
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,6 +35,16 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * @var ObjectManagerInterface
      */
     private $objectManager;
+
+    /**
+     * @var array
+     */
+    private $attributeValues;
+
+    /**
+     * @var array
+     */
+    private $attributeTypes;
 
     /**
      * @inheritdoc
@@ -49,10 +62,13 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExport()
     {
-        $expectedAttributes = [];
-        /** @var $collection Collection */
+        /** @var Collection $collection */
         $collection = $this->objectManager->create(Collection::class);
-        /** @var $attribute Attribute */
+        $this->initAttributeValues($collection);
+        $this->initAttributeTypes($collection);
+
+        $expectedAttributes = [];
+        /** @var Attribute $attribute */
         foreach ($collection as $attribute) {
             $expectedAttributes[] = $attribute->getAttributeCode();
         }
@@ -72,10 +88,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNotEmpty($lines['data'], 'No data was exported.');
 
-        /** @var $customers CustomerModel[] */
+        /** @var CustomerModel[] $customers */
         $customers = $this->objectManager->create(CustomerCollection::class)->getItems();
         foreach ($customers as $customer) {
-            $data = $customer->getData();
+            $data = $this->processCustomerData($customer, $expectedAttributes);
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
             array_walk(
@@ -89,6 +105,96 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
             $this->assertArraySubset($exportData, $data);
         }
+    }
+
+    /**
+     * Initialize attribute option values.
+     *
+     * @param Collection $attributeCollection
+     * @return $this
+     */
+    private function initAttributeValues(Collection $attributeCollection): CustomerTest
+    {
+        /** @var Attribute $attribute */
+        foreach ($attributeCollection as $attribute) {
+            $this->attributeValues[$attribute->getAttributeCode()] = $this->_model->getAttributeOptions($attribute);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Initialize attribute types.
+     *
+     * @param \Magento\Customer\Model\ResourceModel\Attribute\Collection $attributeCollection
+     * @return $this
+     */
+    private function initAttributeTypes(Collection $attributeCollection): CustomerTest
+    {
+        /** @var Attribute $attribute */
+        foreach ($attributeCollection as $attribute) {
+            $this->attributeTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Format Customer data as same as export data.
+     *
+     * @param CustomerModel $item
+     * @param array $expectedAttributes
+     * @return array
+     */
+    private function processCustomerData(CustomerModel $item, array $expectedAttributes): array
+    {
+        $data = [];
+        foreach ($expectedAttributes as $attributeCode) {
+            $attributeValue = $item->getData($attributeCode);
+
+            if ($this->isMultiselect($attributeCode)) {
+                $values = [];
+                $attributeValue = explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attributeValue);
+                foreach ($attributeValue as $value) {
+                    $values[] = $this->getAttributeValueById($attributeCode, $value);
+                }
+                $data[$attributeCode] = implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $values);
+            } else {
+                $data[$attributeCode] = $this->getAttributeValueById($attributeCode, $attributeValue);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Check that attribute is multiselect type by attribute code.
+     *
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function isMultiselect(string $attributeCode): bool
+    {
+        return isset($this->attributeTypes[$attributeCode])
+            && $this->attributeTypes[$attributeCode] === 'multiselect';
+    }
+
+    /**
+     * Return attribute value by id.
+     *
+     * @param string $attributeCode
+     * @param int|string $valueId
+     * @return mixed
+     */
+    private function getAttributeValueById(string $attributeCode, $valueId)
+    {
+        if (isset($this->attributeValues[$attributeCode])
+            && isset($this->attributeValues[$attributeCode][$valueId])
+        ) {
+            return $this->attributeValues[$attributeCode][$valueId];
+        }
+
+        return $valueId;
     }
 
     /**
@@ -172,14 +278,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     public function testFilterEntityCollection()
     {
         $createdAtDate = '2038-01-01';
-
-        /** @var $objectManager ObjectManagerInterface */
-        $objectManager = $this->objectManager;
-
         /**
          * Change created_at date of first customer for future filter test.
          */
-        $customers = $objectManager->get(Registry::class)
+        $customers = $this->objectManager->get(Registry::class)
             ->registry('_fixture/Magento_ImportExport_Customer_Collection');
         $customers[0]->setCreatedAt($createdAtDate);
         $customers[0]->save();
@@ -239,6 +341,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
                 }
             }
         }
+
         return $data;
     }
 }
