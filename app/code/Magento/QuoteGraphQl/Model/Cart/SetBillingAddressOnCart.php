@@ -56,13 +56,10 @@ class SetBillingAddressOnCart
     {
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
+        $useForShipping = isset($billingAddressInput['use_for_shipping'])
+            ? (bool)$billingAddressInput['use_for_shipping'] : false;
         $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
-            ? (bool)$billingAddressInput['same_as_shipping'] : false;
-
-        if (!isset($billingAddressInput['same_as_shipping'])) {
-            $sameAsShipping = isset($billingAddressInput['use_for_shipping'])
-                ? (bool)$billingAddressInput['use_for_shipping'] : false;
-        }
+            ? (bool)$billingAddressInput['same_as_shipping'] : $useForShipping;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
