@@ -86,7 +86,10 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     }
 
     /**
+     * Get carrier title
+     *
      * @param string $code
+     *
      * @return \Magento\Framework\Phrase|string|bool
      */
     public function getCarrierTitle($code)
