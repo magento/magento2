@@ -13,6 +13,8 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Catalog\Model\Product\Type;
 
 /**
+ * Weee tax model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -88,9 +90,6 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      */
     protected $accountManagement;
 
-    /** @var array */
-    private $weeAtrributesCache = [];
-
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -144,6 +143,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get the weee amount
+     *
      * @param Product $product
      * @param null|false|\Magento\Framework\DataObject $shipping
      * @param null|false|\Magento\Framework\DataObject $billing
@@ -173,6 +174,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get the weee amount excluding tax
+     *
      * @param Product $product
      * @param null|false|\Magento\Framework\DataObject $shipping
      * @param null|false|\Magento\Framework\DataObject $billing
@@ -203,6 +206,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get the weee attribute codes
+     *
      * @param bool $forceEnabled
      * @return array
      */
@@ -214,8 +219,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Wee tax attribute codes
      *
-     * @param  null|string|bool|int|Store $store
-     * @param  bool $forceEnabled
+     * @param null|string|bool|int|Store $store
+     * @param bool $forceEnabled
      * @return array
      */
     public function getWeeeTaxAttributeCodes($store = null, $forceEnabled = false)
@@ -231,6 +236,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve the relevant wee tax attributes assigned to a product by location
+     *
      * @param Product $product
      * @param null|false|\Magento\Quote\Model\Quote\Address $shipping
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
@@ -241,6 +248,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getProductWeeeAttributes(
         $product,
@@ -250,148 +258,136 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $calculateTax = null,
         $round = true
     ) {
-        $cacheKey = sprintf(
-            '%s-%s-%s-%s-%s',
-            $product->getId(),
-            $shipping && $shipping->getId() ? $shipping->getId() : '',
-            $billing && $billing->getId() ? $billing->getId() : '',
-            $website && $website->getId() ? $website->getId() : $website ? $website : '',
-            $calculateTax,
-            $round
-        );
         $result = [];
-        if (isset($this->weeAtrributesCache[$cacheKey])) {
-            $result = $this->weeAtrributesCache[$cacheKey];
+        $websiteId = null;
+        /** @var \Magento\Store\Model\Store $store */
+        $store = null;
+        if (!$website) {
+            $store = $product->getStore();
+            if ($store) {
+                $websiteId = $store->getWebsiteId();
+            }
+        }
+        if (!$websiteId) {
+            $websiteObject = $this->_storeManager->getWebsite($website);
+            $websiteId = $websiteObject->getId();
+            $store = $websiteObject->getDefaultGroup()->getDefaultStore();
+        }
+
+        $allWeee = $this->getWeeeTaxAttributeCodes($store);
+        if (!$allWeee) {
+            return $result;
+        }
+
+        /** @var Calculation $calculator */
+        $calculator = $this->_calculationFactory->create();
+
+        $customerId = $this->_customerSession->getCustomerId();
+        if ($shipping && $shipping->getCountryId()) {
+            $customerTaxClass = $shipping->getQuote()->getCustomerTaxClassId();
         } else {
-            $websiteId = null;
-            /** @var \Magento\Store\Model\Store $store */
-            $store = null;
-            if (!$website) {
-                $store = $product->getStore();
-                if ($store) {
-                    $websiteId = $store->getWebsiteId();
-                }
-            }
-            if (!$websiteId) {
-                $websiteObject = $this->_storeManager->getWebsite($website);
-                $websiteId = $websiteObject->getId();
-                $store = $websiteObject->getDefaultGroup()->getDefaultStore();
-            }
-
-            $allWeee = $this->getWeeeTaxAttributeCodes($store);
-            if (!$allWeee) {
-                return $result;
-            }
-
-            /** @var \Magento\Tax\Model\Calculation $calculator */
-            $calculator = $this->_calculationFactory->create();
-
-            $customerId = $this->_customerSession->getCustomerId();
-            if ($shipping && $shipping->getCountryId()) {
-                $customerTaxClass = $shipping->getQuote()->getCustomerTaxClassId();
+            // if customer logged use it default shipping and billing address
+            if ($customerId) {
+                $shipping = $this->accountManagement->getDefaultShippingAddress($customerId);
+                $billing = $this->accountManagement->getDefaultBillingAddress($customerId);
+                $customerTaxClass = null;
             } else {
-                // if customer logged use it default shipping and billing address
-                if ($customerId) {
-                    $shipping = $this->accountManagement->getDefaultShippingAddress($customerId);
-                    $billing = $this->accountManagement->getDefaultBillingAddress($customerId);
-                    $customerTaxClass = null;
-                } else {
-                    $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
-                    $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
-                    if (!empty($billingAddressArray)) {
-                        $billing = new \Magento\Framework\DataObject($billingAddressArray);
-                    }
-                    if (!empty($shippingAddressArray)) {
-                        $shipping = new \Magento\Framework\DataObject($shippingAddressArray);
-                    }
-                    $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
+                $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
+                $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
+                if (!empty($billingAddressArray)) {
+                    $billing = new \Magento\Framework\DataObject($billingAddressArray);
                 }
+                if (!empty($shippingAddressArray)) {
+                    $shipping = new \Magento\Framework\DataObject($shippingAddressArray);
+                }
+                $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
             }
+        }
 
-            $rateRequest = $calculator->getRateRequest(
-                $shipping,
-                $billing,
-                $customerTaxClass,
-                $store,
-                $customerId
-            );
-            $defaultRateRequest = $calculator->getDefaultRateRequest($store);
+        $rateRequest = $calculator->getRateRequest(
+            $shipping,
+            $billing,
+            $customerTaxClass,
+            $store,
+            $customerId
+        );
+        $defaultRateRequest = $calculator->getDefaultRateRequest($store);
 
-            $productAttributes = $this->getResource()->fetchWeeeTaxCalculationsByEntity(
-                $rateRequest->getCountryId(),
-                $rateRequest->getRegionId(),
-                $websiteId,
-                $store->getId(),
-                $product->getId()
-            );
+        $productAttributes = $this->getResource()->fetchWeeeTaxCalculationsByEntity(
+            $rateRequest->getCountryId(),
+            $rateRequest->getRegionId(),
+            $websiteId,
+            $store->getId(),
+            $product->getId()
+        );
 
-            foreach ($productAttributes as $attribute) {
-                $value = $attribute['weee_value'];
-                if ($value) {
-                    $taxAmount = $amount = 0;
-                    $amount = $value;
-                    $amountExclTax = $value;
-                    if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
-                        /** @var \Magento\Tax\Model\Calculation $calculator */
-                        $defaultPercent = $calculator->getRate(
-                            $defaultRateRequest->setProductClassId($product->getTaxClassId())
-                        );
-                        $currentPercent = $calculator->getRate(
-                            $rateRequest->setProductClassId($product->getTaxClassId())
-                        );
-                        if ($this->_taxData->priceIncludesTax($store)) {
-                            $amountInclTax = $value / (100 + $defaultPercent) * (100 + $currentPercent);
-                            if ($round) {
-                                $amountInclTax = $this->priceCurrency->round($amountInclTax);
-                            }
-                            $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
-                            if ($round) {
-                                $taxAmount = $this->priceCurrency->round($taxAmount);
-                            }
-                            $amountExclTax = $amountInclTax - $taxAmount;
-                        } else {
-                            $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
-                            if (is_array($appliedRates) && count($appliedRates) > 1) {
-                                $taxAmount = 0;
-                                foreach ($appliedRates as $appliedRate) {
-                                    $taxRate = $appliedRate['percent'];
-                                    if ($round) {
-                                        $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
-                                    } else {
-                                        $taxAmount += $value * $taxRate / 100;
-                                    }
-                                }
-                            } else {
+        foreach ($productAttributes as $attribute) {
+            $value = $attribute['weee_value'];
+            if ($value) {
+                $taxAmount = $amount = 0;
+                $amount = $value;
+                $amountExclTax = $value;
+                if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
+                    /** @var Calculation $calculator */
+                    $defaultPercent = $calculator->getRate(
+                        $defaultRateRequest->setProductClassId($product->getTaxClassId())
+                    );
+                    $currentPercent = $calculator->getRate(
+                        $rateRequest->setProductClassId($product->getTaxClassId())
+                    );
+                    if ($this->_taxData->priceIncludesTax($store)) {
+                        $amountInclTax = $value / (100 + $defaultPercent) * (100 + $currentPercent);
+                        if ($round) {
+                            $amountInclTax = $this->priceCurrency->round($amountInclTax);
+                        }
+                        $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
+                        if ($round) {
+                            $taxAmount = $this->priceCurrency->round($taxAmount);
+                        }
+                        $amountExclTax = $amountInclTax - $taxAmount;
+                    } else {
+                        $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
+                        if (is_array($appliedRates) && count($appliedRates) > 1) {
+                            $taxAmount = 0;
+                            foreach ($appliedRates as $appliedRate) {
+                                $taxRate = $appliedRate['percent'];
                                 if ($round) {
-                                    $taxAmount = $this->priceCurrency->round(
-                                        $value * $currentPercent / 100
-                                    );
+                                    $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
                                 } else {
-                                    $taxAmount = $value * $currentPercent / 100;
+                                    $taxAmount += $value * $taxRate / 100;
                                 }
+                            }
+                        } else {
+                            if ($round) {
+                                $taxAmount = $this->priceCurrency->round(
+                                    $value * $currentPercent / 100
+                                );
+                            } else {
+                                $taxAmount = $value * $currentPercent / 100;
                             }
                         }
                     }
-
-                    $one = new \Magento\Framework\DataObject();
-                    $one->setName(
-                        $attribute['label_value'] ? __($attribute['label_value']) : __($attribute['frontend_label'])
-                    )
-                        ->setAmount($amount)
-                        ->setTaxAmount($taxAmount)
-                        ->setAmountExclTax($amountExclTax)
-                        ->setCode($attribute['attribute_code']);
-
-                    $result[] = $one;
                 }
-            }
 
-            $this->weeAtrributesCache[$cacheKey] = $result;
+                $one = new \Magento\Framework\DataObject();
+                $one->setName(
+                    $attribute['label_value'] ? __($attribute['label_value']) : __($attribute['frontend_label'])
+                )
+                    ->setAmount($amount)
+                    ->setTaxAmount($taxAmount)
+                    ->setAmountExclTax($amountExclTax)
+                    ->setCode($attribute['attribute_code']);
+
+                $result[] = $one;
+            }
         }
+
         return $result;
     }
 
     /**
+     * Is there a weee attribute available for the location provided
+     *
      * @param int $countryId
      * @param int $regionId
      * @param int $websiteId
