@@ -481,6 +481,10 @@
                     referenceColumn="attribute_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="EAV_ATTRIBUTE_LABEL_STORE_ID_STORE_STORE_ID" table="eav_attribute_label"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_STORE_ID_UNIQUE">
+            <column name="store_id"/>
+            <column name="attribute_id"/>
+        </constraint>
         <index referenceId="EAV_ATTRIBUTE_LABEL_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
