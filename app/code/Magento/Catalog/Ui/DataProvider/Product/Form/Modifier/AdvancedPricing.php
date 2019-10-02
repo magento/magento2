@@ -647,14 +647,7 @@ class AdvancedPricing extends AbstractModifier
                 ],
             ],
         ];
-
-        $path = $this->arrayManager->findPath(
-            static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_PRICE,
-            $this->meta,
-            null,
-            'children'
-        );
-
+        
         $this->meta = $this->arrayManager->merge(
             $this->arrayManager->findPath(
                 static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_PRICE,
