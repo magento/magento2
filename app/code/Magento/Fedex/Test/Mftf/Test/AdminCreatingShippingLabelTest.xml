@@ -114,7 +114,7 @@
         <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipmentIntoOrder"/>
         <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
-        <actionGroup ref="AdminShipmentCreatePackageActionGroup" stepKey="createPackage">
+        <actionGroup ref="AdminShipmentCreateShippingLabelActionGroup" stepKey="createPackage">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTab"/>

@@ -62,7 +62,7 @@
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
     </actionGroup>
-    <actionGroup name="AdminShipmentCreatePackageActionGroup">
+    <actionGroup name="AdminShipmentCreateShippingLabelActionGroup">
         <arguments>
             <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
         </arguments>
