@@ -22,7 +22,7 @@
             <input>multiselectgrouplist</input>
         </stores>
         <used_in_forms>
-            <selector>[name="used_in_forms[1]"]</selector>
+            <selector>[id="used_in_forms"]</selector>
             <input>multiselectgrouplist</input>
         </used_in_forms>
         <checkbox_text />
