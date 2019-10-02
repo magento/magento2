@@ -35,7 +35,7 @@ class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
             if ($this->_getCheckout()->getCustomerDefaultShippingAddress()) {
                 $addressForm->setBackUrl($this->_url->getUrl('*/checkout/addresses'));
             } else {
-                $addressForm->setBackUrl($this->_url->getUrl('*/cart/'));
+                $addressForm->setBackUrl($this->_url->getUrl('checkout/cart/'));
             }
         }
         $this->_view->renderLayout();
