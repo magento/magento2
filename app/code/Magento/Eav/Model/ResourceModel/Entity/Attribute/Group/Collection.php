@@ -5,6 +5,8 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Group;
 
+use Magento\Cms\Model\Template\Filter;
+
 /**
  * Eav attribute group resource collection
  *
@@ -30,28 +32,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Set Attribute Set Filter
      *
-     * @deprecated since do not sets ConditionType
-     * @see setAttributeSetConditionSetFilter($setId, $conditionType = 'eq')
-     * @param int $setId
+     * @param \Magento\Framework\Api\Filter $filter
      * @return $this
      */
-    public function setAttributeSetFilter($setId)
+    public function setAttributeSetFilter($filter)
     {
-        $this->addFieldToFilter('attribute_set_id', ['eq' => $setId]);
-        $this->setOrder('sort_order');
-        return $this;
-    }
-
-    /**
-     * Set Attribute Set Condition Type Set Filter
-     *
-     * @param string $setId
-     * @param string $conditionType
-     * @return $this
-     */
-    public function setAttributeSetConditionSetFilter($setId, $conditionType = 'eq')
-    {
-        $this->addFieldToFilter('attribute_set_id', [$conditionType => $setId]);
+        $this->addFieldToFilter('attribute_set_id', [$filter->getConditionType() => $filter->getValue()]);
         $this->setOrder('sort_order');
         return $this;
     }

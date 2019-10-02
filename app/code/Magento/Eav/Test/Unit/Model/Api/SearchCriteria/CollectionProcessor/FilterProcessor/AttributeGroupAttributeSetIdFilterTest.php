@@ -33,16 +33,13 @@ class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit\Framework\TestCase
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filterMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($filterValue);
 
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
-            ->method('setAttributeSetConditionSetFilter')
-            ->with($filterValue)
+            ->method('setAttributeSetFilter')
+            ->with($filterMock)
             ->willReturnSelf();
 
         $this->assertTrue($this->filter->apply($filterMock, $collectionMock));
