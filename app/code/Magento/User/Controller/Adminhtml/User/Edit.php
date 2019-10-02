@@ -1,16 +1,22 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Locale\Resolver;
+use Magento\User\Controller\Adminhtml\User;
 
-class Edit extends \Magento\User\Controller\Adminhtml\User
+/**
+ * Class Edit
+ */
+class Edit extends User implements HttpGetActionInterface
 {
     /**
+     * Edit admin user action
+     *
      * @return void
      */
     public function execute()
@@ -22,7 +28,7 @@ class Edit extends \Magento\User\Controller\Adminhtml\User
         if ($userId) {
             $model->load($userId);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This user no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This user no longer exists.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             }

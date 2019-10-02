@@ -170,7 +170,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->checkUserAndRoleIds($idDeleteRole, $idUser, $idUserRole);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('You cannot delete self-assigned roles.'))
             ->willReturnSelf();
 
@@ -202,7 +202,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->roleModelMock->expects($this->once())->method('delete')->willReturnSelf();
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You deleted the role.'))
             ->willReturnSelf();
 
@@ -234,7 +234,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->roleModelMock->expects($this->once())->method('delete')->willThrowException(new \Exception);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('An error occurred while deleting this role.'))
             ->willReturnSelf();
 
@@ -265,7 +265,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->roleModelMock->expects($this->at(2))->method('getId')->willReturn(null);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('We can\'t find a role to delete.'))
             ->willReturnSelf();
 

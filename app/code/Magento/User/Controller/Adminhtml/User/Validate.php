@@ -1,12 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-class Validate extends \Magento\User\Controller\Adminhtml\User
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\User\Controller\Adminhtml\User;
+
+/**
+ * Class Validate
+ */
+class Validate extends User implements HttpPostActionInterface
 {
     /**
      * AJAX customer validation action
@@ -34,7 +39,7 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
 
         if ($errors !== true && !empty($errors)) {
             foreach ($errors as $error) {
-                $this->messageManager->addError($error);
+                $this->messageManager->addErrorMessage($error);
             }
             $response->setError(1);
             $this->_view->getLayout()->initMessages();

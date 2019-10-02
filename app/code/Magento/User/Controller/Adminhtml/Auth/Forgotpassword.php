@@ -80,6 +80,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function execute()
     {
@@ -127,17 +128,17 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                     return $resultRedirect->setPath('admin');
                 }
                 // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
+                $this->messageManager->addSuccessMessage(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
                     $this->backendDataHelper->getHomePageUrl()
                 );
                 return;
             } else {
-                $this->messageManager->addError(__('Please correct this email address:'));
+                $this->messageManager->addErrorMessage(__('Please correct this email address:'));
             }
         } elseif (!empty($params)) {
-            $this->messageManager->addError(__('Please enter an email address.'));
+            $this->messageManager->addErrorMessage(__('Please enter an email address.'));
         }
         $this->_view->loadLayout();
         $this->_view->renderLayout();

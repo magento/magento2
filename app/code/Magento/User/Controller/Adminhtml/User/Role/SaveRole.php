@@ -87,7 +87,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
 
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
-            $this->messageManager->addError(__('This role no longer exists.'));
+            $this->messageManager->addErrorMessage(__('This role no longer exists.'));
             return $resultRedirect->setPath('adminhtml/*/');
         }
 
@@ -155,6 +155,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
     private function parseRequestVariable($paramName): array
     {
         $value = $this->getRequest()->getParam($paramName, null);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         parse_str($value, $value);
         $value = array_keys($value);
         return $value;

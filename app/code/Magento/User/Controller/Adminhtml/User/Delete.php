@@ -1,18 +1,24 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Controller\Adminhtml\User;
 
-use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
+use Magento\User\Controller\Adminhtml\User;
 
-class Delete extends \Magento\User\Controller\Adminhtml\User
+/**
+ * Class Delete
+ */
+class Delete extends User implements HttpPostActionInterface
 {
     /**
+     * Execute delete admin user action
+     *
      * @return void
      */
     public function execute()
@@ -23,7 +29,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
 
         if ($userId) {
             if ($currentUser->getId() == $userId) {
-                $this->messageManager->addError(__('You cannot delete your own account.'));
+                $this->messageManager->addErrorMessage(__('You cannot delete your own account.'));
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;
             }
@@ -39,16 +45,16 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                 $model = $this->_userFactory->create();
                 $model->setId($userId);
                 $model->delete();
-                $this->messageManager->addSuccess(__('You deleted the user.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the user.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $this->getRequest()->getParam('user_id')]);
                 return;
             }
         }
-        $this->messageManager->addError(__('We can\'t find a user to delete.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a user to delete.'));
         $this->_redirect('adminhtml/*/');
     }
 }

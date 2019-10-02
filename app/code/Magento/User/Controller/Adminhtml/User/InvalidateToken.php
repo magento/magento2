@@ -1,18 +1,19 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\User\Controller\Adminhtml\User;
 
 /**
  * Class InvalidateToken - used to invalidate/revoke all authentication tokens for a specific user.
  */
-class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
+class InvalidateToken extends User implements HttpGetActionInterface
 {
     /**
      * @var AdminTokenServiceInterface
@@ -38,6 +39,8 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
     }
 
     /**
+     * Invalidate token action
+     *
      * @return void
      */
     public function execute()
@@ -45,16 +48,16 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
         if ($userId = $this->getRequest()->getParam('user_id')) {
             try {
                 $this->tokenService->revokeAdminAccessToken($userId);
-                $this->messageManager->addSuccess(__('You have revoked the user\'s tokens.'));
+                $this->messageManager->addSuccessMessage(__('You have revoked the user\'s tokens.'));
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;
             }
         }
-        $this->messageManager->addError(__('We can\'t find a user to revoke.'));
+        $this->messageManager->addErrorMessage(__('We can\'t find a user to revoke.'));
         $this->_redirect('adminhtml/*');
     }
 }
