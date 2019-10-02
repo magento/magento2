@@ -121,7 +121,7 @@ class Data
     public function getCustomerTokenLifetime()
     {
         $hours = $this->_scopeConfig->getValue('oauth/access_token_lifetime/customer');
-        return is_numeric($hours) ? $hours : 0;
+        return is_numeric($hours) && $hours > 0 ? $hours : 0;
     }
 
     /**
@@ -132,6 +132,6 @@ class Data
     public function getAdminTokenLifetime()
     {
         $hours = $this->_scopeConfig->getValue('oauth/access_token_lifetime/admin');
-        return is_numeric($hours) ? $hours : 0;
+        return is_numeric($hours) && $hours > 0 ? $hours : 0;
     }
 }
