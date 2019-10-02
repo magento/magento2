@@ -34,3 +34,4 @@ foreach ($emailsToDelete as $email) {
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+$registry->unregister('_fixture/Magento_ImportExport_Customer_Collection');

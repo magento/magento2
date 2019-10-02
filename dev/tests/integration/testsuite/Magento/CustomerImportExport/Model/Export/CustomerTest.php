@@ -47,39 +47,75 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     private $attributeTypes;
 
     /**
+     * @var Collection
+     */
+    private $attributeCollection;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
+        $this->attributeCollection = $this->objectManager->create(Collection::class);
     }
 
     /**
      * Export "Customer Main File".
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
+     * @return void
      */
     public function testExport()
     {
-        /** @var Collection $collection */
-        $collection = $this->objectManager->create(Collection::class);
-        $this->initAttributeValues($collection);
-        $this->initAttributeTypes($collection);
+        $this->processCustomerAttribute();
+        $expectedAttributes = $this->getExpectedAttributes();
+        $lines = $this->export($expectedAttributes);
+        $this->checkExportData($lines, $expectedAttributes);
+    }
 
+    /**
+     * Return attributes which should be exported.
+     *
+     * @return array
+     */
+    private function getExpectedAttributes(): array
+    {
         $expectedAttributes = [];
         /** @var Attribute $attribute */
-        foreach ($collection as $attribute) {
+        foreach ($this->attributeCollection as $attribute) {
             $expectedAttributes[] = $attribute->getAttributeCode();
         }
-        $expectedAttributes = array_diff($expectedAttributes, $this->_model->getDisabledAttributes());
 
-        $this->_model->setWriter($this->objectManager->get(Csv::class));
+        return array_diff($expectedAttributes, $this->_model->getDisabledAttributes());
+    }
+
+    /**
+     * Prepare Customer attribute.
+     *
+     * @return void
+     */
+    private function processCustomerAttribute(): void
+    {
+        $this->initAttributeValues($this->attributeCollection);
+        $this->initAttributeTypes($this->attributeCollection);
+    }
+
+    /**
+     * Export customer.
+     *
+     * @param array $expectedAttributes
+     * @return array
+     */
+    private function export(array $expectedAttributes): array
+    {
+        $this->_model->setWriter($this->objectManager->create(Csv::class));
         $data = $this->_model->export();
+
         $this->assertNotEmpty($data);
 
         $lines = $this->_csvToArray($data, 'email');
-
         $this->assertEquals(
             count($expectedAttributes),
             count(array_intersect($expectedAttributes, $lines['header'])),
@@ -88,8 +124,20 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNotEmpty($lines['data'], 'No data was exported.');
 
+        return $lines;
+    }
+
+    /**
+     * Check that exported data is correct.
+     *
+     * @param array $lines
+     * @param array $expectedAttributes
+     * @return void
+     */
+    private function checkExportData(array $lines, array $expectedAttributes): void
+    {
         /** @var CustomerModel[] $customers */
-        $customers = $this->objectManager->create(CustomerCollection::class)->getItems();
+        $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
             $exportData = $lines['data'][$data['email']];
@@ -111,7 +159,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * Initialize attribute option values.
      *
      * @param Collection $attributeCollection
-     * @return $this
+     * @return CustomerTest
      */
     private function initAttributeValues(Collection $attributeCollection): CustomerTest
     {
@@ -127,7 +175,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * Initialize attribute types.
      *
      * @param \Magento\Customer\Model\ResourceModel\Attribute\Collection $attributeCollection
-     * @return $this
+     * @return CustomerTest
      */
     private function initAttributeTypes(Collection $attributeCollection): CustomerTest
     {
@@ -184,7 +232,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $attributeCode
      * @param int|string $valueId
-     * @return mixed
+     * @return int|string|array
      */
     private function getAttributeValueById(string $attributeCode, $valueId)
     {
