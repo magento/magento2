@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -20,12 +20,12 @@ use Magento\Framework\Filesystem\DriverInterface;
 /**
  * Controller that delete file by name.
  */
-class Delete extends ExportController implements HttpGetActionInterface
+class Delete extends ExportController implements HttpPostActionInterface
 {
     /**
-     * url to this controller
+     * Url to this controller
      */
-    const URL = 'admin/export_file/delete';
+    const URL = 'adminhtml/export_file/delete';
 
     /**
      * @var Filesystem

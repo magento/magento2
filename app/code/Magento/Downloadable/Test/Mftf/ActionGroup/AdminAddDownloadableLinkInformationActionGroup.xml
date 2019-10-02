@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add information before create downloadable link -->
     <actionGroup name="AdminAddDownloadableLinkInformationActionGroup">
+        <annotations>
+            <description>Checks 'Is this downloadable Product?'. Fills in the provided Downloadable details under the 'Downloadable Information'.</description>
+        </annotations>
         <arguments>
             <argument name="downloadableData" type="entity" defaultValue="downloadableData"/>
         </arguments>
+        
         <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection"/>
         <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkOptionIsDownloadable" after="openDownloadableSection"/>
         <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillLinkTitle" after="checkOptionIsDownloadable"/>

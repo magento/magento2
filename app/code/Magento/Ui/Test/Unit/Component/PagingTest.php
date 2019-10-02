@@ -81,31 +81,11 @@ class PagingTest extends \PHPUnit\Framework\TestCase
             ],
             'config' => [
                 'options' => [
-                    [
-                        'value' => 20,
-                        'label' => 20
-                    ],
-                    [
-                        'value' => 30,
-                        'label' => 30
-                    ],
-                    [
-                        'value' => 50,
-                        'label' => 50
-                    ],
-                    [
-                        'value' => 100,
-                        'label' => 100
-                    ],
-                    [
-                        'value' => 200,
-                        'label' => 200
-                    ],
-                    [
+                    'options1' => [
                         'value' => 20,
                         'label' => 'options1'
                     ],
-                    [
+                    'options2' => [
                         'value' => 40,
                         'label' => 'options2'
                     ],

@@ -21,6 +21,7 @@
         <element name="itemDiscountAmount" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-discont .price" parameterized="true"/>
         <element name="itemTotal" type="text" selector=".order-creditmemo-tables tbody:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
         <element name="updateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button']" timeout="30"/>
+        <element name="disabledUpdateQty" type="button" selector=".order-creditmemo-tables tfoot button[data-ui-id='order-items-update-button'].disabled" timeout="30"/>
         <element name="nameColumn" type="text" selector=".order-creditmemo-tables .product-title"/>
         <element name="skuColumn" type="text" selector=".order-creditmemo-tables .product-sku-block"/>
     </section>

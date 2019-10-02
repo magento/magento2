@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Paypal\Model\Payflow\Service\Request;
 
 use Magento\Framework\Math\Random;
@@ -13,7 +16,7 @@ use Magento\Paypal\Model\Payflowpro;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class SecureToken
+ * Class for requesting a secure Payflow Pro token from Paypal
  */
 class SecureToken
 {
@@ -42,7 +45,6 @@ class SecureToken
         Random $mathRandom,
         Transparent $transparent
     ) {
-
         $this->url = $url;
         $this->mathRandom = $mathRandom;
         $this->transparent = $transparent;
@@ -52,11 +54,12 @@ class SecureToken
      * Get the Secure Token from Paypal for TR
      *
      * @param Quote $quote
+     * @param string[] $urls
      *
      * @return DataObject
      * @throws \Exception
      */
-    public function requestToken(Quote $quote)
+    public function requestToken(Quote $quote, array $urls = [])
     {
         $this->transparent->setStore($quote->getStoreId());
         $request = $this->transparent->buildBasicRequest();
@@ -67,9 +70,9 @@ class SecureToken
         $request->setCurrency($quote->getBaseCurrencyCode());
         $request->setCreatesecuretoken('Y');
         $request->setSecuretokenid($this->mathRandom->getUniqueHash());
-        $request->setReturnurl($this->url->getUrl('paypal/transparent/response'));
-        $request->setErrorurl($this->url->getUrl('paypal/transparent/response'));
-        $request->setCancelurl($this->url->getUrl('paypal/transparent/cancel'));
+        $request->setReturnurl($urls['return_url'] ?? $this->url->getUrl('paypal/transparent/response'));
+        $request->setErrorurl($urls['error_url'] ?? $this->url->getUrl('paypal/transparent/response'));
+        $request->setCancelurl($urls['cancel_url'] ?? $this->url->getUrl('paypal/transparent/response'));
         $request->setDisablereceipt('TRUE');
         $request->setSilenttran('TRUE');
 

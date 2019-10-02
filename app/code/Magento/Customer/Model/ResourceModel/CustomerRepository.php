@@ -209,7 +209,9 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
-            $customerModel->setStoreId($this->storeManager->getStore()->getId());
+            $customerModel->setStoreId(
+                $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
+            );
         }
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -277,7 +279,6 @@ class CustomerRepository implements CustomerRepositoryInterface
                 'delegate_data' => $delegatedNewOperation ? $delegatedNewOperation->getAdditionalData() : [],
             ]
         );
-
         return $savedCustomer;
     }
 

@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-95175"/>
             <group value="creditMemo"/>
             <group value="tax"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <!--Create category and product-->

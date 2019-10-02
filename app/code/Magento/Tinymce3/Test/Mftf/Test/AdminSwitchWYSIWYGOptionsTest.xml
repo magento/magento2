@@ -16,7 +16,7 @@
             <title value="Admin should able to switch between versions of TinyMCE"/>
             <description value="Admin should able to switch between versions of TinyMCE"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-82936"/>
+            <testCaseId value="MC-6114"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>

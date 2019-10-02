@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!--
-         /**
-          * Copyright © Magento, Inc. All rights reserved.
-          * See COPYING.txt for license details.
-          */
-        -->
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ClearCacheActionGroup">
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToNewCustomVarialePage" />
+        <annotations>
+            <description>Goes to the Admin Cache Management page. Clicks on 'Flush Magento Cache'.</description>
+        </annotations>
+        
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToNewCustomVarialePage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{AdminCacheManagementSection.FlushMagentoCache}}" stepKey="clickFlushMagentoCache" />
+        <click selector="{{AdminCacheManagementSection.FlushMagentoCache}}" stepKey="clickFlushMagentoCache"/>
         <waitForPageLoad stepKey="waitForCacheFlush"/>
     </actionGroup>
+    
     <actionGroup name="clearPageCache">
+        <annotations>
+            <description>Goes to the Admin Cache Management page. Selects 'Refresh'. Checks the 'Page Cache' row. Clicks on Submit.</description>
+        </annotations>
+
         <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="amOnCacheManagementPage"/>
         <waitForPageLoad stepKey="waitForCacheManagement"/>
         <selectOption selector="{{AdminCacheManagementSection.massActionSelect}}" userInput="refresh" stepKey="selectRefresh"/>

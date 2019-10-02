@@ -176,4 +176,10 @@
         <data key="is_require">true</data>
         <requiredEntity type="product_option_value">ProductOptionPercentPriceValueDropdown</requiredEntity>
     </entity>
+    <entity name="ProductOptionFieldSecond" extends="ProductOptionField">
+        <data key="title" unique="suffix">fifth option</data>
+    </entity>
+    <entity name="ProductOptionFileSecond" extends="ProductOptionFile">
+        <data key="title" unique="suffix">fourth option</data>
+    </entity>
 </entities>

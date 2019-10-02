@@ -30,11 +30,12 @@ class Element extends \SimpleXMLElement
      * @param \Magento\Framework\Simplexml\Element $element
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function setParent($element)
     {
-        //$this->_parent = $element;
     }
+    // phpcs:enable
 
     /**
      * Returns parent node for the element
@@ -179,7 +180,8 @@ class Element extends \SimpleXMLElement
     }
 
     /**
-     * asArray() analog, but without attributes
+     * The asArray() analog, but without attributes
+     *
      * @return array|string
      */
     public function asCanonicalArray()
@@ -245,7 +247,7 @@ class Element extends \SimpleXMLElement
         $attributes = $this->attributes();
         if ($attributes) {
             foreach ($attributes as $key => $value) {
-                $out .= ' ' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
+                $out .= ' ' . $key . '="' . str_replace('"', '\"', $this->xmlentities($value)) . '"';
             }
         }
 
@@ -471,6 +473,7 @@ class Element extends \SimpleXMLElement
      * Unset self from the XML-node tree
      *
      * Note: trying to refer this object as a variable after "unsetting" like this will result in E_WARNING
+     *
      * @return void
      */
     public function unsetSelf()

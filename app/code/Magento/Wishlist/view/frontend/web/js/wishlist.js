@@ -10,7 +10,7 @@ define([
     'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/validation/validation',
     'mage/dataPost'
 ], function ($, mageTemplate, alert) {

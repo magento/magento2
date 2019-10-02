@@ -18,6 +18,11 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRatePrice"/>
+            <magentoCLI command="config:set {{EnableFlatRateToAllAllowedCountriesConfigData.path}} {{EnableFlatRateToAllAllowedCountriesConfigData.value}}" stepKey="allowFlatRateToAllCountries"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -109,9 +114,9 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <deleteData  createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData  createDataKey="createConfigChildProduct2" stepKey="deleteSimpleProduct2"/>
-            <deleteData  createDataKey="createConfigChildProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteSimpleProduct3"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
@@ -131,8 +136,8 @@
         <!--Assert Shopping Cart Summary -->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$40.00"/>
-            <argument name="shipping" value="$10.00"/>
-            <argument name="total" value="$50.00"/>
+            <argument name="shipping" value="10.00"/>
+            <argument name="total" value="50.00"/>
         </actionGroup>
 
         <!--Assert Product Details In Checkout cart -->

@@ -14,6 +14,9 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\CacheInterface;
 use Magento\User\Model\User;
 
+/**
+ * Class CanViewNotificationTest
+ */
 class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
 {
     /** @var CanViewNotification */

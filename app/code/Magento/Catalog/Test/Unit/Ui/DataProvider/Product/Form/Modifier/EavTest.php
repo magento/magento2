@@ -266,15 +266,17 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods([
-                'load',
-                'getAttributeGroupCode',
-                'getApplyTo',
-                'getFrontendInput',
-                'getAttributeCode',
-                'usesSource',
-                'getSource',
-            ])
+            ->setMethods(
+                [
+                    'load',
+                    'getAttributeGroupCode',
+                    'getApplyTo',
+                    'getFrontendInput',
+                    'getAttributeCode',
+                    'usesSource',
+                    'getSource',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -307,9 +309,7 @@ class EavTest extends AbstractModifierTest
             ->willReturnSelf();
         $this->groupCollectionMock->expects($this->any())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([
-                $this->groupMock,
-            ]));
+            ->willReturn(new \ArrayIterator([$this->groupMock]));
         $this->attributeCollectionMock->expects($this->any())
             ->method('addFieldToSelect')
             ->willReturnSelf();
@@ -324,9 +324,7 @@ class EavTest extends AbstractModifierTest
             ->willReturn($this->attributeCollectionMock);
         $this->productMock->expects($this->any())
             ->method('getAttributes')
-            ->willReturn([
-                $this->attributeMock,
-            ]);
+            ->willReturn([$this->attributeMock,]);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
@@ -355,24 +353,27 @@ class EavTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(Eav::class, [
-            'locator' => $this->locatorMock,
-            'eavValidationRules' => $this->eavValidationRulesMock,
-            'eavConfig' => $this->eavConfigMock,
-            'request' => $this->requestMock,
-            'groupCollectionFactory' => $this->groupCollectionFactoryMock,
-            'storeManager' => $this->storeManagerMock,
-            'formElementMapper' => $this->formElementMapperMock,
-            'metaPropertiesMapper' => $this->metaPropertiesMapperMock,
-            'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-            'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
-            'sortOrderBuilder' => $this->sortOrderBuilderMock,
-            'attributeRepository' => $this->attributeRepositoryMock,
-            'arrayManager' => $this->arrayManagerMock,
-            'eavAttributeFactory' => $this->eavAttributeFactoryMock,
-            '_eventManager' => $this->eventManagerMock,
-            'attributeCollectionFactory' => $this->attributeCollectionFactoryMock
-        ]);
+        return $this->objectManager->getObject(
+            Eav::class,
+            [
+                'locator' => $this->locatorMock,
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'eavConfig' => $this->eavConfigMock,
+                'request' => $this->requestMock,
+                'groupCollectionFactory' => $this->groupCollectionFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'formElementMapper' => $this->formElementMapperMock,
+                'metaPropertiesMapper' => $this->metaPropertiesMapperMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+                'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
+                'sortOrderBuilder' => $this->sortOrderBuilderMock,
+                'attributeRepository' => $this->attributeRepositoryMock,
+                'arrayManager' => $this->arrayManagerMock,
+                'eavAttributeFactory' => $this->eavAttributeFactoryMock,
+                '_eventManager' => $this->eventManagerMock,
+                'attributeCollectionFactory' => $this->attributeCollectionFactoryMock
+            ]
+        );
     }
 
     public function testModifyData()
@@ -389,9 +390,7 @@ class EavTest extends AbstractModifierTest
             ->willReturn($this->attributeCollectionMock);
 
         $this->attributeCollectionMock->expects($this->any())->method('getItems')
-            ->willReturn([
-                $this->eavAttributeMock
-            ]);
+            ->willReturn([$this->eavAttributeMock]);
 
         $this->locatorMock->expects($this->any())->method('getProduct')
             ->willReturn($this->productMock);
@@ -480,11 +479,11 @@ class EavTest extends AbstractModifierTest
             ['value' => ['test1', 'test2'], 'label' => 'Array label'],
         ];
         $attributeOptionsExpected = [
-            ['value' => '1', 'label' => 'Int label'],
-            ['value' => '1.5', 'label' => 'Float label'],
-            ['value' => '1', 'label' => 'Boolean label'],
-            ['value' => 'string', 'label' => 'String label'],
-            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
+            ['value' => '1', 'label' => 'Int label', '__disableTmpl' => true],
+            ['value' => '1.5', 'label' => 'Float label', '__disableTmpl' => true],
+            ['value' => '1', 'label' => 'Boolean label', '__disableTmpl' => true],
+            ['value' => 'string', 'label' => 'String label', '__disableTmpl' => true],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label', '__disableTmpl' => true],
         ];
 
         $this->productMock->method('getId')->willReturn($productId);

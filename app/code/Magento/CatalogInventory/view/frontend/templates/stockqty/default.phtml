@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
  */
 ?>
-<?php if ($block->isMsgVisible()): ?>
-    <div class="availability only" title="<?= /* @escapeNotVerified */ __('Only %1 left', ($block->getStockQtyLeft())) ?>">
-        <?= /* @escapeNotVerified */ __('Only %1 left', "<strong>{$block->getStockQtyLeft()}</strong>") ?>
+<?php if ($block->isMsgVisible()) : ?>
+    <div class="availability only" title="<?= $block->escapeHtmlAttr(__('Only %1 left', ($block->getStockQtyLeft()))) ?>">
+        <?= /* @noEscape */ __('Only %1 left', "<strong>{$block->escapeHtml($block->getStockQtyLeft())}</strong>") ?>
     </div>
 <?php endif ?>
