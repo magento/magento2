@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
