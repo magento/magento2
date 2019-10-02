@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,6 +12,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\CurrencySymbol\Controller\Adminhtml\System\Currency as CurrencyAction;
 
+/**
+ * Class FetchRates
+ */
 class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
@@ -41,20 +43,20 @@ class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpP
             }
             $rates = $importModel->fetchRates();
             $errors = $importModel->getMessages();
-            if (sizeof($errors) > 0) {
+            if (count($errors) > 0) {
                 foreach ($errors as $error) {
-                    $this->messageManager->addWarning($error);
+                    $this->messageManager->addWarningMessage($error);
                 }
-                $this->messageManager->addWarning(
+                $this->messageManager->addWarningMessage(
                     __('Click "Save" to apply the rates we found.')
                 );
             } else {
-                $this->messageManager->addSuccess(__('Click "Save" to apply the rates we found.'));
+                $this->messageManager->addSuccessMessage(__('Click "Save" to apply the rates we found.'));
             }
 
             $backendSession->setRates($rates);
         } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
