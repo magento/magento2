@@ -117,18 +117,20 @@ class Configurable implements DimensionalIndexerInterface
     {
         $this->tableMaintainer->createMainTmpTable($dimensions);
 
-        $temporaryPriceTable = $this->indexTableStructureFactory->create([
-            'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
-            'entityField' => 'entity_id',
-            'customerGroupField' => 'customer_group_id',
-            'websiteField' => 'website_id',
-            'taxClassField' => 'tax_class_id',
-            'originalPriceField' => 'price',
-            'finalPriceField' => 'final_price',
-            'minPriceField' => 'min_price',
-            'maxPriceField' => 'max_price',
-            'tierPriceField' => 'tier_price',
-        ]);
+        $temporaryPriceTable = $this->indexTableStructureFactory->create(
+            [
+                'tableName' => $this->tableMaintainer->getMainTmpTable($dimensions),
+                'entityField' => 'entity_id',
+                'customerGroupField' => 'customer_group_id',
+                'websiteField' => 'website_id',
+                'taxClassField' => 'tax_class_id',
+                'originalPriceField' => 'price',
+                'finalPriceField' => 'final_price',
+                'minPriceField' => 'min_price',
+                'maxPriceField' => 'max_price',
+                'tierPriceField' => 'tier_price',
+            ]
+        );
         $select = $this->baseFinalPrice->getQuery(
             $dimensions,
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
@@ -248,7 +250,7 @@ class Configurable implements DimensionalIndexerInterface
         // adds price of custom option, that was applied in DefaultPrice::_applyCustomOption
         $selectForCrossUpdate->columns(
             [
-                'price' => new \Zend_Db_Expr('i.max_price - i.price + io.max_price'),
+                'price' => new \Zend_Db_Expr('i.min_price - i.price + io.min_price'),
                 'final_price' => new \Zend_Db_Expr('i.min_price - i.price + io.min_price'),
                 'min_price' => new \Zend_Db_Expr('i.min_price - i.price + io.min_price'),
                 'max_price' => new \Zend_Db_Expr('i.max_price - i.price + io.max_price'),
