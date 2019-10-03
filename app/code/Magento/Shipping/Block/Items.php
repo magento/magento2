@@ -79,7 +79,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * @param   \Magento\Sales\Model\Order\Shipment $shipment
      * @return  string
      */
-    public function getCommentsHtml($shipment): string
+    public function getCommentsHtml($shipment)
     {
         $html = '';
         $comments = $this->getChildBlock('shipment_comments');

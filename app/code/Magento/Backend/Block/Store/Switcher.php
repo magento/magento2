@@ -582,7 +582,7 @@ class Switcher extends \Magento\Backend\Block\Template
      *
      * @return string
      */
-    public function getHintHtml(): string
+    public function getHintHtml()
     {
         $html = '';
         $url = $this->getHintUrl();
