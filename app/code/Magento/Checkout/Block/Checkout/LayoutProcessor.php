@@ -8,6 +8,7 @@ namespace Magento\Checkout\Block\Checkout;
 use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use \Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Class LayoutProcessor
@@ -28,6 +29,11 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @var AttributeMerger
      */
     protected $merger;
+
+    /**
+     * @var ArrayManager
+     */
+    protected $arrayManager;
 
     /**
      * @var \Magento\Customer\Model\Options
@@ -53,6 +59,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
+     * @param ArrayManager $arrayManager
      * @param \Magento\Customer\Model\Options|null $options
      * @param Data|null $checkoutDataHelper
      * @param \Magento\Shipping\Model\Config|null $shippingConfig
@@ -62,6 +69,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
         \Magento\Ui\Component\Form\AttributeMapper $attributeMapper,
         AttributeMerger $merger,
+        ArrayManager $arrayManager,
         \Magento\Customer\Model\Options $options = null,
         Data $checkoutDataHelper = null,
         \Magento\Shipping\Model\Config $shippingConfig = null,
@@ -70,6 +78,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
         $this->attributeMapper = $attributeMapper;
         $this->merger = $merger;
+        $this->arrayManager = $arrayManager;
         $this->options = $options ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Customer\Model\Options::class);
         $this->checkoutDataHelper = $checkoutDataHelper ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -157,37 +166,49 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         $elements = $this->getAddressAttributes();
         $elements = $this->convertElementsToSelect($elements, $attributesToConvert);
         // The following code is a workaround for custom address attributes
-        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-            ['payment']['children'])) {
-            $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-            ['payment']['children'] = $this->processPaymentChildrenComponents(
-                $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
-                ['payment']['children'],
-                $elements
+        $path = 'components/checkout/children/steps/children/billing-step/children/payment/children';
+        if ($this->arrayManager->exists($path, $jsLayout)) {
+            $this->arrayManager->set(
+                $path,
+                $jsLayout,
+                $this->processPaymentChildrenComponents(
+                    $this->arrayManager->get(
+                        $path,
+                        $jsLayout
+                    ),
+                    $elements
+                )
             );
-        }
-        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
-            ['step-config']['children']['shipping-rates-validation']['children'])) {
-            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
-            ['step-config']['children']['shipping-rates-validation']['children'] =
-                $this->processShippingChildrenComponents(
-                    $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']['children']
-                    ['step-config']['children']['shipping-rates-validation']['children']
-                );
         }
 
-        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'])) {
-            $fields = $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'];
-            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
-            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'] = $this->merger->merge(
-                $elements,
-                'checkoutProvider',
-                'shippingAddress',
-                $fields
+        $path = 'components/checkout/children/steps/children/shipping-step/children/step-config/children/'
+              . 'shipping-rates-validation/children';
+        if ($this->arrayManager->exists($path, $jsLayout)) {
+            $this->arrayManager->set(
+                $path,
+                $jsLayout,
+                $this->processShippingChildrenComponents(
+                    $this->arrayManager->get($path, $jsLayout)
+                )
             );
         }
+
+        $path = 'components/checkout/children/steps/children/shipping-step/children/shippingAddress/children/'
+              . 'shipping-address-fieldset/children';
+        if ($this->arrayManager->exists($path, $jsLayout)) {
+            $fields = $this->arrayManager->get($path, $jsLayout);
+            $this->arrayManager->set(
+                $path,
+                $jsLayout,
+                $this->merger->merge(
+                    $elements,
+                    'checkoutProvider',
+                    'shippingAddress',
+                    $fields
+                )
+            );
+        }
+
         return $jsLayout;
     }
 

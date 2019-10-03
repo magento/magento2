@@ -11,6 +11,7 @@ use Magento\Checkout\Helper\Data;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Options;
 
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Form\AttributeMapper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -33,6 +34,11 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
      * @var AttributeMerger|MockObject
      */
     private $attributeMerger;
+
+    /**
+     * @var $arrayManager|MockObject
+     */
+    private $arrayManager;
 
     /**
      * @var Data|MockObject
@@ -66,6 +72,10 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['merge'])
             ->getMock();
 
+        $this->arrayManager = $this->getMockBuilder(ArrayManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->dataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods(['isDisplayBillingOnPaymentMethodAvailable'])
@@ -85,6 +95,7 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
             $this->attributeDataProvider,
             $this->attributeMapper,
             $this->attributeMerger,
+            $this->arrayManager,
             $options,
             $this->dataHelper,
             $shippingConfig,
@@ -109,10 +120,12 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->attributeMerger->expects(static::exactly(2))
             ->method('merge')
-            ->willReturnMap([
-                ['payment1_1' => $this->getBillingComponent('payment1_1')],
-                ['payment2_1' => $this->getBillingComponent('payment2_1')],
-            ]);
+            ->willReturnMap(
+                [
+                    ['payment1_1' => $this->getBillingComponent('payment1_1')],
+                    ['payment2_1' => $this->getBillingComponent('payment2_1')],
+                ]
+            );
 
         $actual = $this->layoutProcessor->process($jsLayout);
 
