@@ -13,7 +13,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Category\Product as CategoryIndexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
-use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -35,13 +34,6 @@ class SaveTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $config = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $config->method('isElasticsearchEnabled')
-            ->willReturn(true);
-        $this->_objectManager->addSharedInstance($config, Config::class);
-
         $this->changeIndexerSchedule(FulltextIndexer::INDEXER_ID, true);
         $this->changeIndexerSchedule(CategoryIndexer::INDEXER_ID, true);
     }
@@ -51,7 +43,6 @@ class SaveTest extends AbstractBackendController
      */
     protected function tearDown()
     {
-        $this->_objectManager->removeSharedInstance(Config::class);
         $this->changeIndexerSchedule(FulltextIndexer::INDEXER_ID, $this->indexerSchedule[FulltextIndexer::INDEXER_ID]);
         $this->changeIndexerSchedule(CategoryIndexer::INDEXER_ID, $this->indexerSchedule[CategoryIndexer::INDEXER_ID]);
 
@@ -161,9 +152,12 @@ class SaveTest extends AbstractBackendController
         $items = $repository->getList($searchCriteria)
             ->getItems();
 
-        $idList = array_map(function (ProductInterface $item) {
-            return $item->getId();
-        }, $items);
+        $idList = array_map(
+            function (ProductInterface $item) {
+                return $item->getId();
+            },
+            $items
+        );
 
         return $idList;
     }

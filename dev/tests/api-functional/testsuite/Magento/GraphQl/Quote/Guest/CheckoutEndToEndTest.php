@@ -384,7 +384,7 @@ mutation {
     }
   ) {
     order {
-      order_id
+      order_number
     }
   }
 }
@@ -392,8 +392,8 @@ QUERY;
         $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertNotEmpty($response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertNotEmpty($response['placeOrder']['order']['order_number']);
     }
 
     public function tearDown()
