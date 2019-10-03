@@ -139,12 +139,12 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getHeaderColumns()
     {
         $validAttributeCodes = $this->_getExportAttributeCodes();
-        return array_merge($this->_permanentAttributes, $validAttributeCodes, ['password']);
+        return array_merge($this->_permanentAttributes, $validAttributeCodes);
     }
 
     /**
