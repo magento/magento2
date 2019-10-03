@@ -32,24 +32,24 @@ class CategoryFilter
      * Filter for filtering the requested categories id's based on url_key, ids, name in the result.
      *
      * @param array $args
-     * @return array
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
+     * @return bool
      */
-    public function applyFilters(array $args): array
-    {
-        $categoryCollection = $this->collectionFactory->create();
+    public function applyFilters(
+        array $args,
+        \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
+    ): bool {
         foreach ($args['filters'] as $field => $cond) {
             foreach ($cond as $condType => $value) {
                 if ($field === 'ids') {
                     $categoryCollection->addIdFilter($value);
+                } elseif ($condType === 'match') {
+                    $categoryCollection->addAttributeToFilter($field, ['like' => "%{$value}%"]);
                 } else {
                     $categoryCollection->addAttributeToFilter($field, [$condType => $value]);
                 }
             }
         }
-        $categoryIds = [];
-        foreach ($categoryCollection as $category) {
-            $categoryIds[] = (int)$category->getId();
-        }
-        return $categoryIds;
+        return true;
     }
 }
