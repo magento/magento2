@@ -65,8 +65,11 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     private $customLayoutRepository;
 
     /**
-     * @inheritDoc
-     *
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param array $data
      * @param CustomLayoutRepository|null $customLayoutRepository
      */
     public function __construct(
@@ -561,18 +564,15 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * @inheritdoc
-     * @since 101.0.0
+     * Validate identifier before saving the entity.
+     *
+     * @return void
+     * @throws LocalizedException
      */
-    public function beforeSave()
+    private function validateNewIdentifier(): void
     {
         $originalIdentifier = $this->getOrigData('identifier');
         $currentIdentifier = $this->getIdentifier();
-
-        if ($this->hasDataChanges()) {
-            $this->setUpdateTime(null);
-        }
-
         if ($this->getId() && $originalIdentifier !== $currentIdentifier) {
             switch ($originalIdentifier) {
                 case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_ROUTE_PAGE):
@@ -580,13 +580,28 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
                         __('This identifier is reserved for "CMS No Route Page" in configuration.')
                     );
                 case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_HOME_PAGE):
-                    throw new LocalizedException(__('This identifier is reserved for "CMS Home Page" in configuration.'));
+                    throw new LocalizedException(
+                        __('This identifier is reserved for "CMS Home Page" in configuration.')
+                    );
                 case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_COOKIES_PAGE):
                     throw new LocalizedException(
                         __('This identifier is reserved for "CMS No Cookies Page" in configuration.')
                     );
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.0.0
+     */
+    public function beforeSave()
+    {
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
+
+        $this->validateNewIdentifier();
 
         //Removing deprecated custom layout update if a new value is provided
         $layoutUpdate = $this->getData('layout_update_selected');

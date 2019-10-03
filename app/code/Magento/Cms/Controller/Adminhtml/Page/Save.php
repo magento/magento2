@@ -11,8 +11,6 @@ use Magento\Cms\Model\Page;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Cms\Model\Page\CustomLayoutRepositoryInterface;
-use Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelected;
 
 /**
  * Save CMS page action.
@@ -67,8 +65,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
             ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
-        $this->customLayoutRepository = $customLayoutRepository
-            ?? ObjectManager::getInstance()->get(CustomLayoutRepositoryInterface::class);
         parent::__construct($context);
     }
 
