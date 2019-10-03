@@ -126,6 +126,21 @@ class StaleCacheReplicaTest extends TestCase
     }
 
     /** @test */
+    public function afterNoticingCacheHasBeenLockedKeepsUsingSlaveCache()
+    {
+        $this->slaveCache->save('data_in_slave_one', 'cache_one');
+        $this->slaveCache->save('data_in_slave_two', 'cache_two');
+
+        $this->lockManager->lock('lock_name');
+
+        $this->cache->load('cache_one');
+
+        $this->lockManager->unlock('lock_name');
+
+        $this->assertEquals('data_in_slave_two', $this->cache->load('cache_two'));
+    }
+
+    /** @test */
     public function loadsDataFromMasterWhenCacheIsLockedIfItIsAvailable()
     {
         $this->masterCache->save('data_in_master', 'cache_one');

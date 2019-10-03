@@ -32,6 +32,9 @@ class StaleCacheReplica implements FrontendInterface
     /** @var array */
     private $masterOnlyIdentifiers;
 
+    /** @var bool */
+    private $isPersistentlyLocked = false;
+
     /**
      * StaleCacheReplica constructor.
      * @param FrontendInterface $masterCache
@@ -73,8 +76,7 @@ class StaleCacheReplica implements FrontendInterface
             return $cachedData;
         }
 
-        if (!in_array($identifier, $this->masterOnlyIdentifiers)
-            && $this->lockManager->isLocked($this->lockId)) {
+        if (!in_array($identifier, $this->masterOnlyIdentifiers) && $this->isCacheWasLocked()) {
             return $this->slaveCache->load($identifier);
         }
 
@@ -122,5 +124,21 @@ class StaleCacheReplica implements FrontendInterface
     public function getLowLevelFrontend()
     {
         return $this->masterCache->getLowLevelFrontend();
+    }
+
+    /**
+     * Checks if cache has been locked and persists its locked status
+     * to prevent race condition when cache finishes writing before stale
+     * cache finished loading.
+     *
+     * @return bool
+     */
+    private function isCacheWasLocked(): bool
+    {
+        if (!$this->isPersistentlyLocked) {
+            $this->isPersistentlyLocked = $this->lockManager->isLocked($this->lockId);
+        }
+
+        return $this->isPersistentlyLocked;
     }
 }
