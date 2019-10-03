@@ -129,7 +129,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     max_characters: Int @doc(description: "The maximum number of characters that can be entered for this customizable option.")
 }
 
-type CategoryTree implements CategoryInterface @doc(description: "An array containing the filtered categories and their subcategories") {
+type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation.") {
     children: [CategoryTree] @doc(description: "Child categories tree.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 

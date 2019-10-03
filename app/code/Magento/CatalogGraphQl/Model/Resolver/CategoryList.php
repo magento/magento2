@@ -14,20 +14,14 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 
 /**
- * Category tree resolver, used for GraphQL category data request processing.
+ * Category List resolver, used for GraphQL category data request processing.
  */
 class CategoryList implements ResolverInterface
 {
-    /**
-     * Name of type in GraphQL
-     */
-    const CATEGORY_INTERFACE = 'CategoryInterface';
-
     /**
      * @var CategoryTree
      */
@@ -76,30 +70,22 @@ class CategoryList implements ResolverInterface
         }
 
         if (!isset($args['filters'])) {
-            throw new GraphQlInputException(
-                __( "'filters' input argument is required.")
-            );
+            $rootCategoryIds = [(int)$context->getExtensionAttributes()->getStore()->getRootCategoryId()];
+        } else {
+            $rootCategoryIds = $this->categoryFilter->applyFilters($args);
         }
 
-        $rootCategoryIds = $this->categoryFilter->applyFilters($args);
         $result = [];
-        $categoriesTreeData = [];
-
         foreach ($rootCategoryIds as $rootCategoryId) {
             if ($rootCategoryId !== Category::TREE_ROOT_ID) {
                 $this->checkCategoryIsActive->execute($rootCategoryId);
             }
-            $categoriesTree = $this->categoryTree->getTree($info, $rootCategoryId);
-
-            if (empty($categoriesTree) || ($categoriesTree->count() == 0)) {
+            $categoryTree = $this->categoryTree->getTree($info, $rootCategoryId);
+            if (empty($categoryTree)) {
                 throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
             }
-            $categoriesTreeData[] = $categoriesTree;
+            $result[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
         }
-
-        foreach ($categoriesTreeData  as $treeData ) {
-            $result[] = $this->extractDataFromCategoryTree->execute($treeData);
-        }
-        return current($result);
+        return $result;
     }
 }
