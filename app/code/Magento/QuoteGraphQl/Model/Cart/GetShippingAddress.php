@@ -12,6 +12,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote\Address;
+use Magento\QuoteGraphQl\Model\Cart\Address\SaveQuoteAddressToCustomerAddressBook;
 
 /**
  * Get shipping address
@@ -24,11 +25,20 @@ class GetShippingAddress
     private $quoteAddressFactory;
 
     /**
-     * @param QuoteAddressFactory $quoteAddressFactory
+     * @var SaveQuoteAddressToCustomerAddressBook
      */
-    public function __construct(QuoteAddressFactory $quoteAddressFactory)
-    {
+    private $saveQuoteAddressToCustomerAddressBook;
+
+    /**
+     * @param QuoteAddressFactory $quoteAddressFactory
+     * @param SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
+     */
+    public function __construct(
+        QuoteAddressFactory $quoteAddressFactory,
+        SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
+    ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->saveQuoteAddressToCustomerAddressBook = $saveQuoteAddressToCustomerAddressBook;
     }
 
     /**
@@ -62,8 +72,15 @@ class GetShippingAddress
             );
         }
 
+        $customerId = $context->getUserId();
+
         if (null === $customerAddressId) {
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+
+            // need to save address only for registered user and if save_in_address_book = true
+            if (0 !== $customerId && !empty($addressInput['save_in_address_book'])) {
+                $this->saveQuoteAddressToCustomerAddressBook->execute($shippingAddress, $customerId);
+            }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -71,7 +88,7 @@ class GetShippingAddress
 
             $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
                 (int)$customerAddressId,
-                $context->getUserId()
+                $customerId
             );
         }
 
