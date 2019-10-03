@@ -66,8 +66,6 @@ class CartRepositoryTest extends WebapiAbstract
             $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
             $cart = $this->getCart('test01');
             $quoteRepository->delete($cart);
-            $cart = $this->getCart('multishipping_quote_id');
-            $quoteRepository->delete($cart);
         } catch (\InvalidArgumentException $e) {
             // Do nothing if cart fixture was not used
         }
@@ -143,50 +141,6 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getBaseToQuoteRate(), $cartData['currency']['base_to_quote_rate']);
         $this->assertEquals($cart->getStoreToBaseRate(), $cartData['currency']['store_to_base_rate']);
         $this->assertEquals($cart->getStoreToQuoteRate(), $cartData['currency']['store_to_quote_rate']);
-    }
-
-    /**
-     * Tests that multishipping quote contains all addresses in shipping assignments.
-     *
-     * @magentoApiDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
-     */
-    public function testGetMultishippingCart()
-    {
-        $cart = $this->getCart('multishipping_quote_id');
-        $cartId = $cart->getId();
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/carts/' . $cartId,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => 'quoteCartRepositoryV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'quoteCartRepositoryV1Get',
-            ],
-        ];
-
-        $requestData = ['cartId' => $cartId];
-        $cartData = $this->_webApiCall($serviceInfo, $requestData);
-
-        $shippingAssignments = $cart->getExtensionAttributes()->getShippingAssignments();
-        foreach ($shippingAssignments as $key => $shippingAssignment) {
-            $address = $shippingAssignment->getShipping()->getAddress();
-            $cartItem = $shippingAssignment->getItems()[0];
-            $this->assertEquals(
-                $address->getId(),
-                $cartData['extension_attributes']['shipping_assignments'][$key]['shipping']['address']['id']
-            );
-            $this->assertEquals(
-                $cartItem->getSku(),
-                $cartData['extension_attributes']['shipping_assignments'][$key]['items'][0]['sku']
-            );
-            $this->assertEquals(
-                $cartItem->getQty(),
-                $cartData['extension_attributes']['shipping_assignments'][$key]['items'][0]['qty']
-            );
-        }
     }
 
     /**

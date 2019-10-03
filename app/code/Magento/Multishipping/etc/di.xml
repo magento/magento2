@@ -10,6 +10,6 @@
         <plugin name="multishipping_shipping_addresses" type="Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin" />
     </type>
     <type name="Magento\Quote\Model\QuoteRepository">
-        <plugin name="multishipping_quote_repository" type="Magento\Multishipping\Plugin\MultishippingQuoteRepositoryPlugin" />
+        <plugin name="multishipping_quote_repository" type="Magento\Multishipping\Plugin\MultishippingQuoteRepository" />
     </type>
 </config>

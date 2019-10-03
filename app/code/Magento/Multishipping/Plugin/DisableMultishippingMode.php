@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Multishipping\Controller\Checkout;
+namespace Magento\Multishipping\Plugin;
 
 use Magento\Checkout\Model\Cart;
 use Magento\Framework\App\Action\Action;
@@ -13,7 +13,7 @@ use Magento\Framework\App\Action\Action;
 /**
  * Turns Off Multishipping mode for Quote.
  */
-class Plugin
+class DisableMultishippingMode
 {
     /**
      * @var Cart

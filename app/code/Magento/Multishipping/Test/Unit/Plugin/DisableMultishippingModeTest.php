@@ -10,15 +10,15 @@ namespace Magento\Multishipping\Test\Unit\Controller\Checkout;
 
 use Magento\Checkout\Controller\Index\Index;
 use Magento\Checkout\Model\Cart;
-use Magento\Multishipping\Controller\Checkout\Plugin;
+use Magento\Multishipping\Plugin\DisableMultishippingMode;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class PluginTest
+ * Class DisableMultishippingModeTest
  */
-class PluginTest extends \PHPUnit\Framework\TestCase
+class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +31,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     private $quoteMock;
 
     /**
-     * @var Plugin
+     * @var DisableMultishippingMode
      */
     private $object;
 
@@ -48,7 +48,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->cartMock->expects($this->once())
             ->method('getQuote')
             ->will($this->returnValue($this->quoteMock));
-        $this->object = new \Magento\Multishipping\Controller\Checkout\Plugin($this->cartMock);
+        $this->object = new DisableMultishippingMode($this->cartMock);
     }
 
     /**

@@ -15,9 +15,9 @@ use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 
 /**
- * Plugin for multishipping quote processing in WebAPI.
+ * Plugin for multishipping quote processing.
  */
-class MultishippingQuoteRepositoryPlugin
+class MultishippingQuoteRepository
 {
     /**
      * @var ShippingAssignmentFactory

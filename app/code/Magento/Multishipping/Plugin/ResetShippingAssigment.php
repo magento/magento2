@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 /**
  * Resets quote shipping assignments when item is removed from multishipping quote.
  */
-class ResetShippingAssigmentPlugin
+class ResetShippingAssigment
 {
     /**
      * @var ShippingAssignmentProcessor
