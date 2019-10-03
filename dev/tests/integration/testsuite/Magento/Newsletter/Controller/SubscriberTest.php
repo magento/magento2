@@ -83,6 +83,8 @@ class SubscriberTest extends AbstractController
      */
     public function testCreatePosWithSubscribeEmailAction()
     {
+        $this->markTestSkipped('Skip until failed. MAGETWO-96420');
+
         $config = Bootstrap::getObjectManager()->get(MutableScopeConfigInterface::class);
         $accountConfirmationRequired = $config->getValue(
             AccountConfirmation::XML_PATH_IS_CONFIRM,
