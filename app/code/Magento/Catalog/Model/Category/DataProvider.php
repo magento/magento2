@@ -23,7 +23,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\Stdlib\ArrayUtils;
@@ -168,7 +167,7 @@ class DataProvider extends ModifierPoolDataProvider
     private $arrayUtils;
 
     /**
-     * @var Filesystem
+     * @var FileInfo
      */
     private $fileInfo;
 
@@ -195,7 +194,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param ArrayUtils|null $arrayUtils
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
      * @param ArrayManager|null $arrayManager
-     * @param Filesystem|null $fileInfo
+     * @param FileInfo|null $fileInfo
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -217,7 +216,7 @@ class DataProvider extends ModifierPoolDataProvider
         ?ArrayUtils $arrayUtils = null,
         ScopeOverriddenValue $scopeOverriddenValue = null,
         ArrayManager $arrayManager = null,
-        Filesystem $fileInfo = null
+        FileInfo $fileInfo = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -232,7 +231,7 @@ class DataProvider extends ModifierPoolDataProvider
         $this->scopeOverriddenValue = $scopeOverriddenValue ?:
             ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
         $this->arrayManager = $arrayManager ?: ObjectManager::getInstance()->get(ArrayManager::class);
-        $this->fileInfo = $fileInfo ?: ObjectManager::getInstance()->get(Filesystem::class);
+        $this->fileInfo = $fileInfo ?: ObjectManager::getInstance()->get(FileInfo::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
