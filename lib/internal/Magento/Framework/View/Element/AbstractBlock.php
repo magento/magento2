@@ -1127,11 +1127,26 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         };
 
         return (string)$this->lockQuery->nonBlockingLockedLoadData(
-            $this->getCacheKey(),
+            $this->shortenLockName($this->getCacheKey()),
             $loadAction,
             $collectAction,
             $saveAction
         );
+    }
+
+    /**
+     * Shortens lock name in case plugin increased cache key size out of sha1 length
+     *
+     * @param string $cacheKey
+     * @return string
+     */
+    private function shortenLockName(string $cacheKey)
+    {
+        if (strlen(self::CACHE_KEY_PREFIX) + 40 < strlen($cacheKey)) {
+            return self::CACHE_KEY_PREFIX . sha1($cacheKey);
+        }
+
+        return $cacheKey;
     }
 
     /**
