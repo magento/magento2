@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Sales order view items block
@@ -78,7 +79,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * @param   \Magento\Sales\Model\Order\Shipment $shipment
      * @return  string
      */
-    public function getCommentsHtml($shipment)
+    public function getCommentsHtml($shipment): string
     {
         $html = '';
         $comments = $this->getChildBlock('shipment_comments');

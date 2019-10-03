@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Block\Store;
 
@@ -581,14 +582,16 @@ class Switcher extends \Magento\Backend\Block\Template
      *
      * @return string
      */
-    public function getHintHtml()
+    public function getHintHtml(): string
     {
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="admin__field-tooltip tooltip">';
-            $html .= '<a href="' . $this->escapeUrl($url) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . $this->escapeHtmlAttr(__('What is this?'));
-            $html .= '"' . 'class="admin__field-tooltip-action action-help"><span>' . $this->escapeHtmlAttr(__('What is this?')).'</span></a></span></div>';
+            $html = '<div class="admin__field-tooltip tooltip"><a href="%s" onclick="this.target=\'_blank\'"  title="%s"
+            class="admin__field-tooltip-action action-help"><span>%s</span></a></span></div>';
+            $title =  $this->escapeHtmlAttr(__('What is this?'));
+            $span= $this->escapeHtml(__('What is this?'));
+            sprintf($html, $this->escapeUrl($url), $title, $span);
         }
         return $html;
     }
