@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Multishipping\Test\Unit\Controller\Checkout;
+namespace Magento\Multishipping\Test\Unit\Plugin;
 
 use Magento\Checkout\Controller\Index\Index;
 use Magento\Checkout\Model\Cart;
