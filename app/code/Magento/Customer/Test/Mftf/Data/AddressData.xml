@@ -51,6 +51,21 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_TX_Without_Default" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
     <entity name="US_Address_TX_Default_Billing" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
