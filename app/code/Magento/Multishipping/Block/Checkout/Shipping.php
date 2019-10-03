@@ -70,7 +70,9 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @inheritDoc
+     * Add page title and prepare layout
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {
