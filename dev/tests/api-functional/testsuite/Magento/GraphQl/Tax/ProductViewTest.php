@@ -263,7 +263,7 @@ QUERY;
                 [
                     'minimalPrice' => [
                         'amount' => [
-                            'value' => 4.106501,
+                            'value' => 4.1065,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -281,7 +281,7 @@ QUERY;
                     ],
                     'regularPrice' => [
                         'amount' => [
-                            'value' => 10.750001,
+                            'value' => 10.7500,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -299,7 +299,7 @@ QUERY;
                     ],
                     'maximalPrice' => [
                         'amount' => [
-                            'value' => 4.106501,
+                            'value' => 4.1065,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
