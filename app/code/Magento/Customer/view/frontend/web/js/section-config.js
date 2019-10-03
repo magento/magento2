@@ -3,10 +3,15 @@
  * See COPYING.txt for license details.
  */
 
-define(['underscore'], function (_) {
+define(['underscore', 'module'], function (_, module) {
     'use strict';
 
-    var baseUrls, sections, clientSideSections, sectionNames, canonize;
+    var options = module.config(),
+        baseUrls = options.baseUrls,
+        sections = options.sections,
+        clientSideSections = options.clientSideSections,
+        sectionNames = options.sectionNames,
+        canonize;
 
     /**
      * @param {String} url
@@ -80,14 +85,8 @@ define(['underscore'], function (_) {
         },
 
         /**
-         * @param {Object} options
          * @constructor
          */
-        'Magento_Customer/js/section-config': function (options) {
-            baseUrls = options.baseUrls;
-            sections = options.sections;
-            clientSideSections = options.clientSideSections;
-            sectionNames = options.sectionNames;
-        }
+        'Magento_Customer/js/section-config': function () {}
     };
 });

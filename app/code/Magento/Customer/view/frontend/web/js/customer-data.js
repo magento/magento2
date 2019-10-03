@@ -11,13 +11,13 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
-    'mage/url',
+    'module',
     'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig, url) {
+], function ($, _, ko, sectionConfig, module) {
     'use strict';
 
-    var options = {},
+    var options = module.config(),
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
@@ -25,9 +25,6 @@ define([
         dataProvider,
         buffer,
         customerData;
-
-    url.setBaseUrl(window.BASE_URL);
-    options.sectionLoadUrl = url.build('customer/section/load');
 
     //TODO: remove global change, in this case made for initNamespaceStorage
     $.cookieStorage.setConf({
@@ -337,16 +334,14 @@ define([
         },
 
         /**
-         * @param {Object} settings
          * @constructor
          */
-        'Magento_Customer/js/customer-data': function (settings) {
-            options = settings;
-            invalidateCacheBySessionTimeOut(settings);
-            invalidateCacheByCloseCookieSession();
-            customerData.init();
-        }
+        'Magento_Customer/js/customer-data': function () {}
     };
+
+    invalidateCacheBySessionTimeOut(options);
+    invalidateCacheByCloseCookieSession();
+    customerData.init();
 
     /**
      * Events listener
