@@ -75,6 +75,10 @@
         <grabTextFrom selector="{{PriceRuleConditionsSection.firstProductAttributeSelected}}"  stepKey="grabTextFromSelectedAttribute" after="today"/>
         <assertEquals expected="$today" actual="$grabTextFromSelectedAttribute" stepKey="assertTodayDate" after="grabTextFromSelectedAttribute"/>
     </actionGroup>
+    <actionGroup name="AdminCreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
+        <remove keyForRemoval="selectSite"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsite"/>
+    </actionGroup>
     <actionGroup name="CreateCatalogPriceRuleViaTheUi">
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
