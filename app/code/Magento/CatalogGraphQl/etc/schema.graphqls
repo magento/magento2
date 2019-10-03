@@ -16,7 +16,7 @@ type Query {
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @deprecated(reason: "Use 'categoryList' query instead of 'category' query") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
     categoryList(
     filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
-    ): [CategoryTree] @doc(description: "Categories filter.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList")
+    ): [CategoryTree] @doc(description: "Returns an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList")
 }
 
 type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
@@ -113,7 +113,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     max_characters: Int @doc(description: "The maximum number of characters that can be entered for this customizable option.")
 }
 
-type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation.") {
+type CategoryTree implements CategoryInterface @doc(description: "An array containing the filtered categories and their subcategories") {
     children: [CategoryTree] @doc(description: "Child categories tree.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
@@ -282,7 +282,7 @@ input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput
 
 input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
 {
-    ids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies and filters the category.")
+    ids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category.")
     url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category")
     name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
 }
