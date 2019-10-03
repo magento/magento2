@@ -31,7 +31,7 @@
         <element name="cartItemsAreaActive" type="textarea" selector="div.block.items-in-cart.active" timeout="30"/>
         <element name="checkMoneyOrderPayment" type="radio" selector="input#checkmo.radio" timeout="30"/>
         <element name="placeOrder" type="button" selector=".payment-method._active button.action.primary.checkout" timeout="30"/>
-        <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[text()='Payment Method']" />
+        <element name="paymentSectionTitle" type="text" selector="//*[@id='checkout-payment-method-load']//div[@data-role='title']" />
         <element name="orderSummarySubtotal" type="text" selector="//tr[@class='totals sub']//span[@class='price']" />
         <element name="orderSummaryShippingTotal" type="text" selector="//tr[@class='totals shipping excl']//span[@class='price']" />
         <element name="orderSummaryShippingMethod" type="text" selector="//tr[@class='totals shipping excl']//span[@class='value']" />
