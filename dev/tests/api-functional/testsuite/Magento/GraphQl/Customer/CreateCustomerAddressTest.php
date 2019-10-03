@@ -139,7 +139,6 @@ MUTATION;
      */
     public function testCreateCustomerAddressWithCountryCode()
     {
-        $customerId = 1;
         $newAddress = [
             'region' => [
                 'region' => 'Arizona',
@@ -195,7 +194,7 @@ mutation {
       region_id
       region_code
     }
-    country_id
+    country_code
     street
     company
     telephone
@@ -220,16 +219,14 @@ MUTATION;
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
+        $this->assertEquals(null, $response['createCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['createCustomerAddress']);
 
         $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
         $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
 
-        $newAddress['country_id'] = $newAddress['country_code'];
-        unset($newAddress['country_code']);
-        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
-        $this->assertCustomerAddressesFields($address, $newAddress);
+        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress'], 'country_code');
+        $this->assertCustomerAddressesFields($address, $newAddress, 'country_code');
     }
 
     /**
@@ -412,12 +409,16 @@ MUTATION;
      *
      * @param AddressInterface $address
      * @param array $actualResponse
+     * @param string $countryFieldName
      */
-    private function assertCustomerAddressesFields(AddressInterface $address, array $actualResponse): void
-    {
+    private function assertCustomerAddressesFields(
+        AddressInterface $address,
+        array $actualResponse,
+        string $countryFieldName = 'country_id'
+    ): void {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => 'country_id', 'expected_value' => $address->getCountryId()],
+            ['response_field' => $countryFieldName, 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
             ['response_field' => 'telephone', 'expected_value' => $address->getTelephone()],

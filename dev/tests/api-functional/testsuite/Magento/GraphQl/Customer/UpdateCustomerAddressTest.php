@@ -85,7 +85,6 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
     {
         $userName = 'customer@example.com';
         $password = 'password';
-        $customerId = 1;
         $addressId = 1;
 
         $mutation = $this->getMutationWithCountryCode($addressId);
@@ -93,15 +92,15 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
-        $this->assertEquals($customerId, $response['updateCustomerAddress']['customer_id']);
+        $this->assertEquals(null, $response['updateCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
 
         $address = $this->addressRepository->getById($addressId);
         $this->assertEquals($address->getId(), $response['updateCustomerAddress']['id']);
-        $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress']);
+        $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress'], 'country_code');
 
         $updateAddress = $this->getAddressDataCanadaCountry();
-        $this->assertCustomerAddressesFields($address, $updateAddress);
+        $this->assertCustomerAddressesFields($address, $updateAddress, 'country_code');
     }
 
     /**
@@ -159,12 +158,16 @@ MUTATION;
      *
      * @param AddressInterface $address
      * @param array $actualResponse
+     * @param string $countryFieldName
      */
-    private function assertCustomerAddressesFields(AddressInterface $address, $actualResponse): void
-    {
+    private function assertCustomerAddressesFields(
+        AddressInterface $address,
+        $actualResponse,
+        string $countryFieldName = 'country_id'
+    ): void {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => 'country_id', 'expected_value' => $address->getCountryId()],
+            ['response_field' => $countryFieldName, 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
             ['response_field' => 'telephone', 'expected_value' => $address->getTelephone()],
@@ -443,7 +446,7 @@ MUTATION;
                 'region_id' => 66,
                 'region_code' => 'AB'
             ],
-            'country_id' => 'CA',
+            'country_code' => 'CA',
             'street' => ['Line 1 Street', 'Line 2'],
             'company' => 'Company Name',
             'telephone' => '123456789',
@@ -531,8 +534,8 @@ MUTATION;
     private function getMutationWithCountryCode(int $addressId): string
     {
         $updateAddress = $this->getAddressDataCanadaCountry();
-        $defaultShippingText = $updateAddress['default_shipping'] ? "true" : "false";
-        $defaultBillingText = $updateAddress['default_billing'] ? "true" : "false";
+        $defaultShippingText = $updateAddress['default_shipping'] ? 'true' : 'false';
+        $defaultBillingText = $updateAddress['default_billing'] ? 'true' : 'false';
 
         $mutation
             = <<<MUTATION
@@ -543,7 +546,7 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
-    country_code: {$updateAddress['country_id']}
+    country_code: {$updateAddress['country_code']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
     telephone: "{$updateAddress['telephone']}"
@@ -566,7 +569,7 @@ mutation {
       region_id
       region_code
     }
-    country_id
+    country_code
     street
     company
     telephone
