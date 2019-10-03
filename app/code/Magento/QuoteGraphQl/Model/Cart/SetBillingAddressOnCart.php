@@ -140,6 +140,8 @@ class SetBillingAddressOnCart
      *
      * @param array $errors
      * @return string
+     *
+     * @todo change implementation in https://github.com/magento/graphql-ce/issues/970.
      */
     private function getAddressErrors(array $errors): string
     {

@@ -16,7 +16,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\AddressFactory as BaseQuoteAddressFactory;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Create QuoteAddress
@@ -47,20 +46,19 @@ class QuoteAddressFactory
      * @param BaseQuoteAddressFactory $quoteAddressFactory
      * @param GetCustomerAddress $getCustomerAddress
      * @param AddressHelper $addressHelper
-     * @param CountryInformationAcquirerInterface|null $countryInformationAcquirer
+     * @param CountryInformationAcquirerInterface $countryInformationAcquirer
      */
     public function __construct(
         BaseQuoteAddressFactory $quoteAddressFactory,
         GetCustomerAddress $getCustomerAddress,
         AddressHelper $addressHelper,
-        CountryInformationAcquirerInterface $countryInformationAcquirer = null
+        CountryInformationAcquirerInterface $countryInformationAcquirer
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->getCustomerAddress = $getCustomerAddress;
         $this->addressHelper = $addressHelper;
         $this->countryInformationAcquirer = $countryInformationAcquirer;
-        $this->countryInformationAcquirer = $countryInformationAcquirer
-            ?: ObjectManager::getInstance()->get(CountryInformationAcquirerInterface::class);
+        $this->countryInformationAcquirer = $countryInformationAcquirer;
     }
 
     /**
