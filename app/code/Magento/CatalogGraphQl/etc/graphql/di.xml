@@ -118,4 +118,23 @@
             </argument>
         </arguments>
     </type>
+
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\AttributeProcessor">
+        <arguments>
+            <argument name="fieldToAttributeMap" xsi:type="array">
+                <item name="price_range" xsi:type="array">
+                    <item name="price" xsi:type="string">price</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
