@@ -323,7 +323,8 @@
                 </field>
                 <field id="port" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Port (25)</label>
-                    <comment>For Windows server only.</comment>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
+                    <comment>Please enter at least 0 and at most 65535 (For Windows server only).</comment>
                 </field>
                 <field id="set_return_path" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Set Return-Path</label>
