@@ -127,14 +127,13 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $this->calculator->process($item);
                 $this->aggregateItemDiscount($item, $total);
             }
+            $this->aggregateDiscountPerRule($item, $address);
         }
 
         $this->calculator->prepareDescription($address);
         $total->setDiscountDescription($address->getDiscountDescription());
-        $total->setDiscountBreakdown($this->aggregateDiscountPerRule($quote));
         $total->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
         $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
-
         $address->setDiscountAmount($total->getDiscountAmount());
         $address->setBaseDiscountAmount($total->getBaseDiscountAmount());
 
@@ -221,32 +220,31 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @return array
+     * Aggregates discount per rule
+     *
+     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @param \Magento\Quote\Api\Data\AddressInterface $address
+     * @return void
      */
     private function aggregateDiscountPerRule(
-        \Magento\Quote\Model\Quote $quote
+        \Magento\Quote\Api\Data\CartItemInterface $item,
+        \Magento\Quote\Api\Data\AddressInterface $address
     ) {
-        $items = $quote->getItems();
-        $discountPerRule = [];
-        if ($items) {
-            foreach ($items as $item) {
-                $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
-                if ($discountBreakdown) {
-                    foreach ($discountBreakdown as $key => $value) {
-                        /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
-                        $discount = $value['discount'];
-                        $ruleLabel = $value['rule'];
-                        if (isset($discountPerRule[$key])) {
-                            $discountPerRule[$key]['discount'] += $discount;
-                        } else {
-                            $discountPerRule[$key]['discount'] = $discount;
-                        }
-                        $discountPerRule[$key]['rule'] = $ruleLabel;
-                    }
+        $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
+        $discountPerRule = $address->getExtensionAttributes()->getDiscounts();
+        if ($discountBreakdown) {
+            foreach ($discountBreakdown as $key => $value) {
+                /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
+                $discount = $value['discount'];
+                $ruleLabel = $value['rule'];
+                if (isset($discountPerRule[$key])) {
+                    $discountPerRule[$key]['discount'] += $discount;
+                } else {
+                    $discountPerRule[$key]['discount'] = $discount;
                 }
+                $discountPerRule[$key]['rule'] = $ruleLabel;
             }
         }
-        return $discountPerRule;
+        $address->getExtensionAttributes()->setDiscounts($discountPerRule);
     }
 }

@@ -9,4 +9,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\CartItemInterface">
         <attribute code="discounts" type="string" />
     </extension_attributes>
+    <extension_attributes for="Magento\Quote\Api\Data\AddressInterface">
+        <attribute code="discounts" type="string" />
+    </extension_attributes>
 </config>

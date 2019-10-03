@@ -178,7 +178,12 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Quote\Model\Quote\Item\CartItemPersister">
+        <plugin name="discount_item_plugin" type="Magento\SalesRule\Model\Quote\Item\Plugin\Discount"/>
+    </type>
+    <type name="Magento\Quote\Model\ResourceModel\Quote">
+        <plugin name="discount_cart_plugin" type="Magento\SalesRule\Model\Plugin\ResourceModel\Discount"/>
+    </type>
     <type name="Magento\Quote\Model\Cart\CartTotalRepository">
         <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
     </type>

@@ -101,9 +101,6 @@
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="quoteProductMassChange" type="Magento\Quote\Model\Product\Plugin\MarkQuotesRecollectMassDisabled"/>
     </type>
-    <type name="Magento\Quote\Model\Quote\Item\CartItemPersister">
-        <plugin name="discountItemPlugin" type="Magento\Quote\Model\Quote\Item\Plugin\Discount"/>
-    </type>
     <type name="Magento\Quote\Model\ValidationRules\QuoteValidationComposite">
         <arguments>
             <argument name="validationRules" xsi:type="array">

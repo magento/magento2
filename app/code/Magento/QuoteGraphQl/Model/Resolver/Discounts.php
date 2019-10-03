@@ -12,27 +12,12 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
-use Magento\QuoteGraphQl\Model\Cart\DiscountAggregator;
 
 /**
  * @inheritdoc
  */
 class Discounts implements ResolverInterface
 {
-    /**
-     * @var DiscountAggregator
-     */
-    private $discountAggregator;
-
-    /**
-     * @param DiscountAggregator|null $discountAggregator
-     */
-    public function __construct(
-        DiscountAggregator $discountAggregator
-    ) {
-        $this->discountAggregator = $discountAggregator;
-    }
-
     /**
      * @inheritdoc
      */
@@ -55,14 +40,15 @@ class Discounts implements ResolverInterface
     private function getDiscountValues(Quote $quote)
     {
         $discountValues=[];
-        $totalDiscounts = $this->discountAggregator->aggregateDiscountPerRule($quote);
+        $address = $quote->getShippingAddress();
+        $totalDiscounts = $address->getExtensionAttributes()->getDiscounts();
         if ($totalDiscounts) {
             foreach ($totalDiscounts as $value) {
                 $discount = [];
                 $amount = [];
                 /* @var \Magento\SalesRule\Model\Rule $rule*/
                 $rule = $value['rule'];
-                $discount['label'] = $rule->getStoreLabel($quote->getStore()) ?: __('Discount');
+                $discount['label'] = $rule ?: __('Discount');
                 $amount['value'] = $value['discount'];
                 $amount['currency'] = $quote->getQuoteCurrencyCode();
                 $discount['amount'] = $amount;
