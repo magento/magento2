@@ -136,7 +136,7 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
     public function validateLayoutSelectedFor(PageModel $page): void
     {
         $layoutFile = $page->getData('layout_update_selected');
-        if ($layoutFile && !$this->isLayoutValidFor($page, $layoutFile)) {
+        if ($layoutFile && (!$page->getId() || !$this->isLayoutValidFor($page, $layoutFile))) {
             throw new LocalizedException(__('Invalid Custom Layout Update selected'));
         }
     }

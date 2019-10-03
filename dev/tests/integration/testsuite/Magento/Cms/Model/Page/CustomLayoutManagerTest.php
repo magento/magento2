@@ -43,6 +43,11 @@ class CustomLayoutManagerTest extends TestCase
     private $resultFactory;
 
     /**
+     * @var IdentityMap
+     */
+    private $identityMap;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -68,6 +73,7 @@ class CustomLayoutManagerTest extends TestCase
             ['manager' => $this->manager]
         );
         $this->pageFactory = $objectManager->get(PageFactory::class);
+        $this->identityMap = $objectManager->get(IdentityMap::class);
     }
 
     /**
@@ -80,15 +86,17 @@ class CustomLayoutManagerTest extends TestCase
     public function testCustomLayoutUpdate(): void
     {
         /** @var Page $page */
-        $page = $this->pageFactory->create();
+        $page = $this->pageFactory->create(['customLayoutRepository' => $this->repo]);
         $page->load('page100', 'identifier');
         $pageId = (int)$page->getId();
+        $this->identityMap->add($page);
         //Set file ID
         $this->repo->save(new CustomLayoutSelected($pageId, 'select2'));
 
         //Test handles
         $result = $this->resultFactory->create();
         $this->manager->applyUpdate($result, $this->repo->getFor($pageId));
+        $this->identityMap->remove((int)$page->getId());
         $this->assertContains('___selectable_page100_select2', $result->getLayout()->getUpdate()->getHandles());
     }
 }

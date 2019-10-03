@@ -116,7 +116,7 @@ class DataProviderTest extends TestCase
             $meta['design']['children']['custom_layout_update_select']['arguments']['data']
         );
         $expectedList = [
-            ['label' => 'No update', 'value' => ''],
+            ['label' => 'No update', 'value' => '_no_update_'],
             ['label' => 'test1', 'value' => 'test1'],
             ['label' => 'test2', 'value' => 'test2']
         ];
@@ -141,7 +141,7 @@ class DataProviderTest extends TestCase
             $meta['design']['children']['custom_layout_update_select']['arguments']['data']
         );
         $expectedList = [
-            ['label' => 'No update', 'value' => ''],
+            ['label' => 'No update', 'value' => '_no_update_'],
             ['label' => 'Use existing layout update XML', 'value' => '_existing_'],
             ['label' => 'test3', 'value' => 'test3'],
         ];

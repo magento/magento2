@@ -57,6 +57,11 @@ class PageDesignTest extends AbstractBackendController
     private $scopeConfig;
 
     /**
+     * @var string[]
+     */
+    private $pagesToDelete = [];
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -69,9 +74,23 @@ class PageDesignTest extends AbstractBackendController
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        foreach ($this->pagesToDelete as $identifier) {
+            $page = $this->pageRetriever->execute($identifier);
+            $page->delete();
+        }
+        $this->pagesToDelete = [];
+    }
+
+    /**
      * Check whether additional authorization is required for the design fields.
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testSaveDesign(): void
@@ -79,7 +98,7 @@ class PageDesignTest extends AbstractBackendController
         //Expected list of sessions messages collected throughout the controller calls.
         $sessionMessages = ['You are not allowed to change CMS pages design settings'];
         //Test page data.
-        $id = 'test-page';
+        $id = 'test-page' .rand(1111, 9999);
         $requestData = [
             PageInterface::IDENTIFIER => $id,
             PageInterface::TITLE => 'Page title',
@@ -130,13 +149,13 @@ class PageDesignTest extends AbstractBackendController
     /**
      * Check that default design values are accepted without the permissions.
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testSaveDesignWithDefaults(): void
     {
         //Test page data.
-        $id = 'test-page';
+        $id = 'test-page' .rand(1111, 9999);
         $defaultLayout = $this->scopeConfig->getValue('web/default_layouts/default_cms_layout');
         $requestData = [
             PageInterface::IDENTIFIER => $id,
@@ -192,7 +211,7 @@ class PageDesignTest extends AbstractBackendController
             PageInterface::TITLE => 'Page title',
             PageInterface::CUSTOM_LAYOUT_UPDATE_XML => $page->getCustomLayoutUpdateXml(),
             PageInterface::LAYOUT_UPDATE_XML => $page->getLayoutUpdateXml(),
-            'layout_update_selected' => ''
+            'layout_update_selected' => '_no_update_'
         ];
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
