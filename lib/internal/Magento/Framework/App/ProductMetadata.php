@@ -8,12 +8,13 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\Composer\ComposerFactory;
-use \Magento\Framework\Composer\ComposerJsonFinder;
-use \Magento\Framework\App\Filesystem\DirectoryList;
-use \Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Class ProductMetadata
+ *
  * @package Magento\Framework\App
  */
 class ProductMetadata implements ProductMetadataInterface
@@ -27,6 +28,11 @@ class ProductMetadata implements ProductMetadataInterface
      * Magento product name
      */
     const PRODUCT_NAME  = 'Magento';
+
+    /**
+     * Cache key for Magento product version
+     */
+    private const MAGENTO_PRODUCT_VERSION_CACHE_KEY = 'magento-product-version';
 
     /**
      * Product version
@@ -47,11 +53,18 @@ class ProductMetadata implements ProductMetadataInterface
     private $composerInformation;
 
     /**
-     * @param ComposerJsonFinder $composerJsonFinder
+     * @var CacheInterface
      */
-    public function __construct(ComposerJsonFinder $composerJsonFinder)
+    private $cache;
+
+    /**
+     * @param ComposerJsonFinder $composerJsonFinder
+     * @param CacheInterface|null $cache
+     */
+    public function __construct(ComposerJsonFinder $composerJsonFinder, CacheInterface $cache = null)
     {
         $this->composerJsonFinder = $composerJsonFinder;
+        $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
     }
 
     /**
@@ -61,6 +74,9 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function getVersion()
     {
+        if ($cachedVersion = $this->cache->load(self::MAGENTO_PRODUCT_VERSION_CACHE_KEY)) {
+            $this->version = $cachedVersion;
+        }
         if (!$this->version) {
             if (!($this->version = $this->getSystemPackageVersion())) {
                 if ($this->getComposerInformation()->isMagentoRoot()) {
@@ -69,6 +85,7 @@ class ProductMetadata implements ProductMetadataInterface
                     $this->version = 'UNKNOWN';
                 }
             }
+            $this->cache->save($this->version, self::MAGENTO_PRODUCT_VERSION_CACHE_KEY);
         }
         return $this->version;
     }
