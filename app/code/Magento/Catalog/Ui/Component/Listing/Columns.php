@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Ui\Component\Listing;
 
 /**
+ * Column IU component
+ *
  * @api
  * @since 100.0.2
  */
@@ -30,6 +32,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         'boolean' => 'select',
         'multiselect' => 'select',
         'date' => 'dateRange',
+        'datetime' => 'datetimeRange',
     ];
 
     /**
@@ -52,7 +55,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare()
     {

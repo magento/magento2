@@ -111,8 +111,30 @@ class Date extends AbstractDataType
     public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $setUtcTimeZone = true)
     {
         try {
-            $dateObj = $this->localeDate->date($date, $this->getLocale(), true);
+            $dateObj = $this->localeDate->date($date, $this->getLocale(), false);
             $dateObj->setTime($hour, $minute, $second);
+            //convert store date to default date in UTC timezone without DST
+            if ($setUtcTimeZone) {
+                $dateObj->setTimezone(new \DateTimeZone('UTC'));
+            }
+            return $dateObj;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Convert given date to default (UTC) timezone
+     *
+     * @param string $date
+     * @param bool $setUtcTimeZone
+     * @return \DateTime|null
+     */
+    public function convertDatetime(string $date, bool $setUtcTimeZone = true): ?\DateTime
+    {
+        try {
+            $date = rtrim($date, 'Z');
+            $dateObj = new \DateTime($date, new \DateTimeZone($this->localeDate->getConfigTimezone()));
             //convert store date to default date in UTC timezone without DST
             if ($setUtcTimeZone) {
                 $dateObj->setTimezone(new \DateTimeZone('UTC'));

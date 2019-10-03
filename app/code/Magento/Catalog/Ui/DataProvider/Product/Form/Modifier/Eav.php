@@ -746,6 +746,9 @@ class Eav extends AbstractModifier
                 // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
+            case 'datetime':
+                $meta = $this->customizeDatetimeAttribute($meta);
+                break;
         }
 
         //Checking access to design config.
@@ -944,6 +947,19 @@ class Eav extends AbstractModifier
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
         $meta['arguments']['data']['config']['wysiwygConfigData'] = $this->wysiwygConfigProcessor->process($attribute);
+
+        return $meta;
+    }
+
+    /**
+     * Customize datetime attribute
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeDatetimeAttribute(array $meta)
+    {
+        $meta['arguments']['data']['config']['options']['showsTime'] = 1;
 
         return $meta;
     }

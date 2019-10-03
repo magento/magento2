@@ -78,5 +78,12 @@
                 <thumbnail_position>stretch</thumbnail_position>
             </watermark>
         </design>
+        <general>
+            <validator_data>
+                <input_types>
+                    <datetime>datetime</datetime>
+                </input_types>
+            </validator_data>
+        </general>
     </default>
 </config>

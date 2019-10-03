@@ -57,6 +57,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ['image', 'text'],
             ['textarea', 'text'],
             ['date', 'datetime'],
+            ['datetime', 'datetime'],
             ['select', 'int'],
             ['boolean', 'int'],
             ['price', 'decimal'],
@@ -91,6 +92,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ['weight', 'default_value_text'],
             ['textarea', 'default_value_textarea'],
             ['date', 'default_value_date'],
+            ['datetime', 'default_value_datetime'],
             ['boolean', 'default_value_yesno']
         ];
     }
