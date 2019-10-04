@@ -14,3 +14,17 @@ type FixedProductTax @doc(description: "A single FPT that can be applied to a pr
     amount: Money @doc(description: "Amount of the FPT as a money object.")
     label: String @doc(description: "The label assigned to the FPT to be displayed on the frontend.")
 }
+
+type StoreConfig {
+    product_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    category_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    sales_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+}
+
+enum FixedProductTaxDisplaySettings @doc(description: "This enumeration display settings for the fixed product tax") {
+    INCLUDING_FPT
+    INCLUDING_FPT_AND_FPT_DESCRIPTION
+    EXCLUDING_FPT_INCLUDING_FPT_AND_FPT_DESCRIPTION
+    EXCLUDING_FPT
+    NONE
+}
