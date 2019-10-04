@@ -35,11 +35,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setAttributeSetFilter($setId)
     {
-        if ($setId instanceof \Magento\Framework\Api\Filter) {
-            $this->addFieldToFilter('attribute_set_id', [$setId->getConditionType() => $setId->getValue()]);
-        } else {
-            $this->addFieldToFilter('attribute_set_id', ['eq' => $setId]);
-        }
+        $condition = ($setId instanceof \Magento\Framework\Api\Filter)
+            ? [$setId->getConditionType() => $setId->getValue()]
+            : ['eq' => $setId];
+
+        $this->addFieldToFilter('attribute_set_id', $condition);
         $this->setOrder('sort_order');
         return $this;
     }
