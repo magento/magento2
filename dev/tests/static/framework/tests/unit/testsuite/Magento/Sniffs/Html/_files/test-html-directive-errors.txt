@@ -1,0 +1,18 @@
+------------------------------------------------------------------------------------------------------------------------------------
+FOUND 6 ERRORS AFFECTING 1 LINE
+------------------------------------------------------------------------------------------------------------------------------------
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad($bad.param())"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "foo.bad.baz()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "$foo.bad.trans()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "$bad.bad()"
+ 1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
+   |       | Found "$bad.multiline()"
+------------------------------------------------------------------------------------------------------------------------------------
+
+

@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div>{{var foo.good}}</div>
+<div>{{var foo.bad()}}</div>
+<div>{{var foo.bad($bad.param())}}</div>
+<div>{{var foo.bad.baz()}}</div>
+<div>{{trans "foo %bar" bar=$foo.good.trans}}</div>
+<div>{{trans "foo %bar" bar=$foo.bad.trans()}}</div>
+<div>{{trans "foo %bar" bar="something"}}</div>
+<div>{{trans "foo %bar" bar="something" bad="$bad.bad()"}}</div>
+<div>{{something "
+    <blah>foo %bar</blah>blah
+    " bar="something"
+}}</div>
+<div>{{something "
+    <blah>foo %bar</blah>blah
+    " bar="something" bad="$bad.multiline()"
+}}</div>

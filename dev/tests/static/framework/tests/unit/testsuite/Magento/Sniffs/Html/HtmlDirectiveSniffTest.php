@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\Sniffs\Html;
 
 /**
- * Test the html binding sniff on real files.
+ * Test the html directive sniff on real files.
  */
-class HtmlBindingSniffTest extends AbstractHtmlSniffTest
+class HtmlDirectiveSniffTest extends AbstractHtmlSniffTest
 {
     /**
      * Files to sniff and expected reports.
@@ -22,8 +22,8 @@ class HtmlBindingSniffTest extends AbstractHtmlSniffTest
     {
         return [
             [
-                'test-html-binding.html',
-                'test-html-binding-errors.txt'
+                'test-html-directive.html',
+                'test-html-directive-errors.txt'
             ]
         ];
     }
