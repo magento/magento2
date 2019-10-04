@@ -10,7 +10,6 @@ namespace Magento\Quote\Test\Unit\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Quote\Model\CustomerManagement;
@@ -315,7 +314,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getActiveForCustomer')
             ->with($userId)
-            ->willThrowException(new NoSuchEntityException());
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->setMethods(['getDefaultBilling'])->disableOriginalConstructor()->getMockForAbstractClass();
         $quoteAddress = $this->createPartialMock(
@@ -466,7 +465,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException NoSuchEntityException
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testAssignCustomerNoSuchCustomer()
     {
@@ -489,7 +488,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getById')
             ->with($customerId)
-            ->willThrowException(new NoSuchEntityException());
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
         $this->expectExceptionMessage(
             "No such entity."
@@ -545,7 +544,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getForCustomer')
             ->with($customerId)
-            ->willThrowException(new NoSuchEntityException());
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
         $activeQuoteMock = $this->createPartialMock(
             Quote::class,
@@ -1001,7 +1000,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetCartForCustomer()
     {
