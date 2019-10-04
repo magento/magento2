@@ -239,6 +239,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      * @param array $filterData
      * @param array $expectedCondition
      * @param MockObject $uiComponent
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processFilters(
         string $name,
@@ -257,18 +258,22 @@ class DateTest extends \PHPUnit\Framework\TestCase
                 $from = new \DateTime($filterData[$name]['from']);
                 $to = new \DateTime($filterData[$name]['to']);
                 $uiComponent->method('convertDatetime')
-                    ->willReturnMap([
-                        [$filterData[$name]['from'], true, $from],
-                        [$filterData[$name]['to'], true, $to],
-                    ]);
+                    ->willReturnMap(
+                        [
+                            [$filterData[$name]['from'], true, $from],
+                            [$filterData[$name]['to'], true, $to],
+                        ]
+                    );
             } else {
                 $from = new \DateTime($filterData[$name]['from']);
                 $to = new \DateTime($filterData[$name]['to'] . ' 23:59:59');
                 $uiComponent->method('convertDate')
-                    ->willReturnMap([
-                        [$filterData[$name]['from'], 0, 0, 0, true, $from],
-                        [$filterData[$name]['to'], 23, 59, 59, true, $to],
-                    ]);
+                    ->willReturnMap(
+                        [
+                            [$filterData[$name]['from'], 0, 0, 0, true, $from],
+                            [$filterData[$name]['to'], 23, 59, 59, true, $to],
+                        ]
+                    );
             }
         }
 

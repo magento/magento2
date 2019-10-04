@@ -58,7 +58,7 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test to Update filter component according to $component
-     * 
+     *
      * @param string $filterType
      * @param string $filterName
      * @dataProvider updateDataProvider

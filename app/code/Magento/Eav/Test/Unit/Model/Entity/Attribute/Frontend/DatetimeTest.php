@@ -56,7 +56,7 @@ class DatetimeTest extends TestCase
 
     /**
      * Test to retrieve attribute value
-     * 
+     *
      * @param string $frontendInput
      * @param int $timeType
      * @dataProvider getValueDataProvider
