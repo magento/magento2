@@ -20,7 +20,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Save/Delete UrlRewrites by Product ID's and visibility
  *
- * @deprecated
+ * @deprecated URL rewrites will be created for all products.
  */
 class AdaptUrlRewritesToVisibilityAttribute
 {
