@@ -27,7 +27,7 @@ type PriceAdjustment @doc(description: "PriceAdjustment is deprecated. Taxes wil
     description: PriceAdjustmentDescriptionEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
 }
 
-enum PriceAdjustmentCodesEnum @doc(description: "PriceAdjustmentCodesEnum is deprecated. This enumeration contains values defined in modules other than the Catalog module.") {
+enum PriceAdjustmentCodesEnum @doc(description: "PriceAdjustment.code is deprecated. This enumeration contains values defined in modules other than the Catalog module.") {
 }
 
 enum PriceAdjustmentDescriptionEnum @doc(description: "PriceAdjustmentDescriptionEnum is deprecated. This enumeration states whether a price adjustment is included or excluded.") {
