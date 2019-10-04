@@ -16,15 +16,15 @@ type FixedProductTax @doc(description: "A single FPT that can be applied to a pr
 }
 
 type StoreConfig {
-    product_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
-    category_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
-    sales_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    product_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The product page display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    category_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The category page display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
+    sales_fixed_product_tax_display_setting : FixedProductTaxDisplaySettings @doc(description: "The sales modules pages display setting for the fixed product tax") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\StoreConfig")
 }
 
 enum FixedProductTaxDisplaySettings @doc(description: "This enumeration display settings for the fixed product tax") {
-    INCLUDING_FPT
-    INCLUDING_FPT_AND_FPT_DESCRIPTION
-    EXCLUDING_FPT_INCLUDING_FPT_AND_FPT_DESCRIPTION
-    EXCLUDING_FPT
-    NONE
+    INCLUDING_FPT @doc(description: "Fixed product tax amount(s) is included into the price and details from fixed_product_taxes should not be displayed")
+    INCLUDING_FPT_AND_FPT_DESCRIPTION @doc(description: "Fixed product tax amount(s) is included into the price and the details from fixed_product_taxes should be displayed")
+    EXCLUDING_FPT_INCLUDING_FPT_AND_FPT_DESCRIPTION @doc(description: "Fixed product tax amount(s) is included into the price and the details from fixed_product_taxes should be shown, also price without the amount(s) of fixed_product_taxes should be displayed")
+    EXCLUDING_FPT @doc(description: "Fixed product tax amount(s) is excluded from the price and details from fixed_product_taxes should not be displayed")
+    NONE @doc(description: "Fixed product tax feature is disabled and we should not show or query fixed_product_taxes field")
 }
