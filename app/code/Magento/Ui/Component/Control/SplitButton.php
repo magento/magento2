@@ -83,12 +83,12 @@ class SplitButton extends Button
             'style' => $this->getStyle(),
         ];
 
-        if (($idHard = $this->getIdHard())) {
+        if ($idHard = $this->getIdHard()) {
             $attributes['id'] = $idHard;
         }
 
         //TODO perhaps we need to skip data-mage-init when disabled="disabled"
-        if (($dataAttribute = $this->getDataAttribute())) {
+        if ($dataAttribute = $this->getDataAttribute()) {
             $this->getDataAttributes($dataAttribute, $attributes);
         }
 
@@ -112,7 +112,7 @@ class SplitButton extends Button
             $title = $this->getLabel();
         }
 
-        if (($currentClass = $this->getClass())) {
+        if ($currentClass = $this->getClass()) {
             $classes[] = $currentClass;
         }
 

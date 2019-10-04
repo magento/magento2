@@ -51,7 +51,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
-        if (($productId && !$product->getEntityId())) {
+        if ($productId && !$product->getEntityId()) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $this->messageManager->addErrorMessage(__('This product doesn\'t exist.'));

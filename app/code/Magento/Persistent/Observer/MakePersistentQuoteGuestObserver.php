@@ -65,8 +65,8 @@ class MakePersistentQuoteGuestObserver implements ObserverInterface
         /** @var $action \Magento\Persistent\Controller\Index */
         $action = $observer->getEvent()->getControllerAction();
         if ($action instanceof \Magento\Persistent\Controller\Index) {
-            if ((($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn())
-                || $this->_persistentData->isShoppingCartPersist())
+            if (($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn())
+                || $this->_persistentData->isShoppingCartPersist()
             ) {
                 $this->quoteManager->setGuest(true);
             }
