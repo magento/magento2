@@ -167,15 +167,12 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         $elements = $this->convertElementsToSelect($elements, $attributesToConvert);
         // The following code is a workaround for custom address attributes
         $path = 'components/checkout/children/steps/children/billing-step/children/payment/children';
-        if ($this->arrayManager->exists($path, $jsLayout)) {
-            $this->arrayManager->set(
+        if ($fields = $this->arrayManager->get($path, $jsLayout)) {
+            $jsLayout = $this->arrayManager->set(
                 $path,
                 $jsLayout,
                 $this->processPaymentChildrenComponents(
-                    $this->arrayManager->get(
-                        $path,
-                        $jsLayout
-                    ),
+                    $fields,
                     $elements
                 )
             );
@@ -183,21 +180,20 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
         $path = 'components/checkout/children/steps/children/shipping-step/children/step-config/children/'
               . 'shipping-rates-validation/children';
-        if ($this->arrayManager->exists($path, $jsLayout)) {
-            $this->arrayManager->set(
+        if ($fields = $this->arrayManager->get($path, $jsLayout)) {
+            $jsLayout = $this->arrayManager->set(
                 $path,
                 $jsLayout,
                 $this->processShippingChildrenComponents(
-                    $this->arrayManager->get($path, $jsLayout)
+                    $fields
                 )
             );
         }
 
         $path = 'components/checkout/children/steps/children/shipping-step/children/shippingAddress/children/'
               . 'shipping-address-fieldset/children';
-        if ($this->arrayManager->exists($path, $jsLayout)) {
-            $fields = $this->arrayManager->get($path, $jsLayout);
-            $this->arrayManager->set(
+        if ($this->arrayManager->get($path, $jsLayout)) {
+            $jsLayout = $this->arrayManager->set(
                 $path,
                 $jsLayout,
                 $this->merger->merge(
