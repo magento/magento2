@@ -184,7 +184,18 @@ class InstallTest extends Injectable
         // Step 3: Web Configuration.
         $assertAdminUri->processAssert($this->installPage);
         $this->installPage->getWebConfigBlock()->clickAdvancedOptions();
-        $this->installPage->getWebConfigBlock()->fill($installConfig);
+        //Waiting for modules list to show and fill it out
+        $browser->waitUntil(
+            function () use ($installConfig) {
+                try {
+                    $this->installPage->getWebConfigBlock()->fill($installConfig);
+                    return true;
+                } catch (\Throwable $exception) {
+                    //Modules list is not yet loaded, waiting some more
+                    return false;
+                }
+            }
+        );
         $this->installPage->getWebConfigBlock()->clickNext();
         // Step 4: Customize Your Store
         $this->installPage->getCustomizeStoreBlock()->fill($installConfig);
