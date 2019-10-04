@@ -42,6 +42,11 @@ class System implements ConfigTypeInterface
     const CONFIG_TYPE = 'system';
 
     /**
+     * Cache key for storing current prefix for config cache
+     */
+    const CACHE_KEY_FOR_PREFIX = 'system_cache_prefix';
+
+    /**
      * Name of the lock to acquire during write
      */
     const LOCK_NAME = 'SYSTEM_CONFIG';
@@ -101,6 +106,16 @@ class System implements ConfigTypeInterface
      * @var LockGuardedCacheLoader
      */
     private $lockQuery;
+
+    /**
+     * Cache prefix
+     *
+     * Allows to continue reading stale cache while new cache
+     * is generated and prevents race condition on write operations
+     *
+     * @var string
+     */
+    private $cachePrefix;
 
     /**
      * @param ConfigSourceInterface $source
@@ -245,9 +260,7 @@ class System implements ConfigTypeInterface
         return $this->lockQuery->nonBlockingLockedLoadData(
             self::$lockName,
             $loadAction,
-            function () {
-                return \Closure::fromCallable([$this, 'readData'])();
-            },
+            \Closure::fromCallable([$this, 'readData']),
             \Closure::fromCallable([$this, 'cacheData']),
             function ($data) use ($scopeType) {
                 return $data[$scopeType] ?? [];
@@ -296,7 +309,13 @@ class System implements ConfigTypeInterface
      */
     private function loadFromCacheAndDecode(string $cacheKey, callable $dataFormatter = null)
     {
-        $cachedData = $this->cache->load($cacheKey);
+        $cachePrefix = $this->loadCachePrefix();
+
+        if (!$cachePrefix) {
+            return false;
+        }
+
+        $cachedData = $this->cache->load($cachePrefix . $cacheKey);
 
         if ($cachedData === false) {
             return false;
@@ -389,18 +408,37 @@ class System implements ConfigTypeInterface
      */
     private function cacheData(array $data)
     {
-        $this->saveToCache($this->configType, $data);
-        $this->saveToCache($this->configType . '_default', $data['default']);
+        $cacheToStore = [
+            $this->configType => $data,
+            $this->configType . '_default' => $data['default']
+        ];
 
         $scopes = [];
         foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
             foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
                 $scopes[$curScopeType][$curScopeId] = 1;
-                $this->saveToCache($this->configType . '_' . $curScopeType . '_' . $curScopeId, $curScopeData);
+                $cacheToStore[$this->configType . '_' . $curScopeType . '_' . $curScopeId] = $curScopeData;
             }
         }
 
-        $this->saveToCache($this->configType . '_scopes', $scopes);
+        $cacheToStore[$this->configType . '_scopes'] = $scopes;
+
+        $cachePrefix = $this->generateCachePrefix();
+        foreach ($cacheToStore as $cacheKey => $cacheData) {
+            $this->saveToCache($cachePrefix . $cacheKey, $cacheData);
+        }
+
+        $oldCachePrefix = $this->loadCachePrefix();
+        $this->saveCachePrefix($cachePrefix);
+
+        if (!$oldCachePrefix) {
+            return $data;
+        }
+
+        foreach (array_keys($cacheToStore) as $cacheKey) {
+            $this->cache->remove($oldCachePrefix . $cacheKey);
+        }
+
         return $data;
     }
 
@@ -419,6 +457,41 @@ class System implements ConfigTypeInterface
             $cacheKey,
             [self::CACHE_TAG]
         );
+    }
+
+    /**
+     * Saves cache prefix into storage to be used on next requests
+     */
+    private function saveCachePrefix(string $cachePrefix)
+    {
+        $this->cachePrefix = $cachePrefix;
+        $this->cache->save(
+            $this->cachePrefix,
+            self::CACHE_KEY_FOR_PREFIX,
+            [self::CACHE_TAG]
+        );
+    }
+
+    /**
+     * Loads cache prefix if not loaded
+     */
+    private function loadCachePrefix(): string
+    {
+        if ($this->cachePrefix === null) {
+            $this->cachePrefix = $this->cache->load(self::CACHE_KEY_FOR_PREFIX);
+        }
+
+        return $this->cachePrefix;
+    }
+
+    /**
+     * Generates new cache prefix
+     *
+     * @return string
+     */
+    private function generateCachePrefix(): string
+    {
+        return uniqid($this->configType);
     }
 
     /**
