@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontElasticsearch6SearchInvalidValueTest">
         <annotations>
-            <features value="Search"/>
+            <features value="Elasticsearch6"/>
             <stories value="Search Product on Storefront"/>
             <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
@@ -24,17 +24,17 @@
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Enable Elasticsearch-->
-            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="enableElasticsearch"/>
+            <magentoCLI command="config:set {{EnableElasticSearch6Config.path}} {{EnableElasticSearch6Config.value}}" stepKey="enableElasticsearch6"/>
             <!--Set Minimal Query Length-->
-            <magentoCLI command="config:set catalog/search/min_query_length 2" stepKey="setMinQueryLength"/>
+            <magentoCLI command="config:set {{SetMinQueryLength2Config.path}} {{SetMinQueryLength2Config.value}}" stepKey="setMinQueryLength"/>
             <!--Reindex indexes and clear cache-->
             <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
             <magentoCLI command="cache:flush config" stepKey="flushCache"/>
         </before>
         <after>
             <!--Set configs to default-->
-            <magentoCLI command="config:set catalog/search/min_query_length 3" stepKey="setMinQueryLengthPreviousState"/>
-            <magentoCLI command="config:set catalog/search/engine mysql" stepKey="resetSearchEnginePreviousState"/>
+            <magentoCLI command="config:set {{SetMinQueryLength3Config.path}} {{SetMinQueryLength3Config.value}}" stepKey="setMinQueryLengthPreviousState"/>
+            <magentoCLI command="config:set {{SetDefaultSearchEngineConfig.path}} {{SetDefaultSearchEngineConfig.value}}" stepKey="resetSearchEnginePreviousState"/>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
