@@ -137,14 +137,14 @@ class AbstractForm extends \Magento\Framework\DataObject
     /**
      * Add child element
      *
-     * if $after parameter is false - then element adds to end of collection
-     * if $after parameter is null - then element adds to begin of collection
-     * if $after parameter is string - then element adds after of the element with some id
+     * If $after parameter is false - then element adds to end of collection
+     * If $after parameter is null - then element adds to befin of collection
+     * If $after parameter is string - then element adds after of the element with some id
      *
-     * @param   string $elementId
-     * @param   string $type
-     * @param   array  $config
-     * @param   bool|string|null  $after
+     * @param string $elementId
+     * @param string $type
+     * @param array $config
+     * @param bool|string|null $after
      * @return AbstractElement
      */
     public function addField($elementId, $type, $config, $after = false)
