@@ -6,6 +6,9 @@
 
 namespace Magento\TestFramework\Mail\Template;
 
+/**
+ * Class TransportBuilderMock
+ */
 class TransportBuilderMock extends \Magento\Framework\Mail\Template\TransportBuilder
 {
     /**
