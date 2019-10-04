@@ -822,7 +822,7 @@ define([
         ],
         'validate-state': [
             function (value) {
-                return value !== 0 || value === '';
+                return value !== 0;
             },
             $.mage.__('Please select State/Province.')
         ],

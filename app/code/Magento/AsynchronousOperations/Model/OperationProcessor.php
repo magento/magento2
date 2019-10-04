@@ -206,9 +206,7 @@ class OperationProcessor
             }
         } catch (NoSuchEntityException $e) {
             $this->logger->error($e->getMessage());
-            $result['status'] = ($e instanceof TemporaryStateExceptionInterface) ?
-                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED :
-                OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
+            $result['status'] = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
             $result['error_code'] = $e->getCode();
             $result['messages'][] = $e->getMessage();
         } catch (LocalizedException $e) {
