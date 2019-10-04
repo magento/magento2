@@ -298,23 +298,28 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
         }
         try {
-            $this->quoteRepository->getForCustomer($customerId);
-            throw new StateException(
-                __("The customer can't be assigned to the cart because the customer already has an active cart.")
-            );
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            $customerActiveQuote = $this->quoteRepository->getForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            /** This exception appear when customer have no active cart*/
+            $customerActiveQuote = $this->quoteFactory->create();
+            $customerActiveQuote->setCustomer($customer);
+            $customerActiveQuote->setCustomerIsGuest(0);
+            $customerActiveQuote->setStoreId($storeId);
+            $customerActiveQuote->setIsActive(true);
         }
 
-        $quote->setCustomer($customer);
-        $quote->setCustomerIsGuest(0);
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'quote_id');
-        if ($quoteIdMask->getId()) {
-            $quoteIdMask->delete();
+        if ($customerActiveQuote->getIsActive()) {
+            /** Merge carts */
+            $customerActiveQuote->merge($quote);
+            $this->quoteRepository->delete($quote);
+            $this->quoteRepository->save($customerActiveQuote);
+
+            return true;
+        } else {
+            throw new \Magento\Framework\Exception\NoSuchEntityException(
+                __("The customer can't be assigned to the cart. No active cart for customer.")
+            );
         }
-        $this->quoteRepository->save($quote);
-        return true;
     }
 
     /**
