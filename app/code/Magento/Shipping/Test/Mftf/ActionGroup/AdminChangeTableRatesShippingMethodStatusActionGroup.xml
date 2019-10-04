@@ -18,6 +18,9 @@
         <selectOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" userInput="{{status}}" stepKey="changeTableRatesMethodStatus"/>
     </actionGroup>
     <actionGroup name="AdminImportFileTableRatesShippingMethodActionGroup">
+        <annotations>
+            <description>Import a file in Table Rates tab in Shipping Method config page.</description>
+        </annotations>
         <arguments>
             <argument name="file" type="string" defaultValue="test_tablerates.csv"/>
         </arguments>

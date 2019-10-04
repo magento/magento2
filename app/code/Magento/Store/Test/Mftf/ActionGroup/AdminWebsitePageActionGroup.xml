@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminGoCreatedWebsitePageActionGroup">
+        <annotations>
+            <description>Filter website name in grid and go first found website page</description>
+        </annotations>
         <arguments>
             <argument name="websiteName" type="string" defaultValue="SecondWebsite"/>
         </arguments>
