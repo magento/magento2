@@ -38,9 +38,6 @@ class PasswordManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $dateTimeFactory;
 
-    /** @var \Magento\Framework\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject */
-    private $objectFactory;
-
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

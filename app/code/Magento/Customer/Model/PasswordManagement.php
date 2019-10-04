@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\PasswordManagementInterface;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
@@ -32,7 +31,7 @@ class PasswordManagement implements PasswordManagementInterface
     /**
      * @var CustomerModel
      */
-    protected $customerModel;
+    private $customerModel;
 
     /**
      * @var CustomerRegistry
@@ -51,8 +50,9 @@ class PasswordManagement implements PasswordManagementInterface
 
     /**
      * @param CustomerRegistry $customerRegistry
-     * @param AccountManagementInterface|null $accountManagement
+     * @param CustomerModel $customerModel
      * @param GetCustomerByToken|null $getByToken
+     * @param DateTimeFactory|null $dateTimeFactory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
