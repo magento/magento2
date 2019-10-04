@@ -63,7 +63,7 @@
         <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="assertShippingMethodAvailable">
             <argument name="shippingMethodName" value="Best Way"/>
         </actionGroup>
-        <actionGroup ref="SetShippingMethodActionGroup" stepKey="setShippingMethodTableRate">
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodTableRate">
             <argument name="shippingMethodName" value="Best Way"/>
         </actionGroup>
         <!--Proceed to Review and Payments section-->
