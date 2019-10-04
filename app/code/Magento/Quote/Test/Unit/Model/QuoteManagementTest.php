@@ -495,7 +495,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model->assignCustomer($cartId, $customerId, $storeId);
-
     }
 
     public function testAssignCustomer()
