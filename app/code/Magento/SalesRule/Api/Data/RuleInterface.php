@@ -61,14 +61,14 @@ interface RuleInterface extends ExtensibleDataInterface
     /**
      * Get display label
      *
-     * @return RuleLabelInterface[]|null
+     * @return \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null
      */
     public function getStoreLabels();
 
     /**
      * Set display label
      *
-     * @param RuleLabelInterface[]|null $storeLabels
+     * @param \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null $storeLabels
      * @return $this
      */
     public function setStoreLabels(array $storeLabels = null);
@@ -182,14 +182,14 @@ interface RuleInterface extends ExtensibleDataInterface
     /**
      * Get condition for the rule
      *
-     * @return ConditionInterface|null
+     * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
      */
     public function getCondition();
 
     /**
      * Set condition for the rule
      *
-     * @param ConditionInterface|null $condition
+     * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $condition
      * @return $this
      */
     public function setCondition(ConditionInterface $condition = null);
@@ -197,14 +197,14 @@ interface RuleInterface extends ExtensibleDataInterface
     /**
      * Get action condition
      *
-     * @return ConditionInterface|null
+     * @return \Magento\SalesRule\Api\Data\ConditionInterface|null
      */
     public function getActionCondition();
 
     /**
      * Set action condition
      *
-     * @param ConditionInterface|null $actionCondition
+     * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $actionCondition
      * @return $this
      */
     public function setActionCondition(ConditionInterface $actionCondition = null);
@@ -438,14 +438,14 @@ interface RuleInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return RuleExtensionInterface|null
+     * @return \Magento\SalesRule\Api\Data\RuleExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param RuleExtensionInterface $extensionAttributes
+     * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(RuleExtensionInterface $extensionAttributes);
