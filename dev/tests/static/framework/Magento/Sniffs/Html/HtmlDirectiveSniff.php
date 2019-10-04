@@ -71,7 +71,7 @@ class HtmlDirectiveSniff implements Sniff
         $parameterTokenizer->setString($body);
         $params = $parameterTokenizer->tokenize();
 
-        foreach ($params as $key => $param) {
+        foreach ($params as $param) {
             if (substr($param, 0, 1) === '$') {
                 $this->validateVariableUsage($phpcsFile, $param);
             }
@@ -94,7 +94,7 @@ class HtmlDirectiveSniff implements Sniff
             return;
         }
 
-        foreach ($stack as $key => $token) {
+        foreach ($stack as $token) {
             if ($token['type'] === 'method') {
                 $phpcsFile->addError(
                     'Template directives may not invoke methods. Only scalar array access is allowed.' . PHP_EOL
