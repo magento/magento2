@@ -192,7 +192,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
         $path = 'components/checkout/children/steps/children/shipping-step/children/shippingAddress/children/'
               . 'shipping-address-fieldset/children';
-        if ($this->arrayManager->get($path, $jsLayout)) {
+        if ($fields = $this->arrayManager->get($path, $jsLayout)) {
             $jsLayout = $this->arrayManager->set(
                 $path,
                 $jsLayout,
