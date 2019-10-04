@@ -67,9 +67,11 @@ class AbstractForm extends \Magento\Framework\DataObject
      * Please override this one instead of overriding real __construct constructor
      *
      * @return void
+     * @codingStandardsIgnoreStart
      */
     protected function _construct()
     {
+        //@codingStandardsIgnoreEnd
     }
 
     /**
