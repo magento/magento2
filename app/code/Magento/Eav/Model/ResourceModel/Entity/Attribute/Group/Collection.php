@@ -5,8 +5,6 @@
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Group;
 
-use Magento\Cms\Model\Template\Filter;
-
 /**
  * Eav attribute group resource collection
  *

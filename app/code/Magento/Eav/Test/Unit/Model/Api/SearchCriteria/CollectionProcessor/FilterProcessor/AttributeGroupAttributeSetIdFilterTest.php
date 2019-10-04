@@ -28,8 +28,6 @@ class AttributeGroupAttributeSetIdFilterTest extends \PHPUnit\Framework\TestCase
 
     public function testApply()
     {
-        $filterValue = 'filter_value';
-
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
