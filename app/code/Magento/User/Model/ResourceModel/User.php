@@ -253,6 +253,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function delete(\Magento\Framework\Model\AbstractModel $user)
     {
+        $user->beforeDelete();
         $this->_beforeDelete($user);
         $connection = $this->getConnection();
 
@@ -268,7 +269,9 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $connection->rollBack();
             return false;
         }
+        $user->afterDelete();
         $connection->commit();
+        $user->afterDeleteCommit();
         $this->_afterDelete($user);
         return true;
     }
