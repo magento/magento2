@@ -91,7 +91,8 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'sk_SK', /*Slovak (Slovakia)*/
         'sl_SI', /*Slovenian (Slovenia)*/
         'sq_AL', /*Albanian (Albania)*/
-        'sr_Cyrl_RS', /*Serbian (Serbia)*/
+        'sr_Cyrl_RS', /*Serbian (Cyrillic, Serbia)*/
+        'sr_Latn_RS', /*Serbian (Latin, Serbia)*/
         'sv_SE', /*Swedish (Sweden)*/
         'sv_FI', /*Swedish (Finland)*/
         'sw_KE', /*Swahili (Kenya)*/
