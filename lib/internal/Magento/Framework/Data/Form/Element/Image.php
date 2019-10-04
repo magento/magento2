@@ -9,9 +9,7 @@ namespace Magento\Framework\Data\Form\Element;
 use Magento\Framework\UrlInterface;
 
 /**
- * Category form input image element
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Category form input image element.
  */
 class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
