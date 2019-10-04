@@ -9,7 +9,6 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
-        "magento/module-cms": "*",
         "magento/module-config": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*"
