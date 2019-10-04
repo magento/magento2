@@ -138,7 +138,7 @@ class AbstractForm extends \Magento\Framework\DataObject
      * Add child element
      *
      * if $after parameter is false - then element adds to end of collection
-     * if $after parameter is null - then element adds to befin of collection
+     * if $after parameter is null - then element adds to begin of collection
      * if $after parameter is string - then element adds after of the element with some id
      *
      * @param   string $elementId
