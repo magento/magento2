@@ -30,7 +30,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <comment userInput="Rollback config" stepKey="rollbackConfigComment"/>
+            <!--Rollback config-->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodSystemConfigPage"/>
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewToMainWebsite">
                 <argument name="website" value="_defaultWebsite"/>
@@ -41,7 +41,7 @@
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveSystemConfig"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <comment userInput="Admin Configuration: enable Table Rates and import CSV file with the rates" stepKey="prepareAdminConfigurationComment"/>
+        <!--Admin Configuration: enable Table Rates and import CSV file with the rates-->
         <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
             <argument name="website" value="_defaultWebsite"/>
@@ -49,28 +49,28 @@
         <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethod"/>
         <attachFile selector="{{AdminShippingMethodTableRatesSection.importFile}}" userInput="tablerates.csv" stepKey="attachFileForImport"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
-        <comment userInput="Login as created customer" stepKey="loginAsCustomerComment"/>
+        <!--Login as created customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <comment userInput="Add the created product to the shopping cart" stepKey="addProductToCartComment"/>
+        <!--Add the created product to the shopping cart-->
         <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <comment userInput="Proceed to Checkout from the mini cart" stepKey="proceedToCheckoutComment"/>
+        <!--Proceed to Checkout from the mini cart-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
-        <comment userInput="Shipping Method: select table rate" stepKey="assertShippingMethodComment"/>
+        <!--Shipping Method: select table rate-->
         <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="assertShippingMethodAvailable">
             <argument name="shippingMethodName" value="Best Way"/>
         </actionGroup>
         <actionGroup ref="SetShippingMethodActionGroup" stepKey="setShippingMethodTableRate">
             <argument name="shippingMethodName" value="Best Way"/>
         </actionGroup>
-        <comment userInput="Proceed to Review and Payments section" stepKey="proceedToReviewAndPaymentsComment"/>
+        <!--Proceed to Review and Payments section-->
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickToSaveShippingInfo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
         <waitForPageLoad stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
-        <comment userInput="Place order and assert the message of success" stepKey="placeOrderComment"/>
-        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <!--Place order and assert the message of success-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderProductSuccessful"/>
     </test>
 </tests>
