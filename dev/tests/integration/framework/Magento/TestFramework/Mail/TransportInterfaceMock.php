@@ -30,6 +30,7 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
      */
     public function sendMessage()
     {
+        //phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired
         return;
     }
 
