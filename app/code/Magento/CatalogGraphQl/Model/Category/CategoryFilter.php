@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Category;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * Category filter allows to filter collection using 'id, url_key, name' from search criteria.
@@ -32,24 +34,47 @@ class CategoryFilter
      * Filter for filtering the requested categories id's based on url_key, ids, name in the result.
      *
      * @param array $args
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
-     * @return bool
+     * @param Collection $categoryCollection
      */
     public function applyFilters(
         array $args,
-        \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection
-    ): bool {
+        Collection $categoryCollection
+    ): void {
+        $categoryCollection->addAttributeToFilter(CategoryInterface::KEY_IS_ACTIVE, ['eq' => 1]);
         foreach ($args['filters'] as $field => $cond) {
             foreach ($cond as $condType => $value) {
                 if ($field === 'ids') {
                     $categoryCollection->addIdFilter($value);
-                } elseif ($condType === 'match') {
-                    $categoryCollection->addAttributeToFilter($field, ['like' => "%{$value}%"]);
                 } else {
-                    $categoryCollection->addAttributeToFilter($field, [$condType => $value]);
+                    $this->addAttributeFilter($categoryCollection, $field, $condType, $value);
                 }
             }
         }
-        return true;
+    }
+
+    /**
+     * @param Collection $categoryCollection
+     * @param string $field
+     * @param string $condType
+     * @param string|array $value
+     */
+    private function addAttributeFilter($categoryCollection, $field, $condType, $value)
+    {
+        if ($condType === 'match') {
+            $this->addMatchFilter($categoryCollection, $field, $value);
+            return;
+        }
+        $categoryCollection->addAttributeToFilter($field, [$condType => $value]);
+    }
+
+    /**
+     *
+     * @param Collection $categoryCollection
+     * @param string $field
+     * @param string $value
+     */
+    private function addMatchFilter($categoryCollection, $field, $value)
+    {
+        $categoryCollection->addAttributeToFilter($field, ['like' => "%{$value}%"]);
     }
 }

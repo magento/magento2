@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\Category;
 use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -77,10 +76,7 @@ class CategoryList implements ResolverInterface
         if (isset($value[$field->getName()])) {
             return $value[$field->getName()];
         }
-
         $categoryCollection = $this->collectionFactory->create();
-        $categoryCollection->addAttributeToFilter('is_active', 1);
-        $categoryCollection->addAttributeToSelect(['name','url_key', 'ids']);
 
         if (!isset($args['filters'])) {
             $rootCategoryIds = [(int)$context->getExtensionAttributes()->getStore()->getRootCategoryId()];
@@ -91,14 +87,10 @@ class CategoryList implements ResolverInterface
                 $rootCategoryIds[] = (int)$category->getId();
             }
         }
-
         $result = [];
         foreach ($rootCategoryIds as $rootCategoryId) {
-            if ($rootCategoryId !== Category::TREE_ROOT_ID) {
-                $this->checkCategoryIsActive->execute($rootCategoryId);
-            }
             $categoryTree = $this->categoryTree->getTree($info, $rootCategoryId);
-            if (empty($categoryTree) || ($categoryTree->count() == 0)) {
+            if (empty($categoryTree)) {
                 throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
             }
             $result[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
