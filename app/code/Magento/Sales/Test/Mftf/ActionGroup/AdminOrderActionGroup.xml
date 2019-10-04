@@ -92,12 +92,9 @@
         <annotations>
             <description>Clears the Email, First Name, Last Name, Street Line 1, City, Postal Code and Phone fields when adding an Order and then verifies that they are required after attempting to Save.</description>
         </annotations>
-        
+
         <seeElement selector="{{AdminOrderFormAccountSection.requiredGroup}}" stepKey="seeCustomerGroupRequired"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.emailRequiredToCreateOrder('1')}}" stepKey="selectEmailRequiredOption"/>
         <seeElement selector="{{AdminOrderFormAccountSection.requiredEmail}}" stepKey="seeEmailRequired"/>
-        <checkOption selector="{{AdminOrderFormItemsSection.emailRequiredToCreateOrder('0')}}" stepKey="unselectEmailRequiredOption"/>
-        <seeElement selector="{{AdminOrderFormAccountSection.noRequiredEmail}}" stepKey="seeNoEmailRequired"/>
         <clearField selector="{{AdminOrderFormAccountSection.email}}" stepKey="clearEmailField"/>
         <clearField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" stepKey="clearFirstNameField"/>
         <clearField selector="{{AdminOrderFormBillingAddressSection.LastName}}" stepKey="clearLastNameField"/>
@@ -184,7 +181,7 @@
         <annotations>
             <description>EXTENDS: addConfigurableProductToOrder. Selects the provided Option to the Configurable Product.</description>
         </annotations>
-        
+
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" userInput="{{option.label}}" stepKey="selectionConfigurableOption"/>
     </actionGroup>
@@ -198,7 +195,7 @@
             <argument name="option"/>
             <argument name="quantity" type="string"/>
         </arguments>
-        
+
         <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect(attribute.default_frontend_label)}}" stepKey="waitForConfigurablePopover"/>
         <wait time="2" stepKey="waitForOptionsToLoad"/>
@@ -216,7 +213,7 @@
             <argument name="product"/>
             <argument name="quantity" type="string" defaultValue="1"/>
         </arguments>
-        
+
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilterBundle"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchBundle"/>
@@ -238,7 +235,7 @@
         <arguments>
             <argument name="price" type="string"/>
         </arguments>
-        
+
         <grabTextFrom selector="{{AdminOrderFormItemsSection.rowPrice('1')}}" stepKey="grabProductPriceFromGrid" after="clickOk"/>
         <assertEquals stepKey="assertProductPriceInGrid" message="Bundle product price in grid should be equal {{price}}" after="grabProductPriceFromGrid">
             <expectedResult type="string">{{price}}</expectedResult>
@@ -519,7 +516,7 @@
             <argument name="product"/>
             <argument name="customer"/>
         </arguments>
-        
+
         <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
         <waitForPageLoad stepKey="waitForNewOrderPageOpened"/>
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
