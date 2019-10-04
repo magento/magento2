@@ -46,6 +46,7 @@ class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
             'template' => 'ui/grid/filters/elements/ui-select',
             'searchUrl' => $this->urlBuilder->getUrl('catalog/product/search'),
             'filterPlaceholder' => __('Product Name or SKU'),
+            'filterRateLimitMethod' => 'notifyWhenChangesStop',
             'isDisplayEmptyPlaceholder' => true,
             'emptyOptionsHtml' => __('Start typing to find products'),
             'missingValuePlaceholder' => __('Product with ID: %s doesn\'t exist'),
