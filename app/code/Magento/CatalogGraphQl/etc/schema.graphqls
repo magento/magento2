@@ -16,9 +16,9 @@ type Query {
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
 }
 
-type Price @doc(description: "The Price object defines the price of a product as well as any tax-related adjustments.") {
-    amount: Money @doc(description: "The price of a product plus a three-letter currency code.")
-    adjustments: [PriceAdjustment] @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
+type Price @doc(description: "Price is deprecated, replaced by ProductPrice. The Price object defines the price of a product as well as any tax-related adjustments.") {
+    amount: Money @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "The price of a product plus a three-letter currency code.")
+    adjustments: [PriceAdjustment] @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
 }
 
 type PriceAdjustment @doc(description: "The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
@@ -41,10 +41,26 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
     DYNAMIC
 }
 
-type ProductPrices @doc(description: "The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
-    minimalPrice: Price @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
-    maximalPrice: Price @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
-    regularPrice: Price @doc(description: "The base price of a product.")
+type ProductPrices @doc(description: "ProductPrices is deprecated, replaced by PriceRange. The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
+    minimalPrice: Price @deprecated(reason: "Use PriceRange.minimum_price.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
+    maximalPrice: Price @deprecated(reason: "Use PriceRange.maximum_price.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
+    regularPrice: Price @deprecated(reason: "Use regular_price from PriceRange.minimum_price or PriceRange.maximum_price.") @doc(description: "The base price of a product.")
+}
+
+type PriceRange @doc(description: "Price range for a product. If the product has a single price, the minimum and maximum price will be the same."){
+    minimum_price: ProductPrice! @doc(description: "The lowest possible price for the product.")
+    maximum_price: ProductPrice @doc(description: "The highest possible price for the product.")
+}
+
+type ProductPrice @doc(description: "Represents a product price.") {
+    regular_price: Money! @doc(description: "The regular price of the product.")
+    final_price: Money! @doc(description: "The final price of the product after discounts applied.")
+    discount: ProductDiscount @doc(description: "The price discount. Represents the difference between the regular and final price.")
+}
+
+type ProductDiscount @doc(description: "A discount applied to a product price.") {
+    percent_off: Float @doc(description: "The discount expressed a percentage.")
+    amount_off: Float @doc(description: "The actual value of the discount.")
 }
 
 type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
@@ -57,7 +73,6 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
     linked_product_type: String @doc(description: "The type of linked product (simple, virtual, bundle, downloadable, grouped, configurable).")
     position: Int @doc(description: "The position within the list of product links.")
 }
-
 
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
     id: Int @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
@@ -77,7 +92,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     thumbnail: ProductImage @doc(description: "The relative path to the product's thumbnail image.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
     new_from_date: String @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @doc(description: "The end date for new product listings.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
-    tier_price: Float @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
+    tier_price: Float @deprecated(reason: "Use price_tiers for product tier price information.") @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
     options_container: String @doc(description: "If the product has multiple options, determines where they appear on the product page.")
     created_at: String @doc(description: "Timestamp indicating when the product was created.")
     updated_at: String @doc(description: "Timestamp indicating when the product was updated.")
@@ -86,7 +101,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     websites: [Website] @doc(description: "An array of websites in which the product is available.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
     product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductLinks")
     media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
-    price: ProductPrices @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
+    price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
+    price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
