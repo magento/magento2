@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOrderSelectShippingMethodActionGroup">
+        <annotations>
+            <description>Select Shipping method from admin order page.</description>
+        </annotations>
         <arguments>
             <argument name="methodTitle" type="string" defaultValue="flatrate"/>
             <argument name="methodName" type="string" defaultValue="fixed"/>

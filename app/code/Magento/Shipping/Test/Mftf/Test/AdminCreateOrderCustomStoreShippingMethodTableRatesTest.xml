@@ -11,7 +11,7 @@
     <test name="AdminCreateOrderCustomStoreShippingMethodTableRatesTest">
         <annotations>
             <features value="Shipping"/>
-            <stories value="Shipping method Table Rates settings gets from wrong store"/>
+            <stories value="Shipping method Table Rates"/>
             <title value="Create order on second store with shipping method Table Rates"/>
             <description value="Create order on second store with shipping method Table Rates"/>
             <severity value="MAJOR"/>
