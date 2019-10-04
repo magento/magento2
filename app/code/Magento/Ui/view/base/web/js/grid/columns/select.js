@@ -21,10 +21,15 @@ define([
         getLabel: function () {
             var options = this.options || [],
                 values = this._super(),
+                multiSelectValues = [],
                 label = [];
 
             if (_.isString(values)) {
-                values = values.split(',');
+                multiSelectValues = values.split(',');
+
+                multiSelectValues = multiSelectValues.map(function (value) {
+                    return value + '';
+                });
             }
 
             if (!_.isArray(values)) {
@@ -40,6 +45,10 @@ define([
             options.forEach(function (item) {
                 if (_.contains(values, item.value + '')) {
                     label.push(item.label);
+                } else {
+                    if (_.contains(multiSelectValues, item.value + '')) {
+                        label.push(item.label);
+                    }
                 }
             });
 
