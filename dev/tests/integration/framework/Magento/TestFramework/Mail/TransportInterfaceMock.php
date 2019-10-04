@@ -8,6 +8,13 @@ namespace Magento\TestFramework\Mail;
 
 class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterface
 {
+    private $message;
+
+    public function __construct($message = '')
+    {
+        $this->message = $message;
+    }
+
     /**
      * Mock of send a mail using transport
      *
@@ -21,10 +28,10 @@ class TransportInterfaceMock implements \Magento\Framework\Mail\TransportInterfa
     /**
      * Get message
      *
-     * @return string
+     * @return mixed
      */
     public function getMessage()
     {
-        return '';
+        return $this->message;
     }
 }
