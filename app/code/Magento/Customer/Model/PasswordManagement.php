@@ -51,8 +51,8 @@ class PasswordManagement implements PasswordManagementInterface
     /**
      * @param CustomerRegistry $customerRegistry
      * @param CustomerModel $customerModel
-     * @param GetCustomerByToken|null $getByToken
      * @param DateTimeFactory|null $dateTimeFactory
+     * @param GetCustomerByToken|null $getByToken
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
