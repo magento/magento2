@@ -127,7 +127,7 @@ abstract class AbstractMassaction extends Widget
      * Retrieve massaction item with id $itemId
      *
      * @param string $itemId
-     * @return Item|null
+     * @return \Magento\Backend\Block\Widget\Grid\Massaction\Item|null
      */
     public function getItem($itemId)
     {
