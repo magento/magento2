@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -18,11 +17,19 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollectionFactory;
 
+/**
+ * Test for Product Price With FPT
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class ProductPriceWithFPTTest extends GraphQlAbstract
 {
-    /** @var  ObjectManager $objectManager */
+    /** @var ObjectManager $objectManager */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp() :void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -33,19 +40,21 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * Catalog Display setting: Excluding Tax
      * FPT Display setting: Including FPT only
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceExcludeTaxAndIncludeFPTOnlySettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceExcludeTaxAndIncludeFPTOnly()
+    public function testCatalogPriceExcludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
        /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/display/type', '1');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '0');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/weee/apply_vat', '0');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -70,6 +79,26 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
         $this->assertEquals(12.7, $fixedProductTax['amount']['value']);
         $this->assertEquals('fpt_for_all_front_label', $fixedProductTax['label']);
+    }
+
+    /**
+     * CatalogPriceExcludeTaxAndIncludeFPTOnlyProvider settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceExcludeTaxAndIncludeFPTOnlySettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/display/type' => '1',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '0',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '0',
+                ]
+            ]
+        ];
     }
 
     /**
@@ -77,19 +106,21 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * Catalog Display setting: Excluding Tax
      * FPT Display setting: Including FPT and FPT description
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceExcludeTaxAndIncludeFPTWithDescriptionSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceExcludeTaxAndIncludeFPTWithDescription()
+    public function testCatalogPriceExcludeTaxAndIncludeFPTWithDescription(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/display/type', '1');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '1');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/weee/apply_vat', '0');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -117,24 +148,45 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     }
 
     /**
+     * CatalogPriceExcludeTaxAndIncludeFPTWithDescription settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceExcludeTaxAndIncludeFPTWithDescriptionSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/display/type' => '1',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '1',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '0',
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Catalog Prices : Excluding Tax
      * Catalog Display setting: Including Tax
      * FPT Display setting: Including FPT only
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnlySettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnly()
+    public function testCatalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/calculation/price_includes_tax', '0');
-        $configWriter->save('tax/display/type', '2');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '0');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/weee/apply_vat', '0');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -171,24 +223,46 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     }
 
     /**
+     * CatalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnly settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnlySettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/calculation/price_includes_tax' => '0',
+                    'tax/display/type' => '2',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '0',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '0',
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Catalog Prices : Excluding Tax
      * Catalog Display setting: Including Tax
      * FPT Display setting: Including FPT and FPT description
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescriptionSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescription()
+    public function testCatalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/calculation/price_includes_tax', '0');
-        $configWriter->save('tax/display/type', '2');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '1');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/weee/apply_vat', '0');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -225,23 +299,46 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     }
 
     /**
+     * CatalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescription settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescriptionSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/calculation/price_includes_tax' => '0',
+                    'tax/display/type' => '2',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '1',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '0',
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Catalog Prices : Including Tax
      * Catalog Display setting: Excluding Tax
      * FPT Display setting: Including FPT and FPT description
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescriptionSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescription()
+    public function testCatalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/display/type', '1');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '1');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/calculation/price_includes_tax', '1');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -269,23 +366,46 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     }
 
     /**
+     * CatalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescription settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescriptionSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/calculation/price_includes_tax' => '1',
+                    'tax/display/type' => '1',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '1',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '1',
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Catalog Prices : Including Tax
      * Catalog Display setting: Including Tax
      * FPT Display setting: Including FPT Only
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnlySettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnly()
+    public function testCatalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnly(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/display/type', '2');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '0');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/calculation/price_includes_tax', '1');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -310,6 +430,27 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $fixedProductTax = $product['price_range']['minimum_price']['fixed_product_taxes'][0];
         $this->assertEquals(12.7, $fixedProductTax['amount']['value']);
         $this->assertEquals('fpt_for_all_front_label', $fixedProductTax['label']);
+    }
+
+    /**
+     * CatalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnly settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnlySettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/calculation/price_includes_tax' => '1',
+                    'tax/display/type' => '2',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '0',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '0',
+                ]
+            ]
+        ];
     }
 
     /**
@@ -318,20 +459,22 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * FPT Display setting: Including FPT and FPT Description
      * Apply Tax to FPT = Yes
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPTSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPT()
-    {
+    public function testCatalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPT(
+        array $weeTaxSettings
+    ) {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/display/type', '2');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '0');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/calculation/price_includes_tax', '1');
-        $configWriter->save('tax/weee/apply_vat', '1');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -357,7 +500,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $product = $result['products']['items'][0];
 
         //12.7 + 7.5% of 12.7 = 13.65
-        $fptWithTax = round(13.65, 2) ;
+        $fptWithTax = round(13.65, 2);
         // final price and regular price are the sum of product price and FPT
         $this->assertEquals(113.65, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
         $this->assertEquals(113.65, round($product['price_range']['minimum_price']['final_price']['value'], 2));
@@ -371,6 +514,26 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertEquals('fpt_for_all_front_label', $fixedProductTax['label']);
     }
 
+    /**
+     * CatalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPT settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPTSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/calculation/price_includes_tax' > '1',
+                    'tax/display/type' => '2',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '0',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '1',
+                ]
+            ]
+        ];
+    }
 
     /**
      * Use multiple FPTs per product with the below tax/fpt configurations
@@ -380,21 +543,22 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * FPT Display setting: Including FPT and FPT description
      * Apply tax on FPT : Yes
      *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTsSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/Weee/_files/fixed_product_attribute.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
-    public function testCatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTs()
+    public function testCatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTs(array $weeTaxSettings)
     {
         /** @var WriterInterface $configWriter */
         $configWriter = $this->objectManager->get(WriterInterface::class);
 
-        $configWriter->save('tax/display/type', '2');
-        $configWriter->save('tax/weee/enable', '1');
-        $configWriter->save('tax/weee/display', '1');
-        $configWriter->save('tax/defaults/region', '1');
-        $configWriter->save('tax/calculation/price_includes_tax', '1');
-        $configWriter->save('tax/weee/apply_vat', '1');
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
 
         /** @var ScopeConfigInterface $scopeConfig */
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
@@ -422,25 +586,50 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertNotEmpty($result['products']['items']);
         $product = $result['products']['items'][0];
-        $this->assertEquals(124.4, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
-        $this->assertCount(2, $product['price_range']['fixed_product_taxes'], 'Fixed product tax count is incorrect');
+        $this->assertEquals(124.40, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertCount(
+            2,
+            $product['price_range']['minimum_price']['fixed_product_taxes'],
+            'Fixed product tax count is incorrect'
+        );
         $this->assertResponseFields(
-            $product['price_range']['fixed_product_taxes'],
+            $product['price_range']['minimum_price']['fixed_product_taxes'],
             [
-                [
-                'amount' => [
-                    'value' => 10.75
-                ],
-                'label' => 'fixed_product_attribute'
-              ],
                 [
                     'amount' => [
                         'value' => 13.6525
                     ],
                     'label' => 'fpt_for_all_front_label'
-                ]
+                ],
+                [
+                    'amount' => [
+                        'value' => 10.75
+                    ],
+                    'label' => 'fixed_product_attribute_front_label'
+                ],
             ]
         );
+    }
+
+    /**
+     * CatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTsSettingsProvider settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTsSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/calculation/price_includes_tax' => '1',
+                    'tax/display/type' => '2',
+                    'tax/weee/enable' => '1',
+                    'tax/weee/display' => '1',
+                    'tax/defaults/region' => '1',
+                    'tax/weee/apply_vat' => '1',
+                ]
+            ]
+        ];
     }
 
     /**

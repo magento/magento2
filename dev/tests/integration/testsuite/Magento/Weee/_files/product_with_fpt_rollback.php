@@ -19,7 +19,7 @@ if ($product->getId()) {
     $product->delete();
 }
 
-/** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 $attribute->load('fpt_for_all', 'attribute_code');

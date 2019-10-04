@@ -16,6 +16,7 @@ $entityModel = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity::
 $entityTypeId = $entityModel->setType(Product::ENTITY)->getTypeId();
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
+/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
 $attribute = Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
@@ -35,6 +36,7 @@ $attribute->setAttributeCode(
     1
 )->save();
 
+/** @var Product $product */
 $product = Bootstrap::getObjectManager()->create(Product::class);
 $product->setTypeId(
     'simple'

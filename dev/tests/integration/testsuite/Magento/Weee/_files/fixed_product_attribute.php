@@ -3,32 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
-$attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
+/** @var \Magento\Catalog\Setup\CategorySetup $installer */
+$installer = Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Setup\CategorySetup::class
+);
+$attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
+$entityModel = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity::class);
+$entityTypeId = $entityModel->setType(Product::ENTITY)->getTypeId();
+$groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-$entityType = $objectManager->create(\Magento\Eav\Model\Entity\Type::class)->loadByCode('catalog_product');
-$defaultSetId = $objectManager->create(\Magento\Catalog\Model\Product::class)->getDefaultAttributeSetid();
+/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+$attribute = Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
+);
+$attribute->setAttributeCode(
+    'fixed_product_attribute'
+)->setEntityTypeId(
+    $entityTypeId
+)->setAttributeGroupId(
+    $groupId
+)->setAttributeSetId(
+    $attributeSetId
+)->setFrontendLabel(
+    'fixed_product_attribute_front_label'
+)->setFrontendInput(
+    'weee'
+)->setIsUserDefined(
+    1
+)->save();
 
-$attributeGroupId = $attributeSet->getDefaultGroupId($entityType->getDefaultAttributeSetId());
+/** @var $product \Magento\Catalog\Model\Product */
+$product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 
-$attributeData = [
-    'entity_type_id' => $entityType->getId(),
-    'attribute_code' => 'fixed_product_attribute',
-    'backend_model' => 'Magento\Weee\Model\Attribute\Backend\Weee\Tax',
-    'is_required' => 0,
-    'is_user_defined' => 1,
-    'is_static' => 1,
-    'attribute_set_id' => $defaultSetId,
-    'attribute_group_id' => $attributeGroupId,
-    'frontend_label' =>'fixed_product_attribute_label'
-];
-
-/** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
-$attribute = $objectManager->create(\Magento\Eav\Model\Entity\Attribute::class);
-$attribute->setData($attributeData);
-$attribute->save();
+$product = $product->loadByAttribute('sku', 'simple-with-ftp');
+if ($product->getId()) {
+    $product->setFixedProductAttribute(
+        [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10.00, 'delete' => '']]
+    )->save();
+}
