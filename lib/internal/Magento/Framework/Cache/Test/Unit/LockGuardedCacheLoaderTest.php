@@ -293,7 +293,6 @@ class LockGuardedCacheLoaderTest extends TestCase
         $this->assertEquals(['uncached'], $result);
     }
 
-
     /** @test */
     public function nonBlockingLoaderTriesLoadingCacheAtLeastTwoTimesWhenItIsLocked()
     {
