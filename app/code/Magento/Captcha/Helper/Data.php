@@ -51,6 +51,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * List uses Models of Captcha
+     *
      * @var array
      */
     protected $_captcha = [];
@@ -71,18 +72,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_factory;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context      $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Filesystem $filesystem
-     * @param \Magento\Captcha\Model\CaptchaFactory $factory
+     * @param Filesystem                                 $filesystem
+     * @param \Magento\Captcha\Model\CaptchaFactory      $factory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory
-    )
-    {
+    ) {
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
         $this->_factory = $factory;
@@ -92,7 +92,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get Captcha
      *
-     * @param string $formId
+     * @param  string $formId
      * @return \Magento\Captcha\Model\CaptchaInterface
      */
     public function getCaptcha($formId)
@@ -113,8 +113,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Returns config value
      *
-     * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
-     * @param \Magento\Store\Model\Store $store
+     * @param  string                     $key   The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
+     * @param  \Magento\Store\Model\Store $store
      * @return \Magento\Framework\App\Config\Element
      */
     public function getConfig($key, $store = null)
@@ -153,7 +153,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get captcha image directory
      *
-     * @param mixed $website
+     * @param  mixed $website
      * @return string
      */
     public function getImgDir($website = null)
@@ -167,16 +167,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get captcha image base URL
      *
-     * @param mixed $website
+     * @param  mixed $website
      * @return string
      */
     public function getImgUrl($website = null)
     {
         return $this->_storeManager->getStore()->getBaseUrl(
             DirectoryList::MEDIA
-            ) . 'captcha' . '/' . $this->_getWebsiteCode(
-                $website
-            ) . '/';
+        ) . 'captcha' . '/' . $this->_getWebsiteCode(
+            $website
+        ) . '/';
     }
 
     /**
@@ -187,15 +187,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function reCaptchaEnable()
     {
         return (bool)$this->scopeConfig->getValue(
-        self::XML_PATH_ENABLED_FRONTEND,
-        ScopeInterface::SCOPE_STORE
+            self::XML_PATH_ENABLED_FRONTEND,
+            ScopeInterface::SCOPE_STORE
         );
     }
 
     /**
      * Get website code
      *
-     * @param mixed $website
+     * @param  mixed $website
      * @return string
      */
     protected function _getWebsiteCode($website = null)
