@@ -11,8 +11,6 @@
         <block name="require.js" class="Magento\Framework\View\Element\Template" template="Magento_Theme::page/js/require_js.phtml" />
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
-            <block class="Magento\Translation\Block\Html\Head\Config" name="translate-config"/>
-            <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
             <block class="Magento\Framework\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
             <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="Magento_Theme::html/notices.phtml"/>
         </referenceContainer>

@@ -16,7 +16,7 @@
     <preference for="Magento\AsynchronousOperations\Api\Data\SummaryOperationStatusInterface" type="Magento\AsynchronousOperations\Model\OperationStatus" />
     <preference for="Magento\AsynchronousOperations\Api\Data\DetailedBulkOperationsStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Detailed" />
     <preference for="Magento\AsynchronousOperations\Api\Data\BulkOperationsStatusInterface" type="Magento\AsynchronousOperations\Model\BulkStatus\Short" />
-    <preference for="Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\AsynchronousOperations\Api\Data\OperationSearchResultsInterface" type="Magento\AsynchronousOperations\Model\OperationSearchResults" />
     <preference for="Magento\AsynchronousOperations\Api\OperationRepositoryInterface" type="Magento\AsynchronousOperations\Model\OperationRepository" />
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
