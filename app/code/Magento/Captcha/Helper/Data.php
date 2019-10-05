@@ -181,4 +181,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $website
         ) . '/';
     }
+    
+     /**
+     * Check if reCaptcha is enable for frontend
+     *
+     * @return bool
+     */
+    public function reCaptchaEnable(){
+        return $this->scopeConfig->getValue(
+            'msp_securitysuite_recaptcha/frontend/enabled',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 }
