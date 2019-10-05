@@ -47,6 +47,11 @@ class System implements ConfigTypeInterface
     const CACHE_KEY_FOR_PREFIX = 'system_cache_prefix';
 
     /**
+     * Stale cache key for reading while new cache is generated
+     */
+    const STALE_CACHE_KEY_FOR_PREFIX = 'stale_system_cache_prefix';
+
+    /**
      * Name of the lock to acquire during write
      */
     const LOCK_NAME = 'SYSTEM_CONFIG';
@@ -237,12 +242,7 @@ class System implements ConfigTypeInterface
      */
     private function loadAllData()
     {
-        return $this->lockQuery->nonBlockingLockedLoadData(
-            self::$lockName,
-            \Closure::fromCallable([$this, 'loadAllDataFromCache']),
-            \Closure::fromCallable([$this, 'readData']),
-            \Closure::fromCallable([$this, 'cacheData'])
-        );
+        return $this->loadFromCacheAndDecode($this->configType) ?: $this->readData();
     }
 
     /**
@@ -253,19 +253,45 @@ class System implements ConfigTypeInterface
      */
     private function loadDefaultScopeData($scopeType)
     {
-        $loadAction = function () use ($scopeType) {
-            return $this->loadDataFromCacheForScopeType($scopeType);
-        };
+        $data = $this->loadDataFromCacheForScopeType($scopeType);
 
-        return $this->lockQuery->nonBlockingLockedLoadData(
-            self::$lockName,
-            $loadAction,
-            \Closure::fromCallable([$this, 'readData']),
-            \Closure::fromCallable([$this, 'cacheData']),
-            function ($data) use ($scopeType) {
-                return $data[$scopeType] ?? [];
-            }
+        if ($data === false) {
+            $data = $this->readData()[$scopeType] ?? [];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Load configuration data for a specified scope.
+     *
+     * @param string $scopeType
+     * @param string $scopeId
+     * @return array
+     */
+    private function loadScopeData($scopeType, $scopeId)
+    {
+        $scopeData = $this->loadFromCacheAndDecode(
+            $this->configType . '_' . $scopeType . '_' . $scopeId
         );
+
+        if ($scopeData !== false) {
+            return $scopeData;
+        }
+
+        $availableScopes = $this->getAvailableDataScopes();
+
+        if ($availableScopes && !isset($availableScopes[$scopeType][$scopeId])) {
+            $scopeData = $this->loadFromCacheAndDecode(
+                $this->configType
+            );
+
+            if (isset($scopeData[$scopeType][$scopeId])) {
+                return $scopeData[$scopeType][$scopeId];
+            }
+        }
+
+        return $this->readData()[$scopeType][$scopeId] ?? [];
     }
 
     /**
@@ -304,10 +330,9 @@ class System implements ConfigTypeInterface
      * Loads data from cache by key and decodes it into ready to use data
      *
      * @param string $cacheKey
-     * @param callable $dataFormatter
      * @return array|bool
      */
-    private function loadFromCacheAndDecode(string $cacheKey, callable $dataFormatter = null)
+    private function loadFromCacheAndDecode(string $cacheKey)
     {
         $cachePrefix = $this->loadCachePrefix();
 
@@ -323,60 +348,7 @@ class System implements ConfigTypeInterface
 
         $decodedData = $this->serializer->unserialize($this->encryptor->decrypt($cachedData));
 
-        if ($dataFormatter) {
-            $decodedData = $dataFormatter($decodedData);
-        }
-
         return $decodedData;
-    }
-
-    /**
-     * Load configuration data for a specified scope.
-     *
-     * @param string $scopeType
-     * @param string $scopeId
-     * @return array
-     */
-    private function loadScopeData($scopeType, $scopeId)
-    {
-        $loadAction = function () use ($scopeType, $scopeId) {
-            $scopeData = $this->loadFromCacheAndDecode(
-                $this->configType . '_' . $scopeType . '_' . $scopeId,
-                function ($cachedData) use ($scopeType, $scopeId) {
-                    return $cachedData;
-                }
-            );
-
-            if ($scopeData !== false) {
-                return $scopeData;
-            }
-
-            $availableScopes = $this->getAvailableDataScopes();
-
-            if ($availableScopes && !isset($availableScopes[$scopeType][$scopeId])) {
-                $scopeData = $this->loadFromCacheAndDecode(
-                    $this->configType
-                );
-
-                if (!isset($scopeData[$scopeType][$scopeId])) {
-                    return false;
-                }
-
-                return $scopeData[$scopeType][$scopeId];
-            }
-
-            return $scopeData;
-        };
-
-        return $this->lockQuery->nonBlockingLockedLoadData(
-            self::$lockName,
-            $loadAction,
-            \Closure::fromCallable([$this, 'readData']),
-            \Closure::fromCallable([$this, 'cacheData']),
-            function ($data) use ($scopeType, $scopeId) {
-                return $data[$scopeType][$scopeId] ?? [];
-            }
-        );
     }
 
     /**
@@ -387,15 +359,10 @@ class System implements ConfigTypeInterface
     private function getAvailableDataScopes(): array
     {
         if ($this->availableDataScopes === null) {
-            $this->loadFromCacheAndDecode(
-                $this->configType . '_scopes',
-                function ($scopes) {
-                    $this->availableDataScopes = $scopes;
-                }
-            );
+            $this->availableDataScopes = $this->loadFromCacheAndDecode($this->configType . '_scopes') ?: [];
         }
 
-        return $this->availableDataScopes ?? [];
+        return $this->availableDataScopes;
     }
 
     /**
@@ -403,11 +370,15 @@ class System implements ConfigTypeInterface
      *
      * Caches data per scope to avoid reading data for all scopes on every request
      *
-     * @param array $data
-     * @return array
+     * @param string $previousCachePrefix
+     * @return string
      */
-    private function cacheData(array $data)
+    private function cacheData(string $previousCachePrefix)
     {
+        $data = $this->readData();
+
+        $this->cachePrefix = $this->generateCachePrefix();
+
         $cacheToStore = [
             $this->configType => $data,
             $this->configType . '_default' => $data['default']
@@ -423,23 +394,17 @@ class System implements ConfigTypeInterface
 
         $cacheToStore[$this->configType . '_scopes'] = $scopes;
 
-        $cachePrefix = $this->generateCachePrefix();
         foreach ($cacheToStore as $cacheKey => $cacheData) {
-            $this->saveToCache($cachePrefix . $cacheKey, $cacheData);
+            $this->saveToCache($cacheKey, $cacheData);
         }
 
-        $oldCachePrefix = $this->loadCachePrefix();
-        $this->saveCachePrefix($cachePrefix);
+        $this->saveCachePrefix();
 
-        if (!$oldCachePrefix) {
-            return $data;
+        if ($previousCachePrefix) {
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$previousCachePrefix]);
         }
 
-        foreach (array_keys($cacheToStore) as $cacheKey) {
-            $this->cache->remove($oldCachePrefix . $cacheKey);
-        }
-
-        return $data;
+        return $this->cachePrefix;
     }
 
     /**
@@ -454,32 +419,53 @@ class System implements ConfigTypeInterface
     {
         $this->cache->save(
             $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
-            $cacheKey,
-            [self::CACHE_TAG]
+            $this->cachePrefix . $cacheKey,
+            [$this->cachePrefix]
         );
     }
 
     /**
      * Saves cache prefix into storage to be used on next requests
      */
-    private function saveCachePrefix(string $cachePrefix)
+    private function saveCachePrefix()
     {
-        $this->cachePrefix = $cachePrefix;
         $this->cache->save(
             $this->cachePrefix,
             self::CACHE_KEY_FOR_PREFIX,
             [self::CACHE_TAG]
         );
+
+        $this->cache->save(
+            $this->cachePrefix,
+            self::STALE_CACHE_KEY_FOR_PREFIX
+        );
     }
 
     /**
-     * Loads cache prefix if not loaded
+     * Loads cache prefix is not previously loaded
+     *
+     * In case of cache prefix is not available in cache storage,
+     * it elects main process which will write data to configuration cache.
+     * So it tries to acquire lock if cache prefix is missing and
+     * uses dataSaver as a way to trigger cache generation by returning null
+     * as data saver only invoked when lock succeeds.
      */
-    private function loadCachePrefix(): string
+    private function loadCachePrefix()
     {
-        if ($this->cachePrefix === null) {
-            $this->cachePrefix = $this->cache->load(self::CACHE_KEY_FOR_PREFIX);
+        if ($this->cachePrefix !== null) {
+            return $this->cachePrefix;
         }
+
+        $this->cachePrefix = $this->lockQuery->nonBlockingLockedLoadData(
+            self::$lockName,
+            function () {
+                return $this->cache->load(self::CACHE_KEY_FOR_PREFIX);
+            },
+            function () {
+                return $this->cache->load(self::STALE_CACHE_KEY_FOR_PREFIX) ?? '';
+            },
+            \Closure::fromCallable([$this, 'cacheData'])
+        );
 
         return $this->cachePrefix;
     }

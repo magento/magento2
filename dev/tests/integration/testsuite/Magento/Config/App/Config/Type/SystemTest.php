@@ -95,26 +95,12 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testClearingSpecificScopeCacheDoesNotBreakCachedValueRetrieval()
-    {
-        // First uncached call to configuration
-        $this->createSystemConfig()->get('websites/base/web/test/test_value_1');
-
-        $this->clearConfigCacheKey('system_websites_base');
-
-        // Second call after cache data is stored
-        $this->assertEquals(
-            'value1.db.website_base.test',
-            $this->createSystemConfig()->get('websites/base/web/test/test_value_1')
-        );
-    }
-
-    public function testClearingDefaultCacheAndLockingItReturnsStaleCachedValue()
+    public function testClearingCachePrefixAndLockingItReturnsStaleCachedValue()
     {
         // First uncached call to configuration
         $this->createSystemConfig()->get('default/web/test/test_value_1');
 
-        $this->clearConfigCacheKey('system_default');
+        $this->clearConfigCachePrefix();
         $this->accessLock()->lock('SYSTEM_CONFIG');
         // Second call after cache data is stored
         $configValue = $this->createSystemConfig()->get('default/web/test/test_value_1');
@@ -126,46 +112,12 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testClearingWebsiteCacheAndLockingItReturnsStaleCachedValue()
-    {
-        // First uncached call to configuration
-        $this->createSystemConfig()->get('websites/base/web/test/test_value_1');
-
-        $this->clearConfigCacheKey('system_websites_base');
-        $this->accessLock()->lock('SYSTEM_CONFIG');
-        // Second call after cache data is stored
-        $configValue = $this->createSystemConfig()->get('websites/base/web/test/test_value_1');
-        $this->accessLock()->unlock('SYSTEM_CONFIG');
-
-        $this->assertEquals(
-            'value1.db.website_base.test',
-            $configValue
-        );
-    }
-
-    public function testClearingStoreCacheAndLockingItReturnsStaleCachedValue()
+    public function testClearingConfigurationCacheAndLockingFallsBackToStaleCache()
     {
         // First uncached call to configuration
         $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
 
-        $this->clearConfigCacheKey('system_stores_default');
-        $this->accessLock()->lock('SYSTEM_CONFIG');
-        // Second call after cache data is stored
-        $configValue = $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
-        $this->accessLock()->unlock('SYSTEM_CONFIG');
-
-        $this->assertEquals(
-            'value1.db.store_default.test',
-            $configValue
-        );
-    }
-
-    public function testClearingConfigurationCacheAndLockingUsesValuesFromConfigData()
-    {
-        // First uncached call to configuration
-        $this->createSystemConfig()->get('stores/default/web/test/test_value_1');
-
-        $this->accessCacheFrontend()->clean();
+        $this->accessCacheFrontend()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [System::CACHE_TAG]);
 
         $this->accessLock()->lock('SYSTEM_CONFIG');
         // Second call after cache data is stored
@@ -178,17 +130,11 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    private function clearConfigCacheKey(string $cacheKey)
+    private function clearConfigCachePrefix()
     {
         $cache = $this->accessCacheFrontend();
 
-        $prefix = $cache->load(System::CACHE_KEY_FOR_PREFIX);
-
-        if (!$prefix) {
-            return;
-        }
-
-        $cache->remove($prefix . $cacheKey);
+        $cache->remove(System::STALE_CACHE_KEY_FOR_PREFIX);
     }
 
     private function accessCacheFrontend(): FrontendInterface
