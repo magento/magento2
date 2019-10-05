@@ -41,7 +41,7 @@ $attribute->setAttributeCode(
 $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 
 $product = $product->loadByAttribute('sku', 'simple-with-ftp');
-if ($product->getId()) {
+if ($product && $product->getId()) {
     $product->setFixedProductAttribute(
         [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10.00, 'delete' => '']]
     )->save();
