@@ -145,7 +145,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isRequired($login = null)
     {
-        if($this->captchaData->reCaptchaEnable()){
+        if ($this->captchaData->reCaptchaEnable()) {
             return false;
         }
         
