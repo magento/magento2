@@ -9,6 +9,7 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Captcha\Helper\Adminhtml;
 
 use Magento\Store\Model\ScopeInterface;
@@ -17,7 +18,7 @@ class Data extends \Magento\Captcha\Helper\Data
 {
     // Configuration path
     const XML_PATH_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
-    
+
     /**
      * @var \Magento\Backend\App\ConfigInterface
      */
@@ -36,7 +37,8 @@ class Data extends \Magento\Captcha\Helper\Data
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory,
         \Magento\Backend\App\ConfigInterface $backendConfig
-    ) {
+    )
+    {
         $this->_backendConfig = $backendConfig;
         parent::__construct($context, $storeManager, $filesystem, $factory);
     }
@@ -54,6 +56,19 @@ class Data extends \Magento\Captcha\Helper\Data
     }
 
     /**
+     * Check if reCaptcha is enable for backend
+     *
+     * @return bool
+     */
+    public function reCaptchaEnable()
+    {
+        return (bool)$this->scopeConfig->getValue(
+            XML_PATH_ENABLED_BACKEND,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
      * Get website code
      *
      * @param mixed $website
@@ -62,18 +77,5 @@ class Data extends \Magento\Captcha\Helper\Data
     protected function _getWebsiteCode($website = null)
     {
         return 'admin';
-    }
-    
-     /**
-     * Check if reCaptcha is enable for backend
-     *
-     * @return bool
-     */
-    public function reCaptchaEnable()
-    {
-        return (bool) $this->scopeConfig->getValue(
-            XML_PATH_ENABLED_BACKEND,
-            ScopeInterface::SCOPE_STORE
-        );
     }
 }
