@@ -73,7 +73,7 @@ class Data extends \Magento\Captcha\Helper\Data
     {
         return (bool) $this->scopeConfig->getValue(
             XML_PATH_ENABLED_BACKEND,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 }
