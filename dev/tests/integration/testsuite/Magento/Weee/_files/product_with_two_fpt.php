@@ -8,6 +8,8 @@ declare(strict_types=1);
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 
+require __DIR__ . '/product_with_fpt.php';
+
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
 $installer = Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Setup\CategorySetup::class

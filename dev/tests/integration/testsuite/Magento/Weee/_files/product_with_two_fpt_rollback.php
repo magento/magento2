@@ -22,5 +22,7 @@ if ($attribute->getId()) {
     $attribute->delete();
 }
 
+require __DIR__ . '/product_with_fpt_rollback.php';
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
