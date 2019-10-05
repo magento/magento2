@@ -7,7 +7,7 @@
 /**
  * Captcha helper for adminhtml area
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\Captcha\Helper\Adminhtml;
@@ -20,7 +20,7 @@ class Data extends \Magento\Captcha\Helper\Data
      * @var \Magento\Backend\App\ConfigInterface
      */
     protected $_backendConfig;
-    
+
     /**
      * Backend configuration path for reCaptcha
      */
@@ -28,10 +28,10 @@ class Data extends \Magento\Captcha\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManager $storeManager
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Store\Model\StoreManager     $storeManager
+     * @param \Magento\Framework\Filesystem         $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
-     * @param \Magento\Backend\App\ConfigInterface $backendConfig
+     * @param \Magento\Backend\App\ConfigInterface  $backendConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -39,8 +39,7 @@ class Data extends \Magento\Captcha\Helper\Data
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory,
         \Magento\Backend\App\ConfigInterface $backendConfig
-    )
-    {
+    ) {
         $this->_backendConfig = $backendConfig;
         parent::__construct($context, $storeManager, $filesystem, $factory);
     }
@@ -48,8 +47,8 @@ class Data extends \Magento\Captcha\Helper\Data
     /**
      * Returns config value for admin captcha
      *
-     * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
-     * @param \Magento\Store\Model\Store $store
+     * @param  string                     $key   The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
+     * @param  \Magento\Store\Model\Store $store
      * @return \Magento\Framework\App\Config\Element
      */
     public function getConfig($key, $store = null)
@@ -73,7 +72,7 @@ class Data extends \Magento\Captcha\Helper\Data
     /**
      * Get website code
      *
-     * @param mixed $website
+     * @param  mixed $website
      * @return string
      */
     protected function _getWebsiteCode($website = null)
