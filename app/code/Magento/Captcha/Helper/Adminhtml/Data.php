@@ -63,7 +63,7 @@ class Data extends \Magento\Captcha\Helper\Data
     public function reCaptchaEnable()
     {
         return (bool)$this->scopeConfig->getValue(
-            XML_PATH_ENABLED_BACKEND,
+            self::XML_PATH_ENABLED_BACKEND,
             ScopeInterface::SCOPE_STORE
         );
     }
