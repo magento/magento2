@@ -183,9 +183,9 @@ class PageRepository implements PageRepositoryInterface
                     $page->setCustomThemeFrom($savedPage->getCustomThemeFrom());
                 }
             }
-            if($page->getId()){
+            if ($page->getId()) {
                 $savedPage = $this->getById($page->getId());
-                $pageData = array_replace_recursive($savedPage->toArray(),$page->toArray());
+                $pageData = array_replace_recursive($savedPage->toArray(), $page->toArray());
                 $page->addData($pageData);
             }
             $this->resource->save($page);
