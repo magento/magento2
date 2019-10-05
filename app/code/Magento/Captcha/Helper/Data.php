@@ -188,7 +188,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool
      */
     public function reCaptchaEnable(){
-        return $this->scopeConfig->getValue(
+        return (bool)$this->scopeConfig->getValue(
             'msp_securitysuite_recaptcha/frontend/enabled',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
