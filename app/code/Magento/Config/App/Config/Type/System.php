@@ -375,9 +375,9 @@ class System implements ConfigTypeInterface
      */
     private function cacheData(string $previousCachePrefix)
     {
-        $data = $this->readData();
-
         $this->cachePrefix = $this->generateCachePrefix();
+
+        $data = $this->readData();
 
         $cacheToStore = [
             $this->configType => $data,
