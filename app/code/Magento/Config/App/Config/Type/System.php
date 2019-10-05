@@ -340,6 +340,18 @@ class System implements ConfigTypeInterface
             return false;
         }
 
+        return $this->loadFromCacheAndDecodeWithPrefix($cacheKey, $cachePrefix);
+    }
+
+    /**
+     * Loads data from cache by key and decodes it into ready to use data
+     *
+     * @param string $cacheKey
+     * @param string $cachePrefix
+     * @return array|bool
+     */
+    private function loadFromCacheAndDecodeWithPrefix(string $cacheKey, string $cachePrefix)
+    {
         $cachedData = $this->cache->load($cachePrefix . $cacheKey);
 
         if ($cachedData === false) {
@@ -395,13 +407,15 @@ class System implements ConfigTypeInterface
         $cacheToStore[$this->configType . '_scopes'] = $scopes;
 
         foreach ($cacheToStore as $cacheKey => $cacheData) {
-            $this->saveToCache($cacheKey, $cacheData);
+            $this->saveToCache($cacheKey, $this->cachePrefix, $cacheData);
         }
+
+        $this->saveToCache($this->configType . '_expire_keys', $this->cachePrefix, array_keys($cacheToStore));
 
         $this->saveCachePrefix();
 
         if ($previousCachePrefix) {
-            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$previousCachePrefix]);
+            $this->expirePreviousCacheAfterMinute($previousCachePrefix);
         }
 
         return $this->cachePrefix;
@@ -410,16 +424,15 @@ class System implements ConfigTypeInterface
     /**
      * Saves data by encoding it for a storage
      *
-     * Automatically adds a cache key
-     *
      * @param string $cacheKey
+     * @param string $cachePrefix
      * @param array $data
      */
-    private function saveToCache(string $cacheKey, array $data)
+    private function saveToCache(string $cacheKey, string $cachePrefix, array $data)
     {
         $this->cache->save(
             $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
-            $this->cachePrefix . $cacheKey,
+            $cachePrefix . $cacheKey,
             [$this->cachePrefix]
         );
     }
@@ -538,5 +551,29 @@ class System implements ConfigTypeInterface
             self::$lockName,
             $cleanAction
         );
+    }
+
+    /**
+     * Expires previous configuration cache after one minute
+     *
+     * Saving cache with expire time prevents slow access for still open connection
+     *
+     * @param string $previousCachePrefix
+     */
+    private function expirePreviousCacheAfterMinute(string $previousCachePrefix)
+    {
+        $keysToExpire = $this->loadFromCacheAndDecodeWithPrefix(
+            $this->configType . '_scopes_keys',
+            $previousCachePrefix
+        ) ?: [];
+
+        foreach ($keysToExpire as $cacheKey) {
+            $value = $this->cache->load($previousCachePrefix . $cacheKey);
+            if (!$value) {
+                continue;
+            }
+
+            $this->cache->save($value, $previousCachePrefix . $cacheKey, [], 60);
+        }
     }
 }
