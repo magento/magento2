@@ -236,6 +236,66 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Walk nested hash map by keys from $pathParts.
+     *
+     * @param array $data to walk in
+     * @param array $pathParts keys path
+     * @return mixed
+     */
+    private function getDataByPathParts($data, $pathParts)
+    {
+        foreach ($pathParts as $key) {
+            if ((array)$data === $data && isset($data[$key])) {
+                $data = $data[$key];
+            } elseif ($data instanceof \Magento\Framework\DataObject) {
+                $data = $data->getDataByKey($key);
+            } else {
+                return null;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * The freshly read data.
+     *
+     * @return array
+     */
+    private function readData(): array
+    {
+        $this->data = $this->reader->read();
+        $this->data = $this->postProcessor->process(
+            $this->data
+        );
+
+        return $this->data;
+    }
+
+    /**
+     * Clean cache and global variables cache.
+     *
+     * Next items cleared:
+     * - Internal property intended to store already loaded configuration data
+     * - All records in cache storage tagged with CACHE_TAG
+     *
+     * @return void
+     * @since 100.1.2
+     */
+    public function clean()
+    {
+        $this->data = [];
+        $cleanAction = function () {
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+        };
+
+        $this->lockQuery->lockedCleanData(
+            self::$lockName,
+            $cleanAction
+        );
+    }
+
+    /**
      * Load configuration data for all scopes.
      *
      * @return array
@@ -364,17 +424,32 @@ class System implements ConfigTypeInterface
     }
 
     /**
-     * Retrieves available data scopes from cache
+     * Loads cache prefix is not previously loaded
      *
-     * @return string[]
+     * In case of cache prefix is not available in cache storage,
+     * it elects main process which will write data to configuration cache.
+     * So it tries to acquire lock if cache prefix is missing and
+     * uses dataSaver as a way to trigger cache generation by returning null
+     * as data saver only invoked when lock succeeds.
      */
-    private function getAvailableDataScopes(): array
+    private function loadCachePrefix()
     {
-        if ($this->availableDataScopes === null) {
-            $this->availableDataScopes = $this->loadFromCacheAndDecode($this->configType . '_scopes') ?: [];
+        if ($this->cachePrefix !== null) {
+            return $this->cachePrefix;
         }
 
-        return $this->availableDataScopes;
+        $this->cachePrefix = $this->lockQuery->nonBlockingLockedLoadData(
+            self::$lockName,
+            function () {
+                return $this->cache->load(self::CACHE_KEY_FOR_PREFIX);
+            },
+            function () {
+                return $this->cache->load(self::STALE_CACHE_KEY_FOR_PREFIX) ?? '';
+            },
+            \Closure::fromCallable([$this, 'cacheData'])
+        );
+
+        return $this->cachePrefix;
     }
 
     /**
@@ -407,18 +482,41 @@ class System implements ConfigTypeInterface
         $cacheToStore[$this->configType . '_scopes'] = $scopes;
 
         foreach ($cacheToStore as $cacheKey => $cacheData) {
-            $this->saveToCache($cacheKey, $this->cachePrefix, $cacheData);
+            $this->saveArrayToCache($cacheKey, $this->cachePrefix, $cacheData);
         }
 
-        $this->saveToCache($this->configType . '_expire_keys', $this->cachePrefix, array_keys($cacheToStore));
+        $this->saveArrayToCache($this->configType . '_expire_keys', $this->cachePrefix, array_keys($cacheToStore));
 
-        $this->saveCachePrefix();
+        $this->cache->save(
+            $this->cachePrefix,
+            self::CACHE_KEY_FOR_PREFIX,
+            [self::CACHE_TAG]
+        );
 
         if ($previousCachePrefix) {
-            $this->expirePreviousCacheAfterMinute($previousCachePrefix);
+            $this->expirePreviousCacheAfterAMinute($previousCachePrefix);
         }
 
+        $this->cache->save(
+            $this->cachePrefix,
+            self::STALE_CACHE_KEY_FOR_PREFIX
+        );
+
         return $this->cachePrefix;
+    }
+
+    /**
+     * Retrieves available data scopes from cache
+     *
+     * @return string[]
+     */
+    private function getAvailableDataScopes(): array
+    {
+        if ($this->availableDataScopes === null) {
+            $this->availableDataScopes = $this->loadFromCacheAndDecode($this->configType . '_scopes') ?: [];
+        }
+
+        return $this->availableDataScopes;
     }
 
     /**
@@ -428,59 +526,13 @@ class System implements ConfigTypeInterface
      * @param string $cachePrefix
      * @param array $data
      */
-    private function saveToCache(string $cacheKey, string $cachePrefix, array $data)
+    private function saveArrayToCache(string $cacheKey, string $cachePrefix, array $data)
     {
         $this->cache->save(
             $this->encryptor->encryptWithFastestAvailableAlgorithm($this->serializer->serialize($data)),
             $cachePrefix . $cacheKey,
             [$this->cachePrefix]
         );
-    }
-
-    /**
-     * Saves cache prefix into storage to be used on next requests
-     */
-    private function saveCachePrefix()
-    {
-        $this->cache->save(
-            $this->cachePrefix,
-            self::CACHE_KEY_FOR_PREFIX,
-            [self::CACHE_TAG]
-        );
-
-        $this->cache->save(
-            $this->cachePrefix,
-            self::STALE_CACHE_KEY_FOR_PREFIX
-        );
-    }
-
-    /**
-     * Loads cache prefix is not previously loaded
-     *
-     * In case of cache prefix is not available in cache storage,
-     * it elects main process which will write data to configuration cache.
-     * So it tries to acquire lock if cache prefix is missing and
-     * uses dataSaver as a way to trigger cache generation by returning null
-     * as data saver only invoked when lock succeeds.
-     */
-    private function loadCachePrefix()
-    {
-        if ($this->cachePrefix !== null) {
-            return $this->cachePrefix;
-        }
-
-        $this->cachePrefix = $this->lockQuery->nonBlockingLockedLoadData(
-            self::$lockName,
-            function () {
-                return $this->cache->load(self::CACHE_KEY_FOR_PREFIX);
-            },
-            function () {
-                return $this->cache->load(self::STALE_CACHE_KEY_FOR_PREFIX) ?? '';
-            },
-            \Closure::fromCallable([$this, 'cacheData'])
-        );
-
-        return $this->cachePrefix;
     }
 
     /**
@@ -494,73 +546,13 @@ class System implements ConfigTypeInterface
     }
 
     /**
-     * Walk nested hash map by keys from $pathParts.
-     *
-     * @param array $data to walk in
-     * @param array $pathParts keys path
-     * @return mixed
-     */
-    private function getDataByPathParts($data, $pathParts)
-    {
-        foreach ($pathParts as $key) {
-            if ((array)$data === $data && isset($data[$key])) {
-                $data = $data[$key];
-            } elseif ($data instanceof \Magento\Framework\DataObject) {
-                $data = $data->getDataByKey($key);
-            } else {
-                return null;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * The freshly read data.
-     *
-     * @return array
-     */
-    private function readData(): array
-    {
-        $this->data = $this->reader->read();
-        $this->data = $this->postProcessor->process(
-            $this->data
-        );
-
-        return $this->data;
-    }
-
-    /**
-     * Clean cache and global variables cache.
-     *
-     * Next items cleared:
-     * - Internal property intended to store already loaded configuration data
-     * - All records in cache storage tagged with CACHE_TAG
-     *
-     * @return void
-     * @since 100.1.2
-     */
-    public function clean()
-    {
-        $this->data = [];
-        $cleanAction = function () {
-            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
-        };
-
-        $this->lockQuery->lockedCleanData(
-            self::$lockName,
-            $cleanAction
-        );
-    }
-
-    /**
      * Expires previous configuration cache after one minute
      *
      * Saving cache with expire time prevents slow access for still open connection
      *
      * @param string $previousCachePrefix
      */
-    private function expirePreviousCacheAfterMinute(string $previousCachePrefix)
+    private function expirePreviousCacheAfterAMinute(string $previousCachePrefix)
     {
         $keysToExpire = $this->loadFromCacheAndDecodeWithPrefix(
             $this->configType . '_scopes_keys',
