@@ -301,25 +301,28 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $customerActiveQuote = $this->quoteRepository->getForCustomer($customerId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             /** This exception appear when customer have no active cart*/
-            $customerActiveQuote = $this->quoteFactory->create();
-            $customerActiveQuote->setCustomer($customer);
-            $customerActiveQuote->setCustomerIsGuest(0);
-            $customerActiveQuote->setStoreId($storeId);
-            $customerActiveQuote->setIsActive(true);
+            $customerActiveQuote = false;
         }
 
-        if ($customerActiveQuote->getIsActive()) {
+        if ($customerActiveQuote) {
             /** Merge carts */
-            $customerActiveQuote->merge($quote);
-            $this->quoteRepository->delete($quote);
-            $this->quoteRepository->save($customerActiveQuote);
-
-            return true;
-        } else {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __("The customer can't be assigned to the cart. No active cart for customer.")
-            );
+            $quote->merge($customerActiveQuote);
+            $this->quoteRepository->delete($customerActiveQuote);
         }
+        $quote->setCustomer($customer);
+        $quote->setCustomerIsGuest(0);
+        $quote->setStoreId($storeId);
+        $quote->setIsActive(1);
+
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'quote_id');
+        if ($quoteIdMask->getId()) {
+            $quoteIdMask->delete();
+        }
+
+        $this->quoteRepository->save($quote);
+
+        return true;
     }
 
     /**
