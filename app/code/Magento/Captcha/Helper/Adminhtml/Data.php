@@ -16,13 +16,15 @@ use Magento\Store\Model\ScopeInterface;
 
 class Data extends \Magento\Captcha\Helper\Data
 {
-    // Configuration path
-    const XML_PATH_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
-
     /**
      * @var \Magento\Backend\App\ConfigInterface
      */
     protected $_backendConfig;
+    
+    /**
+     * Backend configuration path for reCaptcha
+     */
+    const XML_PATH_ENABLED_BACKEND = 'msp_securitysuite_recaptcha/backend/enabled';
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
