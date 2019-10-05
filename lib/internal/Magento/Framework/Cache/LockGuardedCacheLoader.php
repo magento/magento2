@@ -131,18 +131,16 @@ class LockGuardedCacheLoader
 
         $isLocked = $this->isLocked($lockName);
 
+        // Optimistic load before trying to acquire lock for write
+        $cachedData = $dataLoader();
+        if ($cachedData !== false) {
+            return $cachedData;
+        }
+
         $isLockAcquired = false;
 
         if (!$isLocked) {
             $isLockAcquired = $this->locker->lock($lockName, 0);
-            $isLocked = true;
-        }
-
-        if ($isLocked && !$isLockAcquired) {
-            $cachedData = $dataLoader();
-            if ($cachedData !== false) {
-                return $cachedData;
-            }
         }
 
         $cachedData = $dataCollector();
