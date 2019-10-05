@@ -37,6 +37,15 @@ class LockGuardedCacheLoader
     private $delayTimeout;
 
     /**
+     * List of locked names
+     *
+     * Used to prevent race condition when lock get released during request
+     *
+     * @var string[]
+     */
+    private $lockedNames = [];
+
+    /**
      * @param LockManagerInterface $locker
      * @param int $lockTimeout
      * @param int $delayTimeout
@@ -120,7 +129,7 @@ class LockGuardedCacheLoader
             return $cachedData;
         }
 
-        $isLocked = $this->locker->isLocked($lockName);
+        $isLocked = $this->isLocked($lockName);
 
         $isLockAcquired = false;
 
@@ -168,5 +177,28 @@ class LockGuardedCacheLoader
         } finally {
             $this->locker->unlock($lockName);
         }
+    }
+
+    /**
+     * Checks if name is locked
+     *
+     * Preserves value in locked names list
+     * if it was locked to prevent race condition
+     *
+     * @param string $lockName
+     * @return bool
+     */
+    private function isLocked($lockName)
+    {
+        if (isset($this->lockedNames[$lockName])) {
+            return true;
+        }
+
+        if ($this->locker->isLocked($lockName)) {
+            $this->lockedNames[$lockName] = $lockName;
+            return true;
+        }
+
+        return false;
     }
 }

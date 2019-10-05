@@ -262,6 +262,39 @@ class LockGuardedCacheLoaderTest extends TestCase
     }
 
     /** @test */
+    public function nonBlockingLoaderPreventsSecondWriteOperationIfCacheWasAlreadyLockedBefore()
+    {
+        $this->lockManager->lock('lock1');
+
+        $this->lockGuard->nonBlockingLockedLoadData(
+            'lock1',
+            function () {
+                return false;
+            },
+            function () {
+                return ['uncached'];
+            },
+            $this->returnPassedDataWithMergedValue(['cached'])
+        );
+
+        $this->lockManager->unlock('lock1');
+
+        $result = $this->lockGuard->nonBlockingLockedLoadData(
+            'lock1',
+            function () {
+                return false;
+            },
+            function () {
+                return ['uncached'];
+            },
+            $this->returnPassedDataWithMergedValue(['cached'])
+        );
+
+        $this->assertEquals(['uncached'], $result);
+    }
+
+
+    /** @test */
     public function nonBlockingLoaderTriesLoadingCacheAtLeastTwoTimesWhenItIsLocked()
     {
         $lockSequence = [
