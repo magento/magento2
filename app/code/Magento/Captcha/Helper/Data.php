@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Captcha\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -42,7 +43,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Default captcha type
      */
     const DEFAULT_CAPTCHA_TYPE = 'Zend';
-    
+
     // Configuration path
     const XML_PATH_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
 
@@ -78,7 +79,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory
-    ) {
+    )
+    {
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
         $this->_factory = $factory;
@@ -161,17 +163,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get website code
-     *
-     * @param mixed $website
-     * @return string
-     */
-    protected function _getWebsiteCode($website = null)
-    {
-        return $this->_storeManager->getWebsite($website)->getCode();
-    }
-
-    /**
      * Get captcha image base URL
      *
      * @param mixed $website
@@ -180,22 +171,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getImgUrl($website = null)
     {
         return $this->_storeManager->getStore()->getBaseUrl(
-            DirectoryList::MEDIA
-        ) . 'captcha' . '/' . $this->_getWebsiteCode(
-            $website
-        ) . '/';
+                DirectoryList::MEDIA
+            ) . 'captcha' . '/' . $this->_getWebsiteCode(
+                $website
+            ) . '/';
     }
-    
-     /**
+
+    /**
      * Check if reCaptcha is enable for frontend
      *
      * @return bool
      */
     public function reCaptchaEnable()
     {
-        return (bool) $this->scopeConfig->getValue(
-             XML_PATH_ENABLED_FRONTEND,
-             ScopeInterface::SCOPE_STORE
+        return (bool)$this->scopeConfig->getValue(
+            XML_PATH_ENABLED_FRONTEND,
+            ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Get website code
+     *
+     * @param mixed $website
+     * @return string
+     */
+    protected function _getWebsiteCode($website = null)
+    {
+        return $this->_storeManager->getWebsite($website)->getCode();
     }
 }
