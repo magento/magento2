@@ -185,7 +185,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function reCaptchaEnable()
     {
         return (bool)$this->scopeConfig->getValue(
-            XML_PATH_ENABLED_FRONTEND,
+            self::XML_PATH_ENABLED_FRONTEND,
             ScopeInterface::SCOPE_STORE
         );
     }
