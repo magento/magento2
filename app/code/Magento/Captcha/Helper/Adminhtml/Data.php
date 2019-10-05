@@ -58,4 +58,16 @@ class Data extends \Magento\Captcha\Helper\Data
     {
         return 'admin';
     }
+    
+     /**
+     * Check if reCaptcha is enable for backend
+     *
+     * @return bool
+     */
+    public function reCaptchaEnable(){
+        return $this->scopeConfig->getValue(
+            'msp_securitysuite_recaptcha/backend/enabled',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 }
