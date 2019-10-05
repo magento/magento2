@@ -44,7 +44,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const DEFAULT_CAPTCHA_TYPE = 'Zend';
 
-    // Configuration path
+    /**
+     * Frontend configuration path for reCaptcha
+     */
     const XML_PATH_ENABLED_FRONTEND = 'msp_securitysuite_recaptcha/frontend/enabled';
 
     /**
@@ -171,7 +173,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getImgUrl($website = null)
     {
         return $this->_storeManager->getStore()->getBaseUrl(
-                DirectoryList::MEDIA
+            DirectoryList::MEDIA
             ) . 'captcha' . '/' . $this->_getWebsiteCode(
                 $website
             ) . '/';
@@ -185,8 +187,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function reCaptchaEnable()
     {
         return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_ENABLED_FRONTEND,
-            ScopeInterface::SCOPE_STORE
+        self::XML_PATH_ENABLED_FRONTEND,
+        ScopeInterface::SCOPE_STORE
         );
     }
 
