@@ -16,6 +16,7 @@
                             $block->getUrl(null, ['_secure' => true]),
                             $block->getUrl(null, ['_secure' => false]),
                         ]),
+                        'sectionNames' => $block->getData('sectionNamesProvider')->getSectionNames()
                     ]
                 ]); ?>
     });
