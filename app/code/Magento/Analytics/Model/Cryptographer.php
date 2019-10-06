@@ -135,6 +135,6 @@ class Cryptographer
         );
         $cipherMethod = strtolower($cipherMethod);
 
-        return (false !== array_search($cipherMethod, $methods));
+        return in_array($cipherMethod, $methods);
     }
 }

@@ -306,7 +306,7 @@ class RouteMapper
     {
         $subdirectoryPattern = str_replace('\\', DIRECTORY_SEPARATOR, $module);
         $subdirectoryPattern .= DIRECTORY_SEPARATOR . 'Controller/';
-        if (array_search($routerId, [Area::AREA_ADMINHTML, Area::AREA_ADMIN], true) !== false) {
+        if (in_array($routerId, [Area::AREA_ADMINHTML, Area::AREA_ADMIN], true)) {
             $subdirectoryPattern .= ucfirst(Area::AREA_ADMINHTML) . DIRECTORY_SEPARATOR;
         } else {
             $subdirectoryPattern .= '(?!' . ucfirst(Area::AREA_ADMINHTML) . ')';

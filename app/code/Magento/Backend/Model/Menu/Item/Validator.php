@@ -122,7 +122,7 @@ class Validator
      */
     private function assertIdentifierIsNotUsed($id)
     {
-        if (array_search($id, $this->_ids) !== false) {
+        if (in_array($id, $this->_ids)) {
             throw new \InvalidArgumentException('Item with id ' . $id . ' already exists');
         }
     }

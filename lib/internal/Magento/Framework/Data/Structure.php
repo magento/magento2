@@ -621,7 +621,7 @@ class Structure
                 )
             );
         }
-        if (false !== array_search($alias, $children)) {
+        if (in_array($alias, $children)) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase(
                     'The element "%1" can\'t have a child because "%1" already has a child with alias "%2".',

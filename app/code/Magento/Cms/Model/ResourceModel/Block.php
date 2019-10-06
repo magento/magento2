@@ -187,7 +187,7 @@ class Block extends AbstractDb
 
         $stores = (array)$object->getData('store_id');
         $isDefaultStore = $this->_storeManager->isSingleStoreMode()
-            || array_search(Store::DEFAULT_STORE_ID, $stores) !== false;
+            || in_array(Store::DEFAULT_STORE_ID, $stores);
 
         if (!$isDefaultStore) {
             $stores[] = Store::DEFAULT_STORE_ID;

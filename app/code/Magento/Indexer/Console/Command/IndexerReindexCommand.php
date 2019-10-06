@@ -182,7 +182,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $dependentIndexerIds = [];
         foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
             $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
-            if (array_search($indexerId, $dependencies) !== false) {
+            if (in_array($indexerId, $dependencies)) {
                 $dependentIndexerIds = array_merge(
                     $dependentIndexerIds,
                     [$id],

@@ -46,7 +46,7 @@ class DependencyInfoProvider implements DependencyInfoProviderInterface
         $this->getIndexerDataWithValidation($indexerId);
         $result = [];
         foreach ($this->config->getIndexers() as $id => $indexerData) {
-            if (array_search($indexerId, $indexerData['dependencies']) !== false) {
+            if (in_array($indexerId, $indexerData['dependencies'])) {
                 $result[] = $id;
             }
         }

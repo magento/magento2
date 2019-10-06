@@ -194,7 +194,7 @@ class DeclarativeSchemaDependencyProvider
             $decodedId = $this->decodeDependencyId($id);
             $entityType = $decodedId['entityType'];
             if ($entityType === self::SCHEMA_ENTITY_TABLE || $entityType === "column") {
-                if (array_search($moduleName, $modules) !== false) {
+                if (in_array($moduleName, $modules)) {
                     unset($dependencies[$id]);
                 }
             } else {
