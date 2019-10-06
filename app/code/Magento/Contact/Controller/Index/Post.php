@@ -78,6 +78,7 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
             );
             $this->dataPersistor->clear('contact_us');
         } catch (LocalizedException $e) {
+            $this->logger->critical($e);
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->dataPersistor->set('contact_us', $this->getRequest()->getParams());
         } catch (\Exception $e) {
