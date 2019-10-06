@@ -256,7 +256,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function parseResponse($response)
     {
         preg_match('~Location: [^\s]*\/id\/(\d+)~', $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
         return ['id' => $id];
     }
 
@@ -268,7 +268,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function getUrl(array $config)
     {
-        $requestParams = isset($config['create_url_params']) ? $config['create_url_params'] : [];
+        $requestParams = $config['create_url_params'] ?? [];
         $params = '';
         foreach ($requestParams as $key => $value) {
             $params .= $key . '/' . $value . '/';
@@ -327,9 +327,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareStatus()
     {
-        $this->fields['product']['status'] = isset($this->fields['product']['status'])
-            ? $this->fields['product']['status']
-            : 'Yes';
+        $this->fields['product']['status'] = $this->fields['product']['status'] ?? 'Yes';
     }
 
     /**
@@ -351,9 +349,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareIsVirtual()
     {
-        $this->fields['product']['is_virtual'] = isset($this->fields['product']['is_virtual'])
-            ? $this->fields['product']['is_virtual']
-            : 'No';
+        $this->fields['product']['is_virtual'] = $this->fields['product']['is_virtual'] ?? 'No';
     }
 
     /**
@@ -406,9 +402,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareQuantityAndStockStatus()
     {
-        $quantityAndStockStatus = isset($this->fields['product']['quantity_and_stock_status'])
-            ? $this->fields['product']['quantity_and_stock_status']
-            : ['is_in_stock' => 'In Stock'];
+        $quantityAndStockStatus = $this->fields['product']['quantity_and_stock_status'] ?? ['is_in_stock' => 'In Stock'];
 
         if (!isset($quantityAndStockStatus['is_in_stock'])) {
             $qty = isset($quantityAndStockStatus['qty']) ? (int)$quantityAndStockStatus['qty'] : null;
@@ -589,9 +583,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function prepareAutosetting()
     {
-        $this->fields['product']['visibility'] = isset($this->fields['product']['visibility'])
-            ? $this->fields['product']['visibility']
-            : 'Catalog, Search';
+        $this->fields['product']['visibility'] = $this->fields['product']['visibility'] ?? 'Catalog, Search';
     }
 
     /**

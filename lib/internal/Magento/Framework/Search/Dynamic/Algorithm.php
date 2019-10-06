@@ -172,7 +172,7 @@ class Algorithm
         $result = [];
         $lastCount = 0;
         $intervalFirstValue = $this->_minValue;
-        $lastSeparator = $this->_lowerLimit === null ? 0 : $this->_lowerLimit;
+        $lastSeparator = $this->_lowerLimit ?? 0;
 
         for ($intervalNumber = 1; $intervalNumber < $this->getIntervalsNumber(); ++$intervalNumber) {
             $separator = $this->_findValueSeparator($intervalNumber, $interval);
@@ -234,7 +234,7 @@ class Algorithm
             $isEqualValue = $intervalFirstValue == $this->_maxValue ? $intervalFirstValue : false;
             $result[$this->getIntervalsNumber()] = [
                 'from' => $isEqualValue ? $isEqualValue : $lastSeparator,
-                'to' => $isEqualValue ? $isEqualValue : ($this->_upperLimit === null ? '' : $this->_upperLimit),
+                'to' => $isEqualValue ? $isEqualValue : ($this->_upperLimit ?? ''),
                 'count' => $this->_count - $lastCount,
             ];
         }

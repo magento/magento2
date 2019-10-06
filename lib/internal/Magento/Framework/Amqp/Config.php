@@ -185,11 +185,9 @@ class Config
         if (null === $this->data) {
             $queueConfig = $this->deploymentConfig->getConfigData(self::QUEUE_CONFIG);
             if ($this->connectionName == self::AMQP_CONFIG) {
-                $this->data = isset($queueConfig[self::AMQP_CONFIG]) ? $queueConfig[self::AMQP_CONFIG] : [];
+                $this->data = $queueConfig[self::AMQP_CONFIG] ?? [];
             } else {
-                $this->data = isset($queueConfig['connections'][$this->connectionName])
-                    ? $queueConfig['connections'][$this->connectionName]
-                    : [];
+                $this->data = $queueConfig['connections'][$this->connectionName] ?? [];
             }
             if (empty($this->data)) {
                 throw  new \LogicException('Unknown connection name ' . $this->connectionName);

@@ -200,7 +200,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
             ['_id' => $this->_quoteString($cacheId)],
             ['expire', 'tags', 'mtime']
         );
-        return $result === null ? false : $result;
+        return $result ?? false;
     }
 
     /**

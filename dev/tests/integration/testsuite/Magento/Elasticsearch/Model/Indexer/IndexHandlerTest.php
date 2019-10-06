@@ -250,7 +250,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $queryResult = $this->client->query($searchQuery);
-        $products = isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
+        $products = $queryResult['hits']['hits'] ?? [];
 
         return $products;
     }

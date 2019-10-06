@@ -23,7 +23,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
     public function getData($key = null)
     {
         $checkoutData = $this->product->getCheckoutData();
-        $this->data = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
+        $this->data = $checkoutData['cartItem'] ?? [];
         $associatedProducts = [];
         $cartItem = [];
 

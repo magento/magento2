@@ -141,7 +141,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
 
         $csvKeys = [];
         foreach (array_shift($csvData) as $csvKey) {
-            $csvKeys[] = isset($this->mappingKeys[$csvKey]) ? $this->mappingKeys[$csvKey] : $csvKey;
+            $csvKeys[] = $this->mappingKeys[$csvKey] ?? $csvKey;
         }
 
         $resultCsvData = [];

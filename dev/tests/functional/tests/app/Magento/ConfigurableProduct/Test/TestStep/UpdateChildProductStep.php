@@ -172,7 +172,7 @@ class UpdateChildProductStep implements TestStepInterface
     {
         $configurableOptions = $product['configurable_attributes_data'];
         $attributeOption = reset($configurableOptions['matrix']);
-        $price = isset($attributeOption['price']) ? $attributeOption['price'] : "0";
+        $price = $attributeOption['price'] ?? "0";
 
         foreach ($configurableOptions['matrix'] as $option) {
             if ($price > $option['price']) {

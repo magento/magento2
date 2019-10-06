@@ -41,7 +41,7 @@ class MapperPool
      */
     public function getMapper($entityType)
     {
-        $className = isset($this->mappers[$entityType]) ? $this->mappers[$entityType] : MapperInterface::class;
+        $className = $this->mappers[$entityType] ?? MapperInterface::class;
         return $this->objectManager->get($className);
     }
 }

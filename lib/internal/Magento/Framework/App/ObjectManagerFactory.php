@@ -127,7 +127,7 @@ class ObjectManagerFactory
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
 
-        $appMode = isset($arguments[State::PARAM_MODE]) ? $arguments[State::PARAM_MODE] : State::MODE_DEFAULT;
+        $appMode = $arguments[State::PARAM_MODE] ?? State::MODE_DEFAULT;
         $booleanUtils = new \Magento\Framework\Stdlib\BooleanUtils();
         $argInterpreter = $this->createArgumentInterpreter($booleanUtils);
         $argumentMapper = new \Magento\Framework\ObjectManager\Config\Mapper\Dom($argInterpreter);
@@ -177,9 +177,7 @@ class ObjectManagerFactory
 
         $generatorParams = $diConfig->getArguments(\Magento\Framework\Code\Generator::class);
         /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
-        $generatedEntities = isset($generatorParams['generatedEntities']['_v_'])
-            ? $generatorParams['generatedEntities']['_v_']
-            : (isset($generatorParams['generatedEntities']) ? $generatorParams['generatedEntities'] : []);
+        $generatedEntities = $generatorParams['generatedEntities']['_v_'] ?? ($generatorParams['generatedEntities'] ?? []);
         $definitionFactory->getCodeGenerator()
             ->setObjectManager($objectManager)
             ->setGeneratedEntities($generatedEntities);
@@ -202,12 +200,8 @@ class ObjectManagerFactory
         ConfigFilePool $configFilePool,
         array $arguments
     ) {
-        $customFile = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE])
-            ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE]
-            : null;
-        $customData = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG])
-            ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG]
-            : [];
+        $customFile = $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE] ?? null;
+        $customData = $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG] ?? [];
         $reader = new DeploymentConfig\Reader($directoryList, $this->driverPool, $configFilePool, $customFile);
         return new DeploymentConfig($reader, $customData);
     }

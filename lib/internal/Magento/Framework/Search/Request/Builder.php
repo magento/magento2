@@ -228,7 +228,7 @@ class Builder
             'from' => $data['from'],
             'size' => $data['size'],
             'query' => $mapper->getRootQuery(),
-            'dimensions' => $this->buildDimensions(isset($data['dimensions']) ? $data['dimensions'] : []),
+            'dimensions' => $this->buildDimensions($data['dimensions'] ?? []),
             'buckets' => $mapper->getBuckets()
         ];
         if (isset($data['sort'])) {

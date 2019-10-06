@@ -136,7 +136,7 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
                     $compareData[$key][] = $value['price_to'];
                 }
             } else {
-                $index = isset($this->placeholder[$key]) ? $this->placeholder[$key] : $key;
+                $index = $this->placeholder[$key] ?? $key;
                 $compareData[$index][] = $value;
             }
         }

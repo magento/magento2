@@ -387,7 +387,7 @@ class Editor extends Textarea
     protected function _getButtonHtml($data)
     {
         $html = '<button type="button"';
-        $html .= ' class="scalable ' . (isset($data['class']) ? $data['class'] : '') . '"';
+        $html .= ' class="scalable ' . ($data['class'] ?? '') . '"';
         $html .= isset($data['onclick']) ? ' onclick="' . $data['onclick'] . '"' : '';
         $html .= isset($data['style']) ? ' style="' . $data['style'] . '"' : '';
         $html .= isset($data['id']) ? ' id="' . $data['id'] . '"' : '';

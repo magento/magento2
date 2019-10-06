@@ -45,7 +45,7 @@ class TemporaryStorage
         DeploymentConfig $config = null
     ) {
         $this->resource = $resource;
-        $this->config = $config !== null ? $config : ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->config = $config ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**

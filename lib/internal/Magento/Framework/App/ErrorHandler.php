@@ -56,7 +56,7 @@ class ErrorHandler
             return false;
         }
 
-        $msg = isset($this->errorPhrases[$errorNo]) ? $this->errorPhrases[$errorNo] : "Unknown error ({$errorNo})";
+        $msg = $this->errorPhrases[$errorNo] ?? "Unknown error ({$errorNo})";
         $msg .= ": {$errorStr} in {$errorFile} on line {$errorLine}";
         throw new \Exception($msg);
     }

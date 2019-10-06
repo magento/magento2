@@ -131,7 +131,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             $data = [
                 'cartItem' => [
                     'sku' => $product->getSku(),
-                    'qty' => isset($product->getCheckoutData()['qty']) ? $product->getCheckoutData()['qty'] : 1,
+                    'qty' => $product->getCheckoutData()['qty'] ?? 1,
                     'quote_id' => $this->quote
                 ]
             ];
@@ -326,9 +326,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
                     $option = [];
                     foreach ($productOption['assigned_products'] as $productData) {
                         if (strpos($productData['search_data']['name'], $checkoutOption['value']['name']) !== false) {
-                            $qty = isset($checkoutOption['qty'])
-                                ? $checkoutOption['qty']
-                                : $productData['data']['selection_qty'];
+                            $qty = $checkoutOption['qty'] ?? $productData['data']['selection_qty'];
                             $option['option_id'] = $productData['option_id'];
                             $option['option_selections'][] = $productData['selection_id'];
                             $option['option_qty'] = $qty;

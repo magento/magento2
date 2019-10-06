@@ -204,7 +204,7 @@ class Copy
     {
         switch (true) {
             case is_array($source):
-                $value = isset($source[$code]) ? $source[$code] : null;
+                $value = $source[$code] ?? null;
                 break;
             case $source instanceof ExtensibleDataInterface:
                 $value = $this->getAttributeValueFromExtensibleObject($source, $code);
@@ -214,7 +214,7 @@ class Copy
                 break;
             case $source instanceof AbstractSimpleObject:
                 $sourceArray = $source->__toArray();
-                $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+                $value = $sourceArray[$code] ?? null;
                 break;
             default:
                 throw new \InvalidArgumentException(
@@ -309,7 +309,7 @@ class Copy
 
         if ($source instanceof AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
-            return isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+            return $sourceArray[$code] ?? null;
         }
 
         throw new \InvalidArgumentException('Attribute in object does not exist.');

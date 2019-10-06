@@ -58,7 +58,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             ? $this->toSnakeCase($this->_converter->convertStdObjectToArray($soapResponse, true))
             : $soapResponse;
         /** Remove result wrappers */
-        $result = isset($result[SoapHandler::RESULT_NODE_NAME]) ? $result[SoapHandler::RESULT_NODE_NAME] : $result;
+        $result = $result[SoapHandler::RESULT_NODE_NAME] ?? $result;
         return $result;
     }
 

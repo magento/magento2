@@ -342,7 +342,7 @@ class Base implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['handler'] =
                     $this->handlerPool->get($field['handler']);
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['dataType'] =
-                    isset($field['dataType']) ? $field['dataType'] : 'varchar';
+                    $field['dataType'] ?? 'varchar';
             }
         }
     }

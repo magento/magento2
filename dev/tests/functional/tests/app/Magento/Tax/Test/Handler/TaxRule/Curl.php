@@ -52,7 +52,7 @@ class Curl extends AbstractCurl implements TaxRuleInterface
         }
 
         preg_match("~Location: [^\s]*\/rule\/(\d+)~", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
 
         return ['id' => $id];
     }
@@ -84,7 +84,7 @@ class Curl extends AbstractCurl implements TaxRuleInterface
      */
     public function prepareFieldData(TaxRule $fixture, array $data, $fixtureField, $newField = null)
     {
-        $newField = $newField === null ? $fixtureField : $newField;
+        $newField = $newField ?? $fixtureField;
         unset($data[$fixtureField]);
 
         if (!$fixture->hasData($fixtureField)) {

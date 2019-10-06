@@ -44,9 +44,7 @@ class Config implements ConfigInterface
     public function getQueuesByTopic($topic)
     {
         $publisherConfig = $this->getPublisherConfigByTopic($topic);
-        $exchange = isset($publisherConfig[ConfigInterface::PUBLISHER_NAME])
-            ? $publisherConfig[ConfigInterface::PUBLISHER_NAME]
-            : null;
+        $exchange = $publisherConfig[ConfigInterface::PUBLISHER_NAME] ?? null;
         /**
          * Exchange should be taken into account here to avoid retrieving queues, related to another exchange,
          * which is not currently associated with topic, but is configured in binds

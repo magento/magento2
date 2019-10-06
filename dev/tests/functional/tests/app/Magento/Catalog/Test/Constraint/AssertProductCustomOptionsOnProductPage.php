@@ -134,7 +134,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
             if (in_array($key, $this->skippedFields, true)) {
                 continue;
             }
-            $formValue = isset($formData[$key]) ? $formData[$key] : null;
+            $formValue = $formData[$key] ?? null;
             $errors = $this->verifyDataForErrors($formValue, $key, $errors, $value);
         }
         return $this->prepareErrorsForOutput($fixtureData, $formData, $isStrict, $isPrepareError, $errors);
@@ -228,9 +228,7 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
      */
     private function prepareEachCustomOption($actualPrice, $customOption, $result)
     {
-        $skippedField = isset($this->skippedFieldOptions[$customOption['type']])
-            ? $this->skippedFieldOptions[$customOption['type']]
-            : [];
+        $skippedField = $this->skippedFieldOptions[$customOption['type']] ?? [];
         foreach ($customOption['options'] as &$option) {
             // recalculate percent price
             if ('Percent' == $option['price_type']) {

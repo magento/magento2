@@ -49,7 +49,7 @@ class Labels extends Section
      */
     public function getFieldsData($fields = null, SimpleElement $element = null)
     {
-        $context = $element === null ? $this->_rootElement : $element;
+        $context = $element ?? $this->_rootElement;
         $storeLabels = [];
         $count = 0;
         $field = $context->find(sprintf(self::STORE_LABEL_NAME, $count));

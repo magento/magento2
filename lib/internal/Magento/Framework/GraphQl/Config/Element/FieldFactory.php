@@ -58,14 +58,14 @@ class FieldFactory
             [
                 'name' => $fieldData['name'],
                 'type' => $fieldData['type'],
-                'required' => isset($fieldData['required']) ? $fieldData['required'] : false,
+                'required' => $fieldData['required'] ?? false,
                 'isList' => isset($fieldData['itemType']) || $isList,
-                'itemType' => isset($fieldData['itemType']) ? $fieldData['itemType'] : '',
-                'resolver' => isset($fieldData['resolver']) ? $fieldData['resolver'] : '',
-                'description' => isset($fieldData['description']) ? $fieldData['description'] : '',
+                'itemType' => $fieldData['itemType'] ?? '',
+                'resolver' => $fieldData['resolver'] ?? '',
+                'description' => $fieldData['description'] ?? '',
                 'arguments' => $arguments,
-                'cache' => isset($fieldData['cache']) ? $fieldData['cache'] : [],
-                'deprecated' => isset($fieldData['deprecated']) ? $fieldData['deprecated'] : [],
+                'cache' => $fieldData['cache'] ?? [],
+                'deprecated' => $fieldData['deprecated'] ?? [],
             ]
         );
     }

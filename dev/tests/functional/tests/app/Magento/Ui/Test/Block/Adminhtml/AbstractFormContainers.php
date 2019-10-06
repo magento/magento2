@@ -73,7 +73,7 @@ abstract class AbstractFormContainers extends Form
             throw new \Exception('Wrong Container Class.');
         }
         $container->setWrapper(
-            isset($this->containers[$containerName]['wrapper']) ? $this->containers[$containerName]['wrapper'] : ''
+            $this->containers[$containerName]['wrapper'] ?? ''
         );
         $container->setMapping(
             isset($this->containers[$containerName]['fields']) ? (array)$this->containers[$containerName]['fields'] : []
@@ -226,9 +226,7 @@ abstract class AbstractFormContainers extends Form
     protected function getContainerElement($containerName)
     {
         $selector = $this->containers[$containerName]['selector'];
-        $strategy = isset($this->containers[$containerName]['strategy'])
-            ? $this->containers[$containerName]['strategy']
-            : Locator::SELECTOR_CSS;
+        $strategy = $this->containers[$containerName]['strategy'] ?? Locator::SELECTOR_CSS;
         return $this->_rootElement->find($selector, $strategy);
     }
 

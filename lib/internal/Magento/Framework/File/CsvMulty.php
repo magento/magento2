@@ -42,7 +42,7 @@ class CsvMulty extends \Magento\Framework\File\Csv
                 } else {
                     $data[$rowData[$keyIndex]] = [];
                     $data[$rowData[$keyIndex]]['line'] = $lineNumber;
-                    $data[$rowData[$keyIndex]]['value'] = isset($rowData[$valueIndex]) ? $rowData[$valueIndex] : null;
+                    $data[$rowData[$keyIndex]]['value'] = $rowData[$valueIndex] ?? null;
                 }
             }
         }

@@ -41,7 +41,7 @@ class Sort implements SortInterface
         $nodes = [];
         $structure = [];
         foreach ($this->array as $name => $item) {
-            $nodes[$name] = isset($nodes[$name]) ? $nodes[$name] : [self::NEXT_KEY => null];
+            $nodes[$name] = $nodes[$name] ?? [self::NEXT_KEY => null];
             if (isset($item[self::DIRECTIVE])) {
                 $nodes[$item[self::DIRECTIVE]][self::NEXT_KEY][$name] = &$nodes[$name];
                 continue;

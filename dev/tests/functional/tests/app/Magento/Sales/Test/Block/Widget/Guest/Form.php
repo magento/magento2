@@ -60,7 +60,7 @@ class Form extends \Magento\Mtf\Block\Form
             $data['billing_zip_code'] = $fixture->getDataFieldConfig('billing_address_id')['source']->getPostcode();
         }
 
-        $fields = isset($data['fields']) ? $data['fields'] : $data;
+        $fields = $data['fields'] ?? $data;
         $mapping = $this->dataMapping($fields);
 
         $this->waitLoadForm();

@@ -219,12 +219,8 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
                 'rule_id' => $ruleId,
                 'code' => $this->fixture->getCouponCode(),
                 'type' => $this->mappingData['coupon_type'][$this->fixture->getCouponType()],
-                'usage_limit' => isset($this->data['uses_per_coupon'])
-                    ? $this->data['uses_per_coupon']
-                    : null,
-                'usage_per_customer' => isset($this->data['usage_per_customer'])
-                    ? $this->data['usage_per_customer']
-                    : null,
+                'usage_limit' => $this->data['uses_per_coupon'] ?? null,
+                'usage_per_customer' => $this->data['usage_per_customer'] ?? null,
                 'is_primary' => true
             ])
         ];
@@ -259,15 +255,9 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
             $childCondition = $this->convertCondition($condition, "{$prefix}{$indent}--", 1);
             $result[] = array_filter([
                 'condition_type' => $condition[$key]['type'],
-                'aggregator_type' => isset($condition[$key]['aggregator'])
-                    ? $condition[$key]['aggregator']
-                    : null,
-                'attribute_name' => isset($condition[$key]['attribute'])
-                    ? $condition[$key]['attribute']
-                    : null,
-                'operator' => isset($condition[$key]['operator'])
-                    ? $condition[$key]['operator']
-                    : null,
+                'aggregator_type' => $condition[$key]['aggregator'] ?? null,
+                'attribute_name' => $condition[$key]['attribute'] ?? null,
+                'operator' => $condition[$key]['operator'] ?? null,
                 'value' => $condition[$key]['value'],
                 'conditions' => empty($childCondition) ? null : $childCondition
             ], [$this, 'filterCondition']);

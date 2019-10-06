@@ -74,7 +74,7 @@ class Content extends Tab
      */
     public function clickInsertVariable(SimpleElement $element = null)
     {
-        $context = $element === null ? $this->_rootElement : $element;
+        $context = $element ?? $this->_rootElement;
         $addVariableButton = $context->find($this->addVariableButton);
         if ($addVariableButton->isVisible()) {
             $addVariableButton->click();
@@ -89,7 +89,7 @@ class Content extends Tab
      */
     public function clickInsertWidget(SimpleElement $element = null)
     {
-        $context = $element === null ? $this->_rootElement : $element;
+        $context = $element ?? $this->_rootElement;
         $addWidgetButton = $context->find($this->addWidgetButton);
         if ($addWidgetButton->isVisible()) {
             try {
@@ -136,7 +136,7 @@ class Content extends Tab
      */
     public function setFieldsData(array $fields, SimpleElement $element = null)
     {
-        $context = $element === null ? $this->_rootElement : $element;
+        $context = $element ?? $this->_rootElement;
         $context->find($this->content)->setValue($fields['content']['value']['content']);
         if (isset($fields['content_heading']['value'])) {
             $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);

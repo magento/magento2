@@ -26,9 +26,7 @@ class Form extends \Magento\Mtf\Block\Form
             throw new \Exception("Cannot find field $field. Check for field mapping in " . self::class);
         }
         $disabledField = $this->mapping[$field]['selector'];
-        $strategy = isset($this->mapping[$field]['strategy'])
-            ? $this->mapping[$field]['strategy']
-            : Locator::SELECTOR_CSS;
+        $strategy = $this->mapping[$field]['strategy'] ?? Locator::SELECTOR_CSS;
         return $this->_rootElement->find($disabledField, $strategy)->isDisabled();
     }
 }

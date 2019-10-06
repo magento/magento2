@@ -339,7 +339,7 @@ class Attribute extends Form
 
         foreach ($attribute['options'] as $option) {
             $count++;
-            $label = isset($option['admin']) ? $option['admin'] : $option['label'];
+            $label = $option['admin'] ?? $option['label'];
             $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 
             //Create option

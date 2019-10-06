@@ -25,7 +25,7 @@ class SearchResults extends AbstractSimpleObject implements SearchResultsInterfa
      */
     public function getItems()
     {
-        return $this->_get(self::KEY_ITEMS) === null ? [] : $this->_get(self::KEY_ITEMS);
+        return $this->_get(self::KEY_ITEMS) ?? [];
     }
 
     /**

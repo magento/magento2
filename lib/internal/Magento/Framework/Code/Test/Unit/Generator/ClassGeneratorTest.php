@@ -248,7 +248,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
         array $expectedData,
         \Zend\Code\Generator\AbstractMemberGenerator $actualObject
     ) {
-        $expectedVisibility = isset($expectedData['visibility']) ? $expectedData['visibility'] : 'public';
+        $expectedVisibility = $expectedData['visibility'] ?? 'public';
         $this->assertEquals($expectedVisibility, $actualObject->getVisibility());
     }
 

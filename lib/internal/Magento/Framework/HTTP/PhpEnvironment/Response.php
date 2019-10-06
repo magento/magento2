@@ -141,8 +141,8 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null)
     {
-        $version = $version === null ? $this->detectVersion() : $version;
-        $phrase = $phrase === null ? $this->getReasonPhrase() : $phrase;
+        $version = $version ?? $this->detectVersion();
+        $phrase = $phrase ?? $this->getReasonPhrase();
 
         $this->setVersion($version);
         $this->setHttpResponseCode($httpCode);

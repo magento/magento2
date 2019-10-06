@@ -165,7 +165,7 @@ class ConfigurableAttributesData extends DataSource
         }
 
         $this->attributesData = array_replace_recursive(
-            isset($data['attributes_data']) ? $data['attributes_data'] : [],
+            $data['attributes_data'] ?? [],
             $this->attributesData
         );
     }
@@ -206,7 +206,7 @@ class ConfigurableAttributesData extends DataSource
             if (is_string($product)) {
                 list($fixture, $dataset) = explode('::', $product);
                 $attributeData = ['attributes' => $this->getProductAttributeData($key)];
-                $productData = isset($this->variationsMatrix[$key]) ? $this->variationsMatrix[$key] : [];
+                $productData = $this->variationsMatrix[$key] ?? [];
 
                 $product = $this->fixtureFactory->createByCode(
                     $fixture,
@@ -281,9 +281,7 @@ class ConfigurableAttributesData extends DataSource
     protected function getAttributeOptionId($compositeKey)
     {
         list($attributeKey, $optionKey) = explode(':', $compositeKey);
-        return isset($this->attributesData[$attributeKey]['options'][$optionKey]['id'])
-            ? $this->attributesData[$attributeKey]['options'][$optionKey]['id']
-            : null;
+        return $this->attributesData[$attributeKey]['options'][$optionKey]['id'] ?? null;
     }
 
     /**
@@ -477,12 +475,10 @@ class ConfigurableAttributesData extends DataSource
 
         foreach ($this->attributesData as $attributeKey => $attribute) {
             foreach ($attribute['options'] as $optionKey => $option) {
-                $option['label'] = isset($option['view']) ? $option['view'] : $option['label'];
+                $option['label'] = $option['view'] ?? $option['label'];
                 $attribute['options'][$optionKey] = array_intersect_key($option, array_flip($optionFields));
             }
-            $attribute['label'] = isset($attribute['label'])
-                ? $attribute['label']
-                : (isset($attribute['frontend_label']) ? $attribute['frontend_label'] : null);
+            $attribute['label'] = $attribute['label'] ?? ($attribute['frontend_label'] ?? null);
             $attribute = array_intersect_key($attribute, array_flip($attributeFields));
 
             $this->data['attributes_data'][$attributeKey] = $attribute;

@@ -60,8 +60,7 @@ class Validator extends ConfigValidator
         }
         if (isset($configData[QueueConfig::CONSUMERS])) {
             foreach ($configData[QueueConfig::CONSUMERS] as $consumerName => $configDataItem) {
-                $handlers = isset($configDataItem[QueueConfig::CONSUMER_HANDLERS])
-                    ? $configDataItem[QueueConfig::CONSUMER_HANDLERS] : [];
+                $handlers = $configDataItem[QueueConfig::CONSUMER_HANDLERS] ?? [];
                 foreach ($handlers as $handler) {
                     $this->validateHandlerType(
                         $handler[QueueConfig::CONSUMER_CLASS],
@@ -90,9 +89,8 @@ class Validator extends ConfigValidator
      */
     private function getAvailablePublishers($configData, $xmlConfigData)
     {
-        $envConfigPublishers = isset($configData[QueueConfig::PUBLISHERS]) ? $configData[QueueConfig::PUBLISHERS] : [];
-        $xmlConfigPublishers = isset($xmlConfigData[QueueConfig::PUBLISHERS])
-            ? $xmlConfigData[QueueConfig::PUBLISHERS] : [];
+        $envConfigPublishers = $configData[QueueConfig::PUBLISHERS] ?? [];
+        $xmlConfigPublishers = $xmlConfigData[QueueConfig::PUBLISHERS] ?? [];
         return array_unique(
             array_merge(
                 array_keys($xmlConfigPublishers),
@@ -110,8 +108,8 @@ class Validator extends ConfigValidator
      */
     private function getAvailableTopics($configData, $xmlConfigData)
     {
-        $envConfigTopics = isset($configData[QueueConfig::TOPICS]) ? $configData[QueueConfig::TOPICS] : [];
-        $xmlConfigTopics = isset($xmlConfigData[QueueConfig::TOPICS]) ? $xmlConfigData[QueueConfig::TOPICS] : [];
+        $envConfigTopics = $configData[QueueConfig::TOPICS] ?? [];
+        $xmlConfigTopics = $xmlConfigData[QueueConfig::TOPICS] ?? [];
         return array_unique(
             array_merge(
                 array_keys($xmlConfigTopics),

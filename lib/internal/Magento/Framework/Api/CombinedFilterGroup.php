@@ -35,7 +35,7 @@ class CombinedFilterGroup extends AbstractSimpleObject
     public function getFilters()
     {
         $filters = $this->_get(self::FILTERS);
-        return $filters === null ? [] : $filters;
+        return $filters ?? [];
     }
 
     /**

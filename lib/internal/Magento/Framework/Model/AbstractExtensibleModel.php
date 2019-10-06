@@ -253,9 +253,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             throw new \LogicException("Custom attributes array should be retrieved via getCustomAttributes() only.");
         } elseif ($key === '') {
             /** Represent model data and custom attributes as a flat array */
-            $customAttributes = isset($this->_data[self::CUSTOM_ATTRIBUTES])
-                ? $this->_data[self::CUSTOM_ATTRIBUTES]
-                : [];
+            $customAttributes = $this->_data[self::CUSTOM_ATTRIBUTES] ?? [];
             $this->convertCustomAttributeValues($customAttributes);
             $data = array_merge($this->_data, $customAttributes);
             unset($data[self::CUSTOM_ATTRIBUTES]);
@@ -263,9 +261,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $data = parent::getData($key, $index);
             if ($data === null) {
                 /** Try to find necessary data in custom attributes */
-                $data = isset($this->_data[self::CUSTOM_ATTRIBUTES][$key])
-                    ? $this->_data[self::CUSTOM_ATTRIBUTES][$key]
-                    : null;
+                $data = $this->_data[self::CUSTOM_ATTRIBUTES][$key] ?? null;
                 if ($data instanceof \Magento\Framework\Api\AttributeValue) {
                     $data = $data->getValue();
                 }

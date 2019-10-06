@@ -54,7 +54,7 @@ class Pool
             throw new \InvalidArgumentException(sprintf('Unknown layout type "%s"', $layoutType));
         }
         $defArgs = $this->types[$layoutType];
-        $class = isset($defArgs['class']) ? $defArgs['class'] : self::DEFAULT_CLASS;
+        $class = $defArgs['class'] ?? self::DEFAULT_CLASS;
         unset($defArgs['class']);
         if ($defArgs) {
             $arguments = array_merge($defArgs, $arguments);

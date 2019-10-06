@@ -69,7 +69,7 @@ class ChangedFiles
             $data = json_decode($changedContent, true);
         }
 
-        return isset($data[$fileName]) ? $data[$fileName] : '';
+        return $data[$fileName] ?? '';
     }
 
     /**
@@ -81,6 +81,6 @@ class ChangedFiles
     public static function getFileExtension($fileName)
     {
         $fileInfo = pathinfo($fileName);
-        return isset($fileInfo['extension']) ? $fileInfo['extension'] : 'unknown';
+        return $fileInfo['extension'] ?? 'unknown';
     }
 }

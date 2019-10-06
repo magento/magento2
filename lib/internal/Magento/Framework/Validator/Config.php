@@ -64,9 +64,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
             );
         }
 
-        $builderClass = isset(
-            $this->_data[$entityName][$groupName]['builder']
-        ) ? $this->_data[$entityName][$groupName]['builder'] : $this->_defaultBuilderClass;
+        $builderClass = $this->_data[$entityName][$groupName]['builder'] ?? $this->_defaultBuilderClass;
 
         if (!class_exists($builderClass)) {
             throw new \InvalidArgumentException(sprintf('Builder class "%s" was not found', $builderClass));

@@ -144,8 +144,8 @@ class ConfigurableOptions extends CustomOptions
         foreach ($tierPricesNodes as $node) {
             preg_match('#^[^\d]+(\d+)[^\d]+(\d+(?:(?:,\d+)*)+(?:.\d+)*).*#i', $node->getText(), $matches);
             $prices[] = [
-                'qty' => isset($matches[1]) ? $matches[1] : null,
-                'price_qty' => isset($matches[2]) ? $matches[2] : null,
+                'qty' => $matches[1] ?? null,
+                'price_qty' => $matches[2] ?? null,
             ];
         }
         return $prices;

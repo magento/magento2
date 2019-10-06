@@ -69,7 +69,7 @@ class Json extends AbstractContentType
             $data = $component->getContext()->getDataSourceData($component);
             $data = reset($data);
             return $this->encoder->encode(
-                isset($data['config']['data']) ? $data['config']['data'] : []
+                $data['config']['data'] ?? []
             );
         }
     }

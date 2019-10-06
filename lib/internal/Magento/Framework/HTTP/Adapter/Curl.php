@@ -191,7 +191,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         /**
          * @internal Curl options setter have to be re-factored
          */
-        $header = isset($this->_config['header']) ? $this->_config['header'] : true;
+        $header = $this->_config['header'] ?? true;
         curl_setopt($this->_getResource(), CURLOPT_HEADER, $header);
 
         return $body;

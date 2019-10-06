@@ -242,9 +242,7 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $stockData = $this->fields['product']['stock_data'];
 
         if (!isset($stockData['is_in_stock'])) {
-            $stockData['is_in_stock'] = isset($this->fields['product']['quantity_and_stock_status']['is_in_stock'])
-                ? $this->fields['product']['quantity_and_stock_status']['is_in_stock']
-                : false;
+            $stockData['is_in_stock'] = $this->fields['product']['quantity_and_stock_status']['is_in_stock'] ?? false;
         }
         if (!isset($stockData['qty']) && isset($this->fields['product']['quantity_and_stock_status']['qty'])) {
             $stockData['qty'] = $this->fields['product']['quantity_and_stock_status']['qty'];

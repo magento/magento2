@@ -150,8 +150,8 @@ abstract class AbstractFactory
         ];
 
         while ($fallback = array_pop($fallbacks)) {
-            $path = isset($fallback['path']) ? $fallback['path'] : '';
-            $ns = isset($fallback['namespace']) ? $fallback['namespace'] : '';
+            $path = $fallback['path'] ?? '';
+            $ns = $fallback['namespace'] ?? '';
             $location = $path . ($ns ? ('/' . str_replace('\\', '/', $ns)) : '');
 
             $pattern = $this->_getPattern($type, $location);

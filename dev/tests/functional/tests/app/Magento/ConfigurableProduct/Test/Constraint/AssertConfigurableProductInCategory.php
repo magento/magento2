@@ -27,7 +27,7 @@ class AssertConfigurableProductInCategory extends AssertProductInCategory
     {
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
         $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
-        $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
+        $price = $priceData['category_price'] ?? $product->getPrice();
         \PHPUnit\Framework\Assert::assertEquals(
             number_format($price, 2, '.', ''),
             $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice(),

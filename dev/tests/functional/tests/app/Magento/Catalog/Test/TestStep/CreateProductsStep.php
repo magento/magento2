@@ -69,8 +69,8 @@ class CreateProductsStep implements TestStepInterface
             } else {
                 $productDataSet = explode('::', $productDataSet);
                 $fixtureClass = $productDataSet[0];
-                $dataset = isset($productDataSet[1]) ? $productDataSet[1] : '';
-                $data = isset($this->data[$key]) ? $this->data[$key] : [];
+                $dataset = $productDataSet[1] ?? '';
+                $data = $this->data[$key] ?? [];
                 /** @var FixtureInterface[] $products */
                 $products[$key] = $this->fixtureFactory->createByCode(
                     trim($fixtureClass),

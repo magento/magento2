@@ -174,13 +174,9 @@ class Curl extends AbstractCurl implements CategoryInterface
      */
     protected function prepareGeneralInformation()
     {
-        $this->fields['general']['is_anchor'] = isset($this->fields['general']['is_anchor'])
-            ? $this->fields['general']['is_anchor']
-            : 'No';
+        $this->fields['general']['is_anchor'] = $this->fields['general']['is_anchor'] ?? 'No';
 
-        $this->fields['general']['include_in_menu'] = isset($this->fields['general']['include_in_menu'])
-            ? $this->fields['general']['include_in_menu']
-            : 'Yes';
+        $this->fields['general']['include_in_menu'] = $this->fields['general']['include_in_menu'] ?? 'Yes';
     }
 
     /**

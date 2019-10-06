@@ -235,7 +235,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $result = [];
         foreach ((array)$xml->xpath('/layout/child::*') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, $element->getName());
-            $modules = isset($check['module']) ? $check['module'] : null;
+            $modules = $check['module'] ?? null;
             if ($modules) {
                 if (!is_array($modules)) {
                     $modules = [$modules];
@@ -273,7 +273,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $result = [];
         foreach ((array)$xml->xpath('/layout/child::*/@parent') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string)$element);
-            $modules = isset($check['module']) ? $check['module'] : null;
+            $modules = $check['module'] ?? null;
             if ($modules) {
                 if (!is_array($modules)) {
                     $modules = [$modules];
@@ -311,7 +311,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $result = [];
         foreach ((array)$xml->xpath('//update/@handle') as $element) {
             $check = $this->_checkDependencyLayoutHandle($currentModule, $area, (string)$element);
-            $modules = isset($check['module']) ? $check['module'] : null;
+            $modules = $check['module'] ?? null;
             if ($modules) {
                 if (!is_array($modules)) {
                     $modules = [$modules];
@@ -349,7 +349,7 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
         $result = [];
         foreach ((array)$xml->xpath('//reference/@name') as $element) {
             $check = $this->_checkDependencyLayoutBlock($currentModule, $area, (string)$element);
-            $module = isset($check['module']) ? $check['module'] : null;
+            $module = $check['module'] ?? null;
             if ($module) {
                 $result[$module] = [
                     'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,

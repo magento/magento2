@@ -47,7 +47,7 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
     ) {
         $filter = [
             'id' => $order->hasData('id') ? $order->getId() : $orderId,
-            'status' => $statusToCheck === null ? $status : $statusToCheck,
+            'status' => $statusToCheck ?? $status,
         ];
 
         $objectManager->create(

@@ -164,7 +164,7 @@ class AbstractItems extends Block
         $data = array_map('trim', explode('SKU:', str_replace("\n", '', $product)));
         return [
             'product' => $data[0],
-            'sku' => isset($data[1]) ? $data[1] : ''
+            'sku' => $data[1] ?? ''
         ];
     }
 }

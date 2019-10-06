@@ -376,13 +376,13 @@ class File extends AbstractIo
             if (!is_callable($callback)) {
                 throw new \InvalidArgumentException("'dirCallback' parameter is not callable");
             }
-            $parameters = isset($dirCallback[1]) ? $dirCallback[1] : [];
+            $parameters = $dirCallback[1] ?? [];
         } else {
             $callback = $fileCallback[0];
             if (!is_callable($callback)) {
                 throw new \InvalidArgumentException("'fileCallback' parameter is not callable");
             }
-            $parameters = isset($fileCallback[1]) ? $fileCallback[1] : [];
+            $parameters = $fileCallback[1] ?? [];
         }
         array_unshift($parameters, $dir);
         $result = @call_user_func_array($callback, $parameters);

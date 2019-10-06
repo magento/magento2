@@ -117,11 +117,11 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
         $result = [];
 
         foreach ($configurableAttributesData->getAttributesData() as $attribute) {
-            $attributeId = isset($attribute['attribute_id']) ? $attribute['attribute_id'] : null;
+            $attributeId = $attribute['attribute_id'] ?? null;
             $dataOptions = [];
 
             foreach ($attribute['options'] as $option) {
-                $optionId = isset($option['id']) ? $option['id'] : null;
+                $optionId = $option['id'] ?? null;
 
                 $dataOption = array_intersect_key($option, array_flip($optionFields));
                 $dataOption['value_index'] = $optionId;
@@ -172,7 +172,7 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
                 $keyIds[] = $attribute['options'][$optionKey]['id'];
                 $configurableAttribute[] = sprintf(
                     '"%s":"%s"',
-                    isset($attribute['attribute_code']) ? $attribute['attribute_code'] : $attribute['frontend_label'],
+                    $attribute['attribute_code'] ?? $attribute['frontend_label'],
                     $attribute['options'][$optionKey]['id']
                 );
             }

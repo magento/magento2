@@ -65,7 +65,7 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
         } else {
             $path = realpath(__DIR__ . '/../_files/view');
         }
-        $files = isset($this->files[$filename]) ? $this->files[$filename] : [];
+        $files = $this->files[$filename] ?? [];
         $realPaths = [];
         foreach ($files as $filePath) {
             $realPaths[] = $path . '/' . $filePath;

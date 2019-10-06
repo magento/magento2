@@ -95,7 +95,7 @@ class GenericMapper extends AbstractMapper
         $selectedUniqueNames = [];
         foreach ($fields as $fieldInfo) {
             if (is_string($fieldInfo)) {
-                $fieldInfo = isset($this->map[$fieldInfo]) ? $this->map[$fieldInfo] : $fieldInfo;
+                $fieldInfo = $this->map[$fieldInfo] ?? $fieldInfo;
             }
             list($correlationName, $field, $alias) = $fieldInfo;
             if (!is_string($alias)) {

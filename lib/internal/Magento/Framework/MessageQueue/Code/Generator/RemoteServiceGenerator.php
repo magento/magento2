@@ -139,8 +139,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                     'type' => $methodParameter->getType(),
                 ];
                 if ($methodParameter->isDefaultValueAvailable()) {
-                    $parameter['defaultValue'] = $methodParameter->getDefaultValue() !== null
-                        ? $methodParameter->getDefaultValue() : $this->_getNullDefaultValue();
+                    $parameter['defaultValue'] = $methodParameter->getDefaultValue() ?? $this->_getNullDefaultValue();
                 }
                 $methodParameters[] = $parameter;
                 $topicParameters[] = "'{$parameterName}' => \${$parameterName}";

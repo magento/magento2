@@ -282,7 +282,7 @@ class ObjectManager
                 }
             }
 
-            $constructArguments[$parameterName] = null === $object ? $defaultValue : $object;
+            $constructArguments[$parameterName] = $object ?? $defaultValue;
         }
         return $constructArguments;
     }

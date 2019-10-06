@@ -47,8 +47,7 @@ class AssertConfigurableWithDisabledOptionCatalogSearchNoResult extends Abstract
         /** @var ConfigurableProduct $product */
         $product = $catalogSearch->getDataFieldConfig('query_text')['source']->getFirstProduct();
 
-        $matrix = isset($product->getConfigurableAttributesData()['matrix']) ?
-            $product->getConfigurableAttributesData()['matrix'] :
+        $matrix = $product->getConfigurableAttributesData()['matrix'] ??
             [];
 
         foreach ($matrix as $option) {

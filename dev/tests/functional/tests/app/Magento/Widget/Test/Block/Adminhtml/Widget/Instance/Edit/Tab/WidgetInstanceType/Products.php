@@ -32,7 +32,7 @@ class Products extends WidgetInstanceForm
      */
     public function fillForm(array $parametersFields, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $fields = $this->dataMapping(array_diff_key($parametersFields, ['entities' => '']));
         foreach ($fields as $key => $values) {
             $this->_fill([$key => $values], $element);

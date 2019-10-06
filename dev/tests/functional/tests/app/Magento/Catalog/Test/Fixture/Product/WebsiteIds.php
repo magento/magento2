@@ -96,7 +96,7 @@ class WebsiteIds extends DataSource
         if ($dataset instanceof Store) {
             $store = $dataset;
         } elseif (is_array($dataset)) {
-            $store = isset($dataset['store']) ? $dataset['store'] :
+            $store = $dataset['store'] ??
                 (isset($dataset['dataset']) ? $this->fixtureFactory->createByCode('store', $dataset) : null);
         }
         if (isset($store)) {

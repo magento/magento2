@@ -108,7 +108,7 @@ class AssertImportAdvancedPricing extends AbstractConstraint
 
         $csvKeys = [];
         foreach (array_shift($csvData) as $csvKey) {
-            $csvKeys[] = isset($this->mappingData[$csvKey]) ? $this->mappingData[$csvKey] : $csvKey;
+            $csvKeys[] = $this->mappingData[$csvKey] ?? $csvKey;
         }
 
         $resultCsvData = [];

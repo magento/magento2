@@ -41,7 +41,7 @@ class Factory
      */
     public static function setHelper($name, $helper)
     {
-        $old = isset(self::$_instances[$name]) ? self::$_instances[$name] : null;
+        $old = self::$_instances[$name] ?? null;
         self::$_instances[$name] = $helper;
         return $old;
     }

@@ -100,7 +100,7 @@ class GridStructure implements IndexStructureInterface
             }
             $columnMap = isset($field['dataType']) && isset($this->columnTypesMap[$field['dataType']])
                 ? $this->columnTypesMap[$field['dataType']]
-                : ['type' => $field['dataType'], 'size' => isset($field['size']) ? $field['size'] : null];
+                : ['type' => $field['dataType'], 'size' => $field['size'] ?? null];
             $name = $field['name'];
             $type = $columnMap['type'];
             $size = $columnMap['size'];

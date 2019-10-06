@@ -39,9 +39,7 @@ class GenerationDirectoryAccess
     public function check()
     {
         $initParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
-        $filesystemDirPaths = isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
-            ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
-            : [];
+        $filesystemDirPaths = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] ?? [];
         $directoryList = new DirectoryList(BP, $filesystemDirPaths);
         $driverPool = new DriverPool();
         $fileWriteFactory = new WriteFactory($driverPool);

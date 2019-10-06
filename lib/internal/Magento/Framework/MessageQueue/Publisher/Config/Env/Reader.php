@@ -57,9 +57,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     {
         $configData = $this->deploymentConfig->getConfigData(MessageQueueEnvReader::ENV_QUEUE);
         if (isset($configData['config'])) {
-            $configData = isset($configData['config'][MessageQueueEnvReader::ENV_PUBLISHERS])
-                ? $configData['config'][MessageQueueEnvReader::ENV_PUBLISHERS]
-                : [];
+            $configData = $configData['config'][MessageQueueEnvReader::ENV_PUBLISHERS] ?? [];
         } else {
             $configData = isset($configData[MessageQueueEnvReader::ENV_PUBLISHERS])
                 ? $this->convertConfigData($scope)
@@ -89,7 +87,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
                 $connectionName = $this->publisherNameToConnectionMap[$publisherName];
                 $config['name'] = $config['connection'];
                 unset($config['connection']);
-                $disabled = isset($config['disabled']) ? $config['disabled'] : false;
+                $disabled = $config['disabled'] ?? false;
                 $config['disabled'] = $disabled;
                 $configData[$topicName]['connections'][$connectionName] = $config;
             }

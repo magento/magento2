@@ -26,7 +26,7 @@ class Form extends AbstractForm
     public function fill(FixtureInterface $fixture, SimpleElement $element = null, $attributes = [])
     {
         $data = $fixture->getData();
-        $fields = isset($data['fields']) ? $data['fields'] : $data;
+        $fields = $data['fields'] ?? $data;
         if (!empty($attributes)) {
             foreach ($attributes as $attribute) {
                 $fields['product'] = [$attribute => $fixture->getDataExport()[$attribute]];

@@ -84,7 +84,7 @@ class Curl extends Conditions implements CmsPageInterface
             throw new \Exception("Cms page entity creating by curl handler was not successful! Response: $response");
         }
         preg_match("~page_id\/(\d*?)\/~", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
 
         return ['page_id' => $id];
     }

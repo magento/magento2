@@ -150,9 +150,7 @@ class ArgumentSequence implements ValidatorInterface
         $migrated = [];
         foreach ($parentArgumentList[self::REQUIRED] as $name => $argument) {
             if (!isset($classArgumentList[self::OPTIONAL][$name])) {
-                $output[$name] = isset(
-                    $classArgumentList[self::REQUIRED][$name]
-                ) ? $classArgumentList[self::REQUIRED][$name] : $argument;
+                $output[$name] = $classArgumentList[self::REQUIRED][$name] ?? $argument;
             } else {
                 $migrated[$name] = $classArgumentList[self::OPTIONAL][$name];
             }
@@ -173,9 +171,7 @@ class ArgumentSequence implements ValidatorInterface
 
         foreach ($parentArgumentList[self::OPTIONAL] as $name => $argument) {
             if (!isset($output[$name])) {
-                $output[$name] = isset(
-                    $classArgumentList[self::OPTIONAL][$name]
-                ) ? $classArgumentList[self::OPTIONAL][$name] : $argument;
+                $output[$name] = $classArgumentList[self::OPTIONAL][$name] ?? $argument;
             }
         }
 

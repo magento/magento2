@@ -127,7 +127,7 @@ class Config extends \Magento\Framework\App\Config
      */
     public function get($configType, $path = null, $default = null)
     {
-        $path = $path === null ? '' : $path;
+        $path = $path ?? '';
         if (!isset($this->data[$configType]) || $this->data[$configType]->getData($path) === null) {
             return parent::get($configType, $path, $default);
         }

@@ -109,7 +109,7 @@ class OauthHelper
     public static function getApiAccessCredentials($resources = null, Integration $integrationModel = null)
     {
         if (!self::$_apiCredentials) {
-            $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
+            $integration = $integrationModel ?? self::_createIntegration($resources);
             $objectManager = Bootstrap::getObjectManager();
             /** @var \Magento\Integration\Api\OauthServiceInterface $oauthService */
             $oauthService = $objectManager->get(\Magento\Integration\Api\OauthServiceInterface::class);

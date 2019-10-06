@@ -69,7 +69,7 @@ class Options extends SimpleElement
     {
         return ObjectManager::getInstance()->create(
             \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option::class,
-            ['element' => $element === null ? $this->find($this->option . ':last-child') : $element]
+            ['element' => $element ?? $this->find($this->option . ':last-child')]
         );
     }
 }

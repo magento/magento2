@@ -436,7 +436,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     private function collectDependency($dependency, $currentModule, &$undeclared)
     {
-        $type = isset($dependency['type']) ? $dependency['type'] : self::TYPE_HARD;
+        $type = $dependency['type'] ?? self::TYPE_HARD;
 
         $soft = $this->_getDependencies($currentModule, self::TYPE_SOFT, self::MAP_TYPE_DECLARED);
         $hard = $this->_getDependencies($currentModule, self::TYPE_HARD, self::MAP_TYPE_DECLARED);

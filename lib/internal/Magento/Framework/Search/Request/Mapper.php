@@ -127,7 +127,7 @@ class Mapper
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'matches' => $query['match']
                     ]
                 );
@@ -146,7 +146,7 @@ class Mapper
                     \Magento\Framework\Search\Request\Query\Filter::class,
                     [
                         'name' => $query['name'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'reference' => $reference,
                         'referenceType' => $referenceType
                     ]
@@ -157,7 +157,7 @@ class Mapper
                 $query = $this->objectManager->create(
                     \Magento\Framework\Search\Request\Query\BoolExpression::class,
                     array_merge(
-                        ['name' => $query['name'], 'boost' => isset($query['boost']) ? $query['boost'] : 1],
+                        ['name' => $query['name'], 'boost' => $query['boost'] ?? 1],
                         $aggregatedByType
                     )
                 );
@@ -209,8 +209,8 @@ class Mapper
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
-                        'from' => isset($filter['from']) ? $filter['from'] : null,
-                        'to' => isset($filter['to']) ? $filter['to'] : null
+                        'from' => $filter['from'] ?? null,
+                        'to' => $filter['to'] ?? null
                     ]
                 );
                 break;

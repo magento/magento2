@@ -121,7 +121,7 @@ class CreateInvoiceStep implements TestStepInterface
         }
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $invoicesData = $this->order->getInvoice() !== null ? $this->order->getInvoice() : ['invoiceData' => []];
+        $invoicesData = $this->order->getInvoice() ?? ['invoiceData' => []];
         foreach ($invoicesData as $invoiceData) {
             $this->salesOrderView->getPageActions()->invoice();
 
@@ -140,7 +140,7 @@ class CreateInvoiceStep implements TestStepInterface
         return [
             'ids' => [
                 'invoiceIds' => $invoiceIds,
-                'shipmentIds' => isset($shipmentIds) ? $shipmentIds : null,
+                'shipmentIds' => $shipmentIds ?? null,
             ]
         ];
     }

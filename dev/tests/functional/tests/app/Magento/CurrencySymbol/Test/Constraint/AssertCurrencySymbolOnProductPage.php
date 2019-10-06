@@ -41,7 +41,7 @@ class AssertCurrencySymbolOnProductPage extends AbstractConstraint
         $price = $catalogProductView->getViewBlock()->getPriceBlock()->getPrice();
         preg_match('`(.*?)\d`', $price, $matches);
 
-        $symbolOnPage = isset($matches[1]) ? $matches[1] : null;
+        $symbolOnPage = $matches[1] ?? null;
         \PHPUnit\Framework\Assert::assertEquals(
             $currencySymbol->getCustomCurrencySymbol(),
             $symbolOnPage,

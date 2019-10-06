@@ -159,7 +159,7 @@ class ShoppingCartPerCustomerTest extends Injectable
                 ['products' => $productsInCart]
             )->run();
 
-            $cart['data'] = isset($checkoutData['totals']) ? $checkoutData['totals'] : [];
+            $cart['data'] = $checkoutData['totals'] ?? [];
             $cart['data']['items'] = ['products' => $productsInCart];
             return $this->fixtureFactory->createByCode('cart', $cart);
         }

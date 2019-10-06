@@ -132,6 +132,6 @@ class Config implements ScopeConfigInterface
             $result = $this->types[$configType]->get($path);
         }
 
-        return $result !== null ? $result : $default;
+        return $result ?? $default;
     }
 }

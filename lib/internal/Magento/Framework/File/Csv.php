@@ -117,7 +117,7 @@ class Csv
         $csvData = $this->getData($file);
         foreach ($csvData as $rowData) {
             if (isset($rowData[$keyIndex])) {
-                $data[$rowData[$keyIndex]] = isset($rowData[$valueIndex]) ? $rowData[$valueIndex] : null;
+                $data[$rowData[$keyIndex]] = $rowData[$valueIndex] ?? null;
             }
         }
         return $data;

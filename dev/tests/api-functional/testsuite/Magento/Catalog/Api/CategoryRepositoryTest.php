@@ -182,8 +182,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         return [
             'parent_id' => '2',
-            'name' => isset($categoryData['name'])
-                ? $categoryData['name'] : uniqid('Category-', true),
+            'name' => $categoryData['name'] ?? uniqid('Category-', true),
             'is_active' => '1',
             'include_in_menu' => '1',
             'available_sort_by' => ['position', 'name'],

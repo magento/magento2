@@ -215,9 +215,7 @@ class File extends DataSource
                     }
                     if (isset($entityData['code'])) {
                         $placeholders['entity_' . $key][$entityKey][$entityData['code']]
-                            = isset($entityData[$entityData['code']])
-                            ? $entityData[$entityData['code']]
-                            : 'Main Website';
+                            = $entityData[$entityData['code']] ?? 'Main Website';
                     }
                 }
             }
@@ -266,9 +264,7 @@ class File extends DataSource
         $websites = $entity->getDataFieldConfig('website_ids')['source']->getWebsites();
         foreach ($websites as $website) {
             if ($website->getCode() === 'base') {
-                $currency = isset($this->value['template']['mainWebsiteCurrency'])
-                    ? $this->value['template']['mainWebsiteCurrency']
-                    : '[USD]';
+                $currency = $this->value['template']['mainWebsiteCurrency'] ?? '[USD]';
                 $this->mainWebsiteMapping['base'] = $website->getName() . "[{$currency}]";
                 break;
             }

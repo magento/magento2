@@ -121,16 +121,14 @@ class Curl extends Conditions implements CatalogRuleInterface
         if (isset($data['website_ids'])) {
             $websiteIds = [];
             foreach ($data['website_ids'] as $websiteId) {
-                $websiteIds[] = isset($this->websiteIds[$websiteId]) ? $this->websiteIds[$websiteId] : $websiteId;
+                $websiteIds[] = $this->websiteIds[$websiteId] ?? $websiteId;
             }
             $data['website_ids'] = $websiteIds;
         }
         if (isset($data['customer_group_ids'])) {
             $customerGroupIds = [];
             foreach ($data['customer_group_ids'] as $customerGroupId) {
-                $customerGroupIds[] = isset($this->customerGroupIds[$customerGroupId])
-                    ? $this->customerGroupIds[$customerGroupId]
-                    : $customerGroupId;
+                $customerGroupIds[] = $this->customerGroupIds[$customerGroupId] ?? $customerGroupId;
             }
             $data['customer_group_ids'] = $customerGroupIds;
         }

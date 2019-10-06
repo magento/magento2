@@ -23,7 +23,7 @@ abstract class AbstractOptions extends Section
      */
     public function fillOptions(array $fields, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping, $element);
 
@@ -39,7 +39,7 @@ abstract class AbstractOptions extends Section
      */
     public function getDataOptions(array $fields = null, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($fields);
 
         return $this->_getData($mapping, $element);
@@ -54,7 +54,7 @@ abstract class AbstractOptions extends Section
      */
     public function getTextForOptionValues(array $fields = null, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($fields);
         $data = [];
 

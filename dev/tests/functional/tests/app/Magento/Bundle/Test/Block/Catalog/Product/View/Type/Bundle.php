@@ -123,7 +123,7 @@ class Bundle extends Block
         /** @var BundleProduct  $product */
         $this->product = $product;
         $bundleSelections = $product->getBundleSelections();
-        $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
+        $bundleOptions = $bundleSelections['bundle_options'] ?? [];
 
         $listFormOptions = $this->getListOptions();
         $formOptions = [];

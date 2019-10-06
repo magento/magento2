@@ -89,7 +89,7 @@ class Curl extends AbstractCurl implements IntegrationInterface
         $curl->close();
 
         preg_match('~<td.*?>.*?' . $name . '.*?/integration/edit/id/(\d+)/~siu', $response, $matches);
-        return isset($matches[1]) ? $matches[1] : null;
+        return $matches[1] ?? null;
     }
 
     /**
@@ -115,7 +115,7 @@ class Curl extends AbstractCurl implements IntegrationInterface
         foreach ($this->fields as $field) {
             $pattern = sprintf($this->patternField, $field);
             preg_match($pattern, $response, $matches);
-            $result[$field] = isset($matches[1]) ? $matches[1] : null;
+            $result[$field] = $matches[1] ?? null;
         }
 
         return $result;

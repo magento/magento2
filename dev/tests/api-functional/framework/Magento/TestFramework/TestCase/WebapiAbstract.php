@@ -565,7 +565,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $this->assertContains($expectedMessage, $soapFault->getMessage(), "Fault message is invalid.");
 
         $errorDetailsNode = 'GenericFault';
-        $errorDetails = isset($soapFault->detail->$errorDetailsNode) ? $soapFault->detail->$errorDetailsNode : null;
+        $errorDetails = $soapFault->detail->$errorDetailsNode ?? null;
         if (!empty($expectedErrorParams) || !empty($expectedWrappedErrors)) {
             /** Check SOAP fault details */
             $this->assertNotNull($errorDetails, "Details must be present.");

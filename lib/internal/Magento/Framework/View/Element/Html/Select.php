@@ -156,7 +156,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             if ($isArrayOption && is_array($option)) {
                 $value = $option['value'];
                 $label = (string)$option['label'];
-                $optgroupName = isset($option['optgroup-name']) ? $option['optgroup-name'] : $label;
+                $optgroupName = $option['optgroup-name'] ?? $label;
                 $params = !empty($option['params']) ? $option['params'] : [];
             } else {
                 $value = (string)$key;

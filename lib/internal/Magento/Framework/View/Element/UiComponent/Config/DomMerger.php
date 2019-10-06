@@ -347,7 +347,7 @@ class DomMerger implements DomMergerInterface
      */
     protected function validateDomDocument(\DOMDocument $domDocument, $schema = null)
     {
-        $schema = $schema !== null ? $schema : $this->schema;
+        $schema = $schema ?? $this->schema;
         libxml_use_internal_errors(true);
         try {
             $errors = \Magento\Framework\Config\Dom::validateDomDocument($domDocument, $schema);

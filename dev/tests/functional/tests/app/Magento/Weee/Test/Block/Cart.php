@@ -24,7 +24,7 @@ class Cart extends \Magento\Checkout\Test\Block\Cart
     public function getCartItem(FixtureInterface $product)
     {
         $dataConfig = $product->getDataConfig();
-        $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        $typeId = $dataConfig['type_id'] ?? null;
         $cartItem = null;
 
         if ($this->hasRender($typeId)) {

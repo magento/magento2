@@ -144,7 +144,7 @@ class AssertConfigurableProductPage extends AssertProductPage
         if (null === $price) {
             $configurableOptions = $this->product->getConfigurableAttributesData();
             foreach ($configurableOptions['matrix'] as $option) {
-                $price = $price === null ? $option['price'] : $price;
+                $price = $price ?? $option['price'];
                 if ($price > $option['price']) {
                     $price = $option['price'];
                 }

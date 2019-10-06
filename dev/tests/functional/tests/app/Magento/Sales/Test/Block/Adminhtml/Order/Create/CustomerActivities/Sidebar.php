@@ -48,7 +48,7 @@ abstract class Sidebar extends Block
             $this->_rootElement->find(sprintf($this->addToOrderProductName, $name), Locator::SELECTOR_XPATH)->click();
 
             $dataConfig = $product->getDataConfig();
-            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+            $typeId = $dataConfig['type_id'] ?? null;
 
             if ($this->hasRender($typeId)) {
                 $this->_rootElement->find(sprintf($this->addToOrderConfigure, $name), Locator::SELECTOR_XPATH)->click();

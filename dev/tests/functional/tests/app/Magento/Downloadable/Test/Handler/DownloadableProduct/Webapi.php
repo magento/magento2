@@ -104,10 +104,10 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
     {
         return [
             'title' => $sample['title'],
-            'sort_order' => isset($sample['sort_order']) ? $sample['sort_order'] : 0,
+            'sort_order' => $sample['sort_order'] ?? 0,
             'sample_type' => $sample['type'],
-            'sample_url' => isset($sample['sample_url']) ? $sample['sample_url'] : null,
-            'sample_file' => isset($sample['sample_file']) ? $sample['sample_file'] : null,
+            'sample_url' => $sample['sample_url'] ?? null,
+            'sample_file' => $sample['sample_file'] ?? null,
         ];
     }
 
@@ -127,9 +127,7 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
         $this->fields['product']['links_exist'] = 1;
         $this->fields['product']['links_purchased_separately'] =
             $this->fields['product']['downloadable_links']['links_purchased_separately'];
-        $this->fields['product']['links_title'] = isset($this->fields['product']['downloadable_links']['title'])
-            ? $this->fields['product']['downloadable_links']['title']
-            : null;
+        $this->fields['product']['links_title'] = $this->fields['product']['downloadable_links']['title'] ?? null;
         $this->fields['product']['extension_attributes']['downloadable_product_links'] = $downloadableProductLinks;
 
         unset($this->fields['downloadable']);
@@ -146,16 +144,16 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
     {
         return [
             'title' => $link['title'],
-            'sort_order' => isset($link['sort_order']) ? $link['sort_order'] : 0,
+            'sort_order' => $link['sort_order'] ?? 0,
             'is_shareable' => $link['is_shareable'],
             'price' => (float)$link['price'],
-            'number_of_downloads' => isset($link['number_of_downloads']) ? $link['number_of_downloads'] : 0,
+            'number_of_downloads' => $link['number_of_downloads'] ?? 0,
             'link_type' => $link['type'],
-            'link_url' => isset($link['link_url']) ? $link['link_url'] : null,
-            'link_file' => isset($link['link_file']) ? $link['link_file'] : null,
-            'sample_type' => isset($link['sample']['type']) ? $link['sample']['type'] : null,
-            'sample_url' => isset($link['sample']['url']) ? $link['sample']['url'] : null,
-            'sample_file' => isset($link['sample']['file']) ? $link['sample']['file'] : null,
+            'link_url' => $link['link_url'] ?? null,
+            'link_file' => $link['link_file'] ?? null,
+            'sample_type' => $link['sample']['type'] ?? null,
+            'sample_url' => $link['sample']['url'] ?? null,
+            'sample_file' => $link['sample']['file'] ?? null,
         ];
     }
 }

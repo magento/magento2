@@ -117,7 +117,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
             // Seems we've got chunked data
 
             $arr = explode('|', $data);
-            $chunks = isset($arr[1]) ? $arr[1] : false;
+            $chunks = $arr[1] ?? false;
             $chunkData = [];
 
             if ($chunks && is_numeric($chunks)) {

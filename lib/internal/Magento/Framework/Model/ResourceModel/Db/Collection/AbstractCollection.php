@@ -218,7 +218,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 if ($column instanceof \Zend_Db_Expr) {
                     $column = $column->__toString();
                 }
-                $key = $alias !== null ? $alias : $column;
+                $key = $alias ?? $column;
                 $columnsToSelect[$key] = $columnEntry;
             }
         }

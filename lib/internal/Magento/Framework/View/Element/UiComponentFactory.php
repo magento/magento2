@@ -220,13 +220,11 @@ class UiComponentFactory extends DataObject
             $rawComponentData = $this->definitionData->get($name);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
             $componentArguments = array_replace_recursive($componentArguments, $arguments);
-            $children = isset($componentArguments['data']['config']['children']) ?
-                        $componentArguments['data']['config']['children'] : [];
+            $children = $componentArguments['data']['config']['children'] ?? [];
             $children = $this->getBundleChildren($children);
         }
 
-        $className = isset($componentArguments['config']['class']) ?
-            $componentArguments['config']['class'] : $className;
+        $className = $componentArguments['config']['class'] ?? $className;
         $components = [];
 
         foreach ($children as $childrenIdentifier => $childrenData) {

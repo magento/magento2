@@ -39,7 +39,7 @@ class Curl extends AbstractCurl implements SystemVariableInterface
         }
 
         preg_match("~Location: [^\\s]*system_variable\\/edit\\/variable_id\\/(\\d+)~", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
+        $id = $matches[1] ?? null;
         return ['variable_id' => $id];
     }
 }

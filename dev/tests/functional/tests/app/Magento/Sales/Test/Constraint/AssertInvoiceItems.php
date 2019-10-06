@@ -35,7 +35,7 @@ class AssertInvoiceItems extends AbstractAssertItems
     ) {
         $orderId = $order->getId();
         $invoicesData = $order->getInvoice();
-        $data = isset($invoicesData[0]['items_data']) ? $invoicesData[0]['items_data'] : [];
+        $data = $invoicesData[0]['items_data'] ?? [];
         $productsData = $this->prepareOrderProducts($order, $data, $cart);
         foreach ($ids['invoiceIds'] as $invoiceId) {
             $filter = [

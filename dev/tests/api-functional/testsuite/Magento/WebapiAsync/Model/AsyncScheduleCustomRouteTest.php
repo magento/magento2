@@ -211,10 +211,8 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
     private function getSimpleProductData($productData = [])
     {
         return [
-            ProductInterface::SKU              => isset($productData[ProductInterface::SKU])
-                ? $productData[ProductInterface::SKU] : uniqid('sku-', true),
-            ProductInterface::NAME             => isset($productData[ProductInterface::NAME])
-                ? $productData[ProductInterface::NAME] : uniqid('sku-', true),
+            ProductInterface::SKU              => $productData[ProductInterface::SKU] ?? uniqid('sku-', true),
+            ProductInterface::NAME             => $productData[ProductInterface::NAME] ?? uniqid('sku-', true),
             ProductInterface::VISIBILITY       => 4,
             ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::PRICE            => 3.62,

@@ -182,7 +182,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                         throw new \InvalidArgumentException('Plugin class ' . $pluginType . ' doesn\'t exist');
                     }
                     foreach ($this->_definitions->getMethodList($pluginType) as $pluginMethod => $methodTypes) {
-                        $current = isset($lastPerMethod[$pluginMethod]) ? $lastPerMethod[$pluginMethod] : '__self';
+                        $current = $lastPerMethod[$pluginMethod] ?? '__self';
                         $currentKey = $type . '_' . $pluginMethod . '_' . $current;
                         if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
                             $this->_processed[$currentKey][DefinitionInterface::LISTENER_AROUND] = $key;

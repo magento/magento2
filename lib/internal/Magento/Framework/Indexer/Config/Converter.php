@@ -74,7 +74,7 @@ class Converter implements ConverterInterface
      */
     protected function convertChild(\DOMElement $childNode, $data)
     {
-        $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
+        $data['fieldsets'] = $data['fieldsets'] ?? [];
         switch ($childNode->nodeName) {
             case 'title':
                 $data['title'] = $childNode->nodeValue;
@@ -108,7 +108,7 @@ class Converter implements ConverterInterface
      */
     protected function convertFieldset(\DOMElement $node, $data)
     {
-        $data['fieldsets'] = isset($data['fieldsets']) ? $data['fieldsets'] : [];
+        $data['fieldsets'] = $data['fieldsets'] ?? [];
 
         $data['fieldsets'][$this->getAttributeValue($node, 'name')] = [
             'source'   => $this->getAttributeValue($node, 'source'),

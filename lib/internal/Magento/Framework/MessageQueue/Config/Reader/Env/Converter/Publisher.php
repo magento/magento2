@@ -31,9 +31,7 @@ class Publisher implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $publishersConfig = isset($source[\Magento\Framework\MessageQueue\Config\Reader\Env::ENV_PUBLISHERS])
-            ? $source[\Magento\Framework\MessageQueue\Config\Reader\Env::ENV_PUBLISHERS]
-            : [];
+        $publishersConfig = $source[\Magento\Framework\MessageQueue\Config\Reader\Env::ENV_PUBLISHERS] ?? [];
         $connections = [];
         if (!empty($publishersConfig)) {
             foreach ($publishersConfig as $configuration) {

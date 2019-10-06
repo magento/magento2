@@ -118,7 +118,7 @@ class Factory
             }
         }
 
-        $idPrefix = isset($options['id_prefix']) ? $options['id_prefix'] : '';
+        $idPrefix = $options['id_prefix'] ?? '';
         if (!$idPrefix && isset($options['prefix'])) {
             $idPrefix = $options['prefix'];
         }
@@ -191,7 +191,7 @@ class Factory
                 throw new \LogicException('Class has to be specified for a cache frontend decorator.');
             }
             $decoratorClass = $decoratorConfig['class'];
-            $decoratorParams = isset($decoratorConfig['parameters']) ? $decoratorConfig['parameters'] : [];
+            $decoratorParams = $decoratorConfig['parameters'] ?? [];
             $decoratorParams['frontend'] = $frontend;
             // conventionally, 'frontend' argument is a decoration subject
             $frontend = $this->_objectManager->create($decoratorClass, $decoratorParams);
@@ -213,7 +213,7 @@ class Factory
     protected function _getBackendOptions(array $cacheOptions)
     {
         $enableTwoLevels = false;
-        $type = isset($cacheOptions['backend']) ? $cacheOptions['backend'] : $this->_defaultBackend;
+        $type = $cacheOptions['backend'] ?? $this->_defaultBackend;
         if (isset($cacheOptions['backend_options']) && is_array($cacheOptions['backend_options'])) {
             $options = $cacheOptions['backend_options'];
         } else {
@@ -380,20 +380,18 @@ class Factory
      */
     protected function _getFrontendOptions(array $cacheOptions)
     {
-        $options = isset($cacheOptions['frontend_options']) ? $cacheOptions['frontend_options'] : [];
+        $options = $cacheOptions['frontend_options'] ?? [];
         if (!array_key_exists('caching', $options)) {
             $options['caching'] = true;
         }
         if (!array_key_exists('lifetime', $options)) {
-            $options['lifetime'] = isset(
-                $cacheOptions['lifetime']
-            ) ? $cacheOptions['lifetime'] : self::DEFAULT_LIFETIME;
+            $options['lifetime'] = $cacheOptions['lifetime'] ?? self::DEFAULT_LIFETIME;
         }
         if (!array_key_exists('automatic_cleaning_factor', $options)) {
             $options['automatic_cleaning_factor'] = 0;
         }
         $options['type'] =
-            isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : \Magento\Framework\Cache\Core::class;
+            $cacheOptions['frontend'] ?? \Magento\Framework\Cache\Core::class;
         return $options;
     }
 }

@@ -65,15 +65,9 @@ class MetadataPool
     private function createMetadata($entityType)
     {
         //@todo: use ID as default if , check is type has EAV attributes
-        $connectionName = isset($this->metadata[$entityType]['connectionName'])
-            ? $this->metadata[$entityType]['connectionName']
-            : 'default';
-        $eavEntityType = isset($this->metadata[$entityType]['eavEntityType'])
-            ? $this->metadata[$entityType]['eavEntityType']
-            : null;
-        $entityContext = isset($this->metadata[$entityType]['entityContext'])
-            ? $this->metadata[$entityType]['entityContext']
-            : [];
+        $connectionName = $this->metadata[$entityType]['connectionName'] ?? 'default';
+        $eavEntityType = $this->metadata[$entityType]['eavEntityType'] ?? null;
+        $entityContext = $this->metadata[$entityType]['entityContext'] ?? [];
         return $this->objectManager->create(
             EntityMetadataInterface::class,
             [

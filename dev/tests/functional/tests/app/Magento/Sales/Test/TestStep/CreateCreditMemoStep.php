@@ -86,7 +86,7 @@ class CreateCreditMemoStep implements TestStepInterface
     {
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $refundsData = $this->order->getRefund() !== null ? $this->order->getRefund() : ['refundData' => []];
+        $refundsData = $this->order->getRefund() ?? ['refundData' => []];
         foreach ($refundsData as $refundData) {
             $this->salesOrderView->getPageActions()->orderCreditMemo();
 

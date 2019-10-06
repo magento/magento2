@@ -32,8 +32,7 @@ class AssertOrderedProductReportForConfigurableProduct extends AbstractConstrain
         foreach ($products as $product) {
             /** @var ConfigurableProduct $product */
             if ($product->hasData('configurable_attributes_data')) {
-                $matrix = isset($product->getConfigurableAttributesData()['matrix']) ?
-                    $product->getConfigurableAttributesData()['matrix'] : [];
+                $matrix = $product->getConfigurableAttributesData()['matrix'] ?? [];
                 foreach ($matrix as $variation) {
                     $filters[] = $variation['sku'];
                 }

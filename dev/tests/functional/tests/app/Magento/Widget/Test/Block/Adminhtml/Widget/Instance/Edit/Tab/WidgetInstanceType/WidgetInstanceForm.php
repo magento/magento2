@@ -59,7 +59,7 @@ class WidgetInstanceForm extends Form
      */
     public function fillForm(array $layoutFields, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($layoutFields);
         foreach ($mapping as $key => $values) {
             $this->_fill([$key => $values], $element);
@@ -76,7 +76,7 @@ class WidgetInstanceForm extends Form
      */
     public function getDataOptions(array $fields = null, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($fields);
         return $this->_getData($mapping, $element);
     }

@@ -98,8 +98,8 @@ class PublisherPool implements PublisherInterface, BulkPublisherInterface
      */
     private function initializePublishers(array $publishers)
     {
-        $asyncPublishers = isset($publishers[self::MODE_ASYNC]) ? $publishers[self::MODE_ASYNC] : [];
-        $syncPublishers = isset($publishers[self::MODE_SYNC]) ? $publishers[self::MODE_SYNC] : [];
+        $asyncPublishers = $publishers[self::MODE_ASYNC] ?? [];
+        $syncPublishers = $publishers[self::MODE_SYNC] ?? [];
         foreach ($asyncPublishers as $connectionType => $publisher) {
             $this->addPublisherToPool(
                 self::MODE_ASYNC,

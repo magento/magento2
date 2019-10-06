@@ -33,7 +33,7 @@ class AssertCreditMemoItems extends AbstractAssertItems
         $creditMemoIndex->open();
         $orderId = $order->getId();
         $refundsData = $order->getRefund();
-        $data = isset($refundsData[0]['items_data']) ? $refundsData[0]['items_data'] : [];
+        $data = $refundsData[0]['items_data'] ?? [];
         $productsData = $this->prepareOrderProducts($order, $data);
         foreach ($ids['creditMemoIds'] as $creditMemoId) {
             $filter = [

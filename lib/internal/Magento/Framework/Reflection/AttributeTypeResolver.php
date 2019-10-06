@@ -41,7 +41,7 @@ class AttributeTypeResolver implements AttributeTypeResolverInterface
         }
         $data = $this->config->get();
         $context = trim($context, '\\');
-        $config = isset($data[$context]) ? $data[$context] : [];
+        $config = $data[$context] ?? [];
         $output = get_class($value);
         if (isset($config[$attributeCode])) {
             $type = $config[$attributeCode]['type'];

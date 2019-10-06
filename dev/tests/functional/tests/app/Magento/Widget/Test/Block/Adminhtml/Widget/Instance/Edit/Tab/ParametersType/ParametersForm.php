@@ -54,7 +54,7 @@ class ParametersForm extends Form
      */
     public function fillForm(array $parametersFields, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($parametersFields);
         $this->_fill(array_diff_key($mapping, ['entities' => '']), $element);
         if (isset($parametersFields['entities'])) {
@@ -71,7 +71,7 @@ class ParametersForm extends Form
      */
     public function getDataOptions(array $fields = null, SimpleElement $element = null)
     {
-        $element = $element === null ? $this->_rootElement : $element;
+        $element = $element ?? $this->_rootElement;
         $mapping = $this->dataMapping($fields);
         return $this->_getData($mapping, $element);
     }

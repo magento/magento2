@@ -181,6 +181,6 @@ class UpdatingServiceTest extends \PHPUnit\Framework\TestCase
             ->getItems();
         $result = array_pop($items);
 
-        return isset($result['signifyd_guarantee_status']) ? $result['signifyd_guarantee_status'] : null;
+        return $result['signifyd_guarantee_status'] ?? null;
     }
 }

@@ -229,7 +229,7 @@ class Curl extends Conditions implements SalesRuleInterface
         $websiteIds = [];
         if (!empty($this->data['website_ids'])) {
             foreach ($this->data['website_ids'] as $name) {
-                $websiteIds[] = isset($this->websiteIds[$name]) ? $this->websiteIds[$name] : $name;
+                $websiteIds[] = $this->websiteIds[$name] ?? $name;
             }
         }
 
@@ -246,7 +246,7 @@ class Curl extends Conditions implements SalesRuleInterface
         $groupIds = [];
         if (!empty($this->data['customer_group_ids'])) {
             foreach ($this->data['customer_group_ids'] as $name) {
-                $groupIds[] = isset($this->customerIds[$name]) ? $this->customerIds[$name] : $name;
+                $groupIds[] = $this->customerIds[$name] ?? $name;
             }
         }
 

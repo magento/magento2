@@ -32,7 +32,7 @@ class CategoryId extends DataSource
     {
         $this->params = $params;
         if (isset($data['fixture']) || isset($data['category'])) {
-            $this->category = isset($data['fixture']) ? $data['fixture'] : $data['category'];
+            $this->category = $data['fixture'] ?? $data['category'];
             $this->data = $this->category->getName();
         } elseif (isset($data['dataset'])) {
             $category = $fixtureFactory->createByCode('category', ['dataset' => $data['dataset']]);

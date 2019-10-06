@@ -31,13 +31,11 @@ class Factory
             'port' => $options->getPort(),
             'user' => $options->getUsername(),
             'password' => $options->getPassword(),
-            'vhost' => $options->getVirtualHost() !== null ? $options->getVirtualHost() : '/',
+            'vhost' => $options->getVirtualHost() ?? '/',
         ];
 
         if ($options->isSslEnabled()) {
-            $parameters['ssl_options'] = $options->getSslOptions() !== null
-                ? $options->getSslOptions()
-                : ['verify_peer' => true];
+            $parameters['ssl_options'] = $options->getSslOptions() ?? ['verify_peer' => true];
         }
 
         return ObjectManager::getInstance()->create($connectionType, $parameters);

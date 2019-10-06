@@ -205,7 +205,7 @@ abstract class Conditions extends Curl
      */
     private function getTypeParam($name)
     {
-        return isset($this->mapTypeParams[$name]) ? $this->mapTypeParams[$name] : [];
+        return $this->mapTypeParams[$name] ?? [];
     }
 
     /**
