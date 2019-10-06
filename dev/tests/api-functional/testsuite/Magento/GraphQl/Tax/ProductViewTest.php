@@ -253,7 +253,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-        // ['product_object_field_name', 'expected_value']
+        // product_object_field_name, expected_value
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -263,7 +263,7 @@ QUERY;
                 [
                     'minimalPrice' => [
                         'amount' => [
-                            'value' => 4.106501,
+                            'value' => 4.1065,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -281,7 +281,7 @@ QUERY;
                     ],
                     'regularPrice' => [
                         'amount' => [
-                            'value' => 10.750001,
+                            'value' => 10.7500,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
@@ -299,7 +299,7 @@ QUERY;
                     ],
                     'maximalPrice' => [
                         'amount' => [
-                            'value' => 4.106501,
+                            'value' => 4.1065,
                             'currency' => 'USD'
                         ],
                         'adjustments' => [
