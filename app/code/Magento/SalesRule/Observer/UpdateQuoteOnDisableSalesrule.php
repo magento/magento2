@@ -4,6 +4,8 @@ namespace Magento\SalesRule\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Model\ResourceModel\Iterator;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
@@ -23,13 +25,30 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
     private $logger;
 
     /**
-     * UpdateQuoteOnDisableSalesrule constructor.
-     * @param CollectionFactory $collectionFactory
-     * @param LoggerInterface $logger
+     * @var Iterator
      */
-    public function __construct(CollectionFactory $collectionFactory, LoggerInterface $logger)
-    {
+    private $iterator;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * UpdateQuoteOnDisableSalesrule constructor.
+     * @param Iterator $iterator
+     * @param CollectionFactory $collectionFactory
+     * @param CartRepositoryInterface $cartRepository
+     */
+    public function __construct(
+        Iterator $iterator,
+        CollectionFactory $collectionFactory,
+        CartRepositoryInterface $cartRepository,
+        LoggerInterface $logger
+    ) {
+        $this->iterator = $iterator;
         $this->collectionFactory = $collectionFactory;
+        $this->cartRepository = $cartRepository;
         $this->logger = $logger;
     }
 
@@ -46,16 +65,37 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
         if ($rule->getIsActive()) {
             return;
         }
+        $this->iterateQuotes($rule);
+    }
+
+    /**
+     * To prevent out of memory issue we read row by row.
+     *
+     * @param Rule $rule
+     * @return void
+     */
+    private function iterateQuotes(Rule $rule): void
+    {
         /** @var Collection $quoteCollection */
         $quoteCollection = $this->collectionFactory->create();
         $quoteCollection->getSelect()->where('FIND_IN_SET(?, applied_rule_ids)', $rule->getId());
-        /** @var Quote $quote */
-        foreach ($quoteCollection as $quote) {
-            try {
-                $quote->collectTotals()->save();
-            } catch (\Exception $e) {
-                $this->logger->error($e);
-            }
+        $this->iterator->walk($quoteCollection->getSelect(), [[$this, 'callbackRecalculateQuote']]);
+    }
+
+    /**
+     * Callback to get and recalculate quote
+     *
+     * @param $args
+     * @return void
+     */
+    public function callbackRecalculateQuote($args): void
+    {
+        try {
+            /** @var Quote $quote */
+            $quote = $this->cartRepository->get($args['row']['entity_id']);
+            $quote->collectTotals()->save();
+        } catch (\Exception $e) {
+            $this->logger->error($e);
         }
     }
 }
