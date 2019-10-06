@@ -1765,6 +1765,7 @@
             <argument name="locker" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
             <argument name="lockTimeout" xsi:type="number">10000</argument>
             <argument name="delayTimeout" xsi:type="number">20</argument>
+            <argument name="notifier" xsi:type="object">Magento\Framework\Cache\CompositeStaleCacheNotifier</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />

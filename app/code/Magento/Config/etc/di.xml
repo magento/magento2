@@ -105,6 +105,7 @@
     <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
             <argument name="locker" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
+            <argument name="notifier" xsi:type="object">Magento\Framework\Cache\CompositeStaleCacheNotifier</argument>
         </arguments>
     </type>
 

@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Cache;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Lock\LockManagerInterface;
 
 /**
@@ -46,18 +47,26 @@ class LockGuardedCacheLoader
     private $lockedNames = [];
 
     /**
+     * @var StaleCacheNotifierInterface
+     */
+    private $notifier;
+
+    /**
      * @param LockManagerInterface $locker
      * @param int $lockTimeout
      * @param int $delayTimeout
+     * @param StaleCacheNotifierInterface $notifier
      */
     public function __construct(
         LockManagerInterface $locker,
         int $lockTimeout = 10000,
-        int $delayTimeout = 20
+        int $delayTimeout = 20,
+        StaleCacheNotifierInterface $notifier = null
     ) {
         $this->locker = $locker;
         $this->lockTimeout = $lockTimeout;
         $this->delayTimeout = $delayTimeout;
+        $this->notifier = $notifier ?? ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
     }
 
     /**
@@ -151,6 +160,8 @@ class LockGuardedCacheLoader
             } finally {
                 $this->locker->unlock($lockName);
             }
+        } else {
+            $this->notifier->cacheLoaderIsUsingStaleCache();
         }
 
         return $dataFormatter ? $dataFormatter($cachedData) : $cachedData;

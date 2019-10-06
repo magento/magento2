@@ -8,13 +8,14 @@
 namespace Magento\Framework\Cache\Test\Unit;
 
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Cache\StaleCacheNotifierInterface;
 use Magento\Framework\Lock\Backend\InMemoryLock;
 use PHPUnit\Framework\TestCase;
 
 /**
  * \Magento\Framework\Cache\LockGuardedCacheLoader test case
  */
-class LockGuardedCacheLoaderTest extends TestCase
+class LockGuardedCacheLoaderTest extends TestCase implements StaleCacheNotifierInterface
 {
     /** @var InMemoryLock */
     private $lockManager;
@@ -28,13 +29,17 @@ class LockGuardedCacheLoaderTest extends TestCase
     /** @var mixed */
     private $cachedData;
 
+    /** @var string[] */
+    private $notifications = [];
+
     protected function setUp()
     {
         $this->lockManager = new InMemoryLock();
         $this->lockGuard = new LockGuardedCacheLoader(
             $this->lockManager,
             1000,
-            5
+            5,
+            $this
         );
     }
 
@@ -345,6 +350,47 @@ class LockGuardedCacheLoaderTest extends TestCase
     }
 
     /** @test */
+    public function nonBlockingLoaderDoesNotNotifyOfStaleCacheOnRegularCacheLoad()
+    {
+        $this->lockGuard->nonBlockingLockedLoadData(
+            'lock1',
+            $this->readValue(['cached']),
+            $this->doNothing(),
+            $this->doNothing()
+        );
+
+        $this->assertEmpty($this->notifications);
+    }
+
+    /** @test */
+    public function nonBlockingLoaderNotifiesOfStaleCacheOnFailedToAcquireLock()
+    {
+        $this->lockManager->lock('lock2');
+
+        $this->lockGuard->nonBlockingLockedLoadData(
+            'lock2',
+            $this->readValue(false),
+            $this->doNothing(),
+            $this->doNothing()
+        );
+
+        $this->assertEquals(['staleCacheLoaded'], $this->notifications);
+    }
+
+    /** @test */
+    public function nonBlockingLoaderDoesNotNotifyOfStaleCacheAcquiredLock()
+    {
+        $this->lockGuard->nonBlockingLockedLoadData(
+            'lock2',
+            $this->readValue(false),
+            $this->doNothing(),
+            $this->doNothing()
+        );
+
+        $this->assertEmpty($this->notifications);
+    }
+
+    /** @test */
     public function dataFormatterGetsInvokedOnNonSavedCacheFlow()
     {
         $this->lockManager->lock('lock1');
@@ -401,5 +447,13 @@ class LockGuardedCacheLoaderTest extends TestCase
         return function ($data) use ($valueToMerge) {
             return array_merge($data, $valueToMerge);
         };
+    }
+
+    /**
+     * Self-shunting notifier to test behavior of composite
+     */
+    public function cacheLoaderIsUsingStaleCache(): void
+    {
+        $this->notifications[] = 'staleCacheLoaded';
     }
 }
