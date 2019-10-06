@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
+
+require __DIR__ . '/product_with_fpt.php';
 
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
 $installer = Bootstrap::getObjectManager()->create(
@@ -21,7 +24,7 @@ $attribute = Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $attribute->setAttributeCode(
-    'fpt_for_all'
+    'fixed_product_attribute'
 )->setEntityTypeId(
     $entityTypeId
 )->setAttributeGroupId(
@@ -29,35 +32,19 @@ $attribute->setAttributeCode(
 )->setAttributeSetId(
     $attributeSetId
 )->setFrontendLabel(
-    'fpt_for_all_front_label'
+    'fixed_product_attribute_front_label'
 )->setFrontendInput(
     'weee'
 )->setIsUserDefined(
     1
 )->save();
 
-/** @var Product $product */
-$product = Bootstrap::getObjectManager()->create(Product::class);
-$product->setTypeId(
-    'simple'
-)->setAttributeSetId(
-    $attributeSetId
-)->setStoreId(
-    1
-)->setWebsiteIds(
-    [1]
-)->setVisibility(
-    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-)->setStatus(
-    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-)->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
-)->setName(
-    'Simple Product FPT'
-)->setSku(
-    'simple-with-ftp'
-)->setPrice(
-    100
-)->setFptForAll(
-    [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 12.70, 'delete' => '']]
-)->save();
+/** @var $product \Magento\Catalog\Model\Product */
+$product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+
+$product = $product->loadByAttribute('sku', 'simple-with-ftp');
+if ($product && $product->getId()) {
+    $product->setFixedProductAttribute(
+        [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10.00, 'delete' => '']]
+    )->save();
+}
