@@ -75,11 +75,10 @@ class ToggleDropdown extends SimpleElement
      */
     protected function waitListOptionsVisible()
     {
-        $browser = $this;
         $selector = $this->listOptions;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                return $browser->find($selector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+        $this->waitUntil(
+            function () use ($selector) {
+                return $this->find($selector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
     }

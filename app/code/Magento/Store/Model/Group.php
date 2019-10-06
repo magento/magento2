@@ -431,10 +431,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function afterDelete()
     {
-        $group = $this;
-        $this->getResource()->addCommitCallback(function () use ($group) {
+        $this->getResource()->addCommitCallback(function () {
             $this->_storeManager->reinitStores();
-            $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['group' => $group]);
+            $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['group' => $this]);
         });
         $result = parent::afterDelete();
 
@@ -457,10 +456,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function afterSave()
     {
-        $group = $this;
-        $this->getResource()->addCommitCallback(function () use ($group) {
+        $this->getResource()->addCommitCallback(function () {
             $this->_storeManager->reinitStores();
-            $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $group]);
+            $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $this]);
         });
         $this->pillPut->put();
         return parent::afterSave();

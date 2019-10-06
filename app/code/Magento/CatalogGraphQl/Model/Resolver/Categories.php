@@ -111,17 +111,16 @@ class Categories implements ResolverInterface
         $storeId = $this->storeManager->getStore()->getId();
         $categoryIds = $this->productCategories->getCategoryIdsByProduct((int)$product->getId(), (int)$storeId);
         $this->categoryIds = array_merge($this->categoryIds, $categoryIds);
-        $that = $this;
 
         return $this->valueFactory->create(
-            function () use ($that, $categoryIds, $info) {
+            function () use ($categoryIds, $info) {
                 $categories = [];
-                if (empty($that->categoryIds)) {
+                if (empty($this->categoryIds)) {
                     return [];
                 }
 
                 if (!$this->collection->isLoaded()) {
-                    $that->attributesJoiner->join($info->fieldNodes[0], $this->collection);
+                    $this->attributesJoiner->join($info->fieldNodes[0], $this->collection);
                     $this->collection->addIdFilter($this->categoryIds);
                 }
                 /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
@@ -130,7 +129,7 @@ class Categories implements ResolverInterface
                         // Try to extract all requested fields from the loaded collection data
                         $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
                         $categories[$item->getId()]['model'] = $item;
-                        $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0]);
+                        $requestedFields = $this->attributesJoiner->getQueryFields($info->fieldNodes[0]);
                         $extractedFields = array_keys($categories[$item->getId()]);
                         $foundFields = array_intersect($requestedFields, $extractedFields);
                         if (count($requestedFields) === count($foundFields)) {

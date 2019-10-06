@@ -162,18 +162,17 @@ class Form extends FormInterface
      */
     protected function addNewTaxRates($taxRule)
     {
-        $rootForm = $this;
         $taxRateMultiSelectList = $this->taxRateMultiSelectList;
         $taxRateDefaultMultiSelect = $this->taxRateDefaultMultiSelect;
         $this->browser->waitUntil(
-            function () use ($rootForm, $taxRateDefaultMultiSelect) {
-                $element = $rootForm->browser->find($taxRateDefaultMultiSelect);
+            function () use ($taxRateDefaultMultiSelect) {
+                $element = $this->browser->find($taxRateDefaultMultiSelect);
                 return $element->isVisible() ? null : true;
             }
         );
         $this->browser->waitUntil(
-            function () use ($rootForm, $taxRateMultiSelectList) {
-                $element = $rootForm->browser->find($taxRateMultiSelectList);
+            function () use ($taxRateMultiSelectList) {
+                $element = $this->browser->find($taxRateMultiSelectList);
                 return $element->isVisible() ? true : null;
             }
         );

@@ -120,11 +120,10 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\ObjectManagerInterface::class,
             ],
         ];
-        $self = $this;
         $this->_objectManager->expects($this->exactly(2))->method('get')->will(
             $this->returnCallback(
-                function ($className) use ($self) {
-                    return $self->getMockForAbstractClass($className);
+                function ($className) {
+                    return $this->getMockForAbstractClass($className);
                 }
             )
         );

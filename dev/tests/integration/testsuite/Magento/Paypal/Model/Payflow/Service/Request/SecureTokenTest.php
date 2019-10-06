@@ -162,14 +162,13 @@ class SecureTokenTest extends TestCase
             'securetokenid' => $secureTokenId,
             'result_code' => '0',
         ]);
-        $self = $this;
         $this->gateway->method('postRequest')
             /** @var DataObject $request */
-            ->with(self::callback(function ($request) use ($self, $expPartner, $expVendor, $expUser, $expPwd) {
-                $self->performAssertion($expPartner, $request->getPartner(), '{Partner}');
-                $self->performAssertion($expVendor, $request->getVendor(), '{Vendor}');
-                $self->performAssertion($expUser, $request->getUser(), '{User}');
-                $self->performAssertion($expPwd, $request->getPwd(), '{Password}');
+            ->with(self::callback(function ($request) use ($expPartner, $expVendor, $expUser, $expPwd) {
+                $this->performAssertion($expPartner, $request->getPartner(), '{Partner}');
+                $this->performAssertion($expVendor, $request->getVendor(), '{Vendor}');
+                $this->performAssertion($expUser, $request->getUser(), '{User}');
+                $this->performAssertion($expPwd, $request->getPwd(), '{Password}');
 
                 return true;
             }))

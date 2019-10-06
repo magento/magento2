@@ -68,11 +68,10 @@ class MigrateDataBetweenShards implements DDLTriggerInterface
         $newTable = $elementHistory->getNew();
         /** @var Table $oldTable */
         $oldTable = $elementHistory->getOld();
-        $that = $this;
 
-        return function () use ($newTable, $oldTable, $that) {
-            $firstConnection = $that->resourceConnection->getConnection($oldTable->getResource());
-            $secondConnection = $that->resourceConnection->getConnection($newTable->getResource());
+        return function () use ($newTable, $oldTable) {
+            $firstConnection = $this->resourceConnection->getConnection($oldTable->getResource());
+            $secondConnection = $this->resourceConnection->getConnection($newTable->getResource());
             $select = $firstConnection->select()->from($oldTable->getName());
 
             foreach ($this->selectGenerator->generator($select, $oldTable->getResource()) as $data) {

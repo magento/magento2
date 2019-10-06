@@ -92,10 +92,9 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
-        $self = $this;
         $this->_objectManager->expects($this->any())->method('get')->willReturnCallback(
-            function ($className) use ($self) {
-                return $self->createMock($className);
+            function ($className) {
+                return $this->createMock($className);
             }
         );
 
@@ -109,13 +108,12 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
-        $self = $this;
         $this->_booleanUtils->expects($this->any())
             ->method('toBoolean')
             ->willReturn(true);
         $this->_objectManager->expects($this->any())->method('get')->willReturnCallback(
-            function ($className) use ($self) {
-                return $self->createMock($className);
+            function ($className) {
+                return $this->createMock($className);
             }
         );
 
@@ -131,13 +129,12 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
-        $self = $this;
         $this->_booleanUtils->expects($this->any())
             ->method('toBoolean')
             ->willReturn(false);
         $this->_objectManager->expects($this->any())->method('create')->willReturnCallback(
-            function ($className) use ($self) {
-                return $self->createMock($className);
+            function ($className) {
+                return $this->createMock($className);
             }
         );
 

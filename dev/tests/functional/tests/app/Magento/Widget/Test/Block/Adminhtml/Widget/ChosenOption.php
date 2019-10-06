@@ -117,11 +117,10 @@ class ChosenOption extends SimpleElement
      */
     protected function waitLoader()
     {
-        $browser = $this;
         $loaderSelector = $this->loaderOld;
         $this->waitUntil(
-            function () use ($browser, $loaderSelector) {
-                $loader = $browser->find($loaderSelector);
+            function () use ($loaderSelector) {
+                $loader = $this->find($loaderSelector);
                 return $loader->isVisible() == false ? true : null;
             }
         );
