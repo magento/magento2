@@ -1708,7 +1708,6 @@ fieldset[disabled] .pager .action-next {
   top: 12px;
   right: 12px;
   display: inline-block;
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -3106,7 +3105,6 @@ body > * {
 .page-main-actions .page-actions .action-add.mselect-button-add.back,
 .page-main-actions .page-actions .action-add.mselect-button-add.action-back,
 .page-main-actions .page-actions .action-add.mselect-button-add.delete {
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -3387,7 +3385,6 @@ fieldset[disabled] .page-main-actions .page-actions .action-add.mselect-button-a
   display: block;
 }
 .store-switcher .actions.dropdown .action.toggle {
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -3594,7 +3591,6 @@ fieldset[disabled] .store-switcher .actions.dropdown .action.toggle {
 button,
 .action-add.mselect-button-add {
   border-radius: 2px;
-  background-image: none;
   background: #f2ebde;
   padding: 6px 13px;
   color: #645d53;
@@ -3632,7 +3628,6 @@ fieldset[disabled] .action-add.mselect-button-add {
 }
 button.primary,
 .action-add.mselect-button-add.primary {
-  background-image: none;
   background: #007dbd;
   padding: 6px 13px;
   color: #ffffff;
@@ -3919,7 +3914,6 @@ fieldset[disabled] .action-add.mselect-button-add.primary {
   margin-left: -35px;
   width: 30px;
   height: 35px;
-  background-size: 109px 70px;
   background: url("../images/logo.svg") no-repeat 0 -21px;
 }
 .icon-error {
@@ -4532,7 +4526,6 @@ fieldset.form__field .control-fields > .form__field:first-child > .label {
   width: 30%;
 }
 .control-text + .ui-datepicker-trigger {
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -4846,7 +4839,6 @@ fieldset[disabled] .control-text + .ui-datepicker-trigger {
   margin: 3px;
   vertical-align: middle;
   display: inline-block;
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -4944,7 +4936,6 @@ fieldset[disabled] .filters-toggle {
   content: ": ";
 }
 .filters-item .action-remove {
-  background-image: none;
   background: #f2ebde;
   padding: 6px 13px;
   color: #645d53;
@@ -5051,7 +5042,6 @@ fieldset[disabled] .filters-item .action-remove {
   margin: 3px;
   vertical-align: middle;
   display: inline-block;
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -5356,7 +5346,6 @@ fieldset[disabled] .filters-form .action-close {
   padding-right: 30px;
 }
 .filters .field-date .group .hasDatepicker + .ui-datepicker-trigger {
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;
@@ -5500,7 +5489,6 @@ fieldset[disabled] .filters .field-date .group .hasDatepicker + .ui-datepicker-t
   margin: 3px;
   vertical-align: middle;
   display: inline-block;
-  background-image: none;
   background: none;
   border: 0;
   margin: 0;

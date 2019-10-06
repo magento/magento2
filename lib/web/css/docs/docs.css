@@ -645,7 +645,6 @@
   border-color: transparent transparent transparent #ccc;
 }
 button {
-  background-image: none;
   background: #f2f2f2;
   border: 1px solid #cdcdcd;
   color: #333333;
@@ -713,7 +712,6 @@ button:focus {
   box-sizing: border-box;
   vertical-align: middle;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -791,7 +789,6 @@ fieldset[disabled] .example-button-10 {
   opacity: 0.5;
 }
 .example-button-11 {
-  background-image: none;
   background: #f2f2f2;
   border: 1px solid #cdcdcd;
   color: #333333;
@@ -847,7 +844,6 @@ fieldset[disabled] .example-button-11 {
   pointer-events: none;
 }
 .example-button-12 {
-  background-image: none;
   background: #f2f2f2;
   border: 1px solid #cdcdcd;
   color: #333333;
@@ -903,7 +899,6 @@ fieldset[disabled] .example-button-12 {
   pointer-events: none;
 }
 .example-button-13 {
-  background-image: none;
   background: #f2f2f2;
   border: 1px solid #cdcdcd;
   color: #333333;
@@ -938,7 +933,6 @@ fieldset[disabled] .example-button-13 {
   pointer-events: none;
 }
 .example-button-4 {
-  background-image: none;
   background: #1979c3;
   border: 1px solid #1979c3;
   color: #ffffff;
@@ -989,8 +983,6 @@ fieldset[disabled] .example-button-4 {
   color: #fff;
 }
 .example-button-7 {
-  background-image: none;
-  background: #f2f2f2;
   background-color: #006bb4;
   background-repeat: repeat-x;
   background-image: -webkit-linear-gradient(top, #1979c3 0%, #006bb4 100%);
@@ -1087,7 +1079,6 @@ fieldset[disabled] .example-button-8 {
 }
 .example-button-9 {
   text-decoration: none;
-  background-image: none;
   background: #f2f2f2;
   border: 1px solid #cdcdcd;
   color: #333333;
@@ -1132,7 +1123,6 @@ fieldset[disabled] .example-button-9 {
   box-shadow: inset 0 3px 1px rgba(0, 0, 0, 0.29);
 }
 .example-button-14 {
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -1161,8 +1151,6 @@ fieldset[disabled] .example-button-14 {
   opacity: 0.5;
 }
 .example-button-15 {
-  background-image: none;
-  background: #1979c3;
   border: 1px solid #1979c3;
   color: #ffffff;
   cursor: pointer;
@@ -5022,7 +5010,6 @@ footer.footer {
 .window.popup.popup-example .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5116,7 +5103,6 @@ fieldset[disabled] .window.popup.popup-example .popup-actions .action.close {
 .window.popup.popup-example-1 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5227,7 +5213,6 @@ fieldset[disabled] .window.popup.popup-example-1 .popup-actions .action.close {
 .window.popup.popup-example-2 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5325,7 +5310,6 @@ fieldset[disabled] .window.popup.popup-example-2 .popup-actions .action.close {
 .window.popup.popup-example-3 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5425,7 +5409,6 @@ fieldset[disabled] .window.popup.popup-example-3 .popup-actions .action.close {
 .window.popup.popup-example-4 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5519,7 +5502,6 @@ fieldset[disabled] .window.popup.popup-example-4 .popup-actions .action.close {
 .window.popup.popup-example-5 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5641,7 +5623,6 @@ fieldset[disabled] .window.popup.popup-example-5 .popup-actions .action.close {
 .window.popup.popup-example-6 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5770,7 +5751,6 @@ fieldset[disabled] .window.popup.popup-example-6 .popup-actions .action.close {
 .window.popup.popup-example-8 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
@@ -5854,7 +5834,6 @@ fieldset[disabled] .window.popup.popup-example-8 .popup-actions .action.close {
 .window.popup.popup-example-9 .popup-actions .action.close {
   position: absolute;
   display: inline-block;
-  background-image: none;
   background: none;
   -moz-box-sizing: content-box;
   border: 0;
