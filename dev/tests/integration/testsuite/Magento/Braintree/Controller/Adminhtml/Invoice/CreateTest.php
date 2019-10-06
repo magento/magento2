@@ -62,7 +62,7 @@ class CreateTest extends AbstractBackendController
      * during creation second partial invoice.
      *
      * @return void
-     * @magentoConfigFixture default_store payment/braintree/merchant_account_id Magneto
+     * @magentoConfigFixture default_store payment/braintree/merchant_account_id Magento
      * @magentoConfigFixture current_store payment/braintree/merchant_account_id USA_Merchant
      * @magentoDataFixture Magento/Braintree/Fixtures/partial_invoice.php
      */
