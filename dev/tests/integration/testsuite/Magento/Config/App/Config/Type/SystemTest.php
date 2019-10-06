@@ -5,11 +5,13 @@
  */
 namespace Magento\Config\App\Config\Type;
 
+use Magento\Config\Model\Config\Factory;
 use Magento\Framework\Lock\Backend\Cache;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -127,6 +129,28 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             'value1.db.store_default.test',
             $configValue
+        );
+    }
+
+    public function testChangingConfigurationValueRefreshesACache()
+    {
+        $systemConfig = $this->objectManager->get(System::class);
+
+        // First uncached call to configuration
+        $systemConfig->get('stores/default/web/test/test_value_1');
+
+        /** @var Factory $configFactory */
+        $configFactory = $this->objectManager->create(Factory::class);
+        $config = $configFactory->create();
+        $config->setScope(ScopeInterface::SCOPE_STORES);
+        $config->setStore('default');
+
+        $config->setDataByPath('web/test/test_value_1', 'new_uncached_value');
+        $config->save();
+
+        $this->assertEquals(
+            'new_uncached_value',
+            $systemConfig->get('stores/default/web/test/test_value_1')
         );
     }
 
