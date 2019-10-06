@@ -375,7 +375,7 @@ define([
                 if (videoInfo) {
                     callback();
                 } else {
-                    this._onRequestError($.mage.__('Invalid video url'));
+                    this._onRequestError('Error: Invalid video url');
                 }
             },
 
@@ -407,7 +407,7 @@ define([
                 videoInfo = this._validateURL(url);
 
                 if (!videoInfo) {
-                    this._onRequestError($.mage.__('Invalid video url'));
+                    this._onRequestError('Error: Invalid video url');
 
                     return;
                 }
@@ -442,7 +442,7 @@ define([
                             errReason = tmpError.reason;
 
                             if (['keyInvalid'].indexOf(errReason) !== -1) {
-                                errorsMessage.push($.mage.__('Youtube API key is invalid'));
+                                errorsMessage.push('Error: Youtube API key is invalid');
 
                                 break;
                             }
@@ -450,7 +450,7 @@ define([
                             errorsMessage.push(tmpError.message);
                         }
 
-                        return $.mage.__('Video cant be shown due to the following reason: ') +
+                        return 'Error: Video cant be shown due to the following reason: ' +
                             $.unique(errorsMessage).join(', ');
                     };
 
@@ -461,7 +461,7 @@ define([
                     }
 
                     if (!data.items || data.items.length < 1) {
-                        this._onRequestError($.mage.__('Video not found'));
+                        this._onRequestError('Error: Video not found');
 
                         return;
                     }
@@ -493,7 +493,7 @@ define([
                         respData;
 
                     if (data.length < 1) {
-                        this._onRequestError($.mage.__('Video not found'));
+                        this._onRequestError('Error: Video not found');
 
                         return null;
                     }
@@ -529,7 +529,7 @@ define([
                         $.proxy(_onYouTubeLoaded, self)
                     ).fail(
                         function () {
-                            self._onRequestError('Video not found');
+                            self._onRequestError('Error: Video not found');
                         }
                     );
                 } else if (type === 'vimeo') {
@@ -546,7 +546,7 @@ define([
                          * @private
                          */
                         error: function () {
-                            self._onRequestError($.mage.__('Video not found'));
+                            self._onRequestError('Error: Video not found');
                         }
                     });
                 }
@@ -559,7 +559,7 @@ define([
                 this._videoInformation = null;
                 this.element.val('');
                 alert({
-                    content: 'Error: "' + data + '"'
+                    content: $.mage.__(data)
                 });
             },
 

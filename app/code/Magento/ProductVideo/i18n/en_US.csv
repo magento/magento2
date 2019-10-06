@@ -25,10 +25,10 @@ Uploader:,Uploader:
 Duration:,Duration:
 "Video Error","Video Error"
 "Unknown video type","Unknown video type"
-"Invalid video url","Invalid video url"
-"Youtube API key is invalid","Youtube API key is invalid"
-"Video cant be shown due to the following reason: ","Video cant be shown due to the following reason: "
-"Video not found","Video not found"
+"Error: Invalid video url","Error: Invalid video url"
+"Error: Youtube API key is invalid","Error: Youtube API key is invalid"
+"Error: Video cant be shown due to the following reason: ","Error: Video cant be shown due to the following reason: "
+"Error: Video not found","Error: Video not found"
 "New Video","New Video"
 Save,Save
 Cancel,Cancel
@@ -41,3 +41,5 @@ Delete,Delete
 "Show related video","Show related video"
 "Auto restart video","Auto restart video"
 "Delete image in all store views","Delete image in all store views"
+
+
