@@ -1067,7 +1067,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
              */
             // @codingStandardsIgnoreEnd
             function ($match) {
-                if ($this->useSessionIdForUrl($match[2] == 'S' ? true : false)) {
+                if ($this->useSessionIdForUrl($match[2] == 'S')) {
                     return $match[1] . $this->_sidResolver->getSessionIdQueryParam($this->_session) . '='
                         . $this->_session->getSessionId() . (isset($match[3]) ? $match[3] : '');
                 } else {

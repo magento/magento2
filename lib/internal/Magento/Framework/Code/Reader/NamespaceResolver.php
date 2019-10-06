@@ -50,7 +50,7 @@ class NamespaceResolver
         ) {
             $name = explode(self::NS_SEPARATOR, $type);
             $unqualifiedName = $name[0];
-            $isQualifiedName = count($name) > 1 ? true : false;
+            $isQualifiedName = count($name) > 1;
             if (isset($availableNamespaces[$unqualifiedName])) {
                 $namespace = $availableNamespaces[$unqualifiedName];
                 if ($isQualifiedName) {

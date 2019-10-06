@@ -133,7 +133,7 @@ class LiselectstoreElement extends SimpleElement
      */
     protected function isSubstring($haystack, $pattern)
     {
-        return preg_match("/$pattern/", $haystack) != 0 ? true : false;
+        return preg_match("/$pattern/", $haystack) != 0;
     }
 
     /**

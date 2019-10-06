@@ -130,7 +130,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
             throw new \InvalidArgumentException('Invalid HTTP response code');
         }
 
-        $this->isRedirect = (300 <= $code && 307 >= $code) ? true : false;
+        $this->isRedirect = (300 <= $code && 307 >= $code);
 
         $this->setStatusCode($code);
         return $this;

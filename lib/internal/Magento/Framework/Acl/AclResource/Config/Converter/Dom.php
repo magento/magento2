@@ -53,7 +53,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
         $sortOrderNode = $resourceAttributes->getNamedItem('sortOrder');
         $resourceData['sortOrder'] = $sortOrderNode !== null ? (int)$sortOrderNode->nodeValue : 0;
         $disabledNode = $resourceAttributes->getNamedItem('disabled');
-        $resourceData['disabled'] = $disabledNode !== null && $disabledNode->nodeValue == 'true' ? true : false;
+        $resourceData['disabled'] = $disabledNode !== null && $disabledNode->nodeValue == 'true';
         // convert child resource nodes if needed
         $resourceData['children'] = [];
         /** @var $childNode \DOMNode */
