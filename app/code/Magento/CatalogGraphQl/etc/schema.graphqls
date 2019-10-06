@@ -21,16 +21,16 @@ type Price @doc(description: "Price is deprecated, replaced by ProductPrice. The
     adjustments: [PriceAdjustment] @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
 }
 
-type PriceAdjustment @doc(description: "The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
+type PriceAdjustment @doc(description: "PriceAdjustment is deprecated. Taxes will be included or excluded in the price. The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
     amount: Money @doc(description: "The amount of the price adjustment and its currency code.")
-    code: PriceAdjustmentCodesEnum @doc(description: "Indicates whether the adjustment involves tax, weee, or weee_tax.")
-    description: PriceAdjustmentDescriptionEnum @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
+    code: PriceAdjustmentCodesEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the adjustment involves tax, weee, or weee_tax.")
+    description: PriceAdjustmentDescriptionEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
 }
 
-enum PriceAdjustmentCodesEnum @doc(description: "Note: This enumeration contains values defined in modules other than the Catalog module.") {
+enum PriceAdjustmentCodesEnum @doc(description: "PriceAdjustment.code is deprecated. This enumeration contains values defined in modules other than the Catalog module.") {
 }
 
-enum PriceAdjustmentDescriptionEnum @doc(description: "This enumeration states whether a price adjustment is included or excluded.") {
+enum PriceAdjustmentDescriptionEnum @doc(description: "PriceAdjustmentDescriptionEnum is deprecated. This enumeration states whether a price adjustment is included or excluded.") {
     INCLUDED
     EXCLUDED
 }
