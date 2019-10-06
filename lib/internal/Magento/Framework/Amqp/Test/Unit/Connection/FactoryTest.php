@@ -89,7 +89,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->optionsMock->expects($this->once())
             ->method('getPassword')
             ->willReturn('guest');
-        $this->optionsMock->expects($this->exactly(2))
+        $this->optionsMock->expects($this->once())
             ->method('getVirtualHost')
             ->willReturn('/');
         $this->optionsMock->expects($this->any())
