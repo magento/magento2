@@ -292,28 +292,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                     $this->_loadedScopes[$scopeCode] = true;
                 }
             } else {
-                $virtualTypes = [];
-                foreach ($this->_scopePriorityScheme as $scopeCode) {
-                    if (false == isset($this->_loadedScopes[$scopeCode])) {
-                        $data = $this->_reader->read($scopeCode) ?: [];
-                        unset($data['preferences']);
-                        if (count($data) > 0) {
-                            $this->_inherited = [];
-                            $this->_processed = [];
-                            $this->merge($data);
-                            foreach ($data as $class => $config) {
-                                if (isset($config['type'])) {
-                                    $virtualTypes[] = $class;
-                                }
-                            }
-                        }
-                        $this->_loadedScopes[$scopeCode] = true;
-                    }
-                    if ($this->isCurrentScope($scopeCode)) {
-                        break;
-                    }
-                }
-                foreach ($virtualTypes as $class) {
+                foreach ($this->_loadScopedVirtualTypes() as $class) {
                     $this->_inheritPlugins($class);
                 }
                 foreach ($this->getClassDefinitions() as $class) {
@@ -326,6 +305,37 @@ class PluginList extends Scoped implements InterceptionPluginList
             }
             $this->_pluginInstances = [];
         }
+    }
+
+    /**
+     * Load virtual types for current scope
+     *
+     * @return array
+     */
+    private function _loadScopedVirtualTypes()
+    {
+        $virtualTypes = [];
+        foreach ($this->_scopePriorityScheme as $scopeCode) {
+            if (!isset($this->_loadedScopes[$scopeCode])) {
+                $data = $this->_reader->read($scopeCode) ?: [];
+                unset($data['preferences']);
+                if (count($data) > 0) {
+                    $this->_inherited = [];
+                    $this->_processed = [];
+                    $this->merge($data);
+                    foreach ($data as $class => $config) {
+                        if (isset($config['type'])) {
+                            $virtualTypes[] = $class;
+                        }
+                    }
+                }
+                $this->_loadedScopes[$scopeCode] = true;
+            }
+            if ($this->isCurrentScope($scopeCode)) {
+                break;
+            }
+        }
+        return $virtualTypes;
     }
 
     /**
