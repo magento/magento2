@@ -19,7 +19,7 @@
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
-        <executeJS function="window.localStorage.clear()" step="clearWidgetCache" />
+        <executeJS function="window.localStorage.clear()" stepKey="clearWidgetCache" />
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAfterCacheCleared"/>
         <waitForPageLoad stepKey="waitForPageLoad5AfterCacheCleared"/>
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" userInput="alt" stepKey="grabFirstProductName1_1"/>
