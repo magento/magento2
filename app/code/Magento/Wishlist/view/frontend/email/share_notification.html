@@ -14,7 +14,7 @@
 
 {{template config_path="design/email/header_template"}}
 
-<p>{{trans "%customer_name wants to share this Wish List from %store_name with you:" customer_name=$customerName store_name=$store.getFrontendName()}}</p>
+<p>{{trans "%customer_name wants to share this Wish List from %store_name with you:" customer_name=$customerName store_name=$store_frontend_name}}</p>
 
 {{depend message}}
 <table class="message-info">
