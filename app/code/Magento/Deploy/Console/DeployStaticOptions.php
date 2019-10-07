@@ -81,7 +81,7 @@ class DeployStaticOptions
     /**
      * Key for js-bundle option
      */
-    const NO_JS_BUNLDE = 'no-js-bundle';
+    const NO_JS_BUNDLE = 'no-js-bundle';
 
     /**
      * Key for css option
@@ -281,7 +281,7 @@ class DeployStaticOptions
                 'Do not deploy JavaScript files.'
             ),
             new InputOption(
-                self::NO_JS_BUNLDE,
+                self::NO_JS_BUNDLE,
                 null,
                 InputOption::VALUE_NONE,
                 'Do not deploy JavaScript bundle files.'

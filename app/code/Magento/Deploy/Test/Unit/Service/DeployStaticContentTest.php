@@ -228,13 +228,13 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
     public function testMaxExecutionTimeOptionPassed()
     {
         $options = [
-            DeployStaticOptions::MAX_EXECUTION_TIME => 100,
+            DeployStaticOptions::MAX_EXECUTION_TIME           => 100,
             DeployStaticOptions::REFRESH_CONTENT_VERSION_ONLY => false,
-            DeployStaticOptions::JOBS_AMOUNT => 3,
-            DeployStaticOptions::STRATEGY => 'compact',
-            DeployStaticOptions::NO_JAVASCRIPT => true,
-            DeployStaticOptions::NO_JS_BUNLDE => true,
-            DeployStaticOptions::NO_HTML_MINIFY => true,
+            DeployStaticOptions::JOBS_AMOUNT                  => 3,
+            DeployStaticOptions::STRATEGY                     => 'compact',
+            DeployStaticOptions::NO_JAVASCRIPT                => true,
+            DeployStaticOptions::NO_JS_BUNDLE                 => true,
+            DeployStaticOptions::NO_HTML_MINIFY               => true,
         ];
 
         $queueMock = $this->createMock(Queue::class);

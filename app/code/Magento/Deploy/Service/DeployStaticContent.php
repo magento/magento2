@@ -128,7 +128,7 @@ class DeployStaticContent
             }
         }
 
-        if ($options[Options::NO_JAVASCRIPT] !== true && $options[Options::NO_JS_BUNLDE] !== true) {
+        if ($options[Options::NO_JAVASCRIPT] !== true && $options[Options::NO_JS_BUNDLE] !== true) {
             $deployBundle = $this->objectManager->create(Bundle::class, [
                 'logger' => $this->logger
             ]);
