@@ -92,7 +92,8 @@ define([
                 !cartCache.isChanged('shippingCarrierCode', data.shippingCarrierCode) &&
                 !cartCache.isChanged('address', address) &&
                 cartCache.get('totals') &&
-                !cartCache.isChanged('subtotal', parseFloat(quote.totals().subtotal))
+                !cartCache.isChanged('subtotal', parseFloat(quote.totals().subtotal)) &&
+                !cartCache.isChanged('discountAmount', parseFloat(quote.totals().discount_amount))
             ) {
                 quote.setTotals(cartCache.get('totals'));
             } else {

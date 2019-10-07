@@ -78,7 +78,9 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
     {
         /** @var Collection $quoteCollection */
         $quoteCollection = $this->collectionFactory->create();
-        $quoteCollection->getSelect()->where('FIND_IN_SET(?, applied_rule_ids)', $rule->getId());
+        $quoteCollection->getSelect()
+            ->where('is_active = 1')
+            ->where('FIND_IN_SET(?, applied_rule_ids)', $rule->getId());
         $this->iterator->walk($quoteCollection->getSelect(), [[$this, 'callbackRecalculateQuote']]);
     }
 
@@ -93,6 +95,7 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
         try {
             /** @var Quote $quote */
             $quote = $this->cartRepository->get($args['row']['entity_id']);
+            $quote->setAppliedRuleIds('');
             $quote->collectTotals()->save();
         } catch (\Exception $e) {
             $this->logger->error($e);

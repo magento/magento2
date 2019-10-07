@@ -201,6 +201,19 @@ define([
             var cached = parseFloat(this.get('totals').subtotal);
 
             return subtotal !== cached;
+        },
+
+        /**
+         * Compare cached discount amount with provided.
+         * Custom method for check object equality.
+         *
+         * @param {float} discount
+         * @returns {boolean}
+         */
+        _isDiscountAmountChanged: function (discount) {
+            var cached = parseFloat(this.get('totals').discount_amount);
+
+            return discount !== cached;
         }
     };
 });
