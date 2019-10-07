@@ -47,43 +47,51 @@
         <div class="block-title">
             <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
         </div>
-        <div class="block-content">
-        <?php if (!$_order->getIsVirtual()) : ?>
-            <div class="box box-order-shipping-address">
-                <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Shipping Address')) ?></strong>
-                </div>
-                <div class="box-content">
-                    <?php $_shipping = $_creditmemo->getShippingAddress() ?>
-                    <address><?= /* @noEscape */ $block->formatAddress($_shipping, 'html') ?></address>
-                </div>
-            </div>
-            <div class="box box-order-shipping-method">
-                <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Shipping Method')) ?></strong>
-                </div>
-                <div class="box-content">
-                    <?= $block->escapeHtml($_order->getShippingDescription()) ?>
-                </div>
-            </div>
-        <?php endif; ?>
-            <div class="box box-order-billing-address">
-                <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Billing Address')) ?></strong>
-                </div>
-                <div class="box-content">
-                    <?php $_billing = $_creditmemo->getbillingAddress() ?>
-                    <address><?= /* @noEscape */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
-                </div>
-            </div>
-            <div class="box box-order-billing-method">
-                <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Payment Method')) ?></strong>
-                </div>
-                <div class="box-content">
-                    <?= $block->getPaymentInfoHtml() ?>
-                </div>
-            </div>
+        <div class="table-wrapper">
+            <table class="data table">
+                <thead>
+                <tr>
+                    <?php if (!$_order->getIsVirtual()) : ?>
+                        <th>
+                            <span><?= $block->escapeHtml(__('Shipping Address')) ?></span>
+                        </th>
+                        <th>
+                            <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
+                        </th>
+                    <?php endif; ?>
+                        <th>
+                            <span><?= $block->escapeHtml(__('Billing Address')) ?></span>
+                        </th>
+                        <th>
+                            <span><?= $block->escapeHtml(__('Payment Method')) ?></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="block-content">
+                    <tr>
+                        <?php if (!$_order->getIsVirtual()) : ?>
+                            <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>">
+                                <?php $_shipping = $_creditmemo->getShippingAddress() ?>
+                                <address><?= /* @noEscape */ $block->formatAddress($_shipping, 'html') ?></address>
+                            </td>
+                            <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>">
+                                <?php if ($_order->getShippingDescription()) : ?>
+                                    <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                                <?php else : ?>
+                                    <?= $block->escapeHtml(__('No shipping information available')) ?>
+                                <?php endif; ?>
+                            </td>
+                        <?php endif ?>
+                        <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>">
+                            <?php $_billing = $_creditmemo->getbillingAddress() ?>
+                            <address><?= /* @noEscape */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
+                        </td>
+                        <td class="box-content" data-th="<?= $block->escapeHtml(__('Payment Method')) ?>">
+                            <?= $block->getPaymentInfoHtml() ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
