@@ -142,16 +142,10 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $data = $this->processCustomerData($customer, $expectedAttributes);
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
-            array_walk(
-                $exportData,
-                function (&$value) {
-                    if (is_string($value) && $value === '') {
-                        $value = null;
-                    }
-                }
-            );
 
-            $this->assertArraySubset($exportData, $data);
+            foreach ($data as $key => $value) {
+                $this->assertEquals($value, $exportData[$key], "Attribute '{$key}' is not equal.");
+            }
         }
     }
 
