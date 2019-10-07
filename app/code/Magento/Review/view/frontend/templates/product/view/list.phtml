@@ -11,9 +11,11 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($_items)) : ?>
 <div class="block review-list" id="customer-reviews">
-    <div class="block-title">
-        <strong><?= $block->escapeHtml(__('Customer Reviews')) ?></strong>
-    </div>
+    <?php if (!$block->getHideTitle()) : ?>
+        <div class="block-title">
+            <strong><?= $block->escapeHtml(__('Customer Reviews')) ?></strong>
+        </div>
+    <?php endif ?>
     <div class="block-content">
         <div class="toolbar review-toolbar">
             <?= $block->getChildHtml('toolbar') ?>

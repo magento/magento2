@@ -355,6 +355,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function _prepareMassactionColumn()
+    {
+        parent::_prepareMassactionColumn();
+        /** needs for correct work of mass action select functionality */
+        $this->setMassactionIdField('rt.review_id');
+
+        return $this;
+    }
+
+    /**
      * Get row url
      *
      * @param \Magento\Review\Model\Review|\Magento\Framework\DataObject $row

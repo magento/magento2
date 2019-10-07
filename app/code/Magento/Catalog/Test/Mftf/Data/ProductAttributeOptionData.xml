@@ -86,4 +86,11 @@
         <data key="label" unique="suffix">White</data>
         <data key="value" unique="suffix">white</data>
     </entity>
+    <!-- Product attribute options from file "export_import_configurable_product.csv" -->
+    <entity name="ProductAttributeOptionOneForExportImport" extends="productAttributeOption1" type="ProductAttributeOption">
+        <data key="label">option1</data>
+    </entity>
+    <entity name="ProductAttributeOptionTwoForExportImport" extends="productAttributeOption2" type="ProductAttributeOption">
+        <data key="label">option2</data>
+    </entity>
 </entities>
