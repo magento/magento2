@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+/**
+ * Class ClassReader
+ *
+ * @package Magento\Framework\Code\Reader
+ */
 class ClassReader implements ClassReaderInterface
 {
     private $parentsCache = [];

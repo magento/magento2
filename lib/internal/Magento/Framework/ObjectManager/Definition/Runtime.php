@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
+/**
+ * Class Runtime
+ *
+ * @package Magento\Framework\ObjectManager\Definition
+ */
 class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
     /**
