@@ -243,6 +243,7 @@ class Helper
     public function initialize(Product $product)
     {
         $productData = $this->request->getPost('product', []);
+
         return $this->initializeFromData($product, $productData);
     }
 
@@ -392,6 +393,7 @@ class Helper
         if (!is_object($this->linkResolver)) {
             $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
         }
+
         return $this->linkResolver;
     }
 
@@ -407,6 +409,7 @@ class Helper
             $this->dateTimeFilter = ObjectManager::getInstance()
                 ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
         }
+
         return $this->dateTimeFilter;
     }
 
