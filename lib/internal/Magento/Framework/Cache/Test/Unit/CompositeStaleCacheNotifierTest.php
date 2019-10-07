@@ -15,7 +15,6 @@ class CompositeStaleCacheNotifierTest extends TestCase implements StaleCacheNoti
 {
     /** @var string[] */
     private $notifications = [];
-    
 
     /** @test */
     public function noNotifications()
