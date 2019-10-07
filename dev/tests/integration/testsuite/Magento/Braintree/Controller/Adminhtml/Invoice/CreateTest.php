@@ -71,11 +71,14 @@ class CreateTest extends AbstractBackendController
         $order = $this->getOrder('100000002');
 
         $this->adapter->method('sale')
-            ->with(self::callback(function ($request) {
-                self::assertEquals('USA_Merchant', $request['merchantAccountId']);
-                return true;
-            }))
-            ->willReturn($this->getTransactionStub());
+            ->with(
+                self::callback(
+                    function ($request) {
+                        self::assertEquals('USA_Merchant', $request['merchantAccountId']);
+                        return true;
+                    }
+                )
+            )->willReturn($this->getTransactionStub());
 
         $uri = 'backend/sales/order_invoice/save/order_id/' . $order->getEntityId();
         $this->prepareRequest($uri);
