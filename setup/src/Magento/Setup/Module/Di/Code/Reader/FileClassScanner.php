@@ -8,6 +8,17 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 
 class FileClassScanner
 {
+    private const NAMESPACE_TOKENS = [
+        T_WHITESPACE => true,
+        T_STRING => true,
+        T_NS_SEPARATOR => true
+    ];
+
+    private const ALLOWED_OPEN_BRACES_TOKENS = [
+        T_CURLY_OPEN               => true,
+        T_DOLLAR_OPEN_CURLY_BRACES => true,
+        T_STRING_VARNAME           => true];
+
     /**
      * The filename of the file to introspect
      *
@@ -69,9 +80,8 @@ class FileClassScanner
      */
     private function extract()
     {
-        $allowedOpenBraces = [T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES, T_STRING_VARNAME];
         $classes = [];
-        $namespace = '';
+        $namespaceParts = [];
         $class = '';
         $triggerClass = false;
         $triggerNamespace = false;
@@ -80,24 +90,25 @@ class FileClassScanner
 
         $this->tokens = token_get_all($this->getFileContents());
         foreach ($this->tokens as $index => $token) {
+            $tokenIsArray = is_array($token);
             // Is either a literal brace or an interpolated brace with a variable
-            if ($token == '{' || (is_array($token) && in_array($token[0], $allowedOpenBraces))) {
+            if ($token === '{' || ($tokenIsArray && isset(self::ALLOWED_OPEN_BRACES_TOKENS[$token[0]]))) {
                 $braceLevel++;
-            } else if ($token == '}') {
+            } else if ($token === '}') {
                 $braceLevel--;
             }
             // The namespace keyword was found in the last loop
             if ($triggerNamespace) {
                 // A string ; or a discovered namespace that looks like "namespace name { }"
-                if (!is_array($token) || ($namespace && $token[0] == T_WHITESPACE)) {
+                if (!$tokenIsArray || ($namespaceParts && $token[0] === T_WHITESPACE)) {
                     $triggerNamespace = false;
-                    $namespace .= '\\';
+                    $namespaceParts[] = '\\';
                     continue;
                 }
-                $namespace .= $token[1];
+                $namespaceParts[] = $token[1];
 
                 // The class keyword was found in the last loop
-            } else if ($triggerClass && $token[0] == T_STRING) {
+            } else if ($triggerClass && $token[0] === T_STRING) {
                 $triggerClass = false;
                 $class = $token[1];
             }
@@ -106,7 +117,7 @@ class FileClassScanner
                 case T_NAMESPACE:
                     // Current loop contains the namespace keyword.  Between this and the semicolon is the namespace
                     $triggerNamespace = true;
-                    $namespace = '';
+                    $namespaceParts = [];
                     $bracedNamespace = $this->isBracedNamespace($index);
                     break;
                 case T_CLASS:
@@ -118,9 +129,8 @@ class FileClassScanner
             }
 
             // We have a class name, let's concatenate and store it!
-            if ($class != '') {
-                $namespace = trim($namespace);
-                $fqClassName = $namespace . trim($class);
+            if ($class !== '') {
+                $fqClassName = trim(join('', $namespaceParts)) . trim($class);
                 $classes[] = $fqClassName;
                 $class = '';
             }
@@ -139,15 +149,15 @@ class FileClassScanner
         $len = count($this->tokens);
         while ($index++ < $len) {
             if (!is_array($this->tokens[$index])) {
-                if ($this->tokens[$index] == ';') {
+                if ($this->tokens[$index] === ';') {
                     return false;
-                } else if ($this->tokens[$index] == '{') {
+                } else if ($this->tokens[$index] === '{') {
                     return true;
                 }
                 continue;
             }
 
-            if (!in_array($this->tokens[$index][0], [T_WHITESPACE, T_STRING, T_NS_SEPARATOR])) {
+            if (!isset(self::NAMESPACE_TOKENS[$this->tokens[$index][0]])) {
                 throw new InvalidFileException('Namespace not defined properly');
             }
         }

@@ -94,7 +94,7 @@ class ClassesScanner implements ClassesScannerInterface
      */
     private function extract(\RecursiveIteratorIterator $recursiveIterator)
     {
-        $classes = [];
+        $classes = [[]];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
             if ($fileItem->isDir() || $fileItem->getExtension() !== 'php' || $fileItem->getBasename()[0] == '.') {
@@ -109,9 +109,9 @@ class ClassesScanner implements ClassesScannerInterface
             $fileScanner = new FileClassScanner($fileItemPath);
             $classNames = $fileScanner->getClassNames();
             $this->includeClasses($classNames, $fileItemPath);
-            $classes = array_merge($classes, $classNames);
+            $classes [] = $classNames;
         }
-        return $classes;
+        return array_merge(...$classes);
     }
 
     /**

@@ -170,19 +170,16 @@ class PhpScanner implements ScannerInterface
      */
     public function collectEntities(array $files)
     {
-        $output = [];
+        $output = [[]];
         foreach ($files as $file) {
             $classes = $this->_getDeclaredClasses($file);
             foreach ($classes as $className) {
                 $reflectionClass = new \ReflectionClass($className);
-                $output = array_merge(
-                    $output,
-                    $this->_fetchFactories($reflectionClass, $file),
-                    $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file)
-                );
+                $output [] = $this->_fetchFactories($reflectionClass, $file);
+                $output [] = $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file);
             }
         }
-        return array_unique($output);
+        return array_unique(array_merge(...$output));
     }
 
     /**
