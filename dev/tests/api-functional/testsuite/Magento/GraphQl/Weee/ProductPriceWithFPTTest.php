@@ -633,6 +633,74 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     }
 
     /**
+     * Test FPT disabled feature
+     *
+     * FPT enabled : FALSE
+     *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceDisabledFPTSettingsProvider
+     * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
+     */
+    public function testCatalogPriceDisableFPT(array $weeTaxSettings)
+    {
+        /** @var WriterInterface $configWriter */
+        $configWriter = $this->objectManager->get(WriterInterface::class);
+
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
+
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var Product $product1 */
+        $product1 = $productRepository->get('simple-with-ftp');
+        $product1->setFixedProductAttribute(
+            [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10, 'delete' => '']]
+        );
+        $productRepository->save($product1);
+
+        $skus = ['simple-with-ftp'];
+        $query = $this->getProductQuery($skus);
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertEquals(100, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertCount(
+            0,
+            $product['price_range']['minimum_price']['fixed_product_taxes'],
+            'Fixed product tax count is incorrect'
+        );
+        $this->assertResponseFields(
+            $product['price_range']['minimum_price']['fixed_product_taxes'],
+            []
+        );
+    }
+
+    /**
+     * CatalogPriceDisableFPT settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceDisabledFPTSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/weee/enable' => '0',
+                    'tax/weee/display' => '1',
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Get GraphQl query to fetch products by sku
      *
      * @param array $skus
