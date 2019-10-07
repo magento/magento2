@@ -103,7 +103,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
             $package->expects($this->never())->method('getTheme');
             $package->expects($this->never())->method('getLocale');
         } else {
-            $package->expects($this->exactly(1))->method('isVirtual')->willReturn(false);
+            $package->expects($this->exactly(2))->method('isVirtual')->willReturn(false);
             $package->expects($this->exactly(3))->method('getArea')->willReturn('area');
             $package->expects($this->exactly(3))->method('getTheme')->willReturn('theme');
             $package->expects($this->exactly(3))->method('getLocale')->willReturn('locale');
@@ -198,6 +198,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 [
                     'strategy' =>  'compact',
                     'no-javascript' => false,
+                    'no-js-bundle' => false,
                     'no-html-minify' => false,
                     'refresh-content-version-only' => false,
                 ],
@@ -207,6 +208,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
                 [
                     'strategy' =>  'compact',
                     'no-javascript' => false,
+                    'no-js-bundle' => false,
                     'no-html-minify' => false,
                     'refresh-content-version-only' => false,
                     'content-version' =>  '123456',
@@ -231,6 +233,7 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
             DeployStaticOptions::JOBS_AMOUNT => 3,
             DeployStaticOptions::STRATEGY => 'compact',
             DeployStaticOptions::NO_JAVASCRIPT => true,
+            DeployStaticOptions::NO_JS_BUNLDE => true,
             DeployStaticOptions::NO_HTML_MINIFY => true,
         ];
 
