@@ -675,8 +675,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Set Action name
-     * Reseted route path if action name has change
+     * Set Action name, reseated route path if action name has change
      *
      * @param string $data
      * @return \Magento\Framework\UrlInterface

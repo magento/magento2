@@ -101,16 +101,22 @@ class NamespaceResolver
                     $imports[$importsCount][] = $item;
                 }
                 foreach ($imports as $import) {
-                    $import = array_filter($import, function ($token) {
-                        $whitelist = [T_NS_SEPARATOR, T_STRING, T_AS];
-                        if (isset($token[0]) && in_array($token[0], $whitelist)) {
-                            return true;
+                    $import = array_filter(
+                        $import,
+                        function ($token) {
+                            $whitelist = [T_NS_SEPARATOR, T_STRING, T_AS];
+                            if (isset($token[0]) && in_array($token[0], $whitelist)) {
+                                return true;
+                            }
+                            return false;
                         }
-                        return false;
-                    });
-                    $import = array_map(function ($element) {
-                        return $element[1];
-                    }, $import);
+                    );
+                    $import = array_map(
+                        function ($element) {
+                            return $element[1];
+                        },
+                        import
+                    );
                     $import = array_values($import);
                     if ($import[0] === self::NS_SEPARATOR) {
                         array_shift($import);
