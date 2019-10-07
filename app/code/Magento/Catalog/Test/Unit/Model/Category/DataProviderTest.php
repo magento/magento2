@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
 use Magento\Catalog\Model\Category;
@@ -232,10 +233,12 @@ class DataProviderTest extends TestCase
             ->getMock();
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
-            ->willReturnMap([
-                ['', null, $categoryData],
-                ['image', null, $categoryData['image']],
-            ]);
+            ->willReturnMap(
+                [
+                    ['', null, $categoryData],
+                    ['image', null, $categoryData['image']],
+                ]
+            );
         $categoryMock->method('getExistsStoreValueFlag')
             ->with('url_key')
             ->willReturn(false);
@@ -304,10 +307,12 @@ class DataProviderTest extends TestCase
             ->getMock();
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
-            ->willReturnMap([
-                ['', null, $categoryData],
-                ['image', null, $categoryData['image']],
-            ]);
+            ->willReturnMap(
+                [
+                    ['', null, $categoryData],
+                    ['image', null, $categoryData['image']],
+                ]
+            );
         $categoryMock->method('getExistsStoreValueFlag')
             ->with('url_key')
             ->willReturn(false);
