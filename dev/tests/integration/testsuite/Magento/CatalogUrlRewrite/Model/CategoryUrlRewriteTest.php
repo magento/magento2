@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Model;
 
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -37,6 +37,9 @@ class CategoryUrlRewriteTest extends TestCase
     /** @var CategoryRepository */
     private $categoryRepository;
 
+    /** @var CategoryResource */
+    private $categoryResource;
+
     /**
      * @inheritDoc
      */
@@ -48,6 +51,7 @@ class CategoryUrlRewriteTest extends TestCase
         $this->categoryFactory = $this->objectManager->get(CategoryFactory::class);
         $this->urlRewriteCollectionFactory = $this->objectManager->get(UrlRewriteCollectionFactory::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
+        $this->categoryResource = $this->objectManager->get(CategoryResource::class);
     }
 
     /**
@@ -62,16 +66,16 @@ class CategoryUrlRewriteTest extends TestCase
         $categoryModel = $this->categoryFactory->create();
         $categoryModel->isObjectNew(true);
         $categoryModel->setData($data['data']);
-        $category = $categoryModel->save($categoryModel);
-        $this->assertNotNull($category->getId(), 'The category was not created');
+        $this->categoryResource->save($categoryModel);
+        $this->assertNotNull($categoryModel->getId(), 'The category was not created');
         $urlRewriteCollection = $this->urlRewriteCollectionFactory->create();
-        $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_ID, ['eq' => $category->getId()])
+        $urlRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_ID, ['eq' => $categoryModel->getId()])
             ->addFieldToFilter(UrlRewrite::ENTITY_TYPE, ['eq' => DataCategoryUrlRewriteDatabaseMap::ENTITY_TYPE]);
 
         foreach ($urlRewriteCollection as $item) {
             foreach ($data['expected_data'] as $field => $expectedItem) {
                 $this->assertEquals(
-                    sprintf($expectedItem, $category->getId()),
+                    sprintf($expectedItem, $categoryModel->getId()),
                     $item[$field],
                     'The expected data does not match actual value'
                 );
