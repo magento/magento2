@@ -62,6 +62,7 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
 {

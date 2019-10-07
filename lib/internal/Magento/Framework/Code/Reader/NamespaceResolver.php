@@ -115,7 +115,7 @@ class NamespaceResolver
                         function ($element) {
                             return $element[1];
                         },
-                        import
+                        $import
                     );
                     $import = array_values($import);
                     if ($import[0] === self::NS_SEPARATOR) {

@@ -175,6 +175,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
      * @inheritDoc
      *
      * @return string[]
+     * @SuppressWarnings(PHPMD.SerializationAware)
      */
     public function __sleep()
     {
