@@ -6,9 +6,9 @@
 namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LockerProcessInterface;
-use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
 /**
@@ -171,7 +171,8 @@ class AlternativeSource implements AlternativeSourceInterface
 
     /**
      * Check if file extension supported
-     * @param $ext string
+     *
+     * @param string $ext
      * @return bool
      */
     public function isExtensionSupported($ext)
