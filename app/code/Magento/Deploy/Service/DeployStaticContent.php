@@ -75,6 +75,9 @@ class DeployStaticContent
      * @param array $options
      * @throws LocalizedException
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function deploy(array $options)
     {
@@ -106,20 +109,20 @@ class DeployStaticContent
 
         $deployStrategy = $this->deployStrategyFactory->create(
             $options[Options::STRATEGY],
-            [
-                'queue' => $this->queueFactory->create($queueOptions)
-            ]
+            ['queue' => $this->queueFactory->create($queueOptions)]
         );
 
         $packages = $deployStrategy->deploy($options);
 
         if ($options[Options::NO_JAVASCRIPT] !== true) {
-            $deployRjsConfig = $this->objectManager->create(DeployRequireJsConfig::class, [
-                'logger' => $this->logger
-            ]);
-            $deployI18n = $this->objectManager->create(DeployTranslationsDictionary::class, [
-                'logger' => $this->logger
-            ]);
+            $deployRjsConfig = $this->objectManager->create(
+                DeployRequireJsConfig::class,
+                ['logger' => $this->logger]
+            );
+            $deployI18n      = $this->objectManager->create(
+                DeployTranslationsDictionary::class,
+                ['logger' => $this->logger]
+            );
             foreach ($packages as $package) {
                 if (!$package->isVirtual()) {
                     $deployRjsConfig->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
@@ -129,9 +132,10 @@ class DeployStaticContent
         }
 
         if ($options[Options::NO_JAVASCRIPT] !== true && $options[Options::NO_JS_BUNDLE] !== true) {
-            $deployBundle = $this->objectManager->create(Bundle::class, [
-                'logger' => $this->logger
-            ]);
+            $deployBundle = $this->objectManager->create(
+                Bundle::class,
+                ['logger' => $this->logger]
+            );
             foreach ($packages as $package) {
                 if (!$package->isVirtual()) {
                     $deployBundle->deploy($package->getArea(), $package->getTheme(), $package->getLocale());

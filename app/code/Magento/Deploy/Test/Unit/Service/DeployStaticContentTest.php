@@ -241,13 +241,15 @@ class DeployStaticContentTest extends \PHPUnit\Framework\TestCase
         $strategyMock = $this->createMock(CompactDeploy::class);
         $this->queueFactory->expects($this->once())
             ->method('create')
-            ->with([
-                'logger' => $this->logger,
-                'maxExecTime' => 100,
-                'maxProcesses' => 3,
-                'options' => $options,
-                'deployPackageService' => null
-            ])
+            ->with(
+                [
+                    'logger'               => $this->logger,
+                    'maxExecTime'          => 100,
+                    'maxProcesses'         => 3,
+                    'options'              => $options,
+                    'deployPackageService' => null
+                ]
+            )
             ->willReturn($queueMock);
         $this->deployStrategyFactory->expects($this->once())
             ->method('create')
