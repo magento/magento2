@@ -20,17 +20,17 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class ShipmentAddTrackTest extends WebapiAbstract
 {
     /**
-     * Service read name
+     * Read name of service
      */
     const SERVICE_READ_NAME = 'salesShipmentTrackRepositoryV1';
 
     /**
-     * Service version
+     * Version of service
      */
     const SERVICE_VERSION = 'V1';
 
     /**
-     * Shipment increment id
+     * Increment id for shipment
      */
     const SHIPMENT_INCREMENT_ID = '100000001';
 
