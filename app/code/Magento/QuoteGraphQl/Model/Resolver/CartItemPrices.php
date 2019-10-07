@@ -96,9 +96,7 @@ class CartItemPrices implements ResolverInterface
                 /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
                 $discountData = $value['discount'];
                 $discountAmount = $discountData->getAmount();
-                /* @var \Magento\SalesRule\Model\Rule $rule */
-                $rule = $value['rule'];
-                $discount['label'] = $rule ?: __('Discount');
+                $discount['label'] = $value['rule'] ?: __('Discount');
                 $amount['value'] = $discountAmount;
                 $amount['currency'] = $currencyCode;
                 $discount['amount'] = $amount;
