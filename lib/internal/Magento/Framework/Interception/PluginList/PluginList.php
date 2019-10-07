@@ -138,7 +138,7 @@ class PluginList extends Scoped implements InterceptionPluginList
     protected function _inheritPlugins($type)
     {
         $type = ltrim($type, '\\');
-        if (!array_key_exists($type, $this->_inherited)) {
+        if (!isset($this->_inherited[$type])) {
             $realType = $this->_omConfig->getOriginalInstanceType($type);
 
             if ($realType !== $type) {

@@ -45,7 +45,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
      */
     public function getParameters($className)
     {
-        if (!array_key_exists($className, $this->_definitions)) {
+        if (!isset($this->_definitions[$className])) {
             $this->_definitions[$className] = $this->_reader->getConstructor($className);
         }
         return $this->_definitions[$className];
