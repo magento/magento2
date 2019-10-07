@@ -48,6 +48,11 @@ class CreateCustomOptionsTest extends TestCase
     private $productRepository;
 
     /**
+     * @var ProductCustomOptionRepositoryInterface
+     */
+    private $optionRepository;
+
+    /**
      * Custom option factory.
      *
      * @var ProductCustomOptionInterfaceFactory
@@ -71,6 +76,7 @@ class CreateCustomOptionsTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->optionRepository = $this->objectManager->create(ProductCustomOptionRepositoryInterface::class);
         $this->customOptionFactory = $this->objectManager->create(ProductCustomOptionInterfaceFactory::class);
         $this->customOptionValueFactory = $this->objectManager
             ->create(ProductCustomOptionValuesInterfaceFactory::class);
@@ -85,11 +91,6 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @magentoConfigFixture default_store catalog/price/scope 1
      * @magentoConfigFixture secondstore_store catalog/price/scope 1
-     *
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
      */
     public function testSaveOptionPriceByStore(): void
     {
@@ -121,10 +122,6 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeTextDataProvider
      *
      * @param array $optionData
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
      */
     public function testCreateOptionsWithTypeText(array $optionData): void
     {
@@ -149,10 +146,6 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
-     * @throws NoSuchEntityException
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws StateException
      */
     public function testFileExtensions(string $rawExtensions, string $expectedExtensions): void
     {
@@ -187,10 +180,6 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $optionValueData
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
      */
     public function testCreateOptionsWithTypeSelect(array $optionData, array $optionValueData): void
     {
@@ -216,10 +205,6 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeDateDataProvider
      *
      * @param array $optionData
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
      */
     public function testCreateOptionsWithTypeDate(array $optionData): void
     {
@@ -238,20 +223,14 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param string $expectedErrorText
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
      */
     public function testCreateOptionWithError(array $optionData, string $expectedErrorText): void
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple');
+        $product = $this->productRepository->get('simple');
         $createdOption = $this->customOptionFactory->create(['data' => $optionData]);
         $product->setOptions([$createdOption]);
         $this->expectExceptionMessage($expectedErrorText);
-        $productRepository->save($product);
+        $this->productRepository->save($product);
     }
 
     /**
@@ -936,14 +915,10 @@ class CreateCustomOptionsTest extends TestCase
      */
     protected function tearDown(): void
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        /** @var ProductCustomOptionRepositoryInterface $optionRepository */
-        $optionRepository = $this->objectManager->create(ProductCustomOptionRepositoryInterface::class);
         try {
-            $product = $productRepository->get('simple');
-            foreach ($optionRepository->getProductOptions($product) as $customOption) {
-                $optionRepository->delete($customOption);
+            $product = $this->productRepository->get('simple');
+            foreach ($this->optionRepository->getProductOptions($product) as $customOption) {
+                $this->optionRepository->delete($customOption);
             }
         } catch (\Exception $e) {
         }
@@ -963,16 +938,12 @@ class CreateCustomOptionsTest extends TestCase
      */
     private function baseCreateCustomOptionAndAssert(array $optionData): ProductCustomOptionInterface
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        /** @var ProductCustomOptionRepositoryInterface $optionRepository */
-        $optionRepository = $this->objectManager->create(ProductCustomOptionRepositoryInterface::class);
-        $product = $productRepository->get('simple');
+        $product = $this->productRepository->get('simple');
         $createdOption = $this->customOptionFactory->create(['data' => $optionData]);
         $createdOption->setProductSku($product->getSku());
         $product->setOptions([$createdOption]);
-        $productRepository->save($product);
-        $productCustomOptions = $optionRepository->getProductOptions($product);
+        $this->productRepository->save($product);
+        $productCustomOptions = $this->optionRepository->getProductOptions($product);
         $this->assertCount(1, $productCustomOptions);
         $option = reset($productCustomOptions);
         $this->assertEquals($optionData['title'], $option->getTitle());

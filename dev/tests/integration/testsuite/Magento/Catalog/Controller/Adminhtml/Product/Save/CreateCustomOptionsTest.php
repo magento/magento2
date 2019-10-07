@@ -10,7 +10,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Save;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -19,9 +18,28 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * Option add via dispatch product controller action save with options data in POST data.
  *
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class CreateCustomOptionsTest extends AbstractBackendController
 {
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var ProductCustomOptionRepositoryInterface
+     */
+    private $optionRepository;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
+        $this->optionRepository = $this->_objectManager->create(ProductCustomOptionRepositoryInterface::class);
+    }
+
     /**
      * Test add to product custom option with type "field".
      *
@@ -30,23 +48,18 @@ class CreateCustomOptionsTest extends AbstractBackendController
      * @dataProvider productWithNewOptionsDataProvider
      *
      * @param array $productPostData
-     * @throws NoSuchEntityException
      */
     public function testSaveCustomOptionWithTypeField(array $productPostData): void
     {
         $this->getRequest()->setPostValue($productPostData);
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
-        /** @var ProductCustomOptionRepositoryInterface $optionRepository */
-        $optionRepository = $this->_objectManager->create(ProductCustomOptionRepositoryInterface::class);
-        $product = $productRepository->get('simple');
+        $product = $this->productRepository->get('simple');
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertSessionMessages(
             $this->contains('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
         );
-        $productOptions = $optionRepository->getProductOptions($product);
+        $productOptions = $this->optionRepository->getProductOptions($product);
         $this->assertCount(2, $productOptions);
         foreach ($productOptions as $customOption) {
             $postOptionData = $productPostData['product']['options'][$customOption->getTitle()] ?? null;
@@ -261,14 +274,10 @@ class CreateCustomOptionsTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
-        /** @var ProductCustomOptionRepositoryInterface $optionRepository */
-        $optionRepository = $this->_objectManager->create(ProductCustomOptionRepositoryInterface::class);
         try {
-            $product = $productRepository->get('simple');
-            foreach ($optionRepository->getProductOptions($product) as $customOption) {
-                $optionRepository->delete($customOption);
+            $product = $this->productRepository->get('simple');
+            foreach ($this->optionRepository->getProductOptions($product) as $customOption) {
+                $this->optionRepository->delete($customOption);
             }
         } catch (\Exception $e) {
             $product = null;
