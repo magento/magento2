@@ -91,6 +91,8 @@ class DtoConfig extends Data
      */
     public function isInterface(string $name): bool
     {
+        $name = ltrim($name, '\\');
+
         return (bool) $this->get('interface/' . $name, false);
     }
 
@@ -102,6 +104,8 @@ class DtoConfig extends Data
      */
     public function getConfiguration(string $name): ?array
     {
+        $name = ltrim($name, '\\');
+
         $interfaceName = $this->getInterfaceName($name);
         if ($interfaceName === null) {
             return null;
@@ -119,6 +123,8 @@ class DtoConfig extends Data
      */
     public function getInterfaceName(string $name): ?string
     {
+        $name = ltrim($name, '\\');
+
         if ($this->isInterface($name)) {
             return $name;
         }
@@ -134,6 +140,8 @@ class DtoConfig extends Data
      */
     public function isImmutable(string $name): bool
     {
+        $name = ltrim($name, '\\');
+
         $config = $this->getConfiguration($name);
         if (!$config) {
             return false;

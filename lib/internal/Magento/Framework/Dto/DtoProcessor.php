@@ -398,6 +398,8 @@ class DtoProcessor
      */
     public function createFromArray(array $data, string $type)
     {
+        $type = ltrim($type, '\\');
+
         // Normalize snake case properties
         foreach ($data as $k => $v) {
             $snakeCaseKey = SimpleDataObjectConverter::camelCaseToSnakeCase($k);

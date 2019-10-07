@@ -10,6 +10,7 @@ namespace Magento\Framework\Dto;
 use Magento\Framework\Dto\Mock\ConfigureTestDtos;
 use Magento\Framework\Dto\Mock\ConfigureTestProjections;
 use Magento\Framework\Dto\Mock\ImmutableDtoInterface;
+use Magento\Framework\Dto\Mock\ImmutableDtoInterfaceFactory;
 use Magento\Framework\Dto\Mock\ImmutableDtoTwoInterface;
 use Magento\Framework\Dto\Mock\ImmutableNestedDtoInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -34,6 +35,11 @@ class DtoProjectionTest extends TestCase
     private $dtoProjection;
 
     /**
+     * @var ImmutableDtoInterfaceFactory
+     */
+    private $immutableDtoFactory;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -44,6 +50,8 @@ class DtoProjectionTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->dtoProcessor = $this->objectManager->get(DtoProcessor::class);
         $this->dtoProjection = $this->objectManager->get(DtoProjection::class);
+
+        $this->immutableDtoFactory = $this->objectManager->get(ImmutableDtoInterfaceFactory::class);
     }
 
     public function testShouldCreateProjectedObject(): void
@@ -124,6 +132,41 @@ class DtoProjectionTest extends TestCase
         /** @var ImmutableDtoInterface $dto2 */
         $dto2 = $this->dtoProjection->execute(
             ImmutableDtoInterface::class,
+            ImmutableNestedDtoInterface::class,
+            $dto
+        );
+
+        self::assertSame($dto->getTestDto1()->getProp1(), $dto2->getProp1());
+        self::assertSame($dto->getTestDto1()->getProp2(), $dto2->getProp2());
+        self::assertSame($dto->getTestDto1()->getProp3(), $dto2->getProp3());
+        self::assertSame($dto->getTestDto1()->getProp4(), $dto2->getProp4());
+    }
+
+    public function testShouldCreateFromNestedProjectedObjectUsingFactory(): void
+    {
+        /** @var ImmutableNestedDtoInterface $dto */
+        $dto = $this->dtoProcessor->createFromArray(
+            [
+                'id' => 'my-id',
+                'test_dto1' => [
+                    'prop1' => 1,
+                    'prop2' => 'b',
+                    'prop3' => ['abc', 'def', 'ghi'],
+                    'prop4' => [1, 2, 3, 4],
+                ],
+                'test_dto2' => [
+                    'prop1' => 2,
+                    'prop2' => 'f',
+                    'prop3' => ['jkl', 'mno', 'pqr'],
+                    'prop4' => [5, 6, 7, 8],
+                ],
+                'test_dto_array' => []
+            ],
+            ImmutableNestedDtoInterface::class
+        );
+
+        /** @var ImmutableDtoInterface $dto2 */
+        $dto2 = $this->immutableDtoFactory->createAsProjection(
             ImmutableNestedDtoInterface::class,
             $dto
         );

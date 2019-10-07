@@ -71,6 +71,9 @@ class DtoProjection
      */
     public function execute(string $toType, string $fromType, $sourceObject)
     {
+        $toType = ltrim($toType, '\\');
+        $fromType = ltrim($fromType, '\\');
+
         $data = $this->dtoProcessor->getObjectData($sourceObject, $fromType);
         $projectionConfig = $this->dtoConfig->get('projection');
 
