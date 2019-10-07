@@ -18,9 +18,6 @@
             <testCaseId value="MC-11332"/>
             <useCaseId value="MAGETWO-61593"/>
             <group value="importExport"/>
-            <skip>
-                <issueId value="MC-17175" />
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -64,7 +61,7 @@
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsFirstTime">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="import_simple_product.csv"/>
-            <argument name="importMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
         </actionGroup>
         <!--Check that attribute value is empty after import-->
         <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct2">
