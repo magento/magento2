@@ -14,7 +14,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class Config
- * @package Magefan\LoginAsCustomer\Model
+ * phpcs:ignoreFile
  */
 class Config
 {
