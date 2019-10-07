@@ -15,6 +15,7 @@ use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
 /**
  * Class Reader
+ *
  * @package Magento\Setup\Module\Di\Compiler\Config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -84,7 +85,7 @@ class Reader
         }
 
         $config = [];
-        
+
         $this->fillThirdPartyInterfaces($areaConfig, $definitionsCollection);
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
 
