@@ -37,7 +37,20 @@ class Discount
     public function beforeSave(CartItemPersister $subject, CartInterface $quote, CartItemInterface $cartItem)
     {
         $cartExtension = $cartItem->getExtensionAttributes();
-        $cartItem->setDiscounts($this->json->serialize($cartExtension->getDiscounts()));
+        $discounts = $cartExtension->getDiscounts();
+        if ($discounts) {
+            foreach ($discounts as $key => $value) {
+                $discount = $value['discount'];
+                $discountData = [
+                    "amount" => $discount->getAmount(),
+                    "baseAmount" => $discount->getBaseAmount(),
+                    "originalAmount" => $discount->getOriginalAmount(),
+                    "baseOriginalAmount" => $discount->getBaseOriginalAmount(),
+                ];
+                $discounts[$key]['discount'] = $this->json->serialize($discountData);
+            }
+            $cartItem->setDiscounts($this->json->serialize($discounts));
+        }
         return [$quote, $cartItem];
     }
 }

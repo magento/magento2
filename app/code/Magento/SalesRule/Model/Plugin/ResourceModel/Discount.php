@@ -39,6 +39,16 @@ class Discount
         foreach ($object->getAllAddresses() as $address) {
             $discounts = $address->getExtensionAttributes()->getDiscounts();
             if ($discounts) {
+                foreach ($discounts as $key => $value) {
+                    $discount = $value['discount'];
+                    $discountData = [
+                        "amount" => $discount->getAmount(),
+                        "baseAmount" => $discount->getBaseAmount(),
+                        "originalAmount" => $discount->getOriginalAmount(),
+                        "baseOriginalAmount" => $discount->getBaseOriginalAmount()
+                    ];
+                    $discounts[$key]['discount'] = $this->json->serialize($discountData);
+                }
                 $address->setDiscounts($this->json->serialize($discounts));
             }
         }

@@ -211,7 +211,7 @@ class RulesApplier
             $discount->setBaseAmount($discountData->getBaseAmount());
             $discount->setOriginalAmount($discountData->getOriginalAmount());
             $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
-            $discountBreakdown[$rule->getId()]['discount'] = $discountData->getAmount();
+            $discountBreakdown[$rule->getId()]['discount'] = $discount;
             $discountBreakdown[$rule->getId()]['rule'] = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
             $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
         }

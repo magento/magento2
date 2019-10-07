@@ -49,7 +49,9 @@ class Discounts implements ResolverInterface
                 /* @var \Magento\SalesRule\Model\Rule $rule*/
                 $rule = $value['rule'];
                 $discount['label'] = $rule ?: __('Discount');
-                $amount['value'] = $value['discount'];
+                /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
+                $discountData = $value['discount'];
+                $amount['value'] = $discountData->getAmount();
                 $amount['currency'] = $quote->getQuoteCurrencyCode();
                 $discount['amount'] = $amount;
                 $discountValues[] = $discount;

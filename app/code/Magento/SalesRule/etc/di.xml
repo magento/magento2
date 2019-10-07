@@ -46,6 +46,12 @@
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
     </type>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="append_discounts_to_items" type="Magento\SalesRule\Model\Plugin\Discount"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Config">
+        <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
+    </type>
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">

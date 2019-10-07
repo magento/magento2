@@ -5,6 +5,9 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
+use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Discount totals calculation model.
  */
@@ -37,22 +40,31 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected $priceCurrency;
 
     /**
+     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
+     */
+    private $discountFactory;
+
+    /**
+     * Discount constructor.
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param DataFactory|null $discountDataFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\SalesRule\Model\Validator $validator,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        DataFactory $discountDataFactory = null
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;
         $this->calculator = $validator;
         $this->storeManager = $storeManager;
         $this->priceCurrency = $priceCurrency;
+        $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
     }
 
     /**
@@ -91,12 +103,14 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $address->setDiscountDescription([]);
         $items = $this->calculator->sortItemsByPriority($items, $address);
+        $address->getExtensionAttributes()->setDiscounts([]);
 
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item)) {
                 $item->setDiscountAmount(0);
                 $item->setBaseDiscountAmount(0);
+                $item->getExtensionAttributes()->setDiscounts([]);
 
                 // ensure my children are zeroed out
                 if ($item->getHasChildren() && $item->isChildrenCalculated()) {
@@ -233,14 +247,26 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
         $discountPerRule = $address->getExtensionAttributes()->getDiscounts();
         if ($discountBreakdown) {
+            /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
             foreach ($discountBreakdown as $key => $value) {
                 /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
                 $discount = $value['discount'];
                 $ruleLabel = $value['rule'];
                 if (isset($discountPerRule[$key])) {
-                    $discountPerRule[$key]['discount'] += $discount;
+                    $discountData = $discountPerRule[$key]['discount'];
+                    $discountData->setBaseAmount($discountData->getBaseAmount()+$discount->getBaseAmount());
+                    $discountData->setAmount($discountData->getAmount()+$discount->getAmount());
+                    $discountData->setOriginalAmount($discountData->getOriginalAmount()+$discount->getOriginalAmount());
+                    $discountData->setBaseOriginalAmount(
+                        $discountData->getBaseOriginalAmount()+$discount->getBaseOriginalAmount()
+                    );
                 } else {
-                    $discountPerRule[$key]['discount'] = $discount;
+                    $discountData = $this->discountFactory->create();
+                    $discountData->setBaseAmount($discount->getBaseAmount());
+                    $discountData->setAmount($discount->getAmount());
+                    $discountData->setOriginalAmount($discount->getOriginalAmount());
+                    $discountData->setBaseOriginalAmount($discount->getBaseOriginalAmount());
+                    $discountPerRule[$key]['discount'] = $discountData;
                 }
                 $discountPerRule[$key]['rule'] = $ruleLabel;
             }
