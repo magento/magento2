@@ -176,11 +176,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetBaseUrlInPub()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
-            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
-            ],
-        ]);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            [
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
+                    DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+                ],
+            ]
+        );
 
         $this->model = $this->_getStoreModel();
         $this->model->load('default');
@@ -283,7 +285,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
-        ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
+            ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
 
         $this->model->load('admin');
         $this->model
@@ -318,7 +320,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testGetCurrentUrlWithUseStoreInUrlFalse()
     {
@@ -366,14 +368,16 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     public function testCRUD()
     {
-        $this->model->setData([
-            'code' => 'test',
-            'website_id' => 1,
-            'group_id' => 1,
-            'name' => 'test name',
-            'sort_order' => 0,
-            'is_active' => 1,
-        ]);
+        $this->model->setData(
+            [
+                'code' => 'test',
+                'website_id' => 1,
+                'group_id' => 1,
+                'name' => 'test name',
+                'sort_order' => 0,
+                'is_active' => 1,
+            ]
+        );
         $crud = new \Magento\TestFramework\Entity(
             $this->model,
             ['name' => 'new name'],
@@ -446,8 +450,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @see self::testIsUseStoreInUrl;
      * @return array
+     * @see self::testIsUseStoreInUrl;
      */
     public function isUseStoreInUrlDataProvider()
     {
