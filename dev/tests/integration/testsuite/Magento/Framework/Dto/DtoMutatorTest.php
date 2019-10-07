@@ -42,14 +42,14 @@ class DtoMutatorTest extends TestCase
     public function testDtoMutator(): void
     {
         /** @var ImmutableDto $dto */
-        $dto = $this->objectManager->create(
-            ImmutableDto::class,
+        $dto = $this->dtoProcessor->createFromArray(
             [
                 'prop1' => 1,
                 'prop2' => 'b',
                 'prop3' => ['abc', 'def', 'ghi'],
                 'prop4' => [1, 2, 3, 4],
-            ]
+            ],
+            ImmutableDto::class
         );
 
         /** @var ImmutableDtoMutator $immutableDtoMutator */
@@ -109,26 +109,26 @@ class DtoMutatorTest extends TestCase
         $dto = $dtoMutator
             ->withId('my-new-id')
             ->withTestDto1(
-                $this->objectManager->create(
-                    ImmutableDto::class,
+                $this->dtoProcessor->createFromArray(
                     [
                         'prop1' => 5,
                         'prop2' => 'b1',
                         'prop3' => ['abc1', 'def1', 'ghi1'],
                         'prop4' => [113, 114, 115, 116],
-                    ]
+                    ],
+                    ImmutableDto::class
                 )
             )
             ->withTestDtoArray(
                 [
-                    $this->objectManager->create(
-                        ImmutableDto::class,
+                    $this->dtoProcessor->createFromArray(
                         [
                             'prop1' => 6,
                             'prop2' => 'b2',
                             'prop3' => ['abc2', 'def2', 'ghi2'],
                             'prop4' => [213, 214, 215, 216],
-                        ]
+                        ],
+                        ImmutableDto::class
                     )
                 ]
             )
