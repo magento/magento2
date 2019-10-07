@@ -44,12 +44,12 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
         $value = parent::getValue($object);
 
         if ($value) {
-            $timeType = $this->getAttribute()->getFrontendInput() === 'datetime'
+            $showTime = $this->getAttribute()->getFrontendInput() === 'datetime'
                 ? \IntlDateFormatter::MEDIUM : \IntlDateFormatter::NONE;
             $data = $this->_localeDate->formatDateTime(
                 new \DateTime($value),
                 \IntlDateFormatter::MEDIUM,
-                $timeType
+                $showTime
             );
         }
 

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Model\Entity;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -103,7 +102,7 @@ class AttributeTest extends TestCase
      * @param string $locale
      * @param string $expected
      * @dataProvider beforeSaveErrorDataDataProvider
-     * @expectedException LocalizedException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveErrorData($defaultValue, $backendType, $locale, $expected)
     {

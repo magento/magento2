@@ -127,20 +127,20 @@ class Date extends AbstractDataType
      * Convert given date to default (UTC) timezone
      *
      * @param string $date
-     * @param bool $setUtcTimeZone
+     * @param bool $setUtcTimezone
      * @return \DateTime|null
      */
-    public function convertDatetime(string $date, bool $setUtcTimeZone = true): ?\DateTime
+    public function convertDatetime(string $date, bool $setUtcTimezone = true): ?\DateTime
     {
         try {
             $date = rtrim($date, 'Z');
             $dateObj = new \DateTime($date, new \DateTimeZone($this->localeDate->getConfigTimezone()));
             //convert store date to default date in UTC timezone without DST
-            if ($setUtcTimeZone) {
+            if ($setUtcTimezone) {
                 $dateObj->setTimezone(new \DateTimeZone('UTC'));
             }
             return $dateObj;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return null;
         }
     }

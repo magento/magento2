@@ -46,8 +46,8 @@ define([
                 moment.locale(this.storeLocale, utils.extend({}, this.calendarConfig));
             }
 
-            if (!_.isUndefined(this.timeZone)) {
-                date = date.tz(this.timeZone);
+            if (!_.isUndefined(this.timezone)) {
+                date = date.tz(this.timezone);
             }
 
             date = date.isValid() && value[this.index] ?

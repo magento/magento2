@@ -957,7 +957,7 @@ class Eav extends AbstractModifier
      * @param array $meta
      * @return array
      */
-    private function customizeDatetimeAttribute(array $meta)
+    private function customizeDatetimeAttribute(array $meta): array
     {
         $meta['arguments']['data']['config']['options']['showsTime'] = 1;
 

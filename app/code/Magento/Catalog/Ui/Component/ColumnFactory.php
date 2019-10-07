@@ -131,14 +131,14 @@ class ColumnFactory
         $dateFormat = $isDatetime
             ? $this->timezone->getDateTimeFormat(\IntlDateFormatter::MEDIUM)
             : $this->timezone->getDateFormat(\IntlDateFormatter::MEDIUM);
-        $timeZone = $isDatetime
+        $timezone = $isDatetime
             ? $this->timezone->getConfigTimezone()
             : $this->timezone->getDefaultTimezone();
 
         return [
-            'timeZone' => $timeZone,
+            'timezone' => $timezone,
             'dateFormat' => $dateFormat,
-            'options' => [ 'showsTime' => $isDatetime],
+            'options' => ['showsTime' => $isDatetime],
         ];
     }
 
