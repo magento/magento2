@@ -139,11 +139,13 @@ class AlternativeSource implements AlternativeSourceInterface
                 ->setTheme($context->getThemePath())
                 ->setLocale($context->getLocale())
                 ->setModule($module)
-                ->setPath(preg_replace(
-                    '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#',
-                    '.' . $name,
-                    $path
-                ))->build();
+                ->setPath(
+                    preg_replace(
+                        '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#',
+                        '.' . $name,
+                        $path
+                    )
+                )->build();
 
             $processor = $this->objectManager->get($alternative[self::PROCESSOR_CLASS]);
             if (!$processor  instanceof ContentProcessorInterface) {

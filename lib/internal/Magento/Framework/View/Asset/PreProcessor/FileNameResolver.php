@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+/**
+ * Class FileNameResolver
+ *
+ * @package Magento\Framework\View\Asset\PreProcessor
+ */
 class FileNameResolver
 {
     /**
