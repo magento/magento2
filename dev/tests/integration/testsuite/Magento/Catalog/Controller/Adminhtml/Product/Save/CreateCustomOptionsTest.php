@@ -32,6 +32,9 @@ class CreateCustomOptionsTest extends AbstractBackendController
      */
     private $optionRepository;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         parent::setUp();
