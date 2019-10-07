@@ -37,7 +37,7 @@
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProduct">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="simpleProductUpdate.csv"/>
-            <argument name="importMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
         </actionGroup>
         <!--Assert product's updated url-->
         <amOnPage url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="navigateToProductPage"/>
