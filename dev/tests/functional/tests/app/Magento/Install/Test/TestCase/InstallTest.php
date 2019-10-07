@@ -187,20 +187,7 @@ class InstallTest extends Injectable
         $this->installPage->getWebConfigBlock()->fill($installConfig);
         $this->installPage->getWebConfigBlock()->clickNext();
         // Step 4: Customize Your Store
-        //Waiting for block to properly load
-        \PHPUnit\Framework\Assert::assertTrue(
-            $browser->waitUntil(
-                function () use ($installConfig) {
-                    try {
-                        $this->installPage->getCustomizeStoreBlock()->fill($installConfig);
-                        return true;
-                    } catch (\Throwable $exception) {
-                        //Not loaded yet
-                        return false;
-                    }
-                }
-            )
-        );
+        $this->installPage->getCustomizeStoreBlock()->fill($installConfig);
         $this->installPage->getCustomizeStoreBlock()->clickNext();
         // Step 5: Create Admin Account.
         $this->installPage->getCreateAdminBlock()->fill($user);
