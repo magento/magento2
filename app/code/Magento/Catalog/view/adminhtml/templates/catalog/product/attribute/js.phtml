@@ -11,9 +11,10 @@ require([
     "jquery",
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/prompt',
+    'uiRegistry',
     "collapsable",
     "prototype"
-], function(jQuery, alert, prompt){
+], function(jQuery, alert, prompt, registry){
 
 function toggleApplyVisibility(select) {
     if ($(select).value == 1) {
@@ -39,15 +40,20 @@ function getFrontTab() {
 
 function checkOptionsPanelVisibility(){
     if($('manage-options-panel')){
-        var panel = $('manage-options-panel').up('.fieldset'),
+        var panelId = 'manage-options-panel',
+            panel = $(panelId),
+            panelFieldSet = panel.up('.fieldset'),
             activePanelClass = 'selected-type-options';
 
         if($('frontend_input') && ($('frontend_input').value=='select' || $('frontend_input').value=='multiselect')){
-            panel.show();
+            panelFieldSet.show();
             jQuery(panel).addClass(activePanelClass);
+            registry.get(panelId, function () {
+                jQuery('#' + panelId).trigger('render');
+            });
         }
         else {
-            panel.hide();
+            panelFieldSet.hide();
             jQuery(panel).removeClass(activePanelClass);
         }
     }

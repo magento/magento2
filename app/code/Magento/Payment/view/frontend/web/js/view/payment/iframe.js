@@ -144,7 +144,7 @@ define([
          * {Function}
          */
         setPaymentInformation: function () {
-            setPaymentInformationAction(
+            return setPaymentInformationAction(
                 this.messageContainer,
                 {
                     method: this.getCode()

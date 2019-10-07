@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginAsCustomerOnCheckoutPageActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer (Email and Password) details in the 'Sign In' modal on the Storefront Checkout page.</description>
+        </annotations>
         <arguments>
             <argument name="customer" type="entity"/>
         </arguments>
+        
         <waitForPageLoad stepKey="waitForCheckoutShippingSectionToLoad"/>
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>

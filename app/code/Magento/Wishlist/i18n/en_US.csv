@@ -101,7 +101,7 @@ Back,Back
 "Max Emails Allowed to be Sent","Max Emails Allowed to be Sent"
 "10 by default. Max - 10000","10 by default. Max - 10000"
 "Email Text Length Limit","Email Text Length Limit"
-"255 by default","255 by default"
+"255 by default. Max - 10000","255 by default. Max - 10000"
 "General Options","General Options"
 Enabled,Enabled
 "My Wish List Link","My Wish List Link"

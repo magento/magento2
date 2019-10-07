@@ -53,6 +53,10 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
         $addressInput = $shippingAddressInput['address'] ?? null;
 
+        if ($addressInput) {
+            $addressInput['customer_notes'] = $shippingAddressInput['customer_notes'] ?? '';
+        }
+
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
                 __('The shipping address must contain either "customer_address_id" or "address".')
@@ -66,7 +70,6 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         }
 
         if (null === $customerAddressId) {
-            $addressInput['country_code'] = strtoupper($addressInput['country_code']);
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {

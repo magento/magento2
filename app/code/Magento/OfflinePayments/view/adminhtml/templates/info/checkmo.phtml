@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var $block \Magento\OfflinePayments\Block\Info\Checkmo
  */
 ?>
 <?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
-<?php if ($block->getInfo()->getAdditionalInformation()): ?>
-    <?php if ($block->getPayableTo()): ?>
+<?php if ($block->getInfo()->getAdditionalInformation()) : ?>
+    <?php if ($block->getPayableTo()) : ?>
         <br /><?= $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
     <?php endif; ?>
-    <?php if ($block->getMailingAddress()): ?>
+    <?php if ($block->getMailingAddress()) : ?>
         <label><?= $block->escapeHtml(__('Send Check to:')) ?></label>
         <div class="checkmo-mailing-address">
             <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>

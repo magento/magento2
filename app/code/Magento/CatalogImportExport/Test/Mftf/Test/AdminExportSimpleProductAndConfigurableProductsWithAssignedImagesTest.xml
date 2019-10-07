@@ -18,9 +18,6 @@
             <testCaseId value="MC-14004"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
         </annotations>
         <before>
             <!-- Create category -->
@@ -118,7 +115,6 @@
 
         <!-- Go to export page -->
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-        <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Fill entity attributes data -->
         <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">

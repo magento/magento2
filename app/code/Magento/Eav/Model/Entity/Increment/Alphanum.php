@@ -15,6 +15,9 @@
  */
 namespace Magento\Eav\Model\Entity\Increment;
 
+/**
+ * Handle alphanumeric ids.
+ */
 class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
 {
     /**
@@ -38,7 +41,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
     {
         $lastId = $this->getLastId();
 
-        if (strpos($lastId, $this->getPrefix()) === 0) {
+        if (strpos($lastId, (string) $this->getPrefix()) === 0) {
             $lastId = substr($lastId, strlen($this->getPrefix()));
         }
 
@@ -51,7 +54,7 @@ class Alphanum extends \Magento\Eav\Model\Entity\Increment\AbstractIncrement
         $lid = strlen($lastId) - 1;
 
         for ($i = $lid; $i >= 0; $i--) {
-            $p = strpos($chars, $lastId[$i]);
+            $p = strpos($chars, (string) $lastId[$i]);
             if (false === $p) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Invalid character encountered in increment ID: %1', $lastId)
