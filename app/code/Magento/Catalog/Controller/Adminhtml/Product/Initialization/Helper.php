@@ -216,7 +216,7 @@ class Helper
         }
         $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
 
-        $useDefaults = (array)$this->request->getPost('use_default', []);
+        $useDefaults = (array) $this->request->getPost('use_default', []);
         $productData = $this->attributeFilter->prepareProductAttributes($product, $productData, $useDefaults);
         $product->addData($productData);
 
@@ -276,7 +276,7 @@ class Helper
 
         foreach ($linkTypes as $linkType => $readonly) {
             if (isset($links[$linkType]) && !$readonly) {
-                foreach ((array)$links[$linkType] as $linkData) {
+                foreach ((array) $links[$linkType] as $linkData) {
                     if (empty($linkData['id'])) {
                         continue;
                     }
@@ -286,7 +286,7 @@ class Helper
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
                         ->setLinkType($linkType)
-                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                        ->setPosition(isset($linkData['position']) ? (int) $linkData['position'] : 0);
                     $productLinks[] = $link;
                 }
             }
@@ -422,7 +422,7 @@ class Helper
     private function filterWebsiteIds($websiteIds)
     {
         if (!$this->storeManager->isSingleStoreMode()) {
-            $websiteIds = array_filter((array)$websiteIds);
+            $websiteIds = array_filter((array) $websiteIds);
         } else {
             $websiteIds[$this->storeManager->getWebsite(true)->getId()] = 1;
         }
@@ -463,9 +463,12 @@ class Helper
             }
 
             if (isset($customOptionData['values'])) {
-                $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
-                    return empty($valueData['is_delete']);
-                });
+                $customOptionData['values'] = array_filter(
+                    $customOptionData['values'],
+                    function ($valueData) {
+                        return empty($valueData['is_delete']);
+                    }
+                );
             }
 
             if (isset($customOptionData['price'])) {

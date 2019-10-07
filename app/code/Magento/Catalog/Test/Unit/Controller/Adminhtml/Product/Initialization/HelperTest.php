@@ -289,16 +289,18 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $secondExpectedCustomOption->setData($optionsData['option3']);
         $this->customOptionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturnMap([
+            ->willReturnMap(
                 [
-                    ['data' => $optionsData['option2']],
-                    $firstExpectedCustomOption,
-                ],
-                [
-                    ['data' => $optionsData['option3']],
-                    $secondExpectedCustomOption,
-                ],
-            ]);
+                    [
+                        ['data' => $optionsData['option2']],
+                        $firstExpectedCustomOption,
+                    ],
+                    [
+                        ['data' => $optionsData['option3']],
+                        $secondExpectedCustomOption,
+                    ],
+                ]
+            );
         $website = $this->getMockBuilder(WebsiteInterface::class)->getMockForAbstractClass();
         $website->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn($isSingleStore);
@@ -311,12 +313,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
         $this->productLinkFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturnCallback(function () {
-                return $this->getMockBuilder(ProductLink::class)
-                    ->setMethods(null)
-                    ->disableOriginalConstructor()
-                    ->getMock();
-            });
+            ->willReturnCallback(
+                function () {
+                    return $this->getMockBuilder(ProductLink::class)
+                        ->setMethods(null)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+                }
+            );
 
         $this->attributeFilterMock->expects($this->any())->method('prepareProductAttributes')->willReturnArgument(1);
 
