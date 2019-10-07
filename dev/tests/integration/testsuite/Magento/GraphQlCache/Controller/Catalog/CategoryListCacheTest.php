@@ -77,4 +77,66 @@ QUERY;
         $actualCacheTags = explode(',', $cacheResponse->getHeader('X-Magento-Tags')->getFieldValue());
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
+
+    /**
+     * Test cache tags are generated
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     */
+    public function testRequestCacheTagsForCategoryListOnMultipleIds(): void
+    {
+        $categoryId1 ='400';
+        $categoryId2 = '401';
+        $query
+            = <<<QUERY
+        {
+            categoryList(filters: {ids: {in: ["$categoryId1", "$categoryId2"]}}) {
+                id
+                name
+                url_key
+                description
+                product_count
+           }
+       }
+QUERY;
+        $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
+        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId1, 'cat_c_' . $categoryId2, 'FPC'];
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+    }
+
+    /**
+     * Test request is served from cache
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     */
+    public function testSecondRequestIsServedFromCacheOnMultipleIds()
+    {
+        $categoryId1 ='400';
+        $categoryId2 = '401';
+        $query
+            = <<<QUERY
+        {
+            categoryList(filters: {ids: {in: ["$categoryId1", "$categoryId2"]}}) {
+                id
+                name
+                url_key
+                description
+                product_count
+           }
+       }
+QUERY;
+        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId1, 'cat_c_' . $categoryId2, 'FPC'];
+
+        $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
+        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+
+        $cacheResponse = $this->dispatchGraphQlGETRequest(['query' => $query]);
+        $this->assertEquals('HIT', $cacheResponse->getHeader('X-Magento-Cache-Debug')->getFieldValue());
+        $actualCacheTags = explode(',', $cacheResponse->getHeader('X-Magento-Tags')->getFieldValue());
+        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+    }
 }
