@@ -236,6 +236,118 @@ class System implements ConfigTypeInterface
     }
 
     /**
+     * Load configuration data for all scopes.
+     *
+     * @return array
+     */
+    private function loadAllData()
+    {
+        return $this->loadFromCacheAndDecode($this->configType) ?: $this->readData();
+    }
+
+    /**
+     * Load configuration data for default scope.
+     *
+     * @param string $scopeType
+     * @return array
+     */
+    private function loadDefaultScopeData($scopeType)
+    {
+        $data = $this->loadDataFromCacheForScopeType($scopeType);
+
+        if ($data === false) {
+            $data = $this->readData()[$scopeType] ?? [];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Load configuration data for a specified scope.
+     *
+     * @param string $scopeType
+     * @param string $scopeId
+     * @return array
+     */
+    private function loadScopeData($scopeType, $scopeId)
+    {
+        $scopeData = $this->loadFromCacheAndDecode(
+            $this->configType . '_' . $scopeType . '_' . $scopeId
+        );
+
+        if ($scopeData !== false) {
+            return $scopeData;
+        }
+
+        $availableScopes = $this->getAvailableDataScopes();
+
+        if ($availableScopes && !isset($availableScopes[$scopeType][$scopeId])) {
+            $scopeData = $this->loadFromCacheAndDecode(
+                $this->configType
+            );
+
+            if (isset($scopeData[$scopeType][$scopeId])) {
+                return $scopeData[$scopeType][$scopeId];
+            }
+        }
+
+        return $this->readData()[$scopeType][$scopeId] ?? [];
+    }
+
+    /**
+     * Cache configuration data.
+     *
+     * Caches data per scope to avoid reading data for all scopes on every request
+     *
+     * @param string $previousCachePrefix
+     * @return string
+     */
+    private function cacheData(string $previousCachePrefix)
+    {
+        $this->cachePrefix = $this->generateCachePrefix();
+
+        $data = $this->readData();
+
+        $cacheToStore = [
+            $this->configType => $data,
+            $this->configType . '_default' => $data['default']
+        ];
+
+        $scopes = [];
+        foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
+            foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
+                $scopes[$curScopeType][$curScopeId] = 1;
+                $cacheToStore[$this->configType . '_' . $curScopeType . '_' . $curScopeId] = $curScopeData;
+            }
+        }
+
+        $cacheToStore[$this->configType . '_scopes'] = $scopes;
+
+        foreach ($cacheToStore as $cacheKey => $cacheData) {
+            $this->saveArrayToCache($cacheKey, $this->cachePrefix, $cacheData);
+        }
+
+        $this->saveArrayToCache($this->configType . '_expire_keys', $this->cachePrefix, array_keys($cacheToStore));
+
+        $this->cache->save(
+            $this->cachePrefix,
+            self::CACHE_KEY_FOR_PREFIX,
+            [self::CACHE_TAG]
+        );
+
+        if ($previousCachePrefix) {
+            $this->expirePreviousCacheAfterAMinute($previousCachePrefix);
+        }
+
+        $this->cache->save(
+            $this->cachePrefix,
+            self::STALE_CACHE_KEY_FOR_PREFIX
+        );
+
+        return $this->cachePrefix;
+    }
+
+    /**
      * Walk nested hash map by keys from $pathParts.
      *
      * @param array $data to walk in
@@ -295,65 +407,6 @@ class System implements ConfigTypeInterface
             self::$lockName,
             $cleanAction
         );
-    }
-
-    /**
-     * Load configuration data for all scopes.
-     *
-     * @return array
-     */
-    private function loadAllData()
-    {
-        return $this->loadFromCacheAndDecode($this->configType) ?: $this->readData();
-    }
-
-    /**
-     * Load configuration data for default scope.
-     *
-     * @param string $scopeType
-     * @return array
-     */
-    private function loadDefaultScopeData($scopeType)
-    {
-        $data = $this->loadDataFromCacheForScopeType($scopeType);
-
-        if ($data === false) {
-            $data = $this->readData()[$scopeType] ?? [];
-        }
-
-        return $data;
-    }
-
-    /**
-     * Load configuration data for a specified scope.
-     *
-     * @param string $scopeType
-     * @param string $scopeId
-     * @return array
-     */
-    private function loadScopeData($scopeType, $scopeId)
-    {
-        $scopeData = $this->loadFromCacheAndDecode(
-            $this->configType . '_' . $scopeType . '_' . $scopeId
-        );
-
-        if ($scopeData !== false) {
-            return $scopeData;
-        }
-
-        $availableScopes = $this->getAvailableDataScopes();
-
-        if ($availableScopes && !isset($availableScopes[$scopeType][$scopeId])) {
-            $scopeData = $this->loadFromCacheAndDecode(
-                $this->configType
-            );
-
-            if (isset($scopeData[$scopeType][$scopeId])) {
-                return $scopeData[$scopeType][$scopeId];
-            }
-        }
-
-        return $this->readData()[$scopeType][$scopeId] ?? [];
     }
 
     /**
@@ -449,59 +502,6 @@ class System implements ConfigTypeInterface
                 return $this->cache->load(self::STALE_CACHE_KEY_FOR_PREFIX) ?? '';
             },
             \Closure::fromCallable([$this, 'cacheData'])
-        );
-
-        return $this->cachePrefix;
-    }
-
-    /**
-     * Cache configuration data.
-     *
-     * Caches data per scope to avoid reading data for all scopes on every request
-     *
-     * @param string $previousCachePrefix
-     * @return string
-     */
-    private function cacheData(string $previousCachePrefix)
-    {
-        $this->cachePrefix = $this->generateCachePrefix();
-
-        $data = $this->readData();
-
-        $cacheToStore = [
-            $this->configType => $data,
-            $this->configType . '_default' => $data['default']
-        ];
-
-        $scopes = [];
-        foreach ([StoreScope::SCOPE_WEBSITES, StoreScope::SCOPE_STORES] as $curScopeType) {
-            foreach ($data[$curScopeType] ?? [] as $curScopeId => $curScopeData) {
-                $scopes[$curScopeType][$curScopeId] = 1;
-                $cacheToStore[$this->configType . '_' . $curScopeType . '_' . $curScopeId] = $curScopeData;
-            }
-        }
-
-        $cacheToStore[$this->configType . '_scopes'] = $scopes;
-
-        foreach ($cacheToStore as $cacheKey => $cacheData) {
-            $this->saveArrayToCache($cacheKey, $this->cachePrefix, $cacheData);
-        }
-
-        $this->saveArrayToCache($this->configType . '_expire_keys', $this->cachePrefix, array_keys($cacheToStore));
-
-        $this->cache->save(
-            $this->cachePrefix,
-            self::CACHE_KEY_FOR_PREFIX,
-            [self::CACHE_TAG]
-        );
-
-        if ($previousCachePrefix) {
-            $this->expirePreviousCacheAfterAMinute($previousCachePrefix);
-        }
-
-        $this->cache->save(
-            $this->cachePrefix,
-            self::STALE_CACHE_KEY_FOR_PREFIX
         );
 
         return $this->cachePrefix;
