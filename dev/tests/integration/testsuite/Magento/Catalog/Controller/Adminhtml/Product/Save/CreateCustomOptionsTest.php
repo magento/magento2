@@ -70,11 +70,8 @@ class CreateCustomOptionsTest extends AbstractBackendController
             $this->assertEquals($postOptionData['sku'], $customOption->getSku());
             $this->assertEquals($postOptionData['price'], $customOption->getPrice());
             $this->assertEquals($postOptionData['price_type'], $customOption->getPriceType());
-            if (isset($postOptionData['max_characters'])) {
-                $this->assertEquals($postOptionData['max_characters'], $customOption->getMaxCharacters());
-            } else {
-                $this->assertEquals(0, $customOption->getMaxCharacters());
-            }
+            $maxCharacters = $postOptionData['max_characters'] ?? 0;
+            $this->assertEquals($maxCharacters, $customOption->getMaxCharacters());
         }
     }
 
@@ -267,22 +264,5 @@ class CreateCustomOptionsTest extends AbstractBackendController
                 ],
             ],
         ];
-    }
-
-    /**
-     * Delete all custom options from product.
-     */
-    protected function tearDown(): void
-    {
-        try {
-            $product = $this->productRepository->get('simple');
-            foreach ($this->optionRepository->getProductOptions($product) as $customOption) {
-                $this->optionRepository->delete($customOption);
-            }
-        } catch (\Exception $e) {
-            $product = null;
-        }
-
-        parent::tearDown();
     }
 }

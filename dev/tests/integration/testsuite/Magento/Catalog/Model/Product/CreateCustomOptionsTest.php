@@ -13,11 +13,8 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\Store;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -26,8 +23,6 @@ use PHPUnit\Framework\TestCase;
  * Test product custom options create.
  * Testing option types: "Area", "File", "Drop-down", "Radio-Buttons",
  * "Checkbox", "Multiple Select", "Date", "Date & Time" and "Time".
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
@@ -95,23 +90,26 @@ class CreateCustomOptionsTest extends TestCase
     public function testSaveOptionPriceByStore(): void
     {
         $secondWebsitePrice = 22.0;
-        $defaultStoreId = $this->storeManager->getStore()->getId();
-        $secondStoreId = $this->storeManager->getStore('secondstore')->getId();
+        $currentStoreId = $this->storeManager->getStore()->getId();
+        $customStoreId = $this->storeManager->getStore('secondstore')->getId();
         $product = $this->productRepository->get('simple');
         $option = $product->getOptions()[0];
         $defaultPrice = $option->getPrice();
         $option->setPrice($secondWebsitePrice);
-        $product->setStoreId($secondStoreId);
+        $product->setStoreId($customStoreId);
         // set Current store='secondstore' to correctly save product options for 'secondstore'
-        $this->storeManager->setCurrentStore($secondStoreId);
-        $this->productRepository->save($product);
-        $this->storeManager->setCurrentStore($defaultStoreId);
-        $product = $this->productRepository->get('simple', false, Store::DEFAULT_STORE_ID, true);
+        try {
+            $this->storeManager->setCurrentStore($customStoreId);
+            $this->productRepository->save($product);
+        } finally {
+            $this->storeManager->setCurrentStore($currentStoreId);
+        }
+        $product = $this->productRepository->get('simple', false, $currentStoreId, true);
         $option = $product->getOptions()[0];
         $this->assertEquals($defaultPrice, $option->getPrice(), 'Price value by default store is wrong');
-        $product = $this->productRepository->get('simple', false, $secondStoreId, true);
+        $product = $this->productRepository->get('simple', false, $customStoreId, true);
         $option = $product->getOptions()[0];
-        $this->assertEquals($secondWebsitePrice, $option->getPrice(), 'Price value by store_id=1 is wrong');
+        $this->assertEquals($secondWebsitePrice, $option->getPrice(), 'Price value by custom store is wrong');
     }
 
     /**
@@ -129,12 +127,8 @@ class CreateCustomOptionsTest extends TestCase
         $this->assertEquals($optionData['price'], $option->getPrice());
         $this->assertEquals($optionData['price_type'], $option->getPriceType());
         $this->assertEquals($optionData['sku'], $option->getSku());
-
-        if (isset($optionData['max_characters'])) {
-            $this->assertEquals($optionData['max_characters'], $option->getMaxCharacters());
-        } else {
-            $this->assertEquals(0, $option->getMaxCharacters());
-        }
+        $maxCharacters = $optionData['max_characters'] ?? 0;
+        $this->assertEquals($maxCharacters, $option->getMaxCharacters());
     }
 
     /**
@@ -222,14 +216,14 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsWithErrorDataProvider
      *
      * @param array $optionData
-     * @param string $expectedErrorText
+     * @param \Exception $expectedErrorObject
      */
-    public function testCreateOptionWithError(array $optionData, string $expectedErrorText): void
+    public function testCreateOptionWithError(array $optionData, \Exception $expectedErrorObject): void
     {
         $product = $this->productRepository->get('simple');
         $createdOption = $this->customOptionFactory->create(['data' => $optionData]);
         $product->setOptions([$createdOption]);
-        $this->expectExceptionMessage($expectedErrorText);
+        $this->expectExceptionObject($expectedErrorObject);
         $this->productRepository->save($product);
     }
 
@@ -819,7 +813,7 @@ class CreateCustomOptionsTest extends TestCase
                     'price' => 10,
                     'price_type' => 'fixed',
                 ],
-                'The ProductSku is empty. Set the ProductSku and try again.',
+                new CouldNotSaveException(__('The ProductSku is empty. Set the ProductSku and try again.')),
             ],
             'error_option_without_type' => [
                 [
@@ -833,7 +827,7 @@ class CreateCustomOptionsTest extends TestCase
                     'price_type' => 'fixed',
                     'product_sku' => 'simple',
                 ],
-                "Missed values for option required fields\nInvalid option type",
+                new ValidatorException(__("Missed values for option required fields\nInvalid option type")),
             ],
             'error_option_wrong_price_type' => [
                 [
@@ -848,7 +842,7 @@ class CreateCustomOptionsTest extends TestCase
                     'price_type' => 'test_wrong_price_type',
                     'product_sku' => 'simple',
                 ],
-                'Invalid option value',
+                new ValidatorException(__('Invalid option value')),
             ],
             'error_option_without_price_type' => [
                 [
@@ -862,7 +856,7 @@ class CreateCustomOptionsTest extends TestCase
                     'price' => 10,
                     'product_sku' => 'simple',
                 ],
-                'Invalid option value',
+                new ValidatorException(__('Invalid option value')),
             ],
             'error_option_without_price_value' => [
                 [
@@ -876,7 +870,7 @@ class CreateCustomOptionsTest extends TestCase
                     'price_type' => 'fixed',
                     'product_sku' => 'simple',
                 ],
-                'Invalid option value',
+                new ValidatorException(__('Invalid option value')),
             ],
             'error_option_without_title' => [
                 [
@@ -890,7 +884,7 @@ class CreateCustomOptionsTest extends TestCase
                     'price_type' => 'fixed',
                     'product_sku' => 'simple',
                 ],
-                "Missed values for option required fields",
+                new ValidatorException(__('Missed values for option required fields')),
             ],
             'error_option_with_empty_title' => [
                 [
@@ -905,25 +899,9 @@ class CreateCustomOptionsTest extends TestCase
                     'price_type' => 'fixed',
                     'product_sku' => 'simple',
                 ],
-                "Missed values for option required fields",
+                new ValidatorException(__('Missed values for option required fields')),
             ],
         ];
-    }
-
-    /**
-     * Delete all custom options from product.
-     */
-    protected function tearDown(): void
-    {
-        try {
-            $product = $this->productRepository->get('simple');
-            foreach ($this->optionRepository->getProductOptions($product) as $customOption) {
-                $this->optionRepository->delete($customOption);
-            }
-        } catch (\Exception $e) {
-        }
-
-        parent::tearDown();
     }
 
     /**
@@ -931,10 +909,6 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @return ProductCustomOptionInterface
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
      */
     private function baseCreateCustomOptionAndAssert(array $optionData): ProductCustomOptionInterface
     {
