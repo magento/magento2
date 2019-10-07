@@ -57,7 +57,7 @@
         <element name="email" type="input" selector="//input[contains(@name, 'email') and not(contains(@style, 'display:none'))]"/>
         <element name="password" type="input" selector="//input[contains(@name, 'password') and not(contains(@style, 'display:none'))]"/>
         <element name="loginBtn" type="input" selector="button#btnLogin"/>
-        <element name="reviewUserInfo" type="text" selector="//p[@id='reviewUserInfo' and contains(text(),'Hi, MPI!')]"/>
+        <element name="reviewUserInfo" type="text" selector="#reviewUserInfo"/>
         <element name="cartIcon" type="text" selector="#transactionCart"/>
         <element name="itemName" type="text" selector="//span[@title='{{productName}}']" parameterized="true"/>
         <element name="PayPalSubmitBtn" type="text" selector="//input[@type='submit']"/>
