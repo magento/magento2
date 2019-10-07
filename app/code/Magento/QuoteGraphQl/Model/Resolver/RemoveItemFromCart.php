@@ -49,17 +49,18 @@ class RemoveItemFromCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['cart_item_id']) || empty($args['input']['cart_item_id'])) {
+        if (empty($args['input']['cart_item_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_item_id" is missing.'));
         }
         $itemId = $args['input']['cart_item_id'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         try {
             $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);

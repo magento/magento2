@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckDoubleImportOfProductsTest">
+        <annotations>
+            <description value="Checking double Import of products CSV file"/>
+            <stories value="Import Products"/>
+            <features value="Import/Export"/>
+            <title value="Admin check double import of products test"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6311"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create additional store views -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+                <argument name="customStore" value="secondStoreView"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="customStore" value="thirdStoreView"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete all imported products -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <actionGroup ref="adminDataGridSelectPerPage" stepKey="selectNumberOfProductsPerPage">
+                <argument name="perPage" value="100"/>
+            </actionGroup>
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
+
+            <!-- Delete additional store views -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
+                <argument name="customStore" value="secondStoreView"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
+                <argument name="customStore" value="thirdStoreView"/>
+            </actionGroup>
+
+            <!-- Delete category -->
+            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="Gear"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Import products with add/update behavior -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsFirstTime">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="prepared-for-sample-data.csv"/>
+            <argument name="importNoticeMessage" value="Created: 100, Updated: 3, Deleted: 0"/>
+        </actionGroup>
+
+        <!-- Import products with add/update behavior again -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsSecondTime">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="prepared-for-sample-data.csv"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 300, Deleted: 0"/>
+        </actionGroup>
+    </test>
+</tests>

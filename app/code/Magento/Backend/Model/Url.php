@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
  * Class \Magento\Backend\Model\UrlInterface
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -367,6 +368,19 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     }
 
     /**
+     * Set scope entity
+     *
+     * @param mixed $scopeId
+     * @return \Magento\Framework\UrlInterface
+     */
+    public function setScope($scopeId)
+    {
+        parent::setScope($scopeId);
+        $this->_scope = $this->_scopeResolver->getScope($scopeId);
+        return $this;
+    }
+
+    /**
      * Set custom auth session
      *
      * @param \Magento\Backend\Model\Auth\Session $session
@@ -402,13 +416,13 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     }
 
     /**
-     * Retrieve action path.
-     * Add backend area front name as a prefix to action path
+     * Retrieve action path, add backend area front name as a prefix to action path
      *
      * @return string
      */
     protected function _getActionPath()
     {
+
         $path = parent::_getActionPath();
         if ($path) {
             if ($this->getAreaFrontName()) {
@@ -448,8 +462,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     }
 
     /**
-     * Get config data by path
-     * Use only global config values for backend
+     * Get config data by path, use only global config values for backend
      *
      * @param string $path
      * @return null|string

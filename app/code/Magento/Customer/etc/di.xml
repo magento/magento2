@@ -28,11 +28,11 @@
     <preference for="Magento\Customer\Api\Data\ValidationResultsInterface"
                 type="Magento\Customer\Model\Data\ValidationResults" />
     <preference for="Magento\Customer\Api\Data\GroupSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Customer\Model\GroupSearchResults" />
     <preference for="Magento\Customer\Api\Data\CustomerSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Customer\Model\CustomerSearchResults" />
     <preference for="Magento\Customer\Api\Data\AddressSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Customer\Model\AddressSearchResults" />
     <preference for="Magento\Customer\Api\AccountManagementInterface"
                 type="Magento\Customer\Model\AccountManagement" />
     <preference for="Magento\Customer\Api\CustomerMetadataInterface"
@@ -153,6 +153,11 @@
         </arguments>
     </virtualType>
     <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\SectionNamesProvider">
         <arguments>
             <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
         </arguments>

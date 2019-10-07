@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -58,7 +59,43 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testRemoveCouponFromCartIfCartIdIsEmpty()
+    {
+        $maskedQuoteId = '';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testRemoveCouponFromCartIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  removeCouponFromCart(input: {}) {
+    cart {
+      applied_coupon {
+        code
+      }
+    }
+  }
+}
+
+QUERY;
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testRemoveCouponFromNonExistentCart()
@@ -72,7 +109,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Cart does not contain products
      */
     public function testRemoveCouponFromEmptyCart()

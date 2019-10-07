@@ -6,6 +6,8 @@
 namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
+ * Section
+ *
  * @api
  * @since 100.0.2
  */
@@ -20,13 +22,13 @@ class Section extends AbstractComposite
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param Iterator $childrenIterator
      * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         Iterator $childrenIterator,
         \Magento\Framework\AuthorizationInterface $authorization
     ) {

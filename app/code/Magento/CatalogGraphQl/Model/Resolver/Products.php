@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\SearchFilter;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -24,6 +25,7 @@ class Products implements ResolverInterface
 {
     /**
      * @var Builder
+     * @deprecated
      */
     private $searchCriteriaBuilder;
 
@@ -34,30 +36,41 @@ class Products implements ResolverInterface
 
     /**
      * @var Filter
+     * @deprecated
      */
     private $filterQuery;
 
     /**
      * @var SearchFilter
+     * @deprecated
      */
     private $searchFilter;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchApiCriteriaBuilder;
 
     /**
      * @param Builder $searchCriteriaBuilder
      * @param Search $searchQuery
      * @param Filter $filterQuery
      * @param SearchFilter $searchFilter
+     * @param SearchCriteriaBuilder|null $searchApiCriteriaBuilder
      */
     public function __construct(
         Builder $searchCriteriaBuilder,
         Search $searchQuery,
         Filter $filterQuery,
-        SearchFilter $searchFilter
+        SearchFilter $searchFilter,
+        SearchCriteriaBuilder $searchApiCriteriaBuilder = null
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
         $this->filterQuery = $filterQuery;
         $this->searchFilter = $searchFilter;
+        $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder ??
+            \Magento\Framework\App\ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -70,34 +83,29 @@ class Products implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $searchCriteria = $this->searchCriteriaBuilder->build($field->getName(), $args);
-        $searchCriteria->setCurrentPage($args['currentPage']);
-        $searchCriteria->setPageSize($args['pageSize']);
+        if ($args['currentPage'] < 1) {
+            throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+        }
+        if ($args['pageSize'] < 1) {
+            throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
+        }
         if (!isset($args['search']) && !isset($args['filter'])) {
             throw new GraphQlInputException(
                 __("'search' or 'filter' input argument is required.")
             );
-        } elseif (isset($args['search'])) {
-            $layerType = Resolver::CATALOG_LAYER_SEARCH;
-            $this->searchFilter->add($args['search'], $searchCriteria);
-            $searchResult = $this->searchQuery->getResult($searchCriteria, $info);
-        } else {
-            $layerType = Resolver::CATALOG_LAYER_CATEGORY;
-            $searchResult = $this->filterQuery->getResult($searchCriteria, $info);
-        }
-        //possible division by 0
-        if ($searchCriteria->getPageSize()) {
-            $maxPages = ceil($searchResult->getTotalCount() / $searchCriteria->getPageSize());
-        } else {
-            $maxPages = 0;
         }
 
-        $currentPage = $searchCriteria->getCurrentPage();
-        if ($searchCriteria->getCurrentPage() > $maxPages && $searchResult->getTotalCount() > 0) {
+        //get product children fields queried
+        $productFields = (array)$info->getFieldSelection(1);
+        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
+        $searchCriteria = $this->searchApiCriteriaBuilder->build($args, $includeAggregations);
+        $searchResult = $this->searchQuery->getResult($searchCriteria, $info, $args);
+
+        if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
             throw new GraphQlInputException(
                 __(
                     'currentPage value %1 specified is greater than the %2 page(s) available.',
-                    [$currentPage, $maxPages]
+                    [$searchResult->getCurrentPage(), $searchResult->getTotalPages()]
                 )
             );
         }
@@ -106,11 +114,12 @@ class Products implements ResolverInterface
             'total_count' => $searchResult->getTotalCount(),
             'items' => $searchResult->getProductsSearchResult(),
             'page_info' => [
-                'page_size' => $searchCriteria->getPageSize(),
-                'current_page' => $currentPage,
-                'total_pages' => $maxPages
+                'page_size' => $searchResult->getPageSize(),
+                'current_page' => $searchResult->getCurrentPage(),
+                'total_pages' => $searchResult->getTotalPages()
             ],
-            'layer_type' => $layerType
+            'search_result' => $searchResult,
+            'layer_type' => isset($args['search']) ? Resolver::CATALOG_LAYER_SEARCH : Resolver::CATALOG_LAYER_CATEGORY,
         ];
 
         return $data;

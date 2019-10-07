@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.3-develop)](https://travis-ci.org/magento/magento2)
 [![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
@@ -12,6 +11,10 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 *	[Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
 
+## Learn More About GraphQL in Magento 2
+
+* [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.3/graphql/index.html)
+
 <h2>Contributing to the Magento 2 Code Base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
@@ -21,10 +24,10 @@ To learn about issues, click [here][2]. To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html>
-[2]: <https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report>
-[3]: <https://github.com/magento/magento2/issues>
-[4]: <https://devdocs.magento.com>
+[1]: https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html
+[2]: https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#report
+[3]: https://github.com/magento/magento2/issues
+[4]: https://devdocs.magento.com
 
 <h3>Community Maintainers</h3>
 The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
@@ -45,7 +48,7 @@ Please review the [Code Contributions guide](https://devdocs.magento.com/guides/
 
 ## Reporting Security Issues
 
-To report security vulnerabilities in Magento software or web sites, please create a Bugcrowd researcher account [there](https://bugcrowd.com/magento) to submit and follow-up your issue. Learn more about reporting security issues [here](https://magento.com/security/reporting-magento-security-issue).
+To report security vulnerabilities or learn more about reporting security issues in Magento software or web sites visit the [Magento Bug Bounty Program](https://hackerone.com/magento) on hackerone. Please create a hackerone account [there](https://hackerone.com/magento) to submit and follow-up your issue.
 
 Stay up-to-date on the latest security news and patches for Magento by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 

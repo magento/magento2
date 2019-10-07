@@ -56,7 +56,12 @@ class RendererProxy extends SelectRenderer
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -67,6 +72,9 @@ class RendererProxy extends SelectRenderer
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -99,7 +107,7 @@ class RendererProxy extends SelectRenderer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function render(\Magento\Framework\DB\Select $select, $sql = '')
     {

@@ -8,7 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="StorefrontOrderInformationPage" url="sales/guest/view" area="guest" module="Magento_Sales">
+    <page name="StorefrontOrderInformationPage" url="sales/guest/view" area="storefront" module="Magento_Sales">
         <section name="StorefrontOrderInformationMainSection"/>
     </page>
 </pages>

@@ -43,7 +43,7 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         );
         $this->checkoutSessionMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['clearStorage']);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\Manager::class);
+        $this->moduleManagerMock = $this->createMock(\Magento\Framework\Module\ModuleManagerInterface::class);
         $this->cacheConfigMock = $this->createMock(\Magento\PageCache\Model\Config::class);
         $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
 

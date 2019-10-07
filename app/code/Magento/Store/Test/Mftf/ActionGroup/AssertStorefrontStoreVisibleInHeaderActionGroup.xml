@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontStoreVisibleInHeaderActionGroup">
+        <annotations>
+            <description>Goes to the Storefront. Validates that the provided Store is present in the Header Switch Store View drop down menu on the Storefront.</description>
+        </annotations>
+        <arguments>
+            <argument name="store" type="string"/>
+        </arguments>
+        
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
+        <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="selectStoreSwitcher"/>
+        <waitForPageLoad stepKey="waitForFirstStoreView"/>
+        <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{store}}" stepKey="seeAssertStoreViewOnStorefront"/>
+    </actionGroup>
+</actionGroups>

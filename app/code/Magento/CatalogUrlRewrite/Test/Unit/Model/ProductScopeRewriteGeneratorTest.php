@@ -50,6 +50,9 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
     private $categoryMock;
 
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $configMock;
+
     public function setUp()
     {
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -96,6 +99,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         );
         $this->mergeDataProvider = new \Magento\UrlRewrite\Model\MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getMock();
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             \Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator::class,
@@ -107,7 +111,8 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                 'objectRegistryFactory' => $this->objectRegistryFactory,
                 'storeViewService' => $this->storeViewService,
                 'storeManager' => $this->storeManager,
-                'mergeDataProviderFactory' => $mergeDataProviderFactory
+                'mergeDataProviderFactory' => $mergeDataProviderFactory,
+                'config' => $this->configMock
             ]
         );
         $this->categoryMock = $this->getMockBuilder(Category::class)->disableOriginalConstructor()->getMock();
@@ -115,6 +120,9 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testGenerationForGlobalScope()
     {
+        $this->configMock->expects($this->any())->method('getValue')
+            ->with('catalog/seo/generate_category_product_rewrites')
+            ->willReturn('1');
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(null));
         $product->expects($this->any())->method('getStoreIds')->will($this->returnValue([1]));

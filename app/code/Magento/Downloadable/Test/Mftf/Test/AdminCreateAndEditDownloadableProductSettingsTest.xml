@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndEditDownloadableProductSettingsTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Create/Edit downloadable product in Admin"/>
+            <title value="Admin should be able to set/edit other product information when creating/editing a downloadable product"/>
+            <description value="Admin should be able to set/edit other product information when creating/editing a downloadable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3247"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created downloadable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create new downloadable product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createDownloadableProduct">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Set Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings">
+            <argument name="designSettings" value="simpleBlankDesignOneColumn"/>
+        </actionGroup>
+
+        <!-- Set Gift Options settings for the product -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="enableGiftMessageSettings">
+            <argument name="status" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{DownloadableProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "layout 1 column" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutOneColumn}}" stepKey="seeDesignChanges"/>
+
+        <!-- Assert Gift Option product settings is not present -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="DownloadableProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
+
+        <!-- Open created product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Edit product Search Engine Optimization settings -->
+        <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
+            <argument name="productName" value="ApiDownloadableProduct.name"/>
+        </actionGroup>
+
+        <!-- Edit Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings">
+            <argument name="designSettings" value="simpleBlankDesignTwoColumnsLeft"/>
+        </actionGroup>
+
+        <!-- Edit Gift Option product settings -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+
+        <!-- Verify Url Key after changing -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{ApiDownloadableProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsLeft}}" stepKey="seeNewDesignChanges"/>
+
+        <!-- Assert Gift Option product settings  -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOption"/>
+    </test>
+</tests>

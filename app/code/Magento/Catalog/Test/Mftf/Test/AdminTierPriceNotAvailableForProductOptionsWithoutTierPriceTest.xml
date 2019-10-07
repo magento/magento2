@@ -11,6 +11,7 @@
     <test name="AdminTierPriceNotAvailableForProductOptionsWithoutTierPriceTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Tier price"/>
             <title value="Check that 'tier price' block not available for simple product from options without 'tier price'"/>
             <description value="Check that 'tier price' block not available for simple product from options without 'tier price'"/>
             <severity value="MAJOR"/>

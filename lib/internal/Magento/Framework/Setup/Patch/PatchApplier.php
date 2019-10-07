@@ -10,7 +10,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\Setup\Exception;
+use Magento\Framework\Setup\Exception as SetupException;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
@@ -129,8 +129,8 @@ class PatchApplier
     /**
      * Apply all patches for one module
      *
-     * @param null | string $moduleName
-     * @throws Exception
+     * @param null|string $moduleName
+     * @throws SetupException
      */
     public function applyDataPatch($moduleName = null)
     {
@@ -149,7 +149,7 @@ class PatchApplier
                 ['moduleDataSetup' => $this->moduleDataSetup]
             );
             if (!$dataPatch instanceof DataPatchInterface) {
-                throw new Exception(
+                throw new SetupException(
                     new Phrase("Patch %1 should implement DataPatchInterface", [get_class($dataPatch)])
                 );
             }
@@ -164,7 +164,17 @@ class PatchApplier
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
-                    throw new Exception(new Phrase($e->getMessage()));
+                    throw new SetupException(
+                        new Phrase(
+                            'Unable to apply data patch %1 for module %2. Original exception message: %3',
+                            [
+                                get_class($dataPatch),
+                                $moduleName,
+                                $e->getMessage()
+                            ]
+                        ),
+                        $e
+                    );
                 } finally {
                     unset($dataPatch);
                 }
@@ -173,8 +183,7 @@ class PatchApplier
     }
 
     /**
-     * Register all patches in registry in order to manipulate chains and dependencies of patches
-     * of patches
+     * Register all patches in registry in order to manipulate chains and dependencies of patches of patches
      *
      * @param string $moduleName
      * @param string $patchType
@@ -207,8 +216,8 @@ class PatchApplier
      *
      * Please note: that schema patches are not revertable
      *
-     * @param null | string $moduleName
-     * @throws Exception
+     * @param null|string $moduleName
+     * @throws SetupException
      */
     public function applySchemaPatch($moduleName = null)
     {
@@ -229,7 +238,7 @@ class PatchApplier
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch(get_class($schemaPatch));
             } catch (\Exception $e) {
-                throw new Exception(
+                throw new SetupException(
                     new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
                         [
@@ -248,8 +257,8 @@ class PatchApplier
     /**
      * Revert data patches for specific module
      *
-     * @param null | string $moduleName
-     * @throws Exception
+     * @param null|string $moduleName
+     * @throws SetupException
      */
     public function revertDataPatches($moduleName = null)
     {
@@ -270,7 +279,7 @@ class PatchApplier
                     $adapter->commit();
                 } catch (\Exception $e) {
                     $adapter->rollBack();
-                    throw new Exception(new Phrase($e->getMessage()));
+                    throw new SetupException(new Phrase($e->getMessage()));
                 } finally {
                     unset($dataPatch);
                 }
