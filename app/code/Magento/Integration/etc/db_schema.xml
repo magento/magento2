@@ -138,12 +138,18 @@
                 default="0" comment="Number of failed authentication attempts in a row"/>
         <column xsi:type="timestamp" name="lock_expires_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Lock expiration time"/>
+        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Website Id"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="log_id"/>
         </constraint>
-        <constraint xsi:type="unique" referenceId="OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE">
+        <constraint xsi:type="foreign" referenceId="OAUTH_TOKEN_REQUEST_LOG_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+                    table="oauth_token_request_log" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE_WEBSITE_ID">
             <column name="user_name"/>
             <column name="user_type"/>
+            <column name="website_id"/>
         </constraint>
     </table>
 </schema>

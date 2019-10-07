@@ -10,11 +10,11 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-integration": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*,",
+        "magento/module-customer": "*"
     },
     "suggest": {
-        "magento/module-user": "*",
-        "magento/module-customer": "*"
+        "magento/module-user": "*"
     },
     "type": "magento2-module",
     "license": [

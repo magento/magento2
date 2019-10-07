@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Model\ValidateCustomerByShareOption;
 use Magento\Framework\App\ObjectManager;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
@@ -67,14 +68,18 @@ class TokenUserContext implements UserContextInterface
     private $oauthHelper;
 
     /**
-     * Initialize dependencies.
-     *
+     * @var ValidateCustomerByShareOption
+     */
+    private $validateCustomerByShareOption;
+
+    /**
      * @param Request $request
      * @param TokenFactory $tokenFactory
      * @param IntegrationServiceInterface $integrationService
      * @param DateTime|null $dateTime
      * @param Date|null $date
      * @param OauthHelper|null $oauthHelper
+     * @param ValidateCustomerByShareOption $validateCustomerByShareOption
      */
     public function __construct(
         Request $request,
@@ -82,24 +87,21 @@ class TokenUserContext implements UserContextInterface
         IntegrationServiceInterface $integrationService,
         DateTime $dateTime = null,
         Date $date = null,
-        OauthHelper $oauthHelper = null
+        OauthHelper $oauthHelper = null,
+        ValidateCustomerByShareOption $validateCustomerByShareOption = null
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
-        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(
-            DateTime::class
-        );
-        $this->date = $date ?: ObjectManager::getInstance()->get(
-            Date::class
-        );
-        $this->oauthHelper = $oauthHelper ?: ObjectManager::getInstance()->get(
-            OauthHelper::class
-        );
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
+        $this->date = $date ?: ObjectManager::getInstance()->get(Date::class);
+        $this->oauthHelper = $oauthHelper ?: ObjectManager::getInstance()->get(OauthHelper::class);
+        $this->validateCustomerByShareOption = $validateCustomerByShareOption
+            ?: ObjectManager::getInstance()->get(ValidateCustomerByShareOption::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUserId()
     {
@@ -108,7 +110,7 @@ class TokenUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUserType()
     {
@@ -187,6 +189,8 @@ class TokenUserContext implements UserContextInterface
     }
 
     /**
+     * Set user data by token.
+     *
      * @param Token $token
      * @return void
      */
@@ -203,8 +207,12 @@ class TokenUserContext implements UserContextInterface
                 $this->userType = UserContextInterface::USER_TYPE_ADMIN;
                 break;
             case UserContextInterface::USER_TYPE_CUSTOMER:
-                $this->userId = $token->getCustomerId();
-                $this->userType = UserContextInterface::USER_TYPE_CUSTOMER;
+                $customerId = $token->getCustomerId();
+
+                if ($this->validateCustomerByShareOption->execute($customerId)) {
+                    $this->userId = $customerId;
+                    $this->userType = UserContextInterface::USER_TYPE_CUSTOMER;
+                }
                 break;
             default:
                 /* this is an unknown user type so reset the cached user type */
