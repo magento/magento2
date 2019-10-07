@@ -120,13 +120,20 @@ class DeployStaticContent
             $deployI18n = $this->objectManager->create(DeployTranslationsDictionary::class, [
                 'logger' => $this->logger
             ]);
+            foreach ($packages as $package) {
+                if (!$package->isVirtual()) {
+                    $deployRjsConfig->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
+                    $deployI18n->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
+                }
+            }
+        }
+
+        if ($options[Options::NO_JAVASCRIPT] !== true && $options[Options::NO_JS_BUNLDE] !== true ) {
             $deployBundle = $this->objectManager->create(Bundle::class, [
                 'logger' => $this->logger
             ]);
             foreach ($packages as $package) {
                 if (!$package->isVirtual()) {
-                    $deployRjsConfig->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
-                    $deployI18n->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                     $deployBundle->deploy($package->getArea(), $package->getTheme(), $package->getLocale());
                 }
             }
