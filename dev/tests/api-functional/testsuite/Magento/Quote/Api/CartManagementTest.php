@@ -345,9 +345,11 @@ class CartManagementTest extends WebapiAbstract
             'customerId' => $customerId,
             'storeId' => 1,
         ];
-        $this->assertTrue($this->_webApiCall( $serviceInfo, $requestData));
+        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
 
-        $mergedQuote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
+        $mergedQuote = $this->objectManager
+            ->create(\Magento\Quote\Model\Quote::class)
+            ->load('test01', 'reserved_order_id');
 
         $this->assertEquals($expectedQuoteItemsQty, $mergedQuote->getItemsQty());
     }
