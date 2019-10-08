@@ -133,13 +133,15 @@ class OperationProcessor
 
         $outputData = null;
         if ($errorCode === null) {
+            $handlerMessages = [];
             foreach ($handlers as $callback) {
                 $result = $this->executeHandler($callback, $entityParams);
                 $status = $result['status'];
                 $errorCode = $result['error_code'];
-                $messages = array_merge($messages, $result['messages']);
+                $handlerMessages[] = $result['messages'];
                 $outputData = $result['output_data'];
             }
+            $messages = array_merge($messages, ...$handlerMessages);
         }
 
         if (isset($outputData)) {
@@ -187,7 +189,7 @@ class OperationProcessor
             'output_data' => null
         ];
         try {
-            $result['output_data'] = call_user_func_array($callback, $entityParams);
+            $result['output_data'] = $callback(...$entityParams);
             $result['messages'][] = sprintf('Service execution success %s::%s', get_class($callback[0]), $callback[1]);
         } catch (\Zend_Db_Adapter_Exception  $e) {
             $this->logger->critical($e->getMessage());
