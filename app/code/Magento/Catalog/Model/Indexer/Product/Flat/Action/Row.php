@@ -85,45 +85,53 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         $ids = [$id];
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
-        $stores = $this->_storeManager->getStores();
-        foreach ($stores as $store) {
-            $tableExists = $this->_isFlatTableExists($store->getId());
-            if ($tableExists) {
-                $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
-                $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
-            }
+        $select = $this->_connection->select();
+        $select->from(['e' => 'store'], ['e.store_id'])
+            ->where('c.product_id = ' . $id)
+            ->joinLeft(['c' => 'catalog_product_website'], 'e.website_id = c.website_id', []);
+        $storeIds = $this->_connection->fetchCol($select);
 
-            /* @var $status \Magento\Eav\Model\Entity\Attribute */
-            $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
-            $statusTable = $status->getBackend()->getTable();
-            $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');
-            $statusConditions = [
-                's.store_id IN(0,' . (int)$store->getId() . ')',
-                's.attribute_id = ' . (int)$status->getId(),
-                'e.entity_id = ' . (int)$id,
-            ];
-            $select = $this->_connection->select();
-            $select->from(['e' => $catalogProductEntityTable], ['s.value'])
-                ->where(implode(' AND ', $statusConditions))
-                ->joinLeft(['s' => $statusTable], "e.{$linkField} = s.{$linkField}", [])
-                ->order('s.store_id DESC')
-                ->limit(1);
-            $result = $this->_connection->query($select);
-            $status = $result->fetchColumn(0);
-
-            if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
-                if (!$tableExists) {
-                    $this->_flatTableBuilder->build(
-                        $store->getId(),
-                        $ids,
-                        $this->_valueFieldSuffix,
-                        $this->_tableDropSuffix,
-                        false
-                    );
+        if (!empty($storeIds)) {
+            foreach ($storeIds as $storeId) {
+                $store = $this->_storeManager->getStore($storeId);
+                $tableExists = $this->_isFlatTableExists($store->getId());
+                if ($tableExists) {
+                    $this->flatItemEraser->removeDeletedProducts($ids, $store->getId());
+                    $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
                 }
-                $this->flatItemWriter->write($store->getId(), $id, $this->_valueFieldSuffix);
-            } else {
-                $this->flatItemEraser->deleteProductsFromStore($id, $store->getId());
+
+                /* @var $status \Magento\Eav\Model\Entity\Attribute */
+                $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
+                $statusTable = $status->getBackend()->getTable();
+                $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');
+                $statusConditions = [
+                    's.store_id IN(0,' . (int)$store->getId() . ')',
+                    's.attribute_id = ' . (int)$status->getId(),
+                    'e.entity_id = ' . (int)$id,
+                ];
+                $select = $this->_connection->select();
+                $select->from(['e' => $catalogProductEntityTable], ['s.value'])
+                    ->where(implode(' AND ', $statusConditions))
+                    ->joinLeft(['s' => $statusTable], "e.{$linkField} = s.{$linkField}", [])
+                    ->order('s.store_id DESC')
+                    ->limit(1);
+                $result = $this->_connection->query($select);
+                $status = $result->fetchColumn(0);
+
+                if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
+                    if (!$tableExists) {
+                        $this->_flatTableBuilder->build(
+                            $store->getId(),
+                            $ids,
+                            $this->_valueFieldSuffix,
+                            $this->_tableDropSuffix,
+                            false
+                        );
+                    }
+                    $this->flatItemWriter->write($store->getId(), $id, $this->_valueFieldSuffix);
+                } else {
+                    $this->flatItemEraser->deleteProductsFromStore($id, $store->getId());
+                }
             }
         }
 
