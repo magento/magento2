@@ -1176,4 +1176,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
 </config>
