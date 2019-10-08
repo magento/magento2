@@ -3,86 +3,100 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Observer;
 
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Checks if guest checkout is allowed then quote contains downloadable products.
+ */
 class IsAllowedGuestCheckoutObserver implements ObserverInterface
 {
     /**
      *  Xml path to disable checkout
      */
-    const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
+    private const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
 
     /**
      *  Xml path to get downloadable Shareable setting
      */
-    const XML_PATH_DOWNLOADABLE_SHAREABLE = 'catalog/downloadable/shareable';
+    private const XML_PATH_DOWNLOADABLE_SHAREABLE = 'catalog/downloadable/shareable';
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * Downloadable link collection factory
      *
-     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory
+     * @var CollectionFactory
      */
-    protected $_linksFactory;
+    private $linksFactory;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CollectionFactory $linksFactory
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory $linksFactory
+        ScopeConfigInterface $scopeConfig,
+        CollectionFactory $linksFactory
     ) {
-        $this->_scopeConfig = $scopeConfig;
-        $this->_linksFactory = $linksFactory;
+        $this->scopeConfig = $scopeConfig;
+        $this->linksFactory = $linksFactory;
     }
 
     /**
      * Check is allowed guest checkout if quote contain downloadable product(s)
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $store = $observer->getEvent()->getStore();
         $result = $observer->getEvent()->getResult();
 
-        /* @var $quote \Magento\Quote\Model\Quote */
+        /* @var $quote Quote */
         $quote = $observer->getEvent()->getQuote();
 
         foreach ($quote->getAllItems() as $item) {
             if (($product = $item->getProduct())
-                && $product->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+                && $product->getTypeId() == Type::TYPE_DOWNLOADABLE
             ) {
-                if ($this->_scopeConfig->isSetFlag(
+                if ($this->scopeConfig->isSetFlag(
                     self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                     ScopeInterface::SCOPE_STORE,
                     $store
-                ) || !$this->checkForShareableLinks($item)) {
+                )
+                    || !$this->checkForShareableLinks($item, $store)) {
                     $result->setIsAllowed(false);
                     break;
                 }
             }
         }
+
         return $this;
     }
 
     /**
      * Check for shareable link
      *
-     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @param CartItemInterface $item
+     * @param int $store
      * @return boolean
      */
-    private function checkForShareableLinks($item)
+    private function checkForShareableLinks(CartItemInterface $item, int $store): bool
     {
         $isSharable = true;
         $option = $item->getOptionByCode('downloadable_link_ids');
@@ -91,17 +105,19 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
             $links = $this->linksFactory->create()->addFieldToFilter("link_id", ["in" => $downloadableLinkIds]);
             foreach ($links as $link) {
                 if (!$link->getIsShareable() ||
-                    ($link->getIsShareable() == 2 && !$this->_scopeConfig->isSetFlag(
-                        self::XML_PATH_DOWNLOADABLE_SHAREABLE,
-                        ScopeInterface::SCOPE_STORE,
-                        $store
-                    )
+                    (
+                        $link->getIsShareable() == 2 && !$this->scopeConfig->isSetFlag(
+                            self::XML_PATH_DOWNLOADABLE_SHAREABLE,
+                            ScopeInterface::SCOPE_STORE,
+                            $store
+                        )
                     )
                 ) {
                     $isSharable = false;
                 }
             }
         }
+
         return $isSharable;
     }
 }

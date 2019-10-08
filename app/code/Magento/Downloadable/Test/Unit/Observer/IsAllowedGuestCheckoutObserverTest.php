@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Downloadable\Test\Unit\Observer;
 
 use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
@@ -136,10 +137,10 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')
             ->will($this->returnValue($quote));
 
-        $this->scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
             ->with(
-                IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                'catalog/downloadable/disable_guest_checkout',
                 ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
@@ -168,33 +169,57 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testIsAllowedGuestCheckoutConfigSetToFalse()
     {
+        $storeCode = 1;
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getTypeId'])
+            ->getMock();
+
+        $product->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Type::TYPE_DOWNLOADABLE);
+
+        $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getProduct'])
+            ->getMock();
+
+        $item->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($product);
+
+        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllItems'])
+            ->getMock();
+
+        $quote->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn([$item]);
+
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($storeCode);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
             ->will($this->returnValue($this->resultMock));
 
-        $this->scopeConfig->expects($this->at(0))
+        $this->eventMock->expects($this->once())
+            ->method('getQuote')
+            ->will($this->returnValue($quote));
+
+        $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                'catalog/downloadable/disable_guest_checkout',
                 ScopeInterface::SCOPE_STORE,
-                $this->storeMock
+                $storeCode
             )
             ->willReturn(false);
 
-        $this->scopeConfig->expects($this->at(1))
-            ->method('isSetFlag')
-            ->with(
-                IsAllowedGuestCheckoutObserver::XML_PATH_DOWNLOADABLE_SHAREABLE,
-                ScopeInterface::SCOPE_STORE,
-                $this->storeMock
-            )
-            ->willReturn(true);
-
-        $this->observerMock->expects($this->exactly(2))
+        $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
             ->will($this->returnValue($this->eventMock));
 
