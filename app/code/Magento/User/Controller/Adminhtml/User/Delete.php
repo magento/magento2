@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,9 +8,14 @@ namespace Magento\User\Controller\Adminhtml\User;
 use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * Delete admin user.
+ */
 class Delete extends \Magento\User\Controller\Adminhtml\User
 {
     /**
+     * Execute delete action.
+     *
      * @return void
      */
     public function execute()
@@ -34,7 +38,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                 $currentUser->performIdentityCheck($currentUserPassword);
                 /** @var \Magento\User\Model\User $model */
                 $model = $this->_userFactory->create();
-                $model->setId($userId);
+                $model->load($userId);
                 $model->delete();
                 $this->messageManager->addSuccess(__('You deleted the user.'));
                 $this->_redirect('adminhtml/*/');
