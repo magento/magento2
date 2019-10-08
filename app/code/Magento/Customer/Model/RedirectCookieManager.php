@@ -21,12 +21,12 @@ class RedirectCookieManager
     /**
      * @var CookieMetadataFactory
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
 
     /**
      * @var CookieManagerInterface
      */
-    protected $cookieManager;
+    private $cookieManager;
 
     /**
      * @param CookieMetadataFactory $cookieMetadataFactory
