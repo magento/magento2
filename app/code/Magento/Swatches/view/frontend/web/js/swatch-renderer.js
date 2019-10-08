@@ -1265,7 +1265,10 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-                gallery.first();
+
+                if (gallery) {
+                    gallery.first();
+                }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }
