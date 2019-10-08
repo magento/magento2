@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDisabledQtyActionGroup">
+        <annotations>
+            <description>Goes to the 'Quantity' field and assert disabled attribute.</description>
+        </annotations>
+
+        <seeElement selector="{{AdminProductFormSection.productQuantity}}" stepKey="assertProductQty"/>
+        <assertElementContainsAttribute selector="{{AdminProductFormSection.productQuantity}}" attribute="disabled" expectedValue="true" stepKey="checkIfQtyIsDisabled" />
+    </actionGroup>
+</actionGroups>
