@@ -7,11 +7,14 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Validator\DbValidator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -159,7 +162,10 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
-        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
+        $this->dbValidator
+            ->expects($this->once())
+            ->method('checkDatabaseConnection')
+            ->willReturn($configDataMock);
     }
 
     /**

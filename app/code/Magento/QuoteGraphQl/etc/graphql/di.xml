@@ -10,4 +10,12 @@
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingAddressesOnCart"/>
     <preference for="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCartInterface"
                 type="Magento\QuoteGraphQl\Model\Cart\SetShippingMethodsOnCart"/>
+    <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="quantity" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\QuantityDataProvider</item>
+                <item name="customizable_options" xsi:type="object">Magento\QuoteGraphQl\Model\Cart\BuyRequest\CustomizableOptionsDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

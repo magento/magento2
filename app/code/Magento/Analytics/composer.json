@@ -2,7 +2,7 @@
     "name": "magento/module-analytics",
     "description": "N/A",
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/module-backend": "101.0.*",
         "magento/module-config": "101.1.*",
         "magento/module-integration": "100.3.*",
@@ -22,5 +22,5 @@
             "Magento\\Analytics\\": ""
         }
     },
-    "version": "100.3.2"
+    "version": "100.3.3"
 }

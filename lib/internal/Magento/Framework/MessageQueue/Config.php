@@ -12,7 +12,7 @@ use Magento\Framework\Phrase;
 /**
  * Queue configuration.
  *
- * @deprecated 102.0.2
+ * @deprecated 102.0.3
  */
 class Config implements ConfigInterface
 {

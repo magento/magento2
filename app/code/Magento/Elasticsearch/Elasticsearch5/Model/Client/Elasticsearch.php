@@ -146,10 +146,12 @@ class Elasticsearch implements ClientInterface
      */
     public function createIndex($index, $settings)
     {
-        $this->getClient()->indices()->create([
-            'index' => $index,
-            'body' => $settings,
-        ]);
+        $this->getClient()->indices()->create(
+            [
+                'index' => $index,
+                'body' => $settings,
+            ]
+        );
     }
 
     /**
@@ -252,10 +254,12 @@ class Elasticsearch implements ClientInterface
             'type' => $entityType,
             'body' => [
                 $entityType => [
-                    '_all' => $this->prepareFieldInfo([
-                        'enabled' => true,
-                        'type' => 'text',
-                    ]),
+                    '_all' => $this->prepareFieldInfo(
+                        [
+                            'enabled' => true,
+                            'type' => 'text',
+                        ]
+                    ),
                     'properties' => [],
                     'dynamic_templates' => [
                         [
@@ -282,10 +286,12 @@ class Elasticsearch implements ClientInterface
                             'string_mapping' => [
                                 'match' => '*',
                                 'match_mapping_type' => 'string',
-                                'mapping' => $this->prepareFieldInfo([
-                                    'type' => 'text',
-                                    'index' => false,
-                                ]),
+                                'mapping' => $this->prepareFieldInfo(
+                                    [
+                                        'type' => 'text',
+                                        'index' => false,
+                                    ]
+                                ),
                             ],
                         ]
                     ],
@@ -332,10 +338,9 @@ class Elasticsearch implements ClientInterface
      */
     public function deleteMapping($index, $entityType)
     {
-        $this->getClient()->indices()->deleteMapping([
-            'index' => $index,
-            'type' => $entityType,
-        ]);
+        $this->getClient()->indices()->deleteMapping(
+            ['index' => $index, 'type' => $entityType]
+        );
     }
 
     /**

@@ -61,8 +61,13 @@ class Client
             'operationName' => !empty($operationName) ? $operationName : null
         ];
         $postData = $this->json->jsonEncode($requestArray);
+        try {
+            $responseBody = $this->curlClient->post($url, $postData, $headers);
+        } catch (\Exception $e) {
+            // if response code > 400 then response is the exception message
+            $responseBody = $e->getMessage();
+        }
 
-        $responseBody = $this->curlClient->post($url, $postData, $headers);
         return $this->processResponse($responseBody);
     }
 

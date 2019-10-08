@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCatalogRuleInGridActionGroup">
+        <arguments>
+            <argument name="catalogRuleName" type="string"/>
+            <argument name="status" type="string" defaultValue=""/>
+            <argument name="websites" type="string"/>
+            <argument name="catalogRuleId" type="string"/>
+        </arguments>
+        <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{catalogRuleId}}" stepKey="seeCatalogRuleId"/>
+        <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{catalogRuleName}}" stepKey="seeCatalogRuleName"/>
+        <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{status}}" stepKey="seeCatalogRuleStatus"/>
+        <see selector="{{AdminCatalogPriceRuleGrid.firstRow}}" userInput="{{websites}}" stepKey="seeCatalogRuleWebsite"/>
+    </actionGroup>
+</actionGroups>

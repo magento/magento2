@@ -288,7 +288,7 @@
                 <item name="payment" xsi:type="string">Magento\Braintree\Gateway\Request\PaymentDataBuilder</item>
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
-                <item name="3dsecure" xsi:type="string">Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder</item>
+                <item name="3dsecure" xsi:type="string">Magento\Braintree\Gateway\Request\VaultThreeDSecureDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\KountPaymentDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="store" xsi:type="string">Magento\Braintree\Gateway\Request\StoreConfigBuilder</item>
@@ -614,7 +614,6 @@
                 <item name="payment/braintree/merchant_id" xsi:type="string">1</item>
                 <item name="payment/braintree/private_key" xsi:type="string">1</item>
                 <item name="payment/braintree/merchant_account_id" xsi:type="string">1</item>
-                <item name="payment/braintree/kount_id" xsi:type="string">1</item>
                 <item name="payment/braintree_paypal/merchant_name_override" xsi:type="string">1</item>
                 <item name="payment/braintree/descriptor_phone" xsi:type="string">1</item>
                 <item name="payment/braintree/descriptor_url" xsi:type="string">1</item>

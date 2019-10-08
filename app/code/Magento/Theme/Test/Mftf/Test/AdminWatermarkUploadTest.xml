@@ -16,6 +16,9 @@
             <description value="Watermark images should be able to be uploaded in the admin"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-5796"/>
+            <skip>
+                <issueId value="MC-18496"/>
+            </skip>
             <group value="Watermark"/>
         </annotations>
         <before>

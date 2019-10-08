@@ -32,6 +32,7 @@
         <element name="confProductPriceCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='price_container']//input" parameterized="true"/>
         <element name="confProductQuantityCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='quantity_container']//input" parameterized="true"/>
         <element name="confProductWeightCell" type="input" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{var}}')]/ancestor::tr/td[@data-index='price_weight']//input" parameterized="true"/>
+        <element name="confProductOptionStatusCell" type="text" selector="//*[.='Attributes']/ancestor::tr//span[contains(text(), '{{productName}}')]/ancestor::tr/td[@data-index='status']" parameterized="true"/>
         <element name="confProductSkuMessage" type="text" selector="//*[@name='configurable-matrix[{{arg}}][sku]']/following-sibling::label" parameterized="true"/>
         <element name="variationsSkuInputByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) input[name*='sku']" type="input" parameterized="true"/>
         <element name="variationsSkuInputErrorByRow" selector="[data-index='configurable-matrix'] table > tbody > tr:nth-of-type({{row}}) .admin__field-error" type="text" parameterized="true"/>
@@ -44,6 +45,7 @@
         <element name="productQuantity" type="input" selector=".admin__control-text[name='product[quantity_and_stock_status][qty]']"/>
         <element name="currentVariationsQuantityCells" type="button" selector="td[data-index='quantity_container']"/>
         <element name="rowByCode" type="textarea" selector="//span[contains(text(), '{{var1}}-{{var2}}')]//ancestor-or-self::tr" parameterized="true"/>
+        <element name="currentAttribute" type="text" selector="//fieldset[@class='admin__fieldset']/div[contains(@class, 'admin__field _disabled')]//span"/>
     </section>
     <section name="AdminConfigurableProductSelectAttributesSlideOut">
         <element name="grid" type="button" selector=".admin__data-grid-wrap tbody"/>

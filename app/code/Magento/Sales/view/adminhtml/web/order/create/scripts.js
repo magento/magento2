@@ -42,6 +42,7 @@ define([
             this.isOnlyVirtualProduct = false;
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
+            this.selectAddressEvent = false;
             this.shippingTemplate = template(shippingTemplate, {
                 data: {
                     title: jQuery.mage.__('Shipping Method'),
@@ -169,17 +170,19 @@ define([
         },
 
         selectAddress : function(el, container){
+
             id = el.value;
             if (id.length == 0) {
                 id = '0';
             }
-            if(this.addresses[id]){
-                this.fillAddressFields(container, this.addresses[id]);
 
-            }
-            else{
+            this.selectAddressEvent = true;
+            if (this.addresses[id]) {
+                this.fillAddressFields(container, this.addresses[id]);
+            } else {
                 this.fillAddressFields(container, {});
             }
+            this.selectAddressEvent = false;
 
             var data = this.serializeData(container);
             data[el.name] = id;
@@ -190,6 +193,7 @@ define([
             } else{
                 this.saveData(data);
             }
+
         },
 
         /**
@@ -259,7 +263,7 @@ define([
             data = data.toObject();
 
             if (type === 'billing' && this.shippingAsBilling) {
-                this.syncAddressField(this.shippingAddressContainer, field.name, field.value);
+                this.syncAddressField(this.shippingAddressContainer, field.name, field);
                 resetShipping = true;
             }
 
@@ -277,6 +281,10 @@ define([
             if (name === 'customer_address_id') {
                 data['order[' + type + '_address][customer_address_id]'] =
                     $('order-' + type + '_address_customer_address_id').value;
+            }
+
+            if (name === 'country_id' && this.selectAddressEvent === false) {
+                $('order-' + type + '_address_customer_address_id').value = '';
             }
 
             this.resetPaymentMethod();
@@ -308,7 +316,11 @@ define([
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
-                    element.value = fieldValue;
+                    if (element.type === "checkbox") {
+                        element.checked = fieldValue.checked;
+                    } else {
+                        element.value = fieldValue.value;
+                    }
                 }
             });
         },
@@ -561,6 +573,9 @@ define([
         applyCoupon : function(code){
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {'order[coupon][code]':code, reset_shipping: 0});
             this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
         },
 
         addProduct : function(id){

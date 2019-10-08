@@ -219,7 +219,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         if ($this->_totalRecords === null) {
             $sql = $this->getSelectCountSql();
-            $this->_totalRecords = $this->getConnection()->fetchOne($sql, $this->_bindParams);
+            $this->_totalRecords = $this->_totalRecords ?? $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
         return (int)$this->_totalRecords;
     }
@@ -367,10 +367,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
 
     /**
      * Hook for operations before rendering filters
+     *
+     * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
-    protected function _renderFiltersBefore() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    protected function _renderFiltersBefore()
     {
     }
+    // phpcs:enable
 
     /**
      * Add field filter to collection
@@ -823,11 +827,13 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Init select
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _initSelect() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // no implementation, should be overridden in children classes
     }
+    // phpcs:enable
 
     /**
      * Join extension attribute.

@@ -35,4 +35,20 @@
         <data key="attribute_code">news_from_date</data>
         <data key="value">2018-05-17 00:00:00</data>
     </entity>
+    <entity name="CustomDynamicProductDescription" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">Dynamicscription testing 321</data>
+    </entity>
+    <entity name="CustomDynamicProductShortDescription" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">Short dynamictest 555</data>
+    </entity>
+    <entity name="CustomFixedProductDescription" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">Fixedscription testing 321</data>
+    </entity>
+    <entity name="CustomFixedProductShortDescription" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">Short Fixedtest 555</data>
+    </entity>
 </entities>

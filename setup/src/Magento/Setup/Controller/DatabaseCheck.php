@@ -10,6 +10,9 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class DatabaseCheck
+ */
 class DatabaseCheck extends AbstractActionController
 {
     /**

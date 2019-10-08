@@ -24,22 +24,22 @@ class UpdateCustomerTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
      * @var CustomerAuthUpdate
      */
     private $customerAuthUpdate;
+
+    /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
 
     protected function setUp()
     {
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
+        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
     }
 
     /**
@@ -165,7 +165,7 @@ QUERY;
      */
     public function testUpdateCustomerIfAccountIsLocked()
     {
-        $this->lockCustomer(1);
+        $this->lockCustomer->execute(1);
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -280,16 +280,5 @@ QUERY;
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
-    }
-
-    /**
-     * @param int $customerId
-     * @return void
-     */
-    private function lockCustomer(int $customerId): void
-    {
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-        $customerSecure->setLockExpires('2030-12-31 00:00:00');
-        $this->customerAuthUpdate->saveAuth($customerId);
     }
 }

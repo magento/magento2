@@ -21,6 +21,7 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 
 /**
  * Front controller for web API GraphQL area.
@@ -59,6 +60,7 @@ class GraphQl implements FrontControllerInterface
 
     /**
      * @var ContextInterface
+     * @deprecated 100.3.3 $contextFactory is used for creating Context object
      */
     private $resolverContext;
 
@@ -83,16 +85,22 @@ class GraphQl implements FrontControllerInterface
     private $httpResponse;
 
     /**
+     * @var ContextFactoryInterface
+     */
+    private $contextFactory;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
      * @param ExceptionFormatter $graphQlError
-     * @param ContextInterface $resolverContext
+     * @param ContextInterface $resolverContext Deprecated. $contextFactory is used for creating Context object.
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
+     * @param ContextFactoryInterface $contextFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,7 +113,8 @@ class GraphQl implements FrontControllerInterface
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
         JsonFactory $jsonFactory = null,
-        HttpResponse $httpResponse = null
+        HttpResponse $httpResponse = null,
+        ContextFactoryInterface $contextFactory = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -117,6 +126,7 @@ class GraphQl implements FrontControllerInterface
         $this->queryFields = $queryFields;
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
+        $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
     }
 
     /**
@@ -146,7 +156,7 @@ class GraphQl implements FrontControllerInterface
             $result = $this->queryProcessor->process(
                 $schema,
                 $query,
-                $this->resolverContext,
+                $this->contextFactory->create(),
                 $data['variables'] ?? []
             );
         } catch (\Exception $error) {

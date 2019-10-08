@@ -14,6 +14,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Provides some configurations for customer.
+ */
 class ConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -57,7 +60,7 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -96,12 +99,14 @@ class ConfigProvider implements ConfigProviderInterface
      * Whether redirect to login page is required
      *
      * @return bool
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function isRedirectRequired()
     {
         $baseUrl = $this->storeManager->getStore()->getBaseUrl();
 
-        if (strpos($this->getLoginUrl(), $baseUrl) !== false) {
+        if (strpos($this->getLoginUrl(), (string) $baseUrl) !== false) {
             return false;
         }
 

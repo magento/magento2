@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "102.0.*",
         "magento/module-backup": "100.3.*",
         "magento/module-catalog": "103.0.*",
@@ -40,5 +40,5 @@
             "Magento\\Backend\\": ""
         }
     },
-    "version": "101.0.2"
+    "version": "101.0.3"
 }

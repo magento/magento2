@@ -110,4 +110,11 @@
         <data key="tax_region_id">51</data>
         <data key="rate">6</data>
     </entity>
+    <entity name="USFullTaxRate" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_postcode">*</data>
+        <data key="zip_is_range">0</data>
+        <data key="rate">10</data>
+    </entity>
 </entities>

@@ -183,7 +183,7 @@ class MessageValidator
      *
      * @return CommunicationConfig
      *
-     * @deprecated 102.0.2
+     * @deprecated 102.0.3
      */
     private function getCommunicationConfig()
     {

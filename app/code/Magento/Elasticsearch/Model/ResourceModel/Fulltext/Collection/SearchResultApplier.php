@@ -50,7 +50,6 @@ class SearchResultApplier implements SearchResultApplierInterface
         foreach ($this->searchResult->getItems() as $item) {
             $ids[] = (int)$item->getId();
         }
-        $this->collection->setPageSize(null);
         $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
         $orderList = join(',', $ids);
         $this->collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);

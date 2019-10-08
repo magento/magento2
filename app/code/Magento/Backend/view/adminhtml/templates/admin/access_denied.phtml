@@ -3,14 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
  * @see \Magento\Backend\Block\Denied
  */
+
+// phpcs:disable Magento2.Security.Superglobal
 ?>
 <hr class="access-denied-hr"/>
 <div class="access-denied-page">
@@ -21,10 +20,10 @@
         <li><span><?= $block->escapeHtml(__('Contact a system administrator or store owner to gain permissions.')) ?></span></li>
         <li>
             <span><?= $block->escapeHtml(__('Return to ')) ?>
-                <?php if(isset($_SERVER['HTTP_REFERER'])): ?>
+                <?php if (isset($_SERVER['HTTP_REFERER'])) : ?>
                     <a href="<?= $block->escapeUrl(__($_SERVER['HTTP_REFERER'])) ?>">
                         <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
-                <?php else: ?>
+                <?php else : ?>
                     <a href="<?= $block->escapeHtmlAttr(__('javascript:history.back()')) ?>">
                         <?= $block->escapeHtml(__('previous page')) ?></a><?= $block->escapeHtml(__('.')) ?>
                 <?php endif ?>

@@ -16,6 +16,9 @@
             <description value="Admin should be able to add image to WYSIWYG content Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84377"/>
+            <skip>
+                <issueId value="MC-17233"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>

@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-96722"/>
             <useCaseId value="MAGETWO-96410"/>
             <group value="SalesRule"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
 
         <before>

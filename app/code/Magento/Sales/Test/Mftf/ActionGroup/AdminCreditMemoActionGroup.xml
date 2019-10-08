@@ -37,4 +37,25 @@
         </arguments>
         <see selector="{{AdminCreditMemoItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
     </actionGroup>
+    <actionGroup name="StartToCreateCreditMemoActionGroup">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="navigateToOrderPage"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <waitForElementVisible selector="{{AdminHeaderSection.pageTitle}}" stepKey="waitForPageTitle"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+    </actionGroup>
+    <actionGroup name="SubmitCreditMemoActionGroup">
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitButtonEnabled"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}$grabOrderId" stepKey="seeViewOrderPageCreditMemo"/>
+    </actionGroup>
+    <actionGroup name="UpdateCreditMemoTotalsActionGroup">
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="waitUpdateTotalsButtonEnabled"/>
+        <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
+    </actionGroup>
 </actionGroups>

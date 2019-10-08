@@ -168,6 +168,25 @@ QUERY;
         self::assertEquals(13, $response['category']['id']);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Category doesn't exist
+     */
+    public function testGetDisabledCategory()
+    {
+        $categoryId = 8;
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
     public function testNonExistentCategoryWithProductCount()
     {
         $query = <<<QUERY

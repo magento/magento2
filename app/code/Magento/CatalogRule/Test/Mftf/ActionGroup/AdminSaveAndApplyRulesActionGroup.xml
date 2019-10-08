@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveAndApplyRulesActionGroup">
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="saveTheCatalogRule"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <seeElement selector="{{AdminCatalogPriceRuleGrid.updateMessage}}" stepKey="seeMessageToUpdateTheCatalogRules"/>
+        <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <click stepKey="applyRules" selector="{{AdminCatalogPriceRuleGrid.applyRules}}"/>
+        <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="Updated rules applied."/>
+    </actionGroup>
+</actionGroups>

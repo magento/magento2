@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/module-eav": "102.0.*",
         "magento/module-catalog": "103.0.*",
         "magento/module-catalog-inventory": "100.3.*",
@@ -29,5 +29,5 @@
             "Magento\\CatalogGraphQl\\": ""
         }
     },
-    "version": "100.3.2"
+    "version": "100.3.3"
 }

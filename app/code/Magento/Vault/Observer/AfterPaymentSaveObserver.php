@@ -77,11 +77,9 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $paymentToken->setPaymentMethodCode($payment->getMethod());
 
         $additionalInformation = $payment->getAdditionalInformation();
-        if (isset($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE])) {
-            $paymentToken->setIsVisible(
-                (bool) (int) $additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE]
-            );
-        }
+        $paymentToken->setIsVisible(
+            (bool) (int) ($additionalInformation[VaultConfigProvider::IS_ACTIVE_CODE] ?? 0)
+        );
 
         $paymentToken->setPublicHash($this->generatePublicHash($paymentToken));
 
@@ -115,7 +113,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
     /**
      * Reads Payment token from Order Payment
      *
-     * @param OrderPaymentExtensionInterface | null $extensionAttributes
+     * @param OrderPaymentExtensionInterface|null $extensionAttributes
      * @return PaymentTokenInterface | null
      */
     protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)

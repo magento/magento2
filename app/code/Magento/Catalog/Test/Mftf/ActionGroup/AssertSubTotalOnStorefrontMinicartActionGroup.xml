@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertSubTotalOnStorefrontMiniCartActionGroup">
+        <arguments>
+            <argument name="subTotal" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowCartButtonVisible"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabTextFromMiniCartSubtotalField"/>
+        <assertEquals message="Mini shopping cart should contain subtotal {{subTotal}}" stepKey="assertSubtotalFieldFromMiniShoppingCart1">
+            <expectedResult type="string">{{subTotal}}</expectedResult>
+            <actualResult type="variable">grabTextFromMiniCartSubtotalField</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

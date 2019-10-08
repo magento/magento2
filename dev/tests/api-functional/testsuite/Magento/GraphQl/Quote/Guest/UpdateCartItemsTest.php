@@ -70,6 +70,17 @@ class UpdateCartItemsTest extends GraphQlAbstract
 
         $this->assertEquals($itemId, $item['id']);
         $this->assertEquals($quantity, $item['quantity']);
+
+        //Check that update is correctly reflected in cart
+        $cartQuery = $this->getCartQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($cartQuery);
+
+        $this->assertArrayHasKey('cart', $response);
+
+        $responseCart = $response['cart'];
+        $item = current($responseCart['items']);
+
+        $this->assertEquals($quantity, $item['quantity']);
     }
 
     /**
@@ -90,6 +101,15 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $this->assertArrayHasKey('cart', $response['updateCartItems']);
 
         $responseCart = $response['updateCartItems']['cart'];
+        $this->assertCount(0, $responseCart['items']);
+
+        //Check that update is correctly reflected in cart
+        $cartQuery = $this->getCartQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($cartQuery);
+
+        $this->assertArrayHasKey('cart', $response);
+
+        $responseCart = $response['cart'];
         $this->assertCount(0, $responseCart['items']);
     }
 
@@ -236,7 +256,7 @@ QUERY;
             ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
-                'Field CartItemUpdateInput.quantity of required type Float! was not provided.'
+                'Required parameter "quantity" for "cart_items" is missing.'
             ],
         ];
     }
@@ -265,6 +285,26 @@ mutation {
         id
         quantity
       }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getCartQuery(string $maskedQuoteId)
+    {
+        return <<<QUERY
+query {
+  cart(cart_id: "{$maskedQuoteId}"){
+    items{
+      product{
+        name
+      }
+      quantity
     }
   }
 }

@@ -257,13 +257,15 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData([
-            'user_create_word' => [
-                'data' => 'AbCdEf5',
-                'words' => 'AbCdEf5',
-                'expires' => time() + self::EXPIRE_FRAME
+        $session->setData(
+            [
+                'user_create_word' => [
+                    'data' => 'AbCdEf5',
+                    'words' => 'AbCdEf5',
+                    'expires' => time() + self::EXPIRE_FRAME
+                ]
             ]
-        ]);
+        );
         return $session;
     }
 

@@ -594,7 +594,7 @@ abstract class AbstractDb extends AbstractResource
         $fields = $this->getUniqueFields();
         if (!empty($fields)) {
             if (!is_array($fields)) {
-                $this->_uniqueFields = [['field' => $fields, 'title' => $fields]];
+                $fields = $this->_uniqueFields = [['field' => $fields, 'title' => $fields]];
             }
 
             $data = new \Magento\Framework\DataObject($this->_prepareDataForSave($object));

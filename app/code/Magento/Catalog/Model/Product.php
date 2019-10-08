@@ -501,6 +501,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
     /**
      * Get resource instance
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Product
@@ -838,6 +839,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $storeIds = array_merge($storeIds, $websiteStores);
                 }
             }
@@ -1876,7 +1878,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Save current attribute with code $code and assign new value
+     * Save current attribute with code $code and assign new value.
      *
      * @param string $code Attribute code
      * @param mixed $value New attribute value

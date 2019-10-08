@@ -9,6 +9,11 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CGuestUserTest">
+        <annotations>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
+        </annotations>
         <!-- Step 3: User adds products to cart -->
         <comment userInput="Start of adding products to cart" stepKey="startOfAddingProductsToCart" after="endOfBrowsingCatalog"/>
         <!-- Add Simple Product 1 to cart -->

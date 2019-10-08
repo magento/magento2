@@ -484,9 +484,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $abstractDbMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getCategoryCollection',
-            ])
+                ]
+            )
             ->getMockForAbstractClass();
         $getCategoryCollectionMock = $this->createMock(
             \Magento\Framework\Data\Collection::class
@@ -1217,8 +1219,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMediaGalleryImagesMerging()
     {
-        $mediaEntries = [
-            'images' => [
+        $mediaEntries =
+            [
+            'images' =>
+                [
                 [
                     'value_id' => 1,
                     'file' => 'imageFile.jpg',
@@ -1233,24 +1237,28 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                     'file' => 'smallImageFile.jpg',
                     'media_type' => 'image',
                 ],
-            ]
-        ];
-        $expectedImageDataObject = new \Magento\Framework\DataObject([
+                ]
+            ];
+        $expectedImageDataObject = new \Magento\Framework\DataObject(
+            [
             'value_id' => 1,
             'file' => 'imageFile.jpg',
             'media_type' => 'image',
             'url' => 'http://magento.dev/pub/imageFile.jpg',
             'id' => 1,
             'path' => '/var/www/html/pub/imageFile.jpg',
-        ]);
-        $expectedSmallImageDataObject = new \Magento\Framework\DataObject([
+            ]
+        );
+        $expectedSmallImageDataObject = new \Magento\Framework\DataObject(
+            [
             'value_id' => 2,
             'file' => 'smallImageFile.jpg',
             'media_type' => 'image',
             'url' => 'http://magento.dev/pub/smallImageFile.jpg',
             'id' => 2,
             'path' => '/var/www/html/pub/smallImageFile.jpg',
-        ]);
+            ]
+        );
 
         $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $directoryMock->method('getAbsolutePath')->willReturnOnConsecutiveCalls(

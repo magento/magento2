@@ -10,7 +10,7 @@
         "magento/module-authorization": "100.3.*",
         "magento/module-backend": "101.0.*",
         "magento/module-ui": "101.1.*",
-        "php": "~7.1.3||~7.2.0"
+        "php": "~7.1.3||~7.2.0||~7.3.0"
     },
     "suggest": {
         "magento/module-admin-notification": "100.3.*",
@@ -29,5 +29,5 @@
             "Magento\\AsynchronousOperations\\": ""
         }
     },
-    "version": "100.3.2"
+    "version": "100.3.3"
 }

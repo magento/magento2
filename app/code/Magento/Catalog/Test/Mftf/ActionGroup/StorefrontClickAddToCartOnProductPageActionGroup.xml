@@ -9,6 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontClickAddToCartOnProductPageActionGroup">
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart" />
+        <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage" />
     </actionGroup>
 </actionGroups>

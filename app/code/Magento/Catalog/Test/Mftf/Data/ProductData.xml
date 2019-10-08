@@ -153,6 +153,18 @@
         <data key="status">1</data>
         <data key="quantity">0</data>
     </entity>
+    <entity name="SimpleProductInStockQuantityZero" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProductInStockQuantityZero</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">SimpleProductInStockQuantityZero</data>
+        <data key="status">1</data>
+        <data key="quantity">0</data>
+        <requiredEntity type="product_extension_attribute">EavStock0</requiredEntity>
+    </entity>
     <!-- Simple Product Disabled -->
     <entity name="SimpleProductOffline" type="product2">
         <data key="sku" unique="suffix">testSku</data>
@@ -166,6 +178,28 @@
         <data key="urlKey" unique="suffix">testurlkey</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="SimpleProductDisabled" type="product">
+        <data key="sku" unique="suffix">simple_product_disabled</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Disabled</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">2</data>
+        <data key="quantity">1001</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="SimpleProductNotVisibleIndividually" type="product">
+        <data key="sku" unique="suffix">simple_product_not_visible_individually</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">Simple Product Not Visible Individually</data>
+        <data key="price">123.00</data>
+        <data key="visibility">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
     </entity>
     <entity name="NewSimpleProduct" type="product">
         <data key="price">321.00</data>
@@ -205,6 +239,9 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductWithShortSKU" type="product2" extends="ApiSimpleOne">
+        <data key="sku" unique="suffix">pr</data>
     </entity>
     <entity name="ApiSimpleOneHidden" type="product2">
         <data key="sku" unique="suffix">api-simple-product</data>
@@ -437,14 +474,43 @@
         <requiredEntity type="product_option">ProductOptionDateTime</requiredEntity>
         <requiredEntity type="product_option">ProductOptionTime</requiredEntity>
     </entity>
+    <entity name="productWithOptionRadiobutton" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionRadiobuttonWithTwoFixedOptions</requiredEntity>
+    </entity>
+    <entity name="productWithCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDown2</requiredEntity>
+    </entity>
+    <entity name="productWithFixedOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionRadioButton2</requiredEntity>
+    </entity>
     <entity name="productWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
+    </entity>
+    <entity name="productWithDropdownOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
+    </entity>
+    <entity name="productWithDropdownAndFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
     </entity>
     <entity name="ProductWithTextFieldAndAreaOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionField</requiredEntity>
         <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+    </entity>
+    <entity name="ProductWithTextFieldAndAreaAndFileOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionArea</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
     </entity>
     <entity name="ApiVirtualProductWithDescription" type="product">
         <data key="sku" unique="suffix">api-virtual-product</data>
@@ -994,5 +1060,109 @@
         <data key="is_in_stock">1</data>
         <data key="tax_class_id">2</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+    </entity>
+    <entity name="defaultSimpleProductWeight200" type="product">
+        <data key="name" unique="suffix">Testp</data>
+        <data key="sku" unique="suffix">testsku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">560.00</data>
+        <data key="urlKey" unique="suffix">testurl-</data>
+        <data key="status">1</data>
+        <data key="quantity">25</data>
+        <data key="weight">200</data>
+        <requiredEntity type="product_extension_attribute">EavStock100</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithTwoOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionMultiSelect</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionPercentPriceDropDown</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithDescription" type="product">
+        <data key="sku" unique="suffix">productwithdescription</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">ProductWithDescription</data>
+        <data key="price">123.00</data>
+        <data key="urlKey" unique="suffix">productwithdescription</data>
+        <data key="status">1</data>
+        <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">ApiProductDescription</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithSpecialPrice" type="product">
+        <data key="sku" unique="suffix">SimpleProductWithSpecialPrice</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">100.00</data>
+        <data key="special_price">90.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">86</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithSpecialPriceSecond" type="product">
+        <data key="sku" unique="suffix">SimpleProductWithSpecialPriceSecond</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">150.00</data>
+        <data key="special_price">110.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">86</data>
+        <data key="urlKey" unique="suffix">simpleproduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct_100" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="price">100.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">777</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock777</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleOneQty10" type="product2">
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="price">40.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="status">1</data>
+        <data key="quantity">10</data>
+        <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleTwoQty10" type="product2">
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="price">40.00</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="status">1</data>
+        <data key="quantity">10</data>
+        <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
 </entities>

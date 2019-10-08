@@ -39,10 +39,13 @@ class ReviewTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        $model = $this->objectManager->getObject(Review::class, [
+        $model = $this->objectManager->getObject(
+            Review::class,
+            [
             'locator' => $this->locatorMock,
             'urlBuilder' => $this->urlBuilderMock,
-        ]);
+            ]
+        );
 
         $reviewClass = new \ReflectionClass(Review::class);
         $moduleManagerProperty = $reviewClass->getProperty('moduleManager');

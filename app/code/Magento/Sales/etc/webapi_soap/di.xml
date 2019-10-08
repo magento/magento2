@@ -6,9 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Quote\Model\QuoteRepository">
-        <plugin name="authorization" type="Magento\Quote\Model\QuoteRepository\Plugin\Authorization" />
-    </type>
     <type name="Magento\Sales\Model\ResourceModel\Order">
         <plugin name="authorization" type="Magento\Sales\Model\ResourceModel\Order\Plugin\Authorization" />
     </type>

@@ -21,6 +21,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * File Backend
@@ -40,6 +41,11 @@ class File extends BackendFile
     private $mime;
 
     /**
+     * @var Database
+     */
+    private $databaseHelper;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ScopeConfigInterface $config
@@ -51,6 +57,7 @@ class File extends BackendFile
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @param Database $databaseHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -64,7 +71,8 @@ class File extends BackendFile
         UrlInterface $urlBuilder,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        Database $databaseHelper = null
     ) {
         parent::__construct(
             $context,
@@ -79,6 +87,7 @@ class File extends BackendFile
             $data
         );
         $this->urlBuilder = $urlBuilder;
+        $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
@@ -103,7 +112,7 @@ class File extends BackendFile
             $this->setValue($file);
             return $this;
         }
-
+      
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->updateMediaDirectory(basename($file), $value['url']);
 
@@ -258,6 +267,10 @@ class File extends BackendFile
         $result = $mediaPath === $destinationMediaPath;
         if (!$result) {
             $result = $this->_mediaDirectory->copyFile(
+                $mediaPath,
+                $destinationMediaPath
+            );
+            $this->databaseHelper->renameFile(
                 $mediaPath,
                 $destinationMediaPath
             );

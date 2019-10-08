@@ -10,10 +10,11 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
-    'mage/cookies'
+    'mage/cookies',
+    'jquery-ui-modules/effect-fade'
 ], function ($, authenticationPopup, customerData, alert, confirm, _) {
     'use strict';
 

@@ -343,6 +343,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
                 )
             )
         ];
+        $output['useQty'] = $this->scopeConfig->isSetFlag(
+            'checkout/cart_link/use_qty',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $output['activeCarriers'] = $this->getActiveCarriers();
         $output['originCountryCode'] = $this->getOriginCountryCode();
         $output['paymentMethods'] = $this->getPaymentMethods();

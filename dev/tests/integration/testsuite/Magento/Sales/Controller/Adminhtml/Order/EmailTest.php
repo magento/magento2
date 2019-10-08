@@ -82,7 +82,7 @@ class EmailTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getRawMessage(), $assert);
+        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $assert);
     }
 
     /**

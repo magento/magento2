@@ -89,6 +89,9 @@ class Product
         if (in_array('media_gallery_entries', $attributes)) {
             $collection->addMediaGalleryData();
         }
+        if (in_array('media_gallery', $attributes)) {
+            $collection->addMediaGalleryData();
+        }
         if (in_array('options', $attributes)) {
             $collection->addOptionsToResult();
         }

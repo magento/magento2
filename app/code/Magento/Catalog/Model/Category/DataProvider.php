@@ -272,10 +272,13 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      */
     public function prepareMeta($meta)
     {
-        $meta = array_replace_recursive($meta, $this->prepareFieldsMeta(
-            $this->getFieldsMap(),
-            $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
-        ));
+        $meta = array_replace_recursive(
+            $meta,
+            $this->prepareFieldsMeta(
+                $this->getFieldsMap(),
+                $this->getAttributesMeta($this->eavConfig->getEntityType('catalog_category'))
+            )
+        );
 
         return $meta;
     }
@@ -361,6 +364,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 }
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    foreach ($meta[$code]['options'] as &$option) {
+                        $option['__disableTmpl'] = true;
+                    }
                 }
             }
 

@@ -4,17 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-?>
-<?php
 /**
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
  */
 ?>
-<form id="currency-symbols-form" action="<?= $block->escapeHtmlAttr($block->getFormActionUrl()) ?>" method="post">
+
+<form id="currency-symbols-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
     <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     <fieldset class="admin__fieldset">
-        <?php foreach ($block->getCurrencySymbolsData() as $code => $data): ?>
+        <?php foreach ($block->getCurrencySymbolsData() as $code => $data) : ?>
         <div class="admin__field _required">
             <label class="admin__field-label" for="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>">
                 <span><?= $block->escapeHtml($code) ?> (<?= $block->escapeHtml($data['displayName']) ?>)</span>
@@ -32,7 +30,12 @@
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
-                    <label class="admin__field-label" for="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"><span><?= $block->escapeHtml($block->getInheritText()) ?></span></label>
+                    <label class="admin__field-label"
+                           for="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>">
+                        <span>
+                            <?= $block->escapeHtml($block->getInheritText()) ?>
+                        </span>
+                    </label>
                 </div>
             </div>
         </div>

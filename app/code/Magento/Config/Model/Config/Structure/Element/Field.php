@@ -8,6 +8,8 @@
 namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
+ * Element field.
+ *
  * @api
  * @since 100.0.2
  */
@@ -243,6 +245,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getGroupPath()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return dirname($this->getConfigPath() ?: $this->getPath());
     }
 

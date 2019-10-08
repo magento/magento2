@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "102.0.*",
         "magento/module-captcha": "100.3.*",
         "magento/module-checkout": "100.3.*",
@@ -27,5 +27,5 @@
             "Magento\\PaypalCaptcha\\": ""
         }
     },
-    "version": "100.3.0"
+    "version": "100.3.1"
 }

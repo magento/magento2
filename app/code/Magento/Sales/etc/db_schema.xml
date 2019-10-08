@@ -219,7 +219,7 @@
         <column xsi:type="varchar" name="remote_ip" nullable="true" length="45" comment="Remote Ip"/>
         <column xsi:type="varchar" name="shipping_method" nullable="true" length="120"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
-        <column xsi:type="varchar" name="store_name" nullable="true" length="32" comment="Store Name"/>
+        <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
         <column xsi:type="varchar" name="x_forwarded_for" nullable="true" length="32" comment="X Forwarded For"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
