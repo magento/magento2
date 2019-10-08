@@ -20,5 +20,6 @@
         <element name="firstShippingAddressOption" type="select" selector="//table//tbody//tr[position()=1]//td[position()=3]//div//select"/>
         <element name="secondShippingAddressValue" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select//option[1]"/>
         <element name="secondShippingAddressOption" type="select" selector="//table//tbody//tr[position()=2]//td[position()=3]//div//select"/>
+        <element name="selectShippingAddress" type="select" selector="(//table[@id='multiship-addresses-table'] //div[@class='field address'] //select)[{{sequenceNumber}}]" parameterized="true"/>
     </section>
 </sections>
