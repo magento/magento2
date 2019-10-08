@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -14,7 +13,6 @@ use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
@@ -354,16 +352,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @since 101.0.0
      */
     protected $linkTypeProvider;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
 
     /**
      * @var \Magento\Eav\Model\Config
@@ -826,8 +814,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
-                    $storeIds = array_merge($storeIds, $websiteStores);
+                    $storeIds[] = $websiteStores;
                 }
+            }
+            if ($storeIds) {
+                $storeIds = array_merge(...$storeIds);
             }
             $this->setStoreIds($storeIds);
         }
@@ -858,34 +849,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
 
         return $attributes;
-    }
-
-    /**
-     * Get user context.
-     *
-     * @return UserContextInterface
-     */
-    private function getUserContext(): UserContextInterface
-    {
-        if (!$this->userContext) {
-            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
-        }
-
-        return $this->userContext;
-    }
-
-    /**
-     * Get authorization service.
-     *
-     * @return AuthorizationInterface
-     */
-    private function getAuthorization(): AuthorizationInterface
-    {
-        if (!$this->authorization) {
-            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        }
-
-        return $this->authorization;
     }
 
     /**

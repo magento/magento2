@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,9 +7,15 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Page;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Save CMS page action.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -56,11 +61,9 @@ class Save extends \Magento\Backend\App\Action
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
-        $this->pageFactory = $pageFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
+        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -97,19 +100,17 @@ class Save extends \Magento\Backend\App\Action
                 }
             }
 
+            $data['layout_update_xml'] = $model->getLayoutUpdateXml();
+            $data['custom_layout_update_xml'] = $model->getCustomLayoutUpdateXml();
             $model->setData($data);
 
-            $this->_eventManager->dispatch(
-                'cms_page_prepare_save',
-                ['page' => $model, 'request' => $this->getRequest()]
-            );
-
-            if (!$this->dataProcessor->validate($data)) {
-                return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
-            }
-
             try {
-                $this->pageRepository->save($model);
+                $this->_eventManager->dispatch(
+                    'cms_page_prepare_save',
+                    ['page' => $model, 'request' => $this->getRequest()]
+                );
+
+                $this->savePage($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 $this->dataPersistor->clear('cms_page');
                 if ($this->getRequest()->getParam('back')) {
@@ -117,8 +118,8 @@ class Save extends \Magento\Backend\App\Action
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (LocalizedException $e) {
-                $this->messageManager->addExceptionMessage($e->getPrevious() ?:$e);
-            } catch (\Exception $e) {
+                $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
 
@@ -126,5 +127,20 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Save the page.
+     *
+     * @param Page $page
+     * @return void
+     * @throws \Throwable
+     */
+    private function savePage(Page $page): void
+    {
+        if (!$this->dataProcessor->validate($page->getData())) {
+            throw new \InvalidArgumentException('Page is invalid');
+        }
+        $this->pageRepository->save($page);
     }
 }

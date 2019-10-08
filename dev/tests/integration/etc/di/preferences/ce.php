@@ -30,4 +30,10 @@ return [
     \Magento\Framework\ShellInterface::class => \Magento\TestFramework\App\Shell::class,
     \Magento\Framework\App\Shell::class => \Magento\TestFramework\App\Shell::class,
     \Magento\Framework\Session\SessionStartChecker::class => \Magento\TestFramework\Session\SessionStartChecker::class,
+    \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class =>
+        \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class,
+    \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
+        \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class,
+    \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
+        \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
 ];

@@ -179,6 +179,9 @@ class View extends Action
             if ($settings->getCustomDesign()) {
                 $this->_catalogDesign->applyCustomDesign($settings->getCustomDesign());
             }
+            if ($settings->getPageLayoutHandles()) {
+                $page->addPageLayoutHandles($settings->getPageLayoutHandles());
+            }
 
             $this->_catalogSession->setLastViewedCategoryId($category->getId());
 

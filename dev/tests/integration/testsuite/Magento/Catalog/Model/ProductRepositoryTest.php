@@ -6,13 +6,14 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
 
 /**
  * Provide tests for ProductRepository model.
@@ -42,14 +43,9 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $searchCriteriaBuilder;
 
     /**
-     * @var Auth
+     * @var ProductLayoutUpdateManager
      */
-    private $authorization;
-
-    /**
-     * @var Builder
-     */
-    private $aclBuilder;
+    private $layoutManager;
 
     /**
      * @inheritdoc
@@ -58,20 +54,18 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
-        $this->authorization = Bootstrap::getObjectManager()->get(Auth::class);
-        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->layoutManager = Bootstrap::getObjectManager()->get(ProductLayoutUpdateManager::class);
     }
 
     /**
-     * @inheritdoc
+     * Create new subject instance.
+     *
+     * @return ProductRepositoryInterface
      */
-    protected function tearDown()
+    private function createRepo(): ProductRepositoryInterface
     {
-        parent::tearDown();
-
-        $this->authorization->logout();
-        $this->aclBuilder->resetRuntimeAcl();
+        return Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -274,30 +268,36 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test authorization when saving product's design settings.
+     * Test that custom layout file attribute is saved.
      *
+     * @return void
+     * @throws \Throwable
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
-    public function testSaveDesign()
+    public function testCustomLayout()
     {
-        $product = $this->productRepository->get('simple');
-        $this->authorization->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+        //New valid value
+        $repo = $this->createRepo();
+        $product = $repo->get('simple');
+        $newFile = 'test';
+        $this->layoutManager->setFakeFiles((int)$product->getId(), [$newFile]);
+        $product->setCustomAttribute('custom_layout_update_file', $newFile);
+        $repo->save($product);
+        $repo = $this->createRepo();
+        $product = $repo->get('simple');
+        $this->assertEquals($newFile, $product->getCustomAttribute('custom_layout_update_file')->getValue());
 
-        //Admin doesn't have access to product's design.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
-
-        $product->setCustomAttribute('custom_design', 2);
-        $product = $this->productRepository->save($product);
-        $this->assertEmpty($product->getCustomAttribute('custom_design'));
-
-        //Admin has access to products' design.
-        $this->aclBuilder->getAcl()
-            ->allow(null, ['Magento_Catalog::products','Magento_Catalog::edit_product_design']);
-
-        $product->setCustomAttribute('custom_design', 2);
-        $product = $this->productRepository->save($product);
-        $this->assertNotEmpty($product->getCustomAttribute('custom_design'));
-        $this->assertEquals(2, $product->getCustomAttribute('custom_design')->getValue());
+        //Setting non-existent value
+        $newFile = 'does not exist';
+        $product->setCustomAttribute('custom_layout_update_file', $newFile);
+        $caughtException = false;
+        try {
+            $repo->save($product);
+        } catch (LocalizedException $exception) {
+            $caughtException = true;
+        }
+        $this->assertTrue($caughtException);
     }
 }

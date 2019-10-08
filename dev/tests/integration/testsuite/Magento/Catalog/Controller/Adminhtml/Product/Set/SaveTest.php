@@ -11,6 +11,12 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
+/**
+ * Test save attribute set
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppArea adminhtml
+ */
 class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**

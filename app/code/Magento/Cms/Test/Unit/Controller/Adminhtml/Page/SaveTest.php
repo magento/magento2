@@ -155,6 +155,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->pageRepository->expects($this->once())->method('getById')->with($this->pageId)->willReturn($page);
         $page->expects($this->once())->method('setData');
+        $page->method('getId')->willReturn($this->pageId);
         $this->pageRepository->expects($this->once())->method('save')->with($page);
 
         $this->dataPersistorMock->expects($this->any())
@@ -267,6 +268,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $page->method('getId')->willReturn(1);
         $this->pageFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($page);
@@ -283,7 +285,14 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
         $this->dataPersistorMock->expects($this->any())
             ->method('set')
-            ->with('cms_page', ['page_id' => $this->pageId]);
+            ->with(
+                'cms_page',
+                [
+                    'page_id' => $this->pageId,
+                    'layout_update_xml' => null,
+                    'custom_layout_update_xml' => null
+                ]
+            );
 
         $this->resultRedirect->expects($this->atLeastOnce())
             ->method('setPath')
