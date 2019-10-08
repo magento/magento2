@@ -54,7 +54,7 @@
        <annotations>
            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Dynamic Block Rotate Widget.</description>
        </annotations>
-       
+
        <selectOption selector="{{AdminNewWidgetSection.displayMode}}" userInput="{{widget.display_mode}}" stepKey="selectDisplayMode"/>
        <selectOption selector="{{AdminNewWidgetSection.restrictTypes}}" userInput="{{widget.restrict_type}}" stepKey="selectRestrictType"/>
        <click selector="{{AdminNewWidgetSection.saveAndContinue}}" stepKey="clickSaveWidget"/>
@@ -71,6 +71,7 @@
 
        <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin"/>
        <waitForPageLoad stepKey="waitWidgetsLoad"/>
+       <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
        <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
        <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
        <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>
