@@ -38,6 +38,14 @@ class ErrorCodeProvider
             $result[] = $error->code;
         }
 
+        if (isset($response->transaction) && $response->transaction->status === 'gateway_rejected') {
+            $result[] = $response->transaction->gatewayRejectionReason;
+        }
+
+        if (isset($response->transaction) && $response->transaction->status === 'processor_declined') {
+            $result[] = $response->transaction->processorResponseCode;
+        }
+
         return $result;
     }
 }

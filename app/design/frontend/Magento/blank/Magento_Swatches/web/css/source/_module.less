@@ -16,6 +16,10 @@
 @swatch-option__hover__color: @color-gray20;
 @swatch-option__hover__outline: 1px solid @color-gray60;
 
+@swatch-more__hover__border: @border-width__base solid @color-white;
+@swatch-more__hover__color: @color-orange-red1;
+@swatch-more__hover__outline: 1px solid @color-gray60;
+
 @swatch-option__selected__border: @swatch-option__hover__border;
 @swatch-option__selected__color: @swatch-option__hover__color;
 @swatch-option__selected__outline: 2px solid @active__color;
@@ -318,8 +322,8 @@
         &-more {
             display: inline-block;
             margin: 2px 0;
+            padding: 2px;
             position: static;
-            text-decoration: none !important;
             z-index: 1;
         }
 

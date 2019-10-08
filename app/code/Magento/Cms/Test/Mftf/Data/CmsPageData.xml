@@ -20,6 +20,15 @@
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
     </entity>
+    <entity name="customCmsPage" extends="_defaultCmsPage" type="cms_page">
+        <data key="content">Test content data1</data>
+        <data key="identifier">url_key</data>
+    </entity>
+    <entity name="customCmsPage2" extends="_defaultCmsPage" type="cms_page">
+        <data key="title">Test Second CMS Page</data>
+        <data key="content">Test content data2</data>
+        <data key="identifier">url_key</data>
+    </entity>
     <entity name="_duplicatedCMSPage" type="cms_page">
         <data key="title">testpage</data>
         <data key="content_heading">Test Content Heading</data>

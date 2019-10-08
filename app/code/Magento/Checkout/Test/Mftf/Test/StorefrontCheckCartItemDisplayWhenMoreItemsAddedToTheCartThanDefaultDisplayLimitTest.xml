@@ -15,13 +15,11 @@
             <testCaseId value="MC-14720"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
         </annotations>
 
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
                 <field key="price">10.00</field>
@@ -279,7 +277,9 @@
         </actionGroup>
 
         <!-- Verify  Product11 is not displayed in Mini Cart -->
-        <dontSee selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="$$simpleProduct11.name$$"  stepKey="dontSeeProduct11NameInMiniCart"/>
-        <dontSee selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="110" stepKey="dontSeeProduct11PriceInMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartProductDetailsAbsentActionGroup" stepKey="assertSimpleProduct11IsNotInMiniCart">
+            <argument name="productName" value="$$simpleProduct11.name$$"/>
+            <argument name="productPrice" value="$110.00"/>
+        </actionGroup>
     </test>
 </tests>

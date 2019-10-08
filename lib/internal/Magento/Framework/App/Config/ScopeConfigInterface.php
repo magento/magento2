@@ -23,7 +23,7 @@ interface ScopeConfigInterface
      *
      * @param string $path The path through the tree of configuration values, e.g., 'general/store_information/name'
      * @param string $scopeType The scope to use to determine config value, e.g., 'store' or 'default'
-     * @param null|string $scopeCode
+     * @param null|int|string $scopeCode
      * @return mixed
      */
     public function getValue($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null);
@@ -33,7 +33,7 @@ interface ScopeConfigInterface
      *
      * @param string $path The path through the tree of configuration values, e.g., 'general/store_information/name'
      * @param string $scopeType The scope to use to determine config value, e.g., 'store' or 'default'
-     * @param null|string $scopeCode
+     * @param null|int|string $scopeCode
      * @return bool
      */
     public function isSetFlag($path, $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null);

@@ -7,13 +7,17 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StoreViewDisabledErrorSaveMessageActionGroup">
+        <annotations>
+            <description>Goes to the Admin Store View creation page. Fills in the provided Details (Store Group Name, Store View and Store View Status). Validates that the Error Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="storeGroupName" type="string"/>
             <argument name="storeView" type="string"/>
             <argument name="storeViewStatus" type="string"/>
         </arguments>
+
         <amOnPage  url="{{AdminSystemStoreViewPage.url}}" stepKey="amOnAdminSystemStoreViewPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <selectOption userInput="{{storeGroupName}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>

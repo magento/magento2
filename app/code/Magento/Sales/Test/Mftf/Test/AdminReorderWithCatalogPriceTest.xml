@@ -61,6 +61,9 @@
         </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <!--Verify order item row-->
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" stepKey="waitOrderItemPriceToBeVisible"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" userInput="${{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderItemPrice"/>
         <!--Verify totals on Order page-->
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>

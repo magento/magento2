@@ -18,7 +18,7 @@
       data-mage-init='{
           "multiShipping":{},
           "cartUpdate": {
-               "validationURL": "/multishipping/checkout/checkItems",
+               "validationURL": "<?= $block->escapeUrl($block->getUrl('multishipping/checkout/checkItems')) ?>",
                "eventName": "updateMulticartItemQty"
           }}'
       action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
@@ -62,8 +62,9 @@
                                            name="ship[<?= $block->escapeHtml($_index) ?>][<?= $block->escapeHtml($_item->getQuoteItemId()) ?>][qty]"
                                            value="<?= $block->escapeHtml($_item->getQty()) ?>"
                                            size="2"
+                                           min="0"
                                            class="input-text qty"
-                                           data-validate="{number: true}"/>
+                                           data-validate="{number: true, required:true, 'validate-greater-than-zero':true}"/>
                                 </div>
                             </div>
                         </td>

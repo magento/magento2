@@ -12,5 +12,6 @@
         <element name="widgetTitleSearch" type="input" selector="#widgetInstanceGrid_filter_title"/>
         <element name="searchButton" type="button" selector=".action-default.scalable.action-secondary"/>
         <element name="searchResult" type="text" selector="#widgetInstanceGrid_table>tbody>tr:nth-child(1)"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']"/>
     </section>
 </sections>

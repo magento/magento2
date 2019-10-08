@@ -18,9 +18,6 @@
             <testCaseId value="MC-16054"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17274"/>
-            </skip>
         </annotations>
         <remove keyForRemoval="seeEmptyMessage"/>
 

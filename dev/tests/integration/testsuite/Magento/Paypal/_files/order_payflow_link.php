@@ -34,10 +34,11 @@ $quoteRepository->save($quote);
 $payment = $objManager->create(Payment::class);
 $payment->setMethod(Config::METHOD_PAYFLOWLINK)
     ->setBaseAmountAuthorized(100)
-    ->setAdditionalInformation([
+    ->setAdditionalInformation(
+        [
         'secure_silent_post_hash' => 'cf7i85d01ed7c92223031afb4rdl2f1f'
-    ]);
-
+        ]
+    );
 
 /** @var OrderInterface $order */
 $order = $objManager->create(OrderInterface::class);

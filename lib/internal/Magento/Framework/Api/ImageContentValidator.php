@@ -86,7 +86,7 @@ class ImageContentValidator implements ImageContentValidatorInterface
      */
     protected function isNameValid($name)
     {
-        // Cannot contain \ / : * ? " < > |
+        // Cannot contain \ / ? * : " ; < > ( ) | { }
         if (!preg_match('/^[^\\/?*:";<>()|{}\\\\]+$/', $name)) {
             return false;
         }

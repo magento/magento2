@@ -8,6 +8,8 @@ namespace Magento\Widget\Setup;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Data\Wysiwyg\Normalizer;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\DataConverter\DataConversionException;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 
@@ -17,7 +19,7 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class LayoutUpdateConverter extends SerializedToJson
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -32,17 +34,17 @@ class LayoutUpdateConverter extends SerializedToJson
      * @param Serialize $serialize
      * @param Json $json
      * @param Normalizer $normalizer
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
         Serialize $serialize,
         Json $json,
         Normalizer $normalizer,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->normalizer = $normalizer;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
         parent::__construct($serialize, $json);
     }

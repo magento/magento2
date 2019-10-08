@@ -5,9 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFillUserRoleFormActionGroup">
+        <annotations>
+            <description>Fills in the provided Role and Current Admin Password on the Admin Roles creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="role" type="entity" />
             <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />

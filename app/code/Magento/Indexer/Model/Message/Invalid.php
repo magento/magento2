@@ -59,6 +59,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
      */
     public function getIdentity()
     {
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5('INDEX_INVALID');
     }
 
@@ -74,7 +75,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
         return __(
             'One or more <a href="%1">indexers are invalid</a>. Make sure your <a href="%2" target="_blank">Magento cron job</a> is running.',
             $url,
-            'https://devdocs.magento.com/guides/v2.2/config-guide/cli/config-cli-subcommands-cron.html#create-or-remove-the-magento-crontab'
+            'https://devdocs.magento.com/guides/v2.3/config-guide/cli/config-cli-subcommands-cron.html#create-or-remove-the-magento-crontab'
         );
         //@codingStandardsIgnoreEnd
     }

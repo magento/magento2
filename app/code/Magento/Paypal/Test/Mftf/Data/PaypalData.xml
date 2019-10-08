@@ -99,4 +99,37 @@
         <data key="paypal_express_api_signature">someApiSignature</data>
         <data key="paypal_express_merchantID">someMerchantId</data>
     </entity>
+    <entity name="PaypalConfig" type="paypal_config_state">
+        <requiredEntity type="business_account">BusinessAccount</requiredEntity>
+        <requiredEntity type="api_username">ApiUsername</requiredEntity>
+        <requiredEntity type="api_password">ApiPassword</requiredEntity>
+        <requiredEntity type="api_signature">ApiSignature</requiredEntity>
+        <requiredEntity type="api_authentication">ApiAuthentication</requiredEntity>
+        <requiredEntity type="sandbox_flag">SandboxFlag</requiredEntity>
+        <requiredEntity type="use_proxy">UseProxy</requiredEntity>
+    </entity>
+    <entity name="BusinessAccount" type="business_account">
+        <data key="value">{{_CREDS.magento/paypal_express_checkout_us_business_account}}</data>
+    </entity>
+    <entity name="ApiUsername" type="api_username">
+        <data key="value">{{_CREDS.magento/paypal_express_checkout_us_api_username}}</data>
+    </entity>
+    <entity name="ApiPassword" type="api_password">
+        <data key="value">{{_CREDS.magento/paypal_express_checkout_us_api_password}}</data>
+    </entity>
+    <entity name="ApiSignature" type="api_signature">
+        <data key="value">{{_CREDS.magento/paypal_express_checkout_us_api_signature}}</data>
+    </entity>
+    <entity name="ApiAuthentication" type="api_authentication">
+        <data key="value">0</data>
+    </entity>
+    <entity name="SandboxFlag" type="sandbox_flag">
+        <data key="value">1</data>
+    </entity>
+    <entity name="UseProxy" type="use_proxy">
+        <data key="value">0</data>
+    </entity>
+    <entity name="Payer">
+        <data key="firstName">Alex</data>
+    </entity>
 </entities>

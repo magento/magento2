@@ -20,6 +20,7 @@
         <before>
             <magentoCLI stepKey="disableShoppingCartSidebar" command="config:set checkout/sidebar/display 0"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRatePrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
 
             <!--Create  simple products-->
@@ -108,7 +109,7 @@
             <argument name="total" value="110.00"/>
         </actionGroup>
 
-        <!--Enabled Shopping Cart Sidebar -->
+        <!--Enabled Mini Cart -->
         <magentoCLI stepKey="enableShoppingCartSidebar" command="config:set checkout/sidebar/display 1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <reloadPage stepKey="reloadThePage"/>
