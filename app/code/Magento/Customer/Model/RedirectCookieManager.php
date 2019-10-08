@@ -18,9 +18,6 @@ use Magento\Customer\Api\RedirectCookieManagerInterface;
  */
 class RedirectCookieManager implements RedirectCookieManagerInterface
 {
-    /**
-     * Cookie name
-     */
     const COOKIE_NAME = 'login_redirect';
 
     /**
@@ -46,7 +43,9 @@ class RedirectCookieManager implements RedirectCookieManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get redirect route from cookie for case of successful login/registration
+     *
+     * @return null|string
      */
     public function getRedirectCookie()
     {
@@ -54,7 +53,11 @@ class RedirectCookieManager implements RedirectCookieManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Save redirect route to cookie for case of successful login/registration
+     *
+     * @param string $route
+     * @param StoreInterface $store
+     * @return void
      */
     public function setRedirectCookie($route, StoreInterface $store)
     {
@@ -66,7 +69,10 @@ class RedirectCookieManager implements RedirectCookieManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Clear cookie with requested route
+     *
+     * @param StoreInterface $store
+     * @return void
      */
     public function clearRedirectCookie(StoreInterface $store)
     {

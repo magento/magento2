@@ -20,16 +20,17 @@ use Magento\Framework\Controller\Result\Forward as ResultForward;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Customer\Api\RedirectCookieManagerInterface;
+use Magento\Customer\Model\RedirectCookieManager;
 
 /**
+ * Account Redirect
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
- *
  */
 class Redirect
 {
     /** @deprecated
+     * @see \Magento\Customer\Model\RedirectCookieManager
      * URL to redirect user on successful login or registration
      */
     const LOGIN_REDIRECT_URL = 'login_redirect';
@@ -76,7 +77,7 @@ class Redirect
     protected $cookieManager;
 
     /**
-     * @var RedirectCookieManagerInterface
+     * @var RedirectCookieManager
      */
     protected $redirectCookieManager;
 
@@ -100,7 +101,7 @@ class Redirect
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerUrl
      * @param ResultFactory $resultFactory
-     * @param RedirectCookieManagerInterface $redirectCookieManager
+     * @param RedirectCookieManager $redirectCookieManager
      * @param HostChecker|null $hostChecker
      */
     public function __construct(
@@ -112,7 +113,7 @@ class Redirect
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
-        RedirectCookieManagerInterface $redirectCookieManager,
+        RedirectCookieManager $redirectCookieManager,
         HostChecker $hostChecker = null
     ) {
         $this->request = $request;
@@ -254,6 +255,7 @@ class Redirect
      * Get Cookie manager. For release backward compatibility.
      *
      * @deprecated 100.0.10
+     * @see \Magento\Customer\Model\RedirectCookieManager
      * @return CookieManagerInterface
      */
     protected function getCookieManager()
@@ -268,6 +270,7 @@ class Redirect
      * Set cookie manager. For unit tests.
      *
      * @deprecated 100.0.10
+     * @see \Magento\Customer\Model\RedirectCookieManager
      * @param object $value
      * @return void
      */
