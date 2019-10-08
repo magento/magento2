@@ -47,14 +47,14 @@ class Actions extends AbstractRenderer
      */
     public function render(DataObject $row)
     {
-        $readDetailsHtml = $row->getData('url') ? '<a class="action-details" target="_blank" href="' .
-            $this->escapeUrl($row->getData('url'))
+        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' .
+            $this->escapeUrl($row->getUrl())
             . '">' .
             __('Read Details') . '</a>' : '';
 
-        $markAsReadHtml = !$row->getData('is_read') ? '<a class="action-mark" href="' . $this->getUrl(
+        $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
             '*/*/markAsRead/',
-            ['_current' => true, 'id' => $row->getData('notification_id')]
+            ['_current' => true, 'id' => $row->getNotificationId()]
         ) . '">' . __(
             'Mark as Read'
         ) . '</a>' : '';
@@ -68,7 +68,7 @@ class Actions extends AbstractRenderer
                 '*/*/remove/',
                 [
                     '_current' => true,
-                    'id' => $row->getData('notification_id'),
+                    'id' => $row->getNotificationId(),
                     ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
                 ]
             ),

@@ -50,7 +50,7 @@ class Severity extends AbstractRenderer
         $value = '';
 
         $column = $this->getColumn();
-        $index  = $column->getData('index');
+        $index  = $column->getIndex();
         switch ($row->getData($index)) {
             case MessageInterface::SEVERITY_CRITICAL:
                 $class = 'critical';

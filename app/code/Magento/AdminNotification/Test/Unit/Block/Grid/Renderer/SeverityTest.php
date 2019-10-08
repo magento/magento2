@@ -44,8 +44,11 @@ class SeverityTest extends TestCase
     public function testShouldRenderSeverity() : void
     {
         /** @var Column | \PHPUnit_Framework_MockObject_MockObject $columnMock */
-        $columnMock = $this->getMockBuilder(Column::class)->disableOriginalConstructor()->getMock();
-        $columnMock->expects($this->exactly(5))->method('getData')->with($this->equalTo('index'))->willReturn('index');
+        $columnMock = $this->getMockBuilder(Column::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getIndex'])
+            ->getMock();
+        $columnMock->expects($this->exactly(5))->method('getIndex')->willReturn('index');
         $this->sut->setColumn($columnMock);
         $dataObject = new DataObject();
 
