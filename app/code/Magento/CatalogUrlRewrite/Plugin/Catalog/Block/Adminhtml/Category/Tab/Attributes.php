@@ -39,6 +39,8 @@ class Attributes
     }
 
     /**
+     * Plugin for url key create redirect
+     *
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
      * @param array                                        $result
      *
@@ -50,8 +52,8 @@ class Attributes
     ) {
 
         /**
- * @var \Magento\Catalog\Model\Category $category 
-*/
+         * @var \Magento\Catalog\Model\Category $category
+         */
         $category = $subject->getCurrentCategory();
         if (isset($result['url_key'])) {
             if ($category && $category->getId()) {
