@@ -9,7 +9,7 @@ namespace Magento\Catalog\Api\Data;
  * Represents Data Object for a Product Frontend Action like Product View or Comparison
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface ProductFrontendActionInterface
 {
@@ -17,7 +17,7 @@ interface ProductFrontendActionInterface
      * Gets Identifier of a Product Frontend Action
      *
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getActionId();
 
@@ -26,7 +26,7 @@ interface ProductFrontendActionInterface
      *
      * @param int $actionId
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setActionId($actionId);
 
@@ -34,7 +34,7 @@ interface ProductFrontendActionInterface
      * Gets Identifier of Visitor who performs a Product Frontend Action
      *
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getVisitorId();
 
@@ -43,7 +43,7 @@ interface ProductFrontendActionInterface
      *
      * @param int $visitorId
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setVisitorId($visitorId);
 
@@ -51,7 +51,7 @@ interface ProductFrontendActionInterface
      * Gets Identifier of Customer who performs a Product Frontend Action
      *
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getCustomerId();
 
@@ -60,7 +60,7 @@ interface ProductFrontendActionInterface
      *
      * @param int $customerId
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setCustomerId($customerId);
 
@@ -68,7 +68,7 @@ interface ProductFrontendActionInterface
      * Gets Identifier of Product a Product Frontend Action is performed on
      *
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getProductId();
 
@@ -77,7 +77,7 @@ interface ProductFrontendActionInterface
      *
      * @param int $productId
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setProductId($productId);
 
@@ -85,7 +85,7 @@ interface ProductFrontendActionInterface
      * Gets Identifier of Type of a Product Frontend Action
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getTypeId();
 
@@ -94,7 +94,7 @@ interface ProductFrontendActionInterface
      *
      * @param string $typeId
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setTypeId($typeId);
 
@@ -102,7 +102,7 @@ interface ProductFrontendActionInterface
      * Gets JS timestamp of a Product Frontend Action (in microseconds)
      *
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getAddedAt();
 
@@ -111,7 +111,7 @@ interface ProductFrontendActionInterface
      *
      * @param int $addedAt
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setAddedAt($addedAt);
 }

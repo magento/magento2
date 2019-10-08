@@ -9,7 +9,7 @@ namespace Magento\Catalog\Api\Data;
 /**
  * Product Special Price Interface is used to encapsulate data that can be processed by efficient price API.
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -28,7 +28,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param float $price
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setPrice($price);
 
@@ -36,7 +36,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get product special price value.
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getPrice();
 
@@ -45,7 +45,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param int $storeId
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setStoreId($storeId);
 
@@ -53,7 +53,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get ID of store, that contains special price value.
      *
      * @return int
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getStoreId();
 
@@ -62,7 +62,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $sku
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setSku($sku);
 
@@ -70,7 +70,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get SKU of product, that contains special price value.
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getSku();
 
@@ -79,7 +79,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $datetime
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setPriceFrom($datetime);
 
@@ -87,7 +87,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get start date for special price in Y-m-d H:i:s format.
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getPriceFrom();
 
@@ -96,7 +96,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string $datetime
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setPriceTo($datetime);
 
@@ -104,7 +104,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Get end date for special price in Y-m-d H:i:s format.
      *
      * @return string
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getPriceTo();
 
@@ -113,7 +113,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * If extension attributes do not exist return null.
      *
      * @return \Magento\Catalog\Api\Data\SpecialPriceExtensionInterface|null
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getExtensionAttributes();
 
@@ -122,7 +122,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param \Magento\Catalog\Api\Data\SpecialPriceExtensionInterface $extensionAttributes
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\SpecialPriceExtensionInterface $extensionAttributes

@@ -99,23 +99,61 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                ['name' => 'itemName', 'config' => []],
-                [['itemName' => '', 'entity_id' => 1]],
-                [['itemName' => ['view' => ['href' => 'url', 'label' => __('View')]], 'entity_id' => 1]],
+                [
+                    'name' => 'itemName',
+                    'config' => []
+                ],
+                [
+                    [
+                        'entity_id' => 1,
+                        'itemName' => '',
+                    ],
+                ],
+                [
+                    [
+                        'entity_id' => 1,
+                        'itemName' => [
+                            'view' => [
+                                'href' => 'url',
+                                'label' => __('View'),
+                                '__disableTmpl' => true,
+                            ]
+                        ],
+                    ],
+                ],
                 '#',
-                ['id' => 1]
+                ['id' => 1],
             ],
             [
-                ['name' => 'itemName', 'config' => [
-                    'viewUrlPath' => 'url_path',
-                    'urlEntityParamName' => 'theme_id',
-                    'indexField' => 'theme_id']
+                [
+                    'name' => 'itemName',
+                    'config' => [
+                        'viewUrlPath' => 'url_path',
+                        'urlEntityParamName' => 'theme_id',
+                        'indexField' => 'theme_id',
+                    ],
                 ],
-                [['itemName' => '', 'theme_id' => 2]],
-                [['itemName' => ['view' => ['href' => 'url', 'label' => __('View')]], 'theme_id' => 2]],
+                [
+                    [
+                        'theme_id' => 2,
+                        'itemName' => '',
+                    ],
+                ],
+                [
+                    [
+                        'theme_id' => 2,
+                        'itemName' => [
+                            'view' => [
+                                'href' => 'url',
+                                'label' => __('View'),
+                                '__disableTmpl' => true,
+                            ],
+                        ],
+                    ],
+                ],
                 'url_path',
-                ['theme_id' => 2]
-            ]
+                ['theme_id' => 2],
+            ],
         ];
     }
 }

@@ -70,6 +70,7 @@ class BlockActions extends Column
                                 ]
                             ),
                             'label' => __('Edit'),
+                            '__disableTmpl' => true,
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
@@ -82,8 +83,10 @@ class BlockActions extends Column
                             'confirm' => [
                                 'title' => __('Delete %1', $title),
                                 'message' => __('Are you sure you want to delete a %1 record?', $title),
+                                '__disableTmpl' => true,
                             ],
                             'post' => true,
+                            '__disableTmpl' => true,
                         ],
                     ];
                 }

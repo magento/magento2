@@ -39,7 +39,7 @@ class Message implements MailMessageInterface
     /**
      * @inheritdoc
      *
-     * @deprecated
+     * @deprecated 101.0.8
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
@@ -52,7 +52,7 @@ class Message implements MailMessageInterface
     /**
      * @inheritdoc
      *
-     * @deprecated
+     * @deprecated 101.0.8
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
@@ -93,7 +93,7 @@ class Message implements MailMessageInterface
     /**
      * @inheritdoc
      *
-     * @deprecated This function is missing the from name. The
+     * @deprecated 102.0.1 This function is missing the from name. The
      * setFromAddress() function sets both from address and from name.
      * @see setFromAddress()
      */

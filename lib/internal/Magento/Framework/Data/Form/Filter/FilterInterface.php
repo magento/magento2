@@ -13,6 +13,7 @@ namespace Magento\Framework\Data\Form\Filter;
 
 /**
  * @api
+ * @since 100.0.2
  */
 interface FilterInterface
 {

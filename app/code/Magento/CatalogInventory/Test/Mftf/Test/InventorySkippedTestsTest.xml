@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithDownloadableProductDefaultStockTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1301"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminMassActionAssignProductSourcesForDifferentTypesOfProductsTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1495"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminMassActionUnassignProductSourcesForDifferentTypesOfProductsTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1497"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminMassActionTransferInventoryToSourceForDifferentTypeOfProductsTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1516"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCreateDownloadableProductOnSingleStockModeTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1748"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCreateDownloadableProductWithDefaultSourceTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1749"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCreateDownloadableProductWithCustomStockTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1750"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCacheValidationWhenDownloadableProductIsSoldOutOnSingleStockModeTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1753"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCacheValidationWhenDownloadableProductIsSoldOutOnMultipleStockModeTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1754"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCatalogQuickSearchForDownloadableProductOnTestStockTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1790"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="AdminCatalogQuickSearchForDownloadableProductInSingleStockModeTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1814"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="GuestCustomerOrderedDownloadableProductOnCustomStockFromHomepageTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1300"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+
+    <test name="GuestCustomerOrderedDownloadableProductOnDefaultStockFromHomepageTest">
+        <annotations>
+            <features value="Inventory"/>
+            <stories value="Skipped tests"/>
+            <title value="Skipped tests"/>
+            <description value="Skipped tests"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MSI-1299"/>
+            <group value="Inventory"/>
+            <skip>
+                <issueId value="MC-19341"/>
+            </skip>
+        </annotations>
+    </test>
+</tests>

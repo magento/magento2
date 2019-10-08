@@ -20,6 +20,7 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 
 /**
  * Customer model
@@ -180,7 +181,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
@@ -248,6 +249,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param AccountConfirmation|null $accountConfirmation
+     * @param Random|null $mathRandom
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -272,7 +274,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        Random $mathRandom = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
@@ -291,6 +294,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->indexerRegistry = $indexerRegistry;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
         parent::__construct(
             $context,
             $registry,
@@ -788,7 +792,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if accounts confirmation is required in config
      *
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     public function isConfirmationRequired()
@@ -805,7 +809,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getRandomConfirmationKey()
     {
-        return md5(uniqid());
+        return $this->mathRandom->getRandomString(32);
     }
 
     /**
@@ -968,6 +972,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve attribute set id for customer.
      *
      * @return int
+     * @since 102.0.1
      */
     public function getAttributeSetId()
     {
@@ -1167,7 +1172,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check whether confirmation may be skipped when registering using certain email address
      *
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation()

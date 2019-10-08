@@ -4,12 +4,12 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.1.3||~7.2.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-send-friend": "*"
+        "magento/framework": "102.0.*",
+        "magento/module-catalog": "103.0.*",
+        "magento/module-send-friend": "100.3.*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "100.3.*"
     },
     "license": [
         "OSL-3.0",
@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\SendFriendGraphQl\\": ""
         }
-    }
+    },
+    "version": "100.3.1"
 }

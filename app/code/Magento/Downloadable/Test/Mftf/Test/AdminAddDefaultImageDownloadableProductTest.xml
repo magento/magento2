@@ -19,9 +19,11 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
+            <magentoCLI command="downloadable:domains:add" arguments="static.magento.com" stepKey="addDownloadableDomain"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="static.magento.com" stepKey="removeDownloadableDomain"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 

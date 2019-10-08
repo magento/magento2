@@ -61,14 +61,14 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
     /**
      * @var \Magento\Variable\Model\Variable\Config
-     * @deprecated
+     * @deprecated 103.0.0
      * @see \Magento\Cms\Model\ConfigProvider::processVariableConfig
      */
     protected $_variableConfig;
 
     /**
      * @var \Magento\Widget\Model\Widget\Config
-     * @deprecated
+     * @deprecated 103.0.0
      * @see \Magento\Cms\Model\ConfigProvider::processWidgetConfig
      */
     protected $_widgetConfig;

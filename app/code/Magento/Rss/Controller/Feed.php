@@ -6,7 +6,9 @@
 namespace Magento\Rss\Controller;
 
 /**
- * Class Feed
+ * Class Feed.
+ *
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class Feed extends \Magento\Framework\App\Action\Action
 {
@@ -76,6 +78,8 @@ abstract class Feed extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Authenticate not logged in customer.
+     *
      * @return bool
      */
     protected function auth()
@@ -85,7 +89,6 @@ abstract class Feed extends \Magento\Framework\App\Action\Action
             try {
                 $customer = $this->customerAccountManagement->authenticate($login, $password);
                 $this->customerSession->setCustomerDataAsLoggedIn($customer);
-                $this->customerSession->regenerateId();
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }

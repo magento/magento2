@@ -10,6 +10,7 @@ namespace Magento\Framework;
  * Magento escape methods
  *
  * @api
+ * @since 100.0.2
  */
 class Escaper
 {
@@ -22,6 +23,11 @@ class Escaper
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    private $translateInline;
 
     /**
      * @var string[]
@@ -74,6 +80,7 @@ class Escaper
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
                 set_error_handler(
                     function ($errorNumber, $errorString) {
+                        // phpcs:ignore Magento2.Exceptions.DirectThrow
                         throw new \Exception($errorString, $errorNumber);
                     }
                 );
@@ -83,6 +90,7 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
+                    // phpcs:disable Magento2.Exceptions.ThrowCatch
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
@@ -210,7 +218,7 @@ class Escaper
      * @param string $string
      * @param boolean $escapeSingleQuote
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -236,7 +244,7 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function encodeUrlParam($string)
     {
@@ -248,7 +256,7 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function escapeJs($string)
     {
@@ -275,7 +283,7 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function escapeCss($string)
     {
@@ -288,7 +296,7 @@ class Escaper
      * @param string|array $data
      * @param string $quote
      * @return string|array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -308,12 +316,15 @@ class Escaper
      *
      * @param string $data
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escapeXssInUrl($data)
     {
+        $data = html_entity_decode((string)$data);
+        $this->getTranslateInline()->processResponseBody($data);
+
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers((string)$data),
+            $this->escapeScriptIdentifiers($data),
             ENT_COMPAT | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
@@ -345,7 +356,7 @@ class Escaper
      * @param string $data
      * @param bool $addSlashes
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -359,7 +370,7 @@ class Escaper
      * Get escaper
      *
      * @return \Magento\Framework\ZendEscaper
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getEscaper()
     {
@@ -374,7 +385,7 @@ class Escaper
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getLogger()
     {
@@ -406,5 +417,20 @@ class Escaper
         }
 
         return $allowedTags;
+    }
+
+    /**
+     * Resolve inline translator.
+     *
+     * @return \Magento\Framework\Translate\InlineInterface
+     */
+    private function getTranslateInline()
+    {
+        if ($this->translateInline === null) {
+            $this->translateInline = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Translate\InlineInterface::class);
+        }
+
+        return $this->translateInline;
     }
 }

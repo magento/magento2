@@ -11,6 +11,7 @@
     <test name="AdminUserLoginWithStoreCodeInUrlTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Admin login"/>
             <title value="Admin panel should be accessible with Add Store Code to URL setting enabled"/>
             <description value="Admin panel should be accessible with Add Store Code to URL setting enabled"/>
             <testCaseId value="MC-14279" />

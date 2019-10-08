@@ -352,6 +352,7 @@ class Customer extends AbstractCustomer
      * @param array|AbstractSource $rows
      *
      * @return void
+     * @since 100.2.3
      */
     public function prepareCustomerData($rows): void
     {
@@ -372,6 +373,7 @@ class Customer extends AbstractCustomer
 
     /**
      * @inheritDoc
+     * @since 100.2.3
      */
     public function validateData()
     {

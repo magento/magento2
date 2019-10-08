@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DownloadableTest extends \PHPUnit\Framework\TestCase
 {
@@ -47,6 +50,14 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
      */
     protected $productMetadata;
 
+    /**
+     * @var DomainManagerInterface
+     */
+    private $domainManager;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -56,6 +67,16 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
         $metadataPool = $this->objectManager->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->domainManager = $this->objectManager->get(DomainManagerInterface::class);
+        $this->domainManager->addDomains(['www.bing.com', 'www.google.com', 'www.yahoo.com']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        $this->domainManager->removeDomains(['www.bing.com', 'www.google.com', 'www.yahoo.com']);
     }
 
     /**
@@ -112,7 +133,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $downloadableSamples        = $product->getDownloadableSamples();
 
         //TODO: Track Fields: id, link_id, link_file and sample_file)
-        $expectedLinks= [
+        $expectedLinks = [
             'file' => [
                 'title' => 'TEST Import Link Title File',
                 'sort_order' => '78',
@@ -120,9 +141,9 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
                 'price' => '123.0000',
                 'number_of_downloads' => '123',
                 'is_shareable' => '0',
-                'link_type' => 'file'
+                'link_type' => 'file',
             ],
-            'url'  => [
+            'url' => [
                 'title' => 'TEST Import Link Title URL',
                 'sort_order' => '42',
                 'sample_type' => 'url',
@@ -131,8 +152,8 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
                 'number_of_downloads' => '0',
                 'is_shareable' => '1',
                 'link_type' => 'url',
-                'link_url' => 'http://www.google.com'
-            ]
+                'link_url' => 'http://www.google.com',
+            ],
         ];
         foreach ($downloadableProductLinks as $link) {
             $actualLink = $link->getData();
@@ -154,18 +175,18 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         }
 
         //TODO: Track Fields: id, sample_id and sample_file)
-        $expectedSamples= [
+        $expectedSamples = [
             'file' => [
                 'title' => 'TEST Import Sample File',
                 'sort_order' => '178',
-                'sample_type' => 'file'
+                'sample_type' => 'file',
             ],
-            'url'  => [
+            'url' => [
                 'title' => 'TEST Import Sample URL',
-                 'sort_order' => '178',
-                 'sample_type' => 'url',
-                 'sample_url' => 'http://www.yahoo.com'
-            ]
+                'sort_order' => '178',
+                'sample_type' => 'url',
+                'sample_url' => 'http://www.yahoo.com',
+            ],
         ];
         foreach ($downloadableProductSamples as $sample) {
             $actualSample = $sample->getData();

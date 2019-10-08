@@ -75,7 +75,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Indicate if product has one or more Swatch attributes
      *
-     * @deprecated 100.1.5 unused
+     * @deprecated 100.1.0 unused
      *
      * @var boolean
      */
@@ -236,7 +236,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * @deprecated 100.1.5 Method isProductHasSwatchAttribute() is used instead of this.
+     * @deprecated 100.2.0 Method isProductHasSwatchAttribute() is used instead of this.
      *
      * @codeCoverageIgnore
      * @return void
@@ -488,6 +488,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Get Swatch image size config data.
      *
      * @return string
+     * @since 100.2.5
      */
     public function getJsonSwatchSizeConfig()
     {

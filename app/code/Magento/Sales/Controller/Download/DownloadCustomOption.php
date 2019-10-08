@@ -33,7 +33,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $unserialize;
 

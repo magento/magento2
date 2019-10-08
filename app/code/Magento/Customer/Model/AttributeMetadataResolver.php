@@ -115,7 +115,12 @@ class AttributeMetadataResolver
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
-            $meta['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
+            if ($metaName === 'label') {
+                $meta['arguments']['data']['config'][$metaName] = __($value);
+                $meta['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
+            } else {
+                $meta['arguments']['data']['config'][$metaName] = $value;
+            }
             if ('frontend_input' === $origName) {
                 $meta['arguments']['data']['config']['formElement'] = self::$formElement[$value] ?? $value;
             }
@@ -126,7 +131,14 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config']['options'] = $this->countryWithWebsiteSource
                     ->getAllOptions();
             } else {
-                $meta['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                $options = $attribute->getSource()->getAllOptions();
+                array_walk(
+                    $options,
+                    function (&$item) {
+                        $item['__disableTmpl'] = ['label' => true];
+                    }
+                );
+                $meta['arguments']['data']['config']['options'] = $options;
             }
         }
 

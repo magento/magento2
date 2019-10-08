@@ -8,6 +8,8 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -25,9 +27,26 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     protected $testImagePath;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var DomainManagerInterface
+     */
+    private $domainManager;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
+        parent::setUp();
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->domainManager = $this->objectManager->get(DomainManagerInterface::class);
+        $this->domainManager->addDomains(['www.example.com']);
     }
 
     /**
@@ -37,6 +56,7 @@ class ProductRepositoryTest extends WebapiAbstract
     {
         $this->deleteProductBySku(self::PRODUCT_SKU);
         parent::tearDown();
+        $this->domainManager->removeDomains(['www.example.com']);
     }
 
     protected function getLinkData()
@@ -227,7 +247,9 @@ class ProductRepositoryTest extends WebapiAbstract
             'price' => 5.0,
             'number_of_downloads' => 999,
             'link_type' => 'file',
-            'sample_type' => 'file'
+            'link_file' => $linkFile,
+            'sample_type' => 'file',
+            'sample_file' => $sampleFile,
         ];
         $linkData = $this->getLinkData();
 

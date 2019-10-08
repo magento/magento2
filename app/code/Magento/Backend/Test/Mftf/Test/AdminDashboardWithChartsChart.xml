@@ -11,6 +11,7 @@
     <test name="AdminDashboardWithChartsTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Magento dashboard"/>
             <title value="Google chart on Magento dashboard"/>
             <description value="Google chart on Magento dashboard page is not broken"/>
             <severity value="MAJOR"/>

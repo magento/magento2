@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  * Prepares Color Picker UI component with mode and format
  *
  * @api
+ * @since 101.1.0
  */
 class ColorPicker extends AbstractElement
 {
@@ -54,6 +55,7 @@ class ColorPicker extends AbstractElement
      * Get component name
      *
      * @return string
+     * @since 101.1.0
      */
     public function getComponentName(): string
     {
@@ -64,6 +66,7 @@ class ColorPicker extends AbstractElement
      * Prepare component configuration
      *
      * @return void
+     * @since 101.1.0
      */
     public function prepare() : void
     {

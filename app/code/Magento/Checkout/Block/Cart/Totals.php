@@ -13,6 +13,7 @@ use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
  * Totals cart block.
  *
  * @api
+ * @since 100.0.2
  */
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 {

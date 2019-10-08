@@ -28,7 +28,7 @@ $_rates = ($_newRates) ? $_newRates : $_oldRates;
                     <tr>
                         <th>&nbsp;</th>
                         <?php $_i = 0; foreach ($block->getAllowedCurrencies() as $_currencyCode): ?>
-                            <th><span><?= /* @escapeNotVerified */ $_currencyCode ?></span></th>
+                            <th><span><?= $block->escapeHtml($_currencyCode) ?></span></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>

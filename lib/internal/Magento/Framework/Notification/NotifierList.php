@@ -10,6 +10,7 @@ namespace Magento\Framework\Notification;
  * List of registered system notifiers
  * @api
  *
+ * @since 100.0.2
  */
 class NotifierList
 {

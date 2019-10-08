@@ -13,7 +13,7 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * MySQL search aggregation bucket builder.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 interface BucketInterface

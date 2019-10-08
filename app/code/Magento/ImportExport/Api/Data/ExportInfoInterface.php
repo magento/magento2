@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Api\Data;
 /**
  * Basic interface with data needed for export operation.
  * @api
+ * @since 100.3.2
  */
 interface ExportInfoInterface
 {
@@ -17,6 +18,7 @@ interface ExportInfoInterface
      * Return filename.
      *
      * @return string
+     * @since 100.3.2
      */
     public function getFileName();
 
@@ -25,6 +27,7 @@ interface ExportInfoInterface
      *
      * @param string $fileName
      * @return void
+     * @since 100.3.2
      */
     public function setFileName($fileName);
 
@@ -32,6 +35,7 @@ interface ExportInfoInterface
      * Override standard entity getter.
      *
      * @return string
+     * @since 100.3.2
      */
     public function getFileFormat();
 
@@ -40,6 +44,7 @@ interface ExportInfoInterface
      *
      * @param string $fileFormat
      * @return void
+     * @since 100.3.2
      */
     public function setFileFormat($fileFormat);
 
@@ -47,6 +52,7 @@ interface ExportInfoInterface
      * Return content type.
      *
      * @return string
+     * @since 100.3.2
      */
     public function getContentType();
 
@@ -55,6 +61,7 @@ interface ExportInfoInterface
      *
      * @param string $contentType
      * @return void
+     * @since 100.3.2
      */
     public function setContentType($contentType);
 
@@ -62,6 +69,7 @@ interface ExportInfoInterface
      * Returns entity.
      *
      * @return string
+     * @since 100.3.2
      */
     public function getEntity();
 
@@ -70,6 +78,7 @@ interface ExportInfoInterface
      *
      * @param string $entity
      * @return void
+     * @since 100.3.2
      */
     public function setEntity($entity);
 
@@ -77,6 +86,7 @@ interface ExportInfoInterface
      * Returns export filter.
      *
      * @return string
+     * @since 100.3.2
      */
     public function getExportFilter();
 
@@ -85,6 +95,7 @@ interface ExportInfoInterface
      *
      * @param string $exportFilter
      * @return void
+     * @since 100.3.2
      */
     public function setExportFilter($exportFilter);
 }

@@ -10,6 +10,7 @@
     <test name="AdminDeleteDownloadableProductTest">
         <annotations>
             <features value="Downloadable"/>
+            <stories value="Downloadable product"/>
             <title value="Delete Downloadable Product"/>
             <description value="Admin should be able to delete a downloadable product"/>
             <testCaseId value="MC-11018"/>
@@ -17,6 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="DownloadableProductWithTwoLink" stepKey="createDownloadableProduct">
@@ -30,6 +32,7 @@
             </createData>
         </before>
         <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>

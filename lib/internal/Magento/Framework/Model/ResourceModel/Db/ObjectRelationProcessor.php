@@ -10,6 +10,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface as Connection;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class ObjectRelationProcessor
 {

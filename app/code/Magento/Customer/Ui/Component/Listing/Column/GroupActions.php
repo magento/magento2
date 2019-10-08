@@ -79,6 +79,7 @@ class GroupActions extends Column
                                 ]
                             ),
                             'label' => __('Edit'),
+                            '__disableTmpl' => true,
                         ],
                     ];
 
@@ -100,9 +101,11 @@ class GroupActions extends Column
                             'message' => __(
                                 'Are you sure you want to delete a %1 record?',
                                 $this->escaper->escapeJs($title)
-                            )
+                            ),
+                            '__disableTmpl' => true,
                         ],
-                        'post' => true
+                        'post' => true,
+                        '__disableTmpl' => true,
                     ];
                 }
             }

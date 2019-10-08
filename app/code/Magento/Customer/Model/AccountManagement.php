@@ -963,6 +963,7 @@ class AccountManagement implements AccountManagementInterface
                 $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
             $this->getEmailNotification()->newAccount($customer, $templateType, $redirectUrl, $customer->getStoreId());
+            $customer->setConfirmation(null);
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -1331,7 +1332,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     protected function isConfirmationRequired($customer)
@@ -1348,7 +1349,7 @@ class AccountManagement implements AccountManagementInterface
      *
      * @param CustomerInterface $customer
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation($customer)

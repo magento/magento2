@@ -17,15 +17,17 @@
 
         <!--Go to Marketing> Email Templates-->
         <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateToEmailTemplatePage"/>
+        <waitForPageLoad time="30" stepKey="waitEmailTemplateGridLoad"/>
         <!--Click "Add New Template" button-->
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickAddNewTemplateButton"/>
+        <waitForElementVisible selector="{{AdminEmailTemplateEditSection.templateDropDown}}" stepKey="waitTemplateDropdown"/>
         <!--Select value for "Template" drop-down menu in "Load default template" tab-->
         <selectOption selector="{{AdminEmailTemplateEditSection.templateDropDown}}" userInput="Registry Update" stepKey="selectValueFromTemplateDropDown"/>
         <!--Fill in required fields in "Template Information" tab and click "Save Template" button-->
         <click selector="{{AdminEmailTemplateEditSection.loadTemplateButton}}" stepKey="clickLoadTemplateButton"/>
         <fillField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{EmailTemplate.templateName}}" stepKey="fillTemplateNameField"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveTemplateButton"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" time="30" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
@@ -44,7 +46,8 @@
             <argument name="template" defaultValue="EmailTemplate"/>
         </arguments>
 
-        <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateEmailTemplatePage" />
+        <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateEmailTemplatePage"/>
+        <waitForPageLoad time="30" stepKey="waitEmailTemplateGridLoad"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
         <fillField selector="{{AdminEmailTemplateIndexSection.searchTemplateField}}" userInput="{{template.templateName}}" stepKey="findCreatedTemplate"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
@@ -57,7 +60,7 @@
     <actionGroup name="DeleteEmailTemplate" extends="FindAndOpenEmailTemplate">
         <click selector="{{AdminEmailTemplateEditSection.deleteTemplateButton}}" after="checkTemplateName" stepKey="deleteTemplate"/>
         <acceptPopup after="deleteTemplate" stepKey="acceptPopup"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" time="30" after="acceptPopup" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
     </actionGroup>
 

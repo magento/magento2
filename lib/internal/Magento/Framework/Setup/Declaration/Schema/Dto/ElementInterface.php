@@ -11,6 +11,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Dto;
  * Is parent interface for all various schema structural elements:
  * table, column, constraint, index.
  * @api
+ * @since 102.0.0
  */
 interface ElementInterface
 {
@@ -18,6 +19,7 @@ interface ElementInterface
      * Return name of structural element.
      *
      * @return string
+     * @since 102.0.0
      */
     public function getName();
 
@@ -25,6 +27,7 @@ interface ElementInterface
      * Retrieve element low level type: varchar, char, foreign key, etc..
      *
      * @return string
+     * @since 102.0.0
      */
     public function getType();
 
@@ -36,6 +39,7 @@ interface ElementInterface
      * And in order to distinguish this types of elements we use this method.
      *
      * @return string
+     * @since 102.0.0
      */
     public function getElementType();
 }

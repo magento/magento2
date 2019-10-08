@@ -487,7 +487,7 @@ class Full extends AbstractAction
     /**
      * Retrieves the index table that should be used
      *
-     * @deprecated
+     * @deprecated 102.0.6
      */
     protected function getIndexTargetTable(): string
     {

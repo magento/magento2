@@ -28,6 +28,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class ProductTest
+ *
+ * @magentoAppArea adminhtml
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -2260,6 +2262,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
     {
+        $this->loginAdminUserWithUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -2341,5 +2345,22 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
+    }
+
+    /**
+     * Set the current admin session user based on a username
+     *
+     * @param string $username
+     */
+    private function loginAdminUserWithUsername(string $username)
+    {
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername($username);
+        /** @var $session \Magento\Backend\Model\Auth\Session */
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Auth\Session::class
+        );
+        $session->setUser($user);
     }
 }

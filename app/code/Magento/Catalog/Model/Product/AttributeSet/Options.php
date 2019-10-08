@@ -5,7 +5,14 @@
  */
 namespace Magento\Catalog\Model\Product\AttributeSet;
 
-class Options implements \Magento\Framework\Data\OptionSourceInterface
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Framework\Data\OptionSourceInterface;
+
+/**
+ * Set Options to Attribute Set.
+ */
+class Options implements OptionSourceInterface
 {
     /**
      * @var null|array
@@ -13,27 +20,37 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
     protected $options;
 
     /**
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product $product
+     * @param CollectionFactory $collectionFactory
+     * @param Product $product
      */
     public function __construct(
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product $product
+        CollectionFactory $collectionFactory,
+        Product $product
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->product = $product;
     }
 
     /**
+     * @inheritdoc
+     *
      * @return array|null
      */
     public function toOptionArray()
     {
-        if (null == $this->options) {
+        if (null === $this->options) {
             $this->options = $this->collectionFactory->create()
                 ->setEntityTypeFilter($this->product->getTypeId())
                 ->toOptionArray();
+
+            array_walk(
+                $this->options,
+                function (&$option) {
+                    $option['__disableTmpl'] = true;
+                }
+            );
         }
+
         return $this->options;
     }
 }
