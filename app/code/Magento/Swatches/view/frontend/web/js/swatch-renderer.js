@@ -385,7 +385,8 @@ define([
             var $widget = this,
                 container = this.element,
                 classes = this.options.classes,
-                chooseText = this.options.jsonConfig.chooseText;
+                chooseText = this.options.jsonConfig.chooseText,
+                showTooltip = this.options.showTooltip;
 
             $widget.optionsMap = {};
 
@@ -452,10 +453,12 @@ define([
                 });
             });
 
-            // Connect Tooltip
-            container
-                .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
-                .SwatchRendererTooltip();
+            if (showTooltip === 1) {
+                // Connect Tooltip
+                container
+                    .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
+                    .SwatchRendererTooltip();
+            }
 
             // Hide all elements below more button
             $('.' + classes.moreButton).nextAll().hide();
@@ -750,11 +753,11 @@ define([
 
             $(document).trigger('updateMsrpPriceBlock',
                 [
-                    parseInt($this.attr('index'), 10) + 1,
+                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
                     $widget.options.jsonConfig.optionPrices
                 ]);
 
-            if (checkAdditionalData['update_product_preview_image'] === '1') {
+            if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
                 $widget._loadMedia();
             }
 
@@ -1262,7 +1265,10 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-                gallery.first();
+
+                if (gallery) {
+                    gallery.first();
+                }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

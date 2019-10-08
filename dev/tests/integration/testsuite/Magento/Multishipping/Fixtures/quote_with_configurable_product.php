@@ -22,7 +22,7 @@ require __DIR__ . '/../../ConfigurableProduct/_files/configurable_products.php';
 $objectManager = Bootstrap::getObjectManager();
 
 $product = $productRepository->getById(10);
-$product->setStockData(['use_config_manage_stock' => 1, 'qty' => 2, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
+$product->setStockData(['use_config_manage_stock' => 1, 'qty' => 4, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 $productRepository->save($product);
 
 /** @var Quote $quote */

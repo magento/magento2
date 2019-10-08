@@ -59,7 +59,6 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
     {
         $userName = 'customer@example.com';
         $password = 'password';
-        $customerId = 1;
         $addressId = 1;
 
         $mutation = $this->getMutation($addressId);
@@ -67,7 +66,7 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
-        $this->assertEquals($customerId, $response['updateCustomerAddress']['customer_id']);
+        $this->assertEquals(null, $response['updateCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
 
         $address = $this->addressRepository->getById($addressId);
@@ -306,8 +305,8 @@ MUTATION;
     {
         return [
             ['', '"input" value must be specified'],
-            ['input: ""', 'Expected type CustomerAddressInput, found ""'],
-            ['input: "foo"', 'Expected type CustomerAddressInput, found "foo"']
+            ['input: ""', 'requires type CustomerAddressInput, found ""'],
+            ['input: "foo"', 'requires type CustomerAddressInput, found "foo"']
         ];
     }
 

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSortBundleProductsByPriceTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle products list on Storefront"/>
+            <title value="Customer should be able to sort bundle products by price when viewing products list"/>
+            <description value="Customer should be able to sort bundle products by price when viewing products list"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-228"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- Create simple products for first bundle product -->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+
+            <!-- Create first bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createFirstBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="firstProductBundleOption">
+                <requiredEntity createDataKey="createFirstBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createFirstBundleLink">
+                <requiredEntity createDataKey="createFirstBundleProduct"/>
+                <requiredEntity createDataKey="firstProductBundleOption"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createSecondBundleLink">
+                <requiredEntity createDataKey="createFirstBundleProduct"/>
+                <requiredEntity createDataKey="firstProductBundleOption"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </createData>
+
+            <!-- Create simple products for second bundle product -->
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct"/>
+
+            <!-- Create second bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createSecondBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="secondProductBundleOption">
+                <requiredEntity createDataKey="createSecondBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLinkFirst">
+                <requiredEntity createDataKey="createSecondBundleProduct"/>
+                <requiredEntity createDataKey="secondProductBundleOption"/>
+                <requiredEntity createDataKey="createFirstProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLinkSecond">
+                <requiredEntity createDataKey="createSecondBundleProduct"/>
+                <requiredEntity createDataKey="secondProductBundleOption"/>
+                <requiredEntity createDataKey="createSecondProduct"/>
+            </createData>
+
+            <!-- Create simple products for third bundle product -->
+            <createData entity="SimpleProduct2" stepKey="createFirstProductForBundle"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondProductForBundle">
+                <field key="price">500.00</field>
+            </createData>
+
+            <!-- Create third bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createThirdBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createThirdProductBundleOption">
+                <requiredEntity createDataKey="createThirdBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleFirstLink">
+                <requiredEntity createDataKey="createThirdBundleProduct"/>
+                <requiredEntity createDataKey="createThirdProductBundleOption"/>
+                <requiredEntity createDataKey="createFirstProductForBundle"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleSecondLink">
+                <requiredEntity createDataKey="createThirdBundleProduct"/>
+                <requiredEntity createDataKey="createThirdProductBundleOption"/>
+                <requiredEntity createDataKey="createSecondProductForBundle"/>
+            </createData>
+
+            <!-- Perform CLI reindex -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+        <after>
+            <!-- Delete all created data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createFirstBundleProduct" stepKey="deleteFirstBundleProduct"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createSecondBundleProduct" stepKey="deleteSecondBundleProduct"/>
+            <deleteData createDataKey="createFirstProductForBundle" stepKey="deleteFirstProductForBundle"/>
+            <deleteData createDataKey="createSecondProductForBundle" stepKey="deleteSecondProductForBundle"/>
+            <deleteData createDataKey="createThirdBundleProduct" stepKey="deleteThirdBundleProduct"/>
+        </after>
+
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Assert first bundle products in category product grid -->
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertFirstBundleProduct">
+            <argument name="product" value="$$createFirstBundleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeFromForFirstBundleProduct">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createFirstBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="From $100.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeToForFirstBundleProduct">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceToByProductId($$createFirstBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="To $123.00"/>
+        </actionGroup>
+
+        <!-- Assert second bundle products in category product grid -->
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertSecondBundleProduct">
+            <argument name="product" value="$$createSecondBundleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeFromForSecondBundleProduct">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createSecondBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="From $10.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeToForSecondBundleProduct">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceToByProductId($$createSecondBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="To $123.00"/>
+        </actionGroup>
+
+        <!-- Assert third bundle products in category product grid -->
+        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="assertThirdBundleProduct">
+            <argument name="product" value="$$createThirdBundleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeFromForThirdBundleProduct">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceFromByProductId($$createThirdBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="From $123.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeToForThirdBundleProduct">
+            <argument name="selector" value="{{StorefrontCategoryProductSection.priceToByProductId($$createThirdBundleProduct.id$$)}}"/>
+            <argument name="userInput" value="To $500.00"/>
+        </actionGroup>
+
+        <!-- Switch category view to List mode -->
+        <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
+
+        <!-- Sort products By Price -->
+        <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
+        <!-- Set Ascending Direction -->
+        <actionGroup ref="StorefrontCategoryPageSortAscendingActionGroup" stepKey="setAscendingDirection"/>
+
+        <!-- Assert new products positions -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductFirstPosition">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('1')}}"/>
+            <argument name="userInput" value="$$createThirdBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductSecondPosition">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('2')}}"/>
+            <argument name="userInput" value="$$createFirstBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductThirdPosition">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('3')}}"/>
+            <argument name="userInput" value="$$createSecondBundleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Set Descending Direction -->
+        <actionGroup ref="StorefrontCategoryPageSortDescendingActionGroup" stepKey="setDescendingDirection"/>
+
+        <!-- Assert new products positions -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductNewFirstPosition">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('1')}}"/>
+            <argument name="userInput" value="$$createSecondBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductNewSecondPosition">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('2')}}"/>
+            <argument name="userInput" value="$$createFirstBundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductNewThirdPosition">
+            <argument name="selector" value="{{StorefrontCategoryMainSection.lineProductName('3')}}"/>
+            <argument name="userInput" value="$$createThirdBundleProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

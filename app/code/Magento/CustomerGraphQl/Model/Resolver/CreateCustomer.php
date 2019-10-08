@@ -13,6 +13,8 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Newsletter\Model\Config;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Create customer account resolver
@@ -30,13 +32,23 @@ class CreateCustomer implements ResolverInterface
     private $createCustomerAccount;
 
     /**
+     * @var Config
+     */
+    private $newsLetterConfig;
+
+    /**
+     * CreateCustomer constructor.
+     *
      * @param ExtractCustomerData $extractCustomerData
      * @param CreateCustomerAccount $createCustomerAccount
+     * @param Config $newsLetterConfig
      */
     public function __construct(
         ExtractCustomerData $extractCustomerData,
-        CreateCustomerAccount $createCustomerAccount
+        CreateCustomerAccount $createCustomerAccount,
+        Config $newsLetterConfig
     ) {
+        $this->newsLetterConfig = $newsLetterConfig;
         $this->extractCustomerData = $extractCustomerData;
         $this->createCustomerAccount = $createCustomerAccount;
     }
@@ -55,6 +67,12 @@ class CreateCustomer implements ResolverInterface
             throw new GraphQlInputException(__('"input" value should be specified'));
         }
 
+        if (!$this->newsLetterConfig->isActive(ScopeInterface::SCOPE_STORE)) {
+            $args['input']['is_subscribed'] = false;
+        }
+        if (isset($args['input']['date_of_birth'])) {
+            $args['input']['dob'] = $args['input']['date_of_birth'];
+        }
         $customer = $this->createCustomerAccount->execute(
             $args['input'],
             $context->getExtensionAttributes()->getStore()

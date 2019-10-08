@@ -62,6 +62,9 @@ trait Interceptor
      * Calls parent class sleep if defined, otherwise provides own implementation
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -78,6 +81,9 @@ trait Interceptor
      * Causes Interceptor to be initialized
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
