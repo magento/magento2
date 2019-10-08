@@ -113,6 +113,11 @@ class Elasticsearch implements ClientInterface
         if (!empty($options['port'])) {
             $host .= ':' . $options['port'];
         }
+        
+        if (isset($options['enableAuth']) && ($options['enableAuth'] == 0)) {
+            $host = sprintf('%s://%s', $protocol, $host);
+        }
+        
         if (!empty($options['enableAuth']) && ($options['enableAuth'] == 1)) {
             $host = sprintf('%s://%s:%s@%s', $protocol, $options['username'], $options['password'], $host);
         }
