@@ -23,5 +23,22 @@
         <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}" after="selectSecondShippingMethod" />
         <waitForPageLoad stepKey="waitForShippingInformation" after="clickOnUpdateAddress" />
     </actionGroup>
+    <actionGroup name="StorefrontCheckoutWithMultipleAddressesActionGroup">
+        <click selector="{{SingleShippingSection.checkoutWithMultipleAddresses}}" stepKey="clickOnCheckoutWithMultipleAddresses"/>
+        <waitForPageLoad stepKey="waitForMultipleAddressPageLoad"/>
+    </actionGroup>
+    <actionGroup name="StorefrontSelectAddressActionGroup">
+        <arguments>
+            <argument name="sequenceNumber" type="string" defaultValue="1"/>
+            <argument name="option" type="string" defaultValue="1"/>
+        </arguments>
+        <selectOption selector="{{MultishippingSection.selectShippingAddress(sequenceNumber)}}" userInput="{{option}}" stepKey="selectShippingAddress"/>
+    </actionGroup>
+    <actionGroup name="StorefrontSaveAddressActionGroup">
+        <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}"/>
+        <waitForPageLoad stepKey="waitForShippingInformationAfterUpdated" time="90"/>
+        <click stepKey="goToShippingInformation" selector="{{SingleShippingSection.goToShippingInfo}}"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+    </actionGroup>
 </actionGroups>
 
