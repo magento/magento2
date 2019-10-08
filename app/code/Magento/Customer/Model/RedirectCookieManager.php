@@ -13,7 +13,6 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Customer redirect cookie manager
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
- *
  */
 class RedirectCookieManager
 {
