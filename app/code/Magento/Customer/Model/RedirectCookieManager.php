@@ -9,14 +9,13 @@ namespace Magento\Customer\Model;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Customer\Api\RedirectCookieManagerInterface;
 
 /**
  * Customer redirect cookie manager
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  */
-class RedirectCookieManager implements RedirectCookieManagerInterface
+class RedirectCookieManager
 {
     const COOKIE_NAME = 'login_redirect';
 
