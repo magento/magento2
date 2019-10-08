@@ -17,6 +17,7 @@
     <indexer id="catalog_product_price">
         <dependencies>
             <indexer id="catalogrule_rule" />
+            <indexer id="catalogrule_product" />
         </dependencies>
     </indexer>
 </config>
