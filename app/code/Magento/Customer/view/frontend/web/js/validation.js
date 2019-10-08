@@ -1,4 +1,4 @@
-require([
+define([
     'jquery',
     'moment',
     'jquery/validate',
