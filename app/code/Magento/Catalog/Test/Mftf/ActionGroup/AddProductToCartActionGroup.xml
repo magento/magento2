@@ -43,4 +43,32 @@
     <actionGroup name="AddSimpleProductToCartWithUrlKeyActionGroup" extends="AddSimpleProductToCart">
         <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="navigateProductPage"/>
     </actionGroup>
+
+    <actionGroup name="StorefrontAddProductToCartFromCategoryPageActionGroup">
+        <annotations>
+            <description>Adds the Product to the shopping cart from the Category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="scrollToProduct"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productAddToCartByName(productName)}}" stepKey="waitForAddToCartButtonVisible"/>
+        <click selector="{{StorefrontCategoryProductSection.productAddToCartByName(productName)}}" stepKey="clickOnAddToCartButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontOpenCategoryPageAndAddProductToCartActionGroup" extends="StorefrontAddProductToCartFromCategoryPageActionGroup">
+        <annotations>
+            <description>EXTENDS: StorefrontAddProductToCartFromCategoryPageActionGroup. Opens the Category page. Adds the Product to the shopping cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryUrlKey" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCategoryPage.url(categoryUrlKey)}}" before="scrollToProduct" stepKey="goToCategoryPage"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" after="goToCategoryPage" stepKey="waitForProductVisible"/>
+    </actionGroup>
 </actionGroups>
