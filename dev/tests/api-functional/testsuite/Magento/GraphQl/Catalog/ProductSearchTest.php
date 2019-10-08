@@ -220,7 +220,6 @@ QUERY;
     /**
      * Filter products by custom attribute of dropdown type and filterTypeInput eq
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -434,7 +433,6 @@ QUERY;
     /**
      * Full text search for Products and then filter the results by custom attribute ( sort is by defaulty by relevance)
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -582,7 +580,6 @@ QUERY;
     /**
      *  Filter by category and custom attribute
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -2005,6 +2002,7 @@ QUERY;
     /**
      * Verify that invalid current page return an error
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @expectedException \Exception
      * @expectedExceptionMessage currentPage value must be greater than 0
@@ -2034,6 +2032,7 @@ QUERY;
     /**
      * Verify that invalid page size returns an error.
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @expectedException \Exception
      * @expectedExceptionMessage pageSize value must be greater than 0
