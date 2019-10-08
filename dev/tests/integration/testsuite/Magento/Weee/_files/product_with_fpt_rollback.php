@@ -15,7 +15,7 @@ $registry->register('isSecureArea', true);
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 
 $product = $product->loadByAttribute('sku', 'simple-with-ftp');
-if ($product->getId()) {
+if ($product && $product->getId()) {
     $product->delete();
 }
 

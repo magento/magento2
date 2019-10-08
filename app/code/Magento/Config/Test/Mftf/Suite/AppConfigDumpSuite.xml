@@ -6,11 +6,14 @@
   */
 -->
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
-    <suite name="PaypalTestSuite">
+    <suite name="AppConfigDumpSuite">
+        <before>
+            <magentoCLI command="app:config:dump" stepKey="configDump"/>
+        </before>
+        <after>
+        </after>
         <include>
-            <test name="CheckDefaultValueOfPayPalCustomizeButtonTest"/>
-            <test name="PayPalSmartButtonInCheckoutPage"/>
-            <test name="CheckCreditButtonConfiguration"/>
+            <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest"/>
         </include>
     </suite>
 </suites>

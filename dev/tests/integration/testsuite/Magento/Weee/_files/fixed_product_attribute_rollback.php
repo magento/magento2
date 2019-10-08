@@ -3,24 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap;
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$objectManager = Bootstrap::getObjectManager();
-/** @var \Magento\Framework\Registry $registry */
-$registry = $objectManager->get(\Magento\Framework\Registry::class);
-
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', true);
-
-/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
-$attribute->load('fixed_product_attribute', 'attribute_code');
-if ($attribute->getId()) {
-    $attribute->delete();
-}
-
-$registry->unregister('isSecureArea');
-$registry->register('isSecureArea', false);
+/* @var \Magento\Eav\Model\Entity\Attribute $attribute */
+$attribute = $objectManager->get(\Magento\Eav\Model\Entity\Attribute::class);
+$attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'fixed_product_attribute');
+$attribute->delete();

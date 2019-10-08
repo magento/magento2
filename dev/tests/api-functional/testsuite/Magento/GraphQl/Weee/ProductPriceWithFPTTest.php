@@ -547,8 +547,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @return void
      *
      * @dataProvider catalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTsSettingsProvider
-     * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
-     * @magentoApiDataFixture Magento/Weee/_files/fixed_product_attribute.php
+     * @magentoApiDataFixture Magento/Weee/_files/product_with_two_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
     public function testCatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTs(array $weeTaxSettings)
