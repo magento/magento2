@@ -101,9 +101,10 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         $this->rootDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
 
         $logger = $objectManager->get(\Psr\Log\LoggerInterface::class);
-        $this->deployService = $objectManager->create(DeployStaticContent::class, [
-            'logger' => $logger
-        ]);
+        $this->deployService = $objectManager->create(
+            DeployStaticContent::class,
+            ['logger' => $logger]
+        );
 
         $this->bundleConfig = $objectManager->create(BundleConfig::class);
         $this->config = $objectManager->create(View::class);
