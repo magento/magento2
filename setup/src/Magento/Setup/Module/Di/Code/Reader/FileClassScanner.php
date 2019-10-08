@@ -6,6 +6,11 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
+/**
+ * Class FileClassScanner
+ *
+ * @package Magento\Setup\Module\Di\Code\Reader
+ */
 class FileClassScanner
 {
     private const NAMESPACE_TOKENS = [
@@ -45,7 +50,9 @@ class FileClassScanner
      */
     public function __construct($filename)
     {
+        // phpcs:ignore
         $filename = realpath($filename);
+        // phpcs:ignore
         if (!file_exists($filename) || !\is_file($filename)) {
             throw new InvalidFileException(
                 sprintf(
@@ -64,12 +71,14 @@ class FileClassScanner
      */
     public function getFileContents()
     {
+        // phpcs:ignore
         return file_get_contents($this->filename);
     }
 
     /**
-     * Extracts the fully qualified class name from a file.  It only searches for the first match and stops looking
-     * as soon as it enters the class definition itself.
+     * Extracts the fully qualified class name from a file.
+     *
+     * It only searches for the first match and stops looking as soon as it enters the class definition itself.
      *
      * Warnings are suppressed for this method due to a micro-optimization that only really shows up when this logic
      * is called several millions of times, which can happen quite easily with even moderately sized codebases.
@@ -88,13 +97,14 @@ class FileClassScanner
         $braceLevel = 0;
         $bracedNamespace = false;
 
+        // phpcs:ignore
         $this->tokens = token_get_all($this->getFileContents());
         foreach ($this->tokens as $index => $token) {
             $tokenIsArray = is_array($token);
             // Is either a literal brace or an interpolated brace with a variable
             if ($token === '{' || ($tokenIsArray && isset(self::ALLOWED_OPEN_BRACES_TOKENS[$token[0]]))) {
                 $braceLevel++;
-            } else if ($token === '}') {
+            } elseif ($token === '}') {
                 $braceLevel--;
             }
             // The namespace keyword was found in the last loop
@@ -107,8 +117,8 @@ class FileClassScanner
                 }
                 $namespaceParts[] = $token[1];
 
-                // The class keyword was found in the last loop
-            } else if ($triggerClass && $token[0] === T_STRING) {
+            // The class keyword was found in the last loop
+            } elseif ($triggerClass && $token[0] === T_STRING) {
                 $triggerClass = false;
                 $class = $token[1];
             }
@@ -151,7 +161,7 @@ class FileClassScanner
             if (!is_array($this->tokens[$index])) {
                 if ($this->tokens[$index] === ';') {
                     return false;
-                } else if ($this->tokens[$index] === '{') {
+                } elseif ($this->tokens[$index] === '{') {
                     return true;
                 }
                 continue;
@@ -165,8 +175,9 @@ class FileClassScanner
     }
 
     /**
-     * Retrieves the first class found in a class file.  The return value is in an array format so it retains the
-     * same usage as the FileScanner.
+     * Retrieves the first class found in a class file.
+     *
+     * The return value is in an array format so it retains the same usage as the FileScanner.
      *
      * @return array
      */

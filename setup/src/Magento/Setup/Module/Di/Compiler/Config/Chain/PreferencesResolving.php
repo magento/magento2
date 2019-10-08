@@ -8,6 +8,11 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
+/**
+ * Class PreferencesResolving
+ *
+ * @package Magento\Setup\Module\Di\Compiler\Config\Chain
+ */
 class PreferencesResolving implements ModificationInterface
 {
     /**

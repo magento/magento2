@@ -8,6 +8,11 @@ namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
 
 use Magento\Setup\Module\Di\Compiler\Config\ModificationInterface;
 
+/**
+ * Class BackslashTrim
+ *
+ * @package Magento\Setup\Module\Di\Compiler\Config\Chain
+ */
 class BackslashTrim implements ModificationInterface
 {
     /**
@@ -71,6 +76,5 @@ class BackslashTrim implements ModificationInterface
 
             $this->resolveArguments($value);
         }
-        return;
     }
 }
