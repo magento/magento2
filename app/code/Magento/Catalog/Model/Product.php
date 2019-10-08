@@ -868,21 +868,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         $this->getTypeInstance()->beforeSave($this);
 
-        //Validate changing of design.
-        $userType = $this->getUserContext()->getUserType();
-        if (($userType === UserContextInterface::USER_TYPE_ADMIN
-                || $userType === UserContextInterface::USER_TYPE_INTEGRATION)
-            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_product_design')
-        ) {
-            $this->setData('custom_design', $this->getOrigData('custom_design'));
-            $this->setData('page_layout', $this->getOrigData('page_layout'));
-            $this->setData('options_container', $this->getOrigData('options_container'));
-            $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
-            $this->setData('custom_design_from', $this->getOrigData('custom_design_from'));
-            $this->setData('custom_design_to', $this->getOrigData('custom_design_to'));
-            $this->setData('custom_layout', $this->getOrigData('custom_layout'));
-        }
-
         $hasOptions = false;
         $hasRequiredOptions = false;
 
