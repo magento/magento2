@@ -4,10 +4,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ *  Make persistent quote to be guest
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class MakePersistentQuoteGuestObserver implements ObserverInterface
 {
     /**

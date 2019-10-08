@@ -4,10 +4,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ *  Edit product
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
