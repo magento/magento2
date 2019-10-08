@@ -97,21 +97,23 @@ class RedirectTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getLastCustomerId',
-                'isLoggedIn',
-                'getId',
-                'setLastCustomerId',
-                'unsBeforeAuthUrl',
-                'getBeforeAuthUrl',
-                'setBeforeAuthUrl',
-                'getAfterAuthUrl',
-                'setAfterAuthUrl',
-                'getBeforeRequestParams',
-                'getBeforeModuleName',
-                'getBeforeControllerName',
-                'getBeforeAction',
-            ])
+            ->setMethods(
+                [
+                    'getLastCustomerId',
+                    'isLoggedIn',
+                    'getId',
+                    'setLastCustomerId',
+                    'unsBeforeAuthUrl',
+                    'getBeforeAuthUrl',
+                    'setBeforeAuthUrl',
+                    'getAfterAuthUrl',
+                    'setAfterAuthUrl',
+                    'getBeforeRequestParams',
+                    'getBeforeModuleName',
+                    'getBeforeControllerName',
+                    'getBeforeAction',
+                ]
+            )
             ->getMock();
 
         $this->scopeConfig = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);

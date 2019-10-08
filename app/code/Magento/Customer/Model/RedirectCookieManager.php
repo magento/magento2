@@ -11,6 +11,11 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Customer\Api\RedirectCookieManagerInterface;
 
+/**
+ * Customer redirect cookie manager
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ *
+ */
 class RedirectCookieManager implements RedirectCookieManagerInterface
 {
     /**

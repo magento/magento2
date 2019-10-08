@@ -24,6 +24,8 @@ use Magento\Customer\Api\RedirectCookieManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ *
  */
 class Redirect
 {
@@ -89,6 +91,7 @@ class Redirect
     private $session;
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @param RequestInterface $request
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
