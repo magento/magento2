@@ -12,11 +12,11 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Class AddMissingCountries
+ * Class AddCountriesCaribbeanCuracaoKosovoSintMaarten
  *
  * @package Magento\Directory\Setup\Patch
  */
-class AddMissingCountries implements DataPatchInterface
+class AddCountriesCaribbeanCuracaoKosovoSintMaarten implements DataPatchInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -24,7 +24,7 @@ class AddMissingCountries implements DataPatchInterface
     private $moduleDataSetup;
 
     /**
-     * AddMissingCountries constructor.
+     * AddCountriesCaribbeanCuracaoKosovoSintMaarten constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
