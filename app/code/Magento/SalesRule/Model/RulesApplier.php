@@ -170,6 +170,7 @@ class RulesApplier
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
     protected function getDiscountData($item, $rule, $address)
@@ -199,6 +200,7 @@ class RulesApplier
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
     private function setDiscountBreakdown($discountData, $item, $rule, $address)

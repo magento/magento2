@@ -7,7 +7,8 @@ namespace Magento\SalesRule\Model\Plugin;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
-use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
 
 /**
  * Plugin for persisting discounts along with Quote Address
@@ -22,28 +23,28 @@ class Discount
     /**
      * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
      */
-    protected $discountFactory;
+    private $discountFactory;
 
     /**
      * @param Json $json
      * @param DataFactory|null $discountDataFactory
      */
-    public function __construct(Json $json, DataFactory $discountDataFactory = null)
+    public function __construct(Json $json, DataFactory $discountDataFactory)
     {
         $this->json = $json;
-        $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
+        $this->discountFactory = $discountDataFactory;
     }
 
     /**
      * Plugin for adding item discounts to extension attributes
      *
-     * @param \Magento\Quote\Model\Quote $subject
-     * @param \Magento\Quote\Model\ResourceModel\Quote\Item\Collection $result
-     * @return \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
+     * @param Quote $subject
+     * @param Collection $result
+     * @return Collection
      */
     public function afterGetItemsCollection(
-        \Magento\Quote\Model\Quote $subject,
-        \Magento\Quote\Model\ResourceModel\Quote\Item\Collection $result
+        Quote $subject,
+        Collection $result
     ) {
         foreach ($result as $item) {
             if ($item->getDiscounts() && !$item->getExtensionAttributes()->getDiscounts()) {
@@ -61,12 +62,12 @@ class Discount
     /**
      * Plugin for adding address level discounts to extension attributes
      *
-     * @param \Magento\Quote\Model\Quote $subject
+     * @param Quote $subject
      * @param array $result
      * @return array
      */
     public function afterGetAllAddresses(
-        \Magento\Quote\Model\Quote $subject,
+        Quote $subject,
         array $result
     ) {
         foreach ($result as $address) {
