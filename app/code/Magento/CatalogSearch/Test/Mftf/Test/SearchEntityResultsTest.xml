@@ -368,6 +368,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -377,6 +378,7 @@
             </createData>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>

@@ -15,6 +15,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Cms\Helper\Page as PageHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\UrlRewrite\Model\UrlRewrite;
 
 /**
  * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
@@ -354,5 +355,69 @@ QUERY;
         $this->assertEquals($homePageId, $response['urlResolver']['id']);
         $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
         $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
+    }
+
+    /**
+     * Test for custom type which point to the valid product/category/cms page.
+     *
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     */
+    public function testGetNonExistentUrlRewrite()
+    {
+        $urlPath = 'non-exist-product.html';
+        /** @var UrlRewrite $urlRewrite */
+        $urlRewrite = $this->objectManager->create(UrlRewrite::class);
+        $urlRewrite->load($urlPath, 'request_path');
+
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+        $actualUrls = $urlFinder->findOneByData(
+            [
+                'request_path' => $urlPath,
+                'store_id' => 1
+            ]
+        );
+        $targetPath = $actualUrls->getTargetPath();
+
+        $query = <<<QUERY
+{
+  urlResolver(url:"{$urlPath}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('urlResolver', $response);
+        $this->assertEquals('PRODUCT', $response['urlResolver']['type']);
+        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
+    }
+
+    /**
+     * Test for custom type which point to the invalid product/category/cms page.
+     *
+     * @magentoApiDataFixture Magento/UrlRewrite/_files/url_rewrite_not_existing_entity.php
+     */
+    public function testNonExistentEntityUrlRewrite()
+    {
+        $urlPath = 'non-exist-entity.html';
+
+        $query = <<<QUERY
+{
+  urlResolver(url:"{$urlPath}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
     }
 }

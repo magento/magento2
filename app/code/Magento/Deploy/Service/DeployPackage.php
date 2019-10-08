@@ -107,6 +107,8 @@ class DeployPackage
     }
 
     /**
+     * Execute package deploy procedure when area already emulated
+     *
      * @param Package $package
      * @param array $options
      * @param bool $skipLogging
@@ -136,7 +138,9 @@ class DeployPackage
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
             } catch (\Exception $exception) {
-                $this->logger->critical($exception->getTraceAsString());
+                $this->logger->critical(
+                    'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
+                );
                 $this->errorsCount++;
             }
         }
@@ -219,7 +223,9 @@ class DeployPackage
     private function checkFileSkip($filePath, array $options)
     {
         if ($filePath !== '.') {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $basename = pathinfo($filePath, PATHINFO_BASENAME);
             if ($ext === 'less' && strpos($basename, '_') === 0) {
                 return true;

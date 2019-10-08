@@ -43,6 +43,13 @@
         <selectOption selector="{{AdminProductFormNewAttributeSection.attributeType}}" userInput="{{attributeType}}" stepKey="selectAttributeType"/>
         <click selector="{{AdminProductFormNewAttributeSection.saveAttribute}}" stepKey="saveAttribute"/>
     </actionGroup>
+    <actionGroup name="AdminCreateAttributeFromProductPageWithScope" extends="AdminCreateAttributeFromProductPage" insertAfter="selectAttributeType">
+        <arguments>
+            <argument name="scope" type="string" defaultValue="Store View"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductFormNewAttributeAdvancedSection.sectionHeader}}" dependentSelector="{{AdminProductFormNewAttributeAdvancedSection.scope}}" visible="false" stepKey="openAttributeAdvancedSection"/>
+        <selectOption selector="{{AdminProductFormNewAttributeAdvancedSection.scope}}" userInput="{{scope}}" stepKey="selectScope"/>
+    </actionGroup>
 
     <actionGroup name="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPage" extends="AdminCreateAttributeFromProductPage">
         <remove keyForRemoval="saveAttribute"/>

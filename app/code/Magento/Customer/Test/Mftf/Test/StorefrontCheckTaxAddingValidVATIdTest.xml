@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95028"/>
             <group value="customer"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
         </annotations>
         <before>
             <!--Log In-->
@@ -83,6 +86,7 @@
         <!--Add a product to the cart-->
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
         <!-- Click next button to open payment section -->

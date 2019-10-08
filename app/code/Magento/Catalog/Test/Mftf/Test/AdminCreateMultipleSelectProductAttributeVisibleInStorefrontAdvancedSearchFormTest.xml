@@ -34,6 +34,12 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete product attribute -->
+            <deleteData createDataKey="attribute" stepKey="deleteProductAttribute"/>
+
+            <!-- Delete product attribute set -->
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

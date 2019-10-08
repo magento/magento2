@@ -14,7 +14,7 @@
                 default="0" comment="Customer id"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product id"/>
-        <column xsi:type="decimal" name="price" scale="4" precision="12" unsigned="false" nullable="false" default="0"
+        <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="false" default="0"
                 comment="Price amount"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website id"/>

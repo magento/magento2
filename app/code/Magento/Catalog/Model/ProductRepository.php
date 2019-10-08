@@ -369,8 +369,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
             $this->assignProductToWebsites($product);
+        } elseif (!empty($productData['id'])) {
+            $this->removeProductFromLocalCacheById($productData['id']);
+            $product = $this->getById($productData['id']);
         } else {
-            $this->removeProductFromLocalCache($productData['sku']);
+            $this->removeProductFromLocalCacheBySku($productData['sku']);
             $product = $this->get($productData['sku']);
         }
 
@@ -512,7 +515,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         try {
-            $existingProduct = $this->get($product->getSku());
+            $existingProduct = $product->getId() ? $this->getById($product->getId()) : $this->get($product->getSku());
 
             $product->setData(
                 $this->resourceModel->getLinkField(),
@@ -570,8 +573,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->getCategoryIds()
             );
         }
-        $this->removeProductFromLocalCache($product->getSku());
-        unset($this->instancesById[$product->getId()]);
+        $this->removeProductFromLocalCacheBySku($product->getSku());
+        $this->removeProductFromLocalCacheById($product->getId());
 
         return $this->get($product->getSku(), false, $product->getStoreId());
     }
@@ -584,8 +587,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
-            $this->removeProductFromLocalCache($product->getSku());
-            unset($this->instancesById[$product->getId()]);
+            $this->removeProductFromLocalCacheBySku($product->getSku());
+            $this->removeProductFromLocalCacheById($product->getId());
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()), $e);
@@ -595,8 +598,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $e
             );
         }
-        $this->removeProductFromLocalCache($sku);
-        unset($this->instancesById[$productId]);
+        $this->removeProductFromLocalCacheBySku($sku);
+        $this->removeProductFromLocalCacheById($productId);
 
         return true;
     }
@@ -753,25 +756,36 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * Removes product in the local cache.
+     * Removes product in the local cache by sku.
      *
      * @param string $sku
      * @return void
      */
-    private function removeProductFromLocalCache(string $sku) :void
+    private function removeProductFromLocalCacheBySku(string $sku): void
     {
         $preparedSku = $this->prepareSku($sku);
         unset($this->instances[$preparedSku]);
     }
 
     /**
-     * Saves product in the local cache.
+     * Removes product in the local cache by id.
+     *
+     * @param string|null $id
+     * @return void
+     */
+    private function removeProductFromLocalCacheById(?string $id): void
+    {
+        unset($this->instancesById[$id]);
+    }
+
+    /**
+     * Saves product in the local cache by sku.
      *
      * @param Product $product
      * @param string $cacheKey
      * @return void
      */
-    private function saveProductInLocalCache(Product $product, string $cacheKey) : void
+    private function saveProductInLocalCache(Product $product, string $cacheKey): void
     {
         $preparedSku = $this->prepareSku($product->getSku());
         $this->instances[$preparedSku][$cacheKey] = $product;
@@ -800,8 +814,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function saveProduct($product): void
     {
         try {
-            $this->removeProductFromLocalCache($product->getSku());
-            unset($this->instancesById[$product->getId()]);
+            $this->removeProductFromLocalCacheBySku($product->getSku());
+            $this->removeProductFromLocalCacheById($product->getId());
             $this->resourceModel->save($product);
         } catch (ConnectionException $exception) {
             throw new TemporaryCouldNotSaveException(

@@ -85,11 +85,9 @@ class SenderBuilder
         $copyTo = $this->identityContainer->getEmailCopyTo();
 
         if (!empty($copyTo) && $this->identityContainer->getCopyMethod() == 'copy') {
+            $this->configureEmailTemplate();
             foreach ($copyTo as $email) {
-                $this->configureEmailTemplate();
-
                 $this->transportBuilder->addTo($email);
-
                 $transport = $this->transportBuilder->getTransport();
                 $transport->sendMessage();
             }

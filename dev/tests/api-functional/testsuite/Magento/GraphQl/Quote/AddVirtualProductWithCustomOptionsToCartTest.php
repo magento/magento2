@@ -64,9 +64,10 @@ class AddVirtualProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $customizableOptionsOutput = $response['addVirtualProductsToCart']['cart']['items'][0]['customizable_options'];
         $assignedOptionsCount = count($customOptionsValues);
         for ($counter = 0; $counter < $assignedOptionsCount; $counter++) {
+            $expectedValues = $this->buildExpectedValuesArray($customOptionsValues[$counter]['value_string']);
             self::assertEquals(
-                $customOptionsValues[$counter]['value_string'],
-                $customizableOptionsOutput[$counter]['values'][0]['value']
+                $expectedValues,
+                $customizableOptionsOutput[$counter]['values']
             );
         }
     }
@@ -150,18 +151,39 @@ QUERY;
             $optionType = $customOption->getType();
             if ($optionType == 'field' || $optionType == 'area') {
                 $customOptionsValues[] = [
-                    'id' => (int) $customOption->getOptionId(),
+                    'id' => (int)$customOption->getOptionId(),
                     'value_string' => 'test'
                 ];
             } elseif ($optionType == 'drop_down') {
                 $optionSelectValues = $customOption->getValues();
                 $customOptionsValues[] = [
-                    'id' => (int) $customOption->getOptionId(),
+                    'id' => (int)$customOption->getOptionId(),
                     'value_string' => reset($optionSelectValues)->getOptionTypeId()
+                ];
+            } elseif ($optionType == 'multiple') {
+                $customOptionsValues[] = [
+                    'id' => (int)$customOption->getOptionId(),
+                    'value_string' => '[' . implode(',', array_keys($customOption->getValues())) . ']'
                 ];
             }
         }
 
         return $customOptionsValues;
+    }
+
+    /**
+     * Build the part of expected response.
+     *
+     * @param string $assignedValue
+     * @return array
+     */
+    private function buildExpectedValuesArray(string $assignedValue) : array
+    {
+        $assignedOptionsArray = explode(',', trim($assignedValue, '[]'));
+        $expectedArray = [];
+        foreach ($assignedOptionsArray as $assignedOption) {
+            $expectedArray[] = ['value' => $assignedOption];
+        }
+        return $expectedArray;
     }
 }

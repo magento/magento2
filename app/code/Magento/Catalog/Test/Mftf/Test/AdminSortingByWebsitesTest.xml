@@ -13,6 +13,7 @@
             <stories value="View sorting by websites"/>
             <title value="Sorting by websites in Admin"/>
             <description value="Sorting products by websites in Admin"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

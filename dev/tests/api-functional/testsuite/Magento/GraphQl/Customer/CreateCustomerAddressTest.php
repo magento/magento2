@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -133,7 +134,7 @@ MUTATION;
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCreateCustomerAddressIfUserIsNotAuthorized()
@@ -169,7 +170,7 @@ MUTATION;
      * with missing required Firstname attribute
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testCreateCustomerAddressWithMissingAttribute()
@@ -265,6 +266,46 @@ MUTATION;
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Create new address with invalid input
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @dataProvider invalidInputDataProvider
+     * @param string $input
+     * @param $exceptionMessage
+     * @throws Exception
+     */
+    public function testCreateCustomerAddressWithInvalidInput($input, $exceptionMessage)
+    {
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress($input) {
+    id
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        self::expectException(Exception::class);
+        self::expectExceptionMessage($exceptionMessage);
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidInputDataProvider()
+    {
+        return [
+            ['', 'Syntax Error: Expected Name, found )'],
+            ['input: ""', 'Expected type CustomerAddressInput!, found "".'],
+            ['input: "foo"', 'Expected type CustomerAddressInput!, found "foo".']
+        ];
     }
 
     /**

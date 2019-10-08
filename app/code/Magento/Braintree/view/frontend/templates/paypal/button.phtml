@@ -15,21 +15,18 @@ $config = [
         'id' => $id,
         'clientToken' => $block->getClientToken(),
         'displayName' => $block->getMerchantName(),
-        'actionSuccess' => $block->getActionSuccess()
+        'actionSuccess' => $block->getActionSuccess(),
+        'environment' => $block->getEnvironment()
     ]
 ];
 
 ?>
-<div data-mage-init='<?= /* @noEscape */ json_encode($config) ?>'
-    class="paypal checkout paypal-logo braintree-paypal-logo<?= /* @noEscape */ $block->getContainerId() ?>-container">
-    <button data-currency="<?= /* @noEscape */ $block->getCurrency() ?>"
-       data-locale="<?= /* @noEscape */ $block->getLocale() ?>"
-       data-amount="<?= /* @noEscape */ $block->getAmount() ?>"
-       id="<?= /* @noEscape */ $id ?>"
-       class="action-braintree-paypal-logo" disabled>
-        <img class="braintree-paypal-button-hidden"
-             src="https://checkout.paypal.com/pwpp/2.17.6/images/pay-with-paypal.png"
-             alt="<?= $block->escapeHtml(__('Pay with PayPal')) ?>"
-             title="<?= $block->escapeHtml(__('Pay with PayPal')) ?>"/>
-    </button>
+<div data-mage-init='<?= /* @noEscape */ json_encode($config); ?>'
+    class="paypal checkout paypal-logo braintree-paypal-logo<?= /* @noEscape */ $block->getContainerId(); ?>-container">
+    <div data-currency="<?= /* @noEscape */ $block->getCurrency(); ?>"
+       data-locale="<?= /* @noEscape */ $block->getLocale(); ?>"
+       data-amount="<?= /* @noEscape */ $block->getAmount(); ?>"
+       id="<?= /* @noEscape */ $id; ?>"
+       class="action-braintree-paypal-logo">
+    </div>
 </div>

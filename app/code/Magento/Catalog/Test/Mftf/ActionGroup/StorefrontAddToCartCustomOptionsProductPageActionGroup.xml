@@ -14,6 +14,7 @@
         </arguments>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
 </actionGroups>

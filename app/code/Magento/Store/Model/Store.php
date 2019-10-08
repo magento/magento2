@@ -1086,9 +1086,11 @@ class Store extends AbstractExtensibleModel implements
             $event = $this->_eventPrefix . '_edit';
         }
         $store  = $this;
-        $this->getResource()->addCommitCallback(function () use ($event, $store) {
-            $this->eventManager->dispatch($event, ['store' => $store]);
-        });
+        $this->getResource()->addCommitCallback(
+            function () use ($event, $store) {
+                $this->eventManager->dispatch($event, ['store' => $store]);
+            }
+        );
         $this->pillPut->put();
         return parent::afterSave();
     }
@@ -1291,10 +1293,12 @@ class Store extends AbstractExtensibleModel implements
     public function afterDelete()
     {
         $store = $this;
-        $this->getResource()->addCommitCallback(function () use ($store) {
-            $this->_storeManager->reinitStores();
-            $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['store' => $store]);
-        });
+        $this->getResource()->addCommitCallback(
+            function () use ($store) {
+                $this->_storeManager->reinitStores();
+                $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['store' => $store]);
+            }
+        );
         parent::afterDelete();
         $this->_configCacheType->clean();
 

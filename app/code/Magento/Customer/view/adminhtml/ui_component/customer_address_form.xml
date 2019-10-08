@@ -215,7 +215,6 @@
                             <target>${ $.provider }:${ $.parentScope }.country_id</target>
                         </filterBy>
                         <customEntry>region</customEntry>
-                        <options class="Magento\Directory\Model\ResourceModel\Region\Collection"/>
                     </settings>
                 </select>
             </formElements>

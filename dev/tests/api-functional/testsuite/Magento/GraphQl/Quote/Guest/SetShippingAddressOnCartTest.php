@@ -221,23 +221,19 @@ QUERY;
     public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
 
         $query = <<<QUERY
 mutation {
   setShippingAddressesOnCart(
     input: {
-      cart_id: "{$maskedQuoteId}"
-      shipping_addresses: [
-        {
-          {$input}
-        }
-      ]
+      {$input}
     }
   ) {
     cart {
-      shipping_addresses {
-        city
-      }
+        shipping_addresses {
+            city
+          }
     }
   }
 }
@@ -296,13 +292,18 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'shipping_addresses' => [
-                '',
-                'The shipping address must contain either "customer_address_id" or "address".',
+            'missed_shipping_addresses' => [
+                'cart_id: "cart_id_value"',
+                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
+                'was not provided.',
             ],
             'missed_city' => [
-                'address: { save_in_address_book: false }',
+                'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
                 'Field CartAddressInput.city of required type String! was not provided'
+            ],
+            'missed_cart_id' => [
+                'shipping_addresses: {}',
+                'Required parameter "cart_id" is missing'
             ]
         ];
     }
@@ -365,6 +366,149 @@ mutation {
 }
 QUERY;
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testSetShippingAddressOnNonExistentCart()
+    {
+        $maskedQuoteId = 'non_existent_masked_id';
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: {
+        address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "test region"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+          save_in_address_book: false
+        }
+      }
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressWithLowerCaseCountry()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "John"
+            lastname: "Doe"
+            street: ["6161 West Centinella Avenue"]
+            city: "Culver City"
+            region: "CA"
+            postcode: "90230"
+            country_code: "us"
+            telephone: "555-555-55-55"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        region {
+            code
+        }
+        country {
+            code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $result = $this->graphQlMutation($query);
+
+        self::assertCount(1, $result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+        $address = reset($result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $this->assertEquals('US', $address['country']['code']);
+        $this->assertEquals('CA', $address['region']['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressWithLowerCaseRegion()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "{$maskedQuoteId}"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "John"
+            lastname: "Doe"
+            street: ["6161 West Centinella Avenue"]
+            city: "Culver City"
+            region: "ca"
+            postcode: "90230"
+            country_code: "US"
+            telephone: "555-555-55-55"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        region {
+            code
+        }
+        country {
+            code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $result = $this->graphQlMutation($query);
+
+        self::assertCount(1, $result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+        $address = reset($result['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $this->assertEquals('US', $address['country']['code']);
+        $this->assertEquals('CA', $address['region']['code']);
     }
 
     /**

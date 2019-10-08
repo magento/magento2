@@ -9,7 +9,7 @@ namespace Magento\Framework\Amqp;
  * Factory class for @see \Magento\Framework\Amqp\Queue
  *
  * @api
- * @since 102.0.2
+ * @since 102.0.3
  */
 class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterface
 {
@@ -51,7 +51,7 @@ class QueueFactory implements \Magento\Framework\MessageQueue\QueueFactoryInterf
 
     /**
      * {@inheritdoc}
-     * @since 102.0.2
+     * @since 102.0.3
      */
     public function create($queueName, $connectionName)
     {

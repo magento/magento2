@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FilterProductInGridByStoreViewAndNameActionGroup">
+        <arguments>
+            <argument name="storeView" type="string"/>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchProduct"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.storeViewDropdown(storeView)}}" stepKey="clickStoreViewDropdown"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{productName}}" stepKey="fillProductNameInNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <see selector="{{AdminProductGridFilterSection.nthRow('1')}}" userInput="{{productName}}" stepKey="seeFirstRowToVerifyProductVisibleInGrid"/>
+    </actionGroup>
+</actionGroups>

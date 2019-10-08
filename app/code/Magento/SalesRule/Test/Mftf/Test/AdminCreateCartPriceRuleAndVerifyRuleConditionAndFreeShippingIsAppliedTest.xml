@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleAndVerifyRuleConditionAndFreeShippingIsAppliedTest">
+        <annotations>
+            <stories value="Create Sales Rule"/>
+            <title value="Create Cart Price Rule And Verify Rule Condition And Free Shipping Is Applied"/>
+            <description value="Test log in to Cart Price Rules and Create Cart Price Rule And Verify Rule Condition And Free Shipping Is Applied"/>
+            <testCaseId value="MC-15604"/>
+            <severity value="CRITICAL"/>
+            <group value="SalesRule"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-16684"/>
+            </skip>
+        </annotations>
+
+        <before>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct" createDataKey="initialSimpleProduct"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleConditionAndFreeShippingApplied.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.name}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{CartPriceRuleConditionAndFreeShippingApplied.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="selectCouponType"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
+            <argument name="freeShippingOption" value="{{CartPriceRuleConditionAndFreeShippingApplied.simple_free_shipping}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+
+        <!--Search created cart price rule in grid-->
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="searchCreatedCartPriceRuleInGrid">
+            <argument name="ruleName" value="CartPriceRuleConditionAndFreeShippingApplied.name"/>
+        </actionGroup>
+
+        <!--Go to cart price rule form page and verify AssertCartPriceRuleForm-->
+        <waitForPageLoad stepKey="waitForAdminCartPriceRuleEditPageLoad"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.name}}" stepKey="seeRuleName"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.description}}" stepKey="seeDescription"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.websites}}" stepKey="seeWebsites"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.customerGroups}}" stepKey="seeCustomerGroup"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="seeCouponType"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickActionsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickExpandActions"/>
+        <see selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.simple_action}}" stepKey="seeActionApplyType"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.discount_amount}}" stepKey="seeDiscountAmount"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.simple_free_shipping}}" stepKey="seeFreeShipping"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" stepKey="clickLabelsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.labelsHeader}}" visible="true" stepKey="clickToExpandLabels"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.defaultRuleLabelAllStoreViews}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.defaultRuleLabelAllStoreViews}}" stepKey="seeDefaultRuleLabelAllStoreViews"/>
+        <seeInField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.defaultStoreView}}" stepKey="seeDefaultStoreView"/>
+
+        <!--Go to storefront page and verify created product-->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+        <!--Click on Add To Cart button-->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+
+        <!--Open mini cart and verify Shopping cart subtotal equals to grand total-->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyCartSubtotalEqualsGrandTotal">
+            <argument name="productName" value="$$initialSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$560.00"/>
+            <argument name="cartSubtotal" value="$560.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" visible="true" stepKey="clickEstimateShippingAndTaxToOpen"/>
+        <waitForPageLoad stepKey="waitForEstimateShippingAndTaxToOpen"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country_id}}" stepKey="selectUnitedStatesCountry"/>
+        <waitForPageLoad stepKey="waitToSelectCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaRegion"/>
+        <waitForPageLoad stepKey="waitToSelectState"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{US_Address_CA.postcode}}" stepKey="inputPostCode"/>
+        <!--After selecting country, province and postcode, verify AssertCartPriceRuleConditionIsApplied and AssertCartPriceRuleFreeShippingIsApplied-->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
+            <argument name="subtotal" value="$560.00"/>
+            <argument name="shipping" value="$0.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="$280.00"/>
+        </actionGroup>
+        <see selector="{{CheckoutCartSummarySection.shipping}}" userInput="$0.00" stepKey="seeAssertFreeShippingConditionApplied"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$280.00" stepKey="seeAssertDiscountAmountAppliedForMatchingItemsConditionIsTrue"/>
+    </test>
+</tests>

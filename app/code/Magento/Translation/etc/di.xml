@@ -65,8 +65,8 @@
             <argument name="patterns" xsi:type="array">
                 <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
                 <item name="translate_wrapping" xsi:type="string"><![CDATA[~translate\=("')([^\'].*?)\'\"~]]></item>
-                <item name="mage_translation_widget" xsi:type="string"><![CDATA[~(?:\$|jQuery)\.mage\.__\((?s)[^'"]*?(['"])(.+?)(?<!\\)\1(?s).*?\)~]]></item>
-                <item name="mage_translation_static" xsi:type="string"><![CDATA[~\$t\((?s)[^'"]*?(["'])(.+?)\1(?s).*?\)~]]></item>
+                <item name="mage_translation_widget" xsi:type="string"><![CDATA[~(?s)(?:\$|jQuery)\.mage\.__\(\s*(['"])(?<translate>.+?)(?<!\\)\1\s*(*SKIP)\)\s*(?s)~]]></item>
+                <item name="mage_translation_static" xsi:type="string"><![CDATA[~(?s)\$t\(\s*(['"])(?<translate>.+?)(?<!\\)\1\s*(*SKIP)\)(?s)~]]></item>
                 <item name="translate_args" xsi:type="string"><![CDATA[~translate args\=("|'|"')([^\'].*?)('"|'|")~]]></item>
             </argument>
         </arguments>

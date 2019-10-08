@@ -63,21 +63,23 @@ class Resolver
                     $cacheAnnotation
                 );
             } elseif ($resolvedValue instanceof \Magento\Framework\GraphQl\Query\Resolver\Value) {
-                $resolvedValue->then(function () use ($resolvedValue, $field, $cacheAnnotation) {
-                    if (is_array($resolvedValue->promise->result)) {
-                        $this->cacheableQueryHandler->handleCacheFromResolverResponse(
-                            $resolvedValue->promise->result,
-                            $cacheAnnotation
-                        );
-                    } else {
-                        // case if string or integer we pass in a single array element
-                        $this->cacheableQueryHandler->handleCacheFromResolverResponse(
-                            $resolvedValue->promise->result === null ?
-                                [] : [$field->getName() => $resolvedValue->promise->result],
-                            $cacheAnnotation
-                        );
+                $resolvedValue->then(
+                    function () use ($resolvedValue, $field, $cacheAnnotation) {
+                        if (is_array($resolvedValue->promise->result)) {
+                            $this->cacheableQueryHandler->handleCacheFromResolverResponse(
+                                $resolvedValue->promise->result,
+                                $cacheAnnotation
+                            );
+                        } else {
+                            // case if string or integer we pass in a single array element
+                            $this->cacheableQueryHandler->handleCacheFromResolverResponse(
+                                $resolvedValue->promise->result === null ?
+                                    [] : [$field->getName() => $resolvedValue->promise->result],
+                                $cacheAnnotation
+                            );
+                        }
                     }
-                });
+                );
             } else {
                 // case if string or integer we pass in a single array element
                 $this->cacheableQueryHandler->handleCacheFromResolverResponse(

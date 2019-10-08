@@ -288,9 +288,12 @@ class Customer extends AbstractCustomer
     {
         $firstCustomer = reset($entitiesToUpdate);
         $columnsToUpdate = array_keys($firstCustomer);
-        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
-            return in_array($field, $columnsToUpdate);
-        });
+        $customerFieldsToUpdate = array_filter(
+            $this->customerFields,
+            function ($field) use ($columnsToUpdate) {
+                return in_array($field, $columnsToUpdate);
+            }
+        );
         return $customerFieldsToUpdate;
     }
 
@@ -425,6 +428,9 @@ class Customer extends AbstractCustomer
             $attributeParameters = $this->_attributes[$attributeCode];
             if (in_array($attributeParameters['type'], ['select', 'boolean'])) {
                 $value = $this->getSelectAttrIdByValue($attributeParameters, $value);
+                if ($attributeCode === CustomerInterface::GENDER && $value === 0) {
+                    $value = null;
+                }
             } elseif ('multiselect' == $attributeParameters['type']) {
                 $ids = [];
                 foreach (explode($multiSeparator, mb_strtolower($value)) as $subValue) {
@@ -521,10 +527,8 @@ class Customer extends AbstractCustomer
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = [];
                         }
-                        $attributesToSave[$tableName] = array_diff_key(
-                            $attributesToSave[$tableName],
-                            $customerAttributes
-                        ) + $customerAttributes;
+                        $attributes = array_diff_key($attributesToSave[$tableName], $customerAttributes);
+                        $attributesToSave[$tableName] =  $attributes + $customerAttributes;
                     }
                 }
             }
@@ -580,13 +584,9 @@ class Customer extends AbstractCustomer
                 $this->addRowError(self::ERROR_INVALID_STORE, $rowNumber);
             }
             // check password
-            if (isset(
-                $rowData['password']
-            ) && strlen(
-                $rowData['password']
-            ) && $this->string->strlen(
-                $rowData['password']
-            ) < self::MIN_PASSWORD_LENGTH
+            if (isset($rowData['password'])
+                && strlen($rowData['password'])
+                && $this->string->strlen($rowData['password']) < self::MIN_PASSWORD_LENGTH
             ) {
                 $this->addRowError(self::ERROR_PASSWORD_LENGTH, $rowNumber);
             }

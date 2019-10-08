@@ -16,9 +16,6 @@
             <description value="Sort by price should be correct if the apply Catalog Rule to child product of configurable product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-69988"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
             <group value="сonfigurable_product"/>
         </annotations>
         <before>
@@ -153,9 +150,9 @@
             <argument name="sortBy" value="price"/>
             <argument name="sort" value="desc"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct2"/>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo2"/>
-        <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo2"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct2"/>
 
         <!-- Delete the rule -->
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>

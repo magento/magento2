@@ -183,6 +183,8 @@ class SessionManager implements SessionManagerInterface
 
                 try {
                     $this->appState->getAreaCode();
+                    // @todo MC-18221 need to fix check false positive
+                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
                     throw new \Magento\Framework\Exception\SessionException(
                         new \Magento\Framework\Phrase(
@@ -410,6 +412,9 @@ class SessionManager implements SessionManagerInterface
     {
         $this->_addHost();
         if ($sessionId !== null && preg_match('#^[0-9a-zA-Z,-]+$#', $sessionId)) {
+            if ($this->getSessionId() !== $sessionId) {
+                $this->writeClose();
+            }
             session_id($sessionId);
         }
         return $this;

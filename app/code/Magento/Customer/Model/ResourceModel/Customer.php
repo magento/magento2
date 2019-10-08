@@ -95,9 +95,12 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Check customer scope, email and confirmation key before saving
      *
-     * @param \Magento\Framework\DataObject $customer
+     * @param \Magento\Framework\DataObject|\Magento\Customer\Api\Data\CustomerInterface $customer
+     *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws AlreadyExistsException
+     * @throws ValidatorException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -141,9 +144,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         }
 
         // set confirmation key logic
-        if ($customer->getForceConfirmed() || $customer->getPasswordHash() == '') {
-            $customer->setConfirmation(null);
-        } elseif (!$customer->getId() && $customer->isConfirmationRequired()) {
+        if (!$customer->getId() && $customer->isConfirmationRequired()) {
             $customer->setConfirmation($customer->getRandomConfirmationKey());
         }
         // remove customer confirmation key from database, if empty
@@ -163,7 +164,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      *
      * @param \Magento\Customer\Model\Customer $customer
      * @return void
-     * @throws \Magento\Framework\Validator\Exception
+     * @throws ValidatorException
      */
     protected function _validate($customer)
     {

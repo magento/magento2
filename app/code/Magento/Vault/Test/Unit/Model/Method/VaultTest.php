@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Model\Method;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -25,6 +27,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class VaultTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class VaultTest extends \PHPUnit\Framework\TestCase
@@ -140,7 +143,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken'])
+            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
             ->getMockForAbstractClass();
 
         $commandManagerPool = $this->createMock(CommandManagerPoolInterface::class);
@@ -235,7 +238,7 @@ class VaultTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Vault\Model\Method\Vault::isAvailable
+     * @covers       \Magento\Vault\Model\Method\Vault::isAvailable
      * @dataProvider isAvailableDataProvider
      */
     public function testIsAvailable($isAvailableProvider, $isActive, $expected)
@@ -251,7 +254,10 @@ class VaultTest extends \PHPUnit\Framework\TestCase
 
         $config->expects(static::any())
             ->method('getValue')
-            ->with('active', $storeId)
+            ->with(
+                'active',
+                $storeId
+            )
             ->willReturn($isActive);
 
         $quote->expects(static::any())
@@ -259,10 +265,13 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeId);
 
         /** @var Vault $model */
-        $model = $this->objectManager->getObject(Vault::class, [
-            'config' => $config,
-            'vaultProvider' => $this->vaultProvider
-        ]);
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'config' => $config,
+                'vaultProvider' => $this->vaultProvider
+            ]
+        );
         $actual = $model->isAvailable($quote);
         static::assertEquals($expected, $actual);
     }
@@ -296,19 +305,25 @@ class VaultTest extends \PHPUnit\Framework\TestCase
 
         $config->expects(static::once())
             ->method('getValue')
-            ->with('active', $quote)
+            ->with(
+                'active',
+                $quote
+            )
             ->willReturn(false);
 
         /** @var Vault $model */
-        $model = $this->objectManager->getObject(Vault::class, [
-            'config' => $config,
-            'vaultProvider' => $this->vaultProvider
-        ]);
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'config' => $config,
+                'vaultProvider' => $this->vaultProvider
+            ]
+        );
         static::assertFalse($model->isAvailable($quote));
     }
 
     /**
-     * @covers \Magento\Vault\Model\Method\Vault::canUseInternal
+     * @covers       \Magento\Vault\Model\Method\Vault::canUseInternal
      * @param bool|null $configValue
      * @param bool|null $paymentValue
      * @param bool $expected
@@ -326,7 +341,10 @@ class VaultTest extends \PHPUnit\Framework\TestCase
 
         $handler->expects(static::once())
             ->method('handle')
-            ->with(['field' => 'can_use_internal'], null)
+            ->with(
+                ['field' => 'can_use_internal'],
+                null
+            )
             ->willReturn($configValue);
 
         $this->vaultProvider->expects(static::any())
@@ -334,10 +352,13 @@ class VaultTest extends \PHPUnit\Framework\TestCase
             ->willReturn($paymentValue);
 
         /** @var Vault $model */
-        $model = $this->objectManager->getObject(Vault::class, [
-            'vaultProvider' => $this->vaultProvider,
-            'valueHandlerPool' => $handlerPool,
-        ]);
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'vaultProvider' => $this->vaultProvider,
+                'valueHandlerPool' => $handlerPool,
+            ]
+        );
         static::assertEquals($expected, $model->canUseInternal());
     }
 

@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+//phpcs:disable Magento2.Files.LineLength.MaxExceeded
 ?>
 <?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
 <div id="packaging_window">
@@ -13,14 +11,20 @@
     <section class="admin__page-section" id="package_template" style="display:none;">
         <div class="admin__page-section-title">
             <span class="title">
-                <?= /* @escapeNotVerified */ __('Package') ?> <span data-role="package-number"></span>
+                <?= $block->escapeHtml(__('Package')) ?> <span data-role="package-number"></span>
             </span>
             <div class="actions _primary">
-                <button type="button" class="action-secondary" data-action="package-save-items" onclick="packaging.packItems(this);">
-                    <span><?= /* @escapeNotVerified */ __('Add Selected Product(s) to Package') ?></span>
+                <button type="button"
+                        class="action-secondary"
+                        data-action="package-save-items"
+                        onclick="packaging.packItems(this);">
+                    <span><?= $block->escapeHtml(__('Add Selected Product(s) to Package')) ?></span>
                 </button>
-                <button type="button" class="action-secondary" data-action="package-add-items" onclick="packaging.getItemsForPack(this);">
-                    <span><?= /* @escapeNotVerified */ __('Add Products to Package') ?></span>
+                <button type="button"
+                        class="action-secondary"
+                        data-action="package-add-items"
+                        onclick="packaging.getItemsForPack(this);">
+                    <span><?= $block->escapeHtml(__('Add Products to Package')) ?></span>
                 </button>
             </div>
         </div>
@@ -28,23 +32,23 @@
             <table class="data-table admin__control-table">
                 <thead>
                     <tr>
-                        <th class="col-type"><?= /* @escapeNotVerified */ __('Type') ?></th>
-                        <?php if ($girthEnabled == 1): ?>
-                        <th class="col-size"><?= /* @escapeNotVerified */ __('Size') ?></th>
-                        <th class="col-girth"><?= /* @escapeNotVerified */ __('Girth') ?></th>
+                        <th class="col-type"><?= $block->escapeHtml(__('Type')) ?></th>
+                        <?php if ($girthEnabled == 1) : ?>
+                        <th class="col-size"><?= $block->escapeHtml(__('Size')) ?></th>
+                        <th class="col-girth"><?= $block->escapeHtml(__('Girth')) ?></th>
                         <th>&nbsp;</th>
                         <?php endif; ?>
                         <th class="col-custom" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
-                            <?= /* @escapeNotVerified */ __('Customs Value') ?>
+                            <?= $block->escapeHtml(__('Customs Value')) ?>
                         </th>
-                        <th class="col-total-weight"><?= /* @escapeNotVerified */ __('Total Weight') ?></th>
-                        <th class="col-length"><?= /* @escapeNotVerified */ __('Length') ?></th>
-                        <th class="col-width"><?= /* @escapeNotVerified */ __('Width') ?></th>
-                        <th class="col-height"><?= /* @escapeNotVerified */ __('Height') ?></th>
+                        <th class="col-total-weight"><?= $block->escapeHtml(__('Total Weight')) ?></th>
+                        <th class="col-length"><?= $block->escapeHtml(__('Length')) ?></th>
+                        <th class="col-width"><?= $block->escapeHtml(__('Width')) ?></th>
+                        <th class="col-height"><?= $block->escapeHtml(__('Height')) ?></th>
                         <th>&nbsp;</th>
-                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
-                        <th class="col-signature"><?= /* @escapeNotVerified */ __('Signature Confirmation') ?></th>
-                            <?php endif; ?>
+                        <?php if ($block->getDeliveryConfirmationTypes()) : ?>
+                        <th class="col-signature"><?= $block->escapeHtml(__('Signature Confirmation')) ?></th>
+                        <?php endif; ?>
                         <th class="col-actions">&nbsp;</th>
                     </tr>
                 </thead>
@@ -53,29 +57,29 @@
                         <td class="col-type">
                             <?php $containers = $block->getContainers(); ?>
                             <select name="package_container"
-                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= /* @escapeNotVerified */ $girthEnabled ?>);"
-                                    <?php if (empty($containers)):?>
-                                        title="<?= /* @escapeNotVerified */ __('USPS domestic shipments don\'t use package types.') ?>"
+                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= $block->escapeJs($girthEnabled) ?>);"
+                                    <?php if (empty($containers)) : ?>
+                                        title="<?= $block->escapeHtmlAttr(__('USPS domestic shipments don\'t use package types.')) ?>"
                                         disabled=""
                                         class="admin__control-select disabled"
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         class="admin__control-select"
                                     <?php endif; ?>>
-                                <?php foreach ($containers as $key => $value): ?>
-                                    <option value="<?= /* @escapeNotVerified */ $key ?>" >
-                                        <?= /* @escapeNotVerified */ $value ?>
+                                <?php foreach ($containers as $key => $value) : ?>
+                                    <option value="<?= $block->escapeHtmlAttr($key) ?>" >
+                                        <?= $block->escapeHtml($value) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </td>
-                        <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
+                        <?php if ($girthEnabled == 1 && !empty($sizeSource)) : ?>
                         <td>
                             <select name="package_size"
                                     class="admin__control-select"
-                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= /* @escapeNotVerified */ $girthEnabled ?>);">
-                                <?php foreach ($sizeSource as $key => $value): ?>
-                                <option value="<?= /* @escapeNotVerified */ $sizeSource[$key]['value'] ?>">
-                                    <?= /* @escapeNotVerified */ $sizeSource[$key]['label'] ?>
+                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= $block->escapeJs($girthEnabled) ?>);">
+                                <?php foreach ($sizeSource as $key => $value) : ?>
+                                <option value="<?= $block->escapeHtmlAttr($sizeSource[$key]['value']) ?>">
+                                    <?= $block->escapeHtml($sizeSource[$key]['label']) ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
@@ -89,11 +93,11 @@
                             <select name="container_girth_dimension_units"
                                     class="options-units-dimensions measures admin__control-select"
                                     onchange="packaging.changeMeasures(this);">
-                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= /* @escapeNotVerified */ __('in') ?></option>
-                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::CENTIMETER ?>" ><?= /* @escapeNotVerified */ __('cm') ?></option>
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= $block->escapeHtml(__('in')) ?></option>
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" ><?= $block->escapeHtml(__('cm')) ?></option>
                             </select>
                         </td>
-                            <?php endif; ?>
+                        <?php endif; ?>
                         <?php
                         if ($block->displayCustomsValue()) {
                             $customsValueDisplay = '';
@@ -103,13 +107,15 @@
                             $customsValueValidation = '';
                         }
                         ?>
-                        <td class="col-custom" <?= /* @escapeNotVerified */ $customsValueDisplay ?>>
+                        <td class="col-custom" <?= /* @noEscape */ $customsValueDisplay ?>>
                             <div class="admin__control-addon">
                                 <input type="text"
-                                       class="customs-value input-text admin__control-text <?= /* @escapeNotVerified */ $customsValueValidation ?>"
+                                       class="customs-value input-text admin__control-text <?= /* @noEscape */ $customsValueValidation ?>"
                                        name="package_customs_value" />
                                 <span class="admin__addon-suffix">
-                                    <span class="customs-value-currency"><?= /* @escapeNotVerified */ $block->getCustomValueCurrencyCode() ?></span>
+                                    <span class="customs-value-currency">
+                                        <?= $block->escapeHtml($block->getCustomValueCurrencyCode()) ?>
+                                    </span>
                                 </span>
                             </div>
                         </td>
@@ -121,8 +127,8 @@
                                     <select name="container_weight_units"
                                             class="options-units-weight measures admin__control-select"
                                             onchange="packaging.changeMeasures(this);">
-                                        <option value="<?= /* @escapeNotVerified */ Zend_Measure_Weight::POUND ?>" selected="selected"  ><?= /* @escapeNotVerified */ __('lb') ?></option>
-                                        <option value="<?= /* @escapeNotVerified */ Zend_Measure_Weight::KILOGRAM ?>" ><?= /* @escapeNotVerified */ __('kg') ?></option>
+                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::POUND ?>" selected="selected"  ><?= $block->escapeHtml(__('lb')) ?></option>
+                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::KILOGRAM ?>" ><?= $block->escapeHtml(__('kg')) ?></option>
                                     </select>
                                 <span class="admin__addon-prefix"></span>
                             </div>
@@ -146,35 +152,37 @@
                             <select name="container_dimension_units"
                                     class="options-units-dimensions measures admin__control-select"
                                     onchange="packaging.changeMeasures(this);">
-                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= /* @escapeNotVerified */ __('in') ?></option>
-                                <option value="<?= /* @escapeNotVerified */ Zend_Measure_Length::CENTIMETER ?>" ><?= /* @escapeNotVerified */ __('cm') ?></option>
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= $block->escapeHtml(__('in')) ?></option>
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" ><?= $block->escapeHtml(__('cm')) ?></option>
                             </select>
                         </td>
-                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
+                        <?php if ($block->getDeliveryConfirmationTypes()) : ?>
                         <td>
                             <select name="delivery_confirmation_types" class="admin__control-select">
-                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
-                                <option value="<?= /* @escapeNotVerified */ $key ?>" >
-                                    <?= /* @escapeNotVerified */ $value ?>
+                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value) : ?>
+                                <option value="<?= $block->escapeHtmlAttr($key) ?>" >
+                                    <?= $block->escapeHtml($value) ?>
                                 </option>
                                 <?php endforeach; ?>
                             </select>
                         </td>
-                            <?php endif; ?>
+                        <?php endif; ?>
                         <td class="col-actions">
-                            <button type="button" class="action-delete DeletePackageBtn" onclick="packaging.deletePackage(this);">
-                                <span><?= /* @escapeNotVerified */ __('Delete Package') ?></span>
+                            <button type="button"
+                                    class="action-delete DeletePackageBtn"
+                                    onclick="packaging.deletePackage(this);">
+                                <span><?= $block->escapeHtml(__('Delete Package')) ?></span>
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <?php if ($block->getContentTypes()): ?>
+            <?php if ($block->getContentTypes()) : ?>
                 <table class="data-table admin__control-table" cellspacing="0">
                     <thead>
                         <tr>
-                            <th><?= /* @escapeNotVerified */ __('Contents') ?></th>
-                            <th><?= /* @escapeNotVerified */ __('Explanation') ?></th>
+                            <th><?= $block->escapeHtml(__('Contents')) ?></th>
+                            <th><?= $block->escapeHtml(__('Explanation')) ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -183,9 +191,9 @@
                             <select name="content_type"
                                     class="admin__control-select"
                                     onchange="packaging.changeContentTypes(this);">
-                                <?php foreach ($block->getContentTypes() as $key => $value): ?>
-                                    <option value="<?= /* @escapeNotVerified */ $key ?>" >
-                                        <?= /* @escapeNotVerified */ $value ?>
+                                <?php foreach ($block->getContentTypes() as $key => $value) : ?>
+                                    <option value="<?= $block->escapeHtmlAttr($key) ?>" >
+                                        <?= $block->escapeHtml($value) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

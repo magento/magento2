@@ -623,11 +623,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 return $this->getData('url');
             }
 
-            $rewrite = $this->urlFinder->findOneByData([
-                UrlRewrite::ENTITY_ID => $this->getId(),
-                UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::STORE_ID => $this->getStoreId(),
-            ]);
+            $rewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::ENTITY_ID => $this->getId(),
+                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::STORE_ID => $this->getStoreId(),
+                ]
+            );
             if ($rewrite) {
                 $this->setData('url', $this->getUrlInstance()->getDirectUrl($rewrite->getRequestPath()));
                 Profiler::stop('REWRITE: ' . __METHOD__);

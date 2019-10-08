@@ -596,7 +596,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $additionalRow['_super_attribute_position'] = $position;
                     $additionalRows[] = $additionalRow;
                     $additionalRow = [];
-                    $position += 1;
+                    $position ++;
                 }
             } else {
                 throw new LocalizedException(
@@ -937,7 +937,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         foreach ($dataWithExtraVirtualRows as $option) {
             if (isset($option['_super_products_sku'])) {
-                if (in_array($option['_super_products_sku'], $skus)) {
+                if (in_array($option['_super_products_sku'], $skus, true)) {
                     $error = true;
                     $this->_entityModel->addRowError(
                         sprintf(

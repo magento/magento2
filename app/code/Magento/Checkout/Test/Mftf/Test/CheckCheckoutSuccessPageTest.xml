@@ -15,7 +15,7 @@
             <title value="Customer Checkout"/>
             <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-60345"/>
+            <testCaseId value="MC-16488"/>
             <group value="checkout"/>
         </annotations>
 
@@ -135,10 +135,10 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Success page elements are presented for placed order as Guest"/>
-            <title value="Customer Checkout"/>
-            <description value="To be sure that other elements of Success page are presented for placed order as Guest."/>
+            <title value="Guest Checkout - elements of success page are presented for placed order as guest"/>
+            <description value="To be sure that other elements of Success page are presented for placed order as Guest"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-60346"/>
+            <testCaseId value="MC-16490"/>
             <group value="checkout"/>
         </annotations>
 

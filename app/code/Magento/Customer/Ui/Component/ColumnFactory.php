@@ -68,14 +68,19 @@ class ColumnFactory
      */
     public function create(array $attributeData, $columnName, $context, array $config = [])
     {
-        $config = array_merge([
-            'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
-            'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
-            'align' => 'left',
-            'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
-            'component' => $this->getJsComponent($this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])),
-            '__disableTmpl' => 'true'
-        ], $config);
+        $config = array_merge(
+            [
+                'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
+                'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
+                'align' => 'left',
+                'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
+                'component' => $this->getJsComponent(
+                    $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])
+                ),
+                '__disableTmpl' => 'true'
+            ],
+            $config
+        );
         if ($attributeData[AttributeMetadata::FRONTEND_INPUT] == 'date') {
             $config['dateFormat'] = 'MMM d, y';
             $config['timezone'] = false;
