@@ -174,8 +174,8 @@ class OperationProcessor
     /**
      * Execute topic handler
      *
-     * @param $callback
-     * @param $entityParams
+     * @param callable $callback
+     * @param array $entityParams
      * @return array
      */
     private function executeHandler($callback, $entityParams)
