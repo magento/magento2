@@ -27,3 +27,5 @@ None,None
 "Min Time Between Password Reset Requests","Min Time Between Password Reset Requests"
 "Delay in minutes between password reset requests. Use 0 to disable.","Delay in minutes between password reset requests. Use 0 to disable."
 """%1"" must be later than the current date.","""%1"" must be later than the current date."
+"User Expiration","User Expiration"
+"""%1"" is not a valid date.","""%1"" is not a valid date."

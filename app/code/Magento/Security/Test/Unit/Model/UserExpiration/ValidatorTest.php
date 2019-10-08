@@ -46,13 +46,24 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testWithInvalidDate()
+    {
+        $expireDate = 'invalid_date';
+
+        static::assertFalse($this->validator->isValid($expireDate));
+        static::assertContains(
+            '"Expiration date" is not a valid date.',
+            $this->validator->getMessages()
+        );
+    }
+
     public function testWithPastDate()
     {
         /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $this->timezoneMock->expects(static::once())
-                    ->method('date')
-                    ->will(static::returnValue($dateObject));
+            ->method('date')
+            ->will(static::returnValue($dateObject));
 
         $currentDate = new \DateTime();
         $currentDate = $currentDate->getTimestamp();
@@ -74,8 +85,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $this->timezoneMock->expects(static::once())
-                    ->method('date')
-                    ->will(static::returnValue($dateObject));
+            ->method('date')
+            ->will(static::returnValue($dateObject));
         $currentDate = new \DateTime();
         $currentDate = $currentDate->getTimestamp();
         $expireDate = new \DateTime();

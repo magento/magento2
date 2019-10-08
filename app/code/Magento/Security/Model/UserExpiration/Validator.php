@@ -51,11 +51,15 @@ class Validator extends AbstractValidator
         $expiresAt = $value;
         $label = 'Expiration date';
         if (\Zend_Validate::is($expiresAt, 'NotEmpty')) {
-            $currentTime = $this->dateTime->gmtTimestamp();
-            $utcExpiresAt = $this->timezone->convertConfigTimeToUtc($expiresAt);
-            $expiresAt = $this->timezone->date($utcExpiresAt)->getTimestamp();
-            if ($expiresAt < $currentTime) {
-                $messages['expires_at'] = __('"%1" must be later than the current date.', $label);
+            if (strtotime($expiresAt)) {
+                $currentTime = $this->dateTime->gmtTimestamp();
+                $utcExpiresAt = $this->timezone->convertConfigTimeToUtc($expiresAt);
+                $expiresAt = $this->timezone->date($utcExpiresAt)->getTimestamp();
+                if ($expiresAt < $currentTime) {
+                    $messages['expires_at'] = __('"%1" must be later than the current date.', $label);
+                }
+            } else {
+                $messages['expires_at'] = __('"%1" is not a valid date.', $label);
             }
         }
         $this->_addMessages($messages);
