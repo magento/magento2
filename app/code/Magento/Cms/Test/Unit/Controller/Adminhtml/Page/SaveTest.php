@@ -297,7 +297,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('set')
             ->with(
                 'cms_page',
-                ['page_id' => $this->pageId]
+                [
+                    'page_id' => $this->pageId,
+                    'layout_update_xml' => null,
+                    'custom_layout_update_xml' => null
+                ]
             );
 
         $this->resultRedirect->expects($this->atLeastOnce())

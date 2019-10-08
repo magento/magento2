@@ -25,6 +25,7 @@ use Magento\Catalog\Model\Product\Attribute\Repository;
  * Test save attribute set
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppArea adminhtml
  */
 class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
