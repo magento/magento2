@@ -23,7 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Date;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Zend_Cache_Backend_BlackHole;
 use Zend_Cache_Core;
 
@@ -60,17 +60,17 @@ class DobTest extends TestCase
     const YEAR_HTML =
         '<div><label for="year"><span>yy</span></label><input type="text" id="year" name="Year" value="14"></div>';
 
-    /** @var PHPUnit_Framework_MockObject_MockObject|AttributeMetadataInterface */
+    /** @var MockObject|AttributeMetadataInterface */
     protected $attribute;
 
     /** @var Dob */
     protected $_block;
 
-    /** @var PHPUnit_Framework_MockObject_MockObject|CustomerMetadataInterface */
+    /** @var MockObject|CustomerMetadataInterface */
     protected $customerMetadata;
 
     /**
-     * @var FilterFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactory|MockObject
      */
     protected $filterFactory;
 
@@ -336,12 +336,27 @@ class DobTest extends TestCase
     }
 
     /**
-     * is used to derive the Locale that is used to determine the
-     * value of Dob::getDateFormat() for that Locale.
+     * Is used to derive the Locale that is used to determine the value of Dob::getDateFormat() for that Locale
+     *
+     * @param string $locale
+     * @param string $expectedFormat
+     * @dataProvider getDateFormatDataProvider
      */
-    public function testGetDateFormat()
+    public function testGetDateFormat(string $locale, string $expectedFormat)
     {
-        $this->assertEquals(self::DATE_FORMAT, $this->_block->getDateFormat());
+        $this->_locale = $locale;
+        $this->assertEquals($expectedFormat, $this->_block->getDateFormat());
+    }
+
+    /**
+     * @return array
+     */
+    public function getDateFormatDataProvider(): array
+    {
+        return [
+            ['ar_SA', 'd/M/y'],
+            [Resolver::DEFAULT_LOCALE, self::DATE_FORMAT],
+        ];
     }
 
     /**
