@@ -14,7 +14,6 @@ use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Class Config
- * phpcs:ignoreFile
  */
 class Config
 {
@@ -52,9 +51,8 @@ class Config
      * @param string $path
      * @param null $storeId
      * @return mixed
-     * phpcs:ignoreFile
      */
-    final public function getConfig($path, $storeId = null)
+    public function getConfig($path, $storeId = null)
     {
         return $this->scopeConfig->getValue(
             $path,
@@ -65,9 +63,8 @@ class Config
 
     /**
      * @return mixed
-     * phpcs:ignoreFile
      */
-    final public function isEnabled()
+    public function isEnabled()
     {
         return $this->getConfig(
             self::XML_PATH_EXTENSION_ENABLED
@@ -76,9 +73,8 @@ class Config
 
     /**
      * @return mixed
-     * phpcs:ignoreFile
      */
-    final public function isKeyMissing()
+    public function isKeyMissing()
     {
         return !$this->getConfig(
             self::XML_PATH_KEY
