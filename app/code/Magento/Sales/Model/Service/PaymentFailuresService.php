@@ -168,10 +168,8 @@ class PaymentFailuresService implements PaymentFailuresInterface
             'dateAndTime' => $this->getLocaleDate(),
             'customer' => $this->getCustomerName($quote),
             'customerEmail' => $quote->getBillingAddress()->getEmail(),
-            'billingAddress' => $quote->getBillingAddress(),
-            'shippingAddress' => $quote->getShippingAddress(),
-            'billingAddressHtml' => $quote->getBillingAddress().format('html'),
-            'shippingAddressHtml' => $quote->getShippingAddress().format('html'),
+            'billingAddress' => $quote->getBillingAddress().format('html'),
+            'shippingAddress' => $quote->getShippingAddress().format('html'),
             'shippingMethod' => $this->getConfigValue(
                 'carriers/' . $this->getShippingMethod($quote) . '/title',
                 $quote

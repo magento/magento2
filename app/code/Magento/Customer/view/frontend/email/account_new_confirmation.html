@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject {{trans "Please confirm your %store_name account" store_name=$store.frontend_name}} @-->
+<!--@subject {{trans "Please confirm your %store_name account" store_name=$store_frontend_name}} @-->
 <!--@vars {
-"var this.getUrl($store, 'customer/account/confirm/', [_query:[id:$customer.id, key:$customer.confirmation, back_url:$back_url]])":"Account Confirmation URL",
-"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
+"store url="customer/account/confirm/" _query_id='$customer.id' _query_key='$customer.confirmation' _query_back_url='$back_url'":"Account Confirmation URL",
+"store url='customer/account/'":"Customer Account URL",
 "var customer.email":"Customer Email",
 "var customer.name":"Customer Name"
 } @-->
@@ -23,7 +23,7 @@
             <table class="inner-wrapper" border="0" cellspacing="0" cellpadding="0" align="center">
                 <tr>
                     <td align="center">
-                        <a href="{{var this.getUrl($store,'customer/account/confirm/',[_query:[id:$customer.id,key:$customer.confirmation,back_url:$back_url],_nosid:1])}}" target="_blank">{{trans "Confirm Your Account"}}</a>
+                        <a href="{{store url='customer/account/confirm/' _query_id='$customer.id' _query_key='$customer.confirmation' _query_back_url='$back_url' _nosid='1'}}" target="_blank">{{trans "Confirm Your Account"}}</a>
                     </td>
                 </tr>
             </table>
