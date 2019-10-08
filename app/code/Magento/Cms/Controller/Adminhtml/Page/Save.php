@@ -101,6 +101,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 }
             }
 
+            $data['layout_update_xml'] = $model->getLayoutUpdateXml();
+            $data['custom_layout_update_xml'] = $model->getCustomLayoutUpdateXml();
             $model->setData($data);
 
             try {
