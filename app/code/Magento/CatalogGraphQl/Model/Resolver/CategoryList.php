@@ -104,7 +104,7 @@ class CategoryList implements ResolverInterface
         foreach ($categoryIds as $categoryId) {
             $categoryTree = $this->categoryTree->getTree($info, $categoryId);
             if (empty($categoryTree)) {
-                throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
+                continue;
             }
             $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
         }

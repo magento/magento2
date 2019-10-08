@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -222,6 +224,64 @@ QUERY;
         $query = <<<QUERY
 {
     categoryList(filters: {url_key: {in: ["inactive", "does-not-exist"]}}){
+        id
+        name
+        url_key
+        url_path
+        children_count
+        path
+        position
+    }
+}
+QUERY;
+
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertArrayHasKey('categoryList', $result);
+        $this->assertEquals([], $result['categoryList']);
+    }
+
+    /**
+     * When no filters are supplied, the root category is returned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testEmptyFiltersReturnRootCategory()
+    {
+        $query = <<<QUERY
+{
+    categoryList{
+        id
+        name
+        url_key
+        url_path
+        children_count
+        path
+        position
+    }
+}
+QUERY;
+
+        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $storeRootCategoryId = $storeManager->getStore()->getRootCategoryId();
+
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertArrayHasKey('categoryList', $result);
+        $this->assertEquals('Default Category', $result['categoryList'][0]['name']);
+        $this->assertEquals($storeRootCategoryId, $result['categoryList'][0]['id']);
+    }
+
+    /**
+     * Filtering with match value less than minimum query should return empty result
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testMinimumMatchQueryLength()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {name: {match: "mo"}}){
         id
         name
         url_key
