@@ -80,9 +80,9 @@ class OperationProcessor
      * @param ConsumerConfigurationInterface $configuration
      * @param Json $jsonHelper
      * @param OperationManagementInterface $operationManagement
-     * @param LoggerInterface $logger
      * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
+     * @param LoggerInterface $logger
      */
     public function __construct(
         MessageValidator $messageValidator,
