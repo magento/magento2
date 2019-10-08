@@ -235,12 +235,12 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Aggregates discount per rule
      *
-     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return void
      */
     private function aggregateDiscountPerRule(
-        \Magento\Quote\Api\Data\CartItemInterface $item,
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
         \Magento\Quote\Api\Data\AddressInterface $address
     ) {
         $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
