@@ -16,6 +16,9 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 use Magento\Framework\Pricing\Render;
 
+/**
+ * Resolver for the FPT store config settings
+ */
 class StoreConfig implements ResolverInterface
 {
     /**
