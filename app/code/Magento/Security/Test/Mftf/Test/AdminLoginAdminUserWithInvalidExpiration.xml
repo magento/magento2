@@ -17,7 +17,7 @@
             <description value="Try to login as a user with an invalid expiration date."/>
             <testCaseId value=""/>
             <severity value="CRITICAL"/>
-            <group value="security"/>
+            <group value="debug"/>
         </annotations>
 
         <before>
@@ -25,12 +25,14 @@
         </before>
 
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
-        <generateDate date="+2 minute" format="M d, Y h:i:s" stepKey="expiresDateTime"/>
+        <generateDate date="+2 minute" format="M d, Y h:i A" stepKey="expiresDateTime"/>
         <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
             <argument name="expires_at" value="{$expiresDateTime}"/>
         </actionGroup>
         <grabValueFrom selector="{{AdminNewUserFormSection.username}}" stepKey="grabUsername"/>
         <grabValueFrom selector="{{AdminNewUserFormSection.password}}" stepKey="grabPassword"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminNewUserFormSection.userInfoTab}}" stepKey="openUserInfoTab"/>
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
         <actionGroup ref="logout" stepKey="logout"/>
         <wait time="120" stepKey="waitForUserToExpire"/>
