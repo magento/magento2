@@ -52,6 +52,7 @@ class Config
      * @param string $path
      * @param null $storeId
      * @return mixed
+     * phpcs:ignoreFile
      */
     final public function getConfig($path, $storeId = null)
     {
@@ -64,6 +65,7 @@ class Config
 
     /**
      * @return mixed
+     * phpcs:ignoreFile
      */
     final public function isEnabled()
     {
@@ -74,6 +76,7 @@ class Config
 
     /**
      * @return mixed
+     * phpcs:ignoreFile
      */
     final public function isKeyMissing()
     {
