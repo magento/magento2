@@ -31,6 +31,10 @@
             <actionGroup stepKey="selectNotLoggedInCustomerGroup" ref="selectNotLoggedInCustomerGroup"/>
             <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
             <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule."/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!-- delete the simple product and catalog price rule and logout -->
