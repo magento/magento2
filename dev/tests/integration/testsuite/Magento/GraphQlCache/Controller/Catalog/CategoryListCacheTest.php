@@ -99,10 +99,12 @@ QUERY;
            }
        }
 QUERY;
+        //added the previous category in expected tags as it is cached
+        $expectedCacheTags = ['cat_c','cat_c_' .'333', 'cat_c_' . $categoryId1, 'cat_c_' . $categoryId2, 'FPC'];
+
         $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId1, 'cat_c_' . $categoryId2, 'FPC'];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 
@@ -127,7 +129,8 @@ QUERY;
            }
        }
 QUERY;
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId1, 'cat_c_' . $categoryId2, 'FPC'];
+        //added the previous category in expected tags as it is cached
+        $expectedCacheTags = ['cat_c','cat_c_' .'333', 'cat_c_' . $categoryId1, 'cat_c_' . $categoryId2, 'FPC'];
 
         $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
