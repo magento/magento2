@@ -70,9 +70,6 @@
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteSecondCreatedCustomer">
-                <argument name="customerEmail" value="$$createCustomer.id$$"/>
-            </actionGroup>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
