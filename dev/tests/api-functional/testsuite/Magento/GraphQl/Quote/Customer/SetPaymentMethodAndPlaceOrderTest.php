@@ -96,6 +96,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      *
      * @dataProvider dataProviderSetPaymentOnCartWithException
      * @param string $input
@@ -140,6 +141,13 @@ QUERY;
             'missed_payment_method' => [
                 'cart_id: "cart_id_value"',
                 'Required parameter "code" for "payment_method" is missing.',
+            ],
+            'place_order_with_out_of_stock_products' => [
+                'cart_id: "cart_id_value"
+                  payment_method: {
+                    code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
+                    }',
+                'Unable to place order: Some of the products are out of stock.',
             ],
         ];
     }
