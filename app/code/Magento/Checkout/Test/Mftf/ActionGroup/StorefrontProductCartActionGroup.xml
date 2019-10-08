@@ -155,7 +155,7 @@
         <arguments>
             <argument name="discount" type="string"/>
         </arguments>
-        <waitForElement selector="{{CheckoutCartSummarySection.discountAmount}}" after="assertShipping" stepKey="waitForDiscount"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" after="assertShipping" stepKey="assertDiscount"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscount"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
     </actionGroup>
 </actionGroups>

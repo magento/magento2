@@ -97,6 +97,8 @@
             <argument name="shipping" value="$10.00"/>
             <argument name="total" value="$710.00"/>
          </actionGroup>
+        <!-- Discount is absent in cart subtotal -->
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="discountIsNotApplied"/>
          <!-- Add FirstGroupedProduct to the cart -->
         <actionGroup ref="StorefrontAddGroupedProductWithTwoLinksToCartActionGroup" stepKey="addFirsGroupedProductToCart">
             <argument name="product" value="$createGroupedProduct$"/>
