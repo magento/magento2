@@ -51,7 +51,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers CreateHandler::execute
+     * @covers \Magento\Catalog\Model\Product\Gallery\CreateHandler::execute
      *
      * @return void
      */
@@ -81,7 +81,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * Check sanity of posted image file name
      *
      * @param string $imageFileName
-     * @expectedException FileSystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      * @dataProvider illegalFilenameDataProvider
      */
     public function testExecuteWithIllegalFilename(string $imageFileName): array

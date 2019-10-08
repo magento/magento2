@@ -83,16 +83,13 @@ class UploadTest extends AbstractBackendController
         $this->getRequest()->setMethod($this->httpMethod);
         $this->dispatch($this->uri);
         $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
-        $fileAbsolutePath = $this->mediaDirectory->getAbsolutePath(
-            $this->config->getBaseTmpMediaPath() . $expectation['tmp_media_path']
-        );
         if (empty($expectation['error'])) {
             $this->assertEquals($jsonBody['name'], $expectation['name']);
             $this->assertEquals($jsonBody['type'], $expectation['type']);
             $this->assertEquals($jsonBody['file'], $expectation['file']);
             $this->assertEquals($jsonBody['url'], $expectation['url']);
             $this->assertFileExists(
-                $fileAbsolutePath
+                $this->getFileAbsolutePath($expectation['tmp_media_path'])
             );
         } else {
             $this->assertEquals($jsonBody['error'], $expectation['message']);
@@ -100,7 +97,7 @@ class UploadTest extends AbstractBackendController
 
             if (!empty($expectation['tmp_media_path'])) {
                 $this->assertFileNotExists(
-                    $fileAbsolutePath
+                    $this->getFileAbsolutePath($expectation['tmp_media_path'])
                 );
             }
         }
@@ -240,5 +237,14 @@ class UploadTest extends AbstractBackendController
             'type' => 'text/plain',
             'tmp_name' => $filePath,
         ];
+    }
+
+    /**
+     * @param string $tmpPath
+     * @return string
+     */
+    private function getFileAbsolutePath(string $tmpPath): string
+    {
+        return $this->mediaDirectory->getAbsolutePath($this->config->getBaseTmpMediaPath() . $tmpPath);
     }
 }
