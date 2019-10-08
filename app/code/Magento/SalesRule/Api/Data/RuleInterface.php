@@ -234,6 +234,8 @@ interface RuleInterface extends ExtensibleDataInterface
     public function getIsAdvanced();
 
     /**
+     * Set if rule is advanced
+     *
      * @param bool $isAdvanced
      * @return $this
      */
@@ -262,6 +264,8 @@ interface RuleInterface extends ExtensibleDataInterface
     public function getSortOrder();
 
     /**
+     * Set sort order
+     *
      * @param int $sortOrder
      * @return $this
      */
