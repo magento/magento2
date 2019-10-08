@@ -26,6 +26,7 @@
         <selectOption selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" userInput="{{customUrlRewriteValue}}" stepKey="selectUrlRewriteTypeOption"/>
         <waitForElementVisible selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="waitForCategoryInTreeVisible"/>
         <click selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="clickOnCategoryInTree"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.store}}" stepKey="waitForStoreSelectVisible"/>
         <selectOption selector="{{AdminUrlRewriteEditSection.store}}" userInput="{{storeValue}}" stepKey="selectStoreOption"/>
         <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPathField"/>
         <selectOption selector="{{AdminUrlRewriteEditSection.redirectType}}" userInput="{{redirectTypeValue}}" stepKey="selectRedirectType"/>
