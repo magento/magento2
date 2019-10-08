@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDatetimeProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Datetime product attributes support"/>
+            <title value="Datetime product attribute type is supported"/>
+            <description value="Admin should be able to create datetime product attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-21451"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="datetimeProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Set attribute properties -->
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}"
+                   userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}"
+                      userInput="{{datetimeProductAttribute.frontend_input}}" stepKey="fillInputType"/>
+        <actionGroup ref="AdminNavigateToProductAttributeAdvancedSection" stepKey="goToAdvancedSectionNew"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}"
+                   userInput="{{datetimeProductAttribute.attribute_code}}"
+                   stepKey="fillAttributeCode"/>
+        <!-- Generate and set a default value -->
+        <generateDate date="now" format="m/j/y g:i A" stepKey="generateDefaultValue"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}"
+                   userInput="{$generateDefaultValue}"
+                   stepKey="fillDefaultValue"/>
+        <!-- Save the new product attribute -->
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForGridPageLoadAfterSaveAttribute"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
+                    stepKey="waitForSuccessMessage"/>
+        <!-- Navigate to created product attribute -->
+        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+            <argument name="ProductAttribute" value="datetimeProductAttribute"/>
+        </actionGroup>
+        <!-- Check the saved date and time default value -->
+        <actionGroup ref="AdminNavigateToProductAttributeAdvancedSection" stepKey="goToAdvancedSection"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" stepKey="scrollToDefaultValue"/>
+        <seeInField userInput="{$generateDefaultValue}"
+             selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}"
+             stepKey="checkDefaultValue"/>
+    </test>
+</tests>
