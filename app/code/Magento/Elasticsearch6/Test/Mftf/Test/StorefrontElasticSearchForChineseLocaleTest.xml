@@ -8,10 +8,10 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontElasticSearchForChineseLocaleTest">
+    <test name="StorefrontElasticSearch6ForChineseLocaleTest">
         <annotations>
-            <features value="Elasticsearch"/>
-            <stories value="Elasticsearch for Chinese produce error"/>
+            <features value="Elasticsearch6"/>
+            <stories value="Elasticsearch6 for Chinese"/>
             <title value="Elastic search for Chinese locale"/>
             <description value="Elastic search for Chinese locale"/>
             <severity value="CRITICAL"/>
@@ -21,10 +21,9 @@
         </annotations>
         <before>
             <!-- Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront -->
-            <comment userInput="Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront" stepKey="doInitialSetups"/>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <magentoCLI command="config:set --scope=websites --scope-code=base general/locale/code zh_Hans_CN" stepKey="setLocaleToChina"/>
-            <magentoCLI command="config:set catalog/search/engine elasticsearch6" stepKey="setSearchEngineToElastic6"/>
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForChina.scope}} --scope-code={{GeneralLocalCodeConfigsForChina.scope_code}} {{GeneralLocalCodeConfigsForChina.path}} {{GeneralLocalCodeConfigsForChina.value}}" stepKey="setLocaleToChina"/>
+            <magentoCLI command="config:set {{EnableElasticSearch6Config.path}} {{EnableElasticSearch6Config.value}}" stepKey="enableElasticsearch6"/>
             <actionGroup ref="AdminElasticConnectionTestActionGroup" stepKey="checkConnection"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -35,29 +34,17 @@
         </before>
         <after>
             <!-- Delete created data and reset initial configuration -->
-            <comment userInput="Delete created data and reset initial configuration" stepKey="deleteCreatedDataAndResetConfig"/>
-            <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToConfigurationGeneralPage"/>
-            <waitForPageLoad stepKey="waitForPageLoad"/>
-            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="adminSwitchWebsiteActionGroup">
-                <argument name="website" value="_defaultWebsite"/>
-            </actionGroup>
-            <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
-            <checkOption selector="{{LocaleOptionsSection.defaultLocale}}" stepKey="setDefaultLocaleValue"/>
-            <click selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="closeTab"/>
-            <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
-            <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
-            <createData entity="SetCatalogSearchEngineToDefault" stepKey="setSearchEngineToDefault"/>
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForUS.scope}} --scope-code={{GeneralLocalCodeConfigsForUS.scope_code}} {{GeneralLocalCodeConfigsForUS.path}} {{GeneralLocalCodeConfigsForUS.value}}" stepKey="setLocaleToUS"/>
+            <magentoCLI command="config:set {{SetDefaultSearchEngineConfig.path}} {{SetDefaultSearchEngineConfig.value}}" stepKey="resetSearchEnginePreviousState"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search for product by name -->
-        <comment userInput="Search for product by name" stepKey="searchForProduct"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
             <argument name="phrase" value="$$createProduct.name$$"/>
         </actionGroup>
         <!-- Check if searched product is displayed -->
-        <comment userInput="Check if searched product is displayed" stepKey="checkThatProductIsDisplayed"/>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInCategoryPage"/>
     </test>
 </tests>
