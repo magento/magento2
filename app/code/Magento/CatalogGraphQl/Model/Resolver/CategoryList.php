@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\CatalogGraphQl\Model\Resolver\Category\CheckCategoryIsActive;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -43,27 +43,19 @@ class CategoryList implements ResolverInterface
     private $extractDataFromCategoryTree;
 
     /**
-     * @var CheckCategoryIsActive
-     */
-    private $checkCategoryIsActive;
-
-    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
-     * @param CheckCategoryIsActive $checkCategoryIsActive
      * @param CategoryFilter $categoryFilter
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
-        CheckCategoryIsActive $checkCategoryIsActive,
         CategoryFilter $categoryFilter,
         CollectionFactory $collectionFactory
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
-        $this->checkCategoryIsActive = $checkCategoryIsActive;
         $this->categoryFilter = $categoryFilter;
         $this->collectionFactory = $collectionFactory;
     }
@@ -76,25 +68,47 @@ class CategoryList implements ResolverInterface
         if (isset($value[$field->getName()])) {
             return $value[$field->getName()];
         }
-        $categoryCollection = $this->collectionFactory->create();
+        $store = $context->getExtensionAttributes()->getStore();
 
+        $rootCategoryIds = [];
         if (!isset($args['filters'])) {
-            $rootCategoryIds = [(int)$context->getExtensionAttributes()->getStore()->getRootCategoryId()];
+            $rootCategoryIds[] = (int)$store->getRootCategoryId();
         } else {
-            $this->categoryFilter->applyFilters($args, $categoryCollection);
-            $rootCategoryIds = [];
+            $categoryCollection = $this->collectionFactory->create();
+            try {
+                $this->categoryFilter->applyFilters($args, $categoryCollection, $store);
+            } catch (InputException $e) {
+                return [];
+            }
+
             foreach ($categoryCollection as $category) {
                 $rootCategoryIds[] = (int)$category->getId();
             }
         }
-        $result = [];
-        foreach ($rootCategoryIds as $rootCategoryId) {
-            $categoryTree = $this->categoryTree->getTree($info, $rootCategoryId);
+
+        $result = $this->fetchCategories($rootCategoryIds, $info);
+        return $result;
+    }
+
+    /**
+     * Fetch category tree data
+     *
+     * @param array $categoryIds
+     * @param ResolveInfo $info
+     * @return array
+     * @throws GraphQlNoSuchEntityException
+     */
+    private function fetchCategories(array $categoryIds, ResolveInfo $info)
+    {
+        $fetchedCategories = [];
+        foreach ($categoryIds as $categoryId) {
+            $categoryTree = $this->categoryTree->getTree($info, $categoryId);
             if (empty($categoryTree)) {
                 throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
             }
-            $result[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
+            $fetchedCategories[] = current($this->extractDataFromCategoryTree->execute($categoryTree));
         }
-        return $result;
+
+        return $fetchedCategories;
     }
 }
