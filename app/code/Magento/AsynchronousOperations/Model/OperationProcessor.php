@@ -133,15 +133,13 @@ class OperationProcessor
 
         $outputData = null;
         if ($errorCode === null) {
-            $handlerMessages = [];
             foreach ($handlers as $callback) {
                 $result = $this->executeHandler($callback, $entityParams);
                 $status = $result['status'];
                 $errorCode = $result['error_code'];
-                $handlerMessages[] = $result['messages'];
+                $messages = array_merge($messages, $result['messages']);
                 $outputData = $result['output_data'];
             }
-            $messages = array_merge($messages, ...$handlerMessages);
         }
 
         if (isset($outputData)) {
