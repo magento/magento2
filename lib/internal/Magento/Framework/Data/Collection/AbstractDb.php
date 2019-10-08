@@ -896,6 +896,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -908,6 +911,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

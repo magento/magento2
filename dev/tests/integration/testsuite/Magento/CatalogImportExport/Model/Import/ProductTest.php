@@ -24,9 +24,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
-use Magento\Store\Model\Store;
-use Psr\Log\LoggerInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\Store\Model\Store;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ProductTest
@@ -375,8 +376,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Tests adding of custom options with multiple store views
      *
-     * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppIsolation enabled
      */
     public function testSaveCustomOptionsWithMultipleStoreViews()
@@ -387,7 +388,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $storeCodes = [
             'admin',
             'default',
-            'fixture_second_store',
+            'secondstore',
         ];
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $importFile = 'product_with_custom_options_and_multiple_store_views.csv';
@@ -626,7 +627,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                         explode(',', $optionData)
                     )
                 );
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $option = array_merge(...$option);
 
                 if (!empty($option['type']) && !empty($option['name'])) {
@@ -693,14 +694,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 }
             } else {
                 $existingOptionId = array_search($optionKey, $expectedOptions);
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $expectedData[$existingOptionId] = array_merge(
                     $this->getOptionData($option),
                     $expectedData[$existingOptionId]
                 );
                 if ($optionValues) {
                     foreach ($optionValues as $optionKey => $optionValue) {
-                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $expectedValues[$existingOptionId][$optionKey] = array_merge(
                             $optionValue,
                             $expectedValues[$existingOptionId][$optionKey]
@@ -1707,6 +1708,64 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             $product = $productRepository->get($productSku);
             $stockItem = $product->getExtensionAttributes()->getStockItem();
             $this->assertEquals($productQty, $stockItem->getQty());
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testUpdateUrlRewritesOnImport()
+    {
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_category.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => \Magento\Catalog\Model\Product::ENTITY
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
+        $listOfProductUrlKeys = [
+            sprintf('%s.html', $product->getUrlKey()),
+            sprintf('men/tops/%s.html', $product->getUrlKey()),
+            sprintf('men/%s.html', $product->getUrlKey())
+        ];
+        $repUrlRewriteCol = $this->objectManager->create(
+            UrlRewriteCollection::class
+        );
+
+        /** @var UrlRewriteCollection $collUrlRewrite */
+        $collUrlRewrite = $repUrlRewriteCol->addFieldToSelect(['request_path'])
+            ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
+            ->addFieldToFilter('entity_type', ['eq'=> 'product'])
+            ->load();
+        $listOfUrlRewriteIds = $collUrlRewrite->getAllIds();
+        $this->assertCount(3, $collUrlRewrite);
+
+        foreach ($listOfUrlRewriteIds as $key => $id) {
+            $this->assertEquals(
+                $listOfProductUrlKeys[$key],
+                $collUrlRewrite->getItemById($id)->getRequestPath()
+            );
         }
     }
 

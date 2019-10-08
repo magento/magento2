@@ -5,40 +5,35 @@
  */
 namespace Magento\Sales\Cron;
 
-use Magento\Store\Model\StoresConfig;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
+use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class CleanExpiredQuotes
  */
 class CleanExpiredQuotes
 {
-    const LIFETIME = 86400;
-
     /**
-     * @var StoresConfig
+     * @var ExpiredQuotesCollection
      */
-    protected $storesConfig;
+    private $expiredQuotesCollection;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory
+     * @var StoreManagerInterface
      */
-    protected $quoteCollectionFactory;
+    private $storeManager;
 
     /**
-     * @var array
-     */
-    protected $expireQuotesFilterFields = [];
-
-    /**
-     * @param StoresConfig $storesConfig
-     * @param \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
+     * @param StoreManagerInterface $storeManager
+     * @param ExpiredQuotesCollection $expiredQuotesCollection
      */
     public function __construct(
-        StoresConfig $storesConfig,
-        \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory
+        StoreManagerInterface $storeManager,
+        ExpiredQuotesCollection $expiredQuotesCollection
     ) {
-        $this->storesConfig = $storesConfig;
-        $this->quoteCollectionFactory = $collectionFactory;
+        $this->storeManager = $storeManager;
+        $this->expiredQuotesCollection = $expiredQuotesCollection;
     }
 
     /**
@@ -48,43 +43,11 @@ class CleanExpiredQuotes
      */
     public function execute()
     {
-        $lifetimes = $this->storesConfig->getStoresConfigByPath('checkout/cart/delete_quote_after');
-        foreach ($lifetimes as $storeId => $lifetime) {
-            $lifetime *= self::LIFETIME;
-
-            /** @var $quotes \Magento\Quote\Model\ResourceModel\Quote\Collection */
-            $quotes = $this->quoteCollectionFactory->create();
-
-            $quotes->addFieldToFilter('store_id', $storeId);
-            $quotes->addFieldToFilter('updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);
-            $quotes->addFieldToFilter('is_active', 0);
-
-            foreach ($this->getExpireQuotesAdditionalFilterFields() as $field => $condition) {
-                $quotes->addFieldToFilter($field, $condition);
-            }
-
+        $stores = $this->storeManager->getStores(true);
+        foreach ($stores as $store) {
+            /** @var $quotes Collection */
+            $quotes = $this->expiredQuotesCollection->getExpiredQuotes($store);
             $quotes->walk('delete');
         }
-    }
-
-    /**
-     * Retrieve expire quotes additional fields to filter
-     *
-     * @return array
-     */
-    protected function getExpireQuotesAdditionalFilterFields()
-    {
-        return $this->expireQuotesFilterFields;
-    }
-
-    /**
-     * Set expire quotes additional fields to filter
-     *
-     * @param array $fields
-     * @return void
-     */
-    public function setExpireQuotesAdditionalFilterFields(array $fields)
-    {
-        $this->expireQuotesFilterFields = $fields;
     }
 }

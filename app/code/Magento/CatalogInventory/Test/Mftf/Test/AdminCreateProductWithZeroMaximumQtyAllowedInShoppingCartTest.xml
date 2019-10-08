@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductWithZeroMaximumQtyAllowedInShoppingCartTest">
+        <annotations>
+            <features value="CatalogInventory"/>
+            <stories value="Sales restrictions"/>
+            <title value="Verify that product maximum qty allowed in shopping cart can't be set to zero or less"/>
+            <description value="Verify that product maximum qty allowed in shopping cart can't be set to zero or less"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-17606"/>
+            <testCaseId value="MC-17636"/>
+            <group value="catalog"/>
+            <group value="catalogInventory"/>
+        </annotations>
+        <before>
+            <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
+            <createData entity="SimpleProduct2" stepKey="createdProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
+            <deleteData createDataKey="createdProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to Inventory configuration page -->
+        <amOnPage url="{{AdminInventoryProductStockOptionsConfigPage.url}}" stepKey="openInventoryConfigPage"/>
+        <uncheckOption selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyInherit}}" stepKey="uncheckUseDefaultValueForMaxSaleQty"/>
+        <!-- Validate zero value -->
+        <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateZeroValue">
+            <argument name="qty" value="0"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+        </actionGroup>
+        <!-- Validate negative value -->
+        <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateNegativeValue">
+            <argument name="qty" value="-1"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+        </actionGroup>
+        <!-- Validate alphabetical value -->
+        <actionGroup ref="AdminCatalogInventoryConfigurationMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="validateAlphabeticalValue">
+            <argument name="qty" value="abc"/>
+            <argument name="errorMessage" value="Please enter a valid number in this field."/>
+        </actionGroup>
+        <!-- Fill correct value -->
+        <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQty}}" userInput="100" stepKey="setMaxSaleQtyValueToCorrectNumber"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigWithCorrectNumber"/>
+
+        <!-- Go to product page -->
+        <amOnPage url="{{AdminProductEditPage.url($$createdProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
+        <!-- Validate zero value -->
+        <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateZeroValue">
+            <argument name="qty" value="0"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+        </actionGroup>
+        <!-- Validate negative value -->
+        <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateNegativeValue">
+            <argument name="qty" value="-1"/>
+            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+        </actionGroup>
+        <!-- Validate alphabetical value -->
+        <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateAlphabeticalValue">
+            <argument name="qty" value="abc"/>
+            <argument name="errorMessage" value="Please enter a valid number in this field."/>
+        </actionGroup>
+        <!-- Fill correct value -->
+        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToCorrectNumber">
+            <argument name="qty" value="50"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" stepKey="waitForModalFormToDisappear"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+    </test>
+</tests>
