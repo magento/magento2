@@ -28,7 +28,6 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
- * //@todo remove included categories in fixtures and replace them with category fixture
  */
 class ProductSearchTest extends GraphQlAbstract
 {
