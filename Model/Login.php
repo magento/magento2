@@ -198,6 +198,8 @@ class Login extends \Magento\Framework\Model\AbstractModel
             $this->_customerSession->logout();
         } else {
 
+            $quote = $this->cart->getQuote();
+
             $keepItems = $this->scopeConfig->getValue(
                 self::XML_PATH_KEEP_GUEST_CART,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -205,11 +207,13 @@ class Login extends \Magento\Framework\Model\AbstractModel
 
             if (!$keepItems) {
                 /* Remove items from guest cart */
-                foreach ($this->cart->getQuote()->getAllVisibleItems() as $item) {
+                foreach ($quote->getAllVisibleItems() as $item) {
                     $this->cart->removeItem($item->getId());
                 }
-                $this->cart->save();
             }
+
+            $quote->setCustomerIsGuest(0);
+            $this->cart->save();
         }
 
         $customer = $this->getCustomer();
