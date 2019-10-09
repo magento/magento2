@@ -149,7 +149,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Applies fixed discount amount on whole cart and created order with it
+     * Applies fixed discount amount on whole cart and quote and checks the quote model for item discounts
      *
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
@@ -169,7 +169,6 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         /** @var Rule $rule */
         $rule = $this->getSalesRule('15$ fixed discount on whole cart');
         $salesRuleId = $rule->getRuleId();
-        //$rule->setStoreLabel('Test Coupon_label');
         /** @var CartItemInterface $item */
         $item = $quote->getItems()[0];
         $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
