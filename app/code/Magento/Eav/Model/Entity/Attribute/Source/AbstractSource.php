@@ -89,7 +89,7 @@ abstract class AbstractSource implements
     public function getOptionId($value)
     {
         foreach ($this->getAllOptions() as $option) {
-            if ($this->mbStrcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
+            if ($this->mbStrcasecmp($option['label'], $value) == 0) {
                 return $option['value'];
             }
         }
