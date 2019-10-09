@@ -10,6 +10,9 @@ namespace Magento\Catalog\Ui\Component\UrlInput;
 
 use Magento\Framework\UrlInterface;
 
+/**
+ * Returns configuration for product Url Input type
+ */
 class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
 {
     /**
@@ -27,7 +30,7 @@ class Product implements \Magento\Ui\Model\UrlInput\ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig(): array
     {
