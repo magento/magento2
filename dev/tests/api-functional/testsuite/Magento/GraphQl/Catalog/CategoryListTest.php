@@ -16,7 +16,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class CategoryListTest extends GraphQlAbstract
 {
-
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @dataProvider filterSingleCategoryDataProvider
@@ -39,7 +38,6 @@ class CategoryListTest extends GraphQlAbstract
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
@@ -69,7 +67,6 @@ QUERY;
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(count($expectedResult), $result['categoryList']);
@@ -96,7 +93,6 @@ QUERY;
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(3, $result['categoryList']);
@@ -121,7 +117,6 @@ QUERY;
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
@@ -168,9 +163,7 @@ QUERY;
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
-        $a = 3;
 
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
@@ -234,7 +227,6 @@ QUERY;
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('categoryList', $result);
@@ -261,7 +253,6 @@ QUERY;
     }
 }
 QUERY;
-
         $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
         $storeRootCategoryId = $storeManager->getStore()->getRootCategoryId();
 
@@ -292,7 +283,6 @@ QUERY;
     }
 }
 QUERY;
-
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('categoryList', $result);
@@ -351,6 +341,7 @@ QUERY;
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function filterMultipleCategoriesDataProvider(): array
