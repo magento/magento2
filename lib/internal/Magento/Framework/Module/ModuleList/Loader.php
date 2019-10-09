@@ -78,6 +78,8 @@ class Loader
     public function load(array $exclude = [])
     {
         $result = [];
+        $excludeSet = array_flip($exclude);
+
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
                 $this->parser->loadXML($contents);
@@ -93,7 +95,7 @@ class Loader
 
             $data = $this->converter->convert($this->parser->getDom());
             $name = key($data);
-            if (!in_array($name, $exclude)) {
+            if (!isset($excludeSet[$name])) {
                 $result[$name] = $data[$name];
             }
         }
