@@ -397,7 +397,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         if ($this->checkoutSession->getQuote()->getId()) {
             $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
             $quoteData = $quote->toArray();
-            if (is_object($quote->getExtensionAttributes())) {
+            if (null !== $quote->getExtensionAttributes()) {
                 $quoteData['extension_attributes'] = $quote->getExtensionAttributes()->__toArray();
             }
             $quoteData['is_virtual'] = $quote->getIsVirtual();
