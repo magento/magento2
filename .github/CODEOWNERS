@@ -1,0 +1,206 @@
+/app/code/Magento/AdminNotification/ @paliarush
+/app/code/Magento/Backend/ @paliarush
+/app/code/Magento/User/ @paliarush
+/lib/internal/Magento/Framework/App/ @buskamuza
+/lib/internal/Magento/Framework/Controller/ @buskamuza
+/lib/internal/Magento/Framework/Flag/ @buskamuza
+/lib/internal/Magento/Framework/HTTP/ @buskamuza
+/lib/internal/Magento/Framework/Logger/ @buskamuza
+/lib/internal/Magento/Framework/Message/ @buskamuza
+/lib/internal/Magento/Framework/Notification/ @buskamuza
+/lib/internal/Magento/Framework/Session/ @buskamuza
+/lib/internal/Magento/Framework/Url/ @buskamuza
+/app/code/Magento/Cms/ @melnikovi
+/app/code/Magento/CmsUrlRewrite/ @melnikovi
+/app/code/Magento/Contact/ @melnikovi
+/app/code/Magento/Email/ @melnikovi
+/app/code/Magento/Variable/ @melnikovi
+/app/code/Magento/Widget/ @melnikovi
+/lib/internal/Magento/Framework/Cache/ @kokoc
+/app/code/Magento/CacheInvalidate/ @kokoc
+/app/code/Magento/CatalogInventory/ @tariqjawed83 @maghamed
+/app/code/Magento/Bundle/ @akaplya
+/app/code/Magento/BundleImportExport/ @akaplya
+/app/code/Magento/Catalog/ @akaplya
+/app/code/Magento/CatalogAnalytics/ @akaplya
+/app/code/Magento/CatalogImportExport/ @akaplya
+/app/code/Magento/CatalogSearch/ @kokoc
+/app/code/Magento/CatalogUrlRewrite/ @akaplya
+/app/code/Magento/ConfigurableImportExport/ @akaplya
+/app/code/Magento/ConfigurableProduct/ @akaplya
+/app/code/Magento/Downloadable/ @akaplya
+/app/code/Magento/DownloadableImportExport/ @akaplya
+/app/code/Magento/GroupedImportExport/ @akaplya
+/app/code/Magento/GroupedProduct/ @akaplya
+/app/code/Magento/LayeredNavigation/ @kokoc
+/app/code/Magento/ProductVideo/ @akaplya
+/app/code/Magento/Review/ @akaplya
+/app/code/Magento/Swatches/ @akaplya
+/app/code/Magento/SwatchesLayeredNavigation/ @kokoc
+/app/code/Magento/Checkout/ @paliarush
+/app/code/Magento/CheckoutAgreements/ @paliarush
+/app/code/Magento/GiftMessage/ @paliarush
+/app/code/Magento/InstantPurchase/ @paliarush
+/app/code/Magento/Multishipping/ @joni-jones
+/app/code/Magento/Quote/ @paliarush
+/app/code/Magento/QuoteAnalytics/ @paliarush
+/lib/internal/Magento/Framework/Code/ @joni-jones
+/lib/internal/Magento/Framework/Reflection/ @joni-jones
+/lib/internal/Magento/Framework/Component/ @buskamuza
+/app/code/Magento/Version/ @buskamuza
+/lib/internal/Magento/Framework/Config/ @paliarush
+/app/code/Magento/Config/ @paliarush
+/lib/internal/Magento/Framework/Console/ @joni-jones
+/lib/internal/Magento/Framework/Process/ @joni-jones
+/lib/internal/Magento/Framework/Shell/ @joni-jones
+/app/code/Magento/Cookie/ @kokoc
+/lib/internal/Magento/Framework/Crontab/ @tariqjawed83 @buskamuza
+/app/code/Magento/Cron/ @tariqjawed83 @buskamuza
+/app/code/Magento/Customer/ @paliarush
+/app/code/Magento/CustomerAnalytics/ @paliarush
+/app/code/Magento/CustomerImportExport/ @paliarush
+/app/code/Magento/Persistent/ @paliarush
+/app/code/Magento/Wishlist/ @paliarush
+/lib/internal/Magento/Framework/DB/ @akaplya
+/lib/internal/Magento/Framework/EntityManager/ @akaplya
+/lib/internal/Magento/Framework/Indexer/ @akaplya
+/lib/internal/Magento/Framework/Model/ @akaplya
+/lib/internal/Magento/Framework/Mview/ @akaplya
+/app/code/Magento/Eav/ @akaplya
+/app/code/Magento/Indexer/ @akaplya
+/lib/internal/Magento/Framework/Archive/ @joni-jones
+/lib/internal/Magento/Framework/Convert/ @joni-jones
+/lib/internal/Magento/Framework/Data/ @joni-jones
+/lib/internal/Magento/Framework/DomDocument/ @joni-jones
+/lib/internal/Magento/Framework/Json/ @joni-jones
+/lib/internal/Magento/Framework/Math/ @joni-jones
+/lib/internal/Magento/Framework/Parse/ @joni-jones
+/lib/internal/Magento/Framework/Serialize/ @joni-jones
+/lib/internal/Magento/Framework/Simplexml/ @joni-jones
+/lib/internal/Magento/Framework/Stdlib/ @joni-jones
+/lib/internal/Magento/Framework/Unserialize/ @joni-jones
+/lib/internal/Magento/Framework/Xml/ @joni-jones
+/lib/internal/Magento/Framework/XsltProcessor/ @joni-jones
+/app/code/Magento/Deploy/ @kandy @buskamuza
+/lib/internal/Magento/Framework/Profiler/ @kandy
+/app/code/Magento/Developer/ @buskamuza
+/app/code/Magento/Directory/ @buskamuza
+/lib/internal/Magento/Framework/Exception/ @paliarush
+/lib/internal/Magento/Framework/File/ @buskamuza
+/lib/internal/Magento/Framework/Filesystem/ @buskamuza
+/lib/internal/Magento/Framework/System/ @buskamuza
+/lib/internal/Magento/Framework/Css/ @DrewML
+/lib/internal/Magento/Framework/Option/ @DrewML
+/lib/internal/Magento/Framework/RequireJs/ @DrewML
+/lib/internal/Magento/Framework/View/ @melnikovi
+/dev/tests/js/ @DrewML
+/app/code/Magento/RequireJs/ @DrewML
+/app/code/Magento/Theme/ @melnikovi
+/app/code/Magento/Ui/ @melnikovi
+/lib/internal/Magento/Framework/Intl/ @melnikovi
+/lib/internal/Magento/Framework/Locale/ @melnikovi
+/lib/internal/Magento/Framework/Phrase/ @melnikovi
+/lib/internal/Magento/Framework/Translate/ @melnikovi
+/app/code/Magento/Translation/ @melnikovi
+/app/code/Magento/ImportExport/ @akaplya
+/app/code/Magento/GoogleAdwords/ @buskamuza @melnikovi
+/app/code/Magento/Newsletter/ @buskamuza @melnikovi
+/app/code/Magento/ProductAlert/ @buskamuza @melnikovi
+/app/code/Magento/Rss/ @buskamuza @melnikovi
+/app/code/Magento/SendFriend/ @buskamuza @melnikovi
+/app/code/Magento/Marketplace/ @buskamuza
+/app/code/Magento/MediaStorage/ @buskamuza
+/lib/internal/Magento/Framework/Amqp/ @tariqjawed83 @paliarush
+/lib/internal/Magento/Framework/Bulk/ @tariqjawed83 @paliarush
+/lib/internal/Magento/Framework/Communication/ @tariqjawed83 @paliarush
+/app/code/Magento/Amqp/ @tariqjawed83 @paliarush
+/app/code/Magento/AsynchronousOperations/ @tariqjawed83 @paliarush
+/app/code/Magento/MessageQueue/ @tariqjawed83 @paliarush
+/app/code/Magento/MysqlMq/ @tariqjawed83 @paliarush
+/app/code/Magento/Sales/ @joni-jones
+/app/code/Magento/SalesInventory/ @joni-jones
+/app/code/Magento/SalesSequence/ @joni-jones
+/lib/internal/Magento/Framework/Event/ @buskamuza @kandy
+/lib/internal/Magento/Framework/Interception/ @buskamuza @kandy
+/lib/internal/Magento/Framework/ObjectManager/ @buskamuza @kandy
+/app/code/Magento/PageCache/ @Andrey @kokoc @paliarush
+/app/code/Magento/Authorizenet/ @joni-jones
+/app/code/Magento/Braintree/ @joni-jones
+/app/code/Magento/OfflinePayments/ @joni-jones
+/app/code/Magento/Payment/ @joni-jones
+/app/code/Magento/Paypal/ @joni-jones
+/app/code/Magento/Signifyd/ @joni-jones
+/app/code/Magento/Vault/ @joni-jones
+/lib/internal/Magento/Framework/Pricing/ @akaplya
+/app/code/Magento/AdvancedPricingImportExport/ @akaplya
+/app/code/Magento/CurrencySymbol/ @akaplya
+/app/code/Magento/Msrp/ @akaplya
+/app/code/Magento/Tax/ @akaplya
+/app/code/Magento/TaxImportExport/ @akaplya
+/app/code/Magento/Weee/ @akaplya
+/app/code/Magento/CatalogRule/ @kokoc
+/app/code/Magento/CatalogRuleConfigurable/ @kokoc
+/app/code/Magento/CatalogWidget/ @kokoc
+/app/code/Magento/Rule/ @kokoc
+/app/code/Magento/SalesRule/ @akaplya
+/app/code/Magento/ReleaseNotification/ @paliarush
+/app/code/Magento/Analytics/ @tariqjawed83 @buskamuza
+/app/code/Magento/GoogleAnalytics/ @tariqjawed83 @buskamuza
+/app/code/Magento/NewRelicReporting/ @tariqjawed83 @buskamuza
+/app/code/Magento/Reports/ @tariqjawed83 @buskamuza
+/app/code/Magento/ReviewAnalytics/ @tariqjawed83 @buskamuza
+/app/code/Magento/SalesAnalytics/ @tariqjawed83 @buskamuza
+/app/code/Magento/WishlistAnalytics/ @tariqjawed83 @buskamuza
+/app/code/Magento/GoogleOptimizer/ @paliarush
+/app/code/Magento/Robots/ @paliarush
+/app/code/Magento/Sitemap/ @paliarush
+/lib/internal/Magento/Framework/Search/ @kokoc
+/app/code/Magento/AdvancedSearch/ @kokoc
+/app/code/Magento/Elasticsearch/ @kokoc
+/app/code/Magento/Search/ @kokoc
+/lib/internal/Magento/Framework/Acl/ @kokoc
+/lib/internal/Magento/Framework/Authorization/ @kokoc
+/lib/internal/Magento/Framework/Encryption/ @kokoc
+/app/code/Magento/Authorization/ @kokoc
+/app/code/Magento/Captcha/ @kokoc
+/app/code/Magento/EncryptionKey/ @kokoc
+/app/code/Magento/Security/ @kokoc
+/lib/internal/Magento/Framework/Autoload/ @buskamuza
+/lib/internal/Magento/Framework/Backup/ @buskamuza
+/lib/internal/Magento/Framework/Composer/ @buskamuza
+/lib/internal/Magento/Framework/Setup/ @buskamuza
+/app/code/Magento/Backup/ @buskamuza
+/setup/ @buskamuza
+/app/code/Magento/Dhl/ @joni-jones
+/app/code/Magento/Fedex/ @joni-jones
+/app/code/Magento/OfflineShipping/ @joni-jones
+/app/code/Magento/Shipping/ @joni-jones
+/app/code/Magento/Ups/ @joni-jones
+/app/code/Magento/Usps/ @joni-jones
+/app/code/Magento/Store/ @akaplya
+/lib/internal/Magento/Framework/TestFramework/ @paliarush
+/dev/tests/integration/framework/ @buskamuza
+/dev/tests/setup-integration/framework/ @paliarush
+/dev/tests/static/framework/ @paliarush
+/dev/tests/unit/ @paliarush
+/dev/tests/api-functional/ @paliarush
+/app/code/Magento/UrlRewrite/ @kokoc
+/lib/internal/Magento/Framework/Image/ @buskamuza
+/lib/internal/Magento/Framework/Mail/ @melnikovi
+/lib/internal/Magento/Framework/Filter/ @melnikovi
+/lib/internal/Magento/Framework/Validation/ @melnikovi
+/lib/internal/Magento/Framework/Validator/ @melnikovi
+/lib/internal/Magento/Framework/Api/ @paliarush
+/lib/internal/Magento/Framework/GraphQL/ @paliarush
+/lib/internal/Magento/Framework/Oauth/ @paliarush
+/lib/internal/Magento/Framework/Webapi/ @paliarush
+/app/code/Magento/GraphQL/ @paliarush
+/app/code/Magento/Integration/ @paliarush
+/app/code/Magento/Swagger/ @paliarush
+/app/code/Magento/Webapi/ @paliarush
+/app/code/Magento/WebapiSecurity/ @paliarush
+
+composer.json @buskamuza
+*.js @DrewML
+.htaccess* @akaplya
+nginx.conf* @akaplya

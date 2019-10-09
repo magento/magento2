@@ -127,6 +127,7 @@
                             <map name="false" xsi:type="boolean">false</map>
                             <map name="true" xsi:type="boolean">true</map>
                         </valueMap>
+                        <description translate="true">Merge existing synonyms</description>
                     </settings>
                 </checkbox>
             </formElements>
