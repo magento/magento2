@@ -16,7 +16,7 @@
 <p>{{trans "Thank you for confirming your %store_name account." store_name=$store_frontend_name}}</p>
 <p>
     {{trans "To sign in to our site, use these credentials during checkout or on the "}}
-    <a href="{{store url='customer/account/' _nosid='1'}}">
+    <a href="{{store url='customer/account/' _nosid=1}}">
     {{trans "My Account"}}
     </a>
     {{trans " page:"}}
@@ -27,7 +27,7 @@
 </ul>
 <p>
     {{trans "Forgot your account password? Click "}}
-    <a href="{{store url='customer/account/createPassword/' _query_id='$customer.id' _query_token='$customer.rp_token' _nosid='1'}}">
+    <a href="{{store url='customer/account/createPassword/' _query_id='$customer.id' _query_token='$customer.rp_token' _nosid=1}}">
     {{trans "here"}}
     </a>
     {{trans " to reset it."}}
