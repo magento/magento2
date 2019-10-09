@@ -135,16 +135,31 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily
+     * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
      */
     public function testAccountIsNotConfirmed()
     {
         $confirmation_required = $this->accountManagement::ACCOUNT_CONFIRMATION_REQUIRED;
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
+        $headersMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
         $customer = $this->customerRepository->getById(1)->setConfirmation($confirmation_required);
         $this->customerRepository->save($customer);
-        $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
+        $query = <<<QUERY
+query {
+    customer {
+        firstname
+        lastname
+        email
+    }
+}
+QUERY;
+        $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $headersMap
+        );
     }
 
     /**
