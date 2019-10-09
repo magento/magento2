@@ -19,29 +19,14 @@ use \Magento\Store\Model\Store;
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
-    /**
-     * Pair value separator.
-     */
     const PAIR_VALUE_SEPARATOR = '=';
 
-    /**
-     * Default sort order
-     */
     const DEFAULT_SORT_ORDER = 0;
 
-    /**
-     * Default number of downloads
-     */
     const DEFAULT_NUMBER_OF_DOWNLOADS = 0;
 
-    /**
-     * Default is shareable
-     */
     const DEFAULT_IS_SHAREABLE = 2;
 
-    /**
-     * Default website id
-     */
     const DEFAULT_WEBSITE_ID = 0;
 
     /**
@@ -79,9 +64,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
 
-    /**
-     * Default group title
-     */
     const DEFAULT_GROUP_TITLE = '';
 
     /**
@@ -786,6 +768,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $rowCol
         );
         foreach ($options as $option) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $result[] = array_merge(
                 $this->dataSample,
                 ['product_id' => $entityId],
@@ -810,6 +793,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $rowCol
         );
         foreach ($options as $option) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $result[] = array_merge(
                 $this->dataLink,
                 ['product_id' => $entityId],
