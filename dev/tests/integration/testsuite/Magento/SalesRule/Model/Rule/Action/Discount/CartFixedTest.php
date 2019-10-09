@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
+use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartItemExtensionInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
@@ -21,7 +24,9 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
@@ -131,7 +136,6 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $quote->setCouponCode('CART_FIXED_DISCOUNT_15');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
-
         $this->assertEquals($expectedGrandTotal, $quote->getGrandTotal());
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
@@ -142,6 +146,45 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $cartManagement->placeOrder($quoteIdMask->getMaskedId());
         $order = $this->getOrder('test01');
         $this->assertEquals($expectedGrandTotal, $order->getGrandTotal());
+    }
+
+    /**
+     * Applies fixed discount amount on whole cart and created order with it
+     *
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_subtotal_with_discount.php
+     */
+    public function testDiscountsOnQuoteWithFixedDiscount(): void
+    {
+        $quote = $this->getQuote();
+        $quote->getShippingAddress()
+            ->setShippingMethod('freeshipping_freeshipping')
+            ->setCollectShippingRates(true);
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_15');
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+        /** @var Rule $rule */
+        $rule = $this->getSalesRule('15$ fixed discount on whole cart');
+        $salesRuleId = $rule->getRuleId();
+        //$rule->setStoreLabel('Test Coupon_label');
+        /** @var CartItemInterface $item */
+        $item = $quote->getItems()[0];
+        $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
+        $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getAmount());
+        $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getBaseAmount());
+        $this->assertEquals(5,$quoteItemDiscounts[$salesRuleId]['discount']->getOriginalAmount());
+        $this->assertEquals(10, $quoteItemDiscounts[$salesRuleId]['discount']->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Coupon', $quoteItemDiscounts[$salesRuleId]['rule']);
+
+        $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
+        $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getAmount());
+        $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseAmount());
+        $this->assertEquals(5,$quoteAddressItemDiscount[$salesRuleId]['discount']->getOriginalAmount());
+        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Coupon', $quoteAddressItemDiscount[$salesRuleId]['rule']);
     }
 
     /**
@@ -249,5 +292,30 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             ->getItems();
 
         return array_pop($items);
+    }
+    /**
+     * Gets rule by name.
+     *
+     * @param string $name
+     * @return \Magento\SalesRule\Model\Rule
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getSalesRule(string $name): \Magento\SalesRule\Model\Rule
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('name', $name)
+            ->create();
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $ruleRepository = $this->objectManager->get(RuleRepositoryInterface::class);
+        $items = $ruleRepository->getList($searchCriteria)->getItems();
+
+        $rule = array_pop($items);
+        /** @var \Magento\SalesRule\Model\Converter\ToModel $converter */
+        $converter = $this->objectManager->get(\Magento\SalesRule\Model\Converter\ToModel::class);
+
+        return $converter->toModel($rule);
     }
 }
