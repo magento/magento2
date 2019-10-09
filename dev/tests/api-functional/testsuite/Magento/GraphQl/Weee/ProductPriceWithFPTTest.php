@@ -27,12 +27,61 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     /** @var ObjectManager $objectManager */
     private $objectManager;
 
+    /** @var string[] $objectManager */
+    private $initialConfig;
+
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
+
     /**
      * @inheritdoc
      */
-    protected function setUp() :void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+
+        /** @var ScopeConfigInterface $scopeConfig */
+        $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+
+        $currentSettingsArray = [
+            'tax/display/type',
+            'tax/weee/enable',
+            'tax/weee/display',
+            'tax/defaults/region',
+            'tax/weee/apply_vat',
+            'tax/calculation/price_includes_tax'
+        ];
+
+        foreach ($currentSettingsArray as $configPath) {
+            $this->initialConfig[$configPath] = $this->scopeConfig->getValue(
+                $configPath
+            );
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->writeConfig($this->initialConfig);
+    }
+
+    /**
+     * Write configuration for weee
+     *
+     * @param array $weeTaxSettings
+     * @return void
+     */
+    private function writeConfig(array $weeTaxSettings): void
+    {
+        /** @var WriterInterface $configWriter */
+        $configWriter = $this->objectManager->get(WriterInterface::class);
+
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
+        $this->scopeConfig->clean();
     }
 
     /**
@@ -49,16 +98,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExcludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
-       /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -115,16 +155,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExcludeTaxAndIncludeFPTWithDescription(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -181,16 +212,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
@@ -257,16 +279,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
@@ -333,16 +346,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -400,16 +404,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnly(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -469,16 +464,8 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     public function testCatalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPT(
         array $weeTaxSettings
     ) {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
+        $this->writeConfig($weeTaxSettings);
 
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
         $taxClassCollection = $taxClassCollectionFactory->create();
@@ -552,16 +539,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTs(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
@@ -644,16 +622,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceDisableFPT(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
