@@ -87,6 +87,8 @@ class PatchHistory
 
         $adapter = $this->resourceConnection->getConnection();
         $adapter->insert($this->resourceConnection->getTableName(self::TABLE_NAME), [self::CLASS_NAME => $patchName]);
+
+        $this->patchesRegistry[] = $patchName;
     }
 
     /**
