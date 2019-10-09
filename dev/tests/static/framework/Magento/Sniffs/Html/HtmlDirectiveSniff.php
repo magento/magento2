@@ -18,6 +18,11 @@ use PHP_CodeSniffer\Files\File;
 class HtmlDirectiveSniff implements Sniff
 {
     /**
+     * @var array
+     */
+    private $usedVariables = [];
+
+    /**
      * @inheritDoc
      */
     public function register()
@@ -44,6 +49,8 @@ class HtmlDirectiveSniff implements Sniff
             return;
         }
 
+        $this->usedVariables = [];
+
         if (preg_match_all(Template::CONSTRUCTION_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 if (empty($construction[2])) {
@@ -56,7 +63,10 @@ class HtmlDirectiveSniff implements Sniff
                     $this->validateDirectiveBody($phpcsFile, $construction[2]);
                 }
             }
+
         }
+
+        $this->validateDefinedVariables($phpcsFile, $html);
     }
 
     /**
@@ -73,7 +83,7 @@ class HtmlDirectiveSniff implements Sniff
 
         foreach ($params as $param) {
             if (substr($param, 0, 1) === '$') {
-                $this->validateVariableUsage($phpcsFile, $param);
+                $this->validateVariableUsage($phpcsFile, substr($param, 1));
             }
         }
     }
@@ -86,6 +96,7 @@ class HtmlDirectiveSniff implements Sniff
      */
     private function validateVariableUsage(File $phpcsFile, string $body): void
     {
+        $this->usedVariables[] = 'var ' . trim($body);
         $variableTokenizer = new Template\Tokenizer\Variable();
         $variableTokenizer->setString($body);
         $stack = $variableTokenizer->tokenize();
@@ -95,7 +106,8 @@ class HtmlDirectiveSniff implements Sniff
         }
 
         foreach ($stack as $token) {
-            if ($token['type'] === 'method') {
+            // As a static analyzer there are no data types to know if this is a DataObject so allow all get* methods
+            if ($token['type'] === 'method' && substr($token['name'], 0, 3) !== 'get') {
                 $phpcsFile->addError(
                     'Template directives may not invoke methods. Only scalar array access is allowed.' . PHP_EOL
                     . 'Found "' . trim($body) . '"',
@@ -103,6 +115,53 @@ class HtmlDirectiveSniff implements Sniff
                     'HtmlTemplates.DirectiveUsage.ProhibitedMethodCall'
                 );
             }
+        }
+    }
+
+    /**
+     * Validate the variables defined in the template comment block match the variables actually used in the template
+     *
+     * @param File $phpcsFile
+     * @param string $templateText
+     */
+    private function validateDefinedVariables(File $phpcsFile, string $templateText): void
+    {
+        preg_match('/<!--@vars\s*((?:.)*?)\s*@-->/us', $templateText, $matches);
+
+        $definedVariables = [];
+
+        if (!empty($matches[1])) {
+            $definedVariables = json_decode(str_replace("\n", '', $matches[1]), true);
+            if (json_last_error()) {
+                $phpcsFile->addError(
+                    'Template @vars comment block contains invalid JSON.',
+                    null,
+                    'HtmlTemplates.DirectiveUsage.InvalidVarsJSON'
+                );
+                return;
+            }
+
+            $definedVariables = array_keys($definedVariables);
+        }
+
+        $undefinedVariables = array_diff($this->usedVariables, $definedVariables);
+        foreach ($undefinedVariables as $undefinedVariable) {
+            $phpcsFile->addError(
+                'Template @vars comment block is missing a variable used in the template.' . PHP_EOL
+                 . 'Missing variable: ' . $undefinedVariable,
+                null,
+                'HtmlTemplates.DirectiveUsage.UndefinedVariable'
+            );
+        }
+
+        $extraDefinedVariables = array_diff($definedVariables, $this->usedVariables);
+        foreach ($extraDefinedVariables as $extraDefinedVariable) {
+            $phpcsFile->addError(
+                'Template @vars comment block contains a variable not used in the template.' . PHP_EOL
+                 . 'Extra variable: ' . $extraDefinedVariable,
+                null,
+                'HtmlTemplates.DirectiveUsage.ExtraVariable'
+            );
         }
     }
 }

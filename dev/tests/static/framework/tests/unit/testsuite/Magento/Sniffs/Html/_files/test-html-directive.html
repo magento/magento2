@@ -4,20 +4,44 @@
  * See COPYING.txt for license details.
  */
 -->
+<!--@vars {
+"var foo.good":"Some variable",
+"var foo.good|stillfine":"Some variable",
+"var foo.bad()":"Some variable",
+"var foo.bad()|alsobad":"Some variable",
+"var foo.getGood()":"Some variable",
+"var foo.foo.getGood()":"Some variable",
+"var foo.getGood().fine":"Some variable",
+"var foo.getGood().fine|alsofine":"Some variable",
+"var foo.bad($bad.param())":"Some variable",
+"var foo.bad.baz()":"Some variable",
+"var foo.good.trans":"Some variable",
+"var extra.var.getOhNo()":"Uh Oh, Error time!",
+"var foo.bad.trans()":"Some variable",
+"var bad.bad()":"Some variable",
+"var bad.multiline()":"Some variable"
+} @-->
 
 <div>{{var foo.good}}</div>
+<div>{{var foo.good|stillfine}}</div>
 <div>{{var foo.bad()}}</div>
+<div>{{var foo.bad()|alsobad}}</div>
+<div>{{var foo.getGood()}}</div>
+<div>{{var foo.foo.getGood()}}</div>
+<div>{{var foo.getGood().fine}}</div>
+<div>{{var foo.getGood().fine|alsofine}}</div>
 <div>{{var foo.bad($bad.param())}}</div>
 <div>{{var foo.bad.baz()}}</div>
+<div>{{var foo.undeclared.baz}}</div>
 <div>{{trans "foo %bar" bar=$foo.good.trans}}</div>
 <div>{{trans "foo %bar" bar=$foo.bad.trans()}}</div>
 <div>{{trans "foo %bar" bar="something"}}</div>
-<div>{{trans "foo %bar" bar="something" bad="$bad.bad()"}}</div>
+<div>{{trans "foo %bar" bar="something" bad="$bad.bad()" something=$undeclared.var.error}}</div>
 <div>{{something "
     <blah>foo %bar</blah>blah
     " bar="something"
 }}</div>
 <div>{{something "
     <blah>foo %bar</blah>blah
-    " bar="something" bad="$bad.multiline()"
+    " bar="something" bad=$bad.multiline()
 }}</div>
