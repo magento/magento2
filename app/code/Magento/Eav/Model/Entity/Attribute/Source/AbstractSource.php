@@ -81,7 +81,7 @@ abstract class AbstractSource implements
     }
 
     /**
-     * Get option id.
+     * Get option id by label.
      *
      * @param string $value
      * @return null|string
@@ -95,7 +95,23 @@ abstract class AbstractSource implements
         }
         return null;
     }
-
+        
+    /**
+     * Get option id by value.
+     *
+     * @param string $value
+     * @return null|string
+     */
+    public function getOptionIdByValue($value)
+    {
+        foreach ($this->getAllOptions() as $option) {
+            if (isset($option['value']) && $option['value'] == $value) {
+                return $option['value'];
+            }
+        }
+        return null;
+    }
+        
     /**
      * Add Value Sort To Collection Select
      *
