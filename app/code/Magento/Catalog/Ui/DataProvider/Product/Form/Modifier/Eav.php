@@ -744,7 +744,6 @@ class Eav extends AbstractModifier
 
         $meta = $this->disableInaccessibleAttribute($attribute, $configPath, $meta);
 
-
         return $meta;
     }
 
