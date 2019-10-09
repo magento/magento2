@@ -33,6 +33,7 @@ class Discount
      * @param CartInterface $quote
      * @param CartItemInterface $cartItem
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(CartItemPersister $subject, CartInterface $quote, CartItemInterface $cartItem)
     {

@@ -41,6 +41,7 @@ class Discount
      * @param Quote $subject
      * @param Collection $result
      * @return Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetItemsCollection(
         Quote $subject,
@@ -65,6 +66,7 @@ class Discount
      * @param Quote $subject
      * @param array $result
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetAllAddresses(
         Quote $subject,

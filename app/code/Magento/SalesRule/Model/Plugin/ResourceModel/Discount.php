@@ -31,6 +31,7 @@ class Discount
      * @param \Magento\Quote\Model\ResourceModel\Quote $subject
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         \Magento\Quote\Model\ResourceModel\Quote $subject,
