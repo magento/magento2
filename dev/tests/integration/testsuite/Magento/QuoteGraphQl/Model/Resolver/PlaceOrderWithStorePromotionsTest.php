@@ -44,6 +44,9 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
     /** @var  AdapterInterface */
     private $connection;
 
+    /** @var SerializerInterface */
+    private $jsonSerializer;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -52,6 +55,7 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
             ->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->resource = $this->objectManager->get(ResourceConnection::class);
         $this->connection = $this->resource->getConnection();
+        $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
     }
 
     /**
@@ -73,7 +77,6 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
      */
     public function testResolvePlaceOrderWithMultipleProductsAndMultipleCartRules(): void
     {
-        $serializer = $this->objectManager->get(SerializerInterface::class);
         $categoryId = 56;
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
@@ -96,7 +99,7 @@ mutation {
 QUERY;
 
         $response = $this->graphQlRequest->send($query);
-        $responseContent = $serializer->unserialize($response->getContent());
+        $responseContent = $this->jsonSerializer->unserialize($response->getContent());
         $this->assertArrayNotHasKey('errors', $responseContent);
         $this->assertArrayHasKey('data', $responseContent);
         $orderIdFromResponse = $responseContent['data']['placeOrder']['order']['order_id'];
@@ -106,14 +109,16 @@ QUERY;
         $resultFromQuoteItem = $this->connection->fetchRow($selectFromQuoteItem);
         $serializedCartDiscount = $resultFromQuoteItem['discounts'];
 
-        $this->assertTrue(array_key_exists($salesRuleId, $serializer->unserialize($serializedCartDiscount)));
+        $this->assertTrue(array_key_exists($salesRuleId, $this->jsonSerializer->unserialize($serializedCartDiscount)));
         $this->assertEquals(
             10,
-            json_decode($serializer->unserialize($serializedCartDiscount)[$salesRuleId]['discount'], true)['amount']
+            json_decode($this->jsonSerializer->unserialize(
+                $serializedCartDiscount
+            )[$salesRuleId]['discount'], true)['amount']
         );
         $this->assertEquals(
             'TestRule_Label',
-            $serializer->unserialize($serializedCartDiscount)[$salesRuleId]['rule']
+            $this->jsonSerializer->unserialize($serializedCartDiscount)[$salesRuleId]['rule']
         );
         $selectFromQuoteAddress = $this->connection->select()->from($this->resource->getTableName('quote_address'))
         ->where('address_type = "shipping"');
@@ -122,7 +127,7 @@ QUERY;
         $this->assertEquals(
             10,
             json_decode(
-                $serializer->unserialize(
+                $this->jsonSerializer->unserialize(
                     $resultFromQuoteAddress['discounts']
                 )
                 [$salesRuleId]['discount'],
@@ -133,7 +138,7 @@ QUERY;
         $this->assertEquals(
             10,
             json_decode(
-                $serializer->unserialize(
+                $this->jsonSerializer->unserialize(
                     $resultFromQuoteAddress['discounts']
                 )
                 [$salesRuleId]['discount'],
@@ -143,7 +148,7 @@ QUERY;
         );
         $this->assertEquals(
             'TestRule_Label',
-            $serializer->unserialize($resultFromQuoteAddress['discounts'])[$salesRuleId]['rule']
+            $this->jsonSerializer->unserialize($resultFromQuoteAddress['discounts'])[$salesRuleId]['rule']
         );
     }
 
