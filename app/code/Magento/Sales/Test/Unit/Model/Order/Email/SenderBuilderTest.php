@@ -78,7 +78,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-
         $this->senderBuilder = new SenderBuilder(
             $this->templateContainerMock,
             $this->identityContainerMock,
