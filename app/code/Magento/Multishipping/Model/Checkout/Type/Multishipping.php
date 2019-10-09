@@ -691,6 +691,19 @@ class Multishipping extends \Magento\Framework\DataObject
             $this->quoteAddressToOrder->convert($address)
         );
 
+        $shippingMethodCode = $address->getShippingMethod();
+        if (isset($shippingMethodCode) && !empty($shippingMethodCode)) {
+            $rate = $address->getShippingRateByCode($shippingMethodCode);
+            $shippingPrice = $rate->getPrice();
+        } else {
+            $shippingPrice = $order->getShippingAmount();
+        }
+        $store = $order->getStore();
+        $amountPrice = $store->getBaseCurrency()
+            ->convert($shippingPrice, $store->getCurrentCurrencyCode());
+        $order->setBaseShippingAmount($shippingPrice);
+        $order->setShippingAmount($amountPrice);
+
         $order->setQuote($quote);
         $order->setBillingAddress($this->quoteAddressToOrderAddress->convert($quote->getBillingAddress()));
 
