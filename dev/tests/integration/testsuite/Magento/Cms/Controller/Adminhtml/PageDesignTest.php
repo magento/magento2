@@ -9,12 +9,14 @@ declare(strict_types=1);
 namespace Magento\Cms\Controller\Adminhtml;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\PageFactory;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -47,9 +49,9 @@ class PageDesignTest extends AbstractBackendController
     private $aclBuilder;
 
     /**
-     * @var GetPageByIdentifierInterface
+     * @var PageRepositoryInterface
      */
-    private $pageRetriever;
+    private $repo;
 
     /**
      * @var ScopeConfigInterface
@@ -62,6 +64,28 @@ class PageDesignTest extends AbstractBackendController
     private $pagesToDelete = [];
 
     /**
+     * Find page by identifier.
+     *
+     * @param string $identifier
+     * @return PageInterface
+     * @throws NoSuchEntityException
+     */
+    private function findPage(string $identifier): PageInterface
+    {
+        /** @var SearchCriteriaBuilder $criteria */
+        $criteria = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $criteria->addFilter(PageInterface::IDENTIFIER, $identifier);
+        $criteria->setPageSize(1);
+
+        $results = $this->repo->getList($criteria->create())->getItems();
+        if (!$results) {
+            throw NoSuchEntityException::singleField(PageInterface::IDENTIFIER, $identifier);
+        }
+
+        return array_pop($results);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -69,7 +93,7 @@ class PageDesignTest extends AbstractBackendController
         parent::setUp();
 
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
-        $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
+        $this->repo = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class);
         $this->scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
     }
 
@@ -81,8 +105,8 @@ class PageDesignTest extends AbstractBackendController
         parent::tearDown();
 
         foreach ($this->pagesToDelete as $identifier) {
-            $page = $this->pageRetriever->execute($identifier);
-            $page->delete();
+            $page = $this->findPage($identifier);
+            $this->repo->delete($page);
         }
         $this->pagesToDelete = [];
     }
@@ -139,42 +163,13 @@ class PageDesignTest extends AbstractBackendController
         $this->getRequest()->setPostValue($requestData);
         $this->getRequest()->setDispatched(false);
         $this->dispatch($this->uri);
-        $sessionMessages[] = $sessionMessages[0];
-        $this->assertSessionMessages(
-            self::equalTo($sessionMessages),
-            MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * Check that default design values are accepted without the permissions.
-     *
-     * @magentoDbIsolation disabled
-     * @return void
-     */
-    public function testSaveDesignWithDefaults(): void
-    {
-        //Test page data.
-        $id = 'test-page' .rand(1111, 9999);
-        $defaultLayout = $this->scopeConfig->getValue('web/default_layouts/default_cms_layout');
-        $requestData = [
-            PageInterface::IDENTIFIER => $id,
-            PageInterface::TITLE => 'Page title',
-            PageInterface::PAGE_LAYOUT => $defaultLayout
-        ];
-        //Creating a new page with design properties without the required permissions but with default values.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Cms::save_design');
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue($requestData);
-        $this->dispatch($this->uri);
-
-        //Validating saved page
+        $this->assertSessionMessages(self::equalTo($sessionMessages), MessageInterface::TYPE_ERROR);
+        //Checking that value is not saved
         /** @var Page $page */
         $page = Bootstrap::getObjectManager()->create(PageInterface::class);
         $page->load($id, PageInterface::IDENTIFIER);
         $this->assertNotEmpty($page->getId());
-        $this->assertNotNull($page->getPageLayout());
-        $this->assertEquals($defaultLayout, $page->getPageLayout());
+        $this->assertEquals(1, $page->getCustomTheme());
     }
 
     /**
@@ -186,7 +181,7 @@ class PageDesignTest extends AbstractBackendController
      */
     public function testSaveLayoutXml(): void
     {
-        $page = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
+        $page = $this->findPage('test_custom_layout_page_1');
         $requestData = [
             Page::PAGE_ID => $page->getId(),
             PageInterface::IDENTIFIER => 'test_custom_layout_page_1',
@@ -201,7 +196,7 @@ class PageDesignTest extends AbstractBackendController
         $this->dispatch($this->uri);
         $this->getRequest()->setDispatched(false);
 
-        $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
+        $updated = $this->findPage('test_custom_layout_page_1');
         $this->assertEquals($updated->getCustomLayoutUpdateXml(), $page->getCustomLayoutUpdateXml());
         $this->assertEquals($updated->getLayoutUpdateXml(), $page->getLayoutUpdateXml());
 
@@ -218,7 +213,7 @@ class PageDesignTest extends AbstractBackendController
         $this->dispatch($this->uri);
         $this->getRequest()->setDispatched(false);
 
-        $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
+        $updated = $this->findPage('test_custom_layout_page_1');
         $this->assertEmpty($updated->getCustomLayoutUpdateXml());
         $this->assertEmpty($updated->getLayoutUpdateXml());
     }

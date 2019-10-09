@@ -9,7 +9,9 @@
  */
 namespace Magento\Cms\Controller;
 
-use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -76,9 +78,16 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testCustomHandles(): void
     {
-        /** @var GetPageByIdentifierInterface $pageFinder */
-        $pageFinder = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
-        $page = $pageFinder->execute('test_custom_layout_page_3', 0);
+        /** @var PageRepositoryInterface $repo */
+        $repo = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class);
+        /** @var SearchCriteriaBuilder $criteria */
+        $criteria = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $results = $repo->getList(
+            $criteria->addFilter(PageInterface::IDENTIFIER, 'test_custom_layout_page_3')->setPageSize(1)->create()
+        )->getItems();
+        $this->assertNotEmpty($results);
+        /** @var PageInterface $page */
+        $page = array_pop($results);
         $this->dispatch('/cms/page/view/page_id/' .$page->getId());
         /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);

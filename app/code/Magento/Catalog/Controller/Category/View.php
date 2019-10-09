@@ -179,9 +179,6 @@ class View extends Action
             if ($settings->getCustomDesign()) {
                 $this->_catalogDesign->applyCustomDesign($settings->getCustomDesign());
             }
-            if ($settings->getPageLayoutHandles()) {
-                $page->addPageLayoutHandles($settings->getPageLayoutHandles());
-            }
 
             $this->_catalogSession->setLastViewedCategoryId($category->getId());
 
@@ -189,6 +186,10 @@ class View extends Action
             // apply custom layout (page) template once the blocks are generated
             if ($settings->getPageLayout()) {
                 $page->getConfig()->setPageLayout($settings->getPageLayout());
+            }
+            //Apply custom handles
+            if ($settings->getPageLayoutHandles()) {
+                $page->addPageLayoutHandles($settings->getPageLayoutHandles());
             }
 
             $hasChildren = $category->hasChildren();

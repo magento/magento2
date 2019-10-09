@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model\Page;
 
-use Magento\Cms\Api\GetPageByIdentifierInterface;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Cms\Model\CustomLayoutManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +31,7 @@ class DataProviderTest extends TestCase
     private $provider;
 
     /**
-     * @var GetPageByIdentifierInterface
+     * @var PageRepositoryInterface
      */
     private $repo;
 
@@ -43,12 +46,34 @@ class DataProviderTest extends TestCase
     private $request;
 
     /**
+     * Find page by identifier.
+     *
+     * @param string $identifier
+     * @return PageInterface
+     * @throws NoSuchEntityException
+     */
+    private function findPage(string $identifier): PageInterface
+    {
+        /** @var SearchCriteriaBuilder $criteria */
+        $criteria = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $criteria->addFilter(PageInterface::IDENTIFIER, $identifier);
+        $criteria->setPageSize(1);
+
+        $results = $this->repo->getList($criteria->create())->getItems();
+        if (!$results) {
+            throw NoSuchEntityException::singleField(PageInterface::IDENTIFIER, $identifier);
+        }
+
+        return array_pop($results);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);
+        $this->repo = $objectManager->get(PageRepositoryInterface::class);
         $this->filesFaker = $objectManager->get(CustomLayoutManager::class);
         $this->request = $objectManager->get(HttpRequest::class);
         $this->provider = $objectManager->create(
@@ -101,7 +126,7 @@ class DataProviderTest extends TestCase
     public function testCustomLayoutMeta(): void
     {
         //Testing a page without layout xml
-        $page = $this->repo->execute('test_custom_layout_page_3', 0);
+        $page = $this->findPage('test_custom_layout_page_3');
         $this->filesFaker->fakeAvailableFiles((int)$page->getId(), ['test1', 'test2']);
         $this->request->setParam('page_id', $page->getId());
 
@@ -126,7 +151,7 @@ class DataProviderTest extends TestCase
         $this->assertEquals($expectedList, $metaList);
 
         //Page with old layout xml
-        $page = $this->repo->execute('test_custom_layout_page_1', 0);
+        $page = $this->findPage('test_custom_layout_page_1');
         $this->filesFaker->fakeAvailableFiles((int)$page->getId(), ['test3']);
         $this->request->setParam('page_id', $page->getId());
 
