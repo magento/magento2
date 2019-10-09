@@ -215,9 +215,11 @@ class StockStateProvider implements StockStateProviderInterface
                             );
                         }
                     } elseif ($stockItem->getShowDefaultNotificationMessage()) {
-                        $result->setMessage(
-                            __('The requested qty is not available')
-                        );
+                        $message = __('The requested qty is not available');
+                        $result->setHasError(true)
+                            ->setMessage($message)
+                            ->setQuoteMessage($message)
+                            ->setQuoteMessageIndex('qty');
                     }
                 }
             } else {

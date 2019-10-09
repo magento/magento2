@@ -132,10 +132,6 @@ class QuantityValidator
             $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
         }
 
-        if ($quoteItem->getQuote()->getIsSuperMode()) {
-            return;
-        }
-
         /* @var \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus */
         $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $product->getStore()->getWebsiteId());
 
