@@ -56,9 +56,9 @@ class PatchHistory
      * Read and cache data patches from db
      *
      * All patches are store in patch_list table
-     * @see self::TABLE_NAME
      *
-     * @return array
+     * @see self::TABLE_NAME
+     * @return string[]
      */
     private function getAppliedPatches()
     {
@@ -94,7 +94,7 @@ class PatchHistory
     /**
      * Revert patch from history
      *
-     * @param $patchName
+     * @param string $patchName
      * @return void
      */
     public function revertPatchFromHistory($patchName)
