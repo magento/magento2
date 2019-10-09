@@ -108,6 +108,12 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductSku"/>
     </actionGroup>
+    <actionGroup name="AdminFillProductCountryOfManufactureActionGroup">
+        <arguments>
+            <argument name="countryId" type="string" defaultValue="US"/>
+        </arguments>
+        <selectOption selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="{{countryId}}" stepKey="countryOfManufactureDropDown"/>
+    </actionGroup>
 
     <!--Check that required fields are actually required-->
     <actionGroup name="checkRequiredFieldsInProductForm">
