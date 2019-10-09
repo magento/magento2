@@ -40,7 +40,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_CAPTCHA_FONTS = 'captcha/fonts';
 
     /**
-     * Default captcha type
+     * Captcha type
      */
     const DEFAULT_CAPTCHA_TYPE = 'Zend';
 
