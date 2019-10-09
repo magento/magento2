@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
-use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartItemExtensionInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\GuestCartItemRepositoryInterface;
 use Magento\Quote\Api\GuestCartManagementInterface;
@@ -174,14 +172,14 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
         $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getAmount());
         $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getBaseAmount());
-        $this->assertEquals(5,$quoteItemDiscounts[$salesRuleId]['discount']->getOriginalAmount());
+        $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getOriginalAmount());
         $this->assertEquals(10, $quoteItemDiscounts[$salesRuleId]['discount']->getBaseOriginalAmount());
         $this->assertEquals('TestRule_Coupon', $quoteItemDiscounts[$salesRuleId]['rule']);
 
         $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
         $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getAmount());
         $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseAmount());
-        $this->assertEquals(5,$quoteAddressItemDiscount[$salesRuleId]['discount']->getOriginalAmount());
+        $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getOriginalAmount());
         $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseOriginalAmount());
         $this->assertEquals('TestRule_Coupon', $quoteAddressItemDiscount[$salesRuleId]['rule']);
     }
