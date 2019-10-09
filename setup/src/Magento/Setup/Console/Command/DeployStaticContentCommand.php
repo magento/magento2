@@ -217,8 +217,8 @@ class DeployStaticContentCommand extends Command
      */
     private function isDeletePreviousDeploy(array $options)
     {
-        return isset($options[Options::DELETE_PREVIOUS_FILES])
-            && $options[Options::DELETE_PREVIOUS_FILES];
+        return isset($options[$this->options->getDeletePreviousFilesKey()])
+            && $options[$this->options->getDeletePreviousFilesKey()];
     }
 
     /**
