@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -18,6 +16,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\SalesRule\Model\Converter\ToModel;
 use Magento\SalesRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -75,10 +74,6 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
     public function testResolvePlaceOrderWithMultipleProductsAndMultipleCartRules(): void
     {
         $serializer = $this->objectManager->get(SerializerInterface::class);
-        /** @var  $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        /** @var Product $prod1 */
-        $prod1 = $productRepository->get('simple_product');
         $categoryId = 56;
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
@@ -126,11 +121,25 @@ QUERY;
 
         $this->assertEquals(
             10,
-            json_decode($serializer->unserialize($resultFromQuoteAddress['discounts'])[$salesRuleId]['discount'], true)['amount']
+            json_decode(
+                $serializer->unserialize(
+                    $resultFromQuoteAddress['discounts']
+                )
+                [$salesRuleId]['discount'],
+                true
+            )
+            ['amount']
         );
         $this->assertEquals(
             10,
-            json_decode($serializer->unserialize($resultFromQuoteAddress['discounts'])[$salesRuleId]['discount'], true)['baseAmount']
+            json_decode(
+                $serializer->unserialize(
+                    $resultFromQuoteAddress['discounts']
+                )
+                [$salesRuleId]['discount'],
+                true
+            )
+            ['baseAmount']
         );
         $this->assertEquals(
             'TestRule_Label',
@@ -146,7 +155,7 @@ QUERY;
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getSalesRule(string $name): \Magento\SalesRule\Model\Rule
+    private function getSalesRule(string $name): Rule
     {
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
@@ -159,7 +168,7 @@ QUERY;
 
         $rule = array_pop($items);
         /** @var \Magento\SalesRule\Model\Converter\ToModel $converter */
-        $converter = $this->objectManager->get(\Magento\SalesRule\Model\Converter\ToModel::class);
+        $converter = $this->objectManager->get(ToModel::class);
 
         return $converter->toModel($rule);
     }
