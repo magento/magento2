@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Model\Plugin;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
+use Magento\Framework\Data\Collection;
 
 /**
  * Plugin for persisting discounts along with Quote Address

@@ -211,7 +211,7 @@ class RulesApplier
      */
     private function setDiscountBreakdown($discountData, $item, $rule, $address)
     {
-        if ($discountData->getAmount() > 0) {
+        if ($discountData->getAmount() > 0 && $item->getExtensionAttributes()) {
             /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
             $discount = $this->discountFactory->create();
             $discount->setBaseOriginalAmount($discountData->getBaseOriginalAmount());

@@ -116,6 +116,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     foreach ($item->getChildren() as $child) {
                         $child->setDiscountAmount(0);
                         $child->setBaseDiscountAmount(0);
+                        $item->getExtensionAttributes()->setDiscounts([]);
                     }
                 }
                 continue;
@@ -140,7 +141,9 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $this->calculator->process($item);
                 $this->aggregateItemDiscount($item, $total);
             }
-            $this->aggregateDiscountPerRule($item, $address);
+            if ($item->getExtensionAttributes()) {
+                $this->aggregateDiscountPerRule($item, $address);
+            }
         }
 
         $this->calculator->prepareDescription($address);
