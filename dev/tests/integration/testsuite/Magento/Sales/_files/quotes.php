@@ -19,12 +19,17 @@ $quoteFactory = $objectManager->get(QuoteFactory::class);
 /** @var QuoteRepository $quoteRepository */
 $quoteRepository = $objectManager->get(QuoteRepository::class);
 
+/** @var Magento\Store\Model\Store $store */
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$store->load('fixture_second_store');
+$storeId = $store->getId();
+
 $quotes = [
     'quote for first store' => [
         'store' => 1,
     ],
     'quote for second store' => [
-        'store' => 2,
+        'store' => $storeId,
     ],
 ];
 
