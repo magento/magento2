@@ -67,7 +67,8 @@ class Attributes
                         $storeId
                     );
 
-                    $result['url_key_create_redirect']['valueMap']['true'] = $categoryRewritesHistory ? $category->getUrlKey() : false;
+                    $result['url_key_create_redirect']['valueMap']['true'] = 
+                        $categoryRewritesHistory ? $category->getUrlKey() : false;
                     $result['url_key_create_redirect']['value'] = $category->getUrlKey();
                     $result['url_key_create_redirect']['disabled'] = true;
                 }
