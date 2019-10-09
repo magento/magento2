@@ -14,6 +14,12 @@ namespace Magento\Captcha\Helper\Adminhtml;
 
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Captcha image model
+ *
+ * @api
+ * @since 100.0.2
+ */
 class Data extends \Magento\Captcha\Helper\Data
 {
     /**
