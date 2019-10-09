@@ -2,6 +2,15 @@
 # See COPYING.txt for license details.
 
 enum PriceAdjustmentCodesEnum {
-    WEE
-    WEETAX
+    WEEE @deprecated(reason: "WEEE code is deprecated, use fixed_product_taxes.label")
+    WEEE_TAX @deprecated(reason: "Use fixed_product_taxes. PriceAdjustmentCodesEnum is deprecated. Tax is included or excluded in price. Tax is not shown separtely in Catalog")
+}
+
+type ProductPrice {
+    fixed_product_taxes: [FixedProductTax] @doc(description: "The multiple FPTs that can be applied to a product price.") @resolver(class: "Magento\\WeeeGraphQl\\Model\\Resolver\\FixedProductTax")
+}
+
+type FixedProductTax @doc(description: "A single FPT that can be applied to a product price.") {
+    amount: Money @doc(description: "Amount of the FPT as a money object.")
+    label: String @doc(description: "The label assigned to the FPT to be displayed on the frontend.")
 }
