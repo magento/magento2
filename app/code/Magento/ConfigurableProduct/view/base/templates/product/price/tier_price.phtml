@@ -10,11 +10,11 @@
         <?php $taxDisplayType = $block->getTaxDisplayType(); ?>
         <?php if ($taxDisplayType == Magento\ConfigurableProduct\Pricing\Render\TierPriceBox::DISPLAY_TIER_PRICE_BOTH) : ?>
             <% _.each(tierPrices, function(item, key) { %>
-            <%  var priceStr = '<span class="price-container price-tier_price tax">'
+            <%  var priceStr = '<span class="price-container price-tier_price">'
                 + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
                 + ' data-price-type=""' + ' class="price-wrapper ">'
-                + '<span class="price-wrapper price-including-tax">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
-                + '<span class="price-wrapper price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">' + priceUtils.formatPrice(item.priceExclTax, currencyFormat) + '</span>'
+                + '<span class="price tier-price-including-tax">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
+                + '<span class="price tier-price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?> ">' + priceUtils.formatPrice(item.priceExclTax, currencyFormat) + '</span>'
                 + '</span>'
             + '</span>'; %>
         <?php else : ?>
