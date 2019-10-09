@@ -11,13 +11,17 @@ define([
     'Magento_Catalog/js/price-box'
 ], function ($) {
 
+    /**
+     * Downloadable widget
+     */
     $.widget('mage.downloadable', {
         options: {
             priceHolderSelector: '.price-box'
         },
 
-
-        /** @inheritdoc */
+        /**
+         *  @inheritdoc
+         */
         _create: function () {
             var self = this;
 
