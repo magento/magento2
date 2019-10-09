@@ -209,7 +209,7 @@ class TokenUserContext implements UserContextInterface
             case UserContextInterface::USER_TYPE_CUSTOMER:
                 $customerId = $token->getCustomerId();
 
-                if ($this->validateCustomerByShareOption->execute($customerId)) {
+                if ($this->validateCustomerByShareOption->execute((int)$customerId)) {
                     $this->userId = $customerId;
                     $this->userType = UserContextInterface::USER_TYPE_CUSTOMER;
                 }

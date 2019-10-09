@@ -11,6 +11,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Validate Customer By Share Option.
+ */
 class ValidateCustomerByShareOption
 {
     /**
@@ -54,11 +57,11 @@ class ValidateCustomerByShareOption
     /**
      * If website scope for customer check if customer from current website and isn't locked.
      *
-     * @param $customerId
+     * @param int $customerId
      *
      * @return bool
      */
-    public function execute($customerId): bool
+    public function execute(int $customerId): bool
     {
         $result = true;
         if ((bool)$this->share->isWebsiteScope() === true) {

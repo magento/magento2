@@ -70,7 +70,7 @@ class GetAddressesTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The account is locked.
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetCustomerAddressIfAccountIsLocked()
     {
