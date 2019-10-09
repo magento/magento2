@@ -23,12 +23,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * End to end place order test with store promotions via GraphQl
+ * Place order test with store promotions via GraphQl
  *
  * @magentoAppArea graphql
- *
  * @magentoDbIsolation disabled
- *
  */
 class PlaceOrderWithStorePromotionsTest extends TestCase
 {
