@@ -947,6 +947,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function getCacheId()
     {
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return $this->generateCacheId(md5(implode('|', $this->getHandles())));
     }
 }

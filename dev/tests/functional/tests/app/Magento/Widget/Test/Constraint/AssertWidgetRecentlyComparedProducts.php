@@ -108,7 +108,7 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
             }
             $refreshNo++;
         }
-        \PHPUnit\Framework\Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertTrue(
             $isVisible,
             'Widget is absent on Product Compare page.'
         );

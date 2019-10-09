@@ -742,10 +742,29 @@ class Eav extends AbstractModifier
                 break;
         }
 
-        //Checking access to design config.
-        if (in_array($attributeCode, $this->designAttributeCodes, true)) {
+        $meta = $this->disableInaccessibleAttribute($attribute, $configPath, $meta);
+
+
+        return $meta;
+    }
+
+    /**
+     * Disable inaccessible attributes.
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param string $configPath
+     * @param array $meta
+     * @return array Updated meta.
+     */
+    private function disableInaccessibleAttribute(
+        ProductAttributeInterface $attribute,
+        string $configPath,
+        array $meta
+    ): array {
+        if (in_array($attribute->getAttributeCode(), $this->designAttributeCodes, true)) {
+            //Checking access to design configurations
             if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-                $meta = $this->arrayManager->merge(
+                return $this->arrayManager->merge(
                     $configPath,
                     $meta,
                     [

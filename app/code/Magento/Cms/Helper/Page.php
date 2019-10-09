@@ -97,8 +97,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     private $identityMap;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Cms\Model\Page $page
@@ -123,9 +121,9 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        ?CustomLayoutManagerInterface $customLayoutManager = null,
-        ?CustomLayoutRepositoryInterface $customLayoutRepo = null,
-        ?IdentityMap $identityMap = null
+        CustomLayoutManagerInterface $customLayoutManager = null,
+        CustomLayoutRepositoryInterface $customLayoutRepo = null,
+        IdentityMap $identityMap = null
     ) {
         $this->messageManager = $messageManager;
         $this->_page = $page;

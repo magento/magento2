@@ -633,6 +633,7 @@ class Category extends AbstractResource
     {
         // @codingStandardsIgnoreStart
         $serializeData = $this->serializer->serialize($entityIdsFilter);
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $entityIdsFilterHash = md5($serializeData);
         // @codingStandardsIgnoreEnd
 
