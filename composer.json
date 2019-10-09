@@ -43,7 +43,7 @@
         "wikimedia/less.php": "~1.8.0",
         "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^2.0.0",
-        "php-amqplib/php-amqplib": "~2.7.0",
+        "php-amqplib/php-amqplib": "~2.7.0|~2.10.0",
         "phpseclib/mcrypt_compat": "1.0.8",
         "phpseclib/phpseclib": "2.0.*",
         "ramsey/uuid": "~3.8.0",
