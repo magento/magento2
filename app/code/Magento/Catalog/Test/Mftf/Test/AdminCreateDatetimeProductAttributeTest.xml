@@ -14,44 +14,31 @@
             <description value="Admin should be able to create datetime product attribute"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-21451"/>
-            <group value="Catalog"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
-                <argument name="ProductAttribute" value="datetimeProductAttribute"/>
+                <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <!-- Set attribute properties -->
-        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}"
-                   userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
-        <selectOption selector="{{AttributePropertiesSection.InputType}}"
-                      userInput="{{datetimeProductAttribute.frontend_input}}" stepKey="fillInputType"/>
-        <actionGroup ref="AdminNavigateToProductAttributeAdvancedSection" stepKey="goToAdvancedSectionNew"/>
-        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}"
-                   userInput="{{datetimeProductAttribute.attribute_code}}"
-                   stepKey="fillAttributeCode"/>
-        <!-- Generate and set a default value -->
+        <!-- Generate the datetime default value -->
         <generateDate date="now" format="m/j/y g:i A" stepKey="generateDefaultValue"/>
-        <fillField selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}"
-                   userInput="{$generateDefaultValue}"
-                   stepKey="fillDefaultValue"/>
-        <!-- Save the new product attribute -->
-        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAttribute"/>
-        <waitForPageLoad stepKey="waitForGridPageLoadAfterSaveAttribute"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
-                    stepKey="waitForSuccessMessage"/>
+        <!-- Create new datetime product attribute -->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <waitForPageLoad stepKey="waitForPageLoadAttributes"/>
+        <actionGroup ref="CreateProductAttributeWithDatetimeField" stepKey="createAttribute">
+            <argument name="attribute" value="DatetimeProductAttribute"/>
+            <argument name="date" value="{$generateDefaultValue}"/>
+        </actionGroup>
         <!-- Navigate to created product attribute -->
         <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
-            <argument name="ProductAttribute" value="datetimeProductAttribute"/>
+            <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
         </actionGroup>
-        <!-- Check the saved date and time default value -->
+        <!-- Check the saved datetime default value -->
         <actionGroup ref="AdminNavigateToProductAttributeAdvancedSection" stepKey="goToAdvancedSection"/>
         <scrollTo selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" stepKey="scrollToDefaultValue"/>
         <seeInField userInput="{$generateDefaultValue}"

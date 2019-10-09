@@ -309,7 +309,7 @@
         <data key="frontend_input">date</data>
         <data key="is_required_admin">No</data>
     </entity>
-    <entity name="datetimeProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+    <entity name="DatetimeProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">datetime</data>
         <data key="is_required_admin">No</data>
     </entity>

@@ -345,6 +345,23 @@
         <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDate}}" userInput="{{date}}"/>
     </actionGroup>
 
+    <!-- Inputs datetime default value and attribute code-->
+    <actionGroup name="CreateProductAttributeWithDatetimeField" extends="createProductAttribute" insertAfter="checkRequired">
+        <annotations>
+            <description>EXTENDS: createProductAttribute. Fills in the Attribute Code and Default Value (Attribute Type: Date and Time Field).</description>
+        </annotations>
+        <arguments>
+            <argument name="date" type="string"/>
+        </arguments>
+
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToAdvancedSection"/>
+        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openAdvancedSection"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutAdvancedSection"/>
+        <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" stepKey="scrollToDefaultField"/>
+        <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" userInput="{{date}}"/>
+    </actionGroup>
+
     <!-- Creates dropdown option at row without saving-->
     <actionGroup name="createAttributeDropdownNthOption">
         <annotations>
@@ -377,7 +394,7 @@
             <description>Navigate and open Advanced Attribute Properties section on product attribute page</description>
         </annotations>
 
-        <scrollTo  selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"  stepKey="scrollToSection"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToSection"/>
         <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openSection"/>
         <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutSection"/>
     </actionGroup>
