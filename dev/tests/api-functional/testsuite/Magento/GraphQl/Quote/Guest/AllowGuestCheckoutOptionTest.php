@@ -318,7 +318,7 @@ QUERY;
 mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

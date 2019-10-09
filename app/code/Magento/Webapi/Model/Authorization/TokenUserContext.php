@@ -189,7 +189,7 @@ class TokenUserContext implements UserContextInterface
     }
 
     /**
-     * Set user data by token.
+     * Set user data based on user type received from token data.
      *
      * @param Token $token
      * @return void

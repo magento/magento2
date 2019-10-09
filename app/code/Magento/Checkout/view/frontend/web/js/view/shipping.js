@@ -249,6 +249,16 @@ define([
             if (this.validateShippingInformation()) {
                 quote.billingAddress(null);
                 checkoutDataResolver.resolveBillingAddress();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var shippingAddressData = checkoutData.getShippingAddressFromData();
+
+                    if (shippingAddressData) {
+                        checkoutProvider.set(
+                            'shippingAddress',
+                            $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        );
+                    }
+                });
                 setShippingInformationAction().done(
                     function () {
                         stepNavigator.next();
