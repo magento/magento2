@@ -10,9 +10,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Search order status grid for item with a specific code and validate data -->
     <actionGroup name="AssertOrderStatusExistsInGrid">
+        <annotations>
+            <description>Validates that the provided Order Status and Label are present in the Admin Orders grid.</description>
+        </annotations>
         <arguments>
-            <argument name="status" type="string" />
-            <argument name="label" type="string" />
+            <argument name="status" type="string"/>
+            <argument name="label" type="string"/>
         </arguments>
 
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters"/>

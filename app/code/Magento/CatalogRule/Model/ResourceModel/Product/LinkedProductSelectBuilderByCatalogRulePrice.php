@@ -88,7 +88,8 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
      */
     public function build($productId)
     {
-        $currentDate = $this->dateTime->formatDate($this->localeDate->date(null, null, false), false);
+        $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
+        $currentDate = $this->dateTime->formatDate($timestamp, false);
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $productTable = $this->resource->getTableName('catalog_product_entity');
 

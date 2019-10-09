@@ -81,4 +81,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\OptionManagement">
+        <plugin name="swatches_product_attribute_optionmanagement_plugin" type="Magento\Swatches\Plugin\Eav\Model\Entity\Attribute\OptionManagement"/>
+    </type>
 </config>

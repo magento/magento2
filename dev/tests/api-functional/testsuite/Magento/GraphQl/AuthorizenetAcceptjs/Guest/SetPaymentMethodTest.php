@@ -63,7 +63,6 @@ class SetPaymentMethodTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -71,6 +70,9 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/AuthorizenetAcceptjs/_files/enable_authorizenetacceptjs.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @param string $nonce
      * @param string $descriptor
      * @param bool $expectSuccess
@@ -111,8 +113,8 @@ class SetPaymentMethodTest extends GraphQlAbstract
     {
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
     }
 
     private function assertSetPaymentMethodResponse(array $response, string $methodCode): void
@@ -169,7 +171,7 @@ QUERY;
 mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCMSPageNotFoundOnStorefrontActionGroup">
+        <annotations>
+            <description>Validates that the 'Whoops, our bad' error message is present and correct for a Storefront CMS Page that doesn't exist.</description>
+        </annotations>
+
         <see userInput="Whoops, our bad..." stepKey="seePageErrorNotFound"/>
     </actionGroup>
 </actionGroups>

@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="importexport_importdata" resource="default" engine="innodb" comment="Import Data Table">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
         <column xsi:type="varchar" name="entity" nullable="false" length="50" comment="Entity"/>
         <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append" comment="Behavior"/>
         <column xsi:type="longtext" name="data" nullable="true" comment="Data"/>
@@ -18,7 +18,7 @@
     </table>
     <table name="import_history" resource="default" engine="innodb" comment="Import history table">
         <column xsi:type="int" name="history_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="History record Id"/>
+                comment="History record ID"/>
         <column xsi:type="timestamp" name="started_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Started at"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"

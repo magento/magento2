@@ -7,43 +7,62 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="NavigateToDefaultLayoutsSetting">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Web'. Expands the 'Default Layouts' section.</description>
+        </annotations>
+
         <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
-        <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waittForDefaultCategoryLayout" />
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{DefaultLayoutsSection.categoryLayout}}" stepKey="waittForDefaultCategoryLayout"/>
     </actionGroup>
 
     <actionGroup name="NavigateToConfigurationGeneralPage">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'General'.</description>
+        </annotations>
+
         <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToConfigGeneralPage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
     </actionGroup>
-
     <actionGroup name="SelectTopDestinationsCountry">
+        <annotations>
+            <description>Selects the provided Countries under 'Top destinations' on the 'General' section of the 'Configuration' page. Clicks on the Save button.</description>
+        </annotations>
         <arguments>
             <argument name="countries" type="entity"/>
         </arguments>
+
         <selectOption selector="{{CountryOptionsSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="selectTopDestinationsCountry"/>
         <click selector="#save" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSavingConfig"/>
     </actionGroup>
 
     <actionGroup name="UnSelectTopDestinationsCountry">
+        <annotations>
+            <description>Un-selects the provided Countries under 'Top destinations' on the 'General' section of the 'Configuration' page. Clicks on the Save button.</description>
+        </annotations>
         <arguments>
             <argument name="countries" type="entity"/>
         </arguments>
+
         <unselectOption selector="{{CountryOptionsSection.topDestinations}}" parameterArray="[{{countries.country}}]" stepKey="unSelectTopDestinationsCountry"/>
         <click selector="#save" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSavingConfig"/>
     </actionGroup>
 
     <actionGroup name="SelectCountriesWithRequiredRegion">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'General'. Selects the provided Countries under 'State is Required for'. Clicks on the Save button.</description>
+        </annotations>
         <arguments>
             <argument name="countries" type="entity"/>
         </arguments>
+
         <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToAdminConfigGeneralPage"/>
-        <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab" />
+        <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab"/>
         <waitForAjaxLoad stepKey="waitForAjax"/>
         <scrollTo selector="{{StateOptionsSection.countriesWithRequiredRegions}}" stepKey="scrollToForm"/>
         <selectOption selector="{{StateOptionsSection.countriesWithRequiredRegions}}" parameterArray="[{{countries.country}}]" stepKey="selectCountriesWithRequiredRegion"/>

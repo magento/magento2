@@ -5,9 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ConfigureAuthorizenetAcceptjs" extends="EnableAuthorizenetAcceptjs">
+        <annotations>
+            <description>Sets up the Authorize.net Accept JS configuration setting with a specified Payment action.</description>
+        </annotations>
         <arguments>
             <argument name="paymentAction" type="string"/>
         </arguments>
@@ -23,6 +27,10 @@
     </actionGroup>
 
     <actionGroup name="DisableAuthorizenetAcceptjs">
+        <annotations>
+            <description>Disables the Authorize.net Accept JS configuration setting via the CLI.</description>
+        </annotations>
+
         <magentoCLI stepKey="disableAuthorizenetAcceptjs" command="config:set payment/authorizenet_acceptjs/active 0"/>
     </actionGroup>
     

@@ -9,6 +9,7 @@
     <body>
         <referenceContainer name="after.body.start">
             <block class="Magento\Ui\Block\Logger" name="logger" template="Magento_Ui::logger.phtml"/>
+            <block class="Magento\Ui\Block\Wysiwyg\ActiveEditor" name="theme.active.editor" template="Magento_Ui::wysiwyg/active_editor.phtml" />
         </referenceContainer>
     </body>
 </page>

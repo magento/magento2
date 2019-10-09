@@ -68,11 +68,12 @@ class ParamsBuilder
      * Build image params
      *
      * @param array $imageArguments
+     * @param int $scopeId
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments): array
+    public function build(array $imageArguments, int $scopeId = null): array
     {
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
@@ -81,7 +82,7 @@ class ParamsBuilder
         ];
 
         $overwritten = $this->overwriteDefaultValues($imageArguments);
-        $watermark = isset($miscParams['image_type']) ? $this->getWatermark($miscParams['image_type']) : [];
+        $watermark = isset($miscParams['image_type']) ? $this->getWatermark($miscParams['image_type'], $scopeId) : [];
 
         return array_merge($miscParams, $overwritten, $watermark);
     }
@@ -117,27 +118,32 @@ class ParamsBuilder
      * Get watermark
      *
      * @param string $type
+     * @param int $scopeId
      * @return array
      */
-    private function getWatermark(string $type): array
+    private function getWatermark(string $type, int $scopeId = null): array
     {
         $file = $this->scopeConfig->getValue(
             "design/watermark/{$type}_image",
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $scopeId
         );
 
         if ($file) {
             $size = $this->scopeConfig->getValue(
                 "design/watermark/{$type}_size",
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $scopeId
             );
             $opacity = $this->scopeConfig->getValue(
                 "design/watermark/{$type}_imageOpacity",
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $scopeId
             );
             $position = $this->scopeConfig->getValue(
                 "design/watermark/{$type}_position",
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $scopeId
             );
             $width = !empty($size['width']) ? $size['width'] : null;
             $height = !empty($size['height']) ? $size['height'] : null;
