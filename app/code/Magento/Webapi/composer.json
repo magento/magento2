@@ -10,7 +10,7 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-integration": "*",
-        "magento/module-store": "*,",
+        "magento/module-store": "*",
         "magento/module-customer": "*"
     },
     "suggest": {

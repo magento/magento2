@@ -161,7 +161,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked.
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testUpdateCustomerIfAccountIsLocked()
     {

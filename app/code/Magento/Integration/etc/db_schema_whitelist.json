@@ -91,7 +91,7 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE": true
+            "OAUTH_TOKEN_REQUEST_LOG_USER_NAME_USER_TYPE_WEBSITE_ID": true
         }
     }
 }

@@ -6,6 +6,7 @@
 
 namespace Magento\Webapi\Test\Unit\Model\Authorization;
 
+use Magento\Customer\Model\ValidateCustomerByShareOption;
 use Magento\Webapi\Model\Authorization\TokenUserContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
@@ -63,8 +64,15 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
      */
     private $dateTimeMock;
 
+    /**
+     * @var ValidateCustomerByShareOption|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validateCustomerByShareOption;
+
     protected function setUp()
     {
+        parent::setUp();
+
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(Request::class)
@@ -118,6 +126,10 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
+        $this->validateCustomerByShareOption = $this->getMockBuilder(ValidateCustomerByShareOption::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->tokenUserContext = $this->objectManager->getObject(
             TokenUserContext::class,
             [
@@ -127,6 +139,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 'oauthHelper' => $this->oauthHelperMock,
                 'date' => $this->dateMock,
                 'dateTime' => $this->dateTimeMock,
+                'validateCustomerByShareOption' => $this->validateCustomerByShareOption,
             ]
         );
     }
@@ -283,6 +296,11 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     ->will($this->returnValue($userId));
                 break;
             case UserContextInterface::USER_TYPE_CUSTOMER:
+                $this->validateCustomerByShareOption->expects($this->once())
+                    ->method('execute')
+                    ->with($userId)
+                    ->willReturn(true);
+
                 $token->expects($this->once())
                     ->method('getCustomerId')
                     ->will($this->returnValue($userId));
@@ -420,6 +438,11 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     ->will($this->returnValue($tokenData['user_id']));
                 break;
             case UserContextInterface::USER_TYPE_CUSTOMER:
+                $this->validateCustomerByShareOption->expects($this->any())
+                    ->method('execute')
+                    ->with($tokenData['user_id'])
+                    ->willReturn(true);
+
                 $token->expects($this->any())
                     ->method('getCustomerId')
                     ->will($this->returnValue($tokenData['user_id']));
@@ -532,5 +555,61 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 'expectedUserId' => null,
             ],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testTokenIsNotValid()
+    {
+        $bearerToken = 'bearer1234';
+        $userType = UserContextInterface::USER_TYPE_CUSTOMER;
+        $userId = 1234;
+        $expectedUserType = 3;
+        $expectedUserId = null;
+
+        $this->request->expects($this->once())
+            ->method('getHeader')
+            ->with('Authorization')
+            ->will($this->returnValue("Bearer {$bearerToken}"));
+
+        $token = $this->getMockBuilder(Token::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'loadByToken',
+                    'getId',
+                    'getUserType',
+                    'getCustomerId',
+                    'getAdminId',
+                    '__wakeup',
+                    'getCreatedAt',
+                ]
+            )->getMock();
+        $this->tokenFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($token));
+        $token->expects($this->once())
+            ->method('loadByToken')
+            ->with($bearerToken)
+            ->will($this->returnSelf());
+        $token->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $token->expects($this->any())
+            ->method('getUserType')
+            ->will($this->returnValue($userType));
+
+        $this->validateCustomerByShareOption->expects($this->once())
+            ->method('execute')
+            ->with($userId)
+            ->willReturn(false);
+
+        $token->expects($this->once())
+            ->method('getCustomerId')
+            ->will($this->returnValue($userId));
+
+        $this->assertEquals($expectedUserType, $this->tokenUserContext->getUserType());
+        $this->assertEquals($expectedUserId, $this->tokenUserContext->getUserId());
     }
 }
