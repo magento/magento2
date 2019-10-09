@@ -17,6 +17,7 @@
             <testCaseId value="MC-8647"/>
             <group value="translation"/>
             <group value="checkout"/>
+            <group value="developer_mode_only"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
@@ -30,9 +31,6 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Set developer mode -->
-            <magentoCLI command="deploy:mode:set developer" stepKey="setDeveloperMode"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="DisableTranslateInlineForStorefront"/>
