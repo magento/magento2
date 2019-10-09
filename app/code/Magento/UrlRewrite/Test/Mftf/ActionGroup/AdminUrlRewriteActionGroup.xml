@@ -28,6 +28,7 @@
         <waitForPageLoad stepKey="waitForPageLoaded"/>
         <waitForElementVisible selector="{{AdminUrlRewriteEditSection.categoryInTree(categoryName)}}" stepKey="waitForCategoryInTreeVisible"/>
         <click selector="{{AdminUrlRewriteEditSection.categoryInTree(categoryName)}}" stepKey="clickOnCategoryInTree"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.store}}" stepKey="waitForStoreSelectVisible"/>
         <selectOption selector="{{AdminUrlRewriteEditSection.store}}" userInput="{{store}}" stepKey="selectStoreOption"/>
         <fillField selector="{{AdminUrlRewriteEditSection.requestPathField}}" userInput="{{requestPath}}" stepKey="fillRequestPathField"/>
         <selectOption selector="{{AdminUrlRewriteEditSection.redirectType}}" userInput="{{redirectType}}" stepKey="selectRedirectType"/>
