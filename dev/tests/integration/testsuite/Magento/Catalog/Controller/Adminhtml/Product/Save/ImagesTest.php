@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Save;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\Config;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -33,19 +34,19 @@ class ImagesTest extends AbstractBackendController
     private $mediaDirectory;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
         parent::setUp();
         $this->config = $this->_objectManager->get(Config::class);
         $this->mediaDirectory = $this->_objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->productRepository =  $this->_objectManager->create(ProductRepository::class);
+        $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
     }
 
     /**
@@ -53,6 +54,7 @@ class ImagesTest extends AbstractBackendController
      *
      * @dataProvider simpleProductImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDbIsolation enabled
      * @param array $postData
      * @param array $expectation
@@ -60,7 +62,6 @@ class ImagesTest extends AbstractBackendController
      */
     public function testSaveSimpleProductDefaultImage(array $postData, array $expectation): void
     {
-        $this->copyFileToBaseTmpMediaPath();
         $product = $this->productRepository->get('simple');
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
@@ -79,6 +80,10 @@ class ImagesTest extends AbstractBackendController
         $this->assertEquals($expectation['swatch_image'], $product->getData('swatch_image'));
         $this->assertFileExists(
             $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $expectation['image'])
+        );
+        $this->assertSessionMessages(
+            $this->equalTo(['You saved the product.']),
+            MessageInterface::TYPE_SUCCESS
         );
     }
 
@@ -127,29 +132,5 @@ class ImagesTest extends AbstractBackendController
                 ]
             ]
         ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function tearDown()
-    {
-        $this->mediaDirectory->delete('tmp');
-        $this->mediaDirectory->delete($this->config->getBaseMediaPath() . '/m/a/magento_image.jpg');
-        parent::tearDown();
-    }
-
-    /**
-     * Copy file to media tmp directory
-     *
-     * @return void
-     */
-    private function copyFileToBaseTmpMediaPath(): void
-    {
-        $sourceFile = realpath(__DIR__ . '/../../../../_files') . '/magento_image.jpg';
-        $this->mediaDirectory->create($this->config->getBaseMediaPath() . '/m/a/');
-        $this->mediaDirectory->create($this->config->getBaseTmpMediaPath() . '/m/a/');
-        $targetFile = $this->config->getTmpMediaPath('/m/a/' . basename($sourceFile));
-        copy($sourceFile, $this->mediaDirectory->getAbsolutePath($targetFile));
     }
 }

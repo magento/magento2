@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -50,7 +49,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     private $galleryResource;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
@@ -60,14 +59,14 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     private $productResource;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->createHandler = $this->objectManager->create(CreateHandler::class);
         $this->galleryResource = $this->objectManager->create(Gallery::class);
-        $this->productRepository = $this->objectManager->create(ProductRepository::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
     }
 
@@ -80,12 +79,11 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithImageDuplicate(): void
     {
-        $product = $this->getProduct();
-        $product->setData(
-            'media_gallery',
-            ['images' => ['image' => ['file' => $this->fileName, 'label' => $this->fileLabel]]]
-        );
-        $product->setData('image', $this->fileName);
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => $this->fileLabel]]],
+            'image' => $this->fileName,
+        ];
+        $product = $this->initProduct($data);
         $this->createHandler->execute($product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
         $this->assertEquals($this->fileLabel, $product->getData('image_label'));
@@ -105,25 +103,19 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $imageFileName
      * @expectedException \Magento\Framework\Exception\FileSystemException
+     * @expectedExceptionMessageRegExp ".+ file doesn't exist."
+     * @expectedExceptionMessageRegExp "/^((?!\.\.\/).)*$/"
      * @dataProvider illegalFilenameDataProvider
      * @return void
      */
     public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
-        $product = $this->getProduct();
-        $product->setData(
-            'media_gallery',
-            ['images' => ['image' => ['file' => $imageFileName, 'label' => 'New image']]]
-        );
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $imageFileName, 'label' => 'New image']]],
+        ];
+        $product = $this->initProduct($data);
         $product->setData('image', $imageFileName);
-
-        try {
-            $this->createHandler->execute($product);
-        } catch (FileSystemException $exception) {
-            $this->assertContains(" file doesn't exist.", $exception->getLogMessage());
-            $this->assertNotContains('../', $exception->getLogMessage());
-            throw $exception;
-        }
+        $this->createHandler->execute($product);
     }
 
     /**
@@ -153,17 +145,15 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $swatchImage,
         string $thumbnail
     ): void {
-        $product = $this->getProduct();
-        $product->setData(
-            'media_gallery',
-            ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]]
-        );
-        $product->setData('image', $image);
-        $product->setData('small_image', $smallImage);
-        $product->setData('swatch_image', $swatchImage);
-        $product->setData('thumbnail', $thumbnail);
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'image' => $image,
+            'small_image' => $smallImage,
+            'swatch_image' => $swatchImage,
+            'thumbnail' => $thumbnail,
+        ];
+        $product = $this->initProduct($data);
         $this->createHandler->execute($product);
-
         $this->assertMediaImageRoleAttributes($product, $image, $smallImage, $swatchImage, $thumbnail);
     }
 
@@ -183,23 +173,20 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $swatchImage,
         string $thumbnail
     ): void {
-        $product = $this->getProduct();
-        $product->setData(
-            'media_gallery',
-            ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]]
-        );
-        $product->setData('image', $image);
-        $product->setData('small_image', $smallImage);
-        $product->setData('swatch_image', $swatchImage);
-        $product->setData('thumbnail', $thumbnail);
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'image' => $image,
+            'small_image' => $smallImage,
+            'swatch_image' => $swatchImage,
+            'thumbnail' => $thumbnail,
+        ];
+        $product = $this->initProduct($data);
         $this->createHandler->execute($product);
-
         $product->unsetData('image');
         $product->unsetData('small_image');
         $product->unsetData('swatch_image');
         $product->unsetData('thumbnail');
         $this->createHandler->execute($product);
-
         $this->assertMediaImageRoleAttributes($product, $image, $smallImage, $swatchImage, $thumbnail);
     }
 
@@ -213,14 +200,14 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
                 'image' => $this->fileName,
                 'small_image' => $this->fileName,
                 'swatch_image' => $this->fileName,
-                'thumbnail' => $this->fileName
+                'thumbnail' => $this->fileName,
             ],
             [
                 'image' => 'no_selection',
                 'small_image' => 'no_selection',
                 'swatch_image' => 'no_selection',
-                'thumbnail' => 'no_selection'
-            ]
+                'thumbnail' => 'no_selection',
+            ],
         ];
     }
 
@@ -238,11 +225,10 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $value,
         ?string $expectedValue
     ): void {
-        $product = $this->getProduct();
-        $product->setData(
-            'media_gallery',
-            ['images' => ['image' => ['file' => $this->fileName, $mediaField => $value]]]
-        );
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, $mediaField => $value]]],
+        ];
+        $product = $this->initProduct($data);
         $this->createHandler->execute($product);
         $galleryAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $galleryAttributeId);
@@ -268,21 +254,25 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns product for testing.
      *
+     * @param array $data
      * @return Product
      */
-    private function getProduct(): Product
+    private function initProduct(array $data): Product
     {
-        return $this->productRepository->getById(1);
+        $product = $this->productRepository->getById(1);
+        $product->addData($data);
+
+        return $product;
     }
 
     /**
      * Asserts product attributes related to gallery images.
      *
+     * @param Product $product
      * @param string $image
      * @param string $smallImage
      * @param string $swatchImage
      * @param string $thumbnail
-     * @param Product $product
      * @return void
      */
     private function assertMediaImageRoleAttributes(
@@ -292,33 +282,18 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $swatchImage,
         string $thumbnail
     ): void {
-        $productImage = $this->productResource->getAttributeRawValue(
+        $productsImageData = $this->productResource->getAttributeRawValue(
             $product->getId(),
-            $this->productResource->getAttribute('image'),
-            $product->getStoreId()
-        );
-        $productSmallImage = $this->productResource->getAttributeRawValue(
-            $product->getId(),
-            $this->productResource->getAttribute('small_image'),
-            $product->getStoreId()
-        );
-        $productThumbnail = $this->productResource->getAttributeRawValue(
-            $product->getId(),
-            $this->productResource->getAttribute('thumbnail'),
-            $product->getStoreId()
-        );
-        $productSwatchImage = $this->productResource->getAttributeRawValue(
-            $product->getId(),
-            $this->productResource->getAttribute('swatch_image'),
+            ['image', 'small_image', 'thumbnail', 'swatch_image'],
             $product->getStoreId()
         );
         $this->assertStringStartsWith(
             '/m/a/magento_image',
             $product->getData('media_gallery/images/image/new_file')
         );
-        $this->assertEquals($image, $productImage);
-        $this->assertEquals($smallImage, $productSmallImage);
-        $this->assertEquals($swatchImage, $productSwatchImage);
-        $this->assertEquals($thumbnail, $productThumbnail);
+        $this->assertEquals($image, $productsImageData['image']);
+        $this->assertEquals($smallImage, $productsImageData['small_image']);
+        $this->assertEquals($swatchImage, $productsImageData['swatch_image']);
+        $this->assertEquals($thumbnail, $productsImageData['thumbnail']);
     }
 }

@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
 use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Framework\App\Filesystem\DirectoryList as AppDirectoryList;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
-use Magento\Framework\App\Filesystem\DirectoryList as AppDirectoryList;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -54,7 +54,7 @@ class UploadTest extends AbstractBackendController
     private $config;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -75,35 +75,21 @@ class UploadTest extends AbstractBackendController
      * @param array $expectation
      * @return void
      */
-    public function testUploadAction($file, $expectation): void
+    public function testUploadAction(array $file, array $expectation): void
     {
-        if (!empty($file['create_file'])) {
-            $this->createUploadFile($file['name']);
-        } else {
-            $this->copyUploadFile($file);
-        }
-
+        $this->copyFileToSysTmpDir($file);
         $this->getRequest()->setMethod($this->httpMethod);
         $this->dispatch($this->uri);
         $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
-        if (empty($expectation['error'])) {
-            $this->assertEquals($jsonBody['name'], $expectation['name']);
-            $this->assertEquals($jsonBody['type'], $expectation['type']);
-            $this->assertEquals($jsonBody['file'], $expectation['file']);
-            $this->assertEquals($jsonBody['url'], $expectation['url']);
-            $this->assertFileExists(
-                $this->getFileAbsolutePath($expectation['tmp_media_path'])
-            );
-        } else {
-            $this->assertEquals($jsonBody['error'], $expectation['message']);
-            $this->assertEquals($jsonBody['errorcode'], $expectation['errorcode']);
-
-            if (!empty($expectation['tmp_media_path'])) {
-                $this->assertFileNotExists(
-                    $this->getFileAbsolutePath($expectation['tmp_media_path'])
-                );
-            }
-        }
+        $this->assertEquals($jsonBody['name'], $expectation['name']);
+        $this->assertEquals($jsonBody['type'], $expectation['type']);
+        $this->assertEquals($jsonBody['file'], $expectation['file']);
+        $this->assertEquals($jsonBody['url'], $expectation['url']);
+        $this->assertArrayNotHasKey('error', $jsonBody);
+        $this->assertArrayNotHasKey('errorcode', $jsonBody);
+        $this->assertFileExists(
+            $this->getFileAbsolutePath($expectation['tmp_media_path'])
+        );
     }
 
     /**
@@ -154,13 +140,49 @@ class UploadTest extends AbstractBackendController
                     'tmp_media_path' => '/m/a/magento_image.gif',
                 ],
             ],
+        ];
+    }
+
+    /**
+     * Test upload image on admin product page.
+     *
+     * @dataProvider uploadActionWithErrorsDataProvider
+     * @magentoDbIsolation enabled
+     * @param array $file
+     * @param array $expectation
+     * @return void
+     */
+    public function testUploadActionWithErrors(array $file, array $expectation): void
+    {
+        if (!empty($file['create_file'])) {
+            $this->createFileInSysTmpDir($file['name']);
+        }
+
+        $this->getRequest()->setMethod($this->httpMethod);
+        $this->dispatch($this->uri);
+        $jsonBody = $this->serializer->unserialize($this->getResponse()->getBody());
+        $this->assertEquals($jsonBody['error'], $expectation['message']);
+        $this->assertEquals($jsonBody['errorcode'], $expectation['errorcode']);
+
+        if (!empty($expectation['tmp_media_path'])) {
+            $this->assertFileNotExists(
+                $this->getFileAbsolutePath($expectation['tmp_media_path'])
+            );
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function uploadActionWithErrorsDataProvider(): array
+    {
+        return [
             'upload_image_with_invalid_type' => [
                 'file' => [
                     'create_file' => true,
                     'name' => 'invalid_file.txt',
                 ],
                 'expectation' => [
-                    'error' => true,
                     'message' => 'Disallowed file type.',
                     'errorcode' => 0,
                     'tmp_media_path' => '/i/n/invalid_file.txt',
@@ -173,7 +195,6 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'error' => true,
                     'message' => 'Wrong file size.',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/a/magento_empty.jpg',
@@ -182,7 +203,6 @@ class UploadTest extends AbstractBackendController
             'upload_without_image' => [
                 'file' => [],
                 'expectation' => [
-                    'error' => true,
                     'message' => '$_FILES array is empty',
                     'errorcode' => 0,
                 ],
@@ -191,7 +211,7 @@ class UploadTest extends AbstractBackendController
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function tearDown()
     {
@@ -206,7 +226,7 @@ class UploadTest extends AbstractBackendController
      * @param array $file
      * @return void
      */
-    private function copyUploadFile(array $file): void
+    private function copyFileToSysTmpDir(array $file): void
     {
         if (!empty($file)) {
             $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
@@ -228,7 +248,7 @@ class UploadTest extends AbstractBackendController
      * @param string $name
      * @return void
      */
-    private function createUploadFile(string $name): void
+    private function createFileInSysTmpDir(string $name): void
     {
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($name);
