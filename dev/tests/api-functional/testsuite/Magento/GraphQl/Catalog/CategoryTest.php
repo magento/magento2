@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -551,6 +552,53 @@ QUERY;
             ]
         ];
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * Test category image is returned as full url (not relative path)
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_image.php
+     */
+    public function testCategoryImage()
+    {
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+
+        $query = <<<QUERY
+    {
+  category(id: {$categoryId}) {
+    id
+    name
+    url_key
+    image
+    children {
+      id
+      name
+      url_key
+      image
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['category']);
+        $category = $response['category'];
+        $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl();
+        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . ltrim($categoryModel->getImage(), '/');
+
+        $this->assertEquals($categoryId, $category['id']);
+        $this->assertEquals('Parent Image Category', $category['name']);
+        $this->assertEquals($expectedImageUrl, $category['image']);
+
+        $childCategory = $category['children'][0];
+        $this->assertEquals('Child Image Category', $childCategory['name']);
+        $this->assertEquals($expectedImageUrl, $childCategory['image']);
     }
 
     /**

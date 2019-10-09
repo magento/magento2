@@ -137,4 +137,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader">
+        <arguments>
+            <argument name="categoryAttributeResolvers" xsi:type="array">
+                <item name="image" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Category\Image</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
