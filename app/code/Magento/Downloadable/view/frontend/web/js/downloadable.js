@@ -10,12 +10,12 @@ define([
     'jquery-ui-modules/widget',
     'Magento_Catalog/js/price-box'
 ], function ($) {
-    'use strict';
 
     $.widget('mage.downloadable', {
         options: {
             priceHolderSelector: '.price-box'
         },
+
 
         /** @inheritdoc */
         _create: function () {
@@ -77,6 +77,7 @@ define([
             let allChecked = true,
                 allElementsCheck = $(this.options.allElements),
                 allElementsLabel = $('label[for="' + allElementsCheck.attr('id') + '"] > span');
+
             $(this.options.linkElement).each(function () {
                 if (!this.checked) {
                     allChecked = false;
@@ -85,10 +86,10 @@ define([
 
             if (allChecked) {
                 allElementsLabel.text(allElementsCheck.attr('data-checked'));
-                allElementsCheck.prop('checked', true)
+                allElementsCheck.prop('checked', true);
             } else {
                 allElementsLabel.text(allElementsCheck.attr('data-notchecked'));
-                allElementsCheck.prop('checked', false)
+                allElementsCheck.prop('checked', false);
             }
         }
     });
