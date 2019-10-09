@@ -16,6 +16,8 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
+ * Provide tests for admin product save action with images.
+ *
  * @magentoAppArea adminhtml
  */
 class ImagesTest extends AbstractBackendController
@@ -31,6 +33,11 @@ class ImagesTest extends AbstractBackendController
     private $mediaDirectory;
 
     /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -38,6 +45,7 @@ class ImagesTest extends AbstractBackendController
         parent::setUp();
         $this->config = $this->_objectManager->get(Config::class);
         $this->mediaDirectory = $this->_objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->productRepository =  $this->_objectManager->create(ProductRepository::class);
     }
 
     /**
@@ -53,13 +61,11 @@ class ImagesTest extends AbstractBackendController
     public function testSaveSimpleProductDefaultImage(array $postData, array $expectation): void
     {
         $this->copyFileToBaseTmpMediaPath();
-        /** @var ProductRepository $repository */
-        $repository = $this->_objectManager->create(ProductRepository::class);
-        $product = $repository->get('simple');
+        $product = $this->productRepository->get('simple');
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
-        $product = $repository->get('simple', false, null, true);
+        $product = $this->productRepository->get('simple', false, null, true);
         $galleryImage = reset($product->getData('media_gallery')['images']);
         $expectedGalleryImage = $expectation['media_gallery_image'];
         $this->assertEquals($expectedGalleryImage['position'], $galleryImage['position']);

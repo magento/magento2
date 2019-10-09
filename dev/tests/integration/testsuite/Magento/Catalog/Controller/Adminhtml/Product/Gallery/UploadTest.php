@@ -17,6 +17,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
+ * Provide tests for admin product upload image action.
+ *
  * @magentoAppArea adminhtml
  */
 class UploadTest extends AbstractBackendController
@@ -65,9 +67,10 @@ class UploadTest extends AbstractBackendController
     }
 
     /**
-     * Test upload image on product page.
+     * Test upload image on admin product page.
      *
      * @dataProvider uploadActionDataProvider
+     * @magentoDbIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
@@ -240,6 +243,8 @@ class UploadTest extends AbstractBackendController
     }
 
     /**
+     * Returns absolute path to file in media tmp dir.
+     *
      * @param string $tmpPath
      * @return string
      */

@@ -8,21 +8,30 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test class for \Magento\Catalog\Model\Product\Gallery\CreateHandler.
+ * Provides tests for media gallery images creation during product save.
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoDataFixture Magento/Catalog/_files/product_image.php
+ * @magentoDbIsolation enabled
  */
 class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var string
+     */
     private $fileName = '/m/a/magento_image.jpg';
 
+    /**
+     * @var string
+     */
     private $fileLabel = 'Magento image';
 
     /**
@@ -41,6 +50,16 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     private $galleryResource;
 
     /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -48,9 +67,13 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->createHandler = $this->objectManager->create(CreateHandler::class);
         $this->galleryResource = $this->objectManager->create(Gallery::class);
+        $this->productRepository = $this->objectManager->create(ProductRepository::class);
+        $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
     }
 
     /**
+     * Tests gallery processing on product duplication.
+     *
      * @covers \Magento\Catalog\Model\Product\Gallery\CreateHandler::execute
      *
      * @return void
@@ -78,13 +101,14 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Check sanity of posted image file name
+     * Check sanity of posted image file name.
      *
      * @param string $imageFileName
      * @expectedException \Magento\Framework\Exception\FileSystemException
      * @dataProvider illegalFilenameDataProvider
+     * @return void
      */
-    public function testExecuteWithIllegalFilename(string $imageFileName): array
+    public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
         $product = $this->getProduct();
         $product->setData(
@@ -114,6 +138,8 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests gallery processing with different image roles.
+     *
      * @dataProvider executeDataProvider
      * @param string $image
      * @param string $smallImage
@@ -142,6 +168,8 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests gallery processing without images.
+     *
      * @dataProvider executeDataProvider
      * @param string $image
      * @param string $smallImage
@@ -197,6 +225,8 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests gallery processing with variations of additional gallery image fields.
+     *
      * @dataProvider additionalGalleryFieldsProvider
      * @param string $mediaField
      * @param string $value
@@ -214,7 +244,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             ['images' => ['image' => ['file' => $this->fileName, $mediaField => $value]]]
         );
         $this->createHandler->execute($product);
-        $galleryAttributeId = $product->getResource()->getAttribute('media_gallery')->getAttributeId();
+        $galleryAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $galleryAttributeId);
         $image = reset($productImages);
         $this->assertEquals($image[$mediaField], $expectedValue);
@@ -236,17 +266,18 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Returns product for testing.
+     *
      * @return Product
      */
     private function getProduct(): Product
     {
-        /** @var $product Product */
-        $product = $this->objectManager->create(Product::class);
-        $product->load(1);
-        return $product;
+        return $this->productRepository->getById(1);
     }
 
     /**
+     * Asserts product attributes related to gallery images.
+     *
      * @param string $image
      * @param string $smallImage
      * @param string $swatchImage
@@ -261,26 +292,33 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
         string $swatchImage,
         string $thumbnail
     ): void {
-        $resource = $product->getResource();
-        $id = $product->getId();
-        $storeId = $product->getStoreId();
-
-        $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
-        $this->assertEquals(
-            $image,
-            $resource->getAttributeRawValue($id, $resource->getAttribute('image'), $storeId)
+        $productImage = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            $this->productResource->getAttribute('image'),
+            $product->getStoreId()
         );
-        $this->assertEquals(
-            $smallImage,
-            $resource->getAttributeRawValue($id, $resource->getAttribute('small_image'), $storeId)
+        $productSmallImage = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            $this->productResource->getAttribute('small_image'),
+            $product->getStoreId()
         );
-        $this->assertEquals(
-            $swatchImage,
-            $resource->getAttributeRawValue($id, $resource->getAttribute('swatch_image'), $storeId)
+        $productThumbnail = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            $this->productResource->getAttribute('thumbnail'),
+            $product->getStoreId()
         );
-        $this->assertEquals(
-            $thumbnail,
-            $resource->getAttributeRawValue($id, $resource->getAttribute('thumbnail'), $storeId)
+        $productSwatchImage = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            $this->productResource->getAttribute('swatch_image'),
+            $product->getStoreId()
         );
+        $this->assertStringStartsWith(
+            '/m/a/magento_image',
+            $product->getData('media_gallery/images/image/new_file')
+        );
+        $this->assertEquals($image, $productImage);
+        $this->assertEquals($smallImage, $productSmallImage);
+        $this->assertEquals($swatchImage, $productSwatchImage);
+        $this->assertEquals($thumbnail, $productThumbnail);
     }
 }
