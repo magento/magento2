@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPanelIsFrozenIfStorefrontIsOpenedViaCustomerViewTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Order"/>
+            <title value="Place an order and click print"/>
+            <description value="Admin panel is not frozen if Storefront is opened via Customer View"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="https://github.com/magento/magento2/pull/24845"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
+            <createData entity="SimpleSubCategory" stepKey="createSimpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createSimpleCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$simpleCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProduct">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$simpleCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+        <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"/>
+        <actionGroup ref="submitShipmentIntoOrder" stepKey="submitShipment"/>
+
+        <!--Create Credit Memo-->
+        <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
+            <argument name="orderId" value="{$getOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInCustomer">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+        <click selector="{{StorefrontCustomerOrderSection.viewOrder}}" stepKey="clickViewOrder"/>
+        <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
+        <waitForPageLoad stepKey="waitPageReload"/>
+        <switchToWindow stepKey="switchToWindow"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <see selector="{{CheckoutOrderSummarySection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}} {{US_Address_TX.city}}, {{US_Address_TX.state}}, {{US_Address_TX.postcode}}" stepKey="checkShippingAddress"/>
+    </test>
+</tests>

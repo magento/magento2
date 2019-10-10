@@ -25,6 +25,7 @@
         <!-- Fill the form according the attributes of the entity -->
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
         <selectOption stepKey="selectSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
         <click stepKey="clickFromCalender" selector="{{AdminNewCatalogPriceRule.fromDateButton}}"/>
         <click stepKey="clickFromToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
@@ -49,15 +50,19 @@
         </arguments>
 
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
-        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName"/>
-        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription"/>
-        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName" />
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
+        <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription" />
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite" />
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
-
+    <actionGroup name="AdminCreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
+        <remove keyForRemoval="selectSite"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsite"/>
+    </actionGroup>
     <actionGroup name="CreateCatalogPriceRuleViaTheUi">
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>

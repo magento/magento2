@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckingWithSingleShipmentTest">
+        <annotations>
+            <features value="Multishipment"/>
+            <stories value="Checking multi shipment with single shipment adresses on front end order page"/>
+            <title value="Checking multi shipment with single shipment adresses on front end order page"/>
+            <description value="Shipping price shows 0 when you return from multiple checkout to cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-18519"/>
+            <group value="Multishipment"/>
+        </annotations>
+
+        <before>
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData stepKey="product2" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
+            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+        </before>
+
+        <amOnPage url="$$product1.name$$.html" stepKey="goToProduct1"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct1">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <amOnPage url="$$product2.name$$.html" stepKey="goToProduct2"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="CheckingWithSingleAddressActionGroup" stepKey="checkoutWithSingleAddresses"/>
+        <actionGroup ref="SelectSingleShippingInfoActionGroup" stepKey="checkoutWithSingleShipping"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
+        <actionGroup ref="ReviewOrderForSingleShipmentActionGroup" stepKey="reviewOrderForSingleShipment"/>
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

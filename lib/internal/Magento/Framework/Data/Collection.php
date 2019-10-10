@@ -259,7 +259,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if (0 === $collectionSize) {
             return 1;
         } elseif ($this->_pageSize) {
-            return ceil($collectionSize / $this->_pageSize);
+            return (int)ceil($collectionSize / $this->_pageSize);
         } else {
             return 1;
         }
@@ -889,6 +889,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return string[]
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -907,6 +910,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return void
      * @since 100.0.11
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

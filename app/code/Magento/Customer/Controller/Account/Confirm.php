@@ -6,25 +6,27 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Model\Url;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Confirm
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm extends \Magento\Customer\Controller\AbstractAccount
+class Confirm extends AbstractAccount implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -147,13 +149,16 @@ class Confirm extends \Magento\Customer\Controller\AbstractAccount
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
-        try {
-            $customerId = $this->getRequest()->getParam('id', false);
-            $key = $this->getRequest()->getParam('key', false);
-            if (empty($customerId) || empty($key)) {
-                throw new \Exception(__('Bad request.'));
-            }
 
+        $customerId = $this->getRequest()->getParam('id', false);
+        $key = $this->getRequest()->getParam('key', false);
+        if (empty($customerId) || empty($key)) {
+            $this->messageManager->addErrorMessage(__('Bad request.'));
+            $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
+            return $resultRedirect->setUrl($this->_redirect->error($url));
+        }
+
+        try {
             // log in and send greeting email
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $customer = $this->customerAccountManagement->activate($customerEmail, $key);
