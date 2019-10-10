@@ -9,10 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertVisiblePagerActionGroup">
-        <arguments>
-            <argument name="recordsLabel" type="string" defaultValue="records found"/>
-        </arguments>
-        <see selector="{{AdminExportGridPagerSection.recordsLabel}}" userInput="{{recordsLabel}}" stepKey="seeRecordsLabel"/>
         <seeElement selector="{{AdminExportGridPagerSection.pager}}" stepKey="seeGridPager"/>
+        <seeElement selector="{{AdminGridRowsPerPage.count}}" stepKey="seeCountPerPageElement"/>
     </actionGroup>
 </actionGroups>
