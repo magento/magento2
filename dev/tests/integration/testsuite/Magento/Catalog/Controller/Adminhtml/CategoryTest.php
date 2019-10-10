@@ -132,12 +132,12 @@ class CategoryTest extends AbstractBackendController
         ];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
-        $category = $this->categoryRepository->get($categoryId);
-        $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
         $this->assertSessionMessages(
             $this->equalTo([(string)__('You saved the category.')]),
             MessageInterface::TYPE_SUCCESS
         );
+        $category = $this->categoryRepository->get($categoryId);
+        $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
     }
 
     /**
@@ -488,11 +488,11 @@ class CategoryTest extends AbstractBackendController
         $this->getRequest()->setParam('id', 96377);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
-        $newCategoryProductsCount = $this->getCategoryProductsCount();
         $this->assertSessionMessages(
             $this->equalTo([(string)__('You saved the category.')]),
             MessageInterface::TYPE_SUCCESS
         );
+        $newCategoryProductsCount = $this->getCategoryProductsCount();
         $this->assertEquals(
             $oldCategoryProductsCount,
             $newCategoryProductsCount,
