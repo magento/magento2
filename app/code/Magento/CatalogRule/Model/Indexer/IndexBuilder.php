@@ -246,9 +246,10 @@ class IndexBuilder
             $this->cleanProductIndex([$id]);
 
             $products = $this->productLoader->getProducts([$id]);
-            $product = array_values($products)[0];
             $activeRules = $this->getActiveRules();
-            $this->applyRules($activeRules, $product);
+            foreach ($products as $product) {
+                $this->applyRules($activeRules, $product);
+            }
 
             $this->reindexRuleGroupWebsite->execute();
         } catch (\Exception $e) {
@@ -386,11 +387,11 @@ class IndexBuilder
      * Assign product to rule
      *
      * @param Rule $rule
-     * @param int $productId
+     * @param int $productEntityId
      * @param array $websiteIds
      * @return void
      */
-    private function assignProductToRule(Rule $rule, int $productId, array $websiteIds): void
+    private function assignProductToRule(Rule $rule, int $productEntityId, array $websiteIds): void
     {
         $ruleId = (int) $rule->getId();
         $ruleProductTable = $this->getTable('catalogrule_product');
@@ -398,7 +399,7 @@ class IndexBuilder
             $ruleProductTable,
             [
                 'rule_id = ?' => $ruleId,
-                'product_id = ?' => $productId,
+                'product_id = ?' => $productEntityId,
             ]
         );
 
@@ -420,7 +421,7 @@ class IndexBuilder
                     'to_time' => $toTime,
                     'website_id' => $websiteId,
                     'customer_group_id' => $customerGroupId,
-                    'product_id' => $productId,
+                    'product_id' => $productEntityId,
                     'action_operator' => $actionOperator,
                     'action_amount' => $actionAmount,
                     'action_stop' => $actionStop,
