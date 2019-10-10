@@ -45,10 +45,8 @@ define([
             options.forEach(function (item) {
                 if (_.contains(values, item.value + '')) {
                     label.push(item.label);
-                } else {
-                    if (_.contains(multiSelectValues, item.value + '')) {
-                        label.push(item.label);
-                    }
+                } else if (_.contains(multiSelectValues, item.value + '')) {
+                    label.push(item.label);
                 }
             });
 
