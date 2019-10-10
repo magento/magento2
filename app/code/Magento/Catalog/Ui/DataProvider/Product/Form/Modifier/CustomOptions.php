@@ -603,7 +603,8 @@ class CustomOptions extends AbstractModifier
                         'component' => 'Magento_Ui/js/form/components/group',
                         'breakLine' => false,
                         'showLabel' => false,
-                        'additionalClasses' => 'admin__field-group-columns admin__control-group-equal admin__control-grouped',
+                        'additionalClasses' => 'admin__field-group-columns admin__control-group-equal '
+                            . 'admin__control-grouped',
                         'sortOrder' => $sortOrder,
                         'fieldTemplate' => 'Magento_Catalog/form/field',
                         'visible' => false,

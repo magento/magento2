@@ -238,7 +238,6 @@ class Categories extends AbstractModifier
         if (!$elementPath) {
             return $meta;
         }
-
         $value = [
             'arguments' => [
                 'data' => [

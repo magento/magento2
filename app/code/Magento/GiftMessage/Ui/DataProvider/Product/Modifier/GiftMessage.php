@@ -53,7 +53,9 @@ class GiftMessage extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $data
+     * @return array
+     * @since 100.1.0
      */
     public function modifyData(array $data)
     {
@@ -73,7 +75,9 @@ class GiftMessage extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $meta
+     * @return array
+     * @since 100.1.0
      */
     public function modifyMeta(array $meta)
     {
@@ -104,22 +108,24 @@ class GiftMessage extends AbstractModifier
         $groupConfig = $this->arrayManager->get($containerPath, $meta);
         $fieldConfig = $this->arrayManager->get($fieldPath, $meta);
 
-        $meta = $this->arrayManager->merge($containerPath, $meta, [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'formElement' => 'container',
-                        'componentType' => 'container',
-                        'component' => 'Magento_Ui/js/form/components/group',
-                        'label' => $groupConfig['arguments']['data']['config']['label'],
-                        'additionalClasses' => 'admin__control-grouped',
-                        'breakLine' => false,
-                        'sortOrder' => $fieldConfig['arguments']['data']['config']['sortOrder'],
-                        'dataScope' => '',
+        $meta = $this->arrayManager->merge($containerPath, $meta,
+            [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'formElement' => 'container',
+                            'componentType' => 'container',
+                            'component' => 'Magento_Ui/js/form/components/group',
+                            'label' => $groupConfig['arguments']['data']['config']['label'],
+                            'additionalClasses' => 'admin__control-grouped',
+                            'breakLine' => false,
+                            'sortOrder' => $fieldConfig['arguments']['data']['config']['sortOrder'],
+                            'dataScope' => '',
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]
+        );
         $meta = $this->arrayManager->merge(
             $containerPath,
             $meta,

@@ -525,7 +525,8 @@ class BundlePanel extends AbstractModifier
                         'componentType' => Container::NAME,
                         'component' => 'Magento_Ui/js/form/components/group',
                         'showLabel' => false,
-                        'additionalClasses' => 'admin__field-group-columns admin__control-group-equal admin__control-grouped',
+                        'additionalClasses' => 'admin__field-group-columns admin__control-group-equal '
+                            . 'admin__control-grouped',
                         'breakLine' => false,
                         'sortOrder' => 10,
                     ],
