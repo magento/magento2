@@ -18,7 +18,6 @@
             <testCaseId value="MC-11386"/>
             <group value="catalog"/>
             <group value="indexer"/>
-            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->
