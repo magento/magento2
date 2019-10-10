@@ -10,6 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Checkout select Check/Money billing method -->
     <actionGroup name="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup">
+        <annotations>
+            <description>Selects the Billing Method "Check / Money order" on the Admin 'Create New Order for' page.</description>
+        </annotations>
+
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{AdminCheckoutPaymentSection.checkBillingMethodByName('Check / Money order')}}" dependentSelector="{{AdminCheckoutPaymentSection.checkBillingMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoBillingMethod"/>

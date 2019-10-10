@@ -351,6 +351,11 @@
         <data key="filename">adobe-base</data>
         <data key="file_extension">jpg</data>
     </entity>
+    <entity name="TestImage" extends="TestImageAdobe" type="image">
+        <data key="title" unique="suffix">test_image</data>
+        <data key="file">test_image.jpg</data>
+        <data key="filename">test_image</data>
+    </entity>
     <entity name="ProductWithUnicode" type="product">
         <data key="sku" unique="suffix">&#38657;&#20135;&#21697;</data>
         <data key="type_id">simple</data>
@@ -1164,5 +1169,68 @@
         <data key="quantity">10</data>
         <requiredEntity type="product_extension_attribute">EavStock10</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <!-- Products from file "export_import_configurable_product.csv" -->
+    <entity name="ApiSimpleOneExportImport" extends="ApiSimpleOne" type="product2">
+        <data key="sku">api-simple-one-export-import</data>
+        <data key="name">Api Simple Product One Export Import</data>
+    </entity>
+    <entity name="ApiSimpleTwoExportImport" extends="ApiSimpleTwo" type="product2">
+        <data key="sku">api-simple-two-export-import</data>
+        <data key="name">Api Simple Product Two Export Import</data>
+    </entity>
+    <entity name="SimpleProductPrice10Qty1" type="product">
+        <data key="sku" unique="suffix">simple-product_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProduct_</data>
+        <data key="price">10.00</data>
+        <data key="urlKey" unique="suffix">simple-product_</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="VirtualProductPrice10Qty1" type="product">
+        <data key="sku" unique="suffix">virtual-product_</data>
+        <data key="type_id">virtual</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">VirtualProduct_</data>
+        <data key="price">10.00</data>
+        <data key="weight">0</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct2Price10Qty1" type="product">
+        <data key="sku" unique="suffix">simple-product-2_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct2_</data>
+        <data key="price">10.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct3Price10Qty1" type="product2">
+        <data key="sku" unique="suffix">simple-product-3_</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">SimpleProduct3_</data>
+        <data key="price">10.00</data>
+        <data key="urlKey" unique="suffix">simple-product-3_</data>
+        <data key="status">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="SimpleProductUpdatePrice11" type="product2">
+        <data key="price">11.00</data>
+    </entity>
+    <entity name="SimpleProductUpdatePrice14" type="product2">
+        <data key="price">14.00</data>
+    </entity>
+    <entity name="SimpleProductUpdatePrice16" type="product2">
+        <data key="price">16.00</data>
     </entity>
 </entities>

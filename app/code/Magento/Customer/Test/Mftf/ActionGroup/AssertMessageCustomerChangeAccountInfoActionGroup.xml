@@ -5,14 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
-        
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertMessageCustomerChangeAccountInfoActionGroup">
+        <annotations>
+            <description>Validates that the provided Message/Message Type are present and correct.</description>
+        </annotations>
         <arguments>
-            <argument name="message" type="string" defaultValue="You saved the account information." />
-            <argument name="messageType" type="string" defaultValue="success" />
+            <argument name="message" type="string" defaultValue="You saved the account information."/>
+            <argument name="messageType" type="string" defaultValue="success"/>
         </arguments>
-        <see userInput="{{message}}" selector="{{StorefrontCustomerAccountMainSection.messageByType(messageType)}}" stepKey="verifyMessage" />
+        
+        <see userInput="{{message}}" selector="{{StorefrontCustomerAccountMainSection.messageByType(messageType)}}" stepKey="verifyMessage"/>
     </actionGroup>
 </actionGroups>

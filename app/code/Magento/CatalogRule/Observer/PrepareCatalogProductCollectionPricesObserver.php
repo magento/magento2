@@ -12,14 +12,12 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Observer;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Observer for applying catalog rules on product collection
@@ -60,18 +58,12 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
     protected $groupManagement;
 
     /**
-     * @var \Magento\CatalogRule\Model\RuleDateFormatterInterface
-     */
-    private $ruleDateFormatter;
-
-    /**
      * @param RulePricesStorage $rulePricesStorage
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param StoreManagerInterface $storeManager
      * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\CatalogRule\Model\RuleDateFormatterInterface|null $ruleDateFormatter
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
@@ -79,8 +71,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
         StoreManagerInterface $storeManager,
         TimezoneInterface $localeDate,
         CustomerModelSession $customerSession,
-        GroupManagementInterface $groupManagement,
-        \Magento\CatalogRule\Model\RuleDateFormatterInterface $ruleDateFormatter = null
+        GroupManagementInterface $groupManagement
     ) {
         $this->rulePricesStorage = $rulePricesStorage;
         $this->resourceRuleFactory = $resourceRuleFactory;
@@ -88,8 +79,6 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
         $this->localeDate = $localeDate;
         $this->customerSession = $customerSession;
         $this->groupManagement = $groupManagement;
-        $this->ruleDateFormatter = $ruleDateFormatter ?: ObjectManager::getInstance()
-            ->get(\Magento\CatalogRule\Model\RuleDateFormatterInterface::class);
     }
 
     /**
@@ -100,7 +89,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /* @var $collection ProductCollection */
+        /** @var ProductCollection $collection */
         $collection = $observer->getEvent()->getCollection();
         $store = $this->storeManager->getStore($observer->getEvent()->getStoreId());
         $websiteId = $store->getWebsiteId();
@@ -116,7 +105,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
         if ($observer->getEvent()->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = (new \DateTime())->setTimestamp($this->ruleDateFormatter->getTimeStamp($store));
+            $date = (new \DateTime())->setTimestamp($this->localeDate->scopeTimeStamp($store));
         }
 
         $productIds = [];

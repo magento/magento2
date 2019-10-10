@@ -45,7 +45,7 @@ class SendFriendTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/SendFriend/_files/enable_send_friend_guest.php
+     * @magentoConfigFixture default_store sendfriend/email/allow_guest 1
      */
     public function testSendFriendGuestEnable()
     {
@@ -66,7 +66,7 @@ class SendFriendTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/SendFriend/_files/disable_send_friend_guest.php
+     * @magentoConfigFixture default_store sendfriend/email/allow_guest 0
      * @expectedException \Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
@@ -90,7 +90,7 @@ class SendFriendTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/SendFriend/_files/disable_send_friend_guest.php
+     * @magentoConfigFixture default_store sendfriend/email/allow_guest 0
      */
     public function testSendFriendGuestDisableAsCustomer()
     {
@@ -210,15 +210,11 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * TODO: use magentoApiConfigFixture (to be merged https://github.com/magento/graphql-ce/pull/351)
+     * @magentoConfigFixture default_store sendfriend/email/max_per_hour 1
      * @magentoApiDataFixture Magento/SendFriend/Fixtures/sendfriend_configuration.php
      */
     public function testLimitMessagesPerHour()
     {
-
-        /** @var SendFriend $sendFriend */
-        $sendFriend = $this->sendFriendFactory->create();
-
         $productId = (int)$this->productRepository->get('simple_product')->getId();
         $recipients = '{
                   name: "Recipient Name 1"
@@ -232,13 +228,11 @@ QUERY;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            "You can't send messages more than {$sendFriend->getMaxSendsToFriend()} times an hour."
+            "You can't send messages more than 1 times an hour."
         );
 
-        $maxSendToFriends = $sendFriend->getMaxSendsToFriend();
-        for ($i = 0; $i <= $maxSendToFriends + 1; $i++) {
-            $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-        }
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**

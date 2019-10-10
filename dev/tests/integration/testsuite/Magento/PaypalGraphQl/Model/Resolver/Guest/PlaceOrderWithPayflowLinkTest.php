@@ -119,9 +119,9 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
           code: "$paymentMethod"
             payflow_link: 
             {
-           cancel_url:"http://mage.test/paypal/payflow/cancel"
-           return_url:"http://mage.test/paypal/payflow/return"
-           error_url:"http://mage.test/paypal/payflow/error"
+           cancel_url:"paypal/payflow/cancel"
+           return_url:"paypal/payflow/return"
+           error_url:"paypal/payflow/error"
           }
       }
   }) {    
@@ -133,7 +133,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -183,11 +183,11 @@ QUERY;
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 
@@ -221,9 +221,9 @@ QUERY;
           code: "$paymentMethod"
             payflow_link: 
             {
-           cancel_url:"http://mage.test/paypal/payflow/cancelPayment"
-           return_url:"http://mage.test/paypal/payflow/returnUrl"
-           error_url:"http://mage.test/paypal/payflow/returnUrl"
+           cancel_url:"paypal/payflow/cancelPayment"
+           return_url:"paypal/payflow/returnUrl"
+           error_url:"paypal/payflow/returnUrl"
           }
       }
   }) {    
@@ -235,7 +235,7 @@ QUERY;
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -273,6 +273,6 @@ QUERY;
             $expectedExceptionMessage,
             $actualError['message']
         );
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

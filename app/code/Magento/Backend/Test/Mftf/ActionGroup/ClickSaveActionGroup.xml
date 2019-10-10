@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Click save button and see message-->
+    <actionGroup name="ClickSaveButtonActionGroup">
+        <arguments>
+            <argument name="message" type="string"/>
+        </arguments>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitMessage" />
+        <see userInput="{{message}}" selector="{{AdminMessagesSection.success}}" stepKey="verifyMessage" />
+    </actionGroup>
+</actionGroups>
