@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -69,7 +68,7 @@ class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpP
      *
      * @return Redirect
      */
-    public function execute(): Redirect
+    public function execute()
     {
         try {
             $service = $this->getRequest()->getParam('rate_services');
@@ -90,18 +89,18 @@ class FetchRates extends CurrencyAction implements HttpGetActionInterface, HttpP
             if (count($errors) > 0) {
                 foreach ($errors as $error) {
                     $escapedError = $this->escaper->escapeHtml($error);
-                    $this->messageManager->addWarning($escapedError);
+                    $this->messageManager->addWarningMessage($escapedError);
                 }
-                $this->messageManager->addWarning(
+                $this->messageManager->addWarningMessage(
                     __('Click "Save" to apply the rates we found.')
                 );
             } else {
-                $this->messageManager->addSuccess(__('Click "Save" to apply the rates we found.'));
+                $this->messageManager->addSuccessMessage(__('Click "Save" to apply the rates we found.'));
             }
 
             $this->backendSession->setRates($rates);
         } catch (Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
         /** @var Redirect $resultRedirect */

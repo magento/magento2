@@ -67,7 +67,7 @@ class CurrencyConverterApi extends AbstractImport
     /**
      * @inheritdoc
      */
-    public function fetchRates(): array
+    public function fetchRates()
     {
         $data = [];
         $currencies = $this->_getCurrencyCodes();
