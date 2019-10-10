@@ -14,10 +14,12 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\State;
 use Magento\Framework\Math\Random;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 /**
  * Creates deployment config data based on user input array
- * this class introduced to break down Magento\Setup\Model\ConfigOptionsList::createConfig
+ *
+ * This class introduced to break down {@see Magento\Setup\Model\ConfigOptionsList::createConfig}
  */
 class ConfigGenerator
 {
@@ -62,27 +64,36 @@ class ConfigGenerator
     private $cryptKeyGenerator;
 
     /**
+     * @var DriverOptions
+     */
+    private $driverOptions;
+
+    /**
      * Constructor
      *
      * @param Random $random Deprecated since 100.2.0
      * @param DeploymentConfig $deploymentConfig
      * @param ConfigDataFactory|null $configDataFactory
      * @param CryptKeyGeneratorInterface|null $cryptKeyGenerator
+     * @param DriverOptions|null $driverOptions
      */
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
         ConfigDataFactory $configDataFactory = null,
-        CryptKeyGeneratorInterface $cryptKeyGenerator = null
+        CryptKeyGeneratorInterface $cryptKeyGenerator = null,
+        DriverOptions $driverOptions = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
         $this->configDataFactory = $configDataFactory ?? ObjectManager::getInstance()->get(ConfigDataFactory::class);
         $this->cryptKeyGenerator = $cryptKeyGenerator ?? ObjectManager::getInstance()->get(CryptKeyGenerator::class);
+        $this->driverOptions = $driverOptions ?? ObjectManager::getInstance()->get(DriverOptions::class);
     }
 
     /**
      * Creates encryption key config data
+     *
      * @param array $data
      * @return ConfigData
      */
@@ -178,6 +189,9 @@ class ConfigGenerator
         if ($currentStatus === null) {
             $configData->set($dbConnectionPrefix . ConfigOptionsListConstants::KEY_ACTIVE, '1');
         }
+
+        $driverOptions = $this->driverOptions->getDriverOptions($data);
+        $configData->set($dbConnectionPrefix . ConfigOptionsListConstants::KEY_DRIVER_OPTIONS, $driverOptions);
 
         return $configData;
     }

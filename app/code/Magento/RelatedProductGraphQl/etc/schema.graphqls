@@ -1,0 +1,8 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+interface ProductInterface {
+    related_products: [ProductInterface] @doc(description: "Related Products") @resolver(class: "Magento\\RelatedProductGraphQl\\Model\\Resolver\\RelatedProducts")
+    upsell_products: [ProductInterface] @doc(description: "Upsell Products")  @resolver(class: "Magento\\RelatedProductGraphQl\\Model\\Resolver\\UpSellProducts")
+    crosssell_products: [ProductInterface] @doc(description: "Crosssell Products") @resolver(class: "Magento\\RelatedProductGraphQl\\Model\\Resolver\\CrossSellProducts")
+}

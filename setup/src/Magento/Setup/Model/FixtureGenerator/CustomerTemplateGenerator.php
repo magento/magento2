@@ -48,7 +48,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateEntity()
     {
@@ -67,7 +67,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
      */
     private function getCustomerTemplate()
     {
-        $customerRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
+        $customerRandomizerNumber = crc32(random_int(1, PHP_INT_MAX));
 
         $now = new \DateTime();
 
@@ -100,6 +100,8 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
+     * Get address template.
+     *
      * @param int $customerId
      * @return Address
      */

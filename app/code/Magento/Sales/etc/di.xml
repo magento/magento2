@@ -116,6 +116,7 @@
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
+    <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -640,6 +641,8 @@
                 <item name="adjustment_positive" xsi:type="string">sales_creditmemo.adjustment_positive</item>
                 <item name="adjustment_negative" xsi:type="string">sales_creditmemo.adjustment_negative</item>
                 <item name="order_base_grand_total" xsi:type="string">sales_order.base_grand_total</item>
+                <item name="order_currency_code" xsi:type="string">sales_order.order_currency_code</item>
+                <item name="base_currency_code" xsi:type="string">sales_order.base_currency_code</item>
             </argument>
         </arguments>
     </virtualType>

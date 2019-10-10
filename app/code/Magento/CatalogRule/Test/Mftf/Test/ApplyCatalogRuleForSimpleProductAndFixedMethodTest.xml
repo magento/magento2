@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ApplyCatalogRuleForSimpleProductAndFixedMethodTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14771"/>
+            <group value="CatalogRule"/>
+            <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+
+            <!-- Update all products to have custom options -->
+            <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
+        </before>
+        <after>
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete the catalog price rule -->
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- 1. Begin creating a new catalog price rule -->
+        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+            <argument name ="categoryId" value="$createCategory.id$"/>
+            <argument name ="catalogRule" value="CatalogRuleByFixed"/>
+        </actionGroup>
+
+        <!-- Select not logged in customer group -->
+        <actionGroup ref="selectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+
+        <!-- Save and apply the new catalog price rule -->
+        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        
+        <!-- Navigate to category on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        
+        <!-- Check product 1 name on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
+            <argument name="productInfo" value="$createProduct1.name$"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check product 1 price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Price">
+            <argument name="productInfo" value="$44.48"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check product 1 regular price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1RegularPrice">
+            <argument name="productInfo" value="$56.78"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Navigate to product 1 on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+
+        <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
+        <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
+            <argument name="customOption" value="ProductOptionRadioButton2"/>
+            <argument name="customOptionValue" value="ProductOptionValueRadioButtons1"/>
+            <argument name="productPrice" value="$156.77"/>
+            <argument name="productFinalPrice" value="$144.47"/>
+        </actionGroup>
+
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct1ToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert sub total on mini shopping cart -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$144.47"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -67,6 +67,9 @@
             <stories value="Change Customer Group"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
 
         <remove keyForRemoval="filterCustomer"/>

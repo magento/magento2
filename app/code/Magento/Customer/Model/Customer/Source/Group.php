@@ -6,11 +6,14 @@
 namespace Magento\Customer\Model\Customer\Source;
 
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
-use Magento\Framework\Module\Manager as ModuleManager;
+use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
+/**
+ * Group.
+ */
 class Group implements GroupSourceInterface
 {
     /**

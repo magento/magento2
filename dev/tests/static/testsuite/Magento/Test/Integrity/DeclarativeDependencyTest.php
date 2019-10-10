@@ -23,11 +23,6 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
     private $dependencyProvider;
 
     /**
-     * @var array
-     */
-    private $blacklistedDependencies = [];
-
-    /**
      * Sets up data
      *
      * @throws \Exception
@@ -50,14 +45,6 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
      */
     public function testUndeclaredDependencies()
     {
-        /** TODO: Remove this temporary solution after MC-15534 is closed */
-        $filePattern = __DIR__ . '/_files/dependency_test/blacklisted_dependencies_*.php';
-        $blacklistedDependencies = [];
-        foreach (glob($filePattern) as $fileName) {
-            $blacklistedDependencies = array_merge($blacklistedDependencies, require $fileName);
-        }
-        $this->blacklistedDependencies = $blacklistedDependencies;
-
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
@@ -84,9 +71,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
                 $result = [];
                 foreach ($undeclaredDependency as $name => $modules) {
                     $modules = array_unique($modules);
-                    if ($this->filterBlacklistedDependencies($foundModuleName, $modules)) {
-                        $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
-                    }
+                    $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
                 }
                 if (!empty($result)) {
                     $this->fail(
@@ -96,24 +81,6 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
             },
             $this->prepareFiles(Files::init()->getDbSchemaFiles())
         );
-    }
-
-    /**
-     * Filter blacklisted dependencies.
-     *
-     * @todo Remove this temporary solution after MC-15534 is closed
-     *
-     * @param string $moduleName
-     * @param array $dependencies
-     * @return array
-     */
-    private function filterBlacklistedDependencies(string $moduleName, array $dependencies): array
-    {
-        if (!empty($this->blacklistedDependencies[$moduleName])) {
-            $dependencies = array_diff($dependencies, $this->blacklistedDependencies[$moduleName]);
-        }
-
-        return $dependencies;
     }
 
     /**

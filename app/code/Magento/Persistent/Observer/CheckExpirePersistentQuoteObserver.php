@@ -6,6 +6,7 @@
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Observer of expired session
@@ -69,6 +70,11 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $checkoutPagePath = 'checkout';
 
     /**
+     * @var Quote
+     */
+    private $quote;
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
@@ -100,10 +106,21 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if (!$this->_persistentData->canProcess($observer)) {
+            return;
+        }
+
+        //clear persistent when persistent data is disabled
+        if ($this->isPersistentQuoteOutdated()) {
+            $this->_eventManager->dispatch('persistent_session_expired');
+            $this->quoteManager->expire();
+            $this->_checkoutSession->clearQuote();
+            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
             return;
         }
 
@@ -113,15 +130,56 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_checkoutSession->getQuoteId() &&
             !$this->isRequestFromCheckoutPage($this->request) &&
             // persistent session does not expire on onepage checkout page
-            (
-                $this->_checkoutSession->getQuote()->getIsPersistent() ||
-                $this->_checkoutSession->getQuote()->getCustomerIsGuest()
-            )
+            $this->isNeedToExpireSession()
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
         }
+    }
+
+    /**
+     * Checks if current quote marked as persistent and Persistence Functionality is disabled.
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function isPersistentQuoteOutdated(): bool
+    {
+        if ((!$this->_persistentData->isEnabled() || !$this->_persistentData->isShoppingCartPersist())
+            && !$this->_customerSession->isLoggedIn()
+            && $this->_checkoutSession->getQuoteId()) {
+            return (bool)$this->getQuote()->getIsPersistent();
+        }
+        return false;
+    }
+
+    /**
+     * Condition checker
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function isNeedToExpireSession(): bool
+    {
+        return $this->getQuote()->getIsPersistent() || $this->getQuote()->getCustomerIsGuest();
+    }
+
+    /**
+     * Getter for Quote with micro optimization
+     *
+     * @return Quote
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getQuote(): Quote
+    {
+        if ($this->quote === null) {
+            $this->quote = $this->_checkoutSession->getQuote();
+        }
+        return $this->quote;
     }
 
     /**
@@ -137,8 +195,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
 
         /** @var bool $isCheckoutPage */
         $isCheckoutPage = (
-            false !== strpos($requestUri, $this->checkoutPagePath) ||
-            false !== strpos($refererUri, $this->checkoutPagePath)
+            false !== strpos($requestUri, (string) $this->checkoutPagePath) ||
+            false !== strpos($refererUri, (string) $this->checkoutPagePath)
         );
 
         return $isCheckoutPage;

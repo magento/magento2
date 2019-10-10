@@ -11,6 +11,7 @@
     <test name="AdminCorrectnessInvoicedItemInBundleProductTest">
         <annotations>
             <features value="Sales"/>
+            <stories value="Product invoice"/>
             <title value="Check correctness of invoiced items in a Bundle Product"/>
             <description value="Check correctness of invoiced items in a Bundle Product"/>
             <severity value="CRITICAL"/>

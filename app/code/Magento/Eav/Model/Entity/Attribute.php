@@ -32,12 +32,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     const ATTRIBUTE_CODE_MAX_LENGTH = 60;
 
     /**
-     * Attribute code min length.
+     * Min accepted length of an attribute code.
      */
     const ATTRIBUTE_CODE_MIN_LENGTH = 1;
 
     /**
-     * Cache tag
+     * Tag to use for attributes caching.
      */
     const CACHE_TAG = 'EAV_ATTRIBUTE';
 
@@ -203,6 +203,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Delete entity
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @throws LocalizedException
      * @codeCoverageIgnore
      */
     public function deleteEntity()
@@ -310,23 +311,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
-     * Save additional data
+     * @inheritdoc
      *
      * @return $this
+     * @throws LocalizedException
      */
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
         return parent::afterSave();
-    }
-
-    /**
-     * @inheritdoc
-     * @since 100.0.7
-     */
-    public function afterDelete()
-    {
-        return parent::afterDelete();
     }
 
     /**
@@ -496,6 +489,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -509,6 +505,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -42,7 +43,6 @@ class CreateCustomerAddressTest extends GraphQlAbstract
      */
     public function testCreateCustomerAddress()
     {
-        $customerId = 1;
         $newAddress = [
             'region' => [
                 'region' => 'Arizona',
@@ -123,17 +123,18 @@ MUTATION;
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
+        $this->assertEquals(null, $response['createCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['createCustomerAddress']);
 
         $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
         $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
+        $address->setCustomerId(null);
         $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
         $this->assertCustomerAddressesFields($address, $newAddress);
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCreateCustomerAddressIfUserIsNotAuthorized()
@@ -169,7 +170,7 @@ MUTATION;
      * with missing required Firstname attribute
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testCreateCustomerAddressWithMissingAttribute()
@@ -265,6 +266,46 @@ MUTATION;
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Create new address with invalid input
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @dataProvider invalidInputDataProvider
+     * @param string $input
+     * @param $exceptionMessage
+     * @throws Exception
+     */
+    public function testCreateCustomerAddressWithInvalidInput($input, $exceptionMessage)
+    {
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress($input) {
+    id
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        self::expectException(Exception::class);
+        self::expectExceptionMessage($exceptionMessage);
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidInputDataProvider()
+    {
+        return [
+            ['', 'Syntax Error: Expected Name, found )'],
+            ['input: ""', 'requires type CustomerAddressInput!, found "".'],
+            ['input: "foo"', 'requires type CustomerAddressInput!, found "foo".']
+        ];
     }
 
     /**

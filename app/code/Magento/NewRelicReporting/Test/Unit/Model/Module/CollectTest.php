@@ -8,7 +8,6 @@ namespace Magento\NewRelicReporting\Test\Unit\Model\Module;
 use Magento\NewRelicReporting\Model\Module\Collect;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Module\Manager;
 use Magento\NewRelicReporting\Model\Module;
 
 /**
@@ -162,10 +161,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(false)
-        );
-
         $this->assertInternalType(
             'array',
             $this->model->getModuleData()
@@ -256,10 +251,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
 
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(true)
-        );
-
         $this->assertInternalType(
             'array',
             $this->model->getModuleData()
@@ -349,10 +340,6 @@ class CollectTest extends \PHPUnit\Framework\TestCase
         $this->moduleListMock->expects($this->any())
             ->method('getNames')
             ->willReturn($enabledModulesMockArray);
-
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will(
-            $this->returnValue(true)
-        );
 
         $this->assertInternalType(
             'array',

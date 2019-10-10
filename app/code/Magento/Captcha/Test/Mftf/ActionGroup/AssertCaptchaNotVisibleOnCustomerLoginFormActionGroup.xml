@@ -9,12 +9,16 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCaptchaNotVisibleOnCustomerLoginFormActionGroup">
-        <waitForPageLoad stepKey="waitForPageLoaded" />
+        <annotations>
+            <description>Validate that the Captcha is NOT present on the Backend Admin Login page.</description>
+        </annotations>
+
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
         <dontSee selector="{{StorefrontCustomerSignInFormSection.captchaField}}" stepKey="dontSeeCaptchaField"/>
         <dontSee selector="{{StorefrontCustomerSignInFormSection.captchaImg}}" stepKey="dontSeeCaptchaImage"/>
         <dontSee selector="{{StorefrontCustomerSignInFormSection.captchaReload}}" stepKey="dontSeeCaptchaReloadButton"/>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageReloaded" />
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
         <dontSee selector="{{StorefrontCustomerSignInFormSection.captchaField}}" stepKey="dontSeeCaptchaFieldAfterPageReload"/>
         <dontSee selector="{{StorefrontCustomerSignInFormSection.captchaImg}}" stepKey="dontSeeCaptchaImageAfterPageReload"/>
         <dontSee selector="{{StorefrontCustomerSignInFormSection.captchaReload}}" stepKey="dontSeeCaptchaReloadButtonAfterPageReload"/>

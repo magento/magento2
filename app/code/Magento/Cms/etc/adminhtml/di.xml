@@ -12,6 +12,11 @@
             <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
+    <type name="Magento\Cms\ViewModel\Page\Grid\UrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
     <type name="Magento\Cms\Model\Wysiwyg\CompositeConfigProvider">
         <arguments>
             <argument name="variablePluginConfigProvider" xsi:type="array">

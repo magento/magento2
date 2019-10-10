@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveInAddressBookCheckboxStateTest">
+        <annotations>
+            <stories value="Create Order"/>
+            <title value="The state of 'Save in address book' check-box inside 'Shipping Address' section on 'create Order' Admin page"/>
+            <description value="The state of 'Save in address book' check-box inside 'Shipping Address' section on 'create Order' Admin page"/>
+            <features value="Sales"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-36337"/>
+            <useCaseId value="MAGETWO-99320"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Create customer, category, product and log in -->
+            <comment userInput="Create customer, category, product and log in" stepKey="createTestData"/>
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <!-- Delete created data and log out -->
+            <comment userInput="Delete created data and log out" stepKey="deleteDataAndLogOut"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+        <!-- Create new order and choose an existing customer -->
+        <comment userInput="Create new order and choose an existing customer" stepKey="createOrderAndAddCustomer"/>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add simple product to order -->
+        <comment userInput="Add simple product to order" stepKey="addSimpleProdToOrder"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Just in case uncheck and check 'Same as Billing Address checkbox' -->
+        <comment userInput="Just in case uncheck and check 'Same as Billing Address checkbox'" stepKey="uncheckAndCheckAgain"/>
+        <uncheckOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="unCheckSameAsShippingAddressCheckbox"/>
+        <waitForPageLoad stepKey="waitPageToLoad1"/>
+        <checkOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="checkSameAsShippingAddressCheckbox"/>
+        <waitForPageLoad stepKey="waitPageToLoad2"/>
+        <!-- Check 'Save in address book' checkbox in 'Billing Address' section -->
+        <comment userInput="Check 'Save in address book' checkbox in Billing Address section" stepKey="checkSaveInAddressBookCheckbox"/>
+        <checkOption selector="{{AdminOrderFormBillingAddressSection.SaveAddress}}" stepKey="checkSaveBillingAddressCheckbox"/>
+        <!-- See if 'Save in Address Book' checkbox is selected in 'Shipping Address' section -->
+        <comment userInput="'Save in Address Book' checkbox is checked in 'Shipping Address' section" stepKey="checkIfCheckboxIsChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminOrderFormShippingAddressSection.SaveAddress}}"  stepKey="seeCheckBoxIsSelected"/>
+        <!-- Uncheck 'Save in Address Book' checkbox in 'Billing Address' section -->
+        <comment userInput="Uncheck 'Save in Address Book' checkbox in 'Billing Address' section" stepKey="uncheckCheckboxInBillingAddressSection"/>
+        <uncheckOption selector="{{AdminOrderFormBillingAddressSection.SaveAddress}}" stepKey="uncheckSaveBillingAddressCheckbox"/>
+        <!-- See if 'Save in Address Book' checkbox is deselected in 'Shipping Address' section -->
+        <comment userInput="See if 'Save in Address Book' checkbox is unchecked in 'Shipping Address' section" stepKey="seeIfCheckboxIsUnchecked"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminOrderFormShippingAddressSection.SaveAddress}}"  stepKey="seeCheckBoxIsUnchecked"/>
+    </test>
+</tests>

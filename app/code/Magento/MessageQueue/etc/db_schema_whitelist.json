@@ -13,9 +13,6 @@
     "queue_poison_pill": {
         "column": {
             "version": true
-        },
-        "constraint": {
-            "PRIMARY": true
         }
     }
 }
