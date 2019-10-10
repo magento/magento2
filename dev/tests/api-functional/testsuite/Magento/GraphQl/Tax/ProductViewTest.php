@@ -38,6 +38,13 @@ class ProductViewTest extends GraphQlAbstract
     /** @var \Magento\Tax\Model\Calculation\Rule[] */
     private $fixtureTaxRules;
 
+    /** @var string */
+    private $defaultRegionSystemSetting;
+
+
+    /** @var string */
+    private $defaultPriceDisplayType;
+
     /**
      * @var StoreManagerInterface
      */
@@ -52,19 +59,26 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+
+        $this->defaultRegionSystemSetting = $scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_DEFAULT_REGION
+        );
+
+        $this->defaultPriceDisplayType = $scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE
+        );
+
         //default state tax calculation AL
         $config->saveConfig(
             Config::CONFIG_XML_PATH_DEFAULT_REGION,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             1
         );
 
         $config->saveConfig(
             Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-            3,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            1
+            3
         );
         $this->getFixtureTaxRates();
         $this->getFixtureTaxRules();
@@ -72,6 +86,9 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->reinit();
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
     }
 
     public function tearDown()
@@ -82,16 +99,12 @@ class ProductViewTest extends GraphQlAbstract
         //default state tax calculation AL
         $config->saveConfig(
             Config::CONFIG_XML_PATH_DEFAULT_REGION,
-            null,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            1
+            $this->defaultRegionSystemSetting
         );
 
         $config->saveConfig(
             Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            1
+            $this->defaultPriceDisplayType
         );
         $taxRules = $this->getFixtureTaxRules();
         if (count($taxRules)) {
@@ -107,6 +120,10 @@ class ProductViewTest extends GraphQlAbstract
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
         $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $config->reinit();
+
+        /** @var ScopeConfigInterface $scopeConfig */
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
     }
 
     /**
