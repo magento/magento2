@@ -383,6 +383,40 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testLegacyTemplateLoadedFromDbIsFilteredInLegacyMode()
+    {
+        $this->mockModel();
+
+        $this->setUpThemeFallback(BackendFrontNameResolver::AREA_CODE);
+
+        $this->model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+        $template = '{{var store.isSaveAllowed()}} - {{template config_path="design/email/footer_template"}}';
+        $this->model->setTemplateText($template);
+
+        $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
+        $templateData = [
+            'is_legacy' => '1',
+            'template_code' => 'some_unique_code',
+            'template_type' => TemplateTypesInterface::TYPE_HTML,
+            'template_text' => '{{var this.template_code}}'
+                . ' - {{var store.isSaveAllowed()}} - {{var this.getTemplateCode()}}',
+        ];
+        $template->setData($templateData);
+        $template->save();
+
+        // Store the ID of the newly created template in the system config so that this template will be loaded
+        $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
+            ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
+
+        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $this->model->getProcessedTemplate());
+    }
+
+    /**
      * Ensure that the template_styles variable contains styles from either <!--@styles @--> or the "Template Styles"
      * textarea in backend, depending on whether template was loaded from filesystem or DB.
      *

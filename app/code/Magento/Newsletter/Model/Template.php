@@ -203,7 +203,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         $filter = $this->getTemplateFilter();
         $filter->setVariables($variables);
 
-        $previousStrictMode = $filter->setStrictMode(is_numeric($this->getTemplateId()));
+        $previousStrictMode = $filter->setStrictMode(
+            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
+        );
         $result = $filter->filter($this->getTemplateSubject());
         $filter->setStrictMode($previousStrictMode);
 
