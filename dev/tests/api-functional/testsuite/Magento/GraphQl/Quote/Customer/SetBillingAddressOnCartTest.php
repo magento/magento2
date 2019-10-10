@@ -258,6 +258,42 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testVerifyBillingAddressType()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+          customer_address_id: 1
+       }
+    }
+  ) {
+    cart {
+      billing_address {
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $billingAddress = $response['setBillingAddressOnCart']['cart']['billing_address'];
+        self::assertArrayHasKey('__typename', $billingAddress);
+        self::assertEquals('BillingCartAddress', $billingAddress['__typename']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
