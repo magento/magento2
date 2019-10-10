@@ -12,7 +12,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as Category;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -37,19 +36,20 @@ class CategoryTest extends AbstractBackendController
     /** @var StoreRepositoryInterface */
     private $storeRepository;
 
+    /** @var Json */
+    private $json;
+
     /**
      * @inheritdoc
-     *
-     * @throws AuthenticationException
      */
     protected function setUp()
     {
         parent::setUp();
-
         /** @var ProductResource $productResource */
         $this->productResource = $this->_objectManager->get(ProductResource::class);
         $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
         $this->storeRepository = $this->_objectManager->get(StoreRepositoryInterface::class);
+        $this->json = $this->_objectManager->get(Json::class);
     }
 
     /**
@@ -134,6 +134,10 @@ class CategoryTest extends AbstractBackendController
         $this->dispatch('backend/catalog/category/save');
         $category = $this->categoryRepository->get($categoryId);
         $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the category.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 
     /**
@@ -157,7 +161,7 @@ class CategoryTest extends AbstractBackendController
                 $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/')
             );
         } else {
-            $result = $this->_objectManager->get(Json::class)->unserialize($body);
+            $result = $this->json->unserialize($body);
             $this->assertArrayHasKey('messages', $result);
             $this->assertFalse($result['error']);
             $category = $result['category'];
@@ -445,9 +449,9 @@ class CategoryTest extends AbstractBackendController
             ->setPostValue('pid', $parentId)
             ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/category/move');
-        $jsonResponse = json_decode($this->getResponse()->getBody());
+        $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
-        $this->assertEquals($error, $jsonResponse->error);
+        $this->assertEquals($error, $jsonResponse['error']);
     }
 
     /**
@@ -485,6 +489,10 @@ class CategoryTest extends AbstractBackendController
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
         $newCategoryProductsCount = $this->getCategoryProductsCount();
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the category.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
         $this->assertEquals(
             $oldCategoryProductsCount,
             $newCategoryProductsCount,

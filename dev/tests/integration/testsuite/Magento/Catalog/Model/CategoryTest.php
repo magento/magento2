@@ -55,6 +55,9 @@ class CategoryTest extends TestCase
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -395,14 +398,8 @@ class CategoryTest extends TestCase
         $this->_model->setData(array_merge($requiredData, $data));
         $this->categoryResource->save($this->_model);
         $category = $this->categoryRepository->get($this->_model->getId());
-
-        foreach ($data as $key => $value) {
-            $this->assertEquals(
-                $value,
-                $category->getData($key),
-                sprintf('The field "%s" does not match expected value', $key)
-            );
-        }
+        $categoryData = $category->toArray(array_keys($data));
+        $this->assertSame($data, $categoryData);
     }
 
     /**
