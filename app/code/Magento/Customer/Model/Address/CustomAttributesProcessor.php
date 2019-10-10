@@ -40,11 +40,12 @@ class CustomAttributesProcessor
     public function __construct(
         AddressMetadataInterface $addressMetadata,
         AttributeOptionManagementInterface $attributeOptionManager,
-        EavConfig $eavConfig
+        EavConfig $eavConfig = null
     ) {
         $this->addressMetadata = $addressMetadata;
         $this->attributeOptionManager = $attributeOptionManager;
-        $this->eavConfig = $eavConfig;
+        $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Eav\Model\Config::class);
     }
 
     /**
