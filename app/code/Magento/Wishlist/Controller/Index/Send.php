@@ -259,6 +259,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
                             'items' => $this->getWishlistItems($resultLayout),
                             'viewOnSiteLink' => $this->_url->getUrl('*/shared/index', ['code' => $sharingCode]),
                             'message' => $message,
+                            'store' => $this->storeManager->getStore(),
                         ]
                     )->setFrom(
                         $this->scopeConfig->getValue(
