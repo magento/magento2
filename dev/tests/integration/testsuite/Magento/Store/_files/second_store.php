@@ -8,7 +8,8 @@
 
 /** @var \Magento\Store\Model\Store $store */
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
-if (!$store->load('fixture_second_store', 'code')->getId()) {
+$storeId = $store->load('fixture_second_store', 'code')->getId();
+if (!$storeId) {
     $websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
         \Magento\Store\Model\StoreManagerInterface::class
     )->getWebsite()
@@ -30,4 +31,6 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
         1
     );
     $store->save();
+
+    $storeId = $store->getId();
 }
