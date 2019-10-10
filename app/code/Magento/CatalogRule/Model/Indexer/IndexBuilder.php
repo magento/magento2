@@ -242,7 +242,21 @@ class IndexBuilder
      */
     public function reindexById($id)
     {
-        $this->reindexByIds([$id]);
+        try {
+            $this->cleanProductIndex([$id]);
+
+            $products = $this->productLoader->getProducts([$id]);
+            $product = array_values($products)[0];
+            $activeRules = $this->getActiveRules();
+            $this->applyRules($activeRules, $product);
+
+            $this->reindexRuleGroupWebsite->execute();
+        } catch (\Exception $e) {
+            $this->critical($e);
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Catalog rule indexing failed. See details in exception log.')
+            );
+        }
     }
 
     /**
@@ -445,6 +459,28 @@ class IndexBuilder
         $this->reindexRuleGroupWebsite->execute();
 
         return $this;
+    }
+
+    /**
+     * Apply rules
+     *
+     * @param RuleCollection $ruleCollection
+     * @param Product $product
+     * @return void
+     */
+    private function applyRules(RuleCollection $ruleCollection, Product $product): void
+    {
+        foreach ($ruleCollection as $rule) {
+            if (!$rule->validate($product)) {
+                continue;
+            }
+
+            $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
+            $this->assignProductToRule($rule, $product->getId(), $websiteIds);
+        }
+
+        $this->cleanProductPriceIndex([$product->getId()]);
+        $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
     }
 
     /**
