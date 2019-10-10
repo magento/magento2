@@ -198,11 +198,11 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
     ) {
         $optionId = $attribute->getSource()->getOptionId($optionLabel);
         if ($optionId) {
-            $option->setValue($attribute->getSource()->getOptionId($optionId));
+            $option->setValue($attribute->getSource()->getOptionIdByValue($optionId));
         } elseif (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
                 if ($optionId = $attribute->getSource()->getOptionId($label->getLabel())) {
-                    $option->setValue($attribute->getSource()->getOptionId($optionId));
+                    $option->setValue($attribute->getSource()->getOptionIdByValue($optionId));
                     break;
                 }
             }
