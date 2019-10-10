@@ -148,7 +148,7 @@ class CategoryTest extends AbstractBackendController
      * @magentoDbIsolation enabled
      * @return void
      */
-    public function testSaveActionFromProductCreationPage($postData): void
+    public function testSaveActionFromProductCreationPage(array $postData): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
