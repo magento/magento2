@@ -18,7 +18,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Block\Product\ImageFactory">
-        <plugin name="designLoader" type="Magento\CmsGraphQl\Plugin\DesignLoader" />
-    </type>
 </config>

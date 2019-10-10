@@ -5,10 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CmsGraphQl\Plugin;
+namespace Magento\CatalogGraphQl\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\DesignLoader as ViewDesignLoader;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Catalog\Block\Product\ImageFactory;
 
 /**
  * Load necessary design files for GraphQL
@@ -16,22 +19,22 @@ use Magento\Framework\Message\MessageInterface;
 class DesignLoader
 {
     /**
-     * @var \Magento\Framework\View\DesignLoader
+     * @var DesignLoader
      */
-    protected $designLoader;
+    private $designLoader;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
-     * @param \Magento\Framework\View\DesignLoader $designLoader
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param ViewDesignLoader $designLoader
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Framework\View\DesignLoader $designLoader,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        ViewDesignLoader $designLoader,
+        ManagerInterface $messageManager
     ) {
         $this->designLoader = $designLoader;
         $this->messageManager = $messageManager;
@@ -40,7 +43,7 @@ class DesignLoader
     /**
      * Before create load the design files
      *
-     * @param \Magento\Catalog\Block\Product\ImageFactory $subject
+     * @param ImageFactory $subject
      * @param Product $product
      * @param string $imageId
      * @param array|null $attributes
@@ -48,7 +51,7 @@ class DesignLoader
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeCreate(
-        \Magento\Catalog\Block\Product\ImageFactory $subject,
+        ImageFactory $subject,
         Product $product,
         string $imageId,
         array $attributes = null
