@@ -14,7 +14,7 @@ namespace Magento\Catalog\Ui\Component\Listing;
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
-     * Default columns max order
+     * Default columns max order value
      */
     const DEFAULT_COLUMNS_MAX_ORDER = 100;
 
