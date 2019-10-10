@@ -123,17 +123,20 @@ QUERY;
         $selectFromQuoteAddress = $this->connection->select()->from($this->resource->getTableName('quote_address'))
         ->where('address_type = "shipping"');
         $resultFromQuoteAddress = $this->connection->fetchRow($selectFromQuoteAddress);
-
+        $serializedDiscountQuoteAddress = $resultFromQuoteAddress['discounts'];
+        $this->assertTrue(
+            array_key_exists(
+                $salesRuleId,
+                $this->jsonSerializer->unserialize(
+                    $serializedDiscountQuoteAddress
+                )
+            )
+        );
         $this->assertEquals(
             10,
-            json_decode(
-                $this->jsonSerializer->unserialize(
-                    $resultFromQuoteAddress['discounts']
-                )
-                [$salesRuleId]['discount'],
-                true
-            )
-            ['amount']
+            json_decode($this->jsonSerializer->unserialize(
+                $serializedDiscountQuoteAddress
+            )[$salesRuleId]['discount'], true)['amount']
         );
         $this->assertEquals(
             10,
@@ -148,7 +151,7 @@ QUERY;
         );
         $this->assertEquals(
             'TestRule_Label',
-            $this->jsonSerializer->unserialize($resultFromQuoteAddress['discounts'])[$salesRuleId]['rule']
+            $this->jsonSerializer->unserialize($serializedDiscountQuoteAddress)[$salesRuleId]['rule']
         );
     }
 
