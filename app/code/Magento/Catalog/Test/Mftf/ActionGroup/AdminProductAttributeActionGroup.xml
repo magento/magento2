@@ -355,11 +355,11 @@
         </arguments>
 
         <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToAdvancedSection"/>
-        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openAdvancedSection"/>
+        <conditionalClick selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" dependentSelector="{{AdvancedAttributePropertiesSection.AttributeCode}}" visible="false" stepKey="openAdvancedSection"/>
         <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutAdvancedSection"/>
-        <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
-        <scrollTo selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" stepKey="scrollToDefaultField"/>
-        <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" userInput="{{date}}"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}" stepKey="fillCode"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}" stepKey="scrollToDefaultField"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}" userInput="{{date}}" stepKey="fillDefaultValue"/>
     </actionGroup>
 
     <!-- Creates dropdown option at row without saving-->
@@ -395,7 +395,7 @@
         </annotations>
 
         <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToSection"/>
-        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openSection"/>
+        <conditionalClick selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" dependentSelector="{{AdvancedAttributePropertiesSection.AttributeCode}}" visible="false" stepKey="openSection"/>
         <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutSection"/>
     </actionGroup>
 </actionGroups>

@@ -22,10 +22,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <deleteData createDataKey="createDatetimeAttribute" stepKey="DatetimeProductAttribute"/>
+            <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
             <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -53,13 +54,12 @@
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <!-- Check datetime grid filter -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndexPage"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateDefaultValue}" stepKey="fillProductDatetimeFromFilter"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeTo($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateFilterToDate}" stepKey="fillProductDatetimeToFilter"/>
-        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
-        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{_defaultProduct.name}}" stepKey="checkAppliedDatetimeFilter"/>
-        <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="{$generateDefaultGridValue}" stepKey="checkDefaultValueInGrid"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Name')}}" userInput="{{_defaultProduct.name}}" stepKey="checkAppliedDatetimeFilter"/>
+        <see selector="{{AdminDataGridTableSection.rowTemplateStrict(_defaultProduct.name)}}" userInput="{$generateDefaultGridValue}" stepKey="checkDefaultValueInGrid"/>
     </test>
 </tests>

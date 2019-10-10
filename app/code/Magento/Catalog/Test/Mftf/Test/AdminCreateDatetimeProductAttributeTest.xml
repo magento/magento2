@@ -23,6 +23,7 @@
             <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="DatetimeProductAttribute"/>
             </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Generate the datetime default value -->
@@ -40,9 +41,9 @@
         </actionGroup>
         <!-- Check the saved datetime default value -->
         <actionGroup ref="AdminNavigateToProductAttributeAdvancedSection" stepKey="goToAdvancedSection"/>
-        <scrollTo selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}" stepKey="scrollToDefaultValue"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}" stepKey="scrollToDefaultValue"/>
         <seeInField userInput="{$generateDefaultValue}"
-             selector="{{AdvancedAttributePropertiesSection.DefaultValueDatetime}}"
+             selector="{{AdvancedAttributePropertiesSection.defaultValueDatetime}}"
              stepKey="checkDefaultValue"/>
     </test>
 </tests>
