@@ -58,7 +58,24 @@ class UrlResolverTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
+        $this->assertEquals($requestPath, $response['urlResolver']['relative_url']);
+        $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
+
+        // querying by non seo friendly url path should return seo friendly relative url
+        $query
+            = <<<QUERY
+{
+  urlResolver(url:"{$targetPath}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
+        $this->assertEquals($requestPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
     }
 
@@ -77,10 +94,6 @@ QUERY;
         $page = $this->objectManager->get(\Magento\Cms\Model\Page::class);
         $page->load($homePageIdentifier);
         $homePageId = $page->getId();
-        /** @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $urlPathGenerator */
-        $urlPathGenerator = $this->objectManager->get(\Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator::class);
-        /** @param \Magento\Cms\Api\Data\PageInterface $page */
-        $targetPath = $urlPathGenerator->getCanonicalUrlPath($page);
         $query
             = <<<QUERY
 {
@@ -95,7 +108,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($homePageId, $response['urlResolver']['id']);
-        $this->assertEquals($targetPath, $response['urlResolver']['relative_url']);
+        $this->assertEquals($homePageIdentifier, $response['urlResolver']['relative_url']);
         $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
     }
 }
