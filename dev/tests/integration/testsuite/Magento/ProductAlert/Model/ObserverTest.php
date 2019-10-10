@@ -87,6 +87,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessPortuguese()
     {
+        $this->markTestSkipped('MC-21646');
         // get second store
         $storeRepository = $this->_objectManager->create(StoreRepository::class);
         $secondStore = $storeRepository->get('fixture_second_store');
