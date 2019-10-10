@@ -65,6 +65,12 @@ class StrictResolverTest extends TestCase
         };
         $dataClassStub->setData('foo', 'bar');
 
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $emailTemplate = $this->createMock(\Magento\Email\Model\Template::class);
+        $emailTemplate->method('getUrl')
+            ->with($storeMock, 'some path', ['_query' => ['id' => 'abc', 'token' => 'abc'], 'abc' => '1'])
+            ->willReturn('a url');
+
         return [
             ['', [], null],
             ['foo',['foo' => true], true],
@@ -84,6 +90,17 @@ class StrictResolverTest extends TestCase
             'deny normal method for DataObject' => ['foo.doThing()',['foo' => $dataClassStub], null],
             'deny getter method for DataObject' => ['foo.getThing()',['foo' => $dataClassStub], null],
             'convert getter method to getData(foo)' => ['foo.getFoo()',['foo' => $dataClassStub], 'bar'],
+            'backwards compatibility exception for getUrl' => [
+                'foo.email.getUrl($store,\'some path\',[_query:[id:$foo.bar.baz.bash,token:abc],abc:1])',
+                [
+                    'store' => $storeMock,
+                    'foo' => [
+                        'email' => $emailTemplate,
+                        'bar' => new DataObject(['baz' => ['bash' => 'abc']])
+                    ]
+                ],
+                'a url'
+            ]
         ];
     }
 }
