@@ -56,7 +56,7 @@ class ColumnFactoryTest extends TestCase
     /**
      * @var TimezoneInterface|MockObject
      */
-    private $timeZone;
+    private $timezone;
 
     /**
      * @inheritdoc
@@ -80,13 +80,13 @@ class ColumnFactoryTest extends TestCase
         $this->column = $this->getMockForAbstractClass(ColumnInterface::class);
         $this->uiComponentFactory->method('create')
             ->willReturn($this->column);
-        $this->timeZone = $this->createMock(TimezoneInterface::class);
+        $this->timezone = $this->createMock(TimezoneInterface::class);
 
         $this->columnFactory = $this->objectManager->getObject(
             ColumnFactory::class,
             [
                 'componentFactory' => $this->uiComponentFactory,
-                'timezone' => $this->timeZone,
+                'timezone' => $this->timezone,
             ]
         );
     }
@@ -203,7 +203,7 @@ class ColumnFactoryTest extends TestCase
                     'visible' => true,
                     'filter' => 'dateRange',
                     'component' => 'Magento_Ui/js/grid/columns/date',
-                    'timeZone' => $expectedTimezone,
+                    'timezone' => $expectedTimezone,
                     'dateFormat' => $expectedDateFormat,
                     'options' => [
                         'showsTime' => $showsTime
@@ -224,15 +224,15 @@ class ColumnFactoryTest extends TestCase
         $this->attribute->method('getFrontendInput')
             ->willReturn($frontendInput);
 
-        $this->timeZone->method('getDateFormat')
+        $this->timezone->method('getDateFormat')
             ->with(\IntlDateFormatter::MEDIUM)
             ->willReturn($dateFormat);
-        $this->timeZone->method('getDateTimeFormat')
+        $this->timezone->method('getDateTimeFormat')
             ->with(\IntlDateFormatter::MEDIUM)
             ->willReturn($dateTimeFormat);
-        $this->timeZone->method('getDefaultTimezone')
+        $this->timezone->method('getDefaultTimezone')
             ->willReturn($defaultTimezone);
-        $this->timeZone->method('getConfigTimezone')
+        $this->timezone->method('getConfigTimezone')
             ->willReturn($configTimezone);
 
         $this->uiComponentFactory->expects($this->once())
