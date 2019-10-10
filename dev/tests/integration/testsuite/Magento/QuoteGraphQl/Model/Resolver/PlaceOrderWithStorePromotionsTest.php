@@ -15,6 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Converter\ToModel;
 use Magento\SalesRule\Model\Rule;
@@ -26,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoAppArea graphql
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderWithStorePromotionsTest extends TestCase
 {
@@ -47,6 +49,12 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
     /** @var SerializerInterface */
     private $jsonSerializer;
 
+    /** @var  CartRepositoryInterface */
+    private $quoteRepository;
+
+    /** @var  SearchCriteriaBuilder */
+    private $criteriaBuilder;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -56,6 +64,8 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
         $this->resource = $this->objectManager->get(ResourceConnection::class);
         $this->connection = $this->resource->getConnection();
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
+        $this->quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $this->criteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -75,7 +85,7 @@ class PlaceOrderWithStorePromotionsTest extends TestCase
      *
      * @return void
      */
-    public function testResolvePlaceOrderWithMultipleProductsAndMultipleCartRules(): void
+    public function testResolvePlaceOrderWithProductHavingCartPromotion(): void
     {
         $categoryId = 56;
         $reservedOrderId = 'test_quote';
@@ -124,42 +134,19 @@ QUERY;
             'TestRule_Label',
             $this->jsonSerializer->unserialize($serializedCartDiscount)[$salesRuleId]['rule']
         );
+        $quote = $this->getQuote();
+        $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
+        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getAmount());
+        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseAmount());
+        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getOriginalAmount());
+        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Label', $quoteAddressItemDiscount[$salesRuleId]['rule']);
+
         $addressType = 'shipping';
         $selectFromQuoteAddress = $this->connection->select()->from($this->resource->getTableName('quote_address'))
         ->where('address_type = ?', $addressType);
         $resultFromQuoteAddress = $this->connection->fetchRow($selectFromQuoteAddress);
         $this->assertNotEmpty($resultFromQuoteAddress, 'No record found in quote_address table');
-        $serializedDiscountQuoteAddress = $resultFromQuoteAddress['discounts'];
-//        $this->assertTrue(
-//            array_key_exists(
-//                $salesRuleId,
-//                $this->jsonSerializer->unserialize(
-//                    $serializedDiscountQuoteAddress
-//                )
-//            )
-//        );
-        /*$this->assertEquals(
-            10,
-            json_decode($this->jsonSerializer->unserialize(
-                $serializedDiscountQuoteAddress
-            )[$salesRuleId]['discount'], true)['amount']
-        );*/
-
-//        $this->assertEquals(
-//            10,
-//            json_decode(
-//                $this->jsonSerializer->unserialize(
-//                    $resultFromQuoteAddress['discounts']
-//                )
-//                [$salesRuleId]['discount'],
-//                true
-//            )
-//            ['baseAmount']
-//        );
-        $this->assertEquals(
-            'TestRule_Label',
-            $this->jsonSerializer->unserialize($serializedDiscountQuoteAddress)[$salesRuleId]['rule']
-        );
     }
 
     /**
@@ -186,5 +173,20 @@ QUERY;
         $converter = $this->objectManager->get(ToModel::class);
 
         return $converter->toModel($rule);
+    }
+
+    /**
+     * @return Quote
+     */
+    private function getQuote(): Quote
+    {
+        $searchCriteria = $this->criteriaBuilder->addFilter('reserved_order_id', 'test_quote')->create();
+        $carts = $this->quoteRepository->getList($searchCriteria)
+            ->getItems();
+        if (!$carts) {
+            throw new \RuntimeException('Cart not found');
+        }
+
+        return array_shift($carts);
     }
 }
