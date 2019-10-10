@@ -156,6 +156,8 @@ class UploadTest extends AbstractBackendController
     {
         if (!empty($file['create_file'])) {
             $this->createFileInSysTmpDir($file['name']);
+        } elseif (!empty($file['copy_file'])) {
+            $this->copyFileToSysTmpDir($file);
         }
 
         $this->getRequest()->setMethod($this->httpMethod);
@@ -190,6 +192,7 @@ class UploadTest extends AbstractBackendController
             ],
             'upload_empty_image' => [
                 'file' => [
+                    'copy_file' => true,
                     'name' => 'magento_empty.jpg',
                     'type' => 'image/jpeg',
                     'current_path' => '/../../../../_files',

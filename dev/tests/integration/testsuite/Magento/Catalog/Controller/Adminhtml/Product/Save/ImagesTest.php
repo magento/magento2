@@ -66,25 +66,11 @@ class ImagesTest extends AbstractBackendController
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
-        $product = $this->productRepository->get('simple', false, null, true);
-        $galleryImage = reset($product->getData('media_gallery')['images']);
-        $expectedGalleryImage = $expectation['media_gallery_image'];
-        $this->assertEquals($expectedGalleryImage['position'], $galleryImage['position']);
-        $this->assertEquals($expectedGalleryImage['media_type'], $galleryImage['media_type']);
-        $this->assertEquals($expectedGalleryImage['label'], $galleryImage['label']);
-        $this->assertEquals($expectedGalleryImage['disabled'], $galleryImage['disabled']);
-        $this->assertEquals($expectedGalleryImage['file'], $galleryImage['file']);
-        $this->assertEquals($expectation['image'], $product->getData('image'));
-        $this->assertEquals($expectation['small_image'], $product->getData('small_image'));
-        $this->assertEquals($expectation['thumbnail'], $product->getData('thumbnail'));
-        $this->assertEquals($expectation['swatch_image'], $product->getData('swatch_image'));
-        $this->assertFileExists(
-            $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $expectation['image'])
-        );
         $this->assertSessionMessages(
             $this->equalTo(['You saved the product.']),
             MessageInterface::TYPE_SUCCESS
         );
+        $this->assertSuccessfulImageSave($expectation);
     }
 
     /**
@@ -132,5 +118,28 @@ class ImagesTest extends AbstractBackendController
                 ]
             ]
         ];
+    }
+
+    /**
+     * @param array $expectation
+     * @return void
+     */
+    private function assertSuccessfulImageSave(array $expectation): void
+    {
+        $product = $this->productRepository->get('simple', false, null, true);
+        $galleryImage = reset($product->getData('media_gallery')['images']);
+        $expectedGalleryImage = $expectation['media_gallery_image'];
+        $this->assertEquals($expectedGalleryImage['position'], $galleryImage['position']);
+        $this->assertEquals($expectedGalleryImage['media_type'], $galleryImage['media_type']);
+        $this->assertEquals($expectedGalleryImage['label'], $galleryImage['label']);
+        $this->assertEquals($expectedGalleryImage['disabled'], $galleryImage['disabled']);
+        $this->assertEquals($expectedGalleryImage['file'], $galleryImage['file']);
+        $this->assertEquals($expectation['image'], $product->getData('image'));
+        $this->assertEquals($expectation['small_image'], $product->getData('small_image'));
+        $this->assertEquals($expectation['thumbnail'], $product->getData('thumbnail'));
+        $this->assertEquals($expectation['swatch_image'], $product->getData('swatch_image'));
+        $this->assertFileExists(
+            $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $expectation['image'])
+        );
     }
 }
