@@ -69,7 +69,7 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     public function execute()
     {
         if (!$this->getRequest()->isPost()) {
-            return $this->resultRedirectFactory->create()->setPath('*/*/');
+            return $this->resultRedirectFactory->create()->setPath('contact');
         }
         try {
             $this->sendEmail($this->validatedParams());
@@ -87,7 +87,7 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
             );
             $this->dataPersistor->set('contact_us', $this->getRequest()->getParams());
         }
-        return $this->resultRedirectFactory->create()->setPath('contact/index');
+        return $this->resultRedirectFactory->create()->setPath('contact');
     }
 
     /**
