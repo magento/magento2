@@ -91,7 +91,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testDownload()
+    public function testExecute(): void
     {
         $fileName = 'customer.csv';
         $path = 'export/' . $fileName;
@@ -102,7 +102,8 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(ResponseInterface::class);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')
-            ->with($path, $fileContent, DirectoryList::VAR_DIR)->willReturn($response);
+            ->with($path, $fileContent, DirectoryList::VAR_DIR)
+            ->willReturn($response);
 
         $this->controller->execute();
     }
@@ -110,40 +111,25 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     /**
      * Check behavior with incorrect filename.
      *
-     * @param string $fileName
-     * @dataProvider fileNameDataProvider
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please provide valid export file name
      * @return void
      */
-    public function testDownloadWithIncorrectFilename(string $fileName)
+    public function testExecuteWithEmptyFileName(): void
     {
-        $this->requestMock->expects($this->once())->method('getParam')->with('filename')->willReturn($fileName);
+        $this->requestMock->expects($this->once())->method('getParam')->with('filename')->willReturn('');
 
         $this->controller->execute();
-    }
-
-    /**
-     * Data provider for testDownloadWithIncorrectFilename.
-     *
-     * @return array
-     */
-    public function fileNameDataProvider(): array
-    {
-        return [
-            'Empty parameter' => [''],
-            'Incorrect Name' => ['../customer.csv'],
-        ];
     }
 
     /**
      * Check behavior when method throw exception.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage There are no export file with such name
+     * @expectedExceptionMessage There are no export file with such name customer.csv
      * @return void
      */
-    public function testDownloadWithException()
+    public function testExecuteWithNonExistanceFile(): void
     {
         $fileName = 'customer.csv';
         $path = 'export/' . $fileName;
@@ -164,7 +150,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @return void
      */
-    private function processDownloadAction(string $fileName, string $path)
+    private function processDownloadAction(string $fileName, string $path): void
     {
         $this->requestMock->expects($this->once())->method('getParam')->with('filename')->willReturn($fileName);
         $this->fileSystemMock->expects($this->once())
