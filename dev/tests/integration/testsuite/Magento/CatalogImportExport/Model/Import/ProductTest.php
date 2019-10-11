@@ -976,7 +976,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
         $varDirectory = $fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $varDirectory->delete('import' . DIRECTORY_SEPARATOR . 'images');
+        $varDirectory->delete('import');
         $mediaDirectory->delete('catalog');
     }
 
@@ -2626,43 +2626,33 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $actualAllProductImages = [];
         $product = $this->getProductBySku('simple');
 
-//        Check that new images are imported and existing image is disabled after import
+        // Check that new images are imported and existing image is disabled after import
         $productMediaData = $product->getData('media_gallery');
 
-        if (is_array($productMediaData['images'])) {
-            $allProductImages = $productMediaData['images'];
-            $this->assertCount(3, $allProductImages, 'Images are imported incorrect');
+        $this->assertNotEmpty($productMediaData['images']);
+        $allProductImages = $productMediaData['images'];
+        $this->assertCount(3, $allProductImages, 'Images are imported incorrect');
 
-            foreach ($allProductImages as $image) {
-                $actualAllProductImages[] = [
-                    'file' => $image['file'],
-                    'label' => $image['label'],
-                    'disabled' => $image['disabled'],
-                ];
-            }
+        foreach ($allProductImages as $image) {
+            $actualAllProductImages[] = [
+                'file' => $image['file'],
+                'label' => $image['label'],
+                'disabled' => $image['disabled'],
+            ];
         }
 
         $this->assertEquals(
             $expectedAllProductImages,
             $actualAllProductImages,
-            'Images statuses are incorrect after import'
+            'Images are incorrect after import'
         );
 
-//        Check that on storefront only enabled images are shown
-        $actualActiveImages = array_values($product->getMediaGalleryImages()->getItems());
-        $this->assertCount(2, $actualActiveImages);
-
-        foreach ($actualActiveImages as $actualActiveImage) {
-            $this->assertNotEquals(
-                $expectedHiddenImage['file'],
-                $actualActiveImage->getFile(),
-                'Image should be hidden after import'
-            );
-            $this->assertNotEquals(
-                $expectedHiddenImage['label'],
-                $actualActiveImage->getLabel(),
-                'Image should be hidden after import'
-            );
-        }
+        // Check that on storefront only enabled images are shown
+        $actualActiveImages = $product->getMediaGalleryImages();
+        $this->assertSame(
+            $expectedActiveImages,
+            $actualActiveImages->toArray(['file', 'label', 'disabled'])['items'],
+            'Hidden image is present on frontend after import'
+        );
     }
 }
