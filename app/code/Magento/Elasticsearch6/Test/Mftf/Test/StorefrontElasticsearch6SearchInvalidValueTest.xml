@@ -79,7 +79,7 @@
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush  catalog_product_attribute " stepKey="flushCache"/>
+        <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
         <!--Assert search results on storefront-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
