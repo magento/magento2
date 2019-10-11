@@ -5,6 +5,8 @@
  */
 namespace Magento\AdminNotification\Model;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
@@ -26,7 +28,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     const XML_LAST_UPDATE_PATH = 'system/adminnotification/last_update';
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -82,7 +84,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -97,7 +99,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_backendConfig = $backendConfig;
@@ -106,8 +108,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->_deploymentConfig = $deploymentConfig;
         $this->productMetadata = $productMetadata;
         $this->urlBuilder = $urlBuilder;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 

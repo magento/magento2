@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-98644"/>
             <useCaseId value="MAGETWO-98522"/>
             <group value="Catalog"/>
+            <skip>
+                <issueId value="MC-15930"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

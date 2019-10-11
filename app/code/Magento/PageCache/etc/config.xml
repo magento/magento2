@@ -14,6 +14,9 @@
         </design>
         <system>
             <full_page_cache>
+                <varnish6>
+                    <path>varnish6.vcl</path>
+                </varnish6>
                 <varnish5>
                     <path>varnish5.vcl</path>
                 </varnish5>

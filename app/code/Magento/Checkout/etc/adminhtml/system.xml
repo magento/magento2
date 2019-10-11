@@ -27,12 +27,14 @@
                 </field>
                 <field id="max_items_display_count" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum Number of Items to Display in Order Summary</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
             </group>
             <group id="cart" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Shopping Cart</label>
                 <field id="delete_quote_after" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Quote Lifetime (days)</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
                 <field id="redirect_to_cart" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>After Adding a Product Redirect to Shopping Cart</label>
@@ -40,6 +42,7 @@
                 </field>
                 <field id="number_items_to_display_pager" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of Items to Display Pager</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
                 <field id="crosssell_enabled" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Show Cross-sell Items in the Shopping Cart</label>
@@ -54,16 +57,18 @@
                 </field>
             </group>
             <group id="sidebar" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Shopping Cart Sidebar</label>
+                <label>Mini Cart</label>
                 <field id="display" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>Display Shopping Cart Sidebar</label>
+                    <label>Display Mini Cart</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="count" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of Items to Display Scrollbar</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
                 <field id="max_items_display_count" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum Number of Items to Display</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
             </group>
             <group id="payment_failed" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -83,6 +88,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Payment Failed Email Copy To</label>
+                    <validate>validate-emails</validate>
                     <comment>Separate by ",".</comment>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">

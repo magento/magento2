@@ -7,11 +7,15 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CreateOrderToPrintPageActionGroup">
+        <annotations>
+            <description>Goes to the provided Storefront Category page. Adds the Product to the Cart. Places the Order. Clicks on Print Order.</description>
+        </annotations>
         <arguments>
             <argument name="Category"/>
         </arguments>
+
         <amOnPage url="{{StorefrontCategoryPage.url(Category.name)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
@@ -30,7 +34,12 @@
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
         <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
     </actionGroup>
+    
     <actionGroup name="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" extends="CreateOrderToPrintPageActionGroup">
+        <annotations>
+            <description>EXTENDS: CreateOrderToPrintPageActionGroup. Clicks on 'Check / Money Order'.</description>
+        </annotations>
+
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
         <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
     </actionGroup>

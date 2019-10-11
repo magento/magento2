@@ -11,24 +11,27 @@
  */
 namespace Magento\Framework\Data\Form\Filter;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * EscapeHtml Form Filter Data
  */
 class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
     /**
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 

@@ -31,8 +31,8 @@
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= $block->escapeHtml($_item->getQty() * 1) ?></td>
+    <td class="item-qty"><?= (float)$_item->getQty() * 1 ?></td>
     <td class="item-price">
-        <?= $block->escapeHtml($block->getItemPrice($_item)) ?>
+        <?= /* @noEscape */ $block->getItemPrice($_item) ?>
     </td>
 </tr>

@@ -19,6 +19,10 @@
 
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRatePrice"/>
+            <magentoCLI command="config:set {{EnableFlatRateToAllAllowedCountriesConfigData.path}} {{EnableFlatRateToAllAllowedCountriesConfigData.value}}" stepKey="allowFlatRateToAllCountries"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 

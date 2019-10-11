@@ -38,6 +38,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
@@ -140,7 +141,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_PRODUCT_WEBSITES = '_product_websites';
 
     /**
-     * Media gallery attribute code.
+     * Attribute code for media gallery.
      */
     const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
 
@@ -150,12 +151,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COL_MEDIA_IMAGE = '_media_image';
 
     /**
-     * Inventory use config.
+     * Inventory use config label.
      */
     const INVENTORY_USE_CONFIG = 'Use Config';
 
     /**
-     * Inventory use config prefix.
+     * Prefix for inventory use config.
      */
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
@@ -1191,8 +1192,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
+            // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
             $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
+            // phpcs:enable 
         }
         $this->_initErrorTemplates();
         // remove doubles
@@ -1508,6 +1511,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @throws LocalizedException
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _saveProducts()
     {
@@ -1882,6 +1886,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         return $this;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Prepare array with image states (visible or hidden from product page)
@@ -2487,6 +2492,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function isNeedToValidateUrlKey($rowData)
     {
+        if (!empty($rowData[self::COL_SKU]) && empty($rowData[self::URL_KEY])
+            && $this->getBehavior() === Import::BEHAVIOR_APPEND
+            && $this->isSkuExist($rowData[self::COL_SKU])) {
+            return false;
+        }
+
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
                 || $rowData[self::COL_VISIBILITY]
@@ -2726,8 +2737,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             try {
                 $rowData = $source->current();
             } catch (\InvalidArgumentException $e) {
-                $this->addRowError($e->getMessage(), $this->_processedRowsCount);
-                $this->_processedRowsCount++;
                 $source->next();
                 continue;
             }
@@ -2810,7 +2819,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return trim(strtolower($urlKey));
         }
 
-        if (!empty($rowData[self::COL_NAME])) {
+        if (!empty($rowData[self::COL_NAME])
+            && (array_key_exists(self::URL_KEY, $rowData) || !$this->isSkuExist($rowData[self::COL_SKU]))) {
             return $this->productUrl->formatUrlKey($rowData[self::COL_NAME]);
         }
 
@@ -2962,6 +2972,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
+
+        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
+            $rowData['is_in_stock'] = 0;
+        }
 
         $row = array_merge(
             $this->defaultStockData,

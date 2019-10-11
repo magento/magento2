@@ -445,8 +445,8 @@ define([
          */
         loadShippingRates: function () {
             var addressContainer = this.shippingAsBilling ?
-                    'billingAddressContainer' :
-                    'shippingAddressContainer',
+                'billingAddressContainer' :
+                'shippingAddressContainer',
                 data = this.serializeData(this[addressContainer]).toObject();
 
             data['collect_shipping_rates'] = 1;

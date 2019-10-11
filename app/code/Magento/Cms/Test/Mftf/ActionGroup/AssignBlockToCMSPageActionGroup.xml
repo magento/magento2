@@ -5,46 +5,52 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssignBlockToCMSPage">
+        <annotations>
+            <description>Goes to the Admin Pages grid page. Adds a Block to a CMS Page. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="Block" defaultValue=""/>
             <argument name="CmsPage" defaultValue=""/>
         </arguments>
+        
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
         <waitForPageLoad stepKey="waitForGridReload"/>
         <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending1" visible="true"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish1"/>
+        
         <!-- Conditional Click again in case it goes from default state to ascending on first click -->
         <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="secondClickToAttemptSortByIdDescending2" visible="true"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish1" />
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(CmsPage.identifier)}}" stepKey="waitForCMSPageGrid" />
-        <click selector="{{CmsPagesPageActionsSection.select(CmsPage.identifier)}}" stepKey="clickSelect" />
-        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit(CmsPage.identifier)}}" stepKey="waitForEditLink" />
-        <click selector="{{CmsPagesPageActionsSection.edit(CmsPage.identifier)}}" stepKey="clickEdit" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish1"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(CmsPage.identifier)}}" stepKey="waitForCMSPageGrid"/>
+        <click selector="{{CmsPagesPageActionsSection.select(CmsPage.identifier)}}" stepKey="clickSelect"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.edit(CmsPage.identifier)}}" stepKey="waitForEditLink"/>
+        <click selector="{{CmsPagesPageActionsSection.edit(CmsPage.identifier)}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
-        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
-        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad3" />
-        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading1" />
-        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate" />
-        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon"/>
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="CMS Static Block" stepKey="selectCMSStaticBlock"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading1"/>
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="CMS Static Block Default Template" stepKey="selectTemplate"/>
+        <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2"/>
         <fillField selector="//input[@name='chooser_identifier']" userInput="{{Block.identifier}}" stepKey="fillBlockIdentifier"/>
-        <click selector="//div[@class='modal-inner-wrap']//button[@title='Search']" stepKey="clickSearchBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish2" />
-        <waitForElementVisible selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="waitForBlockTitle" />
-        <click selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="selectPreCreateBlock" />
-        <wait time="3" stepKey="wait1" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading3" />
-        <waitForPageLoad stepKey="waitForPageLoad4" />
+        <click selector="//div[@class='modal-inner-wrap']//button[@title='Search']" stepKey="clickSearchBtn"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish2"/>
+        <waitForElementVisible selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="waitForBlockTitle"/>
+        <click selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="selectPreCreateBlock"/>
+        <wait time="3" stepKey="wait1"/>
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
         <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>

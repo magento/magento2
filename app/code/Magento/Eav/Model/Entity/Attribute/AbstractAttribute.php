@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -1410,8 +1411,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return array_diff(
             parent::__sleep(),
             [
@@ -1440,8 +1439,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);

@@ -6,6 +6,15 @@
 
 namespace Magento\Translation\Model\Inline;
 
+use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
+use Magento\Translation\Model\Inline\CacheManager;
+
 /**
  * Parse content, applying necessary html element wrapping and client scripts for inline translation.
  *
@@ -19,7 +28,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     const DATA_TRANSLATE = 'data-translate';
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -101,7 +110,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -111,22 +120,22 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_inputFilter;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\Translate\InlineInterface
+     * @var InlineInterface
      */
     protected $_translateInline;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
     protected $_appCache;
 
     /**
-     * @var \Magento\Translation\Model\Inline\CacheManager
+     * @var CacheManager
      */
     private $cacheManager;
 
@@ -138,15 +147,15 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Return cache manager
      *
-     * @return \Magento\Translation\Model\Inline\CacheManager
+     * @return CacheManager
      *
      * @deprecated 100.1.0
      */
     private function getCacheManger()
     {
-        if (!$this->cacheManager instanceof \Magento\Translation\Model\Inline\CacheManager) {
-            $this->cacheManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Translation\Model\Inline\CacheManager::class
+        if (!$this->cacheManager instanceof CacheManager) {
+            $this->cacheManager = ObjectManager::getInstance()->get(
+                CacheManager::class
             );
         }
         return $this->cacheManager;
@@ -155,24 +164,24 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Initialize base inline translation model
      *
-     * @param \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StringUtilsFactory $resource
+     * @param StoreManagerInterface $storeManager
      * @param \Zend_Filter_Interface $inputFilter
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\App\Cache\TypeListInterface $appCache
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param State $appState
+     * @param TypeListInterface $appCache
+     * @param InlineInterface $translateInline
      * @param array $relatedCacheTypes
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
-        \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StringUtilsFactory $resource,
+        StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\App\Cache\TypeListInterface $appCache,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
+        State $appState,
+        TypeListInterface $appCache,
+        InlineInterface $translateInline,
         array $relatedCacheTypes = [],
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
@@ -181,8 +190,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
         $this->relatedCacheTypes = $relatedCacheTypes;
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 
@@ -638,7 +647,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $length = $tagLength + 1;
         $end = $from + 1;
         while (substr_count($body, $openTag, $from, $length) !== substr_count($body, $closeTag, $from, $length)) {
-            $end = strpos($body, $closeTag, $end + $tagLength + 1);
+            $end = strpos($body, (string) $closeTag, $end + $tagLength + 1);
             if ($end === false) {
                 return false;
             }

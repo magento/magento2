@@ -63,6 +63,8 @@ class InvoiceCommentSender extends NotifySender
     public function send(Invoice $invoice, $notify = true, $comment = '')
     {
         $order = $invoice->getOrder();
+        $this->identityContainer->setStore($order->getStore());
+
         $transport = [
             'order' => $order,
             'invoice' => $invoice,

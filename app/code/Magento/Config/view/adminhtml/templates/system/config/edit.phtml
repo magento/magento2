@@ -58,10 +58,16 @@ require([
 
                 var parentSection = groupElement.parents('.section-config');
                 parentSection.addClass('highlighted');
+                parentSection.addClass('active');
                 setTimeout(function() {
                     parentSection.removeClass('highlighted', 2000, "easeInBack");
                 }, 3000);
                 if (!parentSection.hasClass('active')) {
+                    if(section == 'payment') {
+                        var openSection = jQuery('.open').first().attr('id');
+                        var splitIdArray = openSection.split('_');
+                        section = section + '_' + splitIdArray[1];
+                    }
                     Fieldset.toggleCollapse(section + '_' + group);
                 }
             }

@@ -1,13 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ * Class \Magento\Reports\Controller\Adminhtml\Report\Product\Downloads
+ */
 class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product implements HttpGetActionInterface
 {
     /**
@@ -15,7 +19,7 @@ class Downloads extends \Magento\Reports\Controller\Adminhtml\Report\Product imp
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::report_products';
+    const ADMIN_RESOURCE = 'Magento_Reports::downloads';
 
     /**
      * Downloads action

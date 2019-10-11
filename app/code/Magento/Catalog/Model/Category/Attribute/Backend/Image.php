@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Uploader;
 
 /**
  * Catalog category image attribute backend model
@@ -70,7 +71,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Gets image name from $value array.
-     * Will return empty string in a case when $value is not an array
+     *
+     * Will return empty string in a case when $value is not an array.
      *
      * @param array $value Attribute value
      * @return string
@@ -85,8 +87,28 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Avoiding saving potential upload data to DB
-     * Will set empty image attribute value if image was not uploaded
+     * Check that image name exists in catalog/category directory and return new image name if it already exists.
+     *
+     * @param string $imageName
+     * @return string
+     */
+    private function checkUniqueImageName(string $imageName): string
+    {
+        $imageUploader = $this->getImageUploader();
+        $mediaDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $imageAbsolutePath = $mediaDirectory->getAbsolutePath(
+            $imageUploader->getBasePath() . DIRECTORY_SEPARATOR . $imageName
+        );
+
+        $imageName = Uploader::getNewFilename($imageAbsolutePath);
+
+        return $imageName;
+    }
+
+    /**
+     * Avoiding saving potential upload data to DB.
+     *
+     * Will set empty image attribute value if image was not uploaded.
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
@@ -99,10 +121,15 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if ($this->fileResidesOutsideCategoryDir($value)) {
             // use relative path for image attribute so we know it's outside of category dir when we fetch it
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $value[0]['url'] = parse_url($value[0]['url'], PHP_URL_PATH);
             $value[0]['name'] = $value[0]['url'];
         }
 
         if ($imageName = $this->getUploadedImageName($value)) {
+            if (!$this->fileResidesOutsideCategoryDir($value)) {
+                $imageName = $this->checkUniqueImageName($imageName);
+            }
             $object->setData($this->additionalData . $attributeName, $value);
             $object->setData($attributeName, $imageName);
         } elseif (!is_string($value)) {
@@ -113,6 +140,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * Get Instance of Category Image Uploader.
+     *
      * @return \Magento\Catalog\Model\ImageUploader
      *
      * @deprecated 101.0.0
@@ -153,9 +182,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $fileUrl = ltrim($value[0]['url'], '/');
         $baseMediaDir = $this->_filesystem->getUri(DirectoryList::MEDIA);
 
-        $usingPathRelativeToBase = strpos($fileUrl, $baseMediaDir) === 0;
+        if (!$baseMediaDir) {
+            return false;
+        }
 
-        return $usingPathRelativeToBase;
+        return strpos($fileUrl, $baseMediaDir) !== false;
     }
 
     /**

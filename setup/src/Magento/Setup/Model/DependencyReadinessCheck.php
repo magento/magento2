@@ -10,6 +10,8 @@ use Magento\Composer\RequireUpdateDryRunCommand;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Driver\File;
 
 /**
@@ -18,7 +20,7 @@ use Magento\Framework\Filesystem\Driver\File;
 class DependencyReadinessCheck
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     private $escaper;
 
@@ -54,22 +56,22 @@ class DependencyReadinessCheck
      * @param DirectoryList $directoryList
      * @param File $file
      * @param MagentoComposerApplicationFactory $composerAppFactory
-     * @param \Magento\Framework\Escaper|null $escaper
+     * @param Escaper|null $escaper
      */
     public function __construct(
         ComposerJsonFinder $composerJsonFinder,
         DirectoryList $directoryList,
         File $file,
         MagentoComposerApplicationFactory $composerAppFactory,
-        \Magento\Framework\Escaper $escaper = null
+        Escaper $escaper = null
     ) {
         $this->composerJsonFinder = $composerJsonFinder;
         $this->directoryList = $directoryList;
         $this->file = $file;
         $this->requireUpdateDryRunCommand = $composerAppFactory->createRequireUpdateDryRunCommand();
         $this->magentoComposerApplication = $composerAppFactory->create();
-        $this->escaper = $escaper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
-            \Magento\Framework\Escaper::class
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
         );
     }
 

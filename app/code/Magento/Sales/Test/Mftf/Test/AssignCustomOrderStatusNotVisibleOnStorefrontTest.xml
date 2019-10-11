@@ -18,9 +18,6 @@
             <testCaseId value="MC-16053"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17274"/>
-            </skip>
         </annotations>
         <before>
             <!-- Create customer -->

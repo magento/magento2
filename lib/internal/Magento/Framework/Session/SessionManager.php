@@ -410,6 +410,9 @@ class SessionManager implements SessionManagerInterface
     {
         $this->_addHost();
         if ($sessionId !== null && preg_match('#^[0-9a-zA-Z,-]+$#', $sessionId)) {
+            if ($this->getSessionId() !== $sessionId) {
+                $this->writeClose();
+            }
             session_id($sessionId);
         }
         return $this;
