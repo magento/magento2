@@ -839,7 +839,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                         "Owner process (%d) not available on host (%s) any more",
                         $orphanJob->getProcessId(),
                         $orphanJob->getProcessHostname()
-                )
+                    )
             )
             ->save();
     }
