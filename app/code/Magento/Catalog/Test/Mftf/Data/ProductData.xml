@@ -67,6 +67,20 @@
     <entity name="ProductWithSpecialSymbols" extends="SimpleProduct" type="product">
         <data key="name">SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^</data>
     </entity>
+    <entity name="SimpleProductBeforeUpdate" type="product">
+        <data key="sku">simpleProduct</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name" unique="suffix">SimpleProduct</data>
+        <data key="price">123.00</data>
+        <data key="visibility">4</data>
+        <data key="status">1</data>
+        <data key="quantity">1000</data>
+        <data key="urlKey">simpleProduct</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="SimpleProductAfterImport1" type="product">
         <data key="sku">SimpleProductForTest1</data>
         <data key="type_id">simple</data>
@@ -1028,6 +1042,10 @@
     </entity>
     <entity name="productAlphabeticalB" type="product" extends="_defaultProduct">
         <data key="name" unique="suffix">BBB Product</data>
+    </entity>
+    <entity name="simpleProductWithShortNameAndSku" type="product" extends="defaultSimpleProduct">
+        <data key="name">Simple_Product</data>
+        <data key="sku">testsku</data>
     </entity>
     <entity name="productWithSpecialCharacters" type="product" extends="_defaultProduct">
         <data key="name" unique="suffix">Product "!@#$%^&amp;*()+:;\|}{][?=~` </data>
