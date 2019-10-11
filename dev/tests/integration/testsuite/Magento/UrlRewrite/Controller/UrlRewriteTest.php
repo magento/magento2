@@ -5,14 +5,29 @@
  */
 namespace Magento\UrlRewrite\Controller;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Zend\Http\Response;
 
 /**
  * Class to test Match corresponding URL Rewrite
  */
 class UrlRewriteTest extends AbstractController
 {
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
+    }
+
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDbIsolation disabled
@@ -81,6 +96,39 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/enable-cookies/?test-param',
                 'redirect' => '',
                 200,
+            ],
+        ];
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     * @dataProvider categoryRewriteProvider
+     * @param string $request
+     * @return void
+     */
+    public function testCategoryUrlRewrite(string $request): void
+    {
+        $this->dispatch($request);
+        $response = $this->getResponse();
+        $this->assertEquals(
+            Response::STATUS_CODE_200,
+            $response->getHttpResponseCode(),
+            'Response code does not match expected value'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function categoryRewriteProvider(): array
+    {
+        return [
+            [
+                'category-1.html',
+                'category-1/category-1-1.html',
+                'category-1/category-1-1/category-1-1-1.html',
             ],
         ];
     }
