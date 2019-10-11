@@ -15,4 +15,3 @@
         <element name="goToBillingInfo" type="button" selector="//span[text()='Continue to Billing Information']"/>
     </section>
 </sections>
-
