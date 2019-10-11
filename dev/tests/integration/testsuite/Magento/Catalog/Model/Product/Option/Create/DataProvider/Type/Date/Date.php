@@ -20,6 +20,6 @@ class Date extends AbstractBase
      */
     protected function getType(): string
     {
-        return ProductCustomOptionInterface::OPTION_GROUP_DATE;
+        return ProductCustomOptionInterface::OPTION_TYPE_DATE;
     }
 }

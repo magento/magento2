@@ -363,7 +363,6 @@ class UpdateCustomOptionsTest extends TestCase
         $product->setOptions([$createdOption]);
         $this->productRepository->save($product);
         $productCustomOptions = $this->optionRepository->getProductOptions($product);
-        $this->assertCount(1, $productCustomOptions);
         $option = reset($productCustomOptions);
 
         return $option;
