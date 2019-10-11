@@ -121,7 +121,10 @@ class UpdateCustomOptionsTest extends AbstractBackendController
             $updatedOption = reset($updatedOptions);
             $this->assertEquals($newValue, $updatedOption->getDataUsingMethod($methodKey));
             $this->assertEquals($option->getOptionId(), $updatedOption->getOptionId());
-            $this->assertNotEquals($option->getDataUsingMethod($methodKey), $updatedOption->getDataUsingMethod($methodKey));
+            $this->assertNotEquals(
+                $option->getDataUsingMethod($methodKey),
+                $updatedOption->getDataUsingMethod($methodKey)
+            );
         }
     }
 }
