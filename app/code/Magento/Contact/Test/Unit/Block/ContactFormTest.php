@@ -63,7 +63,7 @@ class ContactFormTest extends \PHPUnit\Framework\TestCase
     {
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
-            ->with('contact/post', ['_secure' => true]);
+            ->with('contact/index/post', ['_secure' => true]);
         $this->contactForm->getFormAction();
     }
 }
