@@ -2594,26 +2594,28 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     *
+     * @return void
      */
-    public function testImagesAreHiddenAfterImport()
+    public function testImagesAreHiddenAfterImport(): void
     {
         $expectedActiveImages = [
             [
                 'file' => '/m/a/magento_additional_image_one.jpg',
                 'label' => 'Additional Image Label One',
-                'disabled' => '0'
+                'disabled' => '0',
             ],
             [
                 'file' => '/m/a/magento_additional_image_two.jpg',
                 'label' => 'Additional Image Label Two',
-                'disabled' => '0'
+                'disabled' => '0',
             ],
         ];
 
         $expectedHiddenImage = [
             'file' => '/m/a/magento_image.jpg',
             'label' => 'Image Alt Text',
-            'disabled' => '1'
+            'disabled' => '1',
         ];
         $expectedAllProductImages = array_merge(
             [$expectedHiddenImage],
