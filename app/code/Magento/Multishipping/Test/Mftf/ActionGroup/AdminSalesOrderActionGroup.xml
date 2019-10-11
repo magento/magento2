@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <actionGroup name="AdminSalesOrderActionGroup">
+        <waitForPageLoad stepKey="waitForAdminSalesPageToLoad"/>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRowLink"/>
+        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <waitForPageLoad stepKey="waitForCheckTotalActionGroup"/>
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.subTotal}}" stepKey="grabvalueForSubtotal"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.shippingAndHandling}}" stepKey="grabvalueForShippingHandling"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="grabvalueForGrandTotal"/>
+        <executeJS stepKey="sum_TotalValue" function="
+               var subtotal = '{$grabvalueForSubtotal}'.substr(1);
+               var handling = '{$grabvalueForShippingHandling}'.substr(1);
+               var subtotal_handling = (parseFloat(subtotal) + parseFloat(handling)).toFixed(2);
+               return ('$' + subtotal_handling);"/>
+        <assertEquals stepKey="assertSubTotalPrice">
+            <expectedResult type="string">$sum_TotalValue</expectedResult>
+            <actualResult type="string">$grabvalueForGrandTotal</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>
