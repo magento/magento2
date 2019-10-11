@@ -17,8 +17,6 @@ use Magento\Weee\Model\Config;
 
 /**
  * Test for storeConfig FPT config values
- *
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class StoreConfigFPTTest extends GraphQlAbstract
 {
