@@ -40,6 +40,8 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
         return [
             ['any/path', 'http://example.com/'],
             ['any/path', 'http://example.com/uri/'],
+            ['any/path', 'http://example.com'],
+            ['any/path', 'http://example.com/uri'],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $basePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecurePlaceholder],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LINK_URL, $unsecureSuffix],
@@ -102,11 +104,9 @@ class BaseurlTest extends \PHPUnit\Framework\TestCase
         $secureWrongDomainName = 'https://example.com_test/';
 
         return [
-            ['', 'not a valid URL'],
-            ['', 'example.com'],
-            ['', 'http://example.com'],
-            ['', 'http://example.com/uri'],
-            ['', $unsecureWrongDomainName],
+            ['any/path', 'not a valid URL'],
+            ['any/path', 'example.com'],
+            ['any/path', $unsecureWrongDomainName],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, ''],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $baseSuffix],
             [\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecureSuffix],
