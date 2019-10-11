@@ -67,17 +67,6 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     protected function tearDown(): void
     {
-        $taxRules = $this->getFixtureTaxRules();
-        if (count($taxRules)) {
-            $taxRates = $this->getFixtureTaxRates();
-            foreach ($taxRules as $taxRule) {
-                $taxRule->delete();
-            }
-            foreach ($taxRates as $taxRate) {
-                $taxRate->delete();
-            }
-        }
-
         $this->writeConfig($this->initialConfig);
     }
 
