@@ -47,7 +47,7 @@ class UrlRewriteTest extends AbstractController
     public function testMatchUrlRewrite(
         string $request,
         string $redirect,
-        int $expectedCode = 301
+        int $expectedCode = Response::STATUS_CODE_301
     ): void {
         $this->dispatch($request);
         /** @var HttpResponse $response */
