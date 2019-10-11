@@ -33,11 +33,6 @@ class GetCustomerTest extends GraphQlAbstract
     private $customerAuthUpdate;
 
     /**
-     * @var AccountManagementInterface
-     */
-    private $accountManagement;
-
-    /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
@@ -47,7 +42,6 @@ class GetCustomerTest extends GraphQlAbstract
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->accountManagement = Bootstrap::getObjectManager()->get(AccountManagementInterface::class);
         $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
@@ -139,11 +133,12 @@ QUERY;
      */
     public function testAccountIsNotConfirmed()
     {
-        $confirmation_required = $this->accountManagement::ACCOUNT_CONFIRMATION_REQUIRED;
         $customerEmail = 'customer@example.com';
         $currentPassword = 'password';
         $headersMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
-        $customer = $this->customerRepository->getById(1)->setConfirmation($confirmation_required);
+        $customer = $this->customerRepository->getById(1)->setConfirmation(
+            AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
+        );
         $this->customerRepository->save($customer);
         $query = <<<QUERY
 query {
