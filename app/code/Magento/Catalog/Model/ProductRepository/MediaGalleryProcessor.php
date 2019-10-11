@@ -61,11 +61,6 @@ class MediaGalleryProcessor
     /**
      * Process Media gallery data before save product.
      *
-     * Compare Media Gallery Entries Data with existing Media Gallery
-     * * If Media entry has not value_id set it as new
-     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
-     * * Merge Existing and new media gallery
-     *
      * @param ProductInterface $product contains only existing media gallery items
      * @param array $mediaGalleryEntries array which contains all media gallery items
      * @return void
@@ -86,17 +81,9 @@ class MediaGalleryProcessor
                     $newEntries[] = $entry;
                 }
             }
-            foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
-                    if ($updatedEntry['file'] === null) {
-                        unset($updatedEntry['file']);
-                    }
-                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
-                } else {
-                    //set the removed flag
-                    $existingEntry['removed'] = true;
-                }
+            foreach ($existingMediaGallery as $key => $existingEntry) {
+                $updatedEntry = $entriesById[$existingEntry['value_id']] ?? null;
+                $existingMediaGallery[$key] = $this->updateMediaGalleryEntry($existingEntry, $updatedEntry);
             }
             $product->setData('media_gallery', ["images" => $existingMediaGallery]);
         } else {
@@ -110,6 +97,31 @@ class MediaGalleryProcessor
 
         $this->processMediaAttributes($product, $images);
         $this->processEntries($product, $newEntries, $entriesById);
+    }
+
+    /**
+     * Process existing gallery media entry.
+     *
+     * Compare Media Gallery Entries Data with existing Media Gallery
+     * * If Media entry has not value_id set it as new
+     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
+     * * Merge Existing and new media gallery
+     *
+     * @param array $existingEntry
+     * @param array|null $updatedEntry
+     * @return array
+     */
+    public function updateMediaGalleryEntry(array $existingEntry, ?array $updatedEntry): array
+    {
+        if ($updatedEntry !== null) {
+            if ($updatedEntry['file'] === null) {
+                unset($updatedEntry['file']);
+            }
+            $existingEntry = array_merge($existingEntry, $updatedEntry);
+        } else {
+            $existingEntry['removed'] = true;
+        }
+        return $existingEntry;
     }
 
     /**
@@ -138,7 +150,7 @@ class MediaGalleryProcessor
 
         if (!$product->hasGalleryAttribute()) {
             throw new StateException(
-                __("The product that was requested doesn't exist. Verify the product and try again.")
+                __("The product that was requested doesn't have a gallery attribute. Verify the product and try again.")
             );
         }
 
