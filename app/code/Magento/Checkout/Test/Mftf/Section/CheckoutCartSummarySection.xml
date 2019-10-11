@@ -9,6 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
+        <element name="orderTotal" type="input" selector=".grand.totals .amount .price"/>
+        <element name="subTotal" type="input" selector="span[data-th='Subtotal']"/>
         <element name="expandShoppingCartSummary" type="button" selector="//*[contains(@class, 'items-in-cart')][not(contains(@class, 'active'))]"/>
         <element name="elementPosition" type="text" selector=".data.table.totals > tbody tr:nth-of-type({{value}}) > th" parameterized="true"/>
         <element name="subtotal" type="text" selector="//*[@id='cart-totals']//tr[@class='totals sub']//td//span[@class='price']"/>
