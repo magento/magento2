@@ -2592,7 +2592,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Hide product images via hide_from_product_page attribute during import CSV.
      *
-     * @magentoAppIsolation enabled
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      */
@@ -2630,9 +2629,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         if (is_array($productMediaData['images'])) {
             $allProductImages = $productMediaData['images'];
-            $this->assertCount(3, $productMediaData['images'], 'Images are imported incorrect');
+            $this->assertCount(3, $allProductImages, 'Images are imported incorrect');
 
-            foreach($productMediaData['images'] as $image) {
+            foreach ($allProductImages as $image) {
                 $actualAllProductImages[] = [
                     'file' => $image['file'],
                     'label' => $image['label'],
