@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Customers Report collection
- */
 namespace Magento\Reports\Model\ResourceModel\Customer;
 
 /**
+ * Customers Report collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -74,6 +73,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
     protected $orderResource;
 
     /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -88,7 +88,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemFactory
      * @param \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)

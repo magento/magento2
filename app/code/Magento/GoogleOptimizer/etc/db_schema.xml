@@ -9,12 +9,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="googleoptimizer_code" resource="default" engine="innodb" comment="Google Experiment code">
         <column xsi:type="int" name="code_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Google experiment code id"/>
+                comment="Google experiment code ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Optimized entity id product id or catalog id"/>
+                comment="Optimized entity ID product ID or catalog ID"/>
         <column xsi:type="varchar" name="entity_type" nullable="true" length="50" comment="Optimized entity type"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store id"/>
+                comment="Store ID"/>
         <column xsi:type="text" name="experiment_script" nullable="true" comment="Google experiment script"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="code_id"/>

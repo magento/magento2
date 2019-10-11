@@ -8,7 +8,7 @@ namespace Magento\Framework\Code\GeneratorTest;
 use Zend\Code\Generator\ClassGenerator;
 
 /**
- * Class  SourceClassWithNamespace
+ * phpcs:ignoreFile
  */
 class SourceClassWithNamespace extends ParentClassWithNamespace
 {
@@ -115,8 +115,6 @@ class SourceClassWithNamespace extends ParentClassWithNamespace
 
     /**
      * Test method
-     *
-     * @SuppressWarnings(PHPMD.FinalImplementation) Suppressed as is a fixture but not a real code
      */
     final public function publicChildFinal()
     {

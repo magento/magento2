@@ -83,7 +83,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeCollection->expects($this->any())
+        $this->themeCollection->expects($this->once())
             ->method('loadRegisteredThemes')
             ->willReturn([$theme1, $theme2]);
 

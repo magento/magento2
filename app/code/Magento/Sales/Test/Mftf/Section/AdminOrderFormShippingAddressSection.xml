@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormShippingAddressSection">
         <element name="SameAsBilling" type="checkbox" selector="#order-shipping_same_as_billing"/>
+        <element name="SelectFromExistingCustomerAddress" type="select" selector="#order-shipping_address_customer_address_id"/>
         <element name="NamePrefix" type="input" selector="#order-shipping_address_prefix"/>
         <element name="FirstName" type="input" selector="#order-shipping_address_firstname"/>
         <element name="MiddleName" type="input" selector="#order-shipping_address_middlename"/>

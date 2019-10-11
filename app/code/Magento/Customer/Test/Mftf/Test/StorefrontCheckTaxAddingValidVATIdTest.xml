@@ -72,7 +72,7 @@
         </actionGroup>
 
         <!--Go to My account > Address book-->
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+        <actionGroup ref="EnterCustomerAddressInfoFillState" stepKey="enterAddressInfo">
             <argument name="Address" value="UK_Simple_Address"/>
         </actionGroup>
 
@@ -83,6 +83,7 @@
         <!--Add a product to the cart-->
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
         <!-- Click next button to open payment section -->

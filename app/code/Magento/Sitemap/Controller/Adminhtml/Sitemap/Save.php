@@ -5,12 +5,74 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller;
+use Magento\Framework\Validator\StringLength;
+use Magento\MediaStorage\Model\File\Validator\AvailablePath;
+use Magento\Sitemap\Model\SitemapFactory;
 
-class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+/**
+ * Save sitemap controller.
+ */
+class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap implements HttpPostActionInterface
 {
+    /**
+     * Maximum length of sitemap filename
+     */
+    const MAX_FILENAME_LENGTH = 32;
+
+    /**
+     * @var StringLength
+     */
+    private $stringValidator;
+
+    /**
+     * @var AvailablePath
+     */
+    private $pathValidator;
+
+    /**
+     * @var \Magento\Sitemap\Helper\Data
+     */
+    private $sitemapHelper;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var SitemapFactory
+     */
+    private $sitemapFactory;
+
+    /**
+     * Save constructor.
+     * @param Context $context
+     * @param StringLength $stringValidator
+     * @param AvailablePath $pathValidator
+     * @param \Magento\Sitemap\Helper\Data $sitemapHelper
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param SitemapFactory $sitemapFactory
+     */
+    public function __construct(
+        Context $context,
+        StringLength $stringValidator = null,
+        AvailablePath $pathValidator = null,
+        \Magento\Sitemap\Helper\Data $sitemapHelper = null,
+        \Magento\Framework\Filesystem $filesystem = null,
+        SitemapFactory $sitemapFactory = null
+    ) {
+        parent::__construct($context);
+        $this->stringValidator = $stringValidator ?: $this->_objectManager->get(StringLength::class);
+        $this->pathValidator = $pathValidator ?: $this->_objectManager->get(AvailablePath::class);
+        $this->sitemapHelper = $sitemapHelper ?: $this->_objectManager->get(\Magento\Sitemap\Helper\Data::class);
+        $this->filesystem = $filesystem ?: $this->_objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->sitemapFactory = $sitemapFactory ?: $this->_objectManager->get(SitemapFactory::class);
+    }
+
     /**
      * Validate path for generation
      *
@@ -23,17 +85,25 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if (!empty($data['sitemap_filename']) && !empty($data['sitemap_path'])) {
             $data['sitemap_path'] = '/' . ltrim($data['sitemap_path'], '/');
             $path = rtrim($data['sitemap_path'], '\\/') . '/' . $data['sitemap_filename'];
-            /** @var $validator \Magento\MediaStorage\Model\File\Validator\AvailablePath */
-            $validator = $this->_objectManager->create(\Magento\MediaStorage\Model\File\Validator\AvailablePath::class);
-            /** @var $helper \Magento\Sitemap\Helper\Data */
-            $helper = $this->_objectManager->get(\Magento\Sitemap\Helper\Data::class);
-            $validator->setPaths($helper->getValidPaths());
-            if (!$validator->isValid($path)) {
-                foreach ($validator->getMessages() as $message) {
+            $this->pathValidator->setPaths($this->sitemapHelper->getValidPaths());
+            if (!$this->pathValidator->isValid($path)) {
+                foreach ($this->pathValidator->getMessages() as $message) {
                     $this->messageManager->addErrorMessage($message);
                 }
                 // save data in session
-                $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
+                $this->_session->setFormData($data);
+                // redirect to edit form
+                return false;
+            }
+
+            $filename = rtrim($data['sitemap_filename']);
+            $this->stringValidator->setMax(self::MAX_FILENAME_LENGTH);
+            if (!$this->stringValidator->isValid($filename)) {
+                foreach ($this->stringValidator->getMessages() as $message) {
+                    $this->messageManager->addErrorMessage($message);
+                }
+                // save data in session
+                $this->_session->setFormData($data);
                 // redirect to edit form
                 return false;
             }
@@ -49,9 +119,8 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      */
     protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
-        /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
-        $directory = $this->_objectManager->get(\Magento\Framework\Filesystem::class)
-            ->getDirectoryWrite(DirectoryList::ROOT);
+        /** @var \Magento\Framework\Filesystem $directory */
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         if ($this->getRequest()->getParam('sitemap_id')) {
             $model->load($this->getRequest()->getParam('sitemap_id'));
@@ -74,7 +143,7 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         // init model and set data
         /** @var \Magento\Sitemap\Model\Sitemap $model */
-        $model = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
+        $model = $this->sitemapFactory->create();
         $this->clearSiteMap($model);
         $model->setData($data);
 
@@ -85,13 +154,13 @@ class Save extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
             // display success message
             $this->messageManager->addSuccessMessage(__('You saved the sitemap.'));
             // clear previously saved data from session
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
+            $this->_session->setFormData(false);
             return $model->getId();
         } catch (\Exception $e) {
             // display error message
             $this->messageManager->addErrorMessage($e->getMessage());
             // save data in session
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData($data);
+            $this->_session->setFormData($data);
         }
         return false;
     }

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
@@ -62,6 +64,9 @@ class Attribute extends AbstractFilter
             ->getProductCollection();
         $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
         $label = $this->getOptionText($attributeValue);
+        if (is_array($label)) {
+            $label = implode(',', $label);
+        }
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));
@@ -152,5 +157,13 @@ class Attribute extends AbstractFilter
         return isset($optionsFacetedData[$value]['count'])
             ? (int)$optionsFacetedData[$value]['count']
             : 0;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isOptionReducesResults($optionCount, $totalSize)
+    {
+        return $optionCount <= $totalSize;
     }
 }

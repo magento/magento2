@@ -10,7 +10,7 @@ define([
     'mage/smart-keyboard-handler',
     'mage/translate',
     'priceUtils',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'jquery/jquery.parsequery',
     'mage/validation/validation'
 ], function ($, _, mageTemplate, keyboardHandler, $t, priceUtils) {
@@ -385,7 +385,8 @@ define([
             var $widget = this,
                 container = this.element,
                 classes = this.options.classes,
-                chooseText = this.options.jsonConfig.chooseText;
+                chooseText = this.options.jsonConfig.chooseText,
+                showTooltip = this.options.showTooltip;
 
             $widget.optionsMap = {};
 
@@ -406,7 +407,7 @@ define([
                 if ($widget.options.enableControlLabel) {
                     label +=
                         '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
-                            item.label +
+                        $('<i></i>').text(item.label).html() +
                         '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
                 }
@@ -414,7 +415,7 @@ define([
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
-                    listLabel = 'aria-label="' + item.label + '"';
+                    listLabel = 'aria-label="' + $('<i></i>').text(item.label).html() + '"';
                 } else {
                     listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
@@ -452,10 +453,12 @@ define([
                 });
             });
 
-            // Connect Tooltip
-            container
-                .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
-                .SwatchRendererTooltip();
+            if (showTooltip === 1) {
+                // Connect Tooltip
+                container
+                    .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
+                    .SwatchRendererTooltip();
+            }
 
             // Hide all elements below more button
             $('.' + classes.moreButton).nextAll().hide();
@@ -493,7 +496,7 @@ define([
                 return '';
             }
 
-            $.each(config.options, function () {
+            $.each(config.options, function (index) {
                 var id,
                     type,
                     value,
@@ -511,18 +514,20 @@ define([
 
                 // Add more button
                 if (moreLimit === countAttributes++) {
-                    html += '<a href="#" class="' + moreClass + '">' + moreText + '</a>';
+                    html += '<a href="#" class="' + moreClass + '"><span>' + moreText + '</span></a>';
                 }
 
                 id = this.id;
                 type = parseInt(optionConfig[id].type, 10);
-                value = optionConfig[id].hasOwnProperty('value') ? optionConfig[id].value : '';
+                value = optionConfig[id].hasOwnProperty('value') ?
+                    $('<i></i>').text(optionConfig[id].value).html() : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
                 width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
                 height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
-                label = this.label ? this.label : '';
+                label = this.label ? $('<i></i>').text(this.label).html() : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
+                    ' index="' + index + '"' +
                     ' aria-checked="false"' +
                     ' aria-describedby="' + controlId + '"' +
                     ' tabindex="0"' +
@@ -695,7 +700,7 @@ define([
          */
         _sortImages: function (images) {
             return _.sortBy(images, function (image) {
-                return image.position;
+                return parseInt(image.position, 10);
             });
         },
 
@@ -711,7 +716,8 @@ define([
                 $wrapper = $this.parents('.' + $widget.options.classes.attributeOptionsWrapper),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
-                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                $input = $parent.find('.' + $widget.options.classes.attributeInput),
+                checkAdditionalData = JSON.parse(this.options.jsonSwatchConfig[attributeId]['additional_data']);
 
             if ($widget.inProductList) {
                 $input = $widget.productForm.find(
@@ -745,7 +751,16 @@ define([
                 $widget._UpdatePrice();
             }
 
-            $widget._loadMedia();
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    _.findKey($widget.options.jsonConfig.index, $widget.options.jsonConfig.defaultValues),
+                    $widget.options.jsonConfig.optionPrices
+                ]);
+
+            if (parseInt(checkAdditionalData['update_product_preview_image'], 10) === 1) {
+                $widget._loadMedia();
+            }
+
             $input.trigger('change');
         },
 
@@ -915,17 +930,9 @@ define([
             var $widget = this,
                 $product = $widget.element.parents($widget.options.selectorProduct),
                 $productPrice = $product.find(this.options.selectorProductPrice),
-                options = _.object(_.keys($widget.optionsMap), {}),
-                result,
-                tierPriceHtml;
-
-            $widget.element.find('.' + $widget.options.classes.attributeClass + '[option-selected]').each(function () {
-                var attributeId = $(this).attr('attribute-id');
-
-                options[attributeId] = $(this).attr('option-selected');
-            });
-
-            result = $widget.options.jsonConfig.optionPrices[_.findKey($widget.options.jsonConfig.index, options)];
+                result = $widget._getNewPrices(),
+                tierPriceHtml,
+                isShow;
 
             $productPrice.trigger(
                 'updatePrice',
@@ -934,13 +941,11 @@ define([
                 }
             );
 
-            if (typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount) {
-                $(this.options.slyOldPriceSelector).show();
-            } else {
-                $(this.options.slyOldPriceSelector).hide();
-            }
+            isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
 
-            if (typeof result != 'undefined' && result.tierPrices.length) {
+            $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
+
+            if (typeof result != 'undefined' && result.tierPrices && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,
@@ -975,6 +980,35 @@ define([
         },
 
         /**
+         * Get new prices for selected options
+         *
+         * @returns {*}
+         * @private
+         */
+        _getNewPrices: function () {
+            var $widget = this,
+                optionPriceDiff = 0,
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts()),
+                optionPrices = this.options.jsonConfig.optionPrices,
+                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount),
+                optionFinalPrice,
+                newPrices;
+
+            if (!_.isEmpty(allowedProduct)) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+                optionPriceDiff = optionFinalPrice - basePrice;
+            }
+
+            if (optionPriceDiff !== 0) {
+                newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
+            } else {
+                newPrices = $widget.options.jsonConfig.prices;
+            }
+
+            return newPrices;
+        },
+
+        /**
          * Get prices
          *
          * @param {Object} newPrices
@@ -983,27 +1017,11 @@ define([
          * @private
          */
         _getPrices: function (newPrices, displayPrices) {
-            var $widget = this,
-                optionPriceDiff = 0,
-                allowedProduct, optionPrices, basePrice, optionFinalPrice;
+            var $widget = this;
 
             if (_.isEmpty(newPrices)) {
-                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
-                optionPrices = this.options.jsonConfig.optionPrices;
-                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount);
-
-                if (!_.isEmpty(allowedProduct)) {
-                    optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
-                    optionPriceDiff = optionFinalPrice - basePrice;
-                }
-
-                if (optionPriceDiff !== 0) {
-                    newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
-                } else {
-                    newPrices = $widget.options.jsonConfig.prices;
-                }
+                newPrices = $widget._getNewPrices();
             }
-
             _.each(displayPrices, function (price, code) {
 
                 if (newPrices[code]) {
@@ -1029,12 +1047,8 @@ define([
             _.each(allowedProducts, function (allowedProduct) {
                 optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
 
-                if (_.isEmpty(product)) {
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
                     optionMinPrice = optionFinalPrice;
-                    product = allowedProduct;
-                }
-
-                if (optionFinalPrice < optionMinPrice) {
                     product = allowedProduct;
                 }
             }, this);
@@ -1220,8 +1234,8 @@ define([
         updateBaseImage: function (images, context, isInProductView) {
             var justAnImage = images[0],
                 initialImages = this.options.mediaGalleryInitial,
-                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 imagesToUpdate,
+                gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 isInitial;
 
             if (isInProductView) {
@@ -1233,7 +1247,15 @@ define([
                 }
 
                 imagesToUpdate = this._setImageIndex(imagesToUpdate);
-                gallery.updateData(imagesToUpdate);
+
+                if (!_.isUndefined(gallery)) {
+                    gallery.updateData(imagesToUpdate);
+                } else {
+                    context.find(this.options.mediaGallerySelector).on('gallery:loaded', function (loadedGallery) {
+                        loadedGallery = context.find(this.options.mediaGallerySelector).data('gallery');
+                        loadedGallery.updateData(imagesToUpdate);
+                    }.bind(this));
+                }
 
                 if (isInitial) {
                     $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
@@ -1242,6 +1264,10 @@ define([
                         selectedOption: this.getProduct(),
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
+                }
+
+                if (gallery) {
+                    gallery.first();
                 }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);

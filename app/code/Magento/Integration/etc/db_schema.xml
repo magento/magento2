@@ -107,7 +107,7 @@
                 comment="Oauth consumer"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Creation Time"/>
-        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="0"
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Update Time"/>
         <column xsi:type="smallint" name="setup_type" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Integration type - manual or config file"/>
@@ -129,7 +129,7 @@
     <table name="oauth_token_request_log" resource="default" engine="innodb"
            comment="Log of token request authentication failures.">
         <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Log Id"/>
+                comment="Log ID"/>
         <column xsi:type="varchar" name="user_name" nullable="false" length="255"
                 comment="Customer email or admin login"/>
         <column xsi:type="smallint" name="user_type" padding="5" unsigned="true" nullable="false" identity="false"

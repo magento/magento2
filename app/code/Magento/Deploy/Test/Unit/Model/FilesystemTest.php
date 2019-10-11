@@ -69,6 +69,9 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      */
     private $cmdPrefix;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -124,6 +127,9 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $this->cmdPrefix = PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testRegenerateStatic()
     {
         $storeLocales = ['fr_FR', 'de_DE', 'nl_NL'];
@@ -131,18 +137,16 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeLocales);
 
         $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
-        $this->shell->expects(self::at(0))
-            ->method('execute')
-            ->with($setupDiCompileCmd);
-
         $this->initAdminLocaleMock('en_US');
 
         $usedLocales = ['fr_FR', 'de_DE', 'nl_NL', 'en_US'];
+        $cacheFlushCmd = $this->cmdPrefix . 'cache:flush';
         $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy -f '
             . implode(' ', $usedLocales);
-        $this->shell->expects(self::at(1))
+        $this->shell
+            ->expects($this->exactly(4))
             ->method('execute')
-            ->with($staticContentDeployCmd);
+            ->withConsecutive([$cacheFlushCmd], [$setupDiCompileCmd], [$cacheFlushCmd], [$staticContentDeployCmd]);
 
         $this->output->expects(self::at(0))
             ->method('writeln')
@@ -166,6 +170,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGenerateStaticForNotAllowedStoreViewLocale()
     {
@@ -184,6 +189,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage ;echo argument has invalid value, run info:language:list for list of available locales
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGenerateStaticForNotAllowedAdminLocale()
     {

@@ -81,4 +81,16 @@
         <requiredEntity type="StoreLabel">Option9Store0</requiredEntity>
         <requiredEntity type="StoreLabel">Option10Store1</requiredEntity>
     </entity>
+    <entity name="ProductAttributeOption8" type="ProductAttributeOption">
+        <var key="attribute_code" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="label" unique="suffix">White</data>
+        <data key="value" unique="suffix">white</data>
+    </entity>
+    <!-- Product attribute options from file "export_import_configurable_product.csv" -->
+    <entity name="ProductAttributeOptionOneForExportImport" extends="productAttributeOption1" type="ProductAttributeOption">
+        <data key="label">option1</data>
+    </entity>
+    <entity name="ProductAttributeOptionTwoForExportImport" extends="productAttributeOption2" type="ProductAttributeOption">
+        <data key="label">option2</data>
+    </entity>
 </entities>

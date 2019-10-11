@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\EditShippingAddressOnePageCheckoutTest" summary="Customer can place order with new addresses that was edited during checkout with several conditions" ticketId="MAGETWO-67837">
         <variation name="EditShippingAddressOnePageCheckoutTestVariation1">
-            <data name="tag" xsi:type="string">severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1, mftf_migrated:yes</data>
             <data name="customer/dataset" xsi:type="string">johndoe_with_addresses</data>
             <data name="shippingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="editShippingAddress/dataset" xsi:type="string">empty_UK_address_without_email</data>

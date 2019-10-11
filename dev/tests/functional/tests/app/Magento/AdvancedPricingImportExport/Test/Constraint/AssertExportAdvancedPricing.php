@@ -8,6 +8,7 @@ namespace Magento\AdvancedPricingImportExport\Test\Constraint;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Command\File\ExportInterface;
+use Magento\ImportExport\Test\Page\Adminhtml\AdminExportIndex;
 
 /**
  * Assert that exported file with advanced pricing options contains product data.
@@ -22,18 +23,29 @@ class AssertExportAdvancedPricing extends AbstractConstraint
     private $exportData;
 
     /**
+     * Admin export index page.
+     *
+     * @var AdminExportIndex
+     */
+    private $adminExportIndex;
+
+    /**
      * Assert that exported file with advanced pricing options contains product data.
      *
      * @param ExportInterface $export
      * @param array $products
      * @param array $exportedFields
+     * @param AdminExportIndex $adminExportIndex
      * @return void
      */
     public function processAssert(
         ExportInterface $export,
         array $products,
-        array $exportedFields
+        array $exportedFields,
+        AdminExportIndex $adminExportIndex
     ) {
+        $this->adminExportIndex = $adminExportIndex;
+        $this->adminExportIndex->open();
         $this->exportData = $export->getLatest();
         foreach ($products as $product) {
             $regexps = $this->prepareRegexpsForCheck($exportedFields, $product);

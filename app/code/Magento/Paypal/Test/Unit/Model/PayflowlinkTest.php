@@ -131,7 +131,7 @@ class PayflowlinkTest extends \PHPUnit\Framework\TestCase
             ->method('postRequest')
             ->willReturn($response);
 
-        $this->payflowRequest->expects($this->exactly(3))
+        $this->payflowRequest->expects($this->exactly(4))
             ->method('setData')
             ->willReturnMap(
                 [

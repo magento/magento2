@@ -48,11 +48,14 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ['getTemplateVars', 'getTemplateOptions', 'getTemplateId']
         );
 
-        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, [
-            'getStoreId',
-            '__wakeup',
-            'getId',
-        ]);
+        $this->storeMock = $this->createPartialMock(
+            \Magento\Store\Model\Store::class,
+            [
+                'getStoreId',
+                '__wakeup',
+                'getId',
+            ]
+        );
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::class,
@@ -76,7 +79,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
                 'setTemplateIdentifier',
                 'setTemplateOptions',
                 'setTemplateVars',
-                'setFromByStore',
+                'setFromByScope',
             ]
         );
 
@@ -103,7 +106,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getEmailIdentity')
             ->will($this->returnValue($emailIdentity));
         $this->transportBuilder->expects($this->once())
-            ->method('setFromByStore')
+            ->method('setFromByScope')
             ->with($this->equalTo($emailIdentity), 1);
 
         $this->identityContainerMock->expects($this->once())
@@ -146,7 +149,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
         $this->transportBuilder->expects($this->once())
-            ->method('setFromByStore')
+            ->method('setFromByScope')
             ->with($identity, 1);
         $this->transportBuilder->expects($this->once())
             ->method('addTo')
@@ -165,9 +168,6 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
         $transportMock = $this->createMock(
             \Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock::class
         );
-        $this->identityContainerMock->expects($this->once())
-            ->method('getCopyMethod')
-            ->will($this->returnValue('copy'));
         $this->identityContainerMock->expects($this->never())
             ->method('getCustomerEmail');
         $this->identityContainerMock->expects($this->never())
@@ -176,7 +176,7 @@ class SenderBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('addTo')
             ->with($this->equalTo('example@mail.com'));
         $this->transportBuilder->expects($this->once())
-            ->method('setFromByStore')
+            ->method('setFromByScope')
             ->with($identity, 1);
         $this->identityContainerMock->expects($this->once())
             ->method('getStore')

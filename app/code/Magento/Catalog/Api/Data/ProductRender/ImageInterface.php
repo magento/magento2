@@ -92,6 +92,7 @@ interface ImageInterface extends ExtensibleDataInterface
 
     /**
      * Retrieve image label
+     *
      * Image label is short description of this image
      *
      * @return string
@@ -111,7 +112,7 @@ interface ImageInterface extends ExtensibleDataInterface
     /**
      * Retrieve resize width
      *
-     * This width is image dimension, which represents the width, that can be used for perfomance improvements
+     * This width is image dimension, which represents the width, that can be used for performance improvements
      *
      * @return float
      * @since 101.1.0
@@ -128,6 +129,8 @@ interface ImageInterface extends ExtensibleDataInterface
     public function setResizedWidth($width);
 
     /**
+     * Set resized height
+     *
      * @param string $height
      * @return void
      * @since 101.1.0

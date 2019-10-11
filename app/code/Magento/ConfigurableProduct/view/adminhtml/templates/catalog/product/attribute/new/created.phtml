@@ -8,7 +8,7 @@
 <script>
 (function ($) {
 
-    var data = <?= /* @escapeNotVerified */ $block->getAttributesBlockJson() ?>;
+    var data = <?= /* @noEscape */ $block->getAttributesBlockJson() ?>;
     var set = data.set || {id: $('#attribute_set_id').val()};
     if (data.tab == 'variations') {
         $('[data-role=product-variations-matrix]').trigger('add', data.attribute);

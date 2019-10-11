@@ -7,6 +7,9 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
+/**
+ * Test for Magento\Sales\Model\Order\Email\Sender\CreditmemoSender class.
+ */
 class CreditmemoSenderTest extends AbstractSenderTest
 {
     /**
@@ -54,7 +57,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -90,7 +93,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -130,11 +133,15 @@ class CreditmemoSenderTest extends AbstractSenderTest
                     ]
                 );
 
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')
                     ->willReturn($this->senderMock);
@@ -197,6 +204,8 @@ class CreditmemoSenderTest extends AbstractSenderTest
      * @param bool $isVirtualOrder
      * @param int $formatCallCount
      * @param string|null $expectedShippingAddress
+     *
+     * @return void
      * @dataProvider sendVirtualOrderDataProvider
      */
     public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
@@ -207,7 +216,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with(false);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -242,7 +251,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 ]
             );
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
 

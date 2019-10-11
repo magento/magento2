@@ -952,7 +952,7 @@ Changes to version 0.5.8 regular(|) & italic(/) (20040315)
 Changes to version 0.5.7 regular(|) & italic(/) (20040315)
 -N is now 66pt wider
 -^ {Ascicircum} is now better
-- {exclamdown} is now availible
+- {exclamdown} is now available
 - {currency} has been added
 | "-" hyphen is the same as softhyphen. length is now 510pt
 -bars have been made

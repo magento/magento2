@@ -13,6 +13,7 @@
         <element name="email" type="input" selector="#email"/>
         <element name="requiredGroup" type="text" selector=".admin__field.required[data-ui-id='billing-address-fieldset-element-form-field-group-id']"/>
         <element name="requiredEmail" type="text" selector=".admin__field.required[data-ui-id='billing-address-fieldset-element-form-field-email']"/>
-        <element name="defaultGeneral" type="text" selector="//*[contains(text(),'General')]" time="15"/>
+        <element name="defaultGeneral" type="text" selector="//*[contains(text(),'General')]" timeout="15"/>
+        <element name="emailErrorMessage" type="text" selector="#email-error"/>
     </section>
 </sections>

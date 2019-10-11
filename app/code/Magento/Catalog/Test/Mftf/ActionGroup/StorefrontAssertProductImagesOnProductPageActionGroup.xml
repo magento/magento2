@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductImagesOnProductPageActionGroup">
+        <annotations>
+            <description>Validate that the Product Image is present and correct. Validate that the Fullscreen Product Image is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="productImage" type="string" defaultValue="Magento_Catalog/images/product/placeholder/image.jpg"/>
+        </arguments>
+
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitGallerySpinnerDisappear"/>
+        <seeElement selector="{{StorefrontProductMediaSection.gallery}}" stepKey="seeProductGallery"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(productImage)}}" stepKey="seeProductImage"/>
+        <click selector="{{StorefrontProductMediaSection.productImage(productImage)}}" stepKey="openFullscreenImage"/>
+        <waitForPageLoad stepKey="waitForGalleryLoaded"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(productImage)}}" stepKey="seeFullscreenProductImage"/>
+        <click selector="{{StorefrontProductMediaSection.closeFullscreenImage}}" stepKey="closeFullScreenImage"/>
+        <waitForPageLoad stepKey="waitForGalleryDisappear"/>
+    </actionGroup>
+
+    <!--Check availability image in fotorama-->
+    <actionGroup name="StorefrontAssertFotoramaImageAvailablity">
+        <arguments>
+            <argument name="fileName" type="string" defaultValue="magento-logo"/>
+        </arguments>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="seeActiveImageDefault"/>
+    </actionGroup>
+</actionGroups>

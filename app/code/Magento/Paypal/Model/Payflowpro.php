@@ -894,7 +894,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $orderIncrementId = $order->getIncrementId();
         $request->setCustref($orderIncrementId)
             ->setInvnum($orderIncrementId)
-            ->setComment1($orderIncrementId);
+            ->setData('comment1', $orderIncrementId);
     }
 
     /**

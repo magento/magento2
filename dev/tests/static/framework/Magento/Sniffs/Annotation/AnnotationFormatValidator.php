@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\Sniffs\Annotation;
 
 use PHP_CodeSniffer\Files\File;
@@ -21,7 +22,7 @@ class AnnotationFormatValidator
      * @param int $commentEndPtr
      * @return int
      */
-    private function getShortDescriptionEndPosition(File $phpcsFile, int $shortPtr, $commentEndPtr) : int
+    private function getShortDescriptionEndPosition(File $phpcsFile, int $shortPtr, $commentEndPtr): int
     {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $shortPtr;
@@ -48,22 +49,22 @@ class AnnotationFormatValidator
         File $phpcsFile,
         int $shortPtr,
         int $commentEndPtr
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $this->getShortDescriptionEndPosition(
             $phpcsFile,
-            (int) $shortPtr,
+            (int)$shortPtr,
             $commentEndPtr
         );
         $shortPtrEndContent = $tokens[$shortPtrEnd]['content'];
         if (preg_match('/^[a-z]/', $shortPtrEndContent)
             && $shortPtrEnd != $shortPtr
             && !preg_match('/\bSee\b/', $shortPtrEndContent)
-            && $tokens[$shortPtr]['line']+1 === $tokens[$shortPtrEnd]['line']
+            && $tokens[$shortPtr]['line'] + 1 === $tokens[$shortPtrEnd]['line']
             && $tokens[$shortPtrEnd]['code'] !== T_DOC_COMMENT_TAG
         ) {
             $error = 'Short description should not be in multi lines';
-            $phpcsFile->addFixableError($error, $shortPtrEnd+1, 'MethodAnnotation');
+            $phpcsFile->addFixableError($error, $shortPtrEnd + 1, 'MethodAnnotation');
         }
     }
 
@@ -80,17 +81,17 @@ class AnnotationFormatValidator
         int $shortPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $shortPtrEnd = $this->getShortDescriptionEndPosition(
             $phpcsFile,
-            (int) $shortPtr,
+            (int)$shortPtr,
             $commentEndPtr
         );
         $shortPtrEndContent = $tokens[$shortPtrEnd]['content'];
         if (preg_match('/^[A-Z]/', $shortPtrEndContent)
             && !preg_match('/\bSee\b/', $shortPtrEndContent)
-            && $tokens[$shortPtr]['line']+1 === $tokens[$shortPtrEnd]['line']
+            && $tokens[$shortPtr]['line'] + 1 === $tokens[$shortPtrEnd]['line']
             && $tokens[$shortPtrEnd]['code'] !== T_DOC_COMMENT_TAG
         ) {
             $error = 'There must be exactly one blank line between lines';
@@ -118,7 +119,7 @@ class AnnotationFormatValidator
         int $stackPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         if ($tokens[$shortPtr]['line'] !== $tokens[$stackPtr]['line'] + 1) {
             $error = 'No blank lines are allowed before short description';
@@ -165,7 +166,7 @@ class AnnotationFormatValidator
         int $shortPtrEnd,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $longPtr = $phpcsFile->findNext($emptyTypeTokens, $shortPtrEnd + 1, $commentEndPtr - 1, true);
         if (strtolower($tokens[$longPtr]['content']) === '@inheritdoc') {
@@ -191,7 +192,7 @@ class AnnotationFormatValidator
      * @param int $commentStartPtr
      * @param array $emptyTypeTokens
      */
-    public function validateTagsSpacingFormat(File $phpcsFile, int $commentStartPtr, array $emptyTypeTokens) : void
+    public function validateTagsSpacingFormat(File $phpcsFile, int $commentStartPtr, array $emptyTypeTokens): void
     {
         $tokens = $phpcsFile->getTokens();
         if (isset($tokens[$commentStartPtr]['comment_tags'][0])) {
@@ -213,7 +214,7 @@ class AnnotationFormatValidator
      * @param File $phpcsFile
      * @param int $commentStartPtr
      */
-    public function validateTagGroupingFormat(File $phpcsFile, int $commentStartPtr) : void
+    public function validateTagGroupingFormat(File $phpcsFile, int $commentStartPtr): void
     {
         $tokens = $phpcsFile->getTokens();
         $tagGroups = [];
@@ -250,6 +251,60 @@ class AnnotationFormatValidator
     }
 
     /**
+     * Validates tag aligning format
+     *
+     * @param File $phpcsFile
+     * @param int $commentStartPtr
+     */
+    public function validateTagAligningFormat(File $phpcsFile, int $commentStartPtr): void
+    {
+        $tokens = $phpcsFile->getTokens();
+        $noAlignmentPositions = [];
+        $actualPositions = [];
+        $stackPtr = null;
+        foreach ($tokens[$commentStartPtr]['comment_tags'] as $tag) {
+            $content = $tokens[$tag]['content'];
+            if (preg_match('/^@/', $content) && ($tokens[$tag]['line'] === $tokens[$tag + 2]['line'])) {
+                $noAlignmentPositions[] = $tokens[$tag + 1]['column'] + 1;
+                $actualPositions[] = $tokens[$tag + 2]['column'];
+                $stackPtr = $stackPtr ?? $tag;
+            }
+        }
+
+        if (!$this->allTagsAligned($actualPositions)
+            && !$this->noneTagsAligned($actualPositions, $noAlignmentPositions)) {
+            $phpcsFile->addFixableError(
+                'Tags visual alignment must be consistent',
+                $stackPtr,
+                'MethodArguments'
+            );
+        }
+    }
+
+    /**
+     * Check whether all docblock params are aligned.
+     *
+     * @param array $actualPositions
+     * @return bool
+     */
+    private function allTagsAligned(array $actualPositions): bool
+    {
+        return count(array_unique($actualPositions)) === 1;
+    }
+
+    /**
+     * Check whether all docblock params are not aligned.
+     *
+     * @param array $actualPositions
+     * @param array $noAlignmentPositions
+     * @return bool
+     */
+    private function noneTagsAligned(array $actualPositions, array $noAlignmentPositions): bool
+    {
+        return $actualPositions === $noAlignmentPositions;
+    }
+
+    /**
      * Validates extra newline before short description
      *
      * @param File $phpcsFile
@@ -262,7 +317,7 @@ class AnnotationFormatValidator
         int $commentStartPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         $prevPtr = $phpcsFile->findPrevious($emptyTypeTokens, $commentEndPtr - 1, $commentStartPtr, true);
         if ($tokens[$prevPtr]['line'] < ($tokens[$commentEndPtr]['line'] - 1)) {
@@ -286,7 +341,7 @@ class AnnotationFormatValidator
         int $shortPtr,
         int $commentEndPtr,
         array $emptyTypeTokens
-    ) : void {
+    ): void {
         $tokens = $phpcsFile->getTokens();
         if (isset($tokens[$commentStartPtr]['comment_tags'][0])
         ) {
@@ -300,16 +355,16 @@ class AnnotationFormatValidator
             } else {
                 $this->validateShortDescriptionFormat(
                     $phpcsFile,
-                    (int) $shortPtr,
-                    $commentStartPtr,
-                    $commentEndPtr,
+                    (int)$shortPtr,
+                    (int)$commentStartPtr,
+                    (int)$commentEndPtr,
                     $emptyTypeTokens
                 );
             }
         } else {
             $this->validateShortDescriptionFormat(
                 $phpcsFile,
-                (int) $shortPtr,
+                (int)$shortPtr,
                 $commentStartPtr,
                 $commentEndPtr,
                 $emptyTypeTokens

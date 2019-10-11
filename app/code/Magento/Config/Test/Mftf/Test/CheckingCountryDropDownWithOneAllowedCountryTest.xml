@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckingCountryDropDownWithOneAllowedCountryTest">
+        <annotations>
+            <features value="Config"/>
+            <stories value="MAGETWO-96107: Additional blank option in country dropdown"/>
+            <title value="Checking country drop-down with one allowed country"/>
+            <description value="Check country drop-down with one allowed country"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96133"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+            <waitForPageLoad stepKey="WaitForPageToLoad"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+         <!--Flush Magento Cache-->
+        <magentoCLI stepKey="flushCache" command="cache:flush"/>
+         <!--Create a customer account from Storefront-->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createAnAccount">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressBook}}" stepKey="goToAddressBook"/>
+        <click selector="{{StorefrontCustomerAddressSection.country}}" stepKey="clickToExpandCountryDropDown"/>
+        <see selector="{{StorefrontCustomerAddressSection.country}}" userInput="United States" stepKey="seeSelectedCountry"/>
+        <dontSee selector="{{StorefrontCustomerAddressSection.country}}" userInput="Brazil" stepKey="canNotSeeSelectedCountry"/>
+    </test>
+</tests>

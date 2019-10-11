@@ -39,7 +39,7 @@ interface CategoryLinkRepositoryInterface
     /**
      * Remove the product assignment from the category by category id and sku
      *
-     * @param string $categoryId
+     * @param int $categoryId
      * @param string $sku
      * @return bool will returned True if products successfully deleted
      *

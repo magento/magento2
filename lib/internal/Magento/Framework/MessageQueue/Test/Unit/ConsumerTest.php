@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -66,6 +68,21 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     private $consumer;
 
     /**
+     * @var PoisonPillReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $poisonPillRead;
+
+    /**
+     * @var PoisonPillCompareInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $poisonPillCompare;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * Set up.
      *
      * @return void
@@ -83,10 +100,19 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()->getMock();
         $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()->getMock();
+        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->poisonPillCompare = $this->getMockBuilder(PoisonPillCompareInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->poisonPillRead = $this->getMockBuilder(PoisonPillReadInterface::class)
+            ->disableOriginalConstructor()->getMock();
         //Hard dependency used because CallbackInvoker invokes closure logic defined inside of Customer class.
-        $this->callbackInvoker = new \Magento\Framework\MessageQueue\CallbackInvoker();
+        $this->callbackInvoker = new \Magento\Framework\MessageQueue\CallbackInvoker(
+            $this->poisonPillRead,
+            $this->poisonPillCompare,
+            $this->deploymentConfig
+        );
         $this->consumer = $objectManager->getObject(
             \Magento\Framework\MessageQueue\Consumer::class,
             [
@@ -134,7 +160,8 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         $numberOfMessages = 1;
         $consumerName = 'consumer.name';
         $exceptionPhrase = new Phrase('Exception successfully thrown');
-
+        $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion')->willReturn('version-1');
+        $this->poisonPillCompare->expects($this->atLeastOnce())->method('isLatestVersion')->willReturn(true);
         $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->configuration->expects($this->once())->method('getQueue')->willReturn($queue);

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <section name="ShippingMethodSection">
+        <element name="shippingMethodRadioButton" type="select" selector="//input[@class='radio']"/>
+        <element name="firstShippingMethodRadioButton" type="select" selector="//div[@class='block block-shipping'][position()=1]//div[@class='block-content']//div[@class='box box-shipping-method']//div[@class='box-content']//dl//dd[position()=1]//fieldset//div//div//input[@class='radio']"/>
+        <element name="secondShippingMethodRadioButton" type="select" selector="//div[@class='block block-shipping'][position()=2]//div[@class='block-content']//div[@class='box box-shipping-method']//div[@class='box-content']//dl//dd[position()=2]//fieldset//div//div//input[@class='radio']"/>
+        <element name="goToBillingInfo" type="button" selector="//span[text()='Continue to Billing Information']"/>
+    </section>
+</sections>
+

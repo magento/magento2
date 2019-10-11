@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCustomerGroupByEmailActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page. Filters the grid for the provided Email Address. Edits the Customer. Updates the Customer Group with the provided Customer Group. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="emailAddress"/>
+            <argument name="customerGroup" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomerPage01"/>
+
+        <!-- Start of Action Group: searchAdminDataGridByKeyword -->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters0"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{emailAddress}}" stepKey="fillKeywordSearchField01"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch01"/>
+        <waitForPageLoad stepKey="waitForPageLoad02"/>
+        <!-- End of Action Group: searchAdminDataGridByKeyword -->
+
+        <click selector="{{AdminGridRow.editByValue(emailAddress)}}" stepKey="clickOnCustomer01"/>
+        <waitForPageLoad stepKey="waitForPageLoad03"/>
+
+        <conditionalClick selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" dependentSelector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" visible="true" stepKey="clickOnAccountInformation01"/>
+        <waitForPageLoad stepKey="waitForPageLoad04"/>
+
+        <click selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="clickOnCustomerGroup01"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup01"/>
+
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickOnSave01"/>
+        <waitForPageLoad stepKey="waitForPageLoad05"/>
+    </actionGroup>
+</actionGroups>

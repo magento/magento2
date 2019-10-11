@@ -11,7 +11,7 @@ define([
     'Magento_Catalog/js/price-utils',
     'underscore',
     'mage/template',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($, utils, _, mageTemplate) {
     'use strict';
 
@@ -78,11 +78,7 @@ define([
                 pricesCode = [],
                 priceValue, origin, finalPrice;
 
-            if (typeof newPrices !== 'undefined' && newPrices.hasOwnProperty('prices')) {
-                this.cache.additionalPriceObject = {};
-            } else {
-                this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
-            }
+            this.cache.additionalPriceObject = this.cache.additionalPriceObject || {};
 
             if (newPrices) {
                 $.extend(this.cache.additionalPriceObject, newPrices);
