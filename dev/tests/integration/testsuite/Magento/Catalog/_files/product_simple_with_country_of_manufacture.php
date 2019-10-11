@@ -21,12 +21,9 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $productFactory = $objectManager->create(ProductInterfaceFactory::class);
 /** @var $product \Magento\Catalog\Model\Product */
 
-$defaultSetId = $objectManager->create(Product::class)
-    ->getDefaultAttributeSetid();
-
 $product = $productFactory->create();
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setAttributeSetId($defaultSetId)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple Product With Country Of Manufacture')
     ->setSku('simple_with_com')

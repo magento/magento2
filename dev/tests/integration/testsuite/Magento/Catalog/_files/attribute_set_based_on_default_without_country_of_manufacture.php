@@ -22,10 +22,9 @@ $attributeCountryOfManufacture = $attributeRepository->get('country_of_manufactu
 
 /** @var Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
 $attributeSet = $objectManager->create(Set::class);
+/** @var Type $entityType */
 $entityType = $objectManager->create(Type::class)
     ->loadByCode(Magento\Catalog\Model\Product::ENTITY);
-$defaultSetId = $objectManager->create(Product::class)
-    ->getDefaultAttributeSetid();
 $data = [
     'attribute_set_name' => 'custom_attribute_set_wout_com',
     'entity_type_id' => $entityType->getId(),
@@ -35,7 +34,7 @@ $data = [
 $attributeSet->setData($data);
 $attributeSet->validate();
 $attributeSet->save();
-$attributeSet->initFromSkeleton($defaultSetId);
+$attributeSet->initFromSkeleton($entityType->getDefaultAttributeSetId());
 /** @var Group $group */
 foreach ($attributeSet->getGroups() as $group) {
     $groupAttributes = $group->getAttributes();

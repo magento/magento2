@@ -19,7 +19,8 @@ use Magento\Catalog\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Integration test for product view front action.
@@ -84,11 +85,10 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
      * View product with custom attribute when attribute removed from it.
      *
      * It tests that after changing product attribute set from Default to Custom
-     * there are no waring messages in log in case Custom not contains attribute from Default.
+     * there are no warning messages in log in case Custom not contains attribute from Default.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_country_of_manufacture.php
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_based_on_default_without_country_of_manufacture.php
-     * @magentoDbIsolation disabled
      * @return void
      */
     public function testViewActionCustomAttributeSetWithoutCountryOfManufacture(): void
@@ -129,9 +129,7 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     private function getProductBySku(string $sku): Product
     {
-        $product = $this->productRepository->get($sku);
-
-        return $product;
+        return $this->productRepository->get($sku);
     }
 
     /**
@@ -175,8 +173,8 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
     private function getSystemLogContent(): string
     {
         $logDir = $this->getLogDirectoryWrite();
-        $logFullFileName = $logDir->getAbsolutePath($this->systemLogFileName);
-        $content = $this->tail($logFullFileName, 10);
+        $logFile = $logDir->openFile($this->systemLogFileName, 'rb');
+        $content = $this->tail($logFile, 10);
 
         return $content;
     }
@@ -184,22 +182,19 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Get file tail.
      *
-     * @param string $filename
+     * @param FileWriteInterface $file
      * @param int $lines
      * @param int $buffer
      * @return false|string
      */
-    private function tail(string $filename, int $lines = 10, int $buffer = 4096)
+    private function tail(FileWriteInterface $file, int $lines = 10, int $buffer = 4096)
     {
-        // Open the file
-        $f = fopen($filename, "rb");
-
         // Jump to last character
-        fseek($f, -1, SEEK_END);
+        $file->seek(-1, SEEK_END);
 
         // Read it and adjust line number if necessary
         // (Otherwise the result would be wrong if file doesn't end with a blank line)
-        if (fread($f, 1) != "\n") {
+        if ($file->read(1) != "\n") {
             $lines--;
         }
 
@@ -208,18 +203,18 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
         $chunk = '';
 
         // While we would like more
-        while (ftell($f) > 0 && $lines >= 0) {
+        while ($file->tell() > 0 && $lines >= 0) {
             // Figure out how far back we should jump
-            $seek = min(ftell($f), $buffer);
+            $seek = min($file->tell(), $buffer);
 
             // Do the jump (backwards, relative to where we are)
-            fseek($f, -$seek, SEEK_CUR);
+            $file->seek(-$seek, SEEK_CUR);
 
             // Read a chunk and prepend it to our output
-            $output = ($chunk = fread($f, $seek)) . $output;
+            $output = ($chunk = $file->read($seek)) . $output;
 
             // Jump back to where we started reading
-            fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
+            $file->seek(-mb_strlen($chunk, '8bit'), SEEK_CUR);
 
             // Decrease our line counter
             $lines -= substr_count($chunk, "\n");
@@ -233,7 +228,7 @@ class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
         }
 
         // Close file and return
-        fclose($f);
+        $file->close();
 
         return $output;
     }
