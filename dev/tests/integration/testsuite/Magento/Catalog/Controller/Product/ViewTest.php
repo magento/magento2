@@ -26,6 +26,7 @@ use Magento\Framework\Filesystem\Driver\File;
  * Integration test for product view front action.
  *
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
 {
