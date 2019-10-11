@@ -102,6 +102,18 @@ class AccountTest extends \PHPUnit\Framework\TestCase
                 sprintf('Unexpected field "%s" in form.', $element->getId())
             );
         }
+
+        self::assertContains(
+            '<option value="'.$customerGroup.'" selected="selected">Wholesale</option>',
+            $content,
+            'The Customer Group specified for the chosen customer should be selected.'
+        );
+
+        self::assertContains(
+            'value="'.$customer->getEmail().'"',
+            $content,
+            'The Customer Email specified for the chosen customer should be input '
+        );
     }
 
     /**
