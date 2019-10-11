@@ -52,8 +52,9 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Open order by Id-->
-        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
+        <actionGroup ref="OpenOrderByName" stepKey="openOrderById">
             <argument name="orderId" value="$createGuestCart.return$"/>
+            <argument name="orderName" value="{{ShippingAddressTX.fullname}}"/>
         </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>

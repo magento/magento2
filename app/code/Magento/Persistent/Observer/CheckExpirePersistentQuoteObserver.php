@@ -11,7 +11,6 @@ namespace Magento\Persistent\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -132,6 +131,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_checkoutSession->clearQuote();
+            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
             return;
         }
 
@@ -156,7 +156,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      */
     private function isPersistentQuoteOutdated(): bool
     {
-        if (!$this->_persistentData->isEnabled() && !$this->_customerSession->isLoggedIn()
+        if ((!$this->_persistentData->isEnabled() || !$this->_persistentData->isShoppingCartPersist())
+            && !$this->_customerSession->isLoggedIn()
             && $this->_checkoutSession->getQuoteId()
             && $this->isActiveQuote()
         ) {
