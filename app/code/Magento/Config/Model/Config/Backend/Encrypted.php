@@ -48,6 +48,9 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Magic method called during class serialization
      *
      * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -59,6 +62,9 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
      * Magic method called during class un-serialization
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
