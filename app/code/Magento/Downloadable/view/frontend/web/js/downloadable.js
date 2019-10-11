@@ -10,6 +10,7 @@ define([
     'jquery-ui-modules/widget',
     'Magento_Catalog/js/price-box'
 ], function ($) {
+    'use strict';
 
     /**
      * Downloadable widget
@@ -78,7 +79,7 @@ define([
          * @private
          */
         reloadAllCheckText: function () {
-            let allChecked = true,
+            var allChecked = true,
                 allElementsCheck = $(this.options.allElements),
                 allElementsLabel = $('label[for="' + allElementsCheck.attr('id') + '"] > span');
 
