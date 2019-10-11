@@ -117,7 +117,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve default stores select object
-     * 
+     *
      * Select fields website_id, store_id
      *
      * @param bool $includeDefault include/exclude default admin website
