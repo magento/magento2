@@ -9,7 +9,6 @@
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
  */
 ?>
-
 <form id="currency-symbols-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
     <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     <fieldset class="admin__fieldset">
@@ -27,7 +26,7 @@
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?= '\'' . $block->escapeJs($code) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
+                           onclick="toggleUseDefault(<?= '\'' . $block->escapeHtmlAttr($block->escapeJs($code)) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">

@@ -7,12 +7,14 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginAsAdmin">
         <arguments>
             <argument name="adminUser" defaultValue="DefaultAdminUser"/>
         </arguments>
         <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
+        <!-- It sometimes is loading too long for default 10s -->
+        <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded"/>
         <fillField selector="{{AdminLoginFormSection.username}}" userInput="{{adminUser.username}}" stepKey="fillUsername"/>
         <fillField selector="{{AdminLoginFormSection.password}}" userInput="{{adminUser.password}}" stepKey="fillPassword"/>
         <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickLogin"/>

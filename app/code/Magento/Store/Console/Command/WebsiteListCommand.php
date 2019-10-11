@@ -6,9 +6,12 @@
  */
 namespace Magento\Store\Console\Command;
 
+use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table as TableHelper;
+use Symfony\Component\Console\Helper\TableFactory as TableHelperFactory;
 
 /**
  * Class WebsiteListCommand
@@ -23,11 +26,19 @@ class WebsiteListCommand extends Command
     private $manager;
 
     /**
+     * @var TableHelperFactory
+     */
+    private $tableHelperFactory;
+
+    /**
+     * @inheritDoc
      */
     public function __construct(
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteManagement
+        \Magento\Store\Api\WebsiteRepositoryInterface $websiteManagement,
+        TableHelperFactory $tableHelperFactory = null
     ) {
         $this->manager = $websiteManagement;
+        $this->tableHelperFactory = $tableHelperFactory ?? ObjectManager::getInstance()->get(TableHelperFactory::class);
         parent::__construct();
     }
 
@@ -48,7 +59,7 @@ class WebsiteListCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $table = $this->getHelperSet()->get('table');
+            $table = $this->tableHelperFactory->create(['output' => $output]);
             $table->setHeaders(['ID', 'Default Group Id', 'Name', 'Code', 'Sort Order', 'Is Default']);
 
             foreach ($this->manager->getList() as $website) {

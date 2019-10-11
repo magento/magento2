@@ -8,6 +8,9 @@ namespace Magento\Catalog\Api;
 
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
+/**
+ * API tests for \Magento\Catalog\Model\Product\Attribute\Repository.
+ */
 class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductAttributeRepositoryV1';
@@ -326,6 +329,20 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
         $output = $this->updateAttribute($attributeCode, $attributeData);
         $this->assertEquals(4, count($output['options']));
+    }
+
+    /**
+     * Trying to delete system attribute.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_system_attribute.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The system attribute can't be deleted.
+     * @return void
+     */
+    public function testDeleteSystemAttributeById()
+    {
+        $attributeCode = 'test_attribute_code_333';
+        $this->deleteAttribute($attributeCode);
     }
 
     /**
