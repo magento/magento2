@@ -327,4 +327,22 @@
         <data key="postcode">90230</data>
         <data key="telephone">555-55-555-55</data>
     </entity>
+    <entity name="US_Address_AE" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+            <item>113</item>
+        </array>
+        <data key="city">Los Angeles</data>
+        <data key="state">Armed Forces Europe</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">90001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionAE</requiredEntity>
+    </entity>
 </entities>
