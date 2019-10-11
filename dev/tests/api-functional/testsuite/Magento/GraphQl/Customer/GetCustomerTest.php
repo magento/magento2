@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
-use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
@@ -137,7 +136,7 @@ QUERY;
         $currentPassword = 'password';
         $headersMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
         $customer = $this->customerRepository->getById(1)->setConfirmation(
-            AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
+            \Magento\Customer\Api\AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
         );
         $this->customerRepository->save($customer);
         $query = <<<QUERY
@@ -149,12 +148,7 @@ query {
     }
 }
 QUERY;
-        $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $headersMap
-        );
+        $this->graphQlQuery($query, [], '', $headersMap);
     }
 
     /**
