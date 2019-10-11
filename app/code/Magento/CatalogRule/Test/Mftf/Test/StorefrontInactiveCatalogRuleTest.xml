@@ -26,7 +26,8 @@
             </createData>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
             <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
-            <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="Inactive" stepKey="setInactive"/>
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click stepKey="setInactive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
         </before>

@@ -13,8 +13,8 @@ define([
 ], function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
     'use strict';
 
-    var rateProcessors = [],
-        totalsProcessors = [],
+    var rateProcessors = {},
+        totalsProcessors = {},
 
         /**
          * Estimate totals for shipping address and update shipping rates.
