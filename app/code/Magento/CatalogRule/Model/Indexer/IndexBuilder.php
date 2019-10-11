@@ -294,7 +294,6 @@ class IndexBuilder
         $activeRules = $this->getActiveRules()->getItems();
         foreach ($activeRules as $rule) {
             $rule->setProductsFilter($ids);
-            $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
         $this->cleanProductPriceIndex($ids);
