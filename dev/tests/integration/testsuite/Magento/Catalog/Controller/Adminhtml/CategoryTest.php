@@ -9,37 +9,47 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category as Category;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Store\Model\Store;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Test for category backend actions
  *
  * @magentoAppArea adminhtml
  */
-class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class CategoryTest extends AbstractBackendController
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @var ProductResource
      */
     protected $productResource;
 
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
+    /** @var StoreRepositoryInterface */
+    private $storeRepository;
+
+    /** @var Json */
+    private $json;
+
     /**
-     * @inheritDoc
-     *
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @inheritdoc
      */
     protected function setUp()
     {
         parent::setUp();
-
-        /** @var Product $productResource */
-        $this->productResource = Bootstrap::getObjectManager()->get(
-            Product::class
-        );
+        /** @var ProductResource $productResource */
+        $this->productResource = $this->_objectManager->get(ProductResource::class);
+        $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
+        $this->storeRepository = $this->_objectManager->get(StoreRepositoryInterface::class);
+        $this->json = $this->_objectManager->get(Json::class);
     }
 
     /**
@@ -52,35 +62,23 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @param array $inputData
      * @param array $defaultAttributes
      * @param array $attributesSaved
-     * @param bool $isSuccess
+     * @return void
      */
-    public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = [], $isSuccess = true)
+    public function testSaveAction(array $inputData, array $defaultAttributes, array $attributesSaved = []): void
     {
-        /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
-        $store->load('fixturestore', 'code');
+        $store = $this->storeRepository->get('fixturestore');
         $storeId = $store->getId();
-
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($inputData);
         $this->getRequest()->setParam('store', $storeId);
         $this->getRequest()->setParam('id', 2);
         $this->dispatch('backend/catalog/category/save');
-
-        if ($isSuccess) {
-            $this->assertSessionMessages(
-                $this->equalTo(['You saved the category.']),
-                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-            );
-        }
-
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
+        $this->assertSessionMessages(
+            $this->equalTo(['You saved the category.']),
+            MessageInterface::TYPE_SUCCESS
         );
-        $category->setStoreId($storeId);
-        $category->load(2);
-
+        /** @var $category Category */
+        $category = $this->categoryRepository->get(2, $storeId);
         $errors = [];
         foreach ($attributesSaved as $attribute => $value) {
             $actualValue = $category->getData($attribute);
@@ -108,13 +106,12 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
-     * @throws NoSuchEntityException
+     * @return void
      */
-    public function testDefaultValueForCategoryUrlPath()
+    public function testDefaultValueForCategoryUrlPath(): void
     {
-        $repository = $this->_objectManager->get(CategoryRepositoryInterface::class);
         $categoryId = 3;
-        $category = $repository->get($categoryId);
+        $category = $this->categoryRepository->get($categoryId);
         $newUrlPath = 'test_url_path';
         $defaultUrlPath = $category->getData('url_path');
 
@@ -122,7 +119,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $category->setStoreId(1);
         $category->setUrlKey($newUrlPath);
         $category->setUrlPath($newUrlPath);
-        $repository->save($category);
+        $this->categoryRepository->save($category);
         $this->assertEquals($newUrlPath, $category->getUrlPath());
 
         // set default url_path and check it
@@ -135,7 +132,11 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         ];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
-        $category = $repository->get($categoryId);
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the category.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $category = $this->categoryRepository->get($categoryId);
         $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
     }
 
@@ -145,8 +146,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @param array $postData
      * @dataProvider categoryCreatedFromProductCreationPageDataProvider
      * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testSaveActionFromProductCreationPage($postData)
+    public function testSaveActionFromProductCreationPage(array $postData): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
@@ -159,11 +161,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/')
             );
         } else {
-            $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Framework\Json\Helper\Data::class
-            )->jsonDecode(
-                $body
-            );
+            $result = $this->json->unserialize($body);
             $this->assertArrayHasKey('messages', $result);
             $this->assertFalse($result['error']);
             $category = $result['category'];
@@ -182,7 +180,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @static
      * @return array
      */
-    public static function categoryCreatedFromProductCreationPageDataProvider()
+    public static function categoryCreatedFromProductCreationPageDataProvider(): array
     {
         /* Keep in sync with new-category-dialog.js */
         $postData = [
@@ -201,8 +199,10 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
     /**
      * Test SuggestCategories finds any categories.
+     *
+     * @return void
      */
-    public function testSuggestCategoriesActionDefaultCategoryFound()
+    public function testSuggestCategoriesActionDefaultCategoryFound(): void
     {
         $this->getRequest()->setParam('label_part', 'Default');
         $this->dispatch('backend/catalog/category/suggestCategories');
@@ -214,8 +214,10 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
     /**
      * Test SuggestCategories properly processes search by label.
+     *
+     * @return void
      */
-    public function testSuggestCategoriesActionNoSuggestions()
+    public function testSuggestCategoriesActionNoSuggestions(): void
     {
         $this->getRequest()->setParam('label_part', strrev('Default'));
         $this->dispatch('backend/catalog/category/suggestCategories');
@@ -228,7 +230,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function saveActionDataProvider()
+    public function saveActionDataProvider(): array
     {
         return [
             'default values' => [
@@ -352,64 +354,39 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'filter_price_range' => null
                 ],
             ],
-            'incorrect datefrom' => [
-                [
-                    'id' => '2',
-                    'entity_id' => '2',
-                    'path' => '1/2',
-                    'name' => 'Custom Name',
-                    'is_active' => '0',
-                    'description' => 'Custom Description',
-                    'meta_title' => 'Custom Title',
-                    'meta_keywords' => 'Custom keywords',
-                    'meta_description' => 'Custom meta description',
-                    'include_in_menu' => '0',
-                    'url_key' => 'default-category',
-                    'display_mode' => 'PRODUCTS',
-                    'landing_page' => '1',
-                    'is_anchor' => true,
-                    'custom_apply_to_products' => '0',
-                    'custom_design' => 'Magento/blank',
-                    'custom_design_from' => '5/29/2015',
-                    'custom_design_to' => '5/21/2015',
-                    'page_layout' => '',
-                    'custom_layout_update' => '',
-                    'use_config' => [
-                        'available_sort_by' => 1,
-                        'default_sort_by' => 1,
-                        'filter_price_range' => 1,
-                    ],
-                ],
-                [
-                    'name' => false,
-                    'default_sort_by' => false,
-                    'display_mode' => false,
-                    'meta_title' => false,
-                    'custom_design' => false,
-                    'page_layout' => false,
-                    'is_active' => false,
-                    'include_in_menu' => false,
-                    'landing_page' => false,
-                    'custom_apply_to_products' => false,
-                    'available_sort_by' => false,
-                    'description' => false,
-                    'meta_keywords' => false,
-                    'meta_description' => false,
-                    'custom_layout_update' => false,
-                    'custom_design_from' => false,
-                    'custom_design_to' => false,
-                    'filter_price_range' => false
-                ],
-                [],
-                false
-            ]
         ];
     }
 
     /**
-     * Test validation.
+     * @magentoDbIsolation enabled
+     * @return void
      */
-    public function testSaveActionCategoryWithDangerRequest()
+    public function testIncorrectDateFrom(): void
+    {
+        $data = [
+            'name' => 'Test Category',
+            'attribute_set_id' => '3',
+            'parent_id' => 2,
+            'path' => '1/2',
+            'is_active' => true,
+            'custom_design_from' => '5/29/2015',
+            'custom_design_to' => '5/21/2015',
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($data);
+        $this->dispatch('backend/catalog/category/save');
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('Make sure the To Date is later than or the same as the From Date.')]),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Test validation.
+     *
+     * @return void
+     */
+    public function testSaveActionCategoryWithDangerRequest(): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
@@ -428,7 +405,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
             $this->equalTo(['The "Name" attribute value is empty. Set the attribute and try again.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            MessageInterface::TYPE_ERROR
         );
     }
 
@@ -444,18 +421,23 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @param int $grandChildId
      * @param string $grandChildUrlKey
      * @param boolean $error
+     * @return void
      */
-    public function testMoveAction($parentId, $childId, $childUrlKey, $grandChildId, $grandChildUrlKey, $error)
-    {
+    public function testMoveAction(
+        int $parentId,
+        int $childId,
+        string $childUrlKey,
+        int $grandChildId,
+        string $grandChildUrlKey,
+        bool $error
+    ): void {
         $urlKeys = [
             $childId => $childUrlKey,
             $grandChildId => $grandChildUrlKey,
         ];
         foreach ($urlKeys as $categoryId => $urlKey) {
-            /** @var $category \Magento\Catalog\Model\Category */
-            $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\Catalog\Model\Category::class
-            );
+            /** @var $category Category */
+            $category = $this->_objectManager->create(Category::class);
             if ($categoryId > 0) {
                 $category->load($categoryId)
                     ->setUrlKey($urlKey)
@@ -467,9 +449,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             ->setPostValue('pid', $parentId)
             ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/category/move');
-        $jsonResponse = json_decode($this->getResponse()->getBody());
+        $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
-        $this->assertEquals($error, $jsonResponse->error);
+        $this->assertEquals($error, $jsonResponse['error']);
     }
 
     /**
@@ -477,7 +459,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      *
      * @return array
      */
-    public function moveActionDataProvider()
+    public function moveActionDataProvider(): array
     {
         return [
             [400, 401, 'first_url_key', 402, 'second_url_key', false],
@@ -496,11 +478,9 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      *
      * @param array $postData
      */
-    public function testSaveCategoryWithProductPosition(array $postData)
+    public function testSaveCategoryWithProductPosition(array $postData): void
     {
-        /** @var $store \Magento\Store\Model\Store */
-        $store = Bootstrap::getObjectManager()->create(Store::class);
-        $store->load('fixturestore', 'code');
+        $store = $this->storeRepository->get('fixturestore');
         $storeId = $store->getId();
         $oldCategoryProductsCount = $this->getCategoryProductsCount();
         $this->getRequest()->setParam('store', $storeId);
@@ -508,6 +488,10 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()->setParam('id', 96377);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the category.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
         $newCategoryProductsCount = $this->getCategoryProductsCount();
         $this->assertEquals(
             $oldCategoryProductsCount,
@@ -522,7 +506,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function saveActionWithDifferentWebsitesDataProvider()
+    public function saveActionWithDifferentWebsitesDataProvider(): array
     {
         return [
             'default_values' => [
