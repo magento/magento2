@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Controller;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -38,6 +40,7 @@ class UrlRewriteTest extends AbstractController
      * @param string $request
      * @param string $redirect
      * @param int $expectedCode
+     * @return void
      *
      * @dataProvider requestDataProvider
      */
@@ -45,14 +48,14 @@ class UrlRewriteTest extends AbstractController
         string $request,
         string $redirect,
         int $expectedCode = 301
-    ) {
+    ): void {
         $this->dispatch($request);
         /** @var HttpResponse $response */
         $response = $this->getResponse();
         $code = $response->getHttpResponseCode();
         $this->assertEquals($expectedCode, $code, 'Invalid response code');
 
-        if ($expectedCode !== 200) {
+        if ($expectedCode !== Response::STATUS_CODE_200) {
             $location = $response->getHeader('Location')->getFieldValue();
             $this->assertStringEndsWith(
                 $redirect,
@@ -65,7 +68,7 @@ class UrlRewriteTest extends AbstractController
     /**
      * @return array
      */
-    public function requestDataProvider()
+    public function requestDataProvider(): array
     {
         return [
             'Use Case #1: Rewrite: page-one/ --(301)--> page-a/; Request: page-one/ --(301)--> page-a/' => [
@@ -95,7 +98,7 @@ class UrlRewriteTest extends AbstractController
             'Use Case #7: Request with query params' => [
                 'request' => '/enable-cookies/?test-param',
                 'redirect' => '',
-                200,
+                Response::STATUS_CODE_200,
             ],
         ];
     }
