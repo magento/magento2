@@ -15,6 +15,8 @@
                 <use_https>1</use_https>
                 <frequency>1</frequency>
                 <last_update>0</last_update>
+                <show_notification_window>1</show_notification_window>
+                <show_notification_toolbar>1</show_notification_toolbar>
             </adminnotification>
         </system>
     </default>

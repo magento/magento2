@@ -5,7 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="notifications">
             <uiComponent name="notification_area" aclResource="Magento_AdminNotification::show_list"/>
@@ -17,10 +18,15 @@
                    name="notification_window"
                    as="notification_window"
                    aclResource="Magento_AdminNotification::show_toolbar"
-                   template="Magento_AdminNotification::notification/window.phtml"/>
+                   template="Magento_AdminNotification::notification/window.phtml"
+                   ifconfig="system/adminnotification/show_notification_window"/>
         </referenceContainer>
         <referenceContainer name="header">
-            <block class="Magento\AdminNotification\Block\ToolbarEntry" name="notification.messages" before="user" template="Magento_AdminNotification::toolbar_entry.phtml"/>
+            <block class="Magento\AdminNotification\Block\ToolbarEntry"
+                   name="notification.messages"
+                   before="user"
+                   template="Magento_AdminNotification::toolbar_entry.phtml"
+                   ifconfig="system/adminnotification/show_notification_toolbar"/>
         </referenceContainer>
     </body>
 </page>

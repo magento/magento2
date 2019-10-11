@@ -22,6 +22,14 @@
                     <label>Last Update</label>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Field\Notification</frontend_model>
                 </field>
+                <field id="show_notification_window" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Show notification window after logging in</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="show_notification_toolbar" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Show notifications in toolbar</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>
