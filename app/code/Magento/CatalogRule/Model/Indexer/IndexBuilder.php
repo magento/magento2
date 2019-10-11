@@ -290,14 +290,15 @@ class IndexBuilder
     {
         $this->cleanProductIndex($ids);
 
-        /** @var Rule[] $activeRules */
-        $activeRules = $this->getActiveRules()->getItems();
+        $activeRules = $this->getActiveRules();
         foreach ($activeRules as $rule) {
+            /** @var Rule $rule */
             $rule->setProductsFilter($ids);
+            $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
-        $this->cleanProductPriceIndex($ids);
         foreach ($ids as $productId) {
+            $this->cleanProductPriceIndex($productId);
             $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
         }
 
@@ -341,7 +342,7 @@ class IndexBuilder
             [
                 $this->getTable('catalogrule_product'),
                 $this->getTable('catalogrule_product_price'),
-                $this->getTable('catalogrule_group_website'),
+                $this->getTable('catalogrule_group_website')
             ]
         );
     }
