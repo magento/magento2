@@ -26,7 +26,8 @@
             <argument name="index" value="0"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormNoSuccessCheck" stepKey="saveProduct"/>
-        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Link URL's domain is not in list of downloadable_domains in env.php." stepKey="seeLinkUrlInvalidMessage" after="saveProduct" />
+        <waitForElementVisible selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForLinkUrlInvalidMessage" after="saveProduct"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Link URL's domain is not in list of downloadable_domains in env.php." stepKey="seeLinkUrlInvalidMessage" after="waitForLinkUrlInvalidMessage" />
         <magentoCLI stepKey="addDownloadableDomain2" command="downloadable:domains:add static.magento.com" after="seeLinkUrlInvalidMessage" />
         <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductFormAgain" after="addDownloadableDomain2">
             <argument name="product" value="DownloadableProduct"/>
