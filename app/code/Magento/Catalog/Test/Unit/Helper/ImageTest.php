@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Helper;
 
 use Magento\Catalog\Helper\Image;
@@ -295,32 +296,34 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturnMap([
+            ->willReturnMap(
                 [
-                    'design/watermark/' . $data['type'] . '_image',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_imageOpacity',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_opacity']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_position',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_position']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_size',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_size']
-                ],
-            ]);
+                    [
+                        'design/watermark/' . $data['type'] . '_image',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_imageOpacity',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_opacity']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_position',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_position']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_size',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_size']
+                    ],
+                ]
+            );
 
         $this->image->expects($this->any())
             ->method('setWatermarkFile')
