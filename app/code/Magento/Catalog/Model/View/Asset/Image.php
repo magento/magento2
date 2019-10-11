@@ -88,7 +88,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -96,7 +96,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -104,7 +104,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
@@ -112,7 +112,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSourceFile()
     {
@@ -131,7 +131,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -139,7 +139,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -147,7 +147,8 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return ContextInterface
      */
     public function getContext()
@@ -156,7 +157,7 @@ class Image implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {
@@ -191,10 +192,11 @@ class Image implements LocalInterface
 
     /**
      * Converting bool into a string representation
-     * @param $miscParams
+     *
+     * @param array $miscParams
      * @return array
      */
-    private function convertToReadableFormat($miscParams)
+    private function convertToReadableFormat(array $miscParams)
     {
         $miscParams['image_height'] = 'h:' . ($miscParams['image_height'] ?? 'empty');
         $miscParams['image_width'] = 'w:' . ($miscParams['image_width'] ?? 'empty');
