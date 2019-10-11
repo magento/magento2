@@ -78,7 +78,6 @@ class ExportFileDataProvider extends DataProvider
         );
 
         $this->fileIO = $fileIO ?: ObjectManager::getInstance()->get(File::class);
-        $this->request = $request;
     }
 
     /**
