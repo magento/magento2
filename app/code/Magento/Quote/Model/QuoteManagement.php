@@ -305,13 +305,22 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
 
         if ($customerActiveQuote) {
-            /** Merge carts */
-            $quote->merge($customerActiveQuote);
-            $this->quoteRepository->delete($customerActiveQuote);
+            try {
+                /** Merge carts */
+                $quote->merge($customerActiveQuote);
+                $customerActiveQuote->setIsActive(0);
+                $this->quoteRepository->save($customerActiveQuote);
+            } catch (\Exception $e) {
+                $message = sprintf(
+                    "The customer can't be assigned to the cart. Error on cart merging: %s",
+                    $e->getMessage()
+                );
+                throw new StateException($message);
+            }
+
         }
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
-        $quote->setStoreId($storeId);
         $quote->setIsActive(1);
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */

@@ -510,12 +510,12 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         $quoteMock = $this->createPartialMock(
             Quote::class,
-            ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setStoreId', 'setIsActive', 'getIsActive', 'merge']
+            ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setIsActive', 'getIsActive', 'merge']
         );
 
         $activeQuoteMock = $this->createPartialMock(
             Quote::class,
-            ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setStoreId', 'setIsActive', 'getIsActive', 'merge']
+            ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setIsActive', 'getIsActive', 'merge']
         );
 
         $customerMock = $this->createMock(CustomerInterface::class);
@@ -556,17 +556,17 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($activeQuoteMock);
 
         $quoteMock->expects($this->once())->method('merge')->with($activeQuoteMock)->willReturnSelf();
-        $this->quoteRepositoryMock->expects($this->once())->method('delete')->with($activeQuoteMock);
+        $activeQuoteMock->expects($this->once())->method('setIsActive')->with(0);
+        $this->quoteRepositoryMock->expects($this->atLeastOnce())->method('save')->with($activeQuoteMock);
 
         $quoteMock->expects($this->once())->method('setCustomer')->with($customerMock);
         $quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(0);
-        $quoteMock->expects($this->once())->method('setStoreId')->with($storeId);
         $quoteMock->expects($this->once())->method('setIsActive')->with(1);
 
         $this->quoteIdMock->expects($this->once())->method('load')->with($cartId, 'quote_id')->willReturnSelf();
         $this->quoteIdMock->expects($this->once())->method('getId')->willReturn(10);
         $this->quoteIdMock->expects($this->once())->method('delete');
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
+        $this->quoteRepositoryMock->expects($this->atLeastOnce())->method('save')->with($quoteMock);
 
         $this->model->assignCustomer($cartId, $customerId, $storeId);
     }
@@ -585,7 +585,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         $quoteMock = $this->createPartialMock(
             Quote::class,
-            ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setStoreId', 'setIsActive', 'getIsActive', 'merge']
+            ['getCustomerId', 'setCustomer', 'setCustomerIsGuest', 'setIsActive', 'getIsActive', 'merge']
         );
 
         $customerMock = $this->createMock(CustomerInterface::class);
@@ -629,11 +629,9 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(false, $activeQuoteMock);
         $quoteMock->expects($this->never())->method('merge');
-        $this->quoteRepositoryMock->expects($this->never())->method('delete');
 
         $quoteMock->expects($this->once())->method('setCustomer')->with($customerMock);
         $quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(0);
-        $quoteMock->expects($this->once())->method('setStoreId')->with($storeId);
         $quoteMock->expects($this->once())->method('setIsActive')->with(1);
 
         $this->quoteIdMock->expects($this->once())->method('load')->with($cartId, 'quote_id')->willReturnSelf();
