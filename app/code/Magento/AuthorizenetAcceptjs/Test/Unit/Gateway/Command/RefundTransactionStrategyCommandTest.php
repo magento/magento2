@@ -62,20 +62,75 @@ class RefundTransactionStrategyCommandTest extends TestCase
             ->method('execute');
 
         $this->commandPoolMock->method('get')
-            ->willReturnMap([
-                ['get_transaction_details', $this->transactionDetailsCommandMock],
-                ['void', $this->commandMock]
-            ]);
+            ->willReturnMap(
+                [
+                    [
+                        'get_transaction_details',
+                        $this->transactionDetailsCommandMock
+                    ],
+                    [
+                        'void',
+                        $this->commandMock
+                    ]
+                ]
+            );
 
         $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => 'capturedPendingSettlement'
+            ->willReturn(
+                [
+                    'transaction' => [
+                        'transactionStatus' => 'capturedPendingSettlement',
+                        'authAmount' => '20.19',
+                    ]
                 ]
-            ]);
+            );
 
         $buildSubject = [
-            'foo' => '123'
+            'foo' => '123',
+            'amount' => '20.19',
+        ];
+
+        $this->transactionDetailsCommandMock->expects($this->once())
+            ->method('execute')
+            ->with($buildSubject)
+            ->willReturn($this->transactionResultMock);
+
+        $this->command->execute($buildSubject);
+    }
+
+    /**
+     * @expectedException \Magento\Payment\Gateway\Command\CommandException
+     * @expectedExceptionMessage The transaction has not been settled, a partial refund is not yet available.
+     */
+    public function testCommandWillThrowExceptionWhenVoidTransactionIsPartial()
+    {
+        // Assert command is executed
+        $this->commandMock->expects($this->never())
+            ->method('execute');
+
+        $this->commandPoolMock->method('get')
+            ->willReturnMap(
+                [
+                    [
+                        'get_transaction_details',
+                        $this->transactionDetailsCommandMock
+                    ],
+                ]
+            );
+
+        $this->transactionResultMock->method('get')
+            ->willReturn(
+                [
+                    'transaction' => [
+                        'transactionStatus' => 'capturedPendingSettlement',
+                        'authAmount' => '20.19',
+                    ]
+                ]
+            );
+
+        $buildSubject = [
+            'foo' => '123',
+            'amount' => '10.19',
         ];
 
         $this->transactionDetailsCommandMock->expects($this->once())
@@ -93,17 +148,27 @@ class RefundTransactionStrategyCommandTest extends TestCase
             ->method('execute');
 
         $this->commandPoolMock->method('get')
-            ->willReturnMap([
-                ['get_transaction_details', $this->transactionDetailsCommandMock],
-                ['refund_settled', $this->commandMock]
-            ]);
+            ->willReturnMap(
+                [
+                    [
+                        'get_transaction_details',
+                        $this->transactionDetailsCommandMock
+                    ],
+                    [
+                        'refund_settled',
+                        $this->commandMock
+                    ]
+                ]
+            );
 
         $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => 'settledSuccessfully'
+            ->willReturn(
+                [
+                    'transaction' => [
+                        'transactionStatus' => 'settledSuccessfully'
+                    ]
                 ]
-            ]);
+            );
 
         $buildSubject = [
             'foo' => '123'
@@ -128,16 +193,23 @@ class RefundTransactionStrategyCommandTest extends TestCase
             ->method('execute');
 
         $this->commandPoolMock->method('get')
-            ->willReturnMap([
-                ['get_transaction_details', $this->transactionDetailsCommandMock],
-            ]);
+            ->willReturnMap(
+                [
+                    [
+                        'get_transaction_details',
+                        $this->transactionDetailsCommandMock
+                    ],
+                ]
+            );
 
         $this->transactionResultMock->method('get')
-            ->willReturn([
-                'transaction' => [
-                    'transactionStatus' => 'somethingIsWrong'
+            ->willReturn(
+                [
+                    'transaction' => [
+                        'transactionStatus' => 'somethingIsWrong'
+                    ]
                 ]
-            ]);
+            );
 
         $buildSubject = [
             'foo' => '123'

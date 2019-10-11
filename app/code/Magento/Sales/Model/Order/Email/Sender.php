@@ -12,8 +12,9 @@ use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class Sender
- * @api
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @since 100.0.2
  */
 abstract class Sender
@@ -87,10 +88,12 @@ abstract class Sender
             $this->logger->error($e->getMessage());
             return false;
         }
-        try {
-            $sender->sendCopyTo();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+        if ($this->identityContainer->getCopyMethod() == 'copy') {
+            try {
+                $sender->sendCopyTo();
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
         }
         return true;
     }

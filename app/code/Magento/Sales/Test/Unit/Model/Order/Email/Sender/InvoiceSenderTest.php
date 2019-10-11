@@ -57,7 +57,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -144,6 +144,10 @@ class InvoiceSenderTest extends AbstractSenderTest
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')
                     ->willReturn($this->senderMock);

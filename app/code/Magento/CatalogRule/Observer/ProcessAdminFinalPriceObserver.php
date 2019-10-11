@@ -65,7 +65,8 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $product = $observer->getEvent()->getProduct();
-        $date = $this->localeDate->date(null, null, false);
+        $storeId = $product->getStoreId();
+        $date = $this->localeDate->scopeDate($storeId);
         $key = false;
 
         $ruleData = $this->coreRegistry->registry('rule_data');

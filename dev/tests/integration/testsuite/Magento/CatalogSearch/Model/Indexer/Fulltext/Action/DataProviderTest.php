@@ -28,7 +28,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $requestBuilder->setRequestName('quick_search_container');
         $queryRequest = $requestBuilder->create();
         /** @var \Magento\Framework\Search\Adapter\Mysql\Adapter $adapter */
-        $adapter = $objectManager->create(\Magento\Framework\Search\Adapter\Mysql\Adapter::class);
+        $adapterFactory = $objectManager->create(\Magento\Search\Model\AdapterFactory::class);
+        $adapter = $adapterFactory->create();
         $queryResponse = $adapter->query($queryRequest);
         $actualIds = [];
         foreach ($queryResponse as $document) {

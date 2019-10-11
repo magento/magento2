@@ -17,7 +17,13 @@
                         Size is 4 bytes.
                     </xs:documentation>
                 </xs:annotation>
-                <xs:attribute name="default" type="xs:integer" />
+                <xs:attribute name="default">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="\d+|null" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
                 <xs:attribute name="padding">
                     <xs:annotation>
                         <xs:documentation>
