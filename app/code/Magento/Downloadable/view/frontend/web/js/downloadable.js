@@ -11,7 +11,7 @@ define([
     'Magento_Catalog/js/price-box'
 ], function ($) {
     'use strict';
-    
+
     /**
      * Downloadable widget
      */
