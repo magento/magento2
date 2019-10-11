@@ -298,7 +298,7 @@ class IndexBuilder
         }
 
         foreach ($ids as $productId) {
-            $this->cleanProductPriceIndex($productId);
+            $this->cleanProductPriceIndex([$productId]);
             $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
         }
 
