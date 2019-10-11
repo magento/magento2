@@ -150,7 +150,7 @@
         <fillField selector="{{AdminCatalogPriceRuleActionsSection.discountAmount}}" userInput="{{catalogRule.discount_amount}}" stepKey="fillDiscountValue"/>
         <selectOption selector="{{AdminCatalogPriceRuleActionsSection.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
     </actionGroup>
-
+    
     <actionGroup name="AdminFillCatalogRuleConditionActionGroup">
         <arguments>
             <argument name="condition" type="string"/>

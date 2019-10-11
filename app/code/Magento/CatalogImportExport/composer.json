@@ -2,7 +2,7 @@
     "name": "magento/module-catalog-import-export",
     "description": "N/A",
     "require": {
-        "php": "~7.1.0||~7.2.0",
+        "php": "~7.0.13|~7.1.0|~7.2.0",
         "magento/module-catalog": "102.0.*",
         "magento/module-catalog-url-rewrite": "100.2.*",
         "magento/module-eav": "101.0.*",
@@ -12,11 +12,12 @@
         "magento/module-catalog-inventory": "100.2.*",
         "magento/module-media-storage": "100.2.*",
         "magento/module-customer": "101.0.*",
+        "magento/module-authorization": "100.2.*",
         "magento/framework": "101.0.*",
         "ext-ctype": "*"
     },
     "type": "magento2-module",
-    "version": "100.2.8",
+    "version": "100.2.9",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
