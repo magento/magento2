@@ -270,6 +270,22 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
+        $pricesTypes = [
+            'minimalPrice',
+            'regularPrice',
+            'maximalPrice',
+        ];
+        foreach ($pricesTypes as $priceType) {
+            if (isset($actualResponse['price'][$priceType]['amount']['value'])) {
+                $actualResponse['price'][$priceType]['amount']['value'] =
+                    round($actualResponse['price'][$priceType]['amount']['value'], 4);
+            }
+
+            if (isset($actualResponse['price'][$priceType]['adjustments'][0]['amount']['value'])) {
+                $actualResponse['price'][$priceType]['adjustments'][0]['amount']['value'] =
+                    round($actualResponse['price'][$priceType]['adjustments'][0]['amount']['value'], 4);
+            }
+        }
         // product_object_field_name, expected_value
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
@@ -288,7 +304,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.286501,
+                                            'value' => 0.2865,
                                             'currency' => 'USD',
                                         ],
                                         'code' => 'TAX',
@@ -306,7 +322,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.750001,
+                                            'value' => 0.7500,
                                             'currency' => 'USD',
                                         ],
                                         'code' => 'TAX',
@@ -324,7 +340,7 @@ QUERY;
                                 [
                                     'amount' =>
                                         [
-                                            'value' => 0.286501,
+                                            'value' => 0.2865,
                                             'currency' => 'USD',
                                         ],
                                         'code' => 'TAX',

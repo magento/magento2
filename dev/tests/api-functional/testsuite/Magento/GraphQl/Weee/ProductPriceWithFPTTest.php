@@ -33,6 +33,13 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     /** @var ScopeConfigInterface */
     private $scopeConfig;
 
+
+    /** @var \Magento\Tax\Model\Calculation\Rate[] */
+    private $fixtureTaxRates;
+
+    /** @var \Magento\Tax\Model\Calculation\Rule[] */
+    private $fixtureTaxRules;
+
     /**
      * @inheritdoc
      */
@@ -52,11 +59,28 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
             'tax/calculation/price_includes_tax'
         ];
 
+
+        $this->getFixtureTaxRates();
+        $this->getFixtureTaxRules();
+        $taxRules = $this->getFixtureTaxRules();
+        if (count($taxRules)) {
+            $taxRates = $this->getFixtureTaxRates();
+            foreach ($taxRules as $taxRule) {
+                $taxRule->delete();
+            }
+            foreach ($taxRates as $taxRate) {
+                $taxRate->delete();
+            }
+        }
+
         foreach ($currentSettingsArray as $configPath) {
             $this->initialConfig[$configPath] = $this->scopeConfig->getValue(
                 $configPath
             );
         }
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->reinit();
     }
 
     /**
@@ -64,6 +88,17 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     protected function tearDown(): void
     {
+        $taxRules = $this->getFixtureTaxRules();
+        if (count($taxRules)) {
+            $taxRates = $this->getFixtureTaxRates();
+            foreach ($taxRules as $taxRule) {
+                $taxRule->delete();
+            }
+            foreach ($taxRates as $taxRate) {
+                $taxRate->delete();
+            }
+        }
+
         $this->writeConfig($this->initialConfig);
     }
 
@@ -726,5 +761,48 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
   }
 }
 QUERY;
+    }
+
+    /**
+     * Get tax rates created in Magento\Tax\_files\tax_rule_region_1_al.php
+     *
+     * @return \Magento\Tax\Model\Calculation\Rate[]
+     */
+    private function getFixtureTaxRates()
+    {
+        if ($this->fixtureTaxRates === null) {
+            $this->fixtureTaxRates = [];
+            if ($this->getFixtureTaxRules()) {
+                $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
+                foreach ($taxRateIds as $taxRateId) {
+                    /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
+                    $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
+                    $this->fixtureTaxRates[] = $taxRate->load($taxRateId);
+                }
+            }
+        }
+        return $this->fixtureTaxRates;
+    }
+
+    /**
+     * Get tax rule created in Magento\Tax\_files\tax_rule_region_1_al.php
+     *
+     * @return \Magento\Tax\Model\Calculation\Rule[]
+     */
+    private function getFixtureTaxRules()
+    {
+        if ($this->fixtureTaxRules === null) {
+            $this->fixtureTaxRules = [];
+            $taxRuleCodes = ['AL Test Rule'];
+            foreach ($taxRuleCodes as $taxRuleCode) {
+                /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
+                $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
+                $taxRule->load($taxRuleCode, 'code');
+                if ($taxRule->getId()) {
+                    $this->fixtureTaxRules[] = $taxRule;
+                }
+            }
+        }
+        return $this->fixtureTaxRules;
     }
 }
