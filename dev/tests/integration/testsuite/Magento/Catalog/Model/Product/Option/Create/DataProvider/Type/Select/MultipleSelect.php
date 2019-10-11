@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select\AbstractSelect;
 
 /**
@@ -19,6 +20,6 @@ class MultipleSelect extends AbstractSelect
      */
     protected function getType(): string
     {
-        return 'multiple';
+        return ProductCustomOptionInterface::OPTION_TYPE_MULTIPLE;
     }
 }

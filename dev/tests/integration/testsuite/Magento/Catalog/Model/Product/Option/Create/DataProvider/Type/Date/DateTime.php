@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Date;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Option\Create\DataProvider\AbstractBase;
 
 /**
@@ -19,6 +20,6 @@ class DateTime extends AbstractBase
      */
     protected function getType(): string
     {
-        return 'date_time';
+        return ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME;
     }
 }

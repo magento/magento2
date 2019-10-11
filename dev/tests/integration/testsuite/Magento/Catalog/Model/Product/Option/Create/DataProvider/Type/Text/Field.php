@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Text;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Text\AbstractText;
 
 /**
@@ -19,6 +20,6 @@ class Field extends AbstractText
      */
     protected function getType(): string
     {
-        return 'field';
+        return ProductCustomOptionInterface::OPTION_TYPE_FIELD;
     }
 }

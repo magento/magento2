@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -60,10 +61,12 @@ class UpdateCustomOptionsTest extends AbstractBackendController
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     public function testUpdateCustomOptionWithTypeField(array $optionData, array $updateData): void
     {
         $product = $this->productRepository->get('simple');
+        /** @var ProductCustomOptionInterface|Option $option */
         $option = $this->optionRepositoryFactory->create(['data' => $optionData]);
         $option->setProductSku($product->getSku());
         $product->setOptions([$option]);
@@ -87,9 +90,9 @@ class UpdateCustomOptionsTest extends AbstractBackendController
                         'price' => $currentOption->getPrice(),
                         'price_type' => $currentOption->getPriceType(),
                         'is_use_default' => false,
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         foreach ($updateData as $methodKey => $newValue) {
@@ -100,7 +103,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
                         'options' => [
                             0 => [
                                 $methodKey => $newValue,
-                            ]
+                            ],
                         ],
                     ],
                 ]
@@ -114,12 +117,11 @@ class UpdateCustomOptionsTest extends AbstractBackendController
             );
             $updatedOptions = $this->optionRepository->getProductOptions($product);
             $this->assertCount(1, $updatedOptions);
-            /** @var ProductCustomOptionInterface $updatedOption */
+            /** @var ProductCustomOptionInterface|Option $updatedOption */
             $updatedOption = reset($updatedOptions);
-            $methodName = str_replace('_', '', ucwords($methodKey, '_'));
-            $this->assertEquals($newValue, $updatedOption->{'get' . $methodName}());
+            $this->assertEquals($newValue, $updatedOption->getDataUsingMethod($methodKey));
             $this->assertEquals($option->getOptionId(), $updatedOption->getOptionId());
-            $this->assertNotEquals($option->{'get' . $methodName}(), $updatedOption->{'get' . $methodName}());
+            $this->assertNotEquals($option->getDataUsingMethod($methodKey), $updatedOption->getDataUsingMethod($methodKey));
         }
     }
 }

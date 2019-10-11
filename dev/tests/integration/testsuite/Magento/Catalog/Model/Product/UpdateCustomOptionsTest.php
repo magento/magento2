@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -103,6 +104,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     public function testUpdateAreaCustomOption(array $optionData, array $updateData): void
     {
@@ -118,6 +120,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     public function testUpdateFileCustomOption(array $optionData, array $updateData): void
     {
@@ -133,6 +136,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     public function testUpdateDateCustomOption(array $optionData, array $updateData): void
     {
@@ -148,6 +152,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     public function testUpdateDateTimeCustomOption(array $optionData, array $updateData): void
     {
@@ -163,6 +168,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     public function testUpdateTimeCustomOption(array $optionData, array $updateData): void
     {
@@ -180,6 +186,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionValueData
      * @param array $updateOptionData
      * @param array $updateOptionValueData
+     * @return void
      */
     public function testUpdateDropDownCustomOption(
         array $optionData,
@@ -206,6 +213,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionValueData
      * @param array $updateOptionData
      * @param array $updateOptionValueData
+     * @return void
      */
     public function testUpdateRadioButtonsCustomOption(
         array $optionData,
@@ -232,6 +240,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionValueData
      * @param array $updateOptionData
      * @param array $updateOptionValueData
+     * @return void
      */
     public function testUpdateCheckboxCustomOption(
         array $optionData,
@@ -258,6 +267,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionValueData
      * @param array $updateOptionData
      * @param array $updateOptionValueData
+     * @return void
      */
     public function testUpdateMultipleSelectCustomOption(
         array $optionData,
@@ -278,6 +288,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $updateData
+     * @return void
      */
     private function updateAndAssertNotSelectCustomOptions(array $optionData, array $updateData): void
     {
@@ -286,9 +297,11 @@ class UpdateCustomOptionsTest extends TestCase
         $updatedOption = $this->updateOptionWithValues($updateData, $productSku);
 
         foreach ($updateData as $methodKey => $newValue) {
-            $methodName = str_replace('_', '', ucwords($methodKey, '_'));
-            $this->assertEquals($newValue, $updatedOption->{'get' . $methodName}());
-            $this->assertNotEquals($createdOption->{'get' . $methodName}(), $updatedOption->{'get' . $methodName}());
+            $this->assertEquals($newValue, $updatedOption->getDataUsingMethod($methodKey));
+            $this->assertNotEquals(
+                $createdOption->getDataUsingMethod($methodKey),
+                $updatedOption->getDataUsingMethod($methodKey)
+            );
         }
 
         $this->assertEquals($createdOption->getOptionId(), $updatedOption->getOptionId());
@@ -301,6 +314,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionValueData
      * @param array $updateOptionData
      * @param array $updateOptionValueData
+     * @return void
      */
     private function updateAndAssertSelectCustomOptions(
         array $optionData,
@@ -315,17 +329,19 @@ class UpdateCustomOptionsTest extends TestCase
         $updatedOptionValue = $this->getOptionValue($updatedOption);
 
         foreach ($updateOptionData as $methodKey => $newValue) {
-            $methodName = str_replace('_', '', ucwords($methodKey, '_'));
-            $this->assertEquals($newValue, $updatedOption->{'get' . $methodName}());
-            $this->assertNotEquals($createdOption->{'get' . $methodName}(), $updatedOption->{'get' . $methodName}());
+            $this->assertEquals($newValue, $updatedOption->getDataUsingMethod($methodKey));
+            $this->assertNotEquals(
+                $createdOption->getDataUsingMethod($methodKey),
+                $updatedOption->getDataUsingMethod($methodKey)
+            );
         }
 
         foreach ($updateOptionValueData as $methodKey => $newValue) {
             $methodName = str_replace('_', '', ucwords($methodKey, '_'));
             $this->assertEquals($newValue, $updatedOptionValue->{'get' . $methodName}());
             $this->assertNotEquals(
-                $createdOptionValue->{'get' . $methodName}(),
-                $updatedOptionValue->{'get' . $methodName}()
+                $createdOptionValue->getDataUsingMethod($methodKey),
+                $updatedOptionValue->getDataUsingMethod($methodKey)
             );
         }
 
@@ -337,7 +353,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param string $productSku
-     * @return ProductCustomOptionInterface
+     * @return ProductCustomOptionInterface|Option
      */
     private function createCustomOption(array $optionData, string $productSku): ProductCustomOptionInterface
     {
@@ -359,7 +375,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionData
      * @param array $optionValueData
      * @param string $productSku
-     * @return ProductCustomOptionInterface
+     * @return ProductCustomOptionInterface|Option
      */
     private function createCustomOptionWithValue(
         array $optionData,
@@ -377,7 +393,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @param array $updateData
      * @param string $productSku
-     * @return ProductCustomOptionInterface
+     * @return ProductCustomOptionInterface|Option
      */
     private function updateOptionWithValues(array $updateData, string $productSku): ProductCustomOptionInterface
     {
@@ -385,8 +401,7 @@ class UpdateCustomOptionsTest extends TestCase
         $currentOption = $this->getProductOptionByProductSku($product->getSku());
         $currentOption->setProductSku($product->getSku());
         foreach ($updateData as $methodKey => $newValue) {
-            $methodName = str_replace('_', '', ucwords($methodKey, '_'));
-            $currentOption->{'set' . $methodName}($newValue);
+            $currentOption->setDataUsingMethod($methodKey, $newValue);
         }
         $product->setOptions([$currentOption]);
         $this->productRepository->save($product);
@@ -400,7 +415,7 @@ class UpdateCustomOptionsTest extends TestCase
      * @param array $optionUpdateData
      * @param array $optionValueUpdateData
      * @param string $productSku
-     * @return ProductCustomOptionInterface
+     * @return ProductCustomOptionInterface|Option
      */
     private function updateOptionAndValueWithValues(
         array $optionUpdateData,
@@ -412,12 +427,10 @@ class UpdateCustomOptionsTest extends TestCase
         $currentOption->setProductSku($product->getSku());
         $optionValue = $this->getOptionValue($currentOption);
         foreach ($optionUpdateData as $methodKey => $newValue) {
-            $methodName = str_replace('_', '', ucwords($methodKey, '_'));
-            $currentOption->{'set' . $methodName}($newValue);
+            $currentOption->setDataUsingMethod($methodKey, $newValue);
         }
         foreach ($optionValueUpdateData as $methodKey => $newValue) {
-            $methodName = str_replace('_', '', ucwords($methodKey, '_'));
-            $optionValue->{'set' . $methodName}($newValue);
+            $optionValue->setDataUsingMethod($methodKey, $newValue);
         }
         $currentOption->setValues([$optionValue]);
         $product->setOptions([$currentOption]);
@@ -430,13 +443,12 @@ class UpdateCustomOptionsTest extends TestCase
      * Get product option by product sku.
      *
      * @param string $productSku
-     * @return ProductCustomOptionInterface
+     * @return ProductCustomOptionInterface|Option
      */
     private function getProductOptionByProductSku(string $productSku): ProductCustomOptionInterface
     {
         $product = $this->productRepository->get($productSku);
         $currentOptions = $this->optionRepository->getProductOptions($product);
-        $this->assertCount(1, $currentOptions);
 
         return reset($currentOptions);
     }
@@ -445,12 +457,11 @@ class UpdateCustomOptionsTest extends TestCase
      * Return custom option value.
      *
      * @param ProductCustomOptionInterface $customOption
-     * @return ProductCustomOptionValuesInterface
+     * @return ProductCustomOptionValuesInterface|Value
      */
     private function getOptionValue(ProductCustomOptionInterface $customOption): ProductCustomOptionValuesInterface
     {
         $optionValues = $customOption->getValues();
-        $this->assertCount(1, $optionValues);
 
         return reset($optionValues);
     }

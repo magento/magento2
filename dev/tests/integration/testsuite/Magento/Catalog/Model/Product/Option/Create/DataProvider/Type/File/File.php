@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\File;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product\Option\Create\DataProvider\AbstractBase;
 
 /**
@@ -85,6 +86,6 @@ class File extends AbstractBase
      */
     protected function getType(): string
     {
-        return 'file';
+        return ProductCustomOptionInterface::OPTION_TYPE_FILE;
     }
 }
