@@ -27,21 +27,9 @@ class LegacyResolver implements VariableResolverInterface
     private $stringUtils;
 
     /**
-     * @var array
-     */
-    private $stackArgs;
-
-    /**
      * @var VariableFactory
      */
     private $variableTokenizerFactory;
-
-    /**
-     * Stack of stacks for recursive variable resolution
-     *
-     * @var array
-     */
-    private $storedStacks = [];
 
     /**
      * @param StringUtils $stringUtils
@@ -64,25 +52,25 @@ class LegacyResolver implements VariableResolverInterface
 
         $tokenizer = $this->variableTokenizerFactory->create();
         $tokenizer->setString($value);
-        $this->stackArgs = $tokenizer->tokenize();
+        $stackArgs = $tokenizer->tokenize();
         $result = null;
         $last = 0;
-        for ($i = 0, $count = count($this->stackArgs); $i < $count; $i++) {
-            if ($i == 0 && isset($templateVariables[$this->stackArgs[$i]['name']])) {
+        for ($i = 0, $count = count($stackArgs); $i < $count; $i++) {
+            if ($i == 0 && isset($templateVariables[$stackArgs[$i]['name']])) {
                 // Getting of template value
-                $this->stackArgs[$i]['variable'] = &$templateVariables[$this->stackArgs[$i]['name']];
-            } elseif ($this->shouldHandleDataAccess($i)) {
-                $this->handleDataAccess($i, $filter, $templateVariables);
+                $stackArgs[$i]['variable'] = &$templateVariables[$stackArgs[$i]['name']];
+            } elseif ($this->shouldHandleDataAccess($i, $stackArgs)) {
+                $this->handleDataAccess($i, $filter, $templateVariables, $stackArgs);
                 $last = $i;
-            } elseif ($this->shouldHandleAsObjectAccess($i)) {
-                $this->handleObjectMethod($filter, $templateVariables, $i);
+            } elseif ($this->shouldHandleAsObjectAccess($i, $stackArgs)) {
+                $this->handleObjectMethod($filter, $templateVariables, $i, $stackArgs);
                 $last = $i;
             }
         }
 
-        if (isset($this->stackArgs[$last]['variable'])) {
+        if (isset($stackArgs[$last]['variable'])) {
             // If value for construction exists set it
-            $result = $this->stackArgs[$last]['variable'];
+            $result = $stackArgs[$last]['variable'];
         }
 
         return $result;
@@ -96,15 +84,13 @@ class LegacyResolver implements VariableResolverInterface
      * @param array $templateVariables
      * @return array
      */
-    private function getStackArgs($stack, Template $filter, array $templateVariables)
+    private function getStackArgs($stack, Template $filter, array $templateVariables): array
     {
         foreach ($stack as $i => $value) {
             if (is_array($value)) {
                 $stack[$i] = $this->getStackArgs($value, $filter, $templateVariables);
             } elseif (substr((string)$value, 0, 1) === '$') {
-                $this->storedStacks[] = $this->stackArgs;
                 $stack[$i] = $this->resolve(substr($value, 1), $filter, $templateVariables);
-                $this->stackArgs = array_pop($this->storedStacks);
             }
         }
 
@@ -115,18 +101,19 @@ class LegacyResolver implements VariableResolverInterface
      * Handle the access of a variable's property at an index
      *
      * @param int $i
+     * @param array $stackArgs
      */
-    private function handlePropertyAccess(int $i): void
+    private function handlePropertyAccess(int $i, array &$stackArgs): void
     {
-        if (is_array($this->stackArgs[$i - 1]['variable'])) {
-            $this->stackArgs[$i]['variable'] = $this->stackArgs[$i - 1]['variable'][$this->stackArgs[$i]['name']];
+        if (is_array($stackArgs[$i - 1]['variable'])) {
+            $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable'][$stackArgs[$i]['name']];
         } else {
-            $caller = 'get' . $this->stringUtils->upperCaseWords($this->stackArgs[$i]['name'], '_', '');
-            $this->stackArgs[$i]['variable'] = method_exists(
-                $this->stackArgs[$i - 1]['variable'],
+            $caller = 'get' . $this->stringUtils->upperCaseWords($stackArgs[$i]['name'], '_', '');
+            $stackArgs[$i]['variable'] = method_exists(
+                $stackArgs[$i - 1]['variable'],
                 $caller
-            ) ? $this->stackArgs[$i - 1]['variable']->{$caller}() : $this->stackArgs[$i - 1]['variable']->getData(
-                $this->stackArgs[$i]['name']
+            ) ? $stackArgs[$i - 1]['variable']->{$caller}() : $stackArgs[$i - 1]['variable']->getData(
+                $stackArgs[$i]['name']
             );
         }
     }
@@ -137,21 +124,26 @@ class LegacyResolver implements VariableResolverInterface
      * @param Template $filter
      * @param array $templateVariables
      * @param int $i
+     * @param array $stackArgs
      */
-    private function handleDataObjectMethod(Template $filter, array $templateVariables, int $i): void
-    {
-        if (method_exists($this->stackArgs[$i - 1]['variable'], $this->stackArgs[$i]['name'])
-            || substr($this->stackArgs[$i]['name'], 0, 3) == 'get'
+    private function handleDataObjectMethod(
+        Template $filter,
+        array $templateVariables,
+        int $i,
+        array &$stackArgs
+    ): void {
+        if (method_exists($stackArgs[$i - 1]['variable'], $stackArgs[$i]['name'])
+            || substr($stackArgs[$i]['name'], 0, 3) == 'get'
         ) {
-            $this->stackArgs[$i]['args'] = $this->getStackArgs(
-                $this->stackArgs[$i]['args'],
+            $stackArgs[$i]['args'] = $this->getStackArgs(
+                $stackArgs[$i]['args'],
                 $filter,
                 $templateVariables
             );
 
-            $this->stackArgs[$i]['variable'] = call_user_func_array(
-                [$this->stackArgs[$i - 1]['variable'], $this->stackArgs[$i]['name']],
-                $this->stackArgs[$i]['args']
+            $stackArgs[$i]['variable'] = call_user_func_array(
+                [$stackArgs[$i - 1]['variable'], $stackArgs[$i]['name']],
+                $stackArgs[$i]['args']
             );
         }
     }
@@ -162,14 +154,15 @@ class LegacyResolver implements VariableResolverInterface
      * @param Template $filter
      * @param array $templateVariables
      * @param int $i
+     * @param array $stackArgs
      */
-    private function handleObjectMethod(Template $filter, array $templateVariables, int $i): void
+    private function handleObjectMethod(Template $filter, array $templateVariables, int $i, array &$stackArgs): void
     {
-        $object = $this->stackArgs[$i - 1]['variable'];
-        $method = $this->stackArgs[$i]['name'];
+        $object = $stackArgs[$i - 1]['variable'];
+        $method = $stackArgs[$i]['name'];
         if (method_exists($object, $method)) {
-            $args = $this->getStackArgs($this->stackArgs[$i]['args'], $filter, $templateVariables);
-            $this->stackArgs[$i]['variable'] = call_user_func_array([$object, $method], $args);
+            $args = $this->getStackArgs($stackArgs[$i]['args'], $filter, $templateVariables);
+            $stackArgs[$i]['variable'] = call_user_func_array([$object, $method], $args);
         }
     }
 
@@ -177,14 +170,15 @@ class LegacyResolver implements VariableResolverInterface
      * Return if the given index should be processed for data access
      *
      * @param int $i
+     * @param array $stackArgs
      * @return bool
      */
-    private function shouldHandleDataAccess(int $i): bool
+    private function shouldHandleDataAccess(int $i, array &$stackArgs): bool
     {
-        return isset($this->stackArgs[$i - 1]['variable'])
+        return isset($stackArgs[$i - 1]['variable'])
             && (
-                $this->stackArgs[$i - 1]['variable'] instanceof DataObject
-                || is_array($this->stackArgs[$i - 1]['variable'])
+                $stackArgs[$i - 1]['variable'] instanceof DataObject
+                || is_array($stackArgs[$i - 1]['variable'])
             );
     }
 
@@ -192,13 +186,14 @@ class LegacyResolver implements VariableResolverInterface
      * Return if the given index should be processed for object access
      *
      * @param int $i
+     * @param array $stackArgs
      * @return bool
      */
-    private function shouldHandleAsObjectAccess(int $i): bool
+    private function shouldHandleAsObjectAccess(int $i, array &$stackArgs): bool
     {
-        return isset($this->stackArgs[$i - 1]['variable'])
-            && is_object($this->stackArgs[$i - 1]['variable'])
-            && $this->stackArgs[$i]['type'] == 'method';
+        return isset($stackArgs[$i - 1]['variable'])
+            && is_object($stackArgs[$i - 1]['variable'])
+            && $stackArgs[$i]['type'] == 'method';
     }
 
     /**
@@ -207,14 +202,15 @@ class LegacyResolver implements VariableResolverInterface
      * @param int $i
      * @param Template $filter
      * @param array $templateVariables
+     * @param array $stackArgs
      */
-    private function handleDataAccess(int $i, Template $filter, array $templateVariables): void
+    private function handleDataAccess(int $i, Template $filter, array $templateVariables, array &$stackArgs): void
     {
         // If data object calling methods or getting properties
-        if ($this->stackArgs[$i]['type'] == 'property') {
-            $this->handlePropertyAccess($i);
-        } elseif ($this->stackArgs[$i]['type'] == 'method') {
-            $this->handleDataObjectMethod($filter, $templateVariables, $i);
+        if ($stackArgs[$i]['type'] == 'property') {
+            $this->handlePropertyAccess($i, $stackArgs);
+        } elseif ($stackArgs[$i]['type'] == 'method') {
+            $this->handleDataObjectMethod($filter, $templateVariables, $i, $stackArgs);
         }
     }
 }

@@ -19,17 +19,10 @@ use Magento\Framework\Filter\VariableResolverInterface;
  */
 class StrictResolver implements VariableResolverInterface
 {
-    private $stackArgs;
-
     /**
      * @var VariableFactory
      */
     private $variableTokenizerFactory;
-
-    /**
-     * @var array
-     */
-    private $storedStacks = [];
 
     /**
      * @param VariableFactory $variableTokenizerFactory
@@ -50,25 +43,25 @@ class StrictResolver implements VariableResolverInterface
 
         $tokenizer = $this->variableTokenizerFactory->create();
         $tokenizer->setString($value);
-        $this->stackArgs = $tokenizer->tokenize();
+        $stackArgs = $tokenizer->tokenize();
         $result = null;
         $last = 0;
-        for ($i = 0, $count = count($this->stackArgs); $i < $count; $i++) {
-            if ($i === 0 && isset($templateVariables[$this->stackArgs[$i]['name']])) {
+        for ($i = 0, $count = count($stackArgs); $i < $count; $i++) {
+            if ($i === 0 && isset($templateVariables[$stackArgs[$i]['name']])) {
                 // Getting of template value
-                $this->stackArgs[$i]['variable'] = &$templateVariables[$this->stackArgs[$i]['name']];
-            } elseif ($this->shouldHandleDataAccess($i)) {
-                $this->handleDataAccess($i, $filter, $templateVariables);
+                $stackArgs[$i]['variable'] = &$templateVariables[$stackArgs[$i]['name']];
+            } elseif ($this->shouldHandleDataAccess($i, $stackArgs)) {
+                $this->handleDataAccess($i, $filter, $templateVariables, $stackArgs);
 
                 $last = $i;
             }
         }
 
-        if (isset($this->stackArgs[$last]['variable'])
-            && (is_scalar($this->stackArgs[$last]['variable']) || is_array($this->stackArgs[$last]['variable']))
+        if (isset($stackArgs[$last]['variable'])
+            && (is_scalar($stackArgs[$last]['variable']) || is_array($stackArgs[$last]['variable']))
         ) {
             // If value for construction exists set it
-            $result = $this->stackArgs[$last]['variable'];
+            $result = $stackArgs[$last]['variable'];
         }
 
         return $result;
@@ -80,20 +73,21 @@ class StrictResolver implements VariableResolverInterface
      * @param int $i
      * @param Template $filter
      * @param array $templateVariables
+     * @param array $stackArgs
      */
-    private function handleDataAccess(int $i, Template $filter, array $templateVariables): void
+    private function handleDataAccess(int $i, Template $filter, array $templateVariables, array &$stackArgs): void
     {
         // If data object calling methods or getting properties
-        if ($this->stackArgs[$i]['type'] == 'property') {
-            if (is_array($this->stackArgs[$i - 1]['variable'])) {
-                $this->stackArgs[$i]['variable'] = $this->stackArgs[$i - 1]['variable'][$this->stackArgs[$i]['name']];
+        if ($stackArgs[$i]['type'] == 'property') {
+            if (is_array($stackArgs[$i - 1]['variable'])) {
+                $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable'][$stackArgs[$i]['name']];
             } else {
                 // Strict mode should not call getter methods except DataObject's getData
-                $this->stackArgs[$i]['variable'] = $this->stackArgs[$i - 1]['variable']
-                    ->getData($this->stackArgs[$i]['name']);
+                $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']
+                    ->getData($stackArgs[$i]['name']);
             }
-        } elseif ($this->stackArgs[$i]['type'] == 'method' && substr($this->stackArgs[$i]['name'], 0, 3) == 'get') {
-            $this->handleGetterMethod($i, $filter, $templateVariables);
+        } elseif ($stackArgs[$i]['type'] == 'method' && substr($stackArgs[$i]['name'], 0, 3) == 'get') {
+            $this->handleGetterMethod($i, $filter, $templateVariables, $stackArgs);
         }
     }
 
@@ -103,25 +97,26 @@ class StrictResolver implements VariableResolverInterface
      * @param int $i
      * @param Template $filter
      * @param array $templateVariables
+     * @param array $stackArgs
      */
-    private function handleGetterMethod(int $i, Template $filter, array $templateVariables): void
+    private function handleGetterMethod(int $i, Template $filter, array $templateVariables, array &$stackArgs): void
     {
-        if ($this->stackArgs[$i]['name'] === 'getUrl'
-            && $this->stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
+        if ($stackArgs[$i]['name'] === 'getUrl'
+            && $stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
         ) {
-            $this->stackArgs[$i]['args'] = $this->getStackArgs(
-                $this->stackArgs[$i]['args'],
+            $stackArgs[$i]['args'] = $this->getStackArgs(
+                $stackArgs[$i]['args'],
                 $filter,
                 $templateVariables
             );
 
-            $this->stackArgs[$i]['args'][0] = $templateVariables['store'];
-            $this->stackArgs[$i]['variable'] = $this->stackArgs[$i - 1]['variable']->getUrl(
-                ...$this->stackArgs[$i]['args']
+            $stackArgs[$i]['args'][0] = $templateVariables['store'];
+            $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']->getUrl(
+                ...$stackArgs[$i]['args']
             );
         } else {
-            $dataKey = $this->extractDataKeyFromGetter($this->stackArgs[$i]['name']);
-            $this->stackArgs[$i]['variable'] = $this->stackArgs[$i - 1]['variable']->getData($dataKey);
+            $dataKey = $this->extractDataKeyFromGetter($stackArgs[$i]['name']);
+            $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']->getData($dataKey);
         }
     }
 
@@ -133,15 +128,13 @@ class StrictResolver implements VariableResolverInterface
      * @param array $templateVariables
      * @return array
      */
-    private function getStackArgs($stack, Template $filter, array $templateVariables)
+    private function getStackArgs($stack, Template $filter, array $templateVariables): array
     {
         foreach ($stack as $i => $value) {
             if (is_array($value)) {
                 $stack[$i] = $this->getStackArgs($value, $filter, $templateVariables);
             } elseif (substr((string)$value, 0, 1) === '$') {
-                $this->storedStacks[] = $this->stackArgs;
                 $stack[$i] = $this->resolve(substr($value, 1), $filter, $templateVariables);
-                $this->stackArgs = array_pop($this->storedStacks);
             }
         }
 
@@ -163,15 +156,16 @@ class StrictResolver implements VariableResolverInterface
      * Return if the given index should be processed for data access
      *
      * @param int $i
+     * @param array $stackArgs
      * @return bool
      */
-    private function shouldHandleDataAccess(int $i): bool
+    private function shouldHandleDataAccess(int $i, array &$stackArgs): bool
     {
-        return isset($this->stackArgs[$i - 1]['variable'])
+        return isset($stackArgs[$i - 1]['variable'])
             && (
-                $this->stackArgs[$i - 1]['variable'] instanceof DataObject
-                || $this->stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
-                || is_array($this->stackArgs[$i - 1]['variable'])
+                $stackArgs[$i - 1]['variable'] instanceof DataObject
+                || $stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
+                || is_array($stackArgs[$i - 1]['variable'])
             );
     }
 }
