@@ -58,3 +58,7 @@ The code is licensed under [EULA](https://magefan.com/end-user-license-agreement
   * [Magento 2 Lazy Load Extension](https://magefan.com/magento-2-image-lazy-load-extension)
   * [Magento 2 Rocket JavaScript Extension](https://magefan.com/rocket-javascript-deferred-javascript)
   * [Magento 2 CLI Extension](https://magefan.com/magento2-cli-extension)
+  * [Magento Twitter Cards Extension](https://magefan.com/magento-2-twitter-cards-extension)
+  * [Magento 2 Mautic Integration Extension](https://magefan.com/magento-2-mautic-extension)
+  * [Magento 2 Alternate Hreflang Extension](https://magefan.com/magento2-alternate-hreflang-extension)
+
