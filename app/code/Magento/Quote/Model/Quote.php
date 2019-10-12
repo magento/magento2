@@ -857,7 +857,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->setCustomerId($this->_customer->getId());
         }
 
-        if (!$this->_customer->getId()) {
+        if (!$this->getCustomerId()) {
             $this->setCustomerIsGuest(true);
         } else {
             $this->setCustomerIsGuest(false);
