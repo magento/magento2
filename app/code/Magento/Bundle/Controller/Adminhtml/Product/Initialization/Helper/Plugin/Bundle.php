@@ -127,6 +127,8 @@ class Bundle
     }
 
     /**
+     * Process Bundle Options Data
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -179,6 +181,8 @@ class Bundle
     }
 
     /**
+     * Process Dynamic Options Data
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -212,6 +216,8 @@ class Bundle
     }
 
     /**
+     * Build Link
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $linkData
      *
