@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Image\Adapter;
 
 /**
@@ -60,9 +59,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
-        if (!$filename || filesize($filename) === 0) {
-            throw new \InvalidArgumentException('Wrong file');
-        }
         $this->_fileName = $filename;
         $this->_reset();
         $this->getMimeType();
@@ -71,10 +67,12 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             throw new \OverflowException('Memory limit has been reached.');
         }
         $this->imageDestroy();
-        $this->_imageHandler = call_user_func(
-            $this->_getCallback('create', null, sprintf('Unsupported image format. File: %s', $this->_fileName)),
-            $this->_fileName
-        );
+        if (strpos($this->_fileMimeType, 'ico') === false) {
+            $this->_imageHandler = call_user_func(
+                $this->_getCallback('create', null, sprintf('Unsupported image format. File: %s', $this->_fileName)),
+                $this->_fileName
+            );
+        }
         $fileType = $this->getImageType();
         if (in_array($fileType, [IMAGETYPE_PNG, IMAGETYPE_GIF])) {
             $this->_keepTransparency = true;
@@ -204,8 +202,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         if ($quality) {
             $functionParameters[] = $quality;
         }
-
-        call_user_func_array($this->_getCallback('output'), $functionParameters);
+        if (strpos($this->_fileMimeType, 'ico') === false) {
+            call_user_func_array($this->_getCallback('output'), $functionParameters);
+        }
     }
 
     /**
@@ -218,7 +217,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     public function getImage()
     {
         ob_start();
-        call_user_func($this->_getCallback('output'), $this->_imageHandler);
+        if (strpos($this->_fileMimeType, 'ico') === false) {
+            call_user_func($this->_getCallback('output'), $this->_imageHandler);
+        }
         return ob_get_clean();
     }
 
@@ -229,8 +230,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param null|int $fileType
      * @param string $unsupportedText
      * @return string
-     * @throws \InvalidArgumentException
-     * @throws \BadFunctionCallException
+     * @throws \Exception
      */
     private function _getCallback($callbackType, $fileType = null, $unsupportedText = 'Unsupported image format.')
     {
@@ -238,10 +238,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $fileType = $this->_fileType;
         }
         if (empty(self::$_callbacks[$fileType])) {
-            throw new \InvalidArgumentException($unsupportedText);
+            throw new \Exception($unsupportedText);
         }
         if (empty(self::$_callbacks[$fileType][$callbackType])) {
-            throw new \BadFunctionCallException('Callback not found.');
+            throw new \Exception('Callback not found.');
         }
         return self::$_callbacks[$fileType][$callbackType];
     }
@@ -253,7 +253,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param resource &$imageResourceTo
      * @return int
-     * @throws \InvalidArgumentException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _fillBackgroundColor(&$imageResourceTo)
@@ -266,17 +266,17 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                 // fill truecolor png with alpha transparency
                 if ($isAlpha) {
                     if (!imagealphablending($imageResourceTo, false)) {
-                        throw new \InvalidArgumentException('Failed to set alpha blending for PNG image.');
+                        throw new \Exception('Failed to set alpha blending for PNG image.');
                     }
                     $transparentAlphaColor = imagecolorallocatealpha($imageResourceTo, 0, 0, 0, 127);
                     if (false === $transparentAlphaColor) {
-                        throw new \InvalidArgumentException('Failed to allocate alpha transparency for PNG image.');
+                        throw new \Exception('Failed to allocate alpha transparency for PNG image.');
                     }
                     if (!imagefill($imageResourceTo, 0, 0, $transparentAlphaColor)) {
-                        throw new \InvalidArgumentException('Failed to fill PNG image with alpha transparency.');
+                        throw new \Exception('Failed to fill PNG image with alpha transparency.');
                     }
                     if (!imagesavealpha($imageResourceTo, true)) {
-                        throw new \InvalidArgumentException('Failed to save alpha transparency into PNG image.');
+                        throw new \Exception('Failed to save alpha transparency into PNG image.');
                     }
 
                     return $transparentAlphaColor;
@@ -288,22 +288,22 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
                         $transparentColor = imagecolorallocate($imageResourceTo, $r, $g, $b);
                     }
                     if (false === $transparentColor) {
-                        throw new \InvalidArgumentException('Failed to allocate transparent color for image.');
+                        throw new \Exception('Failed to allocate transparent color for image.');
                     }
                     if (!imagefill($imageResourceTo, 0, 0, $transparentColor)) {
-                        throw new \InvalidArgumentException('Failed to fill image with transparency.');
+                        throw new \Exception('Failed to fill image with transparency.');
                     }
                     imagecolortransparent($imageResourceTo, $transparentColor);
                     return $transparentColor;
                 }
             } catch (\Exception $e) {
-                throw new \DomainException('Failed to fill image.');
+                // fallback to default background color
             }
         }
         list($r, $g, $b) = $this->_backgroundColor;
         $color = imagecolorallocate($imageResourceTo, $r, $g, $b);
         if (!imagefill($imageResourceTo, 0, 0, $color)) {
-            throw new \InvalidArgumentException("Failed to fill image background with color {$r} {$g} {$b}.");
+            throw new \Exception("Failed to fill image background with color {$r} {$g} {$b}.");
         }
 
         return $color;
@@ -324,12 +324,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks if image has alpha transparency
      *
      * @param resource $imageResource
-     * @param int $fileType
-     * @param bool $isAlpha
-     * @param bool $isTrueColor
-     *
+     * @param int $fileType one of the constants IMAGETYPE_*
+     * @param bool &$isAlpha
+     * @param bool &$isTrueColor
      * @return boolean
-     *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
@@ -437,10 +435,12 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
     {
         list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType,) = $this->_getImageOptions($imagePath);
         $this->_getFileAttributes();
-        $watermark = call_user_func(
-            $this->_getCallback('create', $watermarkFileType, 'Unsupported watermark image format.'),
-            $imagePath
-        );
+        if (strpos($this->_fileMimeType, 'ico') === false) {
+            $watermark = call_user_func(
+                $this->_getCallback('create', $watermarkFileType, 'Unsupported watermark image format.'),
+                $imagePath
+            );
+        }
 
         $merged = false;
 
@@ -644,13 +644,13 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * Checks required dependencies
      *
      * @return void
-     * @throws \RuntimeException If some of dependencies are missing
+     * @throws \Exception If some of dependencies are missing
      */
     public function checkDependencies()
     {
         foreach ($this->_requiredExtensions as $value) {
             if (!extension_loaded($value)) {
-                throw new \RuntimeException("Required PHP extension '{$value}' was not loaded.");
+                throw new \Exception("Required PHP extension '{$value}' was not loaded.");
             }
         }
     }
@@ -762,7 +762,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param string $text
      * @param string $font
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     protected function _createImageFromTtfText($text, $font)
     {
@@ -784,7 +784,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $text
         );
         if ($result === false) {
-            throw new \InvalidArgumentException('Unable to create TTF text');
+            throw new \Exception('Unable to create TTF text');
         }
     }
 
