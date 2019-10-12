@@ -203,6 +203,7 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-alpha" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
             </settings>
@@ -214,6 +215,9 @@
                 </item>
             </argument>
             <settings>
+             <validation>
+                    <rule name="validate-alpha" xsi:type="boolean">true</rule>
+                </validation>
                 <dataType>text</dataType>
                 <visible>true</visible>
             </settings>
@@ -227,6 +231,7 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-alpha" xsi:type="boolean">true</rule>
                 </validation>
                 <dataType>text</dataType>
             </settings>
