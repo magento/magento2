@@ -5,34 +5,35 @@
  */
 -->
 <div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
-    <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
-    <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
-    <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
-    <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
-    <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
-    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
-
-    <each args="data: currentBillingAddress().customAttributes, as: 'element'">
-        <if args="typeof element === 'object'">
-            <if args="element.label">
-                <text args="element.label"/>
-            </if>
-            <ifnot args="element.label">
-                <if args="element.value">
-                    <text args="element.value"/>
+        <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
+        <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
+        <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
+        <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
+        <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
+        <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
+    
+        <each args="data: currentBillingAddress().customAttributes, as: 'element'">
+            <each args="data: Object.keys(element), as: 'attribute'">
+                <if args="typeof element[attribute] === 'object'">
+                    <ifnot args="element[attribute].label">
+                        <if args="element[attribute].value">
+                            <text args="element[attribute].value"/><br>
+                        </if>
+                    </ifnot>
                 </if>
-            </ifnot>
-        </if>
-        <if args="typeof element === 'string'">
-            <text args="element"/>
-        </if><br/>
-    </each>
-
-    <button visible="!isAddressSameAsShipping()"
-            type="button"
-            class="action action-edit-address"
-            click="editAddress">
-        <span translate="'Edit'"></span>
-    </button>
-</div>
-
+            </each>
+            <if args="typeof element['value'] === 'string'">
+                    <text args="element['value']"/>
+            </if>
+            <br/>
+        </each>
+    
+        <button visible="!isAddressSameAsShipping()"
+                type="button"
+                class="action action-edit-address"
+                click="editAddress">
+            <span translate="'Edit'"></span>
+        </button>
+    </div>
+    
+    
