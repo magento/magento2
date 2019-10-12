@@ -6,7 +6,9 @@
 
 namespace Magento\Sales\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
@@ -16,8 +18,10 @@ use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFact
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Framework\App\ObjectManager;
 use Magento\Tax\Api\OrderTaxManagementInterface;
+use Magento\Payment\Api\Data\PaymentAdditionalInfoInterface;
+use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 /**
  * Repository class
@@ -62,21 +66,58 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     private $orderTaxManagement;
 
     /**
+     * @var PaymentAdditionalInfoFactory
+     */
+    private $paymentAdditionalInfoFactory;
+
+    /**
+     * @var JsonSerializer
+     */
+    private $serializer;
+
+    /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
+     * @var TimezoneInterface
+     */
+    protected $locale;
+
+    /**
+     * @var Template
+     */
+    protected $template;
+
+    /**
      * Constructor
      *
      * @param Metadata $metadata
+     * @param \Magento\Framework\View\Element\Template $template
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $locale
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory|null $orderExtensionFactory
      * @param OrderTaxManagementInterface|null $orderTaxManagement
+     * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
+     * @param JsonSerializer|null $serializer
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(
         Metadata $metadata,
+        \Magento\Framework\View\Element\Template $template,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $locale,
         SearchResultFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory = null,
-        OrderTaxManagementInterface $orderTaxManagement = null
+        OrderTaxManagementInterface $orderTaxManagement = null,
+        PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
+        JsonSerializer $serializer = null,
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null
     ) {
+        $this->locale = $locale;
+        $this->template = $template;
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor ?: ObjectManager::getInstance()
@@ -85,6 +126,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             ->get(\Magento\Sales\Api\Data\OrderExtensionFactory::class);
         $this->orderTaxManagement = $orderTaxManagement ?: ObjectManager::getInstance()
             ->get(OrderTaxManagementInterface::class);
+        $this->paymentAdditionalInfoFactory = $paymentAdditionalInfoFactory ?: ObjectManager::getInstance()
+            ->get(PaymentAdditionalInfoInterfaceFactory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(JsonSerializer::class);
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
+            ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
     }
 
     /**
@@ -108,8 +155,15 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
                     __("The entity that was requested doesn't exist. Verify the entity and try again.")
                 );
             }
+            $date = $this->locale->date($entity->getCreatedAt());
+            $createdAt = $this->template->formatDate($date, \IntlDateFormatter::MEDIUM, true);
+            $entity->setCreatedAt($createdAt);
+            $date = $this->locale->date($entity->getUpdatedAt());
+            $updatedAt = $this->template->formatDate($date, \IntlDateFormatter::MEDIUM, true);
+            $entity->setUpdatedAt($updatedAt);
             $this->setOrderTaxDetails($entity);
             $this->setShippingAssignments($entity);
+            $this->setPaymentAdditionalInfo($entity);
             $this->registry[$id] = $entity;
         }
         return $this->registry[$id];
@@ -139,6 +193,34 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
+     * Set additional info to the order.
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
+    private function setPaymentAdditionalInfo(OrderInterface $order): void
+    {
+        $extensionAttributes = $order->getExtensionAttributes();
+        $paymentAdditionalInformation = $order->getPayment()->getAdditionalInformation();
+
+        $objects = [];
+        foreach ($paymentAdditionalInformation as $key => $value) {
+            /** @var PaymentAdditionalInfoInterface $additionalInformationObject */
+            $additionalInformationObject = $this->paymentAdditionalInfoFactory->create();
+            $additionalInformationObject->setKey($key);
+
+            if (!is_string($value)) {
+                $value = $this->serializer->serialize($value);
+            }
+            $additionalInformationObject->setValue($value);
+
+            $objects[] = $additionalInformationObject;
+        }
+        $extensionAttributes->setPaymentAdditionalInfo($objects);
+        $order->setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
      * Find entities by criteria
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
@@ -148,11 +230,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     {
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
+        $this->extensionAttributesJoinProcessor->process($searchResult);
         $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
         foreach ($searchResult->getItems() as $order) {
             $this->setShippingAssignments($order);
             $this->setOrderTaxDetails($order);
+            $this->setPaymentAdditionalInfo($order);
         }
         return $searchResult;
     }
@@ -250,7 +334,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @throws \Magento\Framework\Exception\InputException
      */
     protected function addFilterGroupToCollection(
