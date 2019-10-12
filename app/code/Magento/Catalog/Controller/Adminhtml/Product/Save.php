@@ -111,12 +111,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($this->getRequest()->getPostValue('is_downloadable')== 0) {
-            $productData = $this->getRequest()->getPostValue();
-            if (isset($productData['downloadable'])) {
-                $this->getRequest()->setPostValue('downloadable', '');
-            }
-        }
         $data = $this->getRequest()->getPostValue();
         $productAttributeSetId = $this->getRequest()->getParam('set');
         $productTypeId = $this->getRequest()->getParam('type');
