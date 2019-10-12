@@ -7,6 +7,7 @@
 namespace Magento\Checkout\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Cart source
@@ -90,8 +91,13 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     {
         $totals = $this->getQuote()->getTotals();
         $subtotalAmount = $totals['subtotal']->getValue();
+        $summaryCount = $this->getSummaryCount();
+        if ($summaryCount>0) {
+            $store = ObjectManager::getInstance()->get(\Magento\Framework\Locale\Resolver::class);
+            $summaryCount = \Zend_Locale_Format::toNumber($this->getSummaryCount(), ['locale' => $store->getLocale()]);
+        }
         return [
-            'summary_count' => $this->getSummaryCount(),
+            'summary_count' => $summaryCount,
             'subtotalAmount' => $subtotalAmount,
             'subtotal' => isset($totals['subtotal'])
                 ? $this->checkoutHelper->formatPrice($subtotalAmount)
