@@ -53,7 +53,7 @@
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Backorders</backend_model>
                     <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
-                <field id="max_sale_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="max_sale_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="1" canRestore="1">
                     <label>Maximum Qty Allowed in Shopping Cart</label>
                     <validate>validate-number</validate>
                 </field>
@@ -62,7 +62,7 @@
                     <validate>validate-number</validate>
                     <backend_model>Magento\CatalogInventory\Model\System\Config\Backend\Minqty</backend_model>
                 </field>
-                <field id="min_sale_qty" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="min_sale_qty" translate="label" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="1" canRestore="1">
                     <label>Minimum Qty Allowed in Shopping Cart</label>
                     <frontend_model>Magento\CatalogInventory\Block\Adminhtml\Form\Field\Minsaleqty</frontend_model>
                     <backend_model>Magento\CatalogInventory\Model\System\Config\Backend\Minsaleqty</backend_model>
