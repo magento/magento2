@@ -7,6 +7,7 @@
 namespace Magento\Config\Controller\Adminhtml\System\Config;
 
 use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
+use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * @api
@@ -28,11 +29,12 @@ abstract class AbstractScopeConfig extends \Magento\Config\Controller\Adminhtml\
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
+        AdminSessionsManager $sessionsManager,
         ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config $backendConfig
     ) {
         $this->_backendConfig = $backendConfig;
-        parent::__construct($context, $configStructure, $sectionChecker);
+        parent::__construct($context, $configStructure, $sessionsManager, $sectionChecker);
     }
 
     /**

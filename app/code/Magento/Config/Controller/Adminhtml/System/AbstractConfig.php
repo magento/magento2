@@ -7,6 +7,7 @@
 namespace Magento\Config\Controller\Adminhtml\System;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * System Configuration Abstract Controller
@@ -31,22 +32,30 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
-     * @deprecated 100.2.0
+     * @var AdminSessionsManager
+     */
+    protected $_sessionsManager;
+
+    /**
+     * @deprecated 101.0.0
      */
     protected $_sectionChecker;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
+     * @param AdminSessionsManager $sessionsManager
      * @param mixed $sectionChecker - deprecated
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
+        AdminSessionsManager $sessionsManager,
         $sectionChecker
     ) {
         parent::__construct($context);
         $this->_configStructure = $configStructure;
+        $this->_sessionsManager = $sessionsManager;
         $this->_sectionChecker = $sectionChecker;
     }
 
@@ -58,6 +67,10 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
+        if (!$this->_sessionsManager->getCurrentSession()->isLoggedInStatus()) {
+            $this->messageManager->addSuccessMessage(__('You were logged out due to inactivity.'));
+            return parent::dispatch($request);
+        }
         if (!$request->getParam('section')) {
             try {
                 $request->setParam('section', $this->_configStructure->getFirstSection()->getId());

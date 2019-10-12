@@ -25,11 +25,12 @@ class Edit extends AbstractScopeConfig implements HttpGetActionInterface
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Security\Model\AdminSessionsManager $sessionsManager,
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config $backendConfig,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
-        parent::__construct($context, $configStructure, $sectionChecker, $backendConfig);
+        parent::__construct($context, $configStructure, $sessionsManager, $sectionChecker, $backendConfig);
         $this->resultPageFactory = $resultPageFactory;
     }
 

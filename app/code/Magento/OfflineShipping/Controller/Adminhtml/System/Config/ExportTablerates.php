@@ -32,13 +32,14 @@ class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\Abstr
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Security\Model\AdminSessionsManager $sessionsManager,
         ConfigSectionChecker $sectionChecker,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
         $this->_fileFactory = $fileFactory;
-        parent::__construct($context, $configStructure, $sectionChecker);
+        parent::__construct($context, $configStructure, $sessionsManager, $sectionChecker);
     }
 
     /**

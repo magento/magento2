@@ -45,12 +45,13 @@ class Save extends AbstractConfig implements HttpPostActionInterface
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Security\Model\AdminSessionsManager $sessionsManager,
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\Stdlib\StringUtils $string
     ) {
-        parent::__construct($context, $configStructure, $sectionChecker);
+        parent::__construct($context, $configStructure, $sessionsManager, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;

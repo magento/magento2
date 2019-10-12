@@ -29,11 +29,12 @@ class State extends AbstractScopeConfig implements HttpPostActionInterface, Http
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
+        \Magento\Security\Model\AdminSessionsManager $sessionsManager,
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config $backendConfig,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
-        parent::__construct($context, $configStructure, $sectionChecker, $backendConfig);
+        parent::__construct($context, $configStructure, $sessionsManager, $sectionChecker, $backendConfig);
         $this->resultRawFactory = $resultRawFactory;
     }
 
