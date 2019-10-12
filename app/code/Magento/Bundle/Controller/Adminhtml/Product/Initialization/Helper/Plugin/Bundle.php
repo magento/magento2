@@ -94,6 +94,12 @@ class Bundle
                 if (empty($option['bundle_selections'])) {
                     continue;
                 }
+
+                // Keeping the old bundle selection.
+                if ($this->request->getPost('back') === 'duplicate') {
+                    unset($option['bundle_selections'][$key]['selection_id']);
+                }
+                
                 $result['bundle_selections'][$key] = $option['bundle_selections'];
                 unset($option['bundle_selections']);
                 $result['bundle_options'][$key] = $option;
