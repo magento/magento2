@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types = 1);
+
 namespace Magento\CatalogImportExport\Model\Export;
 
 /**
@@ -70,7 +73,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExport()
     {
@@ -95,7 +98,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportSpecialChars()
     {
@@ -111,7 +114,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
-     * @magentoDbIsolationEnabled
+     * @magentoDbIsolation enabled
      */
     public function testExportWithProductLinks()
     {
@@ -248,9 +251,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportWithFieldsEnclosure()
     {
-        $this->model->setParameters([
-            \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
-        ]);
+        $this->model->setParameters(
+            [
+                \Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE => 1
+            ]
+        );
 
         $this->model->setWriter(
             $this->objectManager->create(
@@ -278,11 +283,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
 
-        $this->model->setParameters([
-            \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
-                'category_ids' => '2,13'
+        $this->model->setParameters(
+            [
+                \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => [
+                    'category_ids' => '2,13'
+                ]
             ]
-        ]);
+        );
 
         $exportData = $this->model->export();
 
@@ -290,6 +297,22 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('Simple Product Three', $exportData);
         $this->assertNotContains('Simple Product Two', $exportData);
         $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
+    }
+
+    /**
+     * Verify that export processed successfully with wrong category path
+     *
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_broken_categories_path.php
+     */
+    public function testExportWithWrongCategoryPath()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $this->model->export();
     }
 
     /**

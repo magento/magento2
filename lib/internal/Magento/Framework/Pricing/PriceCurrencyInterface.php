@@ -78,6 +78,7 @@ interface PriceCurrencyInterface
     /**
      * Round price
      *
+     * @deprecated
      * @param float $price
      * @return float
      */
@@ -93,6 +94,8 @@ interface PriceCurrencyInterface
     public function getCurrency($scope = null, $currency = null);
 
     /**
+     * Get currency symbol
+     *
      * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
      * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @return string

@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Abstract model class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -42,7 +43,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Data changes flag (true after setData|unsetData call)
-     * @var $_hasDataChange bool
+     * @var bool
      */
     protected $_hasDataChanges = false;
 
@@ -199,7 +200,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 
@@ -216,7 +217,12 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Remove unneeded properties from serialization
+     *
      * @return string[]
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -241,6 +247,9 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Init not serializable fields
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -337,8 +346,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array  $key
-     * @param mixed         $value
+     * @param string|array $key
+     * @param mixed $value
      * @return $this
      */
     public function setData($key, $value = null)
@@ -616,6 +625,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Check if save is allowed
+     *
      * @return bool
      */
     public function isSaveAllowed()
@@ -624,6 +635,8 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     }
 
     /**
+     * Set flag property _hasDataChanges
+     *
      * @param bool $flag
      * @return void
      */
@@ -719,6 +732,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Returns validator, which contains all rules to validate this model.
+     *
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|false
@@ -733,6 +747,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Creates validator for the model with all validation rules in it.
+     *
      * Returns FALSE, if no validation rules exist.
      *
      * @return \Zend_Validate_Interface|bool
@@ -770,6 +785,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * Get list of cache tags applied to model object.
+     *
      * Return false if cache tags are not supported by model
      *
      * @return array|false

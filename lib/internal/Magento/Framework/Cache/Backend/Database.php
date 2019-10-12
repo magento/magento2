@@ -27,11 +27,11 @@
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  */
 
-/**
- * Database cache backend
- */
 namespace Magento\Framework\Cache\Backend;
 
+/**
+ * Database cache backend.
+ */
 class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
@@ -139,7 +139,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
      *
-     * @param  string  $id                     Cache id
+     * @param  string $id Cache id
      * @param  boolean $doNotTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|false cached datas
      */
@@ -432,7 +432,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             return $this->_getConnection()->update(
                 $this->_getDataTable(),
                 ['expire_time' => new \Zend_Db_Expr('expire_time+' . $extraLifetime)],
-                ['id=?' => $id, 'expire_time = 0 OR expire_time>' => time()]
+                ['id=?' => $id, 'expire_time = 0 OR expire_time>?' => time()]
             );
         } else {
             return true;

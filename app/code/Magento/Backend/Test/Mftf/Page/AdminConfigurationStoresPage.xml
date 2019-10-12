@@ -14,4 +14,7 @@
     <page name="WebConfigurationPage" url="admin/system_config/edit/section/web/" area="admin" module="Backend">
         <section name="WYSIWYGOptionsSection"/>
     </page>
+    <page name="GeneralConfigurationPage" url="admin/system_config/edit/section/general/" area="admin" module="Backend">
+        <section name="LocaleOptionsSection"/>
+    </page>
 </pages>

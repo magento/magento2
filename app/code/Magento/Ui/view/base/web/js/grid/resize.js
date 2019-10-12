@@ -624,7 +624,7 @@ define([
         },
 
         /**
-         * Generate index that will indentify context
+         * Generate index that will identify context
          *
          * @param {Object} ctx
          * @return {String}

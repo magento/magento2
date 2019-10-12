@@ -23,7 +23,7 @@
     <type name="Magento\Checkout\Api\GuestPaymentInformationManagementInterface">
         <plugin name="validate-guest-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\GuestValidation"/>
     </type>
-    <type name="\Magento\CheckoutAgreements\Model\CheckoutAgreementsList">
+    <type name="Magento\CheckoutAgreements\Model\CheckoutAgreementsList">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\CheckoutAgreements\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>

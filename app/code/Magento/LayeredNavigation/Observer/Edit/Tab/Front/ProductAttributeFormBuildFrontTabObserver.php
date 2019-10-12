@@ -8,7 +8,7 @@
 namespace Magento\LayeredNavigation\Observer\Edit\Tab\Front;
 
 use Magento\Config\Model\Config\Source;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -22,15 +22,15 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
     protected $optionList;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
     /**
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param Source\Yesno $optionList
      */
-    public function __construct(Manager $moduleManager, Source\Yesno $optionList)
+    public function __construct(ModuleManagerInterface $moduleManager, Source\Yesno $optionList)
     {
         $this->optionList = $optionList;
         $this->moduleManager = $moduleManager;
@@ -60,7 +60,11 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
                 'name' => 'is_filterable',
                 'label' => __("Use in Layered Navigation"),
                 'title' => __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price'),
-                'note' => __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.'),
+                'note' => __(
+                    'Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.
+                    <br>Price is not compatible with <b>\'Filterable (no results)\'</b> option - 
+                     it will make no affect on Price filter.'
+                ),
                 'values' => [
                     ['value' => '0', 'label' => __('No')],
                     ['value' => '1', 'label' => __('Filterable (with results)')],

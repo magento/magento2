@@ -33,8 +33,10 @@ class UrlRewritesTest extends GraphQlAbstract
         items {
             name,
             sku,
-            description,
-          	url_rewrites {
+            description {
+                html
+            }
+            url_rewrites {
               url,
               parameters {
                 name,
@@ -87,8 +89,10 @@ QUERY;
         items {
             name,
             sku,
-            description,
-          	url_rewrites {
+            description {
+                html
+            }
+            url_rewrites {
               url,
               parameters {
                 name,

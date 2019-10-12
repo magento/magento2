@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerWithCountryPolandTest">
+        <annotations>
+            <stories value="Create customer"/>
+            <title value="Create customer, from Poland"/>
+            <description value="Login as admin and create customer with Poland address"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5311"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Filter the created customer From grid-->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
+
+        <!--Add the Address -->
+        <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="selectAddress"/>
+        <waitForPageLoad stepKey="waitForAddressPageToLoad"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="ClickOnAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForNewAddressPageToLoad"/>
+        <checkOption selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}" stepKey="EnableDefaultBillingAddress"/>
+        <fillField selector="{{AdminEditCustomerAddressesSection.streetAddress}}" userInput="{{PolandAddress.street}}" stepKey="fillStreetAddress"/>
+        <fillField selector="{{AdminEditCustomerAddressesSection.city}}" userInput="{{PolandAddress.city}}" stepKey="fillCity"/>
+        <scrollTo selector="{{AdminEditCustomerAddressesSection.phone}}" x="0" y="-80" stepKey="scrollToPhone"/>
+        <selectOption selector="{{AdminEditCustomerAddressesSection.country}}" userInput="{{PolandAddress.country}}" stepKey="fillCountry"/>
+        <fillField selector="{{AdminEditCustomerAddressesSection.zipCode}}" userInput="{{PolandAddress.postcode}}" stepKey="fillPostCode"/>
+        <fillField selector="{{AdminEditCustomerAddressesSection.phone}}" userInput="{{PolandAddress.telephone}}" stepKey="fillPhoneNumber"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="clickOnSaveButton"/>
+        <waitForPageLoad stepKey="waitForPageToBeSaved"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+
+        <!-- Assert Customer in grid -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <see userInput="$$createCustomer.firstname$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertFirstName"/>
+        <see userInput="$$createCustomer.lastname$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertLastName"/>
+        <see userInput="$$createCustomer.email$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
+        <see userInput="{{PolandAddress.country}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertCountry"/>
+        <see userInput="{{PolandAddress.postcode}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertPostCode"/>
+        <see userInput="{{PolandAddress.telephone}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertPhoneNumber"/>
+
+        <!--Assert Customer Form -->
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
+        <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="$$createCustomer.firstname$$" stepKey="seeCustomerFirstName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="$$createCustomer.lastname$$" stepKey="seeCustomerLastName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.email}}" userInput="$$createCustomer.email$$" stepKey="seeCustomerEmail"/>
+        <click selector="{{AdminCustomerAccountInformationSection.addressesButton}}" stepKey="clickOnAddressButton"/>
+        <waitForPageLoad stepKey="waitForAddressGridToLoad"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="$$createCustomer.firstname$$" stepKey="seeAFirstNameInDefaultAddressSection"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="$$createCustomer.lastname$$" stepKey="seeLastNameInDefaultAddressSection"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{PolandAddress.street}}" stepKey="seeStreetInDefaultAddressSection"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{PolandAddress.city}}" stepKey="seeLCityInDefaultAddressSection"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{PolandAddress.country}}" stepKey="seeCountrynDefaultAddressSection"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{PolandAddress.postcode}}" stepKey="seePostCodeInDefaultAddressSection"/>
+        <see selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" userInput="{{PolandAddress.telephone}}" stepKey="seePhoneNumberInDefaultAddressSection"/>
+
+        <!--Assert Customer Address Grid -->
+        <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.street}}" stepKey="seeStreetAddress"/>
+        <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.city}}" stepKey="seeCity"/>
+        <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.country}}" stepKey="seeCountry"/>
+        <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.postcode}}" stepKey="seePostCode"/>
+        <see selector="{{AdminCustomerAddressesGridSection.customerAddressGrid}}" userInput="{{PolandAddress.telephone}}" stepKey="seePhoneNumber"/>
+    </test>
+</tests>

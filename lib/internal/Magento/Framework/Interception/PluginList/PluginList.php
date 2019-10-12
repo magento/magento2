@@ -30,7 +30,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @var array
      */
-    protected $_inherited;
+    protected $_inherited = [];
 
     /**
      * Inherited plugin data, preprocessed for read

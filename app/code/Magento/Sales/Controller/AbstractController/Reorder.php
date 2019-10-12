@@ -1,15 +1,21 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-abstract class Reorder extends Action\Action
+/**
+ * Abstract class for controllers Reorder(Customer) and Reorder(Guest)
+ *
+ * @package Magento\Sales\Controller\AbstractController
+ */
+abstract class Reorder extends Action\Action implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Sales\Controller\AbstractController\OrderLoaderInterface

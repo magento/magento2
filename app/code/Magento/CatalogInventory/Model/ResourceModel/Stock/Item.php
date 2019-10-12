@@ -263,6 +263,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->update($this->getMainTable(), $value, $where);
     }
 
+    /**
+     * Get Manage Stock Expression
+     *
+     * @param string $tableAlias
+     * @return \Zend_Db_Expr
+     */
     public function getManageStockExpr(string $tableAlias = ''): \Zend_Db_Expr
     {
         if ($tableAlias) {
@@ -277,6 +283,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $manageStock;
     }
 
+    /**
+     * Get Backorders Expression
+     *
+     * @param string $tableAlias
+     * @return \Zend_Db_Expr
+     */
     public function getBackordersExpr(string $tableAlias = ''): \Zend_Db_Expr
     {
         if ($tableAlias) {
@@ -291,6 +303,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $itemBackorders;
     }
 
+    /**
+     * Get Minimum Sale Quantity Expression
+     *
+     * @param string $tableAlias
+     * @return \Zend_Db_Expr
+     */
     public function getMinSaleQtyExpr(string $tableAlias = ''): \Zend_Db_Expr
     {
         if ($tableAlias) {

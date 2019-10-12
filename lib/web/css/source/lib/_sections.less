@@ -49,16 +49,16 @@
     @_tab-control-color: @tab-control__color,
     @_tab-control-text-decoration: @tab-control__text-decoration,
 
-    @_tab-control-color-visited: @tab-control__color,
-    @_tab-control-text-decoration-visited: @tab-control__text-decoration,
+    @_tab-control-color-visited: @tab-control__visited__color,
+    @_tab-control-text-decoration-visited: @tab-control__visited__text-decoration,
 
     @_tab-control-background-color-hover: @tab-control__hover__background-color,
     @_tab-control-color-hover: @tab-control__hover__color,
-    @_tab-control-text-decoration-hover: @tab-control__text-decoration,
+    @_tab-control-text-decoration-hover: @tab-control__hover__text-decoration,
 
     @_tab-control-background-color-active: @tab-control__active__background-color,
     @_tab-control-color-active: @tab-control__active__color,
-    @_tab-control-text-decoration-active: @tab-control__text-decoration,
+    @_tab-control-text-decoration-active: @tab-control__active__text-decoration,
 
     @_tab-control-height: @tab-control__height,
     @_tab-control-margin-right: @tab-control__margin-right,
@@ -121,6 +121,7 @@
         &.active > .switch:hover {
             .lib-css(background, @_tab-control-background-color-active);
             .lib-css(color, @_tab-control-color-active);
+            .lib-css(text-decoration, @_tab-control-text-decoration-active);
         }
 
         &.active > .switch,
@@ -200,8 +201,8 @@
     @_accordion-control-color: @accordion-control__color,
     @_accordion-control-text-decoration: @accordion-control__text-decoration,
 
-    @_accordion-control-color-visited: @accordion-control__color,
-    @_accordion-control-text-decoration-visited: @accordion-control__text-decoration,
+    @_accordion-control-color-visited: @accordion-control__visited__color,
+    @_accordion-control-text-decoration-visited: @accordion-control__visited__text-decoration,
 
     @_accordion-control-background-color-hover: @accordion-control__hover__background-color,
     @_accordion-control-color-hover: @accordion-control__hover__color,
@@ -275,6 +276,8 @@
         &.active > .switch:focus,
         &.active > .switch:hover {
             .lib-css(background, @_accordion-control-background-color-active);
+            .lib-css(color, @_accordion-control-color-active);
+            .lib-css(text-decoration, @_accordion-control-text-decoration-active);
             .lib-css(padding-bottom, @_accordion-control-padding-bottom);
         }
     }

@@ -236,6 +236,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
+        
+        $this->_source = null;
 
         return parent::afterSave();
     }
@@ -843,6 +845,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -856,6 +861,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * @inheritdoc
      * @since 100.0.9
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

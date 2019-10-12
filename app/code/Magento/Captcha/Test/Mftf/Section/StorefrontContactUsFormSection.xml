@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontContactUsFormSection">
+        <element name="captchaField" type="input" selector="#contact-form input[name='captcha[contact_us]']" />
+        <element name="captchaImg" type="block" selector="#contact-form img.captcha-img"/>
+        <element name="captchaReload" type="block" selector="#contact-form button.captcha-reload"/>
+    </section>
+</sections>

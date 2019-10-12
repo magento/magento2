@@ -4,14 +4,17 @@
 //  */
 
 //
-//  Common
-//  _____________________________________________
+//  Variables
+//  ---------------------------------------------
 
 @toolbar-mode-icon-font-size: 24px;
 @toolbar-element-background: @panel__background-color;
 
-& when (@media-common = true) {
+//
+//  Common
+//  _____________________________________________
 
+& when (@media-common = true) {
     .page-products {
         .columns {
             position: relative;
@@ -62,6 +65,11 @@
         .products.wrapper ~ .toolbar & {
             display: none;
         }
+
+        .sorter-action {
+            position: relative;
+            top: -2px;
+        }
     }
 
     .sorter-options {
@@ -72,12 +80,12 @@
     .sorter-action {
         vertical-align: top;
         .lib-icon-font(
-        @icon-arrow-up,
-        @_icon-font-size: 28px,
-        @_icon-font-line-height: 32px,
-        @_icon-font-color: @header-icons-color,
-        @_icon-font-color-hover: @header-icons-color-hover,
-        @_icon-font-text-hide: true
+            @icon-arrow-up,
+            @_icon-font-size: 28px,
+            @_icon-font-line-height: 32px,
+            @_icon-font-color: @header-icons-color,
+            @_icon-font-color-hover: @header-icons-color-hover,
+            @_icon-font-text-hide: true
         );
     }
 
@@ -99,7 +107,7 @@
     }
 
     .limiter-label {
-        font-weight: 400;
+        font-weight: @font-weight__regular;
     }
 
     .limiter {
@@ -176,11 +184,11 @@
         }
 
         .lib-icon-font(
-        @icon-grid,
-        @_icon-font-size: @toolbar-mode-icon-font-size,
-        @_icon-font-text-hide: true,
-        @_icon-font-color: @text__color__muted,
-        @_icon-font-color-hover: @text__color__muted
+            @icon-grid,
+            @_icon-font-size: @toolbar-mode-icon-font-size,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: @text__color__muted,
+            @_icon-font-color-hover: @text__color__muted
         );
     }
 

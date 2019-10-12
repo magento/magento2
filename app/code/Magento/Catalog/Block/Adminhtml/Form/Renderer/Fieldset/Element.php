@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
+
 /**
  * Catalog fieldset element renderer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
-
 class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
@@ -29,7 +29,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
     }
 
     /**
-     * Retireve associated with element attribute object
+     * Retrieve associated with element attribute object
      *
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */

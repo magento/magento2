@@ -6,6 +6,8 @@
 
 namespace Magento\Msrp\Test\Unit\Helper;
 
+use Magento\Msrp\Pricing\MsrpPriceCalculatorInterface;
+
 /**
  * Class DataTest
  */
@@ -26,6 +28,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $productMock;
 
+    /**
+     * @var MsrpPriceCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $msrpPriceCalculator;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
@@ -33,6 +43,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getMsrp', 'getPriceInfo', '__wakeup'])
             ->getMock();
+        $this->msrpPriceCalculator = $this->getMockBuilder(MsrpPriceCalculatorInterface::class)
+            ->getMockForAbstractClass();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -40,10 +52,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
             \Magento\Msrp\Helper\Data::class,
             [
                 'priceCurrency' => $this->priceCurrencyMock,
+                'msrpPriceCalculator' => $this->msrpPriceCalculator,
             ]
         );
     }
 
+    /**
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     public function testIsMinimalPriceLessMsrp()
     {
         $msrp = 120;
@@ -73,12 +89,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
             ->will($this->returnValue($finalPriceMock));
 
-        $this->productMock->expects($this->any())
-            ->method('getMsrp')
-            ->will($this->returnValue($msrp));
+        $this->msrpPriceCalculator
+            ->expects($this->any())
+            ->method('getMsrpPriceValue')
+            ->willReturn($msrp);
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $result = $this->helper->isMinimalPriceLessMsrp($this->productMock);
         $this->assertTrue($result, "isMinimalPriceLessMsrp returned incorrect value");

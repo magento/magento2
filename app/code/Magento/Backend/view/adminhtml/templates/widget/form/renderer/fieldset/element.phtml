@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
@@ -26,20 +23,20 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . ($element->getFieldExtraAttributes() ? ' ' . $element->getFieldExtraAttributes() : '');
 ?>
 
-<?php if (!$element->getNoDisplay()): ?>
-    <?php if ($element->getType() == 'hidden'): ?>
+<?php if (!$element->getNoDisplay()) : ?>
+    <?php if ($element->getType() == 'hidden') : ?>
         <?= $element->getElementHtml() ?>
-    <?php else: ?>
-    <div<?= /* @escapeNotVerified */ $fieldAttributes ?>>
-        <?php if ($elementBeforeLabel): ?>
+    <?php else : ?>
+    <div<?= /* @noEscape */ $fieldAttributes ?>>
+        <?php if ($elementBeforeLabel) : ?>
             <?= $element->getElementHtml() ?>
             <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
-            <?= /* @escapeNotVerified */ $note ?>
-        <?php else: ?>
+            <?= /* @noEscape */ $note ?>
+        <?php else : ?>
             <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
-                <?= /* @escapeNotVerified */ ($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
-                <?= /* @escapeNotVerified */ $note ?>
+                <?= /* @noEscape */ ($addOn) ? '<div class="admin__field">' . $element->getElementHtml() . '</div>' : $element->getElementHtml() ?>
+                <?= /* @noEscape */ $note ?>
             </div>
         <?php endif; ?>
     </div>

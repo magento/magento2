@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductCategoryIndexerInUpdateOnScheduleModeTest">
+        <annotations>
+            <stories value="Product Categories Indexer"/>
+            <title value="Product Categories Indexer in Update on Schedule mode"/>
+            <description value="The test verifies that in Update on Schedule mode if displaying of category products on Storefront changes due to product properties change,
+            the changes are NOT applied immediately, but applied only after cron runs (twice)."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11146"/>
+            <group value="catalog"/>
+            <group value="indexer"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <!-- Create category A without products -->
+            <createData entity="_defaultCategory" stepKey="createCategoryA"/>
+
+            <!-- Create product A1 not assigned to any category -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProductA1"/>
+
+            <!-- Create anchor category B with subcategory C-->
+            <createData entity="_defaultCategory" stepKey="createCategoryB"/>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryC">
+                <requiredEntity createDataKey="createCategoryB"/>
+            </createData>
+
+            <!--  Assign product B1 to category B -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductB1">
+                <requiredEntity createDataKey="createCategoryB"/>
+            </createData>
+
+            <!-- Assign product C1 to category C -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductC1">
+                <requiredEntity createDataKey="createCategoryC"/>
+            </createData>
+
+            <!-- Assign product C2 to category C -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductC2">
+                <requiredEntity createDataKey="createCategoryC"/>
+            </createData>
+
+            <!-- Switch indexers to "Update by Schedule" mode -->
+            <actionGroup ref="AdminSwitchAllIndexerToActionModeActionGroup" stepKey="onUpdateBySchedule">
+                <argument name="action" value="Update by Schedule"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Switch indexers to "Update on Save" mode -->
+            <actionGroup ref="AdminSwitchAllIndexerToActionModeActionGroup" stepKey="onUpdateOnSave">
+                <argument name="action" value="Update on Save"/>
+            </actionGroup>
+            <!-- Delete data -->
+            <deleteData createDataKey="createProductA1" stepKey="deleteProductA1"/>
+            <deleteData createDataKey="createProductB1" stepKey="deleteProductB1"/>
+            <deleteData createDataKey="createProductC1" stepKey="deleteProductC1"/>
+            <deleteData createDataKey="createProductC2" stepKey="deleteProductC2"/>
+            <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
+            <deleteData createDataKey="createCategoryC" stepKey="deleteCategoryC"/>
+            <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Case: change product category from product page -->
+        <!-- 1. Open Admin > Catalog > Products > Product A1 -->
+        <amOnPage url="{{AdminProductEditPage.url($$createProductA1.id$$)}}" stepKey="goToProductA1"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- 2. Assign category A to product A1. Save product -->
+        <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignProduct">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+
+        <!-- 3. Open category A on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryA">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+
+        <!-- The category is still empty -->
+        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryA1Name"/>
+        <see userInput="We can't find products matching the selection." stepKey="seeEmptyNotice"/>
+        <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1"/>
+
+        <!-- 4. Run cron to reindex -->
+        <wait time="60" stepKey="waitForChanges"/>
+        <magentoCLI command="cron:run" stepKey="runCron"/>
+
+        <!-- 5. Open category A on Storefront again -->
+        <reloadPage stepKey="reloadCategoryA"/>
+
+        <!-- Category A displays product A1 now -->
+        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
+        <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductA1"/>
+
+        <!--6.  Open Admin > Catalog > Products > Product A1. Unassign category A from product A1 -->
+        <amOnPage url="{{AdminProductEditPage.url($$createProductA1.id$$)}}" stepKey="OnPageProductA1"/>
+        <waitForPageLoad stepKey="waitForProductA1PageLoad"/>
+        <actionGroup ref="AdminUnassignCategoryOnProductAndSaveActionGroup" stepKey="unassignCategoryA">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+
+        <!-- 7. Open category A on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="toCategoryA">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+
+        <!-- Category A still contains product A1 -->
+        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryAOnPage"/>
+        <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductA1"/>
+
+        <!-- 8. Run cron reindex (Ensure that at least one minute passed since last cron run) -->
+        <wait time="60" stepKey="waitOneMinute"/>
+        <magentoCLI command="cron:run" stepKey="runCron1"/>
+
+        <!-- 9. Open category A on Storefront again -->
+        <reloadPage stepKey="refreshCategoryAPage"/>
+
+        <!-- Category A is empty now -->
+        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>
+        <see userInput="We can't find products matching the selection." stepKey="seeOnPageEmptyNotice"/>
+        <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1OnPage"/>
+
+        <!-- Case: change product status -->
+        <!-- 10. Open category B on Storefront  -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="toCategoryB">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!-- Category B displays product B1, C1 and C2 -->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryBOnPage"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductB1"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductC2"/>
+
+        <!-- 11. Open product C1 in Admin. Make it disabled (Enable Product = No)-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProductC1.id$$)}}" stepKey="goToProductC1"/>
+        <waitForPageLoad stepKey="waitForProductC1PageLoad"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickOffEnableToggleAgain"/>
+        <!-- Saved successfully -->
+        <actionGroup ref="saveProductForm" stepKey="saveProductC1"/>
+
+        <!-- 12. Open category B on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="toCategoryBStorefront">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!-- Category B displays product B1, C1 and C2 -->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="categoryBOnPage"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductB1"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC2"/>
+
+        <!-- 13. Open category C on Storefront -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="goToCategoryC">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+
+        <!-- Category C still displays products C1 and C2 -->
+        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="categoryCOnPage"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC1inCategoryC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC2InCategoryC2"/>
+
+        <!-- 14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
+        <wait time="60" stepKey="waitMinute"/>
+        <magentoCLI command="cron:run" stepKey="runCron2"/>
+
+        <!--  15. Open category B on Storefront  -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="onPageCategoryB">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!-- Category B displays product B1 and C2 only-->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryBOnPage"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryBPageProductB1"/>
+        <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeOnCategoryBPageProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryBPageProductC2"/>
+
+        <!-- 16. Open category C on Storefront -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryC">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+
+        <!-- Category C displays only product C2 now -->
+        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleOnCategoryCPage"/>
+        <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeOnCategoryCPageProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCPageProductC2"/>
+
+        <!-- 17. Repeat steps 10-16, but enable products instead. -->
+        <!-- 17.11 Open product C1 in Admin. Make it enabled -->
+        <amOnPage url="{{AdminProductEditPage.url($$createProductC1.id$$)}}" stepKey="goToEditProductC1"/>
+        <waitForPageLoad stepKey="waitForProductC1Page"/>
+        <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickOnEnableToggleAgain"/>
+
+        <!-- Saved successfully -->
+        <actionGroup ref="saveProductForm" stepKey="saveChangedProductC1"/>
+
+        <!-- 17.12. Open category B on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryB">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!-- Category B displays product B1 and C2 -->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="titleCategoryBOnPage"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBPageProductB1"/>
+        <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryBPageProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBPageProductC2"/>
+
+        <!-- 17.13. Open category C on Storefront -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openToCategoryC">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+
+        <!-- Category C displays product C2 -->
+        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="titleOnCategoryCPage"/>
+        <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryCPageProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryCPageProductC2"/>
+
+        <!-- 17.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
+        <wait time="60" stepKey="waitForOneMinute"/>
+        <magentoCLI command="cron:run" stepKey="runCron3"/>
+
+        <!--  17.15. Open category B on Storefront  -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openPageCategoryB">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!--  Category B displays products B1, C1, C2 again, but only after reindex. -->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="onPageSeeCategoryBTitle"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryBProductB1"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryBProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryBProductC2"/>
+
+        <!-- 17.16. Open category C on Storefront -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openOnStorefrontCategoryC">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+
+        <!-- Category C displays products C1, C2 again, but only after reindex.-->
+        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="onPageSeeCategoryCTitle"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryCProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryCProductC2"/>
+
+        <!-- Case: change product visibility -->
+        <!-- 18. Repeat steps 10-17 but change product Visibility instead of product status -->
+        <!-- 18.11 Open product C1 in Admin. Make it enabled -->
+        <amOnPage url="{{AdminProductEditPage.url($$createProductC1.id$$)}}" stepKey="editProductC1"/>
+        <waitForPageLoad stepKey="waitProductC1Page"/>
+        <selectOption selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="Search"
+                      stepKey="changeVisibility"/>
+
+        <!-- Saved successfully -->
+        <actionGroup ref="saveProductForm" stepKey="productC1Saved"/>
+
+        <!-- 18.12. Open category B on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goPageCategoryB">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!--  Category B displays products B1, C1, C2 again, but only after reindex. -->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryBTitle"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBProductB1"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBProductC2"/>
+
+        <!-- 18.13. Open category C on Storefront -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="goPageCategoryC">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+
+        <!-- Category C displays products C1, C2 again, but only after reindex.-->
+        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryCTitle"/>
+        <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC2"/>
+
+        <!-- 18.14. Run cron to reindex  (Ensure that at least one minute passed since last cron run) -->
+        <wait time="60" stepKey="waitExtraMinute"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
+
+        <!--  18.15. Open category B on Storefront  -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="navigateToPageCategoryB">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+
+        <!-- Category B displays product B1 and C2 only-->
+        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryB"/>
+        <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeTitleProductB1"/>
+        <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeCategoryBProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeTitleProductC2"/>
+
+        <!-- 18.18. Open category C on Storefront -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="navigateToPageCategoryC">
+            <argument name="categoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+
+        <!-- Category C displays product C2 again, but only after reindex.-->
+        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryC"/>
+        <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeOnCategoryCProductC1"/>
+        <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnPageTitleProductC2"/>
+    </test>
+</tests>

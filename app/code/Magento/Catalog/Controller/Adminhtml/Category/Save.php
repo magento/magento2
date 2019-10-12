@@ -147,6 +147,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
                 $category->setParentId($parentCategory->getId());
+                $category->setLevel(null);
             }
 
             /**

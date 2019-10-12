@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <script>
 require([
@@ -71,7 +68,7 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?= /* @escapeNotVerified */ $block->getUrl('directory/json/countryRegion') ?>";
+        this.regionsUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('directory/json/countryRegion'))) ?>";
 
         this.bindCountryRegionRelation();
     },
@@ -146,21 +143,32 @@ originModel.prototype = {
             var value = this.regionElement.value;
             var disabled = this.regionElement.disabled;
             if (data.length) {
-                var html = '<select name="'+this.regionElement.name+'" id="'+this.regionElement.id+'" class="required-entry select" title="'+this.regionElement.title+'"'+(disabled?" disabled":"")+'>';
+                var select = document.createElement('select');
+                select.setAttribute('name', this.regionElement.name);
+                select.setAttribute('title', this.regionElement.title);
+                select.setAttribute('id', this.regionElement.id);
+                select.setAttribute('class', 'required-entry select');
+                if (disabled) {
+                    select.setAttribute('disabled', '');
+                }
                 for (var i in data) {
                     if (data[i].label) {
-                        html+= '<option value="'+data[i].value+'"';
-                        if (this.regionElement.value && (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)) {
-                            html+= ' selected';
+                        var option = document.createElement('option');
+                        option.setAttribute('value', data[i].value);
+                        option.innerText = data[i].label;
+                        if (this.regionElement.value &&
+                            (this.regionElement.value == data[i].value || this.regionElement.value == data[i].label)
+                        ) {
+                            option.setAttribute('selected', '');
                         }
-                        html+='>'+data[i].label+'<\/option>';
+                        select.add(option);
                     }
                 }
-                html+= '<\/select>';
 
                 var parentNode = this.regionElement.parentNode;
                 var regionElementId = this.regionElement.id;
-                parentNode.innerHTML = html;
+                parentNode.innerHTML = select.outerHTML;
+
                 this.regionElement = $(regionElementId);
             } else if (this.reload) {
                 this.clearRegionField(disabled);
@@ -168,10 +176,18 @@ originModel.prototype = {
         }
     },
     clearRegionField: function(disabled) {
-        var html = '<input type="text" name="' + this.regionElement.name + '" id="' + this.regionElement.id + '" class="input-text" title="' + this.regionElement.title + '"' + (disabled ? " disabled" : "") + '>';
+        var text = document.createElement('input');
+        text.setAttribute('type', 'text');
+        text.setAttribute('name', this.regionElement.name);
+        text.setAttribute('title', this.regionElement.title);
+        text.setAttribute('id', this.regionElement.id);
+        text.setAttribute('class', 'input-text');
+        if (disabled) {
+            text.setAttribute('disabled', '');
+        }
         var parentNode = this.regionElement.parentNode;
         var regionElementId = this.regionElement.id;
-        parentNode.innerHTML = html;
+        parentNode.innerHTML = text.outerHTML;
         this.regionElement = $(regionElementId);
     }
 }

@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * Special price model
@@ -46,6 +47,8 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
     }
 
     /**
+     * Retrieve special price.
+     *
      * @return bool|float
      */
     public function getValue()
@@ -96,19 +99,19 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isScopeDateInInterval()
     {
         return $this->localeDate->isScopeDateInInterval(
-            $this->product->getStore(),
+            WebsiteInterface::ADMIN_CODE,
             $this->getSpecialFromDate(),
             $this->getSpecialToDate()
         );
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     public function isPercentageDiscount()
     {

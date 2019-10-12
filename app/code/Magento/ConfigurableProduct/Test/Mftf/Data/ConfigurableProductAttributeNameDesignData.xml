@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="NewProductsData" type="user">
         <data key="productName" unique="prefix">Shoes</data>
         <data key="price">60</data>
@@ -31,5 +31,4 @@
         <data key="configurableProduct">configurable</data>
         <data key="errorMessage">element.disabled is not a function</data>
     </entity>
-
 </entities>

@@ -41,24 +41,32 @@ class DataObjectProcessor
     private $customAttributesProcessor;
 
     /**
+     * @var array
+     */
+    private $processors;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param array $processors
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
         TypeCaster $typeCaster,
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
-        ExtensionAttributesProcessor $extensionAttributesProcessor
+        ExtensionAttributesProcessor $extensionAttributesProcessor,
+        array $processors = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->typeCaster = $typeCaster;
         $this->fieldNamer = $fieldNamer;
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
+        $this->processors = $processors;
     }
 
     /**
@@ -121,6 +129,27 @@ class DataObjectProcessor
 
             $outputData[$key] = $value;
         }
+
+        $outputData = $this->changeOutputArray($dataObject, $outputData);
+
+        return $outputData;
+    }
+
+    /**
+     * Change output array if needed.
+     *
+     * @param mixed $dataObject
+     * @param array $outputData
+     * @return array
+     */
+    private function changeOutputArray($dataObject, array $outputData): array
+    {
+        foreach ($this->processors as $dataObjectClassName => $processor) {
+            if ($dataObject instanceof $dataObjectClassName) {
+                $outputData = $processor->execute($dataObject, $outputData);
+            }
+        }
+
         return $outputData;
     }
 }

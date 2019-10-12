@@ -58,7 +58,7 @@
         <field name="sku" is_required="1" group="product-details" />
         <field name="small_image" is_required="0" />
         <field name="small_image_label" is_required="0" />
-        <field name="status" is_required="0" />
+        <field name="status" is_required="0" group="product-details" />
         <field name="thumbnail" is_required="0" />
         <field name="thumbnail_label" is_required="0" />
         <field name="updated_at" is_required="1" />
@@ -66,7 +66,7 @@
         <field name="upsell_tgtr_position_limit" is_required="0" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="id" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />

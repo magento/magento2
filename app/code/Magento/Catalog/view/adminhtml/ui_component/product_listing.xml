@@ -132,6 +132,7 @@
             <settings>
                 <addField>true</addField>
                 <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">Name</label>
             </settings>
         </column>
@@ -154,6 +155,7 @@
         <column name="sku" sortOrder="60">
             <settings>
                 <filter>text</filter>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <label translate="true">SKU</label>
             </settings>
         </column>

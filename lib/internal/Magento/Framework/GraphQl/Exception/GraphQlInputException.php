@@ -37,7 +37,7 @@ class GraphQlInputException extends InputException implements \GraphQL\Error\Cli
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function isClientSafe() : bool
     {
@@ -45,7 +45,7 @@ class GraphQlInputException extends InputException implements \GraphQL\Error\Cli
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getCategory() : string
     {

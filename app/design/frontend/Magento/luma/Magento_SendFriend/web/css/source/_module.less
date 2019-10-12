@@ -10,6 +10,14 @@
 & when (@media-common = true) {
     .form.send.friend {
         &:extend(.abs-add-fields all);
+        
+        .fieldset {
+            .field {
+                .control {
+                    width: 100%;
+                }  
+            }
+        } 
     }
 
     .product-social-links .action.mailto.friend {
@@ -40,6 +48,21 @@
             .field.text {
                 //  &:extend(.abs-form-field-revert-column-1 all);
                 width: 90%;
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) { 
+    .form.send.friend {
+        .fieldset {
+            padding-bottom: @indent__xs;
+        } 
+        
+        .action {
+            &.remove {
+                margin-left: 0;
+                right: 0;
+                top: 100%;
             }
         }
     }

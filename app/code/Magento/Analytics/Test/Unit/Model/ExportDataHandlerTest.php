@@ -13,7 +13,7 @@ use Magento\Analytics\Model\ReportWriterInterface;
 use Magento\Framework\Archive;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
@@ -137,7 +137,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::SYS_TMP)
+            ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->directoryMock);
         $this->directoryMock
             ->expects($this->exactly(4))
@@ -191,7 +191,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
             ->with(
                 $archiveSource,
                 $archiveAbsolutePath,
-                $isArchiveSourceDirectory ? true : false
+                $isArchiveSourceDirectory
             );
 
         $fileContent = 'Some text';
@@ -222,7 +222,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'Data source for archive is directory' => [true],
-            'Data source for archive doesn\'t directory' => [false],
+            'Data source for archive isn\'t directory' => [false],
         ];
     }
 
@@ -238,7 +238,7 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::SYS_TMP)
+            ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->directoryMock);
         $this->reportWriterMock
             ->expects($this->once())

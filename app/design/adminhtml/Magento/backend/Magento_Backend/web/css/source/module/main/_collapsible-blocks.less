@@ -105,17 +105,27 @@
 //
 
 .admin__collapsible-block-wrapper {
+    .admin__collapsible-title[aria-expanded='true'] {
+        &:before {
+            content: @icon-expand-close__content;
+        }
+    } 
+    
     .__collapsible-block-wrapper-pattern();
     .admin__collapsible-title {
         .__collapsible-title-pattern();
     }
-
     &.opened,
     &._show {
         > .fieldset-wrapper-title {
             .admin__collapsible-title {
                 &:before {
                     content: @icon-expand-close__content;
+                }
+                &.active {
+                    &:before {
+                        content: @icon-expand-open__content;
+                    }
                 }
             }
         }
@@ -124,6 +134,21 @@
             .fieldset-wrapper-title {
                 .actions {
                     display: block;
+                }
+            }
+        }
+
+        td.admin__collapsible-block-wrapper {
+            .admin__collapsible-title {
+                &:before {
+                    content: @icon-expand-open__content;
+                }
+            }
+            &._show {
+                .admin__collapsible-title {
+                    &:before {
+                        content: @icon-expand-close__content;
+                    } 
                 }
             }
         }
@@ -146,6 +171,14 @@
 
     &.collapsible-block-wrapper-last {
         border-bottom: 0;
+    }
+
+    .admin__dynamic-rows.admin__control-collapsible {   
+        td {
+            &.admin__collapsible-block-wrapper {
+                border-bottom: none;
+            }
+        }
     }
 }
 
@@ -322,7 +355,7 @@
             }
 
             .value {
-                padding-right: 4rem;
+                padding-right: 2rem;
             }
         }
 
@@ -472,6 +505,8 @@
             width: 44%;
 
             &.with-tooltip {
+                font-size: 0;
+
                 .tooltip {
                     bottom: 0;
                     float: right;
@@ -481,6 +516,11 @@
                     right: 0;
                     top: 0;
                 }
+      
+                .time-separator {
+                    font-size: 14px;
+                    padding-left: 5px;
+                } 
 
                 .tooltip-content {
                     background: @color-very-dark-gray-black2;

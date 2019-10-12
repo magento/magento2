@@ -59,12 +59,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entityFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
+        $this->entityFactory = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -93,7 +98,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getId', 'getWebsiteId'])
             ->getMockForAbstractClass();
-        $moduleManager = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $moduleManager = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $catalogProductFlatState = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Flat\State::class)
@@ -120,32 +125,25 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->entityMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->galleryResourceMock = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Gallery::class
         )->disableOriginalConstructor()->getMock();
-
         $this->metadataPoolMock = $this->getMockBuilder(
             \Magento\Framework\EntityManager\MetadataPool::class
         )->disableOriginalConstructor()->getMock();
-
         $this->galleryReadHandlerMock = $this->getMockBuilder(
             \Magento\Catalog\Model\Product\Gallery\ReadHandler::class
         )->disableOriginalConstructor()->getMock();
-
         $this->storeManager->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->any())->method('getStore')->willReturnSelf();
         $universalFactory->expects($this->exactly(1))->method('create')->willReturnOnConsecutiveCalls(
@@ -168,7 +166,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
-                'entityFactory' => $entityFactory,
+                'entityFactory' => $this->entityFactory,
                 'logger' => $logger,
                 'fetchStrategy' => $fetchStrategy,
                 'eventManager' => $eventManager,
@@ -318,7 +316,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 [ '(customer_group_id=? AND all_groups=0) OR all_groups=1', $customerGroupId]
             )
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($select)
@@ -370,7 +368,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->exactly(1))->method('where')
             ->with('entity_id IN(?)', [1])
             ->willReturnSelf();
-        $select->expects($this->once())->method('order')->with('entity_id')->willReturnSelf();
+        $select->expects($this->once())->method('order')->with('qty')->willReturnSelf();
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($select)
@@ -378,5 +376,21 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $backend->expects($this->once())->method('setPriceData')->with($itemMock, [['product_id' => 1]]);
 
         $this->assertSame($this->collection, $this->collection->addTierPriceData());
+    }
+
+    /**
+     * Test for getNewEmptyItem() method
+     *
+     * @return void
+     */
+    public function testGetNewEmptyItem()
+    {
+        $item = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->entityFactory->expects($this->once())->method('create')->willReturn($item);
+        $firstItem = $this->collection->getNewEmptyItem();
+        $secondItem = $this->collection->getNewEmptyItem();
+        $this->assertEquals($firstItem, $secondItem);
     }
 }

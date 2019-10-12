@@ -25,6 +25,7 @@
             </createData>
             <!-- Enable *Free Shipping* -->
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -33,62 +34,53 @@
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <actionGroup ref="logout" stepKey="logOut"/>
         </after>
 
-        <!-- Flush Magento Cache -->
-        <magentoCLI stepKey="flushCache" command="cache:flush"/>
-
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
-        <amOnPage url="{{AdminOrderCreatePage.url}}" stepKey="navigateToSalesOrderPage"/>
-        <waitForPageLoad stepKey="waitForSalesOrderPageLoaded"/>
-
-        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
-        <waitForElementVisible stepKey="waitForNewOrderPageOpened" selector="{{NewOrderSection.submitOrder}}"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <actionGroup ref="navigateToNewOrderPageNewCustomer" stepKey="navigateToNewOrderPage"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
-        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seeNewOrderPageTitle"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
         <!--Click *Custom Price* link, enter 0 and click *Update Items and Quantities* button-->
         <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickCustomPriceCheckbox"/>
-        <waitForElementVisible stepKey="waitForPriceFieldAppears" selector="{{AdminOrderFormItemsSection.customPriceField}}"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.customPriceField}}" stepKey="waitForPriceFieldAppears"/>
         <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="0" stepKey="fillCustomPriceField"/>
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup" after="clickUpdateItemsAndQuantitiesButton"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!-- Select Free shipping -->
-        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption" after="fillCustomerAddress"/>
+        <actionGroup ref="orderSelectFreeShipping" stepKey="selectFreeShippingOption"/>
 
         <!--Click *Submit Order* button-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder" after="selectFreeShippingOption"/>
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
 
         <!--Click *Invoice* button-->
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForInvoicePageOpened"/>
-
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceSaved"/>
-        <see userInput="The invoice has been created." stepKey="seeCorrectMessage"/>
+        <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
 
         <!--Verify that *Credit Memo* button is displayed-->
         <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
         <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
         <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
-        <see stepKey="seeNewMemoPage" userInput="New Memo"/>
-        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeUrlOnPage"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
     </test>
 </tests>

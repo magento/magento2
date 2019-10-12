@@ -59,7 +59,6 @@ class Form extends \Magento\Backend\Block\Widget
         parent::_construct();
 
         $this->setDestElementId('edit_form');
-        $this->setShowGlobalIcon(false);
     }
 
     /**

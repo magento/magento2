@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CustomerLoginOnStorefrontWithRememberMeChecked" extends="LoginToStorefrontActionGroup">
+        <annotations>
+            <description>EXTENDS: LoginToStorefrontActionGroup. Checks the 'Remember Me' checkbox.</description>
+        </annotations>
+
+        <checkOption selector="{{StorefrontCustomerSignInFormSection.rememberMe}}" before="clickSignInAccountButton" stepKey="checkRememberMe"/>
+    </actionGroup>
+
+    <actionGroup name="CustomerLoginOnStorefrontWithRememberMeUnChecked" extends="LoginToStorefrontActionGroup">
+        <annotations>
+            <description>EXTENDS: LoginToStorefrontActionGroup. Uncheck the 'Remember Me' checkbox.</description>
+        </annotations>
+
+        <uncheckOption selector="{{StorefrontCustomerSignInFormSection.rememberMe}}" before="clickSignInAccountButton" stepKey="unCheckRememberMe"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontRegisterCustomerRememberMe" extends="SignUpNewUserFromStorefrontActionGroup">
+        <!--- Assume we are on customer registration page. -->
+        <remove keyForRemoval="amOnStorefrontPage"/>
+        <remove keyForRemoval="clickOnCreateAccountLink"/>
+        <checkOption  selector="{{StorefrontCustomerSignInFormSection.rememberMe}}" before="clickCreateAccountButton"  stepKey="checkRememberMe"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontCreateCustomerOnRegisterPageDoNotRememberMe" extends="SignUpNewUserFromStorefrontActionGroup">
+        <!--- Assume we are on customer registration page. -->
+        <remove keyForRemoval="amOnStorefrontPage"/>
+        <remove keyForRemoval="clickOnCreateAccountLink"/>
+        <uncheckOption  selector="{{StorefrontCustomerSignInFormSection.rememberMe}}" before="clickCreateAccountButton"  stepKey="unCheckRememberMe"/>
+    </actionGroup>
+</actionGroups>

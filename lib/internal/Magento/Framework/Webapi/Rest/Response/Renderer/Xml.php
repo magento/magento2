@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\Webapi\Rest\Response\Renderer;
 
+/**
+ * Renders response data in Xml format.
+ */
 class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
 {
     /**
@@ -111,8 +114,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
             /** Without the following transformation boolean values are rendered incorrectly */
             $value = $value ? 'true' : 'false';
         }
-        $replacementMap = ['&' => '&amp;'];
-        return str_replace(array_keys($replacementMap), array_values($replacementMap), $value);
+        return (string) $value;
     }
 
     /**

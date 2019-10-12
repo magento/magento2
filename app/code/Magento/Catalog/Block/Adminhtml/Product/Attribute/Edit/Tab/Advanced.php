@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attribute add/edit form main tab
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
@@ -18,6 +13,8 @@ use Magento\Eav\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 
 /**
+ * Product attribute add/edit form main tab
+ *
  * @api
  * @since 100.0.2
  */
@@ -73,6 +70,7 @@ class Advanced extends Generic
      * Adding product form elements for editing attribute
      *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD)
      */
     protected function _prepareForm()
@@ -255,7 +253,7 @@ class Advanced extends Generic
     }
 
     /**
-     * Initialize form fileds values
+     * Initialize form fields values
      *
      * @return $this
      */

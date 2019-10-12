@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteAttributeSetTest" summary="Delete Attribute Set (Attribute Set)" ticketId="MAGETWO-25473">
         <variation name="DeleteAttributeSetTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
+            <data name="tag" xsi:type="string">stable:no, mftf_migrated:yes</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="attributeSet/data/assigned_attributes/dataset" xsi:type="string">default</data>
             <data name="product/dataset" xsi:type="string">default</data>

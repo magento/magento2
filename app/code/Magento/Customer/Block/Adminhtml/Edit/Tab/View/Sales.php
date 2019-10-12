@@ -147,10 +147,12 @@ class Sales extends \Magento\Backend\Block\Template
      */
     public function getWebsiteCount($websiteId)
     {
-        return isset($this->_websiteCounts[$websiteId]) ? $this->_websiteCounts[$websiteId] : 0;
+        return $this->_websiteCounts[$websiteId] ?? 0;
     }
 
     /**
+     * Returns Grouped Collection Rows
+     *
      * @return array
      */
     public function getRows()
@@ -159,6 +161,8 @@ class Sales extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return totals data
+     *
      * @return \Magento\Framework\DataObject
      */
     public function getTotals()
@@ -171,7 +175,9 @@ class Sales extends \Magento\Backend\Block\Template
      *
      * @param float $price
      * @param null|int $websiteId
+     *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function formatCurrency($price, $websiteId = null)
     {

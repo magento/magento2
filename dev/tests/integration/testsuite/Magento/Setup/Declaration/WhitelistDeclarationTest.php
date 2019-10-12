@@ -47,7 +47,7 @@ class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks that all declared table elements also declared into whitelist declaration.
      *
-     * @appIsolation
+     * @magentoAppIsolation enabled
      * @throws \Exception
      */
     public function testConstraintsAndIndexesAreWhitelisted()

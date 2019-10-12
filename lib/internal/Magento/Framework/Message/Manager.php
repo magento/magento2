@@ -8,9 +8,12 @@ namespace Magento\Framework\Message;
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Debug;
 
 /**
  * Message manager model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -67,7 +70,7 @@ class Manager implements ManagerInterface
      * @param Event\ManagerInterface $eventManager
      * @param LoggerInterface $logger
      * @param string $defaultGroup
-     * @param ExceptionMessageFactoryInterface|null exceptionMessageFactory
+     * @param ExceptionMessageFactoryInterface|null $exceptionMessageFactory
      */
     public function __construct(
         Session $session,
@@ -89,7 +92,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultGroup()
     {
@@ -110,8 +113,8 @@ class Manager implements ManagerInterface
     /**
      * @inheritdoc
      *
-     * @param string|null $group
      * @param bool $clear
+     * @param string|null $group
      * @return Collection
      */
     public function getMessages($clear = false, $group = null)
@@ -226,7 +229,7 @@ class Manager implements ManagerInterface
         $items = $this->getMessages(false, $group)->getItems();
 
         foreach ($messages as $message) {
-            if ($message instanceof MessageInterface and !in_array($message, $items, false)) {
+            if ($message instanceof MessageInterface && !in_array($message, $items, false)) {
                 $this->addMessage($message, $group);
             }
         }
@@ -248,7 +251,12 @@ class Manager implements ManagerInterface
             'Exception message: %s%sTrace: %s',
             $exception->getMessage(),
             "\n",
-            $exception->getTraceAsString()
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+            )
         );
 
         $this->logger->critical($message);
@@ -286,7 +294,12 @@ class Manager implements ManagerInterface
             'Exception message: %s%sTrace: %s',
             $exception->getMessage(),
             "\n",
-            $exception->getTraceAsString()
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+            )
         );
 
         $this->logger->critical($message);

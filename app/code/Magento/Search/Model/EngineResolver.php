@@ -10,6 +10,8 @@ use Magento\Framework\Search\EngineResolverInterface;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Search engine resolver model.
+ *
  * @api
  * @since 100.1.0
  */
@@ -61,6 +63,7 @@ class EngineResolver implements EngineResolverInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param array $engines
+     * @param LoggerInterface $logger
      * @param string $path
      * @param string $scopeType
      * @param string $scopeCode

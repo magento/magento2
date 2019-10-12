@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Model;
 
 use Magento\Captcha\Helper\Data;
+use Magento\Framework\Math\Random;
 
 /**
  * Implementation of \Zend\Captcha\Image
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
@@ -79,23 +84,36 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     protected $session;
 
     /**
+     * @var string
+     */
+    private $words;
+
+    /**
+     * @var Random
+     */
+    private $randomMath;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param ResourceModel\LogFactory $resLogFactory
      * @param string $formId
+     * @param Random $randomMath
      * @throws \Zend\Captcha\Exception\ExtensionNotLoadedException
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
-        $formId
+        $formId,
+        Random $randomMath = null
     ) {
         parent::__construct();
         $this->session = $session;
         $this->captchaData = $captchaData;
         $this->resLogFactory = $resLogFactory;
         $this->formId = $formId;
+        $this->randomMath = $randomMath ?? \Magento\Framework\App\ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
@@ -311,18 +329,18 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     public function isCorrect($word)
     {
-        $storedWord = $this->getWord();
+        $storedWords = $this->getWords();
         $this->clearWord();
 
-        if (!$word || !$storedWord) {
+        if (!$word || !$storedWords) {
             return false;
         }
 
         if (!$this->isCaseSensitive()) {
-            $storedWord = strtolower($storedWord);
+            $storedWords = strtolower($storedWords);
             $word = strtolower($word);
         }
-        return $word === $storedWord;
+        return in_array($word, explode(',', $storedWords));
     }
 
     /**
@@ -377,23 +395,9 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function generateWord()
     {
-        $word = '';
-        $symbols = $this->getSymbols();
+        $symbols = (string)$this->captchaData->getConfig('symbols');
         $wordLen = $this->getWordLen();
-        for ($i = 0; $i < $wordLen; $i++) {
-            $word .= $symbols[array_rand($symbols)];
-        }
-        return $word;
-    }
-
-    /**
-     * Get symbols array to use for word generation
-     *
-     * @return array
-     */
-    private function getSymbols()
-    {
-        return str_split((string)$this->captchaData->getConfig('symbols'));
+        return $this->randomMath->getRandomString($wordLen, $symbols);
     }
 
     /**
@@ -481,7 +485,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Get captcha word
      *
-     * @return string
+     * @return string|null
      */
     public function getWord()
     {
@@ -490,17 +494,29 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     }
 
     /**
+     * Get captcha words
+     *
+     * @return string|null
+     */
+    private function getWords()
+    {
+        $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
+        return time() < $sessionData['expires'] ? $sessionData['words'] : null;
+    }
+
+    /**
      * Set captcha word
      *
-     * @param  string $word
+     * @param string $word
      * @return $this
      * @since 100.2.0
      */
     protected function setWord($word)
     {
+        $this->words = $this->words ? $this->words . ',' . $word : $word;
         $this->session->setData(
             $this->getFormIdKey(self::SESSION_WORD),
-            ['data' => $word, 'expires' => time() + $this->getTimeout()]
+            ['data' => $word, 'words' => $this->words, 'expires' => time() + $this->getTimeout()]
         );
         $this->word = $word;
         return $this;
@@ -545,7 +561,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function gc()
     {
-        //do nothing
+        return; // required for static testing to pass
     }
 
     /**

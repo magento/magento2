@@ -1,0 +1,92 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var Magento\AuthorizenetAcceptjs\Block\Form $block
+ */
+$code = $block->escapeHtml($block->getMethodCode());
+$ccType = $block->getInfoData('cc_type');
+$ccExpMonth = $block->getInfoData('cc_exp_month');
+$ccExpYear = $block->getInfoData('cc_exp_year');
+?>
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?= /* @noEscape */ $code ?>"
+          style="display:none">
+    <div class="field-type admin__field _required">
+        <label class="admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_type">
+            <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
+        </label>
+        <div class="admin__field-control">
+            <select id="<?= /* @noEscape */ $code ?>_cc_type" name="payment[cc_type]"
+                    class="required-entry validate-cc-type-select admin__control-select">
+                <option value=""></option>
+                <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
+                    <option value="<?= $block->escapeHtml($typeCode) ?>" <?php if ($typeCode == $ccType) : ?>selected="selected"<?php endif ?>>
+                        <?= $block->escapeHtml($typeName) ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    <div class="field-number admin__field _required">
+        <label class="admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_number">
+            <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
+        </label>
+        <div class="admin__field-control">
+            <input type="text" id="<?= /* @noEscape */ $code ?>_cc_number" name="payment[cc_number]"
+                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="admin__control-text validate-cc-number"
+                   value="<?= /* @noEscape */ $block->getInfoData('cc_number') ?>"/>
+        </div>
+    </div>
+    <div class="field-date admin__field _required">
+        <label class="admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_exp_month">
+            <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
+        </label>
+        <div class="admin__field-control">
+            <select id="<?= /* @noEscape */ $code ?>_cc_exp_month" name="payment[cc_exp_month]"
+                    class="admin__control-select admin__control-select-month validate-cc-exp required-entry">
+                <?php foreach ($block->getCcMonths() as $k => $v) : ?>
+                    <option value="<?= $block->escapeHtml($k) ?>"
+                            <?php if ($k == $ccExpMonth) : ?>selected="selected"<?php endif ?>>
+                        <?= $block->escapeHtml($v) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <select id="<?= /* @noEscape */ $code ?>_cc_exp_year" name="payment[cc_exp_year]"
+                    class="admin__control-select admin__control-select-year required-entry">
+                <?php foreach ($block->getCcYears() as $k => $v) : ?>
+                    <option value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
+                            <?php if ($k == $ccExpYear) : ?>selected="selected"<?php endif ?>>
+                        <?= $block->escapeHtml($v) ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+
+    <?php if ($block->isCvvEnabled()) : ?>
+        <div class="field-number required admin__field _required">
+            <label class="admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_cid">
+                <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
+            </label>
+            <div class="admin__field-control">
+                <input type="text" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+                       class="required-entry validate-cc-cvn admin__control-cvn admin__control-text"
+                       id="<?= /* @noEscape */ $code ?>_cc_cid"
+                       name="payment[cc_cid]" value="<?= /* @noEscape */ $block->getInfoData('cc_cid') ?>"/>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <input type="hidden" id="<?= /* @noEscape */ $code ?>_opaque_data_descriptor"
+           name="payment[opaqueDataDescriptor]"
+           value="<?=$block->escapeHtmlAttr($block->getInfoData('opaqueDataDescriptor')) ?>"/>
+    <input type="hidden" id="<?= /* @noEscape */ $code ?>_opaque_data_value"
+           name="payment[opaqueDataValue]"
+           value="<?=$block->escapeHtmlAttr($block->getInfoData('opaqueDataValue')) ?>"/>
+    <input type="hidden" id="<?= /* @noEscape */ $code ?>_cc_last_4"
+           name="payment[ccLast4]"
+           value="<?=$block->escapeHtmlAttr($block->getInfoData('ccLast4')) ?>"/>
+</fieldset>
