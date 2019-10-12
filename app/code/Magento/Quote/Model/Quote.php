@@ -858,9 +858,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
 
         if (!$this->_customer->getId()) {
-            $this->setCustomerIsGuest(1);
+            $this->setCustomerIsGuest(true);
         } else {
-            $this->setCustomerIsGuest(0);
+            $this->setCustomerIsGuest(false);
         }
 
         //mark quote if it has virtual products only
