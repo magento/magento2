@@ -9,6 +9,7 @@ use Magento\Bundle\Api\Data\OptionInterfaceFactory as OptionFactory;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory as LinkFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
+use Magento\Eav\Model\Attribute\Data\Boolean;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\App\RequestInterface;
 
@@ -49,6 +50,11 @@ class Bundle
     protected $storeManager;
 
     /**
+     * @var Boolean
+     */
+    protected $isDuplicateAction;
+
+    /**
      * @param RequestInterface $request
      * @param OptionFactory $optionFactory
      * @param LinkFactory $linkFactory
@@ -87,6 +93,7 @@ class Bundle
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $product
     ) {
+        $this->isDuplicateAction = $this->request->getPost('back') === 'duplicate' ?: 0;
         $compositeReadonly = $product->getCompositeReadonly();
         $result['bundle_selections'] = $result['bundle_options'] = [];
         if (isset($this->request->getPost('bundle_options')['bundle_options'])) {
@@ -95,11 +102,6 @@ class Bundle
                     continue;
                 }
 
-                // Keeping the old bundle selection.
-                if ($this->request->getPost('back') === 'duplicate') {
-                    unset($option['bundle_selections'][$key]['selection_id']);
-                }
-                
                 $result['bundle_selections'][$key] = $option['bundle_selections'];
                 unset($option['bundle_selections']);
                 $result['bundle_options'][$key] = $option;
@@ -155,11 +157,19 @@ class Bundle
                 if (!empty($linkData['delete'])) {
                     continue;
                 }
+
+                // Keeping old bundle selection.
+                if ($this->isDuplicateAction) {
+                    unset($linkData['selection_id']);
+                }
+
                 if (!empty($linkData['selection_id'])) {
                     $linkData['id'] = $linkData['selection_id'];
                 }
+
                 $links[] = $this->buildLink($product, $linkData);
             }
+
             $option->setProductLinks($links);
             $options[] = $option;
         }
@@ -167,7 +177,6 @@ class Bundle
         $extension = $product->getExtensionAttributes();
         $extension->setBundleProductOptions($options);
         $product->setExtensionAttributes($extension);
-        return;
     }
 
     /**
