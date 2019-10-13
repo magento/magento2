@@ -24,6 +24,10 @@
 
             <!-- Create product with short description -->
             <createData entity="ApiProductWithDescription" stepKey="product"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
 
