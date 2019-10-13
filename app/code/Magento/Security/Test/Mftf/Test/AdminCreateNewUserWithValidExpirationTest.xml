@@ -16,7 +16,6 @@
             <testCaseId value="" />
             <severity value="CRITICAL"/>
             <group value="security"/>
-            <group value="debug"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -35,12 +34,10 @@
         <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPage">
             <argument name="user" value="NewAdminUser"/>
         </actionGroup>
-
         <seeInField userInput="{$expiresDateTime}" selector="input#user_expires_at" stepKey="verifyUserExpirationInField"/>
 
         <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
             <argument name="user" value="NewAdminUser"/>
         </actionGroup>
-        <!-- TODO: delete created user -->
     </test>
 </tests>

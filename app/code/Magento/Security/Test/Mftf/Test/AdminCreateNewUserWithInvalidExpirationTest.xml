@@ -16,7 +16,6 @@
             <testCaseId value="" />
             <severity value="CRITICAL"/>
             <group value="security"/>
-            <group value="debug"/>
         </annotations>
 
         <before>
