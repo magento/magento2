@@ -16,6 +16,7 @@
             <testCaseId value="" />
             <severity value="CRITICAL"/>
             <group value="security"/>
+            <group value="debug"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -25,10 +26,21 @@
         </after>
 
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
-        <generateDate date="+5 day" format="M d, Y h:i:s" stepKey="expiresDateTime"/>
+        <generateDate date="+5 day" format="M d, Y g:i:s A" stepKey="expiresDateTime"/>
         <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
             <argument name="expires_at" value="{$expiresDateTime}"/>
         </actionGroup>
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess" />
+
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openUserEditPage">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+
+        <seeInField userInput="{$expiresDateTime}" selector="input#user_expires_at" stepKey="verifyUserExpirationInField"/>
+
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
+            <argument name="user" value="NewAdminUser"/>
+        </actionGroup>
+        <!-- TODO: delete created user -->
     </test>
 </tests>

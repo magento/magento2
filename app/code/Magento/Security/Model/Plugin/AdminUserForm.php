@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\Plugin;
 
+use Magento\Security\Model\UserExpiration;
+
 /**
  * Add the `expires_at` form field to the User main form.
  *
@@ -21,13 +23,30 @@ class AdminUserForm
     private $localeDate;
 
     /**
+     * @var \Magento\Security\Model\ResourceModel\UserExpiration
+     */
+    private $userExpirationResource;
+
+    /**
+     * @var UserExpirationFactory
+     */
+    private $userExpirationFactory;
+
+    /**
      * UserForm constructor.
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param UserExpiration $userExpiration
+     * @param \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
-    {
+    public function __construct(
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Security\Model\UserExpirationFactory $userExpirationFactory,
+        \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
+    ) {
         $this->localeDate = $localeDate;
+        $this->userExpirationResource = $userExpirationResource;
+        $this->userExpirationFactory = $userExpirationFactory;
     }
 
     /**
@@ -51,6 +70,12 @@ class AdminUserForm
                 \IntlDateFormatter::MEDIUM
             );
             $fieldset = $form->getElement('base_fieldset');
+            $userIdField = $fieldset->getElements()->searchById('user_id');
+            $userExpirationValue = null;
+            if ($userIdField) {
+                $userId = $userIdField->getValue();
+                $userExpirationValue = $this->loadUserExpirationByUserId($userId);
+            }
             $fieldset->addField(
                 'expires_at',
                 'date',
@@ -61,6 +86,7 @@ class AdminUserForm
                     'date_format' => $dateFormat,
                     'time_format' => $timeFormat,
                     'class' => 'validate-date',
+                    'value' => $userExpirationValue,
                 ]
             );
 
@@ -68,5 +94,13 @@ class AdminUserForm
         }
 
         return $proceed();
+    }
+
+    private function loadUserExpirationByUserId($userId)
+    {
+        /** @var \Magento\Security\Model\UserExpiration $userExpiration */
+        $userExpiration = $this->userExpirationFactory->create();
+        $this->userExpirationResource->load($userExpiration, $userId);
+        return $userExpiration->getExpiresAt();
     }
 }

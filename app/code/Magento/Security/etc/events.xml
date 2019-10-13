@@ -10,9 +10,6 @@
     <event name="admin_user_save_after">
         <observer name="add_user_expiration" instance="Magento\Security\Observer\AfterAdminUserSave"/>
     </event>
-    <event name="admin_user_load_after">
-        <observer name="add_user_expiration" instance="Magento\Security\Observer\AfterAdminUserLoad"/>
-    </event>
     <event name="admin_user_authenticate_before">
         <observer name="check_user_expiration" instance="Magento\Security\Observer\AdminUserAuthenticateBefore"/>
     </event>
