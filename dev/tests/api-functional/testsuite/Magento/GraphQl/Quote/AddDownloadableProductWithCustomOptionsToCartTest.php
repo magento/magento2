@@ -72,13 +72,14 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
         self::assertCount($qty, $response['addDownloadableProductsToCart']['cart']);
         $customizableOptionsOutput =
             $response['addDownloadableProductsToCart']['cart']['items'][0]['customizable_options'];
-        $assignedOptionsCount = count($customOptionsValues);
-        for ($counter = 0; $counter < $assignedOptionsCount; $counter++) {
-            $expectedValues = $this->buildExpectedValuesArray($customOptionsValues[$counter]['value_string']);
+        $count = 0;
+        foreach ($customOptionsValues as $value) {
+            $expectedValues = $this->buildExpectedValuesArray($value['value_string']);
             self::assertEquals(
                 $expectedValues,
-                $customizableOptionsOutput[$counter]['values']
+                $customizableOptionsOutput[$count]['values']
             );
+            $count++;
         }
     }
 
