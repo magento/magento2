@@ -34,6 +34,11 @@
             <deleteData createDataKey="categorySecond" stepKey="deleteCategorySecond"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!-- Sign in as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$customer$$"/>

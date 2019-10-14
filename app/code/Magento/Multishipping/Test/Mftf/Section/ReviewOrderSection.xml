@@ -24,4 +24,3 @@
         <element name="grandTotalPrice" type="text" selector="//div[@class='checkout-review']//div[@class='grand totals']//span[@class='price']"/>
     </section>
 </sections>
-
