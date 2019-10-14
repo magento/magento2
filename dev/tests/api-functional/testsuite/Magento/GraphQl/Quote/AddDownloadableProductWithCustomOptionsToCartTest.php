@@ -58,7 +58,11 @@ class AddDownloadableProductWithCustomOptionsToCartTest extends GraphQlAbstract
 
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         /* Generate customizable options fragment for GraphQl request */
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
+        $queryCustomizableOptionValues = preg_replace(
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
+            json_encode(array_values($customOptionsValues))
+        );
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
 
         $query = $this->getQuery($maskedQuoteId, $qty, $sku, $customizableOptions, $linkId);
