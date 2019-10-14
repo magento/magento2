@@ -54,6 +54,11 @@ class RulesApplier
     private $discountInterfaceFactory;
 
     /**
+     * @var array
+     */
+    private $discountAggregator;
+
+    /**
      * @param CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Utility $utility
@@ -93,9 +98,7 @@ class RulesApplier
     {
         $address = $item->getAddress();
         $appliedRuleIds = [];
-        if ($item->getExtensionAttributes()) {
-            $item->getExtensionAttributes()->setDiscounts([]);
-        }
+        $this->discountAggregator = [];
         /* @var $rule Rule */
         foreach ($rules as $rule) {
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
@@ -231,15 +234,14 @@ class RulesApplier
             $discount->setAmount($discountData->getAmount());
             $discount->setBaseAmount($discountData->getBaseAmount());
             $discount->setOriginalAmount($discountData->getOriginalAmount());
-            $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
             $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
             /** @var \Magento\SalesRule\Model\Data\RuleDiscount $itemDiscount */
             $itemDiscount = $this->discountInterfaceFactory->create();
             $itemDiscount->setDiscountData($discount);
             $itemDiscount->setRuleLabel($ruleLabel);
             $itemDiscount->setRuleID($rule->getId());
-            $discountBreakdown[] = $itemDiscount;
-            $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
+            $this->discountAggregator[] = $itemDiscount;
+            $item->getExtensionAttributes()->setDiscounts($this->discountAggregator);
         }
         return $this;
     }

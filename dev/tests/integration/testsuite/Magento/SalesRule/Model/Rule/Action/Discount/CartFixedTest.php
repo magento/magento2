@@ -170,18 +170,22 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         /** @var CartItemInterface $item */
         $item = $quote->getItems()[0];
         $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
-        $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getAmount());
-        $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getBaseAmount());
-        $this->assertEquals(5, $quoteItemDiscounts[$salesRuleId]['discount']->getOriginalAmount());
-        $this->assertEquals(10, $quoteItemDiscounts[$salesRuleId]['discount']->getBaseOriginalAmount());
-        $this->assertEquals('TestRule_Coupon', $quoteItemDiscounts[$salesRuleId]['rule']);
+        $discountData = $quoteItemDiscounts[0]->getDiscountData();
+        $ruleLabel = $quoteItemDiscounts[0]->getRuleLabel();
+        $this->assertEquals(5, $discountData->getAmount());
+        $this->assertEquals(5, $discountData->getBaseAmount());
+        $this->assertEquals(5, $discountData->getOriginalAmount());
+        $this->assertEquals(10, $discountData->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Coupon', $ruleLabel);
 
         $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
-        $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getAmount());
-        $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseAmount());
-        $this->assertEquals(5, $quoteAddressItemDiscount[$salesRuleId]['discount']->getOriginalAmount());
-        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseOriginalAmount());
-        $this->assertEquals('TestRule_Coupon', $quoteAddressItemDiscount[$salesRuleId]['rule']);
+        $discountData = $quoteAddressItemDiscount[0]->getDiscountData();
+        $ruleLabel = $quoteAddressItemDiscount[0]->getRuleLabel();
+        $this->assertEquals(5, $discountData->getAmount());
+        $this->assertEquals(5, $discountData->getBaseAmount());
+        $this->assertEquals(5, $discountData->getOriginalAmount());
+        $this->assertEquals(10, $discountData->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Coupon', $ruleLabel);
     }
 
     /**
