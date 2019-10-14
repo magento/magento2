@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteRepository;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
-require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
+require __DIR__ . '/../../Store/_files/second_store.php';
 
 /** @var $objectManager ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -18,13 +20,18 @@ $objectManager = Bootstrap::getObjectManager();
 $quoteFactory = $objectManager->get(QuoteFactory::class);
 /** @var QuoteRepository $quoteRepository */
 $quoteRepository = $objectManager->get(QuoteRepository::class);
+/** @var StoreFactory $storeFactory */
+$storeFactory = $objectManager->get(StoreFactory::class);
+/** @var Store $secondStore */
+$secondStore = $storeFactory->create();
+$secondStore->load('fixture_second_store', 'code');
 
 $quotes = [
     'quote for first store' => [
         'store' => 1,
     ],
     'quote for second store' => [
-        'store' => 2,
+        'store' => $secondStore->getId(),
     ],
 ];
 
