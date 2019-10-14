@@ -78,8 +78,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Check translations for product alerts
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoConfigFixture current_store catalog/productalert/allow_price 1
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture fixture_second_store_store general/locale/code pt_BR
