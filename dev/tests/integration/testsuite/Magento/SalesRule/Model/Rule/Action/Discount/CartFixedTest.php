@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -22,9 +21,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\SalesRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\SalesRule\Api\RuleRepositoryInterface;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
@@ -290,30 +287,5 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
             ->getItems();
 
         return array_pop($items);
-    }
-    /**
-     * Gets rule by name.
-     *
-     * @param string $name
-     * @return \Magento\SalesRule\Model\Rule
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getSalesRule(string $name): \Magento\SalesRule\Model\Rule
-    {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('name', $name)
-            ->create();
-
-        /** @var CartRepositoryInterface $quoteRepository */
-        $ruleRepository = $this->objectManager->get(RuleRepositoryInterface::class);
-        $items = $ruleRepository->getList($searchCriteria)->getItems();
-
-        $rule = array_pop($items);
-        /** @var \Magento\SalesRule\Model\Converter\ToModel $converter */
-        $converter = $this->objectManager->get(\Magento\SalesRule\Model\Converter\ToModel::class);
-
-        return $converter->toModel($rule);
     }
 }
