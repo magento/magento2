@@ -119,28 +119,32 @@ QUERY;
         $resultFromQuoteItem = $this->connection->fetchRow($selectFromQuoteItem);
         $serializedCartDiscount = $resultFromQuoteItem['discounts'];
 
-        $this->assertTrue(array_key_exists($salesRuleId, $this->jsonSerializer->unserialize($serializedCartDiscount)));
         $this->assertEquals(
             10,
             json_decode(
                 $this->jsonSerializer->unserialize(
                     $serializedCartDiscount
                 )
-                [$salesRuleId]['discount'],
+                [0]['discount'],
                 true
             )['amount']
         );
         $this->assertEquals(
             'TestRule_Label',
-            $this->jsonSerializer->unserialize($serializedCartDiscount)[$salesRuleId]['rule']
+            $this->jsonSerializer->unserialize($serializedCartDiscount)[0]['rule']
+        );
+        $this->assertEquals(
+            $salesRuleId,
+            $this->jsonSerializer->unserialize($serializedCartDiscount)[0]['ruleID']
         );
         $quote = $this->getQuote();
         $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
-        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getAmount());
-        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseAmount());
-        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getOriginalAmount());
-        $this->assertEquals(10, $quoteAddressItemDiscount[$salesRuleId]['discount']->getBaseOriginalAmount());
-        $this->assertEquals('TestRule_Label', $quoteAddressItemDiscount[$salesRuleId]['rule']);
+        $discountData = $quoteAddressItemDiscount[0]->getDiscountData();
+        $this->assertEquals(10, $discountData->getAmount());
+        $this->assertEquals(10, $discountData->getBaseAmount());
+        $this->assertEquals(10, $discountData->getOriginalAmount());
+        $this->assertEquals(10, $discountData->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Label', $quoteAddressItemDiscount[0]->getRuleLabel());
 
         $addressType = 'shipping';
         $selectFromQuoteAddress = $this->connection->select()->from($this->resource->getTableName('quote_address'))

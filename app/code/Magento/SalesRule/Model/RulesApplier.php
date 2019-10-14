@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
+use Magento\SalesRule\Api\Data\DiscountInterfaceFactory;
 
 /**
  * Class RulesApplier
@@ -48,18 +49,25 @@ class RulesApplier
     protected $discountFactory;
 
     /**
+     * @var DiscountInterfaceFactory
+     */
+    private $discountInterfaceFactory;
+
+    /**
      * @param CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Utility $utility
      * @param ChildrenValidationLocator|null $childrenValidationLocator
-     * @param DataFactory $discountDataFactory
+     * @param DataFactory|null $discountDataFactory
+     * @param DiscountInterfaceFactory|null $discountInterfaceFactory
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Utility $utility,
         ChildrenValidationLocator $childrenValidationLocator = null,
-        DataFactory $discountDataFactory = null
+        DataFactory $discountDataFactory = null,
+        DiscountInterfaceFactory $discountInterfaceFactory = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
@@ -67,6 +75,8 @@ class RulesApplier
         $this->childrenValidationLocator = $childrenValidationLocator
              ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
         $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
+        $this->discountInterfaceFactory = $discountInterfaceFactory
+            ?: ObjectManager::getInstance()->get(DiscountInterfaceFactory::class);
     }
 
     /**
@@ -83,6 +93,7 @@ class RulesApplier
     {
         $address = $item->getAddress();
         $appliedRuleIds = [];
+        $item->getExtensionAttributes()->setDiscounts([]);
         /* @var $rule Rule */
         foreach ($rules as $rule) {
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
@@ -219,8 +230,13 @@ class RulesApplier
             $discount->setBaseAmount($discountData->getBaseAmount());
             $discount->setOriginalAmount($discountData->getOriginalAmount());
             $discountBreakdown = $item->getExtensionAttributes()->getDiscounts() ?? [];
-            $discountBreakdown[$rule->getId()]['discount'] = $discount;
-            $discountBreakdown[$rule->getId()]['rule'] = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
+            $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
+            /** @var \Magento\SalesRule\Model\Data\RuleDiscount $itemDiscount */
+            $itemDiscount = $this->discountInterfaceFactory->create();
+            $itemDiscount->setDiscountData($discount);
+            $itemDiscount->setRuleLabel($ruleLabel);
+            $itemDiscount->setRuleID($rule->getId());
+            $discountBreakdown[] = $itemDiscount;
             $item->getExtensionAttributes()->setDiscounts($discountBreakdown);
         }
         return $this;

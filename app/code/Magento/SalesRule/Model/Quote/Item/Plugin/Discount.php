@@ -39,18 +39,23 @@ class Discount
     {
         $cartExtension = $cartItem->getExtensionAttributes();
         $discounts = $cartExtension->getDiscounts();
+        $serializedDiscount = [];
         if ($discounts) {
             foreach ($discounts as $key => $value) {
-                $discount = $value['discount'];
+                $discount = $value->getDiscountData();
                 $discountData = [
                     "amount" => $discount->getAmount(),
                     "baseAmount" => $discount->getBaseAmount(),
                     "originalAmount" => $discount->getOriginalAmount(),
                     "baseOriginalAmount" => $discount->getBaseOriginalAmount(),
                 ];
-                $discounts[$key]['discount'] = $this->json->serialize($discountData);
+                $serializedDiscount[] = [
+                    'discount' => $this->json->serialize($discountData),
+                    'rule' => $value->getRuleLabel(),
+                    'ruleID' => $value->getRuleID(),
+                ];
             }
-            $cartItem->setDiscounts($this->json->serialize($discounts));
+            $cartItem->setDiscounts($this->json->serialize($serializedDiscount));
         }
         return [$quote, $cartItem];
     }

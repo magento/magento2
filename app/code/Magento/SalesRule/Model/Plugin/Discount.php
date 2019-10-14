@@ -9,6 +9,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Data\Collection;
+use Magento\SalesRule\Api\Data\DiscountInterfaceFactory;
 
 /**
  * Plugin for persisting discounts along with Quote Address
@@ -26,13 +27,23 @@ class Discount
     private $discountFactory;
 
     /**
-     * @param Json $json
-     * @param DataFactory|null $discountDataFactory
+     * @var DiscountInterfaceFactory
      */
-    public function __construct(Json $json, DataFactory $discountDataFactory)
-    {
+    private $discountInterfaceFactory;
+
+    /**
+     * @param Json $json
+     * @param DataFactory $discountDataFactory
+     * @param DiscountInterfaceFactory $discountInterfaceFactory
+     */
+    public function __construct(
+        Json $json,
+        DataFactory $discountDataFactory,
+        DiscountInterfaceFactory $discountInterfaceFactory
+    ) {
         $this->json = $json;
         $this->discountFactory = $discountDataFactory;
+        $this->discountInterfaceFactory = $discountInterfaceFactory;
     }
 
     /**
@@ -49,9 +60,14 @@ class Discount
     ) {
         foreach ($result as $item) {
             if ($item->getDiscounts() && !$item->getExtensionAttributes()->getDiscounts()) {
-                $discounts = $this->json->unserialize($item->getDiscounts());
-                foreach ($discounts as $key => $value) {
-                    $discounts[$key]['discount'] = $this->unserializeDiscountData($value['discount']);
+                $unserializeDiscounts = $this->json->unserialize($item->getDiscounts());
+                $discounts = [];
+                foreach ($unserializeDiscounts as $value) {
+                    $itemDiscount = $this->discountInterfaceFactory->create();
+                    $itemDiscount->setDiscountData($this->unserializeDiscountData($value['discount']));
+                    $itemDiscount->setRuleLabel($value['rule']);
+                    $itemDiscount->setRuleID($value['ruleID']);
+                    $discounts[] = $itemDiscount;
                 }
                 $itemExtension = $item->getExtensionAttributes();
                 $itemExtension->setDiscounts($discounts);
@@ -74,12 +90,17 @@ class Discount
     ) {
         foreach ($result as $address) {
             if ($address->getDiscounts() && !$address->getExtensionAttributes()->getDiscounts()) {
-                $discounts = $this->json->unserialize($address->getDiscounts());
-                foreach ($discounts as $key => $value) {
-                    $discounts[$key]['discount'] = $this->unserializeDiscountData($value['discount']);
+                $unserializedDiscounts = $this->json->unserialize($address->getDiscounts());
+                $discounts = [];
+                foreach ($unserializedDiscounts as $value) {
+                    $cartDiscount = $this->discountInterfaceFactory->create();
+                    $cartDiscount->setDiscountData($this->unserializeDiscountData($value['discount']));
+                    $cartDiscount->setRuleLabel($value['rule']);
+                    $cartDiscount->setRuleID($value['ruleID']);
+                    $discounts[] = $cartDiscount;
                 }
-                $itemExtension = $address->getExtensionAttributes();
-                $itemExtension->setDiscounts($discounts);
+                $addressExtension = $address->getExtensionAttributes();
+                $addressExtension->setDiscounts($discounts);
             }
         }
         return $result;

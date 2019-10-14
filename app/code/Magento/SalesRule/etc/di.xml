@@ -30,6 +30,8 @@
                 type="Magento\SalesRule\Model\Data\CouponMassDeleteResult" />
     <preference for="Magento\SalesRule\Api\CouponManagementInterface"
                 type="Magento\SalesRule\Model\Service\CouponManagementService" />
+    <preference for="Magento\SalesRule\Api\Data\DiscountInterface"
+                type="Magento\SalesRule\Model\Data\RuleDiscount" />
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">

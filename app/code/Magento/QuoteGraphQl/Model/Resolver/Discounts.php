@@ -46,9 +46,9 @@ class Discounts implements ResolverInterface
             foreach ($totalDiscounts as $value) {
                 $discount = [];
                 $amount = [];
-                $discount['label'] = $value['rule'] ?: __('Discount');
+                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
                 /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
-                $discountData = $value['discount'];
+                $discountData = $value->getDiscountData();
                 $amount['value'] = $discountData->getAmount();
                 $amount['currency'] = $quote->getQuoteCurrencyCode();
                 $discount['amount'] = $amount;
