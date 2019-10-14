@@ -7,6 +7,9 @@ namespace Magento\NewRelicReporting\Model\Apm;
 
 use \Magento\Framework\HTTP\ZendClient;
 
+/**
+ * Performs the request to make the deployment
+ */
 class Deployments
 {
     /**
@@ -88,7 +91,7 @@ class Deployments
             return false;
         }
 
-        if (($response->getStatus() < 200 || $response->getStatus() > 210)) {
+        if ($response->getStatus() < 200 || $response->getStatus() > 210) {
             $this->logger->warning('Deployment marker request did not send a 200 status code.');
             return false;
         }
