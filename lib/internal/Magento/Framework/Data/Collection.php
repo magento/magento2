@@ -834,7 +834,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getIterator()
     {
-        if(!$this->isLoaded()) {
+        if (!$this->isLoaded()) {
             $this->load();
         }
         return new \ArrayIterator($this->_items);
