@@ -72,7 +72,6 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
-    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -408,6 +407,28 @@
         <arguments>
             <argument name="converters" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Model\ProductLink\Converter\DefaultConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <arguments>
+            <argument name="groupsPool" xsi:type="array">
+                <item name="date" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Date</item>
+                <item name="file" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\File</item>
+                <item name="select" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Select</item>
+                <item name="text" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Text</item>
+            </argument>
+            <argument name="typesPool" xsi:type="array">
+                <item name="field" xsi:type="string">text</item>
+                <item name="area" xsi:type="string">text</item>
+                <item name="file" xsi:type="string">file</item>
+                <item name="drop_down" xsi:type="string">select</item>
+                <item name="radio" xsi:type="string">select</item>
+                <item name="checkbox" xsi:type="string">select</item>
+                <item name="multiple" xsi:type="string">select</item>
+                <item name="date" xsi:type="string">date</item>
+                <item name="date_time" xsi:type="string">date</item>
+                <item name="time" xsi:type="string">date</item>
             </argument>
         </arguments>
     </type>

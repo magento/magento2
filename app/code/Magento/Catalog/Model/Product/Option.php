@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -99,6 +100,16 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     protected $validatorPool;
 
     /**
+     * @var DefaultType[]
+     */
+    private $groupsPool;
+
+    /**
+     * @var string[]
+     */
+    private $typesPool;
+
+    /**
      * @var MetadataPool
      */
     private $metadataPool;
@@ -120,6 +131,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param array $groupsPool
+     * @param array $typesPool
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -135,12 +148,16 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
+        array $groupsPool = [],
+        array $typesPool = [],
         ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
-        $this->validatorPool = $validatorPool;
         $this->string = $string;
+        $this->validatorPool = $validatorPool;
+        $this->groupsPool = $groupsPool;
+        $this->typesPool = $typesPool;
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
 
@@ -306,44 +323,30 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * Get group name of option by given option type
      *
-     * @param string $type
+     * @param string|null $type
      * @return string
      */
-    public function getGroupByType($type = null)
+    public function getGroupByType($type = null): string
     {
         if ($type === null) {
             $type = $this->getType();
         }
-        $optionGroupsToTypes = [
-            self::OPTION_TYPE_FIELD => self::OPTION_GROUP_TEXT,
-            self::OPTION_TYPE_AREA => self::OPTION_GROUP_TEXT,
-            self::OPTION_TYPE_FILE => self::OPTION_GROUP_FILE,
-            self::OPTION_TYPE_DROP_DOWN => self::OPTION_GROUP_SELECT,
-            self::OPTION_TYPE_RADIO => self::OPTION_GROUP_SELECT,
-            self::OPTION_TYPE_CHECKBOX => self::OPTION_GROUP_SELECT,
-            self::OPTION_TYPE_MULTIPLE => self::OPTION_GROUP_SELECT,
-            self::OPTION_TYPE_DATE => self::OPTION_GROUP_DATE,
-            self::OPTION_TYPE_DATE_TIME => self::OPTION_GROUP_DATE,
-            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
-        ];
 
-        return $optionGroupsToTypes[$type] ?? '';
+        return $this->typesPool[$type] ?? '';
     }
 
     /**
      * Group model factory
      *
      * @param string $type Option type
-     * @return \Magento\Catalog\Model\Product\Option\Type\DefaultType
+     * @return DefaultType
      * @throws LocalizedException
      */
-    public function groupFactory($type)
+    public function groupFactory($type): DefaultType
     {
         $group = $this->getGroupByType($type);
-        if (!empty($group)) {
-            return $this->optionTypeFactory->create(
-                'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
-            );
+        if (!empty($group) && isset($this->groupsPool[$group])) {
+            return $this->optionTypeFactory->create($this->groupsPool[$group]);
         }
         throw new LocalizedException(__('The option type to get group instance is incorrect.'));
     }
