@@ -44,7 +44,7 @@
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
-            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableProductUnderscoredSku" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
             </createData>

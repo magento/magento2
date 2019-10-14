@@ -25,6 +25,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
+ * Test for \Magento\Catalog\Api\ProductRepositoryInterface
+ *
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -83,6 +85,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test get() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
      */
     public function testGet()
@@ -96,6 +100,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get product
+     *
      * @param string $sku
      * @param string|null $storeCode
      * @return array|bool|float|int|string
@@ -113,11 +119,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-
         $response = $this->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
+
         return $response;
     }
 
+    /**
+     * Test get() method with invalid sku
+     */
     public function testGetNoSuchEntityException()
     {
         $invalidSku = '(nonExistingSku)';
@@ -152,6 +161,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Product creation provider
+     *
      * @return array
      */
     public function productCreationProvider()
@@ -162,6 +173,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 $data
             );
         };
+
         return [
             [$productBuilder([ProductInterface::TYPE_ID => 'simple', ProductInterface::SKU => 'psku-test-1'])],
             [$productBuilder([ProductInterface::TYPE_ID => 'virtual', ProductInterface::SKU => 'psku-test-2'])],
@@ -188,6 +200,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * Test removing association between product and website 1
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
      */
     public function testUpdateWithDeleteWebsites()
@@ -211,6 +224,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * Test removing all website associations
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
      */
     public function testDeleteAllWebsiteAssociations()
@@ -229,6 +243,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test create() method with multiple websites
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/second_website.php
      */
     public function testCreateWithMultipleWebsites()
@@ -332,6 +348,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test create() method
+     *
      * @dataProvider productCreationProvider
      */
     public function testCreate($product)
@@ -399,6 +417,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
     }
 
+    /**
+     * Test create() method with invalid price format
+     */
     public function testCreateInvalidPriceFormat()
     {
         $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
@@ -435,6 +456,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->getProduct($sku);
     }
 
+    /**
+     * Test product links
+     */
     public function testProductLinks()
     {
         // Create simple product
@@ -468,7 +492,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             "product_links" => [$productLinkData]
         ];
@@ -531,6 +554,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get options data
+     *
      * @param string $productSku
      * @return array
      */
@@ -570,6 +595,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
     }
 
+    /**
+     * Test product options
+     */
     public function testProductOptions()
     {
         //Create product with options
@@ -631,6 +659,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
 
+    /**
+     * Test product with media gallery
+     */
     public function testProductWithMediaGallery()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
@@ -663,7 +694,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 2,
                 'media_type' => 'image',
                 'disabled' => false,
-                'types' => ['image', 'small_image'],
+                'types' => [],
                 'file' => '/t/i/' . $filename2,
             ],
         ];
@@ -676,7 +707,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny1_new_label',
                 'position' => 1,
                 'disabled' => false,
-                'types' => ['image', 'small_image'],
+                'types' => [],
                 'file' => '/t/i/' . $filename1,
             ],
         ];
@@ -690,7 +721,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'media_type' => 'image',
                 'position' => 1,
                 'disabled' => false,
-                'types' => ['image', 'small_image'],
+                'types' => [],
                 'file' => '/t/i/' . $filename1,
             ]
         ];
@@ -710,6 +741,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test update() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testUpdate()
@@ -753,15 +786,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Update product
+     *
      * @param array $product
      * @return array|bool|float|int|string
      */
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            foreach ($product['custom_attributes'] as &$customAttribute) {
-                if ($customAttribute['attribute_code'] == 'category_ids'
-                    && !is_array($customAttribute['value'])
+            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
+            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
                     $customAttribute['value'] = [""];
                 }
@@ -789,6 +825,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test delete() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testDelete()
@@ -798,6 +836,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testGetList()
@@ -860,6 +900,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method with additional params
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testGetListWithAdditionalParams()
@@ -899,6 +941,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method with filtering by website
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
      * @return void
      */
@@ -986,6 +1030,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
     }
 
+    /**
+     * Test getList() method with filtering by store data provider
+     *
+     * @return array
+     */
     public function testGetListWithFilteringByStoreDataProvider()
     {
         return [
@@ -1025,6 +1074,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method with multiple filter groups and sorting and pagination
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
      */
     public function testGetListWithMultipleFilterGroupsAndSortingAndPagination()
@@ -1094,6 +1145,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Convert custom attributes to associative array
+     *
      * @param $customAttributes
      * @return array
      */
@@ -1103,10 +1156,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         foreach ($customAttributes as $customAttribute) {
             $converted[$customAttribute['attribute_code']] = $customAttribute['value'];
         }
+
         return $converted;
     }
 
     /**
+     * Convert associative array to custom attributes
+     *
      * @param $data
      * @return array
      */
@@ -1116,10 +1172,13 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         foreach ($data as $attributeCode => $attributeValue) {
             $customAttributes[] = ['attribute_code' => $attributeCode, 'value' => $attributeValue];
         }
+
         return $customAttributes;
     }
 
     /**
+     * Test eav attributes
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testEavAttributes()
@@ -1163,7 +1222,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 3.62,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             'custom_attributes' => [
                 ['attribute_code' => 'cost', 'value' => ''],
@@ -1173,6 +1231,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Save Product
+     *
      * @param $product
      * @param string|null $storeCode
      * @return mixed
@@ -1180,9 +1240,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
-            foreach ($product['custom_attributes'] as &$customAttribute) {
-                if ($customAttribute['attribute_code'] == 'category_ids'
-                    && !is_array($customAttribute['value'])
+            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
+            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
+                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
+                    && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
                     $customAttribute['value'] = [""];
                 }
@@ -1200,6 +1261,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
+
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
@@ -1227,6 +1289,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
     }
 
+    /**
+     * Test tier prices
+     */
     public function testTierPrices()
     {
         // create a product with tier prices
@@ -1311,6 +1376,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get stock item data
+     *
      * @return array
      */
     private function getStockItemData()
@@ -1343,6 +1410,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test product category links
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testProductCategoryLinks()
@@ -1365,6 +1434,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test update product category without categories
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testUpdateProductCategoryLinksNullOrNotExists()
@@ -1386,6 +1457,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test update product category links position
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testUpdateProductCategoryLinksPosistion()
@@ -1403,6 +1476,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test update product category links unassing
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
      */
     public function testUpdateProductCategoryLinksUnassign()
@@ -1415,6 +1490,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get media gallery data
+     *
      * @param $filename1
      * @param $encodedImage
      * @param $filename2
@@ -1440,7 +1517,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'media_type' => 'image',
                 'disabled' => false,
                 'label' => 'tiny2',
-                'types' => ['image', 'small_image'],
+                'types' => [],
                 'content' => [
                     'type' => 'image/jpeg',
                     'name' => $filename2,
@@ -1450,6 +1527,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
     }
 
+    /**
+     * Test special price
+     */
     public function testSpecialPrice()
     {
         $productData = $this->getSimpleProductData();
@@ -1499,6 +1579,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertFalse(array_key_exists(self::KEY_SPECIAL_PRICE, $customAttributes));
     }
 
+    /**
+     * Test update status
+     */
     public function testUpdateStatus()
     {
         // Create simple product
@@ -1571,6 +1654,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get attribute options
+     *
      * @param string $attributeCode
      * @return array|bool|float|int|string
      */
@@ -1592,6 +1677,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Assert multiselect value
+     *
      * @param string $productSku
      * @param string $multiselectAttributeCode
      * @param string $expectedMultiselectValue
