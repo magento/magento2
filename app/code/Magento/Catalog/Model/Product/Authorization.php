@@ -77,14 +77,15 @@ class Authorization
      * Prepare old values to compare to.
      *
      * @param AttributeInterface $attribute
-     * @param ProductModel|null $oldProduct
+     * @param array|null $oldProduct
      * @return array
      */
-    private function fetchOldValues(AttributeInterface $attribute, ?ProductModel $oldProduct): array
+    private function fetchOldValues(AttributeInterface $attribute, ?array $oldProduct): array
     {
+        $attrCode = $attribute->getAttributeCode();
         if ($oldProduct) {
             //New value may only be the saved value
-            $oldValues = [$oldProduct->getData($attribute->getAttributeCode())];
+            $oldValues = [!empty($oldProduct[$attrCode]) ? $oldProduct[$attrCode] : null];
             if (empty($oldValues[0])) {
                 $oldValues[0] = null;
             }
@@ -100,10 +101,10 @@ class Authorization
      * Check whether the product has changed.
      *
      * @param ProductModel $product
-     * @param ProductModel|null $oldProduct
+     * @param array|null $oldProduct
      * @return bool
      */
-    private function hasProductChanged(ProductModel $product, ?ProductModel $oldProduct = null): bool
+    private function hasProductChanged(ProductModel $product, ?array $oldProduct = null): bool
     {
         $designAttributes = [
             'custom_design',
@@ -147,20 +148,21 @@ class Authorization
     public function authorizeSavingOf(ProductInterface $product): void
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-            $savedProduct = null;
+            $oldData = null;
             if ($product->getId()) {
-                /** @var ProductModel $savedProduct */
-                $savedProduct = $this->productFactory->create();
                 if ($product->getOrigData()) {
-                    $savedProduct->setData($product->getOrigData());
+                    $oldData = $product->getOrigData();
                 } else {
+                    /** @var ProductModel $savedProduct */
+                    $savedProduct = $this->productFactory->create();
                     $savedProduct->load($product->getId());
                     if (!$savedProduct->getSku()) {
                         throw NoSuchEntityException::singleField('id', $product->getId());
                     }
+                    $oldData = $product->getOrigData();
                 }
             }
-            if ($this->hasProductChanged($product, $savedProduct)) {
+            if ($this->hasProductChanged($product, $oldData)) {
                 throw new AuthorizationException(__('Not allowed to edit the product\'s design attributes'));
             }
         }
