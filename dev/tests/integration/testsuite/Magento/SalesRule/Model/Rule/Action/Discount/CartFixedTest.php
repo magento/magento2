@@ -164,9 +164,6 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $quote->setCouponCode('CART_FIXED_DISCOUNT_15');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
-        /** @var Rule $rule */
-        $rule = $this->getSalesRule('15$ fixed discount on whole cart');
-        $salesRuleId = $rule->getRuleId();
         /** @var CartItemInterface $item */
         $item = $quote->getItems()[0];
         $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
