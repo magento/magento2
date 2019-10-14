@@ -88,8 +88,8 @@ class ProductRuleReindex
         $subProducts = [];
         if ($configurableIds) {
             $subProducts = array_values($this->configurable->getChildrenIds($configurableIds)[0]);
-            if ($subProducts) {
-                $subject->executeList($subProducts);
+            foreach ($subProducts as $subProduct) {
+                $subject->executeRow($subProduct);
             }
         }
         return $subProducts;

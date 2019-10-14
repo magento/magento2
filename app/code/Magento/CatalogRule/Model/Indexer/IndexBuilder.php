@@ -297,14 +297,12 @@ class IndexBuilder
             $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
-        $products = $this->productLoader->getProducts($ids);
-        if ($products) {
-            foreach ($products as $product) {
-                $this->cleanProductPriceIndex([$product->getId()]);
-                $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
-            }
-            $this->reindexRuleGroupWebsite->execute();
+        $this->cleanProductPriceIndex($ids);
+        foreach ($ids as $productId) {
+            $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
         }
+
+        $this->reindexRuleGroupWebsite->execute();
     }
 
     /**
