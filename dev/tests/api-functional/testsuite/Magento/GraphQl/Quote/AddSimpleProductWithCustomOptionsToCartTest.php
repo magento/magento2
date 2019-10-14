@@ -32,11 +32,6 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
     private $getCustomOptionsValuesForQueryBySku;
 
     /**
-     * @var GetEmptyOptionsValuesForQueryBySku
-     */
-    private $getEmptyOptionsValuesForQueryBySku;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -45,7 +40,6 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->productCustomOptionsRepository = $objectManager->get(ProductCustomOptionRepositoryInterface::class);
         $this->getCustomOptionsValuesForQueryBySku = $objectManager->get(GetCustomOptionsValuesForQueryBySku::class);
-        $this->getEmptyOptionsValuesForQueryBySku = $objectManager->get(GetEmptyOptionsValuesForQueryBySku::class);
     }
 
     /**
@@ -63,7 +57,7 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
 
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         /* Generate customizable options fragment for GraphQl request */
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
+        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode(array_values($customOptionsValues)));
 
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
@@ -74,13 +68,14 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         self::assertCount(1, $response['addSimpleProductsToCart']['cart']);
 
         $customizableOptionsOutput = $response['addSimpleProductsToCart']['cart']['items'][0]['customizable_options'];
-        $assignedOptionsCount = count($customOptionsValues);
-        for ($counter = 0; $counter < $assignedOptionsCount; $counter++) {
-            $expectedValues = $this->buildExpectedValuesArray($customOptionsValues[$counter]['value_string']);
+        $count = 0;
+        foreach ($customOptionsValues as $type => $value) {
+            $expectedValues = $this->buildExpectedValuesArray($value['value_string'], $type);
             self::assertEquals(
                 $expectedValues,
-                $customizableOptionsOutput[$counter]['values']
+                $customizableOptionsOutput[$count]['values']
             );
+            $count++;
         }
     }
 
@@ -106,54 +101,24 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
     }
 
     /**
-     * Test adding a simple product to the shopping cart with Date customizable option assigned
+     * Test adding a simple product with wrong format value for date option
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_option_date.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddSimpleProductWithDateOption()
+    public function testAddSimpleProductWithWrongDateOptionFormat()
     {
-        $sku = 'simple-product-1';
-        $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'simple';
+        $quantity = 1;
 
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
+        $customOptionsValues['date']['value_string'] = '12-12-12';
+        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode(array_values($customOptionsValues)));
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
 
-        $response = $this->graphQlMutation($query);
-
-        self::assertArrayHasKey('items', $response['addSimpleProductsToCart']['cart']);
-        self::assertCount(1, $response['addSimpleProductsToCart']['cart']);
-
-        $cartItem = $response['addSimpleProductsToCart']['cart']['items'][0];
-        $customizableOptionOutput = $cartItem['customizable_options'][0]['values'][0]['value'];
-        $expectedValue = date("M d, Y", strtotime($customOptionsValues[0]['value_string']));
-
-        self::assertEquals($expectedValue, $customizableOptionOutput);
-    }
-
-    /**
-     * Test adding a simple product with empty values for date option
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_option_date.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     */
-    public function testAddSimpleProductWithMissedDateOptionsSet()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = 'simple-product-1';
-        $quantity = 1;
-
-        $customOptionsValues = $this->getEmptyOptionsValuesForQueryBySku->execute($sku);
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
-        $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
-        $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
-
-        self::expectExceptionMessage(
-            'Invalid format provided. Please use \'Y-m-d H:i:s\' format.'
-        );
+        $this->expectExceptionMessage('Invalid format provided. Please use \'Y-m-d H:i:s\' format.');
 
         $this->graphQlMutation($query);
     }
@@ -204,10 +169,14 @@ QUERY;
      * Build the part of expected response.
      *
      * @param string $assignedValue
+     * @param string $type option type
      * @return array
      */
-    private function buildExpectedValuesArray(string $assignedValue) : array
+    private function buildExpectedValuesArray(string $assignedValue, string $type) : array
     {
+        if ($type === 'date'){
+            return [['value' => date('M d, Y', strtotime($assignedValue))]];
+        }
         $assignedOptionsArray = explode(',', trim($assignedValue, '[]'));
         $expectedArray = [];
         foreach ($assignedOptionsArray as $assignedOption) {

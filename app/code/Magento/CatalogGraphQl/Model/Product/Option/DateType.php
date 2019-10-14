@@ -48,7 +48,7 @@ class DateType extends ProductDateOptionType
             $value = $values[$this->getOption()->getId()];
             $dateTime = \DateTime::createFromFormat(DateTime::DATETIME_PHP_FORMAT, $value);
 
-            if (!$dateTime) {
+            if ($dateTime === false) {
                 throw new GraphQlInputException(
                     __('Invalid format provided. Please use \'Y-m-d H:i:s\' format.')
                 );

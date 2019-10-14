@@ -41,25 +41,26 @@ class GetCustomOptionsValuesForQueryBySku
         foreach ($customOptions as $customOption) {
             $optionType = $customOption->getType();
             if ($optionType == 'date') {
-                $customOptionsValues[] = [
+                $customOptionsValues[$optionType] = [
                     'id' => (int)$customOption->getOptionId(),
-                    'value_string' => '2012-12-12 00:00:00'
+                    'value_string' => '2012-12-12 00:00:00',
                 ];
             } elseif ($optionType == 'field' || $optionType == 'area') {
-                $customOptionsValues[] = [
+                $customOptionsValues[$optionType] = [
                     'id' => (int)$customOption->getOptionId(),
-                    'value_string' => 'test'
+                    'value_string' => 'test',
                 ];
             } elseif ($optionType == 'drop_down') {
                 $optionSelectValues = $customOption->getValues();
-                $customOptionsValues[] = [
+                $customOptionsValues[$optionType] = [
                     'id' => (int)$customOption->getOptionId(),
-                    'value_string' => reset($optionSelectValues)->getOptionTypeId()
+                    'value_string' => reset($optionSelectValues)->getOptionTypeId(),
                 ];
             } elseif ($optionType == 'multiple') {
-                $customOptionsValues[] = [
+                $customOptionsValues[$optionType] = [
                     'id' => (int)$customOption->getOptionId(),
-                    'value_string' => '[' . implode(',', array_keys($customOption->getValues())) . ']'
+                    'value_string' => '[' . implode(',', array_keys($customOption->getValues())) . ']',
+
                 ];
             }
         }
