@@ -42,5 +42,10 @@
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginMessage" />
 
+        <!-- delete user -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
+            <argument name="user" value="NewAdminUser" />
+        </actionGroup>
     </test>
 </tests>
