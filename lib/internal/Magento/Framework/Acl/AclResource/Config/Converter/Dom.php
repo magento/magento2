@@ -5,10 +5,13 @@
  */
 namespace Magento\Framework\Acl\AclResource\Config\Converter;
 
+/**
+ * @inheritDoc
+ */
 class Dom implements \Magento\Framework\Config\ConverterInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \DOMDocument $source
      * @return array
@@ -39,6 +42,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
         $resourceAttributes = $resourceNode->attributes;
         $idNode = $resourceAttributes->getNamedItem('id');
         if ($idNode === null) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Attribute "id" is required for ACL resource.');
         }
         $resourceData['id'] = $idNode->nodeValue;
@@ -53,7 +57,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
         $sortOrderNode = $resourceAttributes->getNamedItem('sortOrder');
         $resourceData['sortOrder'] = $sortOrderNode !== null ? (int)$sortOrderNode->nodeValue : 0;
         $disabledNode = $resourceAttributes->getNamedItem('disabled');
-        $resourceData['disabled'] = $disabledNode !== null && $disabledNode->nodeValue == 'true' ? true : false;
+        $resourceData['disabled'] = $disabledNode !== null && $disabledNode->nodeValue == 'true';
         // convert child resource nodes if needed
         $resourceData['children'] = [];
         /** @var $childNode \DOMNode */
