@@ -32,7 +32,7 @@ class StoreConfig implements ResolverInterface
     private static $weeeDisplaySettings =  [
         WeeeDisplayConfig::DISPLAY_INCL => 'INCLUDE_FPT_WITHOUT_DETAILS',
         WeeeDisplayConfig::DISPLAY_INCL_DESCR => 'INCLUDE_FPT_WITH_DETAILS',
-        WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL => 'EXCLUDE_FPT_WITH_DETAILS',
+        WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL => 'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS',
         WeeeDisplayConfig::DISPLAY_EXCL => 'EXCLUDE_FPT_WITHOUT_DETAILS'
     ];
 
