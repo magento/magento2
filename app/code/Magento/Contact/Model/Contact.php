@@ -30,9 +30,26 @@ class Contact implements ContactInterface
 	*/
     public function send($name, $email, $telephone = null, $comment)
     {
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $params = ['fieldName' => 'email'];
-            throw new InputException(__('%fieldName is not a valid email address.', $params));
+        $params = [];
+        
+        if (!is_string($name) || empty($name)) {
+            $params[] = ['fieldName' => 'name'];
+        }
+        
+        if (!is_string($email) || empty($email)) {
+            $params[] = ['fieldName' => 'email'];
+        }
+    
+        if (!is_string($comment) || empty($comment)) {
+            $params[] = ['fieldName' => 'comment'];
+        }
+        
+        if(!empty($params)){
+            throw new InputException(__('%fieldName is a required field.', $params));
+        }
+        
+        if (false === \strpos($email, '@')) {
+            throw new InputException(__('Invalid email address'));
         }
         
         $contactData = ['name' => $name, 'email' => $email, 'telephone'=> $telephone, 'comment'=> $comment];
