@@ -81,8 +81,8 @@ $_order = $block->getOrder() ?>
             </tr>
         <?php endif; ?>
         <tr bgcolor="#DEE5E8">
-            <td colspan="2" align="right" style="padding:3px 9px"><strong><big><?= $block->escapeHtml(__('Grand Total')) ?></big></strong></td>
-            <td align="right" style="padding:6px 9px"><strong><big><?= /* @noEscape */ $_order->formatPrice($_order->getGrandTotal()) ?></big></strong></td>
+            <td colspan="2" align="right" style="padding:3px 9px"><strong style="font-size: larger"><?= $block->escapeHtml(__('Grand Total')) ?></strong></td>
+            <td align="right" style="padding:6px 9px"><strong style="font-size: larger"><?= /* @noEscape */ $_order->formatPrice($_order->getGrandTotal()) ?></strong></td>
         </tr>
     </tfoot>
 </table>
