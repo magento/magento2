@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Observer;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Model\ResourceModel\Iterator;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
-use Psr\Log\LoggerInterface;
 
 class UpdateQuoteOnDisableSalesrule implements ObserverInterface
 {
@@ -20,40 +19,25 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
     private $collectionFactory;
 
     /**
-     * @var LoggerInterface
+     * @var ResourceConnection
      */
-    private $logger;
-
-    /**
-     * @var Iterator
-     */
-    private $iterator;
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
+    private $resource;
 
     /**
      * UpdateQuoteOnDisableSalesrule constructor.
-     * @param Iterator $iterator
      * @param CollectionFactory $collectionFactory
-     * @param CartRepositoryInterface $cartRepository
+     * @param ResourceConnection $resource
      */
     public function __construct(
-        Iterator $iterator,
         CollectionFactory $collectionFactory,
-        CartRepositoryInterface $cartRepository,
-        LoggerInterface $logger
+        ResourceConnection $resource
     ) {
-        $this->iterator = $iterator;
         $this->collectionFactory = $collectionFactory;
-        $this->cartRepository = $cartRepository;
-        $this->logger = $logger;
+        $this->resource = $resource;
     }
 
     /**
-     * We should ignore active rules and recalculate quotes only when rule is disabled.
+     * We should ignore active rules and add flag to recalculate quotes only when rule is disabled.
      *
      * @param Observer $observer
      * @return void
@@ -65,40 +49,16 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
         if ($rule->getIsActive()) {
             return;
         }
-        $this->iterateQuotes($rule);
-    }
 
-    /**
-     * To prevent out of memory issue we read row by row.
-     *
-     * @param Rule $rule
-     * @return void
-     */
-    private function iterateQuotes(Rule $rule): void
-    {
         /** @var Collection $quoteCollection */
         $quoteCollection = $this->collectionFactory->create();
         $quoteCollection->getSelect()
             ->where('is_active = 1')
             ->where('FIND_IN_SET(?, applied_rule_ids)', $rule->getId());
-        $this->iterator->walk($quoteCollection->getSelect(), [[$this, 'callbackRecalculateQuote']]);
-    }
-
-    /**
-     * Callback to get and recalculate quote
-     *
-     * @param $args
-     * @return void
-     */
-    public function callbackRecalculateQuote($args): void
-    {
-        try {
-            /** @var Quote $quote */
-            $quote = $this->cartRepository->get($args['row']['entity_id']);
-            $quote->setAppliedRuleIds('');
-            $quote->collectTotals()->save();
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-        }
+        $this->resource->getConnection()->update(
+            $this->resource->getTableName('quote'),
+            ['trigger_recollect' => 1],
+            ['entity_id IN (?)' => $quoteCollection->getAllIds()]
+        );
     }
 }
