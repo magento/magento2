@@ -219,7 +219,6 @@ mutation {
           telephone: "88776655"
           region: "TX"
           country_code: "US"
-          save_in_address_book: false
          }
       }
     }
@@ -258,7 +257,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]

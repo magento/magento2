@@ -39,7 +39,7 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
-            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableProductUnderscoredSku" stepKey="product"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="product"/>
             </createData>
