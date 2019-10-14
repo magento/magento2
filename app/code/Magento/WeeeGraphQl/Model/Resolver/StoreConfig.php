@@ -24,16 +24,16 @@ class StoreConfig implements ResolverInterface
     /**
      * @var string
      */
-    private static $weeeDisplaySettingsNone = 'NONE';
+    private static $weeeDisplaySettingsNone = 'FPT_DISABLED';
 
     /**
      * @var array
      */
     private static $weeeDisplaySettings =  [
-        WeeeDisplayConfig::DISPLAY_INCL => 'INCLUDING_FPT',
-        WeeeDisplayConfig::DISPLAY_INCL_DESCR => 'INCLUDING_FPT_AND_FPT_DESCRIPTION',
-        WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL => 'EXCLUDING_FPT_INCLUDING_FPT_AND_FPT_DESCRIPTION',
-        WeeeDisplayConfig::DISPLAY_EXCL => 'EXCLUDING_FPT'
+        WeeeDisplayConfig::DISPLAY_INCL => 'INCLUDE_FPT_WITHOUT_DETAILS',
+        WeeeDisplayConfig::DISPLAY_INCL_DESCR => 'INCLUDE_FPT_WITH_DETAILS',
+        WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL => 'EXCLUDE_FPT_WITH_DETAILS',
+        WeeeDisplayConfig::DISPLAY_EXCL => 'EXCLUDE_FPT_WITHOUT_DETAILS'
     ];
 
     /**
