@@ -1176,12 +1176,12 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Attribute">
+    <type name="Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager">
         <arguments>
             <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Category\Attribute">
+    <type name="Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager">
         <arguments>
             <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
         </arguments>

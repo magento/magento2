@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**
@@ -30,17 +32,32 @@ class LayoutUpdate implements ModifierInterface
     }
 
     /**
+     * Extract custom layout value.
+     *
+     * @param ProductInterface|Product $product
+     * @return mixed
+     */
+    private function extractLayoutUpdate(ProductInterface $product)
+    {
+        if ($product instanceof Product && !$product->hasData(Product::CUSTOM_ATTRIBUTES)) {
+            return $product->getData('custom_layout_update');
+        }
+
+        $attr = $product->getCustomAttribute('custom_layout_update');
+
+        return $attr ? $attr->getValue() : null;
+    }
+
+    /**
      * @inheritdoc
      * @since 101.1.0
      */
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        if ($oldLayout = $product->getCustomAttribute('custom_layout_update')) {
-            if ($oldLayout->getValue()) {
-                $data[$product->getId()][AbstractModifier::DATA_SOURCE_DEFAULT]['custom_layout_update_file']
-                    = \Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
-            }
+        if ($oldLayout = $this->extractLayoutUpdate($product)) {
+            $data[$product->getId()][AbstractModifier::DATA_SOURCE_DEFAULT]['custom_layout_update_file']
+                = \Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
         }
 
         return $data;

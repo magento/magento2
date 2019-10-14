@@ -697,7 +697,7 @@ class Eav extends AbstractModifier
             if ($source instanceof SpecificSourceInterface) {
                 $options = $source->getOptionsFor($product);
             } else {
-                $options = $attributeModel->getSource()->getAllOptions(true, true);
+                $options = $source->getAllOptions(true, true);
             }
             foreach ($options as &$option) {
                 $option['__disableTmpl'] = true;
