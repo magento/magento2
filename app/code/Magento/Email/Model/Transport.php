@@ -10,7 +10,6 @@ namespace Magento\Email\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessageInterface;
-use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
@@ -57,7 +56,7 @@ class Transport implements TransportInterface
     private $zendTransport;
 
     /**
-     * @var MessageInterface
+     * @var EmailMessageInterface
      */
     private $message;
 
