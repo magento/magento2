@@ -296,13 +296,6 @@ class IndexBuilder
             $rule->setProductsFilter($ids);
             $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
-
-        $this->cleanProductPriceIndex($ids);
-        foreach ($ids as $productId) {
-            $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
-        }
-
-        $this->reindexRuleGroupWebsite->execute();
     }
 
     /**
