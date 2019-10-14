@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 declare(strict_types=1);
 
@@ -11,6 +15,9 @@ use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
 
+/**
+ * Set flag trigger_recollect for quotes with disabled rule
+ */
 class UpdateQuoteOnDisableSalesrule implements ObserverInterface
 {
     /**
