@@ -12,7 +12,6 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite;
-use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 /**
  * Test the GraphQL endpoint's URLResolver query to verify canonical URL's are correctly returned.
@@ -69,26 +68,16 @@ QUERY;
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
 
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$urlPath}")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $urlPath,
+            $relativePath,
+            $expectedType
+        );
     }
 
     /**
-     * Tests the use case where non seo friendly is provided as resolver input in the Query
+     * Test the use case where non seo friendly is provided as resolver input in the Query
      *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
@@ -127,27 +116,17 @@ QUERY;
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
         $nonSeoFriendlyPath = $actualUrls->getTargetPath();
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$nonSeoFriendlyPath}")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $nonSeoFriendlyPath,
+            $relativePath,
+            $expectedType
+        );
     }
 
-
     /**
-     * Tests the use case where non seo friendly is provided as resolver input in the Query
+     * Test the use case where non seo friendly is provided as resolver input in the Query
      *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
@@ -180,6 +159,7 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $urlPath = $response['products']['items'][0]['url_key'] . $response['products']['items'][0]['url_suffix'];
+        $suffix = $response['products']['items'][0]['url_suffix'];
 
         /** @var  UrlFinderInterface $urlFinder */
         $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
@@ -190,44 +170,20 @@ QUERY;
             ]
         );
         // querying the end redirect gives the same record
-        $relativePath = $actualUrls->getRequestPath();
-        $expectedType = $actualUrls->getEntityType();
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$renamedKey}.html")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
-
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $renamedKey . $suffix,
+            $actualUrls->getRequestPath(),
+            $actualUrls->getEntityType()
+        );
 
         // querying a url that's a redirect the active redirected final url
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$productSku}.html")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
-
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $productSku . $suffix,
+            $actualUrls->getRequestPath(),
+            $actualUrls->getEntityType()
+        );
 
         // create custom url that doesn't redirect
         /** @var  UrlRewrite $urlRewriteModel */
@@ -251,9 +207,22 @@ QUERY;
         $urlRewriteModel->save();
 
         // querying a custom url that should return the target entity but relative should be the custom url
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $customUrl,
+            $customUrl,
+            $actualUrls->getEntityType()
+        );
+
+        // change custom url that does redirect
+        $urlRewriteModel->setRedirectType('301');
+        $urlRewriteModel->setId($urlRewriteModel->getId());
+        $urlRewriteModel->save();
+
+        //modifying query by adding spaces to avoid getting cached values.
         $query
             = <<<QUERY
-{
+{   
   urlResolver(url:"{$customUrl}")
   {
    id
@@ -265,30 +234,8 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($customUrl, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
-
-
-        // change custom url that does redirect
-        $urlRewriteModel->setRedirectType('301');
-        $urlRewriteModel->setId($urlRewriteModel->getId());
-        $urlRewriteModel->save();
-
-        //modifying query to avoid getting cached values.
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$customUrl}")
-  {
-   id relative_url type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertEquals($actualUrls->getRequestPath(), $response['urlResolver']['relative_url']);
+        $this->assertEquals(strtoupper($actualUrls->getEntityType()), $response['urlResolver']['type']);
 
         $urlRewriteModel->delete();
     }
@@ -331,26 +278,16 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $urlPath = $response['category']['url_key'] . $response['category']['url_suffix'];
 
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$urlPath}")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($categoryId, $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertResponseFromGraphQl(
+            (int) $categoryId,
+            $urlPath,
+            $relativePath,
+            $expectedType
+        );
     }
 
     /**
-     * Tests the use case where the url_key of the existing product is changed
+     * Test the use case where the url_key of the existing product is changed
      *
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
@@ -390,22 +327,13 @@ QUERY;
         );
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
-        $query
-            = <<<QUERY
-{
-  urlResolver(url:"{$urlPath}")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $urlPath,
+            $relativePath,
+            $expectedType
+        );
     }
 
     /**
@@ -484,21 +412,12 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $urlPath = $response['category']['url_key'] . $response['category']['url_suffix'];
 
-        $query = <<<QUERY
-{
-  urlResolver(url:"/{$urlPath}")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($categoryId, $response['urlResolver']['id']);
-        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertResponseFromGraphQl(
+            (int) $categoryId,
+            $urlPath,
+            $relativePath,
+            $expectedType
+        );
     }
 
     /**
@@ -537,5 +456,37 @@ QUERY;
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals('PRODUCT', $response['urlResolver']['type']);
         $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
+    }
+
+    /**
+     * Assert response from GraphQl
+     *
+     * @param string $productId
+     * @param string $urlKey
+     * @param string $relativePath
+     * @param string $expectedType
+     */
+    private function assertResponseFromGraphQl(
+        int $productId,
+        string $urlKey,
+        string $relativePath,
+        string $expectedType
+    ): void {
+        $query
+            = <<<QUERY
+{
+  urlResolver(url:"{$urlKey}")
+  {
+   id
+   relative_url
+   type
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('urlResolver', $response);
+        $this->assertEquals($productId, $response['urlResolver']['id']);
+        $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
+        $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
     }
 }
