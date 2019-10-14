@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <!-- Contact Page -->
     <route url="/V1/contact" method="POST">
-        <service class="Magento\Customer\Api\ContactInterface" method="send"/>
+        <service class="Magento\Contact\Api\ContactInterface" method="send"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
