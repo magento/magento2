@@ -41,7 +41,7 @@ class Discount
         $discounts = $cartExtension->getDiscounts();
         $serializedDiscount = [];
         if ($discounts) {
-            foreach ($discounts as $key => $value) {
+            foreach ($discounts as $value) {
                 $discount = $value->getDiscountData();
                 $discountData = [
                     "amount" => $discount->getAmount(),

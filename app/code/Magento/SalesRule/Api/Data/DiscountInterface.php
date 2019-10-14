@@ -13,14 +13,14 @@ interface DiscountInterface
     /**
      * Get Discount Data
      *
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return mixed
      */
     public function getDiscountData();
 
     /**
      * Get Rule Label
      *
-     * @return mixed
+     * @return string
      */
     public function getRuleLabel();
 
