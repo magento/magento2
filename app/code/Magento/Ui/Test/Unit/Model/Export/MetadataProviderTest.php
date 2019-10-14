@@ -101,8 +101,8 @@ class MetadataProviderTest extends \PHPUnit\Framework\TestCase
             [['Name'],['Name']],
             [['Id'],['Id']],
             [['id'],['id']],
-            [['IDTEST'],['"IDTEST"']],
-            [['ID TEST'],['"ID TEST"']],
+            [['IDTEST'],['IDTEST']],
+            [['ID TEST'],['ID TEST']],
         ];
     }
 

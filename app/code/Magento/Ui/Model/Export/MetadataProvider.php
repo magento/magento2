@@ -15,6 +15,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
+ * Metadata Provider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MetadataProvider
@@ -84,7 +85,7 @@ class MetadataProvider
                 return $childComponent;
             }
         }
-        throw new \Exception('No columns found');
+        throw new \Exception('No columns found'); // @codingStandardsIgnoreLine
     }
 
     /**
