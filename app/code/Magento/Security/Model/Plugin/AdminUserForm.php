@@ -28,7 +28,7 @@ class AdminUserForm
     private $userExpirationResource;
 
     /**
-     * @var UserExpirationFactory
+     * @var \Magento\Security\Model\UserExpirationFactory
      */
     private $userExpirationFactory;
 
@@ -36,7 +36,7 @@ class AdminUserForm
      * UserForm constructor.
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param UserExpiration $userExpiration
+     * @param \Magento\Security\Model\UserExpirationFactory $userExpirationFactory
      * @param \Magento\Security\Model\ResourceModel\UserExpiration $userExpirationResource
      */
     public function __construct(
@@ -96,6 +96,12 @@ class AdminUserForm
         return $proceed();
     }
 
+    /**
+     * Loads a user expiration record by user ID.
+     *
+     * @param $userId string
+     * @return string
+     */
     private function loadUserExpirationByUserId($userId)
     {
         /** @var \Magento\Security\Model\UserExpiration $userExpiration */
