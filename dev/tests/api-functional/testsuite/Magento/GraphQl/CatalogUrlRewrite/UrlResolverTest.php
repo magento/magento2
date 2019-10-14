@@ -68,7 +68,7 @@ QUERY;
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
 
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $urlPath,
             $relativePath,
@@ -117,7 +117,7 @@ QUERY;
         $expectedType = $actualUrls->getEntityType();
         $nonSeoFriendlyPath = $actualUrls->getTargetPath();
 
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $nonSeoFriendlyPath,
             $relativePath,
@@ -168,7 +168,7 @@ QUERY;
             ]
         );
         // querying the end redirect gives the same record
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $renamedKey . $suffix,
             $actualUrls->getRequestPath(),
@@ -176,7 +176,7 @@ QUERY;
         );
 
         // querying a url that's a redirect the active redirected final url
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $productSku . $suffix,
             $actualUrls->getRequestPath(),
@@ -205,7 +205,7 @@ QUERY;
         $urlRewriteModel->save();
 
         // querying a custom url that should return the target entity but relative should be the custom url
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $customUrl,
             $customUrl,
@@ -220,7 +220,7 @@ QUERY;
         ObjectManager::getInstance()->get(\Magento\TestFramework\Helper\CacheCleaner::class)->cleanAll();
 
         //modifying query by adding spaces to avoid getting cached values.
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $customUrl,
             $actualUrls->getRequestPath(),
@@ -267,7 +267,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $urlPath = $response['category']['url_key'] . $response['category']['url_suffix'];
 
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $categoryId,
             $urlPath,
             $relativePath,
@@ -317,7 +317,7 @@ QUERY;
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
 
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $urlPath,
             $relativePath,
@@ -401,7 +401,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $urlPath = $response['category']['url_key'] . $response['category']['url_suffix'];
 
-        $this->assertResponseFromGraphQl(
+        $this->queryUrlAndAssertResponse(
             (int) $categoryId,
             $urlPath,
             $relativePath,
@@ -455,7 +455,7 @@ QUERY;
      * @param string $relativePath
      * @param string $expectedType
      */
-    private function assertResponseFromGraphQl(
+    private function queryUrlAndAssertResponse(
         int $productId,
         string $urlKey,
         string $relativePath,
