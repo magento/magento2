@@ -75,6 +75,7 @@ require([
         unconvertedText: '',
         typeChange: false,
         variables: null,
+        id: 'template_text',
 
         events: {
             'click [data-role=template-save]' : 'save',
@@ -114,31 +115,39 @@ require([
         },
 
         stripTags: function () {
+            var self = this;
             confirm({
-                content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to strip tags?'))) ?>",
+                content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure that you want to strip all tags?'))) ?>",
                 actions: {
                     confirm: function () {
-                        this.unconvertedText = $('template_text').value;
+                        if (tinyMCE.activeEditor()) {
+                            tinyMCE.turnOff();
+                            tinyMCE.getToggleButton().hide();
+                        }
+                        self.unconvertedText = $(self.id).value;
                         $('convert_button').hide();
-                        $('template_text').value =  $('template_text').value.stripScripts().replace(
-                            new RegExp('<style[^>]*>[\\S\\s]*?</style>', 'img'), ''
-                        ).stripTags().strip();
                         $('convert_button_back').show();
+                        $(self.id).value =  $(self.id).value.stripScripts().stripTags();
                         $('field_template_styles').hide();
-                        this.typeChange = true;
-                        return false;
+                        self.typeChange = true;
                     }
                 }
             });
         },
+
         unStripTags: function () {
             $('convert_button').show();
             $('convert_button_back').hide();
-            $('template_text').value =  this.unconvertedText;
-            $('field_template_styles').show();
+            $(this.id).value = this.unconvertedText;
+            if (tinyMCE.activeEditor()) {
+                tinyMCE.turnOn();
+                tinyMCE.getToggleButton().show();
+            }
             this.typeChange = false;
+            $('field_template_styles').show();
             return false;
         },
+
         save: function() {
             if (this.typeChange) {
                 $('change_flag_element').value = '1';
@@ -147,6 +156,7 @@ require([
             jQuery('#email_template_edit_form').triggerHandler('save');
             return false;
         },
+
         preview: function() {
             if (this.typeChange) {
                 $('preview_type').value = <?= /* @noEscape */ TemplateTypesInterface::TYPE_TEXT ?>;
