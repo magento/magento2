@@ -28,7 +28,6 @@ class ValidateAddressFromSchema
         $this->typeRegistry = $typeRegistry;
     }
 
-
     /**
      * Validate data from address against mandatory fields from graphql schema for address
      *

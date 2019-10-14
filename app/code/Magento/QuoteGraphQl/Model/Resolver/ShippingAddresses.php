@@ -32,13 +32,12 @@ class ShippingAddresses implements ResolverInterface
 
     /**
      * @param ExtractQuoteAddressData $extractQuoteAddressData
-     * @param ValidateAddressFromSchema
+     * @param ValidateAddressFromSchema $validateAddressFromSchema
      */
     public function __construct(
         ExtractQuoteAddressData $extractQuoteAddressData,
         ValidateAddressFromSchema $validateAddressFromSchema
-    )
-    {
+    ) {
         $this->extractQuoteAddressData = $extractQuoteAddressData;
         $this->validateAddressFromSchema = $validateAddressFromSchema;
     }

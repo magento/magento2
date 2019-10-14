@@ -37,8 +37,7 @@ class BillingAddress implements ResolverInterface
     public function __construct(
         ExtractQuoteAddressData $extractQuoteAddressData,
         ValidateAddressFromSchema $validateAddressFromSchema
-)
-    {
+    ) {
         $this->extractQuoteAddressData = $extractQuoteAddressData;
         $this->validateAddressFromSchema = $validateAddressFromSchema;
     }
