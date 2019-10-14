@@ -728,7 +728,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 'store' => $this->_storeManager->getStore()->getId(),
             ]
         )->setTemplateVars(
-            ['subscriber_data' => ['confirmation_link' => $this->getConfirmationLink()], 'store' => $this->_storeManager->getStore()]
+            [
+                'subscriber' => $this,
+                'store' => $this->_storeManager->getStore()
+            ]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
