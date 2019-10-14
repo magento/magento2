@@ -58,7 +58,8 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         /* Generate customizable options fragment for GraphQl request */
         $queryCustomizableOptionValues = preg_replace(
-            '/"([^"]+)"\s*:\s*/', '$1:',
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
             json_encode(array_values($customOptionsValues))
         );
 
@@ -118,7 +119,8 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         $customOptionsValues['date']['value_string'] = '12-12-12';
         $queryCustomizableOptionValues = preg_replace(
-            '/"([^"]+)"\s*:\s*/', '$1:',
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
             json_encode(array_values($customOptionsValues))
         );
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";

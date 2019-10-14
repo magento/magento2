@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * CatalogGraphQl product option date type
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class DateType extends ProductDateOptionType
 {
