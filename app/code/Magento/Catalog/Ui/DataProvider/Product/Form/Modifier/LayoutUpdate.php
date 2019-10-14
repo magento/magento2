@@ -55,7 +55,7 @@ class LayoutUpdate implements ModifierInterface
     public function modifyData(array $data)
     {
         $product = $this->locator->getProduct();
-        if ($oldLayout = $this->extractLayoutUpdate($product)) {
+        if ($this->extractLayoutUpdate($product)) {
             $data[$product->getId()][AbstractModifier::DATA_SOURCE_DEFAULT]['custom_layout_update_file']
                 = \Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
         }
