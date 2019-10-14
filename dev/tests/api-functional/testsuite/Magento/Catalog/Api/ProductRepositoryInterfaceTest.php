@@ -794,10 +794,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
-            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$customAttribute) {
+                if ($customAttribute['attribute_code'] == 'category_ids'
+                    && !is_array($customAttribute['value'])
                 ) {
                     $customAttribute['value'] = [""];
                 }
@@ -1240,10 +1239,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
-            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
-            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$customAttribute) {
+                if ($customAttribute['attribute_code'] == 'category_ids'
+                    && !is_array($customAttribute['value'])
                 ) {
                     $customAttribute['value'] = [""];
                 }
