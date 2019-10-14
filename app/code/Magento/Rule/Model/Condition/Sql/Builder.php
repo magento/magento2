@@ -268,6 +268,7 @@ class Builder
                         $condition = "'" . trim($condition) . "'";
                     }
                     $conditions = implode(', ', $conditions);
+                    $collection->getSelect()->reset(Select::ORDER);
                     $collection->getSelect()->order("FIELD($attributeField, $conditions)");
                 }
             } else {
