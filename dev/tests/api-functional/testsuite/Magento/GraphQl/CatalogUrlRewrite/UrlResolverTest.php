@@ -139,9 +139,7 @@ QUERY;
 
         // generate permanent redirects
         $renamedKey = 'p002-ren';
-        $product->setUrlKey($renamedKey);
-        $product->setData('save_rewrites_history', true);
-        $product->save();
+        $product->setUrlKey($renamedKey)->setData('save_rewrites_history', true)->save();
 
         $storeId = $product->getStoreId();
 
@@ -219,24 +217,15 @@ QUERY;
         $urlRewriteModel->setId($urlRewriteModel->getId());
         $urlRewriteModel->save();
 
-        //modifying query by adding spaces to avoid getting cached values.
-        $query
-            = <<<QUERY
-{   
-  urlResolver(url:"{$customUrl}")
-  {
-   id
-   relative_url
-   type
-  }
-}
-QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('urlResolver', $response);
-        $this->assertEquals($product->getEntityId(), $response['urlResolver']['id']);
-        $this->assertEquals($actualUrls->getRequestPath(), $response['urlResolver']['relative_url']);
-        $this->assertEquals(strtoupper($actualUrls->getEntityType()), $response['urlResolver']['type']);
+        ObjectManager::getInstance()->get(\Magento\TestFramework\Helper\CacheCleaner::class)->cleanAll();
 
+        //modifying query by adding spaces to avoid getting cached values.
+        $this->assertResponseFromGraphQl(
+            (int) $product->getEntityId(),
+            $customUrl,
+            $actualUrls->getRequestPath(),
+            strtoupper($actualUrls->getEntityType())
+        );
         $urlRewriteModel->delete();
     }
 
