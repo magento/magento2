@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Adminhtml sales order create sidebar block
@@ -132,7 +136,20 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     {
         $count = $this->getData('item_count');
         if ($count === null) {
-            $count = count($this->getItems());
+            $useQty = $this->_scopeConfig->getValue(
+                'checkout/cart_link/use_qty',
+                ScopeInterface::SCOPE_STORE
+            );
+            $allItems = $this->getItems();
+            if ($useQty) {
+                $count = 0;
+                foreach ($allItems as $item) {
+                    $count += $item->getQty();
+                }
+            } else {
+                $count = count($allItems);
+            }
+
             $this->setData('item_count', $count);
         }
         return $count;
