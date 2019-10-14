@@ -57,7 +57,10 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
 
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         /* Generate customizable options fragment for GraphQl request */
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode(array_values($customOptionsValues)));
+        $queryCustomizableOptionValues = preg_replace(
+            '/"([^"]+)"\s*:\s*/', '$1:',
+            json_encode(array_values($customOptionsValues))
+        );
 
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
@@ -114,7 +117,10 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
 
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         $customOptionsValues['date']['value_string'] = '12-12-12';
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode(array_values($customOptionsValues)));
+        $queryCustomizableOptionValues = preg_replace(
+            '/"([^"]+)"\s*:\s*/', '$1:',
+            json_encode(array_values($customOptionsValues))
+        );
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
 
@@ -174,7 +180,7 @@ QUERY;
      */
     private function buildExpectedValuesArray(string $assignedValue, string $type) : array
     {
-        if ($type === 'date'){
+        if ($type === 'date') {
             return [['value' => date('M d, Y', strtotime($assignedValue))]];
         }
         $assignedOptionsArray = explode(',', trim($assignedValue, '[]'));
