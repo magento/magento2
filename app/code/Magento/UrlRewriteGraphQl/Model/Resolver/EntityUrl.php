@@ -75,7 +75,6 @@ class EntityUrl implements ResolverInterface
                 'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
             ];
 
-
             if (empty($resultArray['id'])) {
                 throw new GraphQlNoSuchEntityException(
                     __('No such entity found with matching URL key: %url', ['url' => $url])
