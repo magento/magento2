@@ -53,6 +53,7 @@ class UrlResolverTest extends GraphQlAbstract
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
@@ -60,6 +61,7 @@ QUERY;
         $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
         $this->assertEquals($requestPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
+        $this->assertEquals(0, $response['urlResolver']['redirectCode']);
 
         // querying by non seo friendly url path should return seo friendly relative url
         $query
@@ -70,6 +72,7 @@ QUERY;
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
@@ -77,6 +80,7 @@ QUERY;
         $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
         $this->assertEquals($requestPath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper(str_replace('-', '_', $expectedEntityType)), $response['urlResolver']['type']);
+        $this->assertEquals(0, $response['urlResolver']['redirectCode']);
     }
 
     /**
@@ -102,6 +106,7 @@ QUERY;
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
@@ -110,5 +115,6 @@ QUERY;
         $this->assertEquals($homePageId, $response['urlResolver']['id']);
         $this->assertEquals($homePageIdentifier, $response['urlResolver']['relative_url']);
         $this->assertEquals('CMS_PAGE', $response['urlResolver']['type']);
+        $this->assertEquals(0, $response['urlResolver']['redirectCode']);
     }
 }

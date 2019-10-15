@@ -67,12 +67,14 @@ QUERY;
         );
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
+        $redirectCode =  $actualUrls->getRedirectType();
 
         $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $urlPath,
             $relativePath,
-            $expectedType
+            $expectedType,
+            $redirectCode
         );
     }
 
@@ -116,12 +118,14 @@ QUERY;
         $relativePath = $actualUrls->getRequestPath();
         $expectedType = $actualUrls->getEntityType();
         $nonSeoFriendlyPath = $actualUrls->getTargetPath();
+        $redirectCode =  $actualUrls->getRedirectType();
 
         $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
             $nonSeoFriendlyPath,
             $relativePath,
-            $expectedType
+            $expectedType,
+            $redirectCode
         );
     }
 
@@ -172,7 +176,8 @@ QUERY;
             (int) $product->getEntityId(),
             $renamedKey . $suffix,
             $actualUrls->getRequestPath(),
-            $actualUrls->getEntityType()
+            $actualUrls->getEntityType(),
+            0
         );
 
         // querying a url that's a redirect the active redirected final url
@@ -180,7 +185,8 @@ QUERY;
             (int) $product->getEntityId(),
             $productSku . $suffix,
             $actualUrls->getRequestPath(),
-            $actualUrls->getEntityType()
+            $actualUrls->getEntityType(),
+            301
         );
 
         // create custom url that doesn't redirect
@@ -209,7 +215,8 @@ QUERY;
             (int) $product->getEntityId(),
             $customUrl,
             $customUrl,
-            $actualUrls->getEntityType()
+            $actualUrls->getEntityType(),
+            0
         );
 
         // change custom url that does redirect
@@ -224,7 +231,8 @@ QUERY;
             (int) $product->getEntityId(),
             $customUrl,
             $actualUrls->getRequestPath(),
-            strtoupper($actualUrls->getEntityType())
+            strtoupper($actualUrls->getEntityType()),
+            301
         );
         $urlRewriteModel->delete();
     }
@@ -271,7 +279,8 @@ QUERY;
             (int) $categoryId,
             $urlPath,
             $relativePath,
-            $expectedType
+            $expectedType,
+            0
         );
     }
 
@@ -321,7 +330,8 @@ QUERY;
             (int) $product->getEntityId(),
             $urlPath,
             $relativePath,
-            $expectedType
+            $expectedType,
+            0
         );
     }
 
@@ -355,6 +365,7 @@ QUERY;
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
@@ -400,12 +411,13 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $urlPath = $response['category']['url_key'] . $response['category']['url_suffix'];
-
+        $urlPathWithLeadingSlash = "/{$urlPath}";
         $this->queryUrlAndAssertResponse(
             (int) $categoryId,
-            $urlPath,
+            $urlPathWithLeadingSlash,
             $relativePath,
-            $expectedType
+            $expectedType,
+            0
         );
     }
 
@@ -438,6 +450,7 @@ QUERY;
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
@@ -445,6 +458,7 @@ QUERY;
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals('PRODUCT', $response['urlResolver']['type']);
         $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
+        $this->assertEquals(0, $response['urlResolver']['redirectCode']);
     }
 
     /**
@@ -454,12 +468,14 @@ QUERY;
      * @param string $urlKey
      * @param string $relativePath
      * @param string $expectedType
+     * @param int $redirectCode
      */
     private function queryUrlAndAssertResponse(
         int $productId,
         string $urlKey,
         string $relativePath,
-        string $expectedType
+        string $expectedType,
+        int $redirectCode
     ): void {
         $query
             = <<<QUERY
@@ -469,6 +485,7 @@ QUERY;
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
@@ -477,5 +494,6 @@ QUERY;
         $this->assertEquals($productId, $response['urlResolver']['id']);
         $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
+        $this->assertEquals($redirectCode, $response['urlResolver']['redirectCode']);
     }
 }
