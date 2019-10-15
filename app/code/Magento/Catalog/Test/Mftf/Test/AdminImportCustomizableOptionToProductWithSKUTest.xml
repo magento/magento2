@@ -24,6 +24,9 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Create two products -->
             <createData entity="SimpleProduct2" stepKey="createFirstProduct"/>
+            <updateData entity="ProductWithTwoTextFieldOptions" createDataKey="createFirstProduct" stepKey="updateFirstProductWithCustomOptions">
+                <requiredEntity createDataKey="createFirstProduct"/>
+            </updateData>
             <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
@@ -40,16 +43,6 @@
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductGridFilter"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
-        <!--Go to product page -->
-        <amOnPage url="{{AdminProductEditPage.url($$createFirstProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
-        <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption1">
-            <argument name="option" value="ProductOptionField"/>
-        </actionGroup>
-        <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption2">
-            <argument name="option" value="ProductOptionField2"/>
-        </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <!--Change second product sku to first product sku-->
         <amOnPage url="{{AdminProductEditPage.url($$createSecondProduct.id$$)}}" stepKey="goToProductEditPage1"/>
         <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
@@ -68,7 +61,7 @@
             <argument name="optionIndex" value="1"/>
         </actionGroup>
         <!--Save product and check sku changed message-->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
         <see selector="{{AdminMessagesSection.notice}}" userInput="SKU for product $$createSecondProduct.name$$ has been changed to $$createFirstProduct.sku$$-1." stepKey="seeSkuChangedMessage"/>
     </test>
 </tests>
