@@ -30,6 +30,10 @@
             <click stepKey="setInactive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>

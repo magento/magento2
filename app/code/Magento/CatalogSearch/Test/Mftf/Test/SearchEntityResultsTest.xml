@@ -23,6 +23,10 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
@@ -87,6 +91,10 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
@@ -124,6 +132,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-15034"/>
             <group value="CatalogSearch"/>
+            <group value="SearchEngineMysql"/>
             <group value="mtf_migrated"/>
         </annotations>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,3); return ret;" stepKey="getFirstThreeLetters" before="searchStorefront"/>
@@ -160,6 +169,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14796"/>
             <group value="CatalogSearch"/>
+            <group value="SearchEngineMysql"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -242,6 +252,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14797"/>
             <group value="CatalogSearch"/>
+            <group value="SearchEngineMysql"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -306,6 +317,10 @@
             <createData entity="VirtualProduct" stepKey="createVirtualProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createVirtualProduct"/>
@@ -336,6 +351,10 @@
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
@@ -375,6 +394,10 @@
             <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
@@ -405,6 +428,10 @@
                 <requiredEntity createDataKey="createProduct"/>
                 <requiredEntity createDataKey="simple1"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
@@ -450,6 +477,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
@@ -512,6 +543,10 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
             <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
@@ -601,6 +636,10 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
