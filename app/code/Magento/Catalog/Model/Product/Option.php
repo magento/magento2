@@ -131,9 +131,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionGroupsToTypes
-     * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
