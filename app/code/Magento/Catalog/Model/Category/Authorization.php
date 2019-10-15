@@ -77,15 +77,16 @@ class Authorization
      * Find values to compare the new one.
      *
      * @param AttributeInterface $attribute
-     * @param CategoryModel|null $oldCategory
+     * @param array|null $oldCategory
      * @return mixed[]
      */
-    private function fetchOldValue(AttributeInterface $attribute, ?CategoryModel $oldCategory): array
+    private function fetchOldValue(AttributeInterface $attribute, ?array $oldCategory): array
     {
         $oldValues = [null];
+        $attrCode = $attribute->getAttributeCode();
         if ($oldCategory) {
             //New value must match saved value exactly
-            $oldValues = [$oldCategory->getData($attribute->getAttributeCode())];
+            $oldValues = [!empty($oldCategory[$attrCode]) ? $oldCategory[$attrCode] : null];
             if (empty($oldValues[0])) {
                 $oldValues[0] = null;
             }
@@ -101,10 +102,10 @@ class Authorization
      * Determine whether a category has design properties changed.
      *
      * @param CategoryModel $category
-     * @param CategoryModel|null $oldCategory
+     * @param array|null $oldCategory
      * @return bool
      */
-    private function hasChanges(CategoryModel $category, ?CategoryModel $oldCategory): bool
+    private function hasChanges(CategoryModel $category, ?array $oldCategory): bool
     {
         foreach ($category->getDesignAttributes() as $designAttribute) {
             $oldValues = $this->fetchOldValue($designAttribute, $oldCategory);
@@ -134,21 +135,22 @@ class Authorization
     public function authorizeSavingOf(CategoryInterface $category): void
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_category_design')) {
-            $savedCategory = null;
+            $oldData = null;
             if ($category->getId()) {
-                /** @var CategoryModel $savedCategory */
-                $savedCategory = $this->categoryFactory->create();
                 if ($category->getOrigData()) {
-                    $savedCategory->setData($category->getOrigData());
+                    $oldData = $category->getOrigData();
                 } else {
+                    /** @var CategoryModel $savedCategory */
+                    $savedCategory = $this->categoryFactory->create();
                     $savedCategory->load($category->getId());
                     if (!$savedCategory->getName()) {
                         throw NoSuchEntityException::singleField('id', $category->getId());
                     }
+                    $oldData = $savedCategory->getData();
                 }
             }
 
-            if ($this->hasChanges($category, $savedCategory)) {
+            if ($this->hasChanges($category, $oldData)) {
                 throw new AuthorizationException(__('Not allowed to edit the category\'s design attributes'));
             }
         }

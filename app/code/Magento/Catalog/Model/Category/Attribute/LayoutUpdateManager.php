@@ -121,7 +121,7 @@ class LayoutUpdateManager
      */
     private function extractAttributeValue(CategoryInterface $category)
     {
-        if ($category instanceof Category && $category->hasData('custom_layout_update_file')) {
+        if ($category instanceof Category && !$category->hasData(CategoryInterface::CUSTOM_ATTRIBUTES)) {
             return $category->getData('custom_layout_update_file');
         }
         if ($attr = $category->getCustomAttribute('custom_layout_update_file')) {

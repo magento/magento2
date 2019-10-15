@@ -367,7 +367,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     if ($source instanceof SpecificSourceInterface && $currentCategory) {
                         $options = $source->getOptionsFor($currentCategory);
                     } else {
-                        $options = $attribute->getSource()->getAllOptions();
+                        $options = $source->getAllOptions();
                     }
                     foreach ($options as &$option) {
                         $option['__disableTmpl'] = true;

@@ -133,7 +133,7 @@ class LayoutUpdateManager
      */
     private function extractAttributeValue(ProductInterface $product)
     {
-        if ($product instanceof Product && $product->hasData('custom_layout_update_file')) {
+        if ($product instanceof Product && !$product->hasData(ProductInterface::CUSTOM_ATTRIBUTES)) {
             return $product->getData('custom_layout_update_file');
         }
         if ($attr = $product->getCustomAttribute('custom_layout_update_file')) {
