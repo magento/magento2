@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Security\Model\Plugin;
 
-use Magento\Security\Model\UserExpiration;
-
 /**
  * Add the `expires_at` form field to the User main form.
  *
@@ -99,7 +97,7 @@ class AdminUserForm
     /**
      * Loads a user expiration record by user ID.
      *
-     * @param $userId string
+     * @param string $userId
      * @return string
      */
     private function loadUserExpirationByUserId($userId)
