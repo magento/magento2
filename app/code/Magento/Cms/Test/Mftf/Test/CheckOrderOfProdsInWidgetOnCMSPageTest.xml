@@ -50,10 +50,10 @@
                           stepKey="selectCategoryCondition"/>
             <waitForPageLoad stepKey="waitBeforeClickingOnRuleParam"/>
             <click selector="{{WidgetSection.RuleParam1('3')}}" stepKey="clickOnRuleParam1"/>
-            <waitForElementVisible selector="{{AdminTargetRuleProductsToMatchSection.newConditionOperator}}"
+            <waitForElementVisible selector="{{WidgetSection.RuleParamSelect('1','1')}}"
                                    stepKey="waitDropdownToAppear"/>
-            <selectOption selector="{{AdminTargetRuleProductsToMatchSection.newConditionOperator}}"
-                          userInput="is one of" stepKey="selectOption"/>
+            <selectOption selector="{{WidgetSection.RuleParamSelect('1','1')}}" userInput="is one of"
+                          stepKey="selectOption"/>
             <waitForElement selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParam"/>
             <click selector="{{WidgetSection.RuleParam}}" stepKey="clickOnRuleParam"/>
             <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement"/>
@@ -62,17 +62,17 @@
             <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product1.name$$"
                        stepKey="fillProduct1Name"/>
             <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSearchFilter"/>
-            <click selector="{{WidgetOptions.Search}}" stepKey="searchFilter"/>
+            <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="searchFilter"/>
             <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct"/>
             <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct1"/>
-            <click selector="{{WidgetOptions.ResetFilter}}" stepKey="resetFilter1"/>
+            <click selector="{{AdminWidgetsSection.resetFilter}}" stepKey="resetFilter1"/>
             <waitForPageLoad stepKey="waitForPageToLoadBeforeFillingProductName"/>
             <createData entity="ApiSimpleProduct" stepKey="product2">
                 <requiredEntity createDataKey="createFirstCategory"/>
             </createData>
             <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product2.name$$"
                        stepKey="fillProduct2Name"/>
-            <click selector="{{WidgetOptions.Search}}" stepKey="clickOnSearch"/>
+            <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="clickOnSearch"/>
             <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct2"/>
             <click selector="{{WidgetSection.PreCreateProduct('$$product2.name$$')}}" stepKey="selectProduct2"/>
             <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="applyProducts"/>
@@ -110,7 +110,7 @@
         <waitForPageLoad stepKey="waitForPageToLoadBeforeFillingProduct1Name"/>
         <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product1.name$$" stepKey="fillProduct1Name_2"/>
         <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSearchFilter"/>
-        <click selector="{{WidgetOptions.Search}}" stepKey="searchFilter"/>
+        <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="searchFilter"/>
         <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct1"/>
         <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct1_1"/>
         <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct2_2"/>
