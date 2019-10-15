@@ -41,7 +41,6 @@ class ProductViewTest extends GraphQlAbstract
     /** @var string */
     private $defaultRegionSystemSetting;
 
-
     /** @var string */
     private $defaultPriceDisplayType;
 

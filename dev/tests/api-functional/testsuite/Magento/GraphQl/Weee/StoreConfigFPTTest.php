@@ -81,7 +81,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL,
                     Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_INCL,
                 ],
-                'displayValue' => 'INCLUDING_FPT',
+                'displayValue' => 'INCLUDE_FPT_WITHOUT_DETAILS',
             ],
             [
                 'weeTaxSettingsDisplayIncludedAndDescription' => [
@@ -90,7 +90,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
                     Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
                 ],
-                'displayValue' => 'INCLUDING_FPT_AND_FPT_DESCRIPTION',
+                'displayValue' => 'INCLUDE_FPT_WITH_DETAILS',
             ],
             [
                 'weeTaxSettingsDisplayIncludedAndExcludedAndDescription' => [
@@ -99,7 +99,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
                     Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
                 ],
-                'displayValue' => 'EXCLUDING_FPT_INCLUDING_FPT_AND_FPT_DESCRIPTION',
+                'displayValue' => 'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS',
             ],
             [
                 'weeTaxSettingsDisplayExcluded' => [
@@ -108,7 +108,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL,
                     Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL,
                 ],
-                'displayValue' => 'EXCLUDING_FPT',
+                'displayValue' => 'EXCLUDE_FPT_WITHOUT_DETAILS',
             ],
             [
                 'weeTaxSettingsDisplayExcluded' => [
@@ -117,7 +117,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL,
                     Config::XML_PATH_FPT_DISPLAY_SALES => WeeeDisplayConfig::DISPLAY_EXCL,
                 ],
-                'displayValue' => 'NONE',
+                'displayValue' => 'FPT_DISABLED',
             ],
         ];
     }
@@ -151,13 +151,16 @@ class StoreConfigFPTTest extends GraphQlAbstract
         $this->assertNotEmpty($result['storeConfig']['category_fixed_product_tax_display_setting']);
         $this->assertNotEmpty($result['storeConfig']['sales_fixed_product_tax_display_setting']);
 
-        $this->assertEquals('INCLUDING_FPT', $result['storeConfig']['product_fixed_product_tax_display_setting']);
         $this->assertEquals(
-            'INCLUDING_FPT_AND_FPT_DESCRIPTION',
+            'INCLUDE_FPT_WITHOUT_DETAILS',
+            $result['storeConfig']['product_fixed_product_tax_display_setting']
+        );
+        $this->assertEquals(
+            'INCLUDE_FPT_WITH_DETAILS',
             $result['storeConfig']['category_fixed_product_tax_display_setting']
         );
         $this->assertEquals(
-            'EXCLUDING_FPT_INCLUDING_FPT_AND_FPT_DESCRIPTION',
+            'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS',
             $result['storeConfig']['sales_fixed_product_tax_display_setting']
         );
     }
