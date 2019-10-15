@@ -432,6 +432,8 @@ class TransportBuilder
                 $this->messageData[$addressType],
                 $convertedAddressArray
             );
+        }else {
+            $this->messageData[$addressType] = $convertedAddressArray;
         }
     }
 }
