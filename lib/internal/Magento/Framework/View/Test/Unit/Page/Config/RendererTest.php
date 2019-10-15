@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Test\Unit\Page\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
 use Magento\Framework\View\Page\Config\Renderer;
 use Magento\Framework\View\Page\Config\Generator;
 
@@ -59,6 +60,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     protected $loggerMock;
 
     /**
+     * @var MsApplicationTileImage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $msApplicationTileImageMock;
+
+    /**
      * @var \Magento\Framework\View\Asset\GroupedCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetsCollection;
@@ -99,6 +105,10 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
 
+        $this->msApplicationTileImageMock = $this->getMockBuilder(MsApplicationTileImage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->assetsCollection = $this->getMockBuilder(\Magento\Framework\View\Asset\GroupedCollection::class)
             ->setMethods(['getGroups'])
             ->disableOriginalConstructor()
@@ -120,7 +130,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 'urlBuilder' => $this->urlBuilderMock,
                 'escaper' => $this->escaperMock,
                 'string' => $this->stringMock,
-                'logger' => $this->loggerMock
+                'logger' => $this->loggerMock,
+                'msApplicationTileImage' => $this->msApplicationTileImageMock
             ]
         );
     }
@@ -147,7 +158,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             'content_type' => 'content_type_value',
             'x_ua_compatible' => 'x_ua_compatible_value',
             'media_type' => 'media_type_value',
-            'og:video:secure_url' => 'secure_url'
+            'og:video:secure_url' => 'secure_url',
+            'msapplication-TileImage' => 'https://site.domain/ms-tile.jpg'
         ];
         $metadataValueCharset = 'newCharsetValue';
 
@@ -155,7 +167,8 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             . '<meta name="metadataName" content="metadataValue"/>' . "\n"
             . '<meta http-equiv="Content-Type" content="content_type_value"/>' . "\n"
             . '<meta http-equiv="X-UA-Compatible" content="x_ua_compatible_value"/>' . "\n"
-            . '<meta property="og:video:secure_url" content="secure_url"/>' . "\n";
+            . '<meta property="og:video:secure_url" content="secure_url"/>' . "\n"
+            . '<meta name="msapplication-TileImage" content="https://site.domain/ms-tile.jpg"/>' . "\n";
 
         $this->stringMock->expects($this->at(0))
             ->method('upperCaseWords')
@@ -170,6 +183,37 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getMetadata')
             ->will($this->returnValue($metadata));
+
+        $this->msApplicationTileImageMock
+            ->expects($this->once())
+            ->method('getUrl')
+            ->with('https://site.domain/ms-tile.jpg')
+            ->will($this->returnValue('https://site.domain/ms-tile.jpg'));
+
+        $this->assertEquals($expected, $this->renderer->renderMetadata());
+    }
+
+    /**
+     * Test renderMetadata when it has 'msapplication-TileImage' meta passed
+     */
+    public function testRenderMetadataWithMsApplicationTileImageAsset()
+    {
+        $metadata = [
+            'msapplication-TileImage' => 'images/ms-tile.jpg'
+        ];
+        $expectedMetaUrl = 'https://site.domain/images/ms-tile.jpg';
+        $expected = '<meta name="msapplication-TileImage" content="' . $expectedMetaUrl . '"/>' . "\n";
+
+        $this->pageConfigMock
+            ->expects($this->once())
+            ->method('getMetadata')
+            ->will($this->returnValue($metadata));
+
+        $this->msApplicationTileImageMock
+            ->expects($this->once())
+            ->method('getUrl')
+            ->with('images/ms-tile.jpg')
+            ->will($this->returnValue($expectedMetaUrl));
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }
@@ -277,12 +321,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn($groupAssetsOne);
         $groupMockOne->expects($this->any())
             ->method('getProperty')
-            ->willReturnMap([
-                [GroupedCollection::PROPERTY_CAN_MERGE, true],
-                [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupOne['type']],
-                ['attributes', $groupOne['attributes']],
-                ['ie_condition', $groupOne['condition']],
-            ]);
+            ->willReturnMap(
+                [
+                    [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                    [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupOne['type']],
+                    ['attributes', $groupOne['attributes']],
+                    ['ie_condition', $groupOne['condition']],
+                ]
+            );
 
         $assetMockTwo = $this->createMock(\Magento\Framework\View\Asset\AssetInterface::class);
         $assetMockTwo->expects($this->once())
@@ -300,12 +346,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->willReturn($groupAssetsTwo);
         $groupMockTwo->expects($this->any())
             ->method('getProperty')
-            ->willReturnMap([
-                [GroupedCollection::PROPERTY_CAN_MERGE, true],
-                [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupTwo['type']],
-                ['attributes', $groupTwo['attributes']],
-                ['ie_condition', $groupTwo['condition']],
-            ]);
+            ->willReturnMap(
+                [
+                    [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                    [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupTwo['type']],
+                    ['attributes', $groupTwo['attributes']],
+                    ['ie_condition', $groupTwo['condition']],
+                ]
+            );
 
         $this->pageConfigMock->expects($this->once())
             ->method('getAssetCollection')

@@ -89,6 +89,8 @@ class PlaceOrder implements ResolverInterface
 
             return [
                 'order' => [
+                    'order_number' => $order->getIncrementId(),
+                    // @deprecated The order_id field is deprecated, use order_number instead
                     'order_id' => $order->getIncrementId(),
                 ],
             ];
