@@ -13,7 +13,7 @@ interface DiscountInterface
     /**
      * Get Discount Data
      *
-     * @return array
+     * @return \Magento\SalesRule\Api\Data\DiscountDataInterface
      */
     public function getDiscountData();
 

@@ -7,7 +7,7 @@
 namespace Magento\SalesRule\Model\Data;
 
 use Magento\SalesRule\Model\Rule\Action\Discount\Data;
-use \Magento\SalesRule\Api\Data\DiscountInterface;
+use Magento\SalesRule\Api\Data\DiscountInterface;
 
 /**
  * Data Model for Rule Discount
