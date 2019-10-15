@@ -267,6 +267,8 @@ class Dob extends AbstractWidget
         $validators['validate-date'] = [
             'dateFormat' => $this->getDateFormat()
         ];
+        $validators['validate-dob'] = true;
+
         return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 
