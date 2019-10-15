@@ -212,7 +212,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $address = $this->_extractAddress();
             $this->_addressRepository->save($address);
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
-            $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
+            $url = $this->_buildUrl('*/*/', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -220,7 +220,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
                 $this->messageManager->addErrorMessage($error->getMessage());
             }
         } catch (\Exception $e) {
-            $redirectUrl = $this->_buildUrl('*/*/index');
+            $redirectUrl = $this->_buildUrl('*/*/');
             $this->messageManager->addExceptionMessage($e, __('We can\'t save the address.'));
         }
 
