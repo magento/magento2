@@ -56,6 +56,7 @@ class OrderSenderTest extends AbstractSenderTest
      * @param $senderSendException
      * @return void
      * @dataProvider sendDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSend($configValue, $forceSyncMode, $emailSendingResult, $senderSendException)
     {
