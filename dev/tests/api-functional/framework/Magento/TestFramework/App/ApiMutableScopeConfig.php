@@ -17,7 +17,7 @@ use Magento\TestFramework\ObjectManager;
 /**
  * @inheritdoc
  */
-class MutableScopeConfig implements MutableScopeConfigInterface
+class ApiMutableScopeConfig implements MutableScopeConfigInterface
 {
     /**
      * @var Config
@@ -56,7 +56,6 @@ class MutableScopeConfig implements MutableScopeConfigInterface
     /**
      * Clean app config cache
      *
-     * @param string|null $type
      * @return void
      */
     public function clean()
@@ -89,19 +88,13 @@ class MutableScopeConfig implements MutableScopeConfigInterface
     private function persistConfig($path, $value, $scopeType, $scopeCode): void
     {
         $pathParts = explode('/', $path);
-        $store = '';
-        if ($scopeType === \Magento\Store\Model\ScopeInterface::SCOPE_STORE) {
-            if ($scopeCode !== null) {
-                $store = ObjectManager::getInstance()
+        $store = 0;
+        if ($scopeType === \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            && $scopeCode !== null) {
+            $store = ObjectManager::getInstance()
                     ->get(\Magento\Store\Api\StoreRepositoryInterface::class)
                     ->get($scopeCode)
                     ->getId();
-            } else {
-                $store = ObjectManager::getInstance()
-                    ->get(\Magento\Store\Model\StoreManagerInterface::class)
-                    ->getStore()
-                    ->getId();
-            }
         }
         $configData = [
             'section' => $pathParts[0],
