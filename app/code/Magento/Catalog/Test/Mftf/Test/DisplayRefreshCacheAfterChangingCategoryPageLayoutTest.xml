@@ -46,6 +46,7 @@
         <waitForPageLoad stepKey="waitSaveToApply"/>
         <!-- See if warning message displays -->
         <comment userInput="See if warning message displays" stepKey="checkWarningMessagePresence"/>
+        <click selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" stepKey="openMessageSection"/>
         <see selector="{{AdminMessagesSection.warningMessage}}" userInput="Please go to Cache Management and refresh cache types" stepKey="seeWarningMessage"/>
     </test>
 </tests>
