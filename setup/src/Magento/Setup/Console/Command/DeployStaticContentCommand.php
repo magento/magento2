@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\Setup\Console\Command;
 
 use InvalidArgumentException;
@@ -34,9 +35,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DeployStaticContentCommand extends Command
 {
-    /**
-     * Default language value
-     */
     const DEFAULT_LANGUAGE_VALUE = 'en_US';
 
     /**

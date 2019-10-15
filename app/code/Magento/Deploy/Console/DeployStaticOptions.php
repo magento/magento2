@@ -122,9 +122,6 @@ class DeployStaticOptions
      */
     const NO_LESS = 'no-less';
 
-    /**
-     * Default jobs amount
-     */
     const DEFAULT_JOBS_AMOUNT = 0;
 
     /**
