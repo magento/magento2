@@ -127,7 +127,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
      * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
      */
     public function testAccountIsNotConfirmed()
