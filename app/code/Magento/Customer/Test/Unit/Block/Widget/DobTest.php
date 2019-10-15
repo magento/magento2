@@ -9,13 +9,13 @@ namespace Magento\Customer\Test\Unit\Block\Widget;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Data\Form\FilterFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Block\Widget\Dob;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Timezone;
@@ -536,8 +536,8 @@ class DobTest extends TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"}}')
-            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
+            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'));
 
         $this->attribute->expects($this->once())
             ->method("isRequired")
@@ -545,7 +545,7 @@ class DobTest extends TestCase
 
         $this->assertEquals(
             $this->_block->getHtmlExtraParams(),
-            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"}}"'
+            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}"'
         );
     }
 
@@ -559,13 +559,17 @@ class DobTest extends TestCase
             ->willReturn(true);
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
-            ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
+            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
+            ->will(
+                $this->returnValue(
+                    '{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'
+                )
+            );
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
         $this->assertEquals(
-            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}"',
+            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}"',
             $this->_block->getHtmlExtraParams()
         );
     }

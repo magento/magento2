@@ -3,18 +3,11 @@
  * See COPYING.txt for license details.
  */
 
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define([
-            'jquery',
-            'mage/backend/validation',
-            'prototype'
-        ], factory);
-    } else {
-        factory(jQuery);
-    }
-}(function (jQuery) {
-
+define([
+    'jquery',
+    'mage/backend/validation',
+    'prototype'
+], function (jQuery) {
     window.directPost = Class.create();
     directPost.prototype = {
         initialize: function (methodCode, iframeId, controller, orderSaveUrl, cgiUrl, nativeAction) {
@@ -349,4 +342,4 @@
             }
         }
     };
-}));
+});
