@@ -7,29 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Controller;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Zend\Http\Response;
 
 /**
  * Class to test Match corresponding URL Rewrite
  */
 class UrlRewriteTest extends AbstractController
 {
-    /** @var CategoryRepositoryInterface */
-    private $categoryRepository;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
-    }
-
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
      * @magentoDbIsolation disabled
@@ -47,7 +32,7 @@ class UrlRewriteTest extends AbstractController
     public function testMatchUrlRewrite(
         string $request,
         string $redirect,
-        int $expectedCode = Response::STATUS_CODE_301
+        int $expectedCode = HttpResponse::STATUS_CODE_301
     ): void {
         $this->dispatch($request);
         /** @var HttpResponse $response */
@@ -55,7 +40,7 @@ class UrlRewriteTest extends AbstractController
         $code = $response->getHttpResponseCode();
         $this->assertEquals($expectedCode, $code, 'Invalid response code');
 
-        if ($expectedCode !== Response::STATUS_CODE_200) {
+        if ($expectedCode !== HttpResponse::STATUS_CODE_200) {
             $location = $response->getHeader('Location')->getFieldValue();
             $this->assertStringEndsWith(
                 $redirect,
@@ -98,7 +83,7 @@ class UrlRewriteTest extends AbstractController
             'Use Case #7: Request with query params' => [
                 'request' => '/enable-cookies/?test-param',
                 'redirect' => '',
-                Response::STATUS_CODE_200,
+                HttpResponse::STATUS_CODE_200,
             ],
         ];
     }
@@ -116,7 +101,7 @@ class UrlRewriteTest extends AbstractController
         $this->dispatch($request);
         $response = $this->getResponse();
         $this->assertEquals(
-            Response::STATUS_CODE_200,
+            HttpResponse::STATUS_CODE_200,
             $response->getHttpResponseCode(),
             'Response code does not match expected value'
         );
