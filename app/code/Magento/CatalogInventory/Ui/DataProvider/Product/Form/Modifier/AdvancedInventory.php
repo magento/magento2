@@ -1,11 +1,10 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
@@ -238,7 +237,7 @@ class AdvancedInventory extends AbstractModifier
             $this->meta = $this->arrayManager->merge(
                 $fieldsetPath . '/children',
                 $this->meta,
-                ['container_quantity_and_stock_status_qty' => $container]
+                ['quantity_and_stock_status_qty' => $container]
             );
         }
     }
