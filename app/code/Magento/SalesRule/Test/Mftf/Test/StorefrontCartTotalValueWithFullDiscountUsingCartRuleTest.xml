@@ -88,8 +88,8 @@
             <magentoCLI command="config:set tax/calculation/shipping_includes_tax 0"  stepKey="unsetSippingPrice"/>
             <magentoCLI command="config:set tax/calculation/cross_border_trade_enabled 1"  stepKey="unsetCrossBorderTrade"/>
             <magentoCLI command="config:set tax/calculation/discount_tax 0"  stepKey="unsetDiscount"/>
-            <magentoCLI command="config:set tax/cart_display/price 0"  stepKey="unsetPrice"/>
-            <magentoCLI command="config:set tax/cart_display/subtotal 0"  stepKey="unsetSubtotal"/>
+            <magentoCLI command="config:set tax/cart_display/price 1"  stepKey="unsetPrice"/>
+            <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="unsetSubtotal"/>
             <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
