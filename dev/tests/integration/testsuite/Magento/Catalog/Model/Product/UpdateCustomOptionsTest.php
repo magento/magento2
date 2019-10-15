@@ -100,7 +100,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Text\Area::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Area::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData
@@ -116,7 +116,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\File\File::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\File::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData
@@ -132,7 +132,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Date\Date::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Date::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData
@@ -148,7 +148,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Date\DateTime::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\DateTime::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData
@@ -164,7 +164,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Date\Time::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Time::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData
@@ -180,7 +180,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select\DropDown::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\DropDown::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $optionValueData
@@ -207,7 +207,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select\RadioButtons::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\RadioButtons::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $optionValueData
@@ -234,7 +234,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select\Checkbox::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Checkbox::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $optionValueData
@@ -261,7 +261,7 @@ class UpdateCustomOptionsTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select\MultipleSelect::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\MultipleSelect::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $optionValueData

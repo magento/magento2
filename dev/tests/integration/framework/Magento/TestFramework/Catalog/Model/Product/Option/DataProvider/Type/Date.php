@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Date;
+namespace Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use Magento\Catalog\Model\Product\Option\Create\DataProvider\AbstractBase;
+use Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\AbstractBase;
 
 /**
  * Data provider for custom options from date group with type "date".

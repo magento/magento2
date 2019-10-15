@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product\Option\Create\DataProvider;
+namespace Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type;
 
 /**
  * Base custom options data provider.

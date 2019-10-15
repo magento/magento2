@@ -57,7 +57,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
      *
-     * @dataProvider \Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Text\Field::getDataForUpdateOptions
+     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData

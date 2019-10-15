@@ -5,14 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Text;
+namespace Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type;
 
-use Magento\Catalog\Model\Product\Option\Create\DataProvider\AbstractBase;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\AbstractBase;
 
 /**
- * Abstract data provider for options from text group.
+ * Data provider for options from file group with type "file".
  */
-abstract class AbstractText extends AbstractBase
+class File extends AbstractBase
 {
     /**
      * @inheritdoc
@@ -22,7 +23,7 @@ abstract class AbstractText extends AbstractBase
         return array_merge_recursive(
             parent::getDataForCreateOptions(),
             [
-                "type_{$this->getType()}_options_with_max_charters_configuration" => [
+                "type_{$this->getType()}_option_file_extension" => [
                     [
                         'record_id' => 0,
                         'sort_order' => 1,
@@ -33,9 +34,12 @@ abstract class AbstractText extends AbstractBase
                         'type' => $this->getType(),
                         'price' => 10,
                         'price_type' => 'fixed',
+                        'file_extension' => 'gif',
+                        'image_size_x' => 10,
+                        'image_size_y' => 20,
                     ],
                 ],
-                "type_{$this->getType()}_options_without_max_charters_configuration" => [
+                "type_{$this->getType()}_option_maximum_file_size" => [
                     [
                         'record_id' => 0,
                         'sort_order' => 1,
@@ -45,6 +49,9 @@ abstract class AbstractText extends AbstractBase
                         'type' => $this->getType(),
                         'price' => 10,
                         'price_type' => 'fixed',
+                        'file_extension' => 'gif',
+                        'image_size_x' => 10,
+                        'image_size_y' => 20,
                     ],
                 ],
             ]
@@ -59,17 +66,26 @@ abstract class AbstractText extends AbstractBase
         return array_merge_recursive(
             parent::getDataForUpdateOptions(),
             [
-                "type_{$this->getType()}_options_with_max_charters_configuration" => [
+                "type_{$this->getType()}_option_file_extension" => [
                     [
-                        'max_characters' => 0,
+                        'file_extension' => 'jpg',
                     ],
                 ],
-                "type_{$this->getType()}_options_without_max_charters_configuration" => [
+                "type_{$this->getType()}_option_maximum_file_size" => [
                     [
-                        'max_characters' => 55,
+                        'image_size_x' => 300,
+                        'image_size_y' => 815,
                     ],
                 ],
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getType(): string
+    {
+        return ProductCustomOptionInterface::OPTION_TYPE_FILE;
     }
 }

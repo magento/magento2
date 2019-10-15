@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product\Option\Create\DataProvider\Type\Select;
+namespace Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type;
 
-use Magento\Catalog\Model\Product\Option\Create\DataProvider\AbstractBase;
+use Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\AbstractBase;
 
 /**
  * Abstract data provider for options from select group.
