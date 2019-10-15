@@ -28,23 +28,15 @@ class PopularSearchTerms
     private $queryCollection;
 
     /**
-     * @var \Magento\Search\Model\ResourceModel\Query
-     */
-    private $queryResource;
-
-    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Search\Model\ResourceModel\Query\Collection
-     * @param ResourceModel\Query $queryResource
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Search\Model\ResourceModel\Query\Collection $queryCollection,
-        \Magento\Search\Model\ResourceModel\Query $queryResource
+        \Magento\Search\Model\ResourceModel\Query\Collection $queryCollection
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->queryCollection = $queryCollection;
-        $this->queryResource = $queryResource;
     }
 
     /**
@@ -56,17 +48,13 @@ class PopularSearchTerms
      */
     public function isCacheable(string $term, int $storeId)
     {
-        $connection = $this->queryResource->getConnection();
-        $select = $connection->select();
-        $select->from($this->queryResource->getMainTable(), [$this->queryResource->getIdFieldName()])
-            ->where('query_text = ?', $term)
-            ->where('store_id = ?', $storeId)
-            ->where('num_results > 0')
-            ->order(['popularity DESC'])
-            ->limit($this->getMaxCountCacheableSearchTerms($storeId));
-        $queryId = $connection->fetchOne($select);
+        $terms = $this->queryCollection
+            ->setPopularQueryFilter($storeId)
+            ->setPageSize($this->getMaxCountCacheableSearchTerms($storeId))
+            ->load()
+            ->getColumnValues('query_text');
 
-        return (bool) $queryId;
+        return in_array($term, $terms);
     }
 
     /**
