@@ -1186,4 +1186,24 @@
             <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Source\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Source\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
 </config>

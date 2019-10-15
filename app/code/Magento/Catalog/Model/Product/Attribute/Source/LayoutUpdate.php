@@ -23,9 +23,9 @@ class LayoutUpdate extends AbstractLayoutUpdate
     private $manager;
 
     /**
-     * @param LayoutUpdateManager\Proxy $manager
+     * @param LayoutUpdateManager $manager
      */
-    public function __construct(LayoutUpdateManager\Proxy $manager)
+    public function __construct(LayoutUpdateManager $manager)
     {
         $this->manager = $manager;
     }
