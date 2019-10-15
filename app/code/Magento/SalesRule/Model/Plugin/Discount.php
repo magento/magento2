@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Model\Plugin;
 
 use Magento\Framework\Serialize\Serializer\Json;
@@ -10,6 +12,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Data\Collection;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
+use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 
 /**
  * Plugin for persisting discounts along with Quote Address
@@ -57,7 +60,7 @@ class Discount
     public function afterGetItemsCollection(
         Quote $subject,
         Collection $result
-    ) {
+    ): Collection {
         foreach ($result as $item) {
             if ($item->getDiscounts() && !$item->getExtensionAttributes()->getDiscounts()) {
                 $unserializeDiscounts = $this->json->unserialize($item->getDiscounts());
@@ -87,7 +90,7 @@ class Discount
     public function afterGetAllAddresses(
         Quote $subject,
         array $result
-    ) {
+    ): array {
         foreach ($result as $address) {
             if ($address->getDiscounts() && !$address->getExtensionAttributes()->getDiscounts()) {
                 $unserializedDiscounts = $this->json->unserialize($address->getDiscounts());
@@ -110,9 +113,9 @@ class Discount
      * Unserialize discount object
      *
      * @param string $serializedDiscount
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return Data
      */
-    private function unserializeDiscountData(string $serializedDiscount)
+    private function unserializeDiscountData(string $serializedDiscount): Data
     {
         $discountArray = $this->json->unserialize($serializedDiscount);
         $discountData = $this->discountFactory->create();

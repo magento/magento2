@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Data;
 
-use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Api\Data\RuleDiscountInterface;
+use Magento\SalesRule\Api\Data\DiscountDataInterface;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 
 /**
  * Data Model for Rule Discount
@@ -21,9 +23,9 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Get Discount Data
      *
-     * @return Data
+     * @return DiscountDataInterface
      */
-    public function getDiscountData()
+    public function getDiscountData(): DiscountDataInterface
     {
         return $this->_get(self::KEY_DISCOUNT_DATA);
     }
@@ -31,9 +33,9 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Get Rule Label
      *
-     * @return mixed|null
+     * @return string
      */
-    public function getRuleLabel()
+    public function getRuleLabel(): ?string
     {
         return $this->_get(self::KEY_RULE_LABEL);
     }
@@ -41,10 +43,10 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Set Discount Data
      *
-     * @param Data $discountData
+     * @param DiscountDataInterface $discountData
      * @return RuleDiscount
      */
-    public function setDiscountData(Data $discountData)
+    public function setDiscountData(DiscountDataInterface $discountData)
     {
         return $this->setData(self::KEY_DISCOUNT_DATA, $discountData);
     }
@@ -63,9 +65,9 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Get Rule ID
      *
-     * @return string
+     * @return int
      */
-    public function getRuleID()
+    public function getRuleID(): ?int
     {
         return $this->_get(self::KEY_RULE_ID);
     }
@@ -73,10 +75,10 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Set Rule ID
      *
-     * @param string $ruleID
+     * @param int $ruleID
      * @return RuleDiscount
      */
-    public function setRuleID(string $ruleID)
+    public function setRuleID(int $ruleID)
     {
         return $this->setData(self::KEY_RULE_ID, $ruleID);
     }
@@ -84,7 +86,7 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return RuleDiscountInterface|null
+     * @return ExtensionAttributesInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -94,11 +96,11 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Set an extension attributes object.
      *
-     * @param RuleDiscountInterface $extensionAttributes
+     * @param ExtensionAttributesInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        RuleDiscountInterface $extensionAttributes
+        ExtensionAttributesInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

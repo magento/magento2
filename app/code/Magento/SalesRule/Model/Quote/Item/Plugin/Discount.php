@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Model\Quote\Item\Plugin;
 
 use Magento\Quote\Model\Quote\Item\CartItemPersister;
@@ -35,7 +37,7 @@ class Discount
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(CartItemPersister $subject, CartInterface $quote, CartItemInterface $cartItem)
+    public function beforeSave(CartItemPersister $subject, CartInterface $quote, CartItemInterface $cartItem): array
     {
         $cartExtension = $cartItem->getExtensionAttributes();
         $discounts = $cartExtension->getDiscounts();
