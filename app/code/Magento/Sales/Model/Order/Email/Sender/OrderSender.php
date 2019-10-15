@@ -130,6 +130,7 @@ class OrderSender extends Sender
             'store' => $order->getStore(),
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+            'created_at_formatted' => $order->getCreatedAtFormatted(2)
         ];
         $transportObject = new DataObject($transport);
 

@@ -61,6 +61,7 @@ class OrderSenderTest extends AbstractSenderTest
     {
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
+        $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -96,6 +97,11 @@ class OrderSenderTest extends AbstractSenderTest
                     ->method('getShippingAddress')
                     ->willReturn($addressMock);
 
+                $this->orderMock->expects($this->once())
+                    ->method('getCreatedAtFormatted')
+                    ->with(2)
+                    ->willReturn($createdAtFormatted);
+
                 $this->templateContainerMock->expects($this->once())
                     ->method('setTemplateVars')
                     ->with(
@@ -105,7 +111,8 @@ class OrderSenderTest extends AbstractSenderTest
                             'payment_html' => 'payment',
                             'store' => $this->storeMock,
                             'formattedShippingAddress' => $address,
-                            'formattedBillingAddress' => $address
+                            'formattedBillingAddress' => $address,
+                            'created_at_formatted'=>$createdAtFormatted
                         ]
                     );
 
@@ -204,6 +211,7 @@ class OrderSenderTest extends AbstractSenderTest
     {
         $address = 'address_test';
         $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -231,6 +239,11 @@ class OrderSenderTest extends AbstractSenderTest
 
         $this->stepAddressFormat($addressMock, $isVirtualOrder);
 
+        $this->orderMock->expects($this->once())
+            ->method('getCreatedAtFormatted')
+            ->with(2)
+            ->willReturn($createdAtFormatted);
+
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -240,7 +253,8 @@ class OrderSenderTest extends AbstractSenderTest
                     'payment_html' => 'payment',
                     'store' => $this->storeMock,
                     'formattedShippingAddress' => $expectedShippingAddress,
-                    'formattedBillingAddress' => $address
+                    'formattedBillingAddress' => $address,
+                    'created_at_formatted'=>$createdAtFormatted
                 ]
             );
 

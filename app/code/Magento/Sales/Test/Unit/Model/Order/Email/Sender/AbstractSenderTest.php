@@ -92,12 +92,15 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getStoreId', '__wakeup']);
 
-        $this->orderMock = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $this->orderMock = $this->createPartialMock(
+            \Magento\Sales\Model\Order::class,
+            [
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
                 'getCustomerEmail', 'getShippingAddress', 'setSendEmail',
-                'setEmailSent'
-            ]);
+                'setEmailSent', 'getCreatedAtFormatted'
+            ]
+        );
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
