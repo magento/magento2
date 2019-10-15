@@ -39,7 +39,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
         $response = $this->soapController->dispatch($request);
         $decodedWsdl = json_decode($response->getContent(), true);
 
-        $this->assertWsdl($decodedWsdl);
+        $this->assertWsdlServices($decodedWsdl);
     }
 
     /**
@@ -49,7 +49,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function assertWsdl(array $decodedWsdl): void
+    protected function assertWsdlServices(array $decodedWsdl): void
     {
         $this->assertArrayHasKey("customerAccountManagementV1", $decodedWsdl);
         $this->assertArrayHasKey("integrationAdminTokenServiceV1", $decodedWsdl);
