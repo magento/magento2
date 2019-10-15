@@ -11,7 +11,7 @@ namespace Magento\SalesRule\Model\Rule\Action\Discount;
  * @api
  * @since 100.0.2
  */
-class Data implements DiscountDataInterface
+class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
 {
     /**
      * @var float
