@@ -294,8 +294,8 @@ class IndexBuilder
         foreach ($activeRules as $rule) {
             /** @var Rule $rule */
             $rule->setProductsFilter($ids);
-            $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
+        $this->reindexRuleGroupWebsite->execute();
     }
 
     /**
