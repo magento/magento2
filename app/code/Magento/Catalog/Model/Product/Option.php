@@ -11,9 +11,9 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -100,14 +100,14 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     protected $validatorPool;
 
     /**
-     * @var DefaultType[]
+     * @var string[]
      */
-    private $groupsPool;
+    private $optionGroups;
 
     /**
      * @var string[]
      */
-    private $typesPool;
+    private $optionGroupsToTypes;
 
     /**
      * @var MetadataPool
@@ -131,8 +131,8 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
-     * @param array $groupsPool
-     * @param array $typesPool
+     * @param array $optionGroups
+     * @param array $optionGroupsToTypes
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -148,18 +148,18 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        array $groupsPool = [],
-        array $typesPool = [],
-        ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null
+        ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
+        array $optionGroups = [],
+        array $optionGroupsToTypes = []
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
         $this->string = $string;
         $this->validatorPool = $validatorPool;
-        $this->groupsPool = $groupsPool;
-        $this->typesPool = $typesPool;
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
+        $this->optionGroups = $optionGroups;
+        $this->optionGroupsToTypes = $optionGroupsToTypes;
 
         parent::__construct(
             $context,
@@ -332,21 +332,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             $type = $this->getType();
         }
 
-        return $this->typesPool[$type] ?? '';
+        return $this->optionGroupsToTypes[$type] ?? '';
     }
 
     /**
      * Group model factory
      *
      * @param string $type Option type
-     * @return DefaultType
+     * @return DataObject
      * @throws LocalizedException
      */
-    public function groupFactory($type): DefaultType
+    public function groupFactory($type)
     {
         $group = $this->getGroupByType($type);
-        if (!empty($group) && isset($this->groupsPool[$group])) {
-            return $this->optionTypeFactory->create($this->groupsPool[$group]);
+        if (!empty($group) && isset($this->optionGroups[$group])) {
+            return $this->optionTypeFactory->create($this->optionGroups[$group]);
         }
         throw new LocalizedException(__('The option type to get group instance is incorrect.'));
     }
