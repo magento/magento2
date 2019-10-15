@@ -7,7 +7,7 @@ namespace Magento\SalesRule\Model\Quote;
 
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Framework\App\ObjectManager;
-use Magento\SalesRule\Api\Data\DiscountInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 
 /**
  * Discount totals calculation model.
@@ -46,7 +46,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     private $discountFactory;
 
     /**
-     * @var DiscountInterfaceFactory
+     * @var RuleDiscountInterfaceFactory
      */
     private $discountInterfaceFactory;
 
@@ -56,7 +56,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param DataFactory|null $discountDataFactory
-     * @param DiscountInterfaceFactory|null $discountInterfaceFactory
+     * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -64,7 +64,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\SalesRule\Model\Validator $validator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         DataFactory $discountDataFactory = null,
-        DiscountInterfaceFactory $discountInterfaceFactory = null
+        RuleDiscountInterfaceFactory $discountInterfaceFactory = null
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;
@@ -73,7 +73,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $this->priceCurrency = $priceCurrency;
         $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
         $this->discountInterfaceFactory = $discountInterfaceFactory
-            ?: ObjectManager::getInstance()->get(DiscountInterfaceFactory::class);
+            ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
     }
 
     /**

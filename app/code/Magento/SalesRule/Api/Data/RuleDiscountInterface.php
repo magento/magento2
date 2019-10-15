@@ -8,7 +8,7 @@ namespace Magento\SalesRule\Api\Data;
 /**
  * @api
  */
-interface DiscountInterface
+interface RuleDiscountInterface
 {
     /**
      * Get Discount Data

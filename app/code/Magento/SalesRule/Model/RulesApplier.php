@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
-use Magento\SalesRule\Api\Data\DiscountInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 
 /**
  * Class RulesApplier
@@ -49,7 +49,7 @@ class RulesApplier
     protected $discountFactory;
 
     /**
-     * @var DiscountInterfaceFactory
+     * @var RuleDiscountInterfaceFactory
      */
     private $discountInterfaceFactory;
 
@@ -64,7 +64,7 @@ class RulesApplier
      * @param Utility $utility
      * @param ChildrenValidationLocator|null $childrenValidationLocator
      * @param DataFactory|null $discountDataFactory
-     * @param DiscountInterfaceFactory|null $discountInterfaceFactory
+     * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
@@ -72,7 +72,7 @@ class RulesApplier
         \Magento\SalesRule\Model\Utility $utility,
         ChildrenValidationLocator $childrenValidationLocator = null,
         DataFactory $discountDataFactory = null,
-        DiscountInterfaceFactory $discountInterfaceFactory = null
+        RuleDiscountInterfaceFactory $discountInterfaceFactory = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
@@ -81,7 +81,7 @@ class RulesApplier
              ?: ObjectManager::getInstance()->get(ChildrenValidationLocator::class);
         $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
         $this->discountInterfaceFactory = $discountInterfaceFactory
-            ?: ObjectManager::getInstance()->get(DiscountInterfaceFactory::class);
+            ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
     }
 
     /**

@@ -9,7 +9,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Data\Collection;
-use Magento\SalesRule\Api\Data\DiscountInterfaceFactory;
+use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 
 /**
  * Plugin for persisting discounts along with Quote Address
@@ -27,19 +27,19 @@ class Discount
     private $discountFactory;
 
     /**
-     * @var DiscountInterfaceFactory
+     * @var RuleDiscountInterfaceFactory
      */
     private $discountInterfaceFactory;
 
     /**
      * @param Json $json
      * @param DataFactory $discountDataFactory
-     * @param DiscountInterfaceFactory $discountInterfaceFactory
+     * @param RuleDiscountInterfaceFactory $discountInterfaceFactory
      */
     public function __construct(
         Json $json,
         DataFactory $discountDataFactory,
-        DiscountInterfaceFactory $discountInterfaceFactory
+        RuleDiscountInterfaceFactory $discountInterfaceFactory
     ) {
         $this->json = $json;
         $this->discountFactory = $discountDataFactory;

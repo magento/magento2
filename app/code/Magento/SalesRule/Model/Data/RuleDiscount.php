@@ -7,12 +7,12 @@
 namespace Magento\SalesRule\Model\Data;
 
 use Magento\SalesRule\Model\Rule\Action\Discount\Data;
-use Magento\SalesRule\Api\Data\DiscountInterface;
+use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 
 /**
  * Data Model for Rule Discount
  */
-class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject implements DiscountInterface
+class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject implements RuleDiscountInterface
 {
     const KEY_DISCOUNT_DATA = 'discount';
     const KEY_RULE_LABEL = 'rule';
@@ -84,7 +84,7 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return DiscountInterface|null
+     * @return RuleDiscountInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -94,11 +94,11 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Set an extension attributes object.
      *
-     * @param DiscountInterface $extensionAttributes
+     * @param RuleDiscountInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        DiscountInterface $extensionAttributes
+        RuleDiscountInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
