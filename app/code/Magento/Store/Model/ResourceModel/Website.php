@@ -47,10 +47,11 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function readAllWebsites()
     {
         $websites = [];
-        if ($this->getConnection()->isTableExists($this->getMainTable())) {
+        $tableName = $this->getMainTable();
+        if ($this->getConnection()->isTableExists($tableName)) {
             $select = $this->getConnection()
                 ->select()
-                ->from($this->getTable($this->getMainTable()));
+                ->from($tableName);
 
             foreach ($this->getConnection()->fetchAll($select) as $websiteData) {
                 $websites[$websiteData['code']] = $websiteData;
