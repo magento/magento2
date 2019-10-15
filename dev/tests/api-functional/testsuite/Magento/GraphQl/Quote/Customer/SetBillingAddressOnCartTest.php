@@ -928,7 +928,7 @@ mutation {
   }
 }
 QUERY;
-        self::expectExceptionMessage('The address failed to save. Verify the address and try again.');
+        $this->expectExceptionMessage('The address failed to save. Verify the address and try again.');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
