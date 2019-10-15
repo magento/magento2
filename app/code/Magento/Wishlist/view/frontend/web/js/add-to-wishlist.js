@@ -66,7 +66,7 @@ define([
             $('[data-action="add-to-wishlist"]').on('click', function () {
                 var validator = $( "#product_addtocart_form" ).validate();
 
-                if(validator.element(self.qtyInfo)===false) {
+                if (validator.element(self.qtyInfo) === false) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
