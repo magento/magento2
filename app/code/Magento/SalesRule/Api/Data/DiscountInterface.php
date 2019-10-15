@@ -13,7 +13,7 @@ interface DiscountInterface
     /**
      * Get Discount Data
      *
-     * @return mixed
+     * @return array
      */
     public function getDiscountData();
 
