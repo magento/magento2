@@ -63,6 +63,14 @@ define([
                 isFileUploaded = false,
                 self = this;
 
+            $('[data-action="add-to-wishlist"]').on('click', function (event) {
+                var validator = $( "#product_addtocart_form" ).validate();
+                if(validator.element(qtyInfo)===false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            })
+
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
                 this._updateAddToWishlistButton({});
                 event.stopPropagation();
