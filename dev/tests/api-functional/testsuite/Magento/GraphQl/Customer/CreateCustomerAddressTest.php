@@ -49,102 +49,6 @@ class CreateCustomerAddressTest extends GraphQlAbstract
                 'region_id' => 4,
                 'region_code' => 'AZ'
             ],
-            'country_id' => 'US',
-            'street' => ['Line 1 Street', 'Line 2'],
-            'company' => 'Company name',
-            'telephone' => '123456789',
-            'fax' => '123123123',
-            'postcode' => '7777',
-            'city' => 'City Name',
-            'firstname' => 'Adam',
-            'lastname' => 'Phillis',
-            'middlename' => 'A',
-            'prefix' => 'Mr.',
-            'suffix' => 'Jr.',
-            'vat_id' => '1',
-            'default_shipping' => true,
-            'default_billing' => false
-        ];
-
-        $mutation
-            = <<<MUTATION
-mutation {
-  createCustomerAddress(input: {
-    region: {
-        region: "{$newAddress['region']['region']}"
-        region_id: {$newAddress['region']['region_id']}
-        region_code: "{$newAddress['region']['region_code']}"
-    }
-    country_id: {$newAddress['country_id']}
-    street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
-    company: "{$newAddress['company']}"
-    telephone: "{$newAddress['telephone']}"
-    fax: "{$newAddress['fax']}"
-    postcode: "{$newAddress['postcode']}"
-    city: "{$newAddress['city']}"
-    firstname: "{$newAddress['firstname']}"
-    lastname: "{$newAddress['lastname']}"
-    middlename: "{$newAddress['middlename']}"
-    prefix: "{$newAddress['prefix']}"
-    suffix: "{$newAddress['suffix']}"
-    vat_id: "{$newAddress['vat_id']}"
-    default_shipping: true
-    default_billing: false
-  }) {
-    id
-    customer_id
-    region {
-      region
-      region_id
-      region_code
-    }
-    country_id
-    street
-    company
-    telephone
-    fax
-    postcode
-    city
-    firstname
-    lastname
-    middlename
-    prefix
-    suffix
-    vat_id
-    default_shipping
-    default_billing
-  }
-}
-MUTATION;
-
-        $userName = 'customer@example.com';
-        $password = 'password';
-
-        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
-        $this->assertArrayHasKey('createCustomerAddress', $response);
-        $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals(null, $response['createCustomerAddress']['customer_id']);
-        $this->assertArrayHasKey('id', $response['createCustomerAddress']);
-
-        $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
-        $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
-        $address->setCustomerId(null);
-        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
-        $this->assertCustomerAddressesFields($address, $newAddress);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testCreateCustomerAddressWithCountryCode()
-    {
-        $newAddress = [
-            'region' => [
-                'region' => 'Arizona',
-                'region_id' => 4,
-                'region_code' => 'AZ'
-            ],
             'country_code' => 'US',
             'street' => ['Line 1 Street', 'Line 2'],
             'company' => 'Company name',
@@ -224,9 +128,78 @@ MUTATION;
 
         $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
         $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
+        $address->setCustomerId(null);
+        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
+        $this->assertCustomerAddressesFields($address, $newAddress);
+    }
 
-        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress'], 'country_code');
-        $this->assertCustomerAddressesFields($address, $newAddress, 'country_code');
+    /**
+     * Test case for deprecated `country_id` field.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateCustomerAddressWithCountryId()
+    {
+        $newAddress = [
+            'region' => [
+                'region' => 'Arizona',
+                'region_id' => 4,
+                'region_code' => 'AZ'
+            ],
+            'country_id' => 'US',
+            'street' => ['Line 1 Street', 'Line 2'],
+            'company' => 'Company name',
+            'telephone' => '123456789',
+            'fax' => '123123123',
+            'postcode' => '7777',
+            'city' => 'City Name',
+            'firstname' => 'Adam',
+            'lastname' => 'Phillis',
+            'middlename' => 'A',
+            'prefix' => 'Mr.',
+            'suffix' => 'Jr.',
+            'vat_id' => '1',
+            'default_shipping' => true,
+            'default_billing' => false
+        ];
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress(input: {
+    region: {
+        region: "{$newAddress['region']['region']}"
+        region_id: {$newAddress['region']['region_id']}
+        region_code: "{$newAddress['region']['region_code']}"
+    }
+    country_id: {$newAddress['country_id']}
+    street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
+    company: "{$newAddress['company']}"
+    telephone: "{$newAddress['telephone']}"
+    fax: "{$newAddress['fax']}"
+    postcode: "{$newAddress['postcode']}"
+    city: "{$newAddress['city']}"
+    firstname: "{$newAddress['firstname']}"
+    lastname: "{$newAddress['lastname']}"
+    middlename: "{$newAddress['middlename']}"
+    prefix: "{$newAddress['prefix']}"
+    suffix: "{$newAddress['suffix']}"
+    vat_id: "{$newAddress['vat_id']}"
+    default_shipping: true
+    default_billing: false
+  }) {
+    country_id
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->assertArrayHasKey('createCustomerAddress', $response);
+        $this->assertEquals($newAddress['country_id'], $response['createCustomerAddress']['country_id']);
     }
 
     /**
@@ -249,7 +222,7 @@ mutation{
     region: {
         region_id: 1
     }
-    country_id: US
+    country_code: US
     postcode: "9999"
     default_shipping: true
     default_billing: false
@@ -278,7 +251,7 @@ mutation {
     region: {
         region_id: 1
     }
-    country_id: US
+    country_code: US
     street: ["Line 1 Street","Line 2"]
     company: "Company name"
     telephone: "123456789"
@@ -310,7 +283,7 @@ MUTATION;
                 'region_id' => 4,
                 'region_code' => 'AZ'
             ],
-            'country_id' => 'US',
+            'country_code' => 'US',
             'street' => ['Line 1 Street', 'Line 2', 'Line 3'],
             'company' => 'Company name',
             'telephone' => '123456789',
@@ -336,7 +309,7 @@ mutation {
         region_id: {$newAddress['region']['region_id']}
         region_code: "{$newAddress['region']['region_code']}"
     }
-    country_id: {$newAddress['country_id']}
+    country_code: {$newAddress['country_code']}
     street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}","{$newAddress['street'][2]}"]
     company: "{$newAddress['company']}"
     telephone: "{$newAddress['telephone']}"
@@ -413,12 +386,11 @@ MUTATION;
      */
     private function assertCustomerAddressesFields(
         AddressInterface $address,
-        array $actualResponse,
-        string $countryFieldName = 'country_id'
+        array $actualResponse
     ): void {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => $countryFieldName, 'expected_value' => $address->getCountryId()],
+            ['response_field' => 'country_code', 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
             ['response_field' => 'telephone', 'expected_value' => $address->getTelephone()],

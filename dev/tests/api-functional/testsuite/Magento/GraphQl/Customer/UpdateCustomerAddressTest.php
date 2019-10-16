@@ -77,30 +77,53 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
     }
 
     /**
+     * Test case for deprecated `country_id` field.
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testUpdateCustomerAddressWithCountryCode()
+    public function testUpdateCustomerAddressWithCountryId()
     {
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 1;
 
-        $mutation = $this->getMutationWithCountryCode($addressId);
+        $updateAddress = $this->getAddressData();
+
+        $mutation =  $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(id: {$addressId}, input: {
+    region: {
+        region: "{$updateAddress['region']['region']}"
+        region_id: {$updateAddress['region']['region_id']}
+        region_code: "{$updateAddress['region']['region_code']}"
+    }
+    country_id: {$updateAddress['country_code']}
+    street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
+    company: "{$updateAddress['company']}"
+    telephone: "{$updateAddress['telephone']}"
+    fax: "{$updateAddress['fax']}"
+    postcode: "{$updateAddress['postcode']}"
+    city: "{$updateAddress['city']}"
+    firstname: "{$updateAddress['firstname']}"
+    lastname: "{$updateAddress['lastname']}"
+    middlename: "{$updateAddress['middlename']}"
+    prefix: "{$updateAddress['prefix']}"
+    suffix: "{$updateAddress['suffix']}"
+    vat_id: "{$updateAddress['vat_id']}"
+    default_shipping: true
+    default_billing: true
+  }) {
+    country_id
+  }
+}
+MUTATION;
 
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
-        $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
-        $this->assertEquals(null, $response['updateCustomerAddress']['customer_id']);
-        $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
-
-        $address = $this->addressRepository->getById($addressId);
-        $this->assertEquals($address->getId(), $response['updateCustomerAddress']['id']);
-        $this->assertCustomerAddressesFields($address, $response['updateCustomerAddress'], 'country_code');
-
-        $updateAddress = $this->getAddressDataCanadaCountry();
-        $this->assertCustomerAddressesFields($address, $updateAddress, 'country_code');
+        $this->assertEquals($updateAddress['country_code'], $response['updateCustomerAddress']['country_id']);
     }
 
     /**
@@ -162,12 +185,11 @@ MUTATION;
      */
     private function assertCustomerAddressesFields(
         AddressInterface $address,
-        $actualResponse,
-        string $countryFieldName = 'country_id'
+        $actualResponse
     ): void {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => $countryFieldName, 'expected_value' => $address->getCountryId()],
+            ['response_field' => 'country_code', 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
             ['response_field' => 'telephone', 'expected_value' => $address->getTelephone()],
@@ -218,7 +240,7 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
-    country_id: {$updateAddress['country_id']}
+    country_code: {$updateAddress['country_code']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
     telephone: "{$updateAddress['telephone']}"
@@ -274,7 +296,7 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
-    country_id: {$updateAddress['country_id']}
+    country_code: {$updateAddress['country_code']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
     telephone: "{$updateAddress['telephone']}"
@@ -413,35 +435,6 @@ MUTATION;
     {
         return [
             'region' => [
-                'region' => 'Alaska',
-                'region_id' => 2,
-                'region_code' => 'AK'
-            ],
-            'country_id' => 'US',
-            'street' => ['Line 1 Street', 'Line 2'],
-            'company' => 'Company Name',
-            'telephone' => '123456789',
-            'fax' => '123123123',
-            'postcode' => '7777',
-            'city' => 'City Name',
-            'firstname' => 'Adam',
-            'lastname' => 'Phillis',
-            'middlename' => 'A',
-            'prefix' => 'Mr.',
-            'suffix' => 'Jr.',
-            'vat_id' => '1',
-            'default_shipping' => true,
-            'default_billing' => true
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function getAddressDataCanadaCountry(): array
-    {
-        return [
-            'region' => [
                 'region' => 'Alberta',
                 'region_id' => 66,
                 'region_code' => 'AB'
@@ -483,7 +476,7 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
-    country_id: {$updateAddress['country_id']}
+    country_code: {$updateAddress['country_code']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
     telephone: "{$updateAddress['telephone']}"
@@ -506,7 +499,7 @@ mutation {
       region_id
       region_code
     }
-    country_id
+    country_code
     street
     company
     telephone
