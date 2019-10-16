@@ -802,6 +802,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(["Thank you for registering with {$name}."]),
             MessageInterface::TYPE_SUCCESS
         );
+        $this->assertEmpty($customerRepository->get($email)->getConfirmation());
     }
 
     /**
