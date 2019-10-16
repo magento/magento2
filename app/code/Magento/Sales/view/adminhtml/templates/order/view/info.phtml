@@ -9,6 +9,10 @@
  */
 $order = $block->getOrder();
 
+$baseCurrencyCode = (string)$order->getBaseCurrencyCode();
+$globalCurrencyCode = (string)$order->getGlobalCurrencyCode();
+$orderCurrencyCode = (string)$order->getOrderCurrencyCode();
+
 $orderAdminDate = $block->formatDate(
     $block->getOrderAdminDate($order->getCreatedAt()),
     \IntlDateFormatter::MEDIUM,
@@ -23,6 +27,7 @@ $orderStoreDate = $block->formatDate(
 );
 
 $customerUrl = $block->getCustomerViewUrl();
+
 $allowedAddressHtmlTags = ['b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub', 'sup', 'ul'];
 ?>
 
@@ -93,15 +98,15 @@ $allowedAddressHtmlTags = ['b', 'br', 'em', 'i', 'li', 'ol', 'p', 'strong', 'sub
                         <td><?= $block->escapeHtml($order->getRemoteIp()); ?><?= $order->getXForwardedFor() ? ' (' . $block->escapeHtml($order->getXForwardedFor()) . ')' : ''; ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getGlobalCurrencyCode() != $order->getBaseCurrencyCode()) : ?>
+                <?php if ($globalCurrencyCode !== $baseCurrencyCode) : ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('%1 / %2 rate:', $order->getGlobalCurrencyCode(), $order->getBaseCurrencyCode())) ?></th>
+                        <th><?= $block->escapeHtml(__('%1 / %2 rate:', $globalCurrencyCode, $baseCurrencyCode)) ?></th>
                         <td><?= $block->escapeHtml($order->getBaseToGlobalRate()) ?></td>
                     </tr>
                 <?php endif; ?>
-                <?php if ($order->getBaseCurrencyCode() != $order->getOrderCurrencyCode()) : ?>
+                <?php if ($baseCurrencyCode !== $orderCurrencyCode && $globalCurrencyCode !== $orderCurrencyCode) : ?>
                     <tr>
-                        <th><?= $block->escapeHtml(__('%1 / %2 rate:', $order->getOrderCurrencyCode(), $order->getBaseCurrencyCode())) ?></th>
+                        <th><?= $block->escapeHtml(__('%1 / %2 rate:', $orderCurrencyCode, $baseCurrencyCode)) ?></th>
                         <td><?= $block->escapeHtml($order->getBaseToOrderRate()) ?></td>
                     </tr>
                 <?php endif; ?>
