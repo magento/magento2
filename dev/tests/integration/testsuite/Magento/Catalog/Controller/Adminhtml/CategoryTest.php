@@ -7,22 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as Category;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\TestFramework\TestCase\AbstractBackendController;
-use Magento\Framework\Message\MessageInterface;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Store\Model\Store;
 
 /**
  * Test for category backend actions
@@ -526,7 +520,6 @@ class CategoryTest extends AbstractBackendController
                     'path' => '1/2/96377',
                     'level' => '2',
                     'children_count' => '0',
-                    'row_id' => '96377',
                     'name' => 'Category 1',
                     'display_mode' => 'PRODUCTS',
                     'url_key' => 'category-1',
