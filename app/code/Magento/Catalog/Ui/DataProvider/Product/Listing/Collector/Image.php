@@ -98,8 +98,6 @@ class Image implements ProductRenderCollectorInterface
     }
 
     /**
-     * In order to allow to use image generation using Services, we need to emulate area code and store code
-     *
      * @inheritdoc
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
