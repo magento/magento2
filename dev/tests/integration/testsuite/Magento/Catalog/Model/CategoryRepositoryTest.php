@@ -132,7 +132,7 @@ class CategoryRepositoryTest extends TestCase
      * @magentoAppArea adminhtml
      * @return void
      */
-    public function testCheckCategoryBehaviourAfterDelete(): void
+    public function testCategoryBehaviourAfterDelete(): void
     {
         $productCollection = $this->productCollectionFactory->create();
         $deletedCategories = ['3', '4', '5', '13'];
