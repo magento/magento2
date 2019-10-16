@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
@@ -17,12 +18,12 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 class FilterPool
 {
     /**
-     * @var array
+     * @var FilterApplierInterface[]
      */
     protected $appliers;
 
     /**
-     * @param array $appliers
+     * @param FilterApplierInterface[] $appliers
      */
     public function __construct(array $appliers = [])
     {
@@ -38,12 +39,7 @@ class FilterPool
     {
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                /** @var $filterApplier FilterApplierInterface*/
-                if (isset($this->appliers[$filter->getConditionType()])) {
-                    $filterApplier = $this->appliers[$filter->getConditionType()];
-                } else {
-                    $filterApplier = $this->appliers['regular'];
-                }
+                $filterApplier = $this->appliers[$filter->getConditionType()] ?? $this->appliers['regular'];
                 $filterApplier->apply($collection, $filter);
             }
         }
