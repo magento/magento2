@@ -87,7 +87,7 @@ class InvoiceCommentIdentityTest extends \PHPUnit\Framework\TestCase
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($this->storeId)
             )
-            ->will($this->returnValue('test_value,test_value2'));
+            ->will($this->returnValue('test_value, test_value2'));
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertEquals(['test_value', 'test_value2'], $result);
