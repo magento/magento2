@@ -258,8 +258,7 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
             ->method('setCustomerFirstname')->with(null)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerLastname')->with(null)->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')
-            ->with(\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID)
+        $this->quoteMock->expects($this->never())->method('setCustomerGroupId')
             ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
