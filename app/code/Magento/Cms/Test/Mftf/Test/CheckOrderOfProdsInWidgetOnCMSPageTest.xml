@@ -28,76 +28,79 @@
             <createData entity="ApiSimpleProduct" stepKey="product1">
                 <requiredEntity createDataKey="createFirstCategory"/>
             </createData>
-            <amOnPage url="{{CmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
-            <waitForPageLoad stepKey="waitEditHomePagePageToLoad"/>
-            <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab"/>
-            <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand"/>
-            <click selector="{{CmsNewPagePageActionsSection.showHideEditor}}" stepKey="showHiddenButtons"/>
-            <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="seeWidgetButton"/>
-            <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
-            <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage"/>
-            <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget"
-                 stepKey="seeInsertWidgetDisabled"/>
-            <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled"/>
-            <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List"
-                          stepKey="selectCatalogProductsList"/>
-            <waitForPageLoad stepKey="waitBeforeClickingOnAddParamBtn"/>
-            <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn"/>
-            <waitForElement selector="{{WidgetSection.ConditionsDropdown}}" stepKey="addingWaitForConditionsDropDown"/>
-            <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
-            <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="SKU"
-                          stepKey="selectCategoryCondition"/>
-            <waitForPageLoad stepKey="waitBeforeClickingOnRuleParam"/>
-            <click selector="{{WidgetSection.RuleParam1('3')}}" stepKey="clickOnRuleParam1"/>
-            <waitForElementVisible selector="{{WidgetSection.RuleParamSelect('1','1')}}"
-                                   stepKey="waitDropdownToAppear"/>
-            <selectOption selector="{{WidgetSection.RuleParamSelect('1','1')}}" userInput="is one of"
-                          stepKey="selectOption"/>
-            <waitForElement selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParam"/>
-            <click selector="{{WidgetSection.RuleParam}}" stepKey="clickOnRuleParam"/>
-            <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement"/>
-            <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser"/>
-            <waitForPageLoad stepKey="waitForPageToLoad"/>
-            <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product1.name$$"
-                       stepKey="fillProduct1Name"/>
-            <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSearchFilter"/>
-            <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="searchFilter"/>
-            <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct"/>
-            <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct1"/>
-            <click selector="{{AdminWidgetsSection.resetFilter}}" stepKey="resetFilter1"/>
-            <waitForPageLoad stepKey="waitForPageToLoadBeforeFillingProductName"/>
             <createData entity="ApiSimpleProduct" stepKey="product2">
                 <requiredEntity createDataKey="createFirstCategory"/>
             </createData>
-            <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product2.name$$"
-                       stepKey="fillProduct2Name"/>
-            <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="clickOnSearch"/>
-            <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct2"/>
-            <click selector="{{WidgetSection.PreCreateProduct('$$product2.name$$')}}" stepKey="selectProduct2"/>
-            <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="applyProducts"/>
-            <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickOnInsertWidgetButton"/>
-            <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget"/>
-            <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget"/>
-            <waitForPageLoad stepKey="waitForSaveComplete"/>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
         </before>
         <after>
-            <actionGroup ref="ClearWidgetsFromCMSContent" stepKey="removeWidgets"/>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createFirstCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
+        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage1">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1"/>
+        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand1"/>
+        <click selector="{{CmsNewPagePageActionsSection.showHideEditor}}" stepKey="showHiddenButtons"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="seeWidgetButton"/>
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage"/>
+        <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget"
+             stepKey="seeInsertWidgetDisabled"/>
+        <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List"
+                      stepKey="selectCatalogProductsList"/>
+        <waitForPageLoad stepKey="waitBeforeClickingOnAddParamBtn"/>
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn"/>
+        <waitForElement selector="{{WidgetSection.ConditionsDropdown}}" stepKey="addingWaitForConditionsDropDown"/>
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="SKU"
+                      stepKey="selectCategoryCondition"/>
+        <waitForPageLoad stepKey="waitBeforeClickingOnRuleParam"/>
+        <click selector="{{WidgetSection.RuleParam1('3')}}" stepKey="clickOnRuleParam1"/>
+        <waitForElementVisible selector="{{WidgetSection.RuleParamSelect('1','1')}}"
+                               stepKey="waitDropdownToAppear"/>
+        <selectOption selector="{{WidgetSection.RuleParamSelect('1','1')}}" userInput="is one of"
+                      stepKey="selectOption"/>
+        <waitForElement selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParam"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickOnRuleParam"/>
+        <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement"/>
+        <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product1.name$$"
+                   stepKey="fillProduct1Name"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSearchFilter1"/>
+        <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="searchFilter1"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct"/>
+        <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct1"/>
+        <click selector="{{AdminWidgetsSection.resetFilter}}" stepKey="resetFilter1"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeFillingProductName"/>
+        <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product2.name$$"
+                   stepKey="fillProduct2Name"/>
+        <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="clickOnSearch"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct2"/>
+        <click selector="{{WidgetSection.PreCreateProduct('$$product2.name$$')}}" stepKey="selectProduct2"/>
+        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="applyProducts"/>
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickOnInsertWidgetButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget1"/>
+        <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget"/>
+        <waitForPageLoad stepKey="waitForSaveComplete"/>
         <actionGroup ref="CompareTwoProductsOrder" stepKey="compareProductOrders1">
+            <argument name="page" value="$$createCMSPage.identifier$$"/>
             <argument name="product_1" value="$$product1$$"/>
             <argument name="product_2" value="$$product2$$"/>
         </actionGroup>
-
-        <amOnPage url="{{CmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
-        <waitForPageLoad stepKey="waitEditHomePagePageToLoad"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab"/>
-        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand"/>
+        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage2">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2"/>
+        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand2"/>
         <executeJS function="jQuery('[id=\'cms_page_form_content_ifr\']').attr('name', 'preview-iframe')"
                    stepKey="setPreviewFrameName"/>
         <switchToIFrame selector="preview-iframe" stepKey="switchToIframe"/>
@@ -109,18 +112,19 @@
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser2"/>
         <waitForPageLoad stepKey="waitForPageToLoadBeforeFillingProduct1Name"/>
         <fillField selector="{{WidgetSection.ChooserName}}" userInput="$$product1.name$$" stepKey="fillProduct1Name_2"/>
-        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSearchFilter"/>
-        <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="searchFilter"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSearchFilter2"/>
+        <click selector="{{AdminNewWidgetSection.searchBlock}}" stepKey="searchFilter2"/>
         <waitForPageLoad stepKey="waitForPageToLoadBeforeSelectingProduct1"/>
         <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct1_1"/>
         <click selector="{{WidgetSection.PreCreateProduct('$$product1.name$$')}}" stepKey="selectProduct2_2"/>
         <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="applyProducts1"/>
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickOnInsertWidgetButton1"/>
-        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget"/>
+        <waitForPageLoad stepKey="waitForPageToLoadBeforeClickingOnSaveWidget2"/>
         <click selector="{{InsertWidgetSection.save}}" stepKey="saveWidget1"/>
         <waitForPageLoad stepKey="waitForSaveComplete1"/>
 
         <actionGroup ref="CompareTwoProductsOrder" stepKey="compareProductOrders2">
+            <argument name="page" value="$$createCMSPage.identifier$$"/>
             <argument name="product_1" value="$$product2$$"/>
             <argument name="product_2" value="$$product1$$"/>
         </actionGroup>
