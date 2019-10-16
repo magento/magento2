@@ -7,26 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Repository;
+use Magento\Developer\Model\Logger\Handler\Syslog;
+use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Eav\Api\AttributeManagementInterface;
-use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Developer\Model\Logger\Handler\Syslog;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Logger\Handler\System;
 use Magento\Framework\Logger\Monolog;
-use Magento\Catalog\Model\Product\Attribute\Repository;
+use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Test save attribute set
+ * Testing for saving an existing or creating a new attribute set.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class SaveTest extends AbstractBackendController
 {
     /**
      * @var string
@@ -64,6 +67,11 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     private $attributeRepository;
 
     /**
+     * @var AttributeSetRepositoryInterface
+     */
+    private $attributeSetRepository;
+
+    /**
      * @inheritDoc
      */
     public function setUp()
@@ -80,11 +88,11 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->attributeRepository = $this->_objectManager->get(Repository::class);
         $this->dataObjectHelper = $this->_objectManager->get(DataObjectHelper::class);
+        $this->attributeSetRepository = $this->_objectManager->get(AttributeSetRepositoryInterface::class);
     }
 
     /**
      * @inheritdoc
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function tearDown()
     {
@@ -93,9 +101,65 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
+     * Test that new attribute set based on default attribute set will be successfully created.
+     *
+     * @magentoDbIsolation enabled
+     *
+     * @return void
      */
-    public function testAlreadyExistsExceptionProcessingWhenGroupCodeIsDuplicated()
+    public function testCreateNewAttributeSetBasedOnDefaultAttributeSet(): void
+    {
+        $this->createAttributeSetBySkeletonAndAssert('Attribute set name for test', 4);
+    }
+
+    /**
+     * Test that new attribute set based on custom attribute set will be successfully created.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
+     *
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testCreateNewAttributeSetBasedOnCustomAttributeSet(): void
+    {
+        $existCustomAttributeSet = $this->getAttributeSetByName('attribute_set_test');
+        $this->createAttributeSetBySkeletonAndAssert(
+            'Attribute set name for test',
+            (int)$existCustomAttributeSet->getAttributeSetId()
+        );
+    }
+
+    /**
+     * Test that new attribute set based on custom attribute set will be successfully created.
+     *
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testGotErrorDuringCreateAttributeSetWithoutName(): void
+    {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(
+            [
+                'gotoEdit' => '1',
+                'skeleton_set' => 4,
+            ]
+        );
+        $this->dispatch('backend/catalog/product_set/save/');
+        $this->assertSessionMessages(
+            $this->contains('The attribute set name is empty. Enter the name and try again.'),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Test that exception throws during save attribute set name process if name of attribute set already exists.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_renamed_group.php
+     * @return void
+     */
+    public function testAlreadyExistsExceptionProcessingWhenGroupCodeIsDuplicated(): void
     {
         $attributeSet = $this->getAttributeSetByName('attribute_set_test');
         $this->assertNotEmpty($attributeSet, 'Attribute set with name "attribute_set_test" is missed');
@@ -129,34 +193,15 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @param string $attributeSetName
-     * @return AttributeSetInterface|null
-     */
-    protected function getAttributeSetByName($attributeSetName)
-    {
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteriaBuilder->addFilter('attribute_set_name', $attributeSetName);
-
-        /** @var AttributeSetRepositoryInterface $attributeSetRepository */
-        $attributeSetRepository = $objectManager->get(AttributeSetRepositoryInterface::class);
-        $result = $attributeSetRepository->getList($searchCriteriaBuilder->create());
-
-        $items = $result->getItems();
-        return $result->getTotalCount() ? array_pop($items) : null;
-    }
-
-    /**
      * Test behavior when attribute set was changed to a new set
-     * with deleted attribute from the previous set
+     * with deleted attribute from the previous set.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/attribute_set_based_on_default.php
      * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testRemoveAttributeFromAttributeSet()
+    public function testRemoveAttributeFromAttributeSet(): void
     {
         $message = 'Attempt to load value of nonexistent EAV attribute';
         $this->removeSyslog();
@@ -178,7 +223,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * Retrieve system.log file path
+     * Retrieve system.log file path.
      *
      * @return string
      */
@@ -186,7 +231,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         if (!$this->systemLogPath) {
             foreach ($this->logger->getHandlers() as $handler) {
-                if ($handler instanceof \Magento\Framework\Logger\Handler\System) {
+                if ($handler instanceof System) {
                     $this->systemLogPath = $handler->getUrl();
                 }
             }
@@ -200,11 +245,89 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return void
      */
-    private function removeSyslog()
+    private function removeSyslog(): void
     {
         $this->syslogHandler->close();
         if (file_exists($this->getSyslogPath())) {
             unlink($this->getSyslogPath());
+        }
+    }
+
+    /**
+     * Search and return attribute set by name.
+     *
+     * @param string $attributeSetName
+     * @return AttributeSetInterface|null
+     */
+    private function getAttributeSetByName(string $attributeSetName): ?AttributeSetInterface
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteriaBuilder->addFilter('attribute_set_name', $attributeSetName);
+        $result = $this->attributeSetRepository->getList($searchCriteriaBuilder->create());
+        $items = $result->getItems();
+
+        return $result->getTotalCount() ? array_pop($items) : null;
+    }
+
+    /**
+     * Create attribute set by skeleton attribute set id and assert that attribute set
+     * created successfully and attributes from skeleton attribute set and created attribute set are equals.
+     *
+     * @param string $attributeSetName
+     * @param int $skeletonAttributeSetId
+     */
+    private function createAttributeSetBySkeletonAndAssert(
+        string $attributeSetName,
+        int $skeletonAttributeSetId
+    ): void {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(
+            [
+                'attribute_set_name' => $attributeSetName,
+                'gotoEdit' => '1',
+                'skeleton_set' => $skeletonAttributeSetId,
+            ]
+        );
+        $this->dispatch('backend/catalog/product_set/save/');
+        $this->assertSessionMessages(
+            $this->contains('You saved the attribute set.'),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $createdAttributeSet = $this->getAttributeSetByName($attributeSetName);
+        $existAttributeSet = $this->attributeSetRepository->get($skeletonAttributeSetId);
+
+        $this->assertNotNull($createdAttributeSet);
+        $this->assertEquals($attributeSetName, $createdAttributeSet->getAttributeSetName());
+
+        $this->assertAttributeSetsAttributesAreEquals($createdAttributeSet, $existAttributeSet);
+    }
+
+    /**
+     * Assert that both attribute sets contains identical attributes by attribute ids.
+     *
+     * @param AttributeSetInterface $createdAttributeSet
+     * @param AttributeSetInterface $existAttributeSet
+     */
+    private function assertAttributeSetsAttributesAreEquals(
+        AttributeSetInterface $createdAttributeSet,
+        AttributeSetInterface $existAttributeSet
+    ): void {
+        $expectedAttributeIds = array_keys(
+            $this->attributeManagement->getAttributes(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $existAttributeSet->getAttributeSetId()
+            )
+        );
+        $actualAttributeIds = array_keys(
+            $this->attributeManagement->getAttributes(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $createdAttributeSet->getAttributeSetId()
+            )
+        );
+        $this->assertEquals(count($expectedAttributeIds), count($actualAttributeIds));
+        foreach ($actualAttributeIds as $attributeId) {
+            $this->assertTrue(in_array($attributeId, $expectedAttributeIds, true));
         }
     }
 }
