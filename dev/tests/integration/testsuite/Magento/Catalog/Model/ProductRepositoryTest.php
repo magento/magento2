@@ -7,14 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
+use Magento\Framework\Acl\Builder;
 
 /**
  * Provide tests for ProductRepository model.
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,22 +32,52 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /*
+     * @var Auth
+     */
+    private $auth;
+
+    /**
+     * @var Builder
+     */
+    private $aclBuilder;
 
     /**
      * Sets up common objects
      */
     protected function setUp()
     {
-        $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
-        );
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
+        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->productFactory = Bootstrap::getObjectManager()->get(ProductFactory::class);
+        $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+    }
 
-        $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()->create(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->auth->logout();
+        $this->aclBuilder->resetRuntimeAcl();
     }
 
     /**
@@ -116,10 +152,15 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $path = $mediaConfig->getBaseMediaPath() . '/magento_image.jpg';
         $absolutePath = $mediaDirectory->getAbsolutePath() . $path;
-        $product->addImageToMediaGallery($absolutePath, [
+        $product->addImageToMediaGallery(
+            $absolutePath,
+            [
             'image',
             'small_image',
-        ], false, false);
+            ],
+            false,
+            false
+        );
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()
@@ -137,5 +178,58 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('image', $images[0]['media_type']);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('image'));
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('small_image'));
+    }
+
+    /**
+     * Test Product Repository can change(update) "sku" for given product.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation enabled
+     * @magentoAppArea adminhtml
+     */
+    public function testUpdateProductSku()
+    {
+        $newSku = 'simple-edited';
+        $productId = $this->productResource->getIdBySku('simple');
+        $initialProduct = $this->productFactory->create();
+        $this->productResource->load($initialProduct, $productId);
+
+        $initialProduct->setSku($newSku);
+        $this->productRepository->save($initialProduct);
+
+        $updatedProduct = $this->productFactory->create();
+        $this->productResource->load($updatedProduct, $productId);
+        self::assertSame($newSku, $updatedProduct->getSku());
+
+        //clean up.
+        $this->productRepository->delete($updatedProduct);
+    }
+
+    /**
+     * Test authorization when saving product's design settings.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppArea adminhtml
+     */
+    public function testSaveDesign()
+    {
+        $product = $this->productRepository->get('simple');
+        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+
+        //Admin doesn't have access to product's design.
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_product_design');
+
+        $product->setCustomAttribute('custom_design', 2);
+        $product = $this->productRepository->save($product);
+        $this->assertEmpty($product->getCustomAttribute('custom_design'));
+
+        //Admin has access to products' design.
+        $this->aclBuilder->getAcl()
+            ->allow(null, ['Magento_Catalog::products','Magento_Catalog::edit_product_design']);
+
+        $product->setCustomAttribute('custom_design', 2);
+        $product = $this->productRepository->save($product);
+        $this->assertNotEmpty($product->getCustomAttribute('custom_design'));
+        $this->assertEquals(2, $product->getCustomAttribute('custom_design')->getValue());
     }
 }

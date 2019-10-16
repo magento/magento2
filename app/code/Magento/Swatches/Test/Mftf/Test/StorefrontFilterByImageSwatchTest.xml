@@ -30,7 +30,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Begin creating a new product attribute -->
@@ -40,6 +40,9 @@
 
         <!-- Select visual swatch -->
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_visual" stepKey="selectInputType"/>
+
+        <!-- Set Update Product Preview Image to Yes-->
+        <selectOption selector="{{AttributePropertiesSection.UpdateProductPreviewImage}}" userInput="Yes" stepKey="setUpdateProductPreviewImage"/>
 
         <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
         <executeJS function="HTMLInputElement.prototype.click = function() { if(this.type !== 'file') HTMLElement.prototype.click.call(this); };" stepKey="disableClick"/>
@@ -99,6 +102,9 @@
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
             <argument name="image" value="TestImageAdobe"/>
         </actionGroup>
+
+        <!-- Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Go to the category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>

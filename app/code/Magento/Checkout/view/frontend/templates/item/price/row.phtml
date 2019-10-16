@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate
 
 /** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
@@ -12,6 +12,9 @@ $_item = $block->getItem();
 ?>
 <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
-        <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getRowTotal()) ?>
+        <?= $block->escapeHtml(
+            $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getRowTotal()),
+            ['span']
+        ) ?>
     </span>
 </span>

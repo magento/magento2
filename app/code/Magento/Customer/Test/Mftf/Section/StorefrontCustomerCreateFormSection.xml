@@ -30,5 +30,6 @@
         <element name="yesNoAttribute" type="select" selector="//select[@id='{{var}}']" parameterized="true" />
         <element name="yesNoOptionAttribute" type="select" selector="//select[@id='{{var}}']/option[2]" parameterized="true" />
         <element name="selectedOption" type="text" selector="//select[@id='{{var}}']/option[@selected='selected']" parameterized="true"/>
+        <element name="attributeLabel" type="text" selector="//span[text()='{{attributeLabel}}']" parameterized="true"/>
     </section>
 </sections>

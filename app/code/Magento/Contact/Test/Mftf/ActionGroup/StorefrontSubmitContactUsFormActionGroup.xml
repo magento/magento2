@@ -9,7 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSubmitContactUsFormActionGroup">
+        <annotations>
+            <description>Clicks on the 'Submit' button on the Storefront 'Contact Us' page.</description>
+        </annotations>
+
         <click selector="{{StorefrontContactUsFormSection.submitFormButton}}" stepKey="clickSubmitFormButton"/>
-        <waitForPageLoad stepKey="waitForCommentSubmitted" />
+        <waitForPageLoad stepKey="waitForCommentSubmitted"/>
     </actionGroup>
 </actionGroups>

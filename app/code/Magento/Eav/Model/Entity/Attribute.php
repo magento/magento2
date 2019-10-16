@@ -32,12 +32,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     const ATTRIBUTE_CODE_MAX_LENGTH = 60;
 
     /**
-     * Attribute code min length.
+     * Min accepted length of an attribute code.
      */
     const ATTRIBUTE_CODE_MIN_LENGTH = 1;
 
     /**
-     * Cache tag
+     * Tag to use for attributes caching.
      */
     const CACHE_TAG = 'EAV_ATTRIBUTE';
 
@@ -203,6 +203,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Delete entity
      *
      * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute
+     * @throws LocalizedException
      * @codeCoverageIgnore
      */
     public function deleteEntity()
@@ -312,21 +313,13 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     /**
      * @inheritdoc
      *
-     * Save additional data.
+     * @return $this
+     * @throws LocalizedException
      */
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
         return parent::afterSave();
-    }
-
-    /**
-     * @inheritdoc
-     * @since 100.0.7
-     */
-    public function afterDelete()
-    {
-        return parent::afterDelete();
     }
 
     /**
@@ -502,8 +495,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->unsetData('attribute_set_info');
         return array_diff(
             parent::__sleep(),
@@ -520,8 +511,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = ObjectManager::getInstance();
         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);

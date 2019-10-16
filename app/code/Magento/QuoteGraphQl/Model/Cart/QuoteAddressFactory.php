@@ -60,7 +60,11 @@ class QuoteAddressFactory
      */
     public function createBasedOnInputData(array $addressInput): QuoteAddress
     {
-        $addressInput['country_id'] = $addressInput['country_code'] ?? '';
+        $addressInput['country_id'] = '';
+        if ($addressInput['country_code']) {
+            $addressInput['country_code'] = strtoupper($addressInput['country_code']);
+            $addressInput['country_id'] = $addressInput['country_code'];
+        }
 
         $maxAllowedLineCount = $this->addressHelper->getStreetLines();
         if (is_array($addressInput['street']) && count($addressInput['street']) > $maxAllowedLineCount) {
@@ -80,8 +84,8 @@ class QuoteAddressFactory
      * @param int $customerAddressId
      * @param int $customerId
      * @return QuoteAddress
-     * @throws GraphQlInputException
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
     public function createBasedOnCustomerAddress(int $customerAddressId, int $customerId): QuoteAddress

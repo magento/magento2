@@ -8,6 +8,9 @@ namespace Magento\Weee\Test\Unit\Observer;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Customer logged in test
+ */
 class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -18,7 +21,7 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     private $moduleManagerMock;
 
@@ -49,12 +52,14 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getCustomerAddress', 'getData'
-            ])
+                ]
+            )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

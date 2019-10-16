@@ -3,15 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\File */ ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_fileInfo = $block->getFileInfo(); ?>
 <?php $_fileExists = $_fileInfo->hasData() ? true : false; ?>
-<?php $_fileName = 'options_' . $_option->getId() . '_file'; ?>
+<?php $_fileName = 'options_' . (int)$_option->getId() . '_file'; ?>
 <?php $_fieldNameAction = $_fileName . '_action'; ?>
 <?php $_fieldValueAction = $_fileExists ? 'save_old' : 'save_new'; ?>
 <?php $_fileNamed = $_fileName . '_name'; ?>
@@ -21,11 +18,11 @@
 require(['prototype'], function(){
 
 //<![CDATA[
-    opFile<?= /* @escapeNotVerified */ $_rand ?> = {
+    opFile<?= /* @noEscape */ $_rand ?> = {
         initializeFile: function(inputBox) {
-            this.inputFile = inputBox.select('input[name="<?= /* @escapeNotVerified */ $_fileName ?>"]')[0];
-            this.inputFileAction = inputBox.select('input[name="<?= /* @escapeNotVerified */ $_fieldNameAction ?>"]')[0];
-            this.fileNameBox = inputBox.up('dd').select('.<?= /* @escapeNotVerified */ $_fileNamed ?>')[0];
+            this.inputFile = inputBox.select('input[name="<?= /* @noEscape */ $_fileName ?>"]')[0];
+            this.inputFileAction = inputBox.select('input[name="<?= /* @noEscape */ $_fieldNameAction ?>"]')[0];
+            this.fileNameBox = inputBox.up('dd').select('.<?= /* @noEscape */ $_fileNamed ?>')[0];
         },
 
         toggleFileChange: function(inputBox) {
@@ -62,42 +59,42 @@ require(['prototype'], function(){
 });
 </script>
 
-<div class="admin__field <?php if ($_option->getIsRequire()) echo ' required _required' ?>">
+<div class="admin__field <?= $_option->getIsRequire() ? ' required _required' : '' ?>">
     <label class="admin__field-label label">
         <?= $block->escapeHtml($_option->getTitle()) ?>
-        <?= /* @escapeNotVerified */ $block->getFormattedPrice() ?>
+        <?= /* @noEscape */ $block->getFormattedPrice() ?>
     </label>
     <div class="admin__field-control control">
-        <?php if ($_fileExists): ?>
+        <?php if ($_fileExists) :?>
             <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
-            <a href="javascript:void(0)" class="label" onclick="opFile<?= /* @escapeNotVerified */ $_rand ?>.toggleFileChange($(this).next('.input-box'))">
-                <?= /* @escapeNotVerified */ __('Change') ?>
+            <a href="javascript:void(0)" class="label" onclick="opFile<?= /* @noEscape */ $_rand ?>.toggleFileChange($(this).next('.input-box'))">
+                <?= $block->escapeHtml(__('Change')) ?>
             </a>&nbsp;
-            <?php if (!$_option->getIsRequire()): ?>
-                <input type="checkbox" onclick="opFile<?= /* @escapeNotVerified */ $_rand ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>"/>
-                <span class="label"><?= /* @escapeNotVerified */ __('Delete') ?></span>
+            <?php if (!$_option->getIsRequire()) :?>
+                <input type="checkbox" onclick="opFile<?= /* @noEscape */ $_rand ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>"/>
+                <span class="label"><?= $block->escapeHtml(__('Delete')) ?></span>
             <?php endif; ?>
         <?php endif; ?>
         <div class="input-box" <?= $_fileExists ? 'style="display:none"' : '' ?>>
             <!-- ToDo UI: add appropriate file class when z-index issue in ui dialog will be resolved  -->
-            <input type="file" name="<?= /* @noEscape */ $_fileName ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= /* @escapeNotVerified */ $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
-            <input type="hidden" name="<?= /* @escapeNotVerified */ $_fieldNameAction ?>" value="<?= /* @escapeNotVerified */ $_fieldValueAction ?>" />
+            <input type="file" name="<?= /* @noEscape */ $_fileName ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
+            <input type="hidden" name="<?= /* @noEscape */ $_fieldNameAction ?>" value="<?= /* @noEscape */ $_fieldValueAction ?>" />
 
-            <?php if ($_option->getFileExtension()): ?>
+            <?php if ($_option->getFileExtension()) :?>
                 <div class="admin__field-note">
-                    <span><?= /* @escapeNotVerified */ __('Compatible file extensions to upload') ?>: <strong><?= /* @escapeNotVerified */ $_option->getFileExtension() ?></strong></span>
+                    <span><?= $block->escapeHtml(__('Compatible file extensions to upload')) ?>: <strong><?= $block->escapeHtml($_option->getFileExtension()) ?></strong></span>
                 </div>
             <?php endif; ?>
 
-            <?php if ($_option->getImageSizeX() > 0): ?>
+            <?php if ($_option->getImageSizeX() > 0) :?>
                 <div class="admin__field-note">
-                    <span><?= /* @escapeNotVerified */ __('Maximum image width') ?>: <strong><?= /* @escapeNotVerified */ $_option->getImageSizeX() ?> <?= /* @escapeNotVerified */ __('px.') ?></strong></span>
+                    <span><?= $block->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$_option->getImageSizeX() ?> <?= $block->escapeHtml(__('px.')) ?></strong></span>
                 </div>
             <?php endif; ?>
 
-            <?php if ($_option->getImageSizeY() > 0): ?>
+            <?php if ($_option->getImageSizeY() > 0) :?>
                 <div class="admin__field-note">
-                    <span><?= /* @escapeNotVerified */ __('Maximum image height') ?>: <strong><?= /* @escapeNotVerified */ $_option->getImageSizeY() ?> <?= /* @escapeNotVerified */ __('px.') ?></strong></span>
+                    <span><?= $block->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$_option->getImageSizeY() ?> <?= $block->escapeHtml(__('px.')) ?></strong></span>
                 </div>
             <?php endif; ?>
         </div>

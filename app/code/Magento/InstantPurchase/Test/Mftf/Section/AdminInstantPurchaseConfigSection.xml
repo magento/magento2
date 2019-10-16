@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminInstantPurchaseConfigSection">
+        <element name="salesInstantPurchaseTab" type="button" selector="#sales_instant_purchase-head"/>
+        <element name="salesInstantPurchaseActive" type="select" selector="#sales_instant_purchase_active"/>
+        <element name="salesInstantPurchaseActiveUseWebsite" type="select" selector="#sales_instant_purchase_active_inherit"/>
+        <element name="salesInstantPurchaseButtonText" type="text" selector="#sales_instant_purchase_button_text"/>
+        <element name="salesInstantPurchaseButtonTextUseWebsite" type="checkbox" selector="#sales_instant_purchase_button_text_inherit"/>
+    </section>
+</sections>

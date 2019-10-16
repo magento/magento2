@@ -107,6 +107,7 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron3"/>
+        <magentoCLI command="cron:run" stepKey="runCron4"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
