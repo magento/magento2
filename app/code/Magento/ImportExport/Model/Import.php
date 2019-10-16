@@ -107,6 +107,9 @@ class Import extends AbstractModel
      */
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
+    /**
+     * Import empty attribute default value
+     */
     const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
     const DEFAULT_SIZE = 50;
     const MAX_IMPORT_CHUNKS = 4;

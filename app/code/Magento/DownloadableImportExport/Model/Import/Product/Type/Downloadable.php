@@ -15,18 +15,34 @@ use \Magento\Store\Model\Store;
 /**
  * Class Downloadable
  *
+ * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
+    /**
+     * Pair value separator.
+     */
     const PAIR_VALUE_SEPARATOR = '=';
 
+    /**
+     * Default sort order
+     */
     const DEFAULT_SORT_ORDER = 0;
 
+    /**
+     * Default number of downloads
+     */
     const DEFAULT_NUMBER_OF_DOWNLOADS = 0;
 
+    /**
+     * Default is shareable
+     */
     const DEFAULT_IS_SHAREABLE = 2;
 
+    /**
+     * Default website id
+     */
     const DEFAULT_WEBSITE_ID = 0;
 
     /**
@@ -64,6 +80,9 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
 
+    /**
+     * Default group title
+     */
     const DEFAULT_GROUP_TITLE = '';
 
     /**

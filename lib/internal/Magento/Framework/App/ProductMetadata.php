@@ -67,7 +67,7 @@ class ProductMetadata implements ProductMetadataInterface
         CacheInterface $cache = null
     ) {
         $this->composerJsonFinder = $composerJsonFinder;
-        $this->cache = $cache ?? ObjectManager::getInstance()->get(CacheInterface::class);
+        $this->cache = $cache ?: ObjectManager::getInstance()->get(CacheInterface::class);
     }
 
     /**
@@ -77,8 +77,7 @@ class ProductMetadata implements ProductMetadataInterface
      */
     public function getVersion()
     {
-        $versionFromCache = $this->cache->load(self::VERSION_CACHE_KEY);
-        $this->version = $this->version ?: $versionFromCache;
+        $this->version = $this->version ?: $this->cache->load(self::VERSION_CACHE_KEY);
         if (!$this->version) {
             if (!($this->version = $this->getSystemPackageVersion())) {
                 if ($this->getComposerInformation()->isMagentoRoot()) {

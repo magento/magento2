@@ -441,7 +441,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Sets customer data as logged in
+     * Sets customer as logged in
      *
      * @param CustomerData $customer
      * @return $this
@@ -593,7 +593,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
-     * Creates URL factory
+     * Creates URL object
      *
      * @return \Magento\Framework\UrlInterface
      */
