@@ -15,23 +15,33 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * Test for class \Magento\Catalog\Controller\Adminhtml\Category\Delete
  *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
  */
 class DeleteTest extends AbstractBackendController
 {
     /**
      * @return void
      */
-    public function testWithError(): void
+    public function testDeleteMissingCategory(): void
     {
         $incorrectId = 825852;
-        $postData = ['id' => $incorrectId];
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setPostValue(['id' => $incorrectId]);
         $this->dispatch('backend/catalog/category/delete');
         $this->assertSessionMessages(
             $this->equalTo([(string)__(sprintf('No such entity with id = %s', $incorrectId))]),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testDeleteCategory(): void
+    {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['id' => 333]);
+        $this->dispatch('backend/catalog/category/delete');
+        $this->assertSessionMessages($this->equalTo([(string)__('You deleted the category.')]));
     }
 }

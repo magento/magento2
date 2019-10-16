@@ -11,6 +11,7 @@ use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\ObjectManagerInterface;
@@ -51,6 +52,9 @@ class CategoryRepositoryTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
+    /** @var CategoryCollectionFactory */
+    private $categoryCollectionFactory;
+
     /**
      * Sets up common objects.
      *
@@ -64,6 +68,7 @@ class CategoryRepositoryTest extends TestCase
         $this->aclBuilder = $this->objectManager->get(Builder::class);
         $this->categoryFactory = $this->objectManager->get(CategoryInterfaceFactory::class);
         $this->productCollectionFactory = $this->objectManager->get(CollectionFactory::class);
+        $this->categoryCollectionFactory = $this->objectManager->create(CategoryCollectionFactory::class);
     }
 
     /**
@@ -127,20 +132,23 @@ class CategoryRepositoryTest extends TestCase
      * @magentoAppArea adminhtml
      * @return void
      */
-    public function testDeleteCategory(): void
+    public function testCheckCategoryBehaviourAfterDelete(): void
     {
         $productCollection = $this->productCollectionFactory->create();
-        $deletedCategories = [3, 4, 5, 13];
-        $categoryCollection = $this->categoryFactory->create()->getCollection()->toArray();
+        $deletedCategories = ['3', '4', '5', '13'];
+        $categoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
         $this->repo->deleteByIdentifier(3);
-        $this->assertEmpty(
-            $productCollection->addCategoriesFilter(['in' => $deletedCategories])->getItems(),
+        $this->assertEquals(
+            0,
+            $productCollection->addCategoriesFilter(['in' => $deletedCategories])->getSize(),
             'The category-products relations was not deleted after category delete'
         );
-        $newCategoryCollection = $this->categoryFactory->create()->getCollection()->toArray();
+        $newCategoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
+        $difference = array_diff($categoryCollectionIds, $newCategoryCollectionIds);
+        sort($difference);
         $this->assertEquals(
             $deletedCategories,
-            array_keys(array_diff_key($categoryCollection, $newCategoryCollection)),
+            $difference,
             'Wrong categories was deleted'
         );
     }
