@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as Category;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
@@ -15,8 +15,8 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for category backend actions
@@ -53,7 +53,7 @@ class CategoryTest extends AbstractBackendController
     }
 
     /**
-     * Test save action
+     * Test save action.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
@@ -410,7 +410,7 @@ class CategoryTest extends AbstractBackendController
     }
 
     /**
-     * Test move Action
+     * Test move action.
      *
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @dataProvider moveActionDataProvider
@@ -470,7 +470,7 @@ class CategoryTest extends AbstractBackendController
     }
 
     /**
-     * Test save action
+     * Test save category with product position.
      *
      * @magentoDataFixture Magento/Catalog/_files/products_in_different_stores.php
      * @magentoDbIsolation disabled
@@ -520,7 +520,6 @@ class CategoryTest extends AbstractBackendController
                     'path' => '1/2/96377',
                     'level' => '2',
                     'children_count' => '0',
-                    'row_id' => '96377',
                     'name' => 'Category 1',
                     'display_mode' => 'PRODUCTS',
                     'url_key' => 'category-1',
@@ -584,7 +583,7 @@ class CategoryTest extends AbstractBackendController
     }
 
     /**
-     * Get items count from catalog_category_product
+     * Get items count from catalog_category_product.
      *
      * @return int
      */
@@ -596,6 +595,38 @@ class CategoryTest extends AbstractBackendController
         );
         return count(
             $this->productResource->getConnection()->fetchAll($oldCategoryProducts)
+        );
+    }
+
+    /**
+     * Verify that the category cannot be saved if the category url matches the admin url.
+     *
+     * @magentoConfigFixture admin/url/use_custom_path 1
+     * @magentoConfigFixture admin/url/custom_path backend
+     */
+    public function testSaveWithCustomBackendNameAction()
+    {
+        $frontNameResolver = Bootstrap::getObjectManager()->create(FrontNameResolver::class);
+        $urlKey = $frontNameResolver->getFrontName();
+        $inputData = [
+            'id' => '2',
+            'url_key' => $urlKey,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1
+            ]
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($inputData);
+        $this->dispatch('backend/catalog/category/save');
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    'URL key "backend" matches a reserved endpoint name '
+                    . '(admin, soap, rest, graphql, standard, backend). Use another URL key.'
+                ]
+            ),
+            MessageInterface::TYPE_ERROR
         );
     }
 }
