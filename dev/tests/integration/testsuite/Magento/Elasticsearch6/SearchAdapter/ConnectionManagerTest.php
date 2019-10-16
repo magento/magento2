@@ -33,12 +33,27 @@ class ConnectionManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test if 'elasticsearch5' search engine returned by connection manager.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch5
+     */
+    public function testCorrectElasticsearchClientEs5()
+    {
+        $connection = $this->connectionManager->getConnection();
+        $this->assertInstanceOf(
+            \Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch::class,
+            $connection
+        );
+    }
+
+    /**
      * Test if 'elasticsearch6' search engine returned by connection manager.
      *
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      */
-    public function testCorrectElasticsearchClient()
+    public function testCorrectElasticsearchClientEs6()
     {
         $connection = $this->connectionManager->getConnection();
         $this->assertInstanceOf(
