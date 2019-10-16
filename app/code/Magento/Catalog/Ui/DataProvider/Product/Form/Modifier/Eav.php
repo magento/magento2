@@ -222,6 +222,7 @@ class Eav extends AbstractModifier
         'custom_design_from',
         'custom_design_to',
         'custom_layout',
+        'custom_layout_update_file'
     ];
 
     /**

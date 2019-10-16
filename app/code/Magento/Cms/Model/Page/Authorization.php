@@ -12,9 +12,7 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface as PageLayoutBuilder;
 
 /**
  * Authorization for saving a page.
@@ -32,31 +30,23 @@ class Authorization
     private $authorization;
 
     /**
-     * @var ScopeConfigInterface
+     * @var PageLayoutBuilder
      */
-    private $scopeConfig;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+    private $pageLayoutBuilder;
 
     /**
      * @param PageRepositoryInterface $pageRepository
      * @param AuthorizationInterface $authorization
-     * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
+     * @param PageLayoutBuilder $pageLayoutBuilder
      */
     public function __construct(
         PageRepositoryInterface $pageRepository,
         AuthorizationInterface $authorization,
-        ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager
+        PageLayoutBuilder $pageLayoutBuilder
     ) {
         $this->pageRepository = $pageRepository;
         $this->authorization = $authorization;
-        $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
+        $this->pageLayoutBuilder = $pageLayoutBuilder;
     }
 
     /**
@@ -72,11 +62,8 @@ class Authorization
     private function hasPageChanged(PageInterface $page, ?PageInterface $oldPage): bool
     {
         if (!$oldPage) {
-            $oldPageLayout = $this->scopeConfig->getValue(
-                'web/default_layouts/default_cms_layout',
-                ScopeInterface::SCOPE_STORE,
-                $this->storeManager->getStore()
-            );
+            //Finding default page layout value.
+            $oldPageLayout = array_keys($this->pageLayoutBuilder->getPageLayoutsConfig()->getPageLayouts())[0];
             if ($page->getPageLayout() && $page->getPageLayout() !== $oldPageLayout) {
                 //If page layout is set and it's not a default value - design attributes are changed.
                 return true;
@@ -93,6 +80,14 @@ class Authorization
         $oldLayoutUpdate = $oldPage ? $oldPage->getCustomLayoutUpdateXml() : null;
         $oldThemeFrom = $oldPage ? $oldPage->getCustomThemeFrom() : null;
         $oldThemeTo = $oldPage ? $oldPage->getCustomThemeTo() : null;
+        $oldLayoutSelected = null;
+        if ($oldPage instanceof \Magento\Cms\Model\Page) {
+            $oldLayoutSelected = $oldPage->getData('layout_update_selected');
+        }
+        $newLayoutSelected = null;
+        if ($page instanceof \Magento\Cms\Model\Page) {
+            $newLayoutSelected = $page->getData('layout_update_selected');
+        }
 
         if ($page->getLayoutUpdateXml() != $oldUpdateXml
             || $page->getPageLayout() != $oldPageLayout
@@ -100,6 +95,7 @@ class Authorization
             || $page->getCustomLayoutUpdateXml() != $oldLayoutUpdate
             || $page->getCustomThemeFrom() != $oldThemeFrom
             || $page->getCustomThemeTo() != $oldThemeTo
+            || $newLayoutSelected != $oldLayoutSelected
         ) {
             return true;
         }
