@@ -20,11 +20,14 @@ use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\Response;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use PHPUnit\Framework\Constraint\StringContains;
 use Zend\Stdlib\Parameters;
 
 /**
@@ -742,6 +745,63 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $response = $app->launch();
         $this->assertResponseRedirect($response, $baseUrl . $redirectUrl);
         $this->assertTrue($this->_objectManager->get(Session::class)->isLoggedIn());
+    }
+
+    /**
+     * Register Customer with email confirmation.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
+     * @return void
+     */
+    public function testRegisterCustomerWithEmailConfirmation(): void
+    {
+        $email = 'test_example@email.com';
+        $this->fillRequestWithAccountDataAndFormKey($email);
+        $this->dispatch('customer/account/createPost');
+        $this->assertRedirect($this->stringContains('customer/account/index/'));
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    'You must confirm your account. Please check your email for the confirmation link or '
+                    . '<a href="http://localhost/index.php/customer/account/confirmation/'
+                    . '?email=test_example%40email.com">click here</a> for a new link.'
+                ]
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
+        /** @var CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $this->_objectManager->create(CustomerRepositoryInterface::class);
+        /** @var CustomerInterface $customer */
+        $customer = $customerRepository->get($email);
+        $confirmation = $customer->getConfirmation();
+        $message = $this->transportBuilderMock->getSentMessage();
+        $rawMessage = $message->getBody()->getParts()[0]->getRawContent();
+        $messageConstraint = $this->logicalAnd(
+            new StringContains("You must confirm your {$email} email before you can sign in (link is only valid once"),
+            new StringContains("customer/account/confirm/?id={$customer->getId()}&amp;key={$confirmation}")
+        );
+        $this->assertThat($rawMessage, $messageConstraint);
+
+        /** @var CookieManagerInterface $cookieManager */
+        $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+        $cookieManager->deleteCookie(MessagePlugin::MESSAGES_COOKIES_NAME);
+        $this->_objectManager->removeSharedInstance(Http::class);
+        $this->_objectManager->removeSharedInstance(Request::class);
+        $this->_request = null;
+
+        $this->getRequest()->setParam('id', $customer->getId());
+        $this->getRequest()->setParam('key', $confirmation);
+        $this->dispatch('customer/account/confirm');
+
+        /** @var StoreManager $store */
+        $store = $this->_objectManager->get(StoreManagerInterface::class);
+        $name = $store->getStore()->getFrontendName();
+
+        $this->assertRedirect($this->stringContains('customer/account/index/'));
+        $this->assertSessionMessages(
+            $this->equalTo(["Thank you for registering with {$name}."]),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 
     /**
