@@ -2086,7 +2086,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
             }
-            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE_VIEW_CODE];
+            if (isset($rowData[Product::COL_STORE_VIEW_CODE])) {
+                $options[$name][$k][self::COLUMN_STORE] = $rowData[Product::COL_STORE_VIEW_CODE];
+            } else {
+                $options[$name][$k][self::COLUMN_STORE] = Store::DEFAULT_STORE_ID;
+            }
             $k++;
         }
         $rowData['custom_options'] = $options;
