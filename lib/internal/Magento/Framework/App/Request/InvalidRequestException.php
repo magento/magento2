@@ -45,6 +45,8 @@ class InvalidRequestException extends RuntimeException
     }
 
     /**
+     * Return replaced result
+     *
      * @return ResponseInterface|ResultInterface|NotFoundException
      */
     public function getReplaceResult()
@@ -53,6 +55,8 @@ class InvalidRequestException extends RuntimeException
     }
 
     /**
+     * Return messages
+     *
      * @return Phrase[]|null
      */
     public function getMessages(): ?array
