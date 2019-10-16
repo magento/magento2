@@ -4,10 +4,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ *  Edit product
+ */
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements HttpGetActionInterface
 {
     /**
@@ -51,7 +55,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
-        if (($productId && !$product->getEntityId())) {
+        if ($productId && !$product->getEntityId()) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $this->messageManager->addErrorMessage(__('This product doesn\'t exist.'));

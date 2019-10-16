@@ -17,6 +17,9 @@
             <description value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-3043"/>
+            <skip>
+                <issueId value="MQE-1128"/>
+            </skip>
         </annotations>
         <before>
             <!--Create Simple Product with Custom Options-->
