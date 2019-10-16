@@ -20,6 +20,9 @@ use function method_exists;
 use function preg_match;
 use function strtolower;
 
+/**
+ * Html output
+ */
 class Output extends AbstractHelper
 {
     /**
@@ -86,6 +89,8 @@ class Output extends AbstractHelper
     }
 
     /**
+     * Return template processor
+     *
      * @return Template
      */
     protected function _getTemplateProcessor()
