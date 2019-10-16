@@ -55,7 +55,9 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->sessionMock =
-            $this->createPartialMock(\Magento\Persistent\Model\Session::class, [
+            $this->createPartialMock(
+                \Magento\Persistent\Model\Session::class,
+                [
                     'setLoadInactive',
                     'setCustomerData',
                     'clearQuote',
@@ -63,7 +65,8 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
                     'getQuote',
                     'removePersistentCookie',
                     '__wakeup',
-                ]);
+                ]
+            );
         $this->persistentDataMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
 
@@ -71,7 +74,9 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
 
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
+        $this->quoteMock = $this->createPartialMock(
+            \Magento\Quote\Model\Quote::class,
+            [
                 'getId',
                 'getIsPersistent',
                 'getPaymentsCollection',
@@ -90,7 +95,8 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
                 'getIsActive',
                 'getCustomerId',
                 '__wakeup'
-            ]);
+            ]
+        );
 
         $this->model = new QuoteManager(
             $this->persistentSessionMock,
@@ -264,14 +270,16 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->exactly(3))
             ->method('getAddressesCollection')->willReturn($this->abstractCollectionMock);
-        $this->abstractCollectionMock->expects($this->exactly(3))->method('walk')->with($this->logicalOr(
-            $this->equalTo('setCustomerAddressId'),
-            $this->equalTo($addressArgs),
-            $this->equalTo('setCustomerId'),
-            $this->equalTo($customerIdArgs),
-            $this->equalTo('setEmail'),
-            $this->equalTo($emailArgs)
-        ));
+        $this->abstractCollectionMock->expects($this->exactly(3))->method('walk')->with(
+            $this->logicalOr(
+                $this->equalTo('setCustomerAddressId'),
+                $this->equalTo($addressArgs),
+                $this->equalTo('setCustomerId'),
+                $this->equalTo($customerIdArgs),
+                $this->equalTo('setEmail'),
+                $this->equalTo($emailArgs)
+            )
+        );
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->persistentSessionMock->expects($this->once())
             ->method('getSession')->willReturn($this->sessionMock);
