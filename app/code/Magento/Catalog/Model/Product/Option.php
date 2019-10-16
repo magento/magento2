@@ -158,8 +158,24 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $this->validatorPool = $validatorPool;
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
-        $this->optionGroups = $optionGroups;
-        $this->optionGroupsToTypes = $optionGroupsToTypes;
+        $this->optionGroups = $optionGroups ?: [
+            'date' => 'Magento\Catalog\Model\Product\Option\Type\Date',
+            'file' => 'Magento\Catalog\Model\Product\Option\Type\File',
+            'select' => 'Magento\Catalog\Model\Product\Option\Type\Select',
+            'text' => 'Magento\Catalog\Model\Product\Option\Type\Text',
+        ];
+        $this->optionGroupsToTypes = $optionGroupsToTypes ?: [
+            'field' => 'text',
+            'area' => 'text',
+            'file' => 'file',
+            'drop_down' => 'select',
+            'radio' => 'select',
+            'checkbox' => 'select',
+            'multiple' => 'select',
+            'date' => 'date',
+            'date_time' => 'date',
+            'time' => 'date',
+        ];
 
         parent::__construct(
             $context,

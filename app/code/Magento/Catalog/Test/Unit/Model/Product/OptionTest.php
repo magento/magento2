@@ -24,16 +24,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     {
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Option::class,
-            [
-                'optionGroupsToTypes' => [
-                    'field' => 'text',
-                    'drop_down' => 'select',
-                    'file' => 'file',
-                ]
-            ]
-        );
+        $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Option::class);
         $this->model->setProduct($this->productMock);
     }
 
