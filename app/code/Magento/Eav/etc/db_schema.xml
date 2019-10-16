@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="eav_entity_type" resource="default" engine="innodb" comment="Eav Entity Type">
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Entity Type Id"/>
+                comment="Entity Type ID"/>
         <column xsi:type="varchar" name="entity_type_code" nullable="false" length="50" comment="Entity Type Code"/>
         <column xsi:type="varchar" name="entity_model" nullable="false" length="255" comment="Entity Model"/>
         <column xsi:type="varchar" name="attribute_model" nullable="true" length="255" comment="Attribute Model"/>
@@ -21,7 +21,7 @@
         <column xsi:type="varchar" name="data_sharing_key" nullable="true" length="100" default="default"
                 comment="Data Sharing Key"/>
         <column xsi:type="smallint" name="default_attribute_set_id" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Default Attribute Set Id"/>
+                identity="false" default="0" comment="Default Attribute Set ID"/>
         <column xsi:type="varchar" name="increment_model" nullable="true" length="255" comment="Increment Model"/>
         <column xsi:type="smallint" name="increment_per_store" padding="5" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Increment Per Store"/>
@@ -44,14 +44,14 @@
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_set_id" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Attribute Set Id"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
+                identity="false" default="0" comment="Attribute Set ID"/>
+        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Parent Id"/>
+                default="0" comment="Parent ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
@@ -75,13 +75,13 @@
     </table>
     <table name="eav_entity_datetime" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="datetime" name="value" on_update="false" nullable="true" comment="Attribute Value"/>
@@ -115,13 +115,13 @@
     </table>
     <table name="eav_entity_decimal" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
@@ -156,13 +156,13 @@
     </table>
     <table name="eav_entity_int" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="int" name="value" padding="11" unsigned="false" nullable="false" identity="false" default="0"
@@ -196,13 +196,13 @@
     </table>
     <table name="eav_entity_text" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="text" name="value" nullable="false" comment="Attribute Value"/>
@@ -233,13 +233,13 @@
     </table>
     <table name="eav_entity_varchar" resource="default" engine="innodb" comment="Eav Entity Value Prefix">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Attribute Value"/>
@@ -273,9 +273,9 @@
     </table>
     <table name="eav_attribute" resource="default" engine="innodb" comment="Eav Attribute">
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="varchar" name="attribute_code" nullable="false" length="255" comment="Attribute Code"/>
         <column xsi:type="varchar" name="attribute_model" nullable="true" length="255" comment="Attribute Model"/>
         <column xsi:type="varchar" name="backend_model" nullable="true" length="255" comment="Backend Model"/>
@@ -308,13 +308,13 @@
     </table>
     <table name="eav_entity_store" resource="default" engine="innodb" comment="Eav Entity Store">
         <column xsi:type="int" name="entity_store_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Store Id"/>
+                comment="Entity Store ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="increment_prefix" nullable="true" length="20" comment="Increment Prefix"/>
-        <column xsi:type="varchar" name="increment_last_id" nullable="true" length="50" comment="Last Incremented Id"/>
+        <column xsi:type="varchar" name="increment_last_id" nullable="true" length="50" comment="Last Incremented ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_store_id"/>
         </constraint>
@@ -332,9 +332,9 @@
     </table>
     <table name="eav_attribute_set" resource="default" engine="innodb" comment="Eav Attribute Set">
         <column xsi:type="smallint" name="attribute_set_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Attribute Set Id"/>
+                comment="Attribute Set ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="varchar" name="attribute_set_name" nullable="true" length="255" comment="Attribute Set Name"/>
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
@@ -355,15 +355,15 @@
     </table>
     <table name="eav_attribute_group" resource="default" engine="innodb" comment="Eav Attribute Group">
         <column xsi:type="smallint" name="attribute_group_id" padding="5" unsigned="true" nullable="false"
-                identity="true" comment="Attribute Group Id"/>
+                identity="true" comment="Attribute Group ID"/>
         <column xsi:type="smallint" name="attribute_set_id" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Attribute Set Id"/>
+                identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="varchar" name="attribute_group_name" nullable="true" length="255"
                 comment="Attribute Group Name"/>
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <column xsi:type="smallint" name="default_id" padding="5" unsigned="true" nullable="true" identity="false"
-                default="0" comment="Default Id"/>
+                default="0" comment="Default ID"/>
         <column xsi:type="varchar" name="attribute_group_code" nullable="false" length="255"
                 comment="Attribute Group Code"/>
         <column xsi:type="varchar" name="tab_group_code" nullable="true" length="255" comment="Tab Group Code"/>
@@ -388,15 +388,15 @@
     </table>
     <table name="eav_entity_attribute" resource="default" engine="innodb" comment="Eav Entity Attributes">
         <column xsi:type="int" name="entity_attribute_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Entity Attribute Id"/>
+                comment="Entity Attribute ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Entity Type Id"/>
+                default="0" comment="Entity Type ID"/>
         <column xsi:type="smallint" name="attribute_set_id" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Attribute Set Id"/>
+                identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="smallint" name="attribute_group_id" padding="5" unsigned="true" nullable="false"
-                identity="false" default="0" comment="Attribute Group Id"/>
+                identity="false" default="0" comment="Attribute Group ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -426,9 +426,9 @@
     </table>
     <table name="eav_attribute_option" resource="default" engine="innodb" comment="Eav Attribute Option">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Option Id"/>
+                comment="Option ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="sort_order" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -443,11 +443,11 @@
     </table>
     <table name="eav_attribute_option_value" resource="default" engine="innodb" comment="Eav Attribute Option Value">
         <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Option Id"/>
+                default="0" comment="Option ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -458,6 +458,10 @@
         <constraint xsi:type="foreign" referenceId="EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_STORE_STORE_ID"
                     table="eav_attribute_option_value" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_OPTION_ID">
+            <column name="store_id"/>
+            <column name="option_id"/>
+        </constraint>
         <index referenceId="EAV_ATTRIBUTE_OPTION_VALUE_OPTION_ID" indexType="btree">
             <column name="option_id"/>
         </index>
@@ -467,11 +471,11 @@
     </table>
     <table name="eav_attribute_label" resource="default" engine="innodb" comment="Eav Attribute Label">
         <column xsi:type="int" name="attribute_label_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Attribute Label Id"/>
+                comment="Attribute Label ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="attribute_label_id"/>
@@ -481,6 +485,10 @@
                     referenceColumn="attribute_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="EAV_ATTRIBUTE_LABEL_STORE_ID_STORE_STORE_ID" table="eav_attribute_label"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="EAV_ATTRIBUTE_LABEL_ATTRIBUTE_ID_STORE_ID_UNIQUE">
+            <column name="store_id"/>
+            <column name="attribute_id"/>
+        </constraint>
         <index referenceId="EAV_ATTRIBUTE_LABEL_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
@@ -491,14 +499,14 @@
     </table>
     <table name="eav_form_type" resource="default" engine="innodb" comment="Eav Form Type">
         <column xsi:type="smallint" name="type_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Type Id"/>
+                comment="Type ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="64" comment="Code"/>
         <column xsi:type="varchar" name="label" nullable="false" length="255" comment="Label"/>
         <column xsi:type="smallint" name="is_system" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Is System"/>
         <column xsi:type="varchar" name="theme" nullable="true" length="64" comment="Theme"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="type_id"/>
         </constraint>
@@ -515,9 +523,9 @@
     </table>
     <table name="eav_form_type_entity" resource="default" engine="innodb" comment="Eav Form Type Entity">
         <column xsi:type="smallint" name="type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Type Id"/>
+                comment="Type ID"/>
         <column xsi:type="smallint" name="entity_type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Entity Type Id"/>
+                comment="Entity Type ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="type_id"/>
             <column name="entity_type_id"/>
@@ -534,9 +542,9 @@
     </table>
     <table name="eav_form_fieldset" resource="default" engine="innodb" comment="Eav Form Fieldset">
         <column xsi:type="smallint" name="fieldset_id" padding="5" unsigned="true" nullable="false" identity="true"
-                comment="Fieldset Id"/>
+                comment="Fieldset ID"/>
         <column xsi:type="smallint" name="type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Type Id"/>
+                comment="Type ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="64" comment="Code"/>
         <column xsi:type="int" name="sort_order" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
@@ -552,9 +560,9 @@
     </table>
     <table name="eav_form_fieldset_label" resource="default" engine="innodb" comment="Eav Form Fieldset Label">
         <column xsi:type="smallint" name="fieldset_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Fieldset Id"/>
+                comment="Fieldset ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Store Id"/>
+                comment="Store ID"/>
         <column xsi:type="varchar" name="label" nullable="false" length="255" comment="Label"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="fieldset_id"/>
@@ -572,13 +580,13 @@
     </table>
     <table name="eav_form_element" resource="default" engine="innodb" comment="Eav Form Element">
         <column xsi:type="int" name="element_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Element Id"/>
+                comment="Element ID"/>
         <column xsi:type="smallint" name="type_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Type Id"/>
+                comment="Type ID"/>
         <column xsi:type="smallint" name="fieldset_id" padding="5" unsigned="true" nullable="true" identity="false"
-                comment="Fieldset Id"/>
+                comment="Fieldset ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <column xsi:type="int" name="sort_order" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

@@ -20,7 +20,11 @@ use Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
- * @inheritdoc
+ * Resolver for setting payment method and placing order
+ *
+ * @deprecated Should use setPaymentMethodOnCart and placeOrder mutations in single request.
+ * @see \Magento\QuoteGraphQl\Model\Resolver\SetPaymentMethodOnCart
+ * @see \Magento\QuoteGraphQl\Model\Resolver\PlaceOrder
  */
 class SetPaymentAndPlaceOrder implements ResolverInterface
 {
@@ -95,6 +99,8 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
 
             return [
                 'order' => [
+                    'order_number' => $order->getIncrementId(),
+                    // @deprecated The order_id field is deprecated, use order_number instead
                     'order_id' => $order->getIncrementId(),
                 ],
             ];
