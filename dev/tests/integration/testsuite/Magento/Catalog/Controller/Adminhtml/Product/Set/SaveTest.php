@@ -15,12 +15,14 @@ use Magento\Developer\Model\Logger\Handler\Syslog;
 use Magento\Eav\Api\AttributeManagementInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Eav\Model\Config;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Logger\Handler\System;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -72,6 +74,16 @@ class SaveTest extends AbstractBackendController
     private $attributeSetRepository;
 
     /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
+     * @var Json
+     */
+    private $json;
+
+    /**
      * @inheritDoc
      */
     public function setUp()
@@ -89,6 +101,8 @@ class SaveTest extends AbstractBackendController
         $this->attributeRepository = $this->_objectManager->get(Repository::class);
         $this->dataObjectHelper = $this->_objectManager->get(DataObjectHelper::class);
         $this->attributeSetRepository = $this->_objectManager->get(AttributeSetRepositoryInterface::class);
+        $this->eavConfig = $this->_objectManager->get(Config::class);
+        $this->json = $this->_objectManager->get(Json::class);
     }
 
     /**
@@ -109,7 +123,10 @@ class SaveTest extends AbstractBackendController
      */
     public function testCreateNewAttributeSetBasedOnDefaultAttributeSet(): void
     {
-        $this->createAttributeSetBySkeletonAndAssert('Attribute set name for test', 4);
+        $this->createAttributeSetBySkeletonAndAssert(
+            'Attribute set name for test',
+            $this->getCatalogProductDefaultAttributeSetId()
+        );
     }
 
     /**
@@ -143,12 +160,12 @@ class SaveTest extends AbstractBackendController
         $this->getRequest()->setPostValue(
             [
                 'gotoEdit' => '1',
-                'skeleton_set' => 4,
+                'skeleton_set' => $this->getCatalogProductDefaultAttributeSetId(),
             ]
         );
         $this->dispatch('backend/catalog/product_set/save/');
         $this->assertSessionMessages(
-            $this->contains('The attribute set name is empty. Enter the name and try again.'),
+            $this->equalTo([(string)__('The attribute set name is empty. Enter the name and try again.')]),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -167,7 +184,7 @@ class SaveTest extends AbstractBackendController
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue(
             'data',
-            json_encode(
+            $this->json->serialize(
                 [
                     'attribute_set_name' => 'attribute_set_test',
                     'groups' => [
@@ -183,12 +200,12 @@ class SaveTest extends AbstractBackendController
         );
         $this->dispatch('backend/catalog/product_set/save/id/' . $attributeSet->getAttributeSetId());
 
-        $jsonResponse = json_decode($this->getResponse()->getBody());
+        $jsonResponse = $this->json->unserialize($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);
-        $this->assertEquals(1, $jsonResponse->error);
+        $this->assertEquals(1, $jsonResponse['error']);
         $this->assertContains(
-            'Attribute group with same code already exist. Please rename &quot;attribute-group-name&quot; group',
-            $jsonResponse->message
+            (string)__('Attribute group with same code already exist. Please rename &quot;attribute-group-name&quot; group'),
+            $jsonResponse['message']
         );
     }
 
@@ -265,9 +282,10 @@ class SaveTest extends AbstractBackendController
         $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
         $searchCriteriaBuilder->addFilter('attribute_set_name', $attributeSetName);
         $result = $this->attributeSetRepository->getList($searchCriteriaBuilder->create());
+
         $items = $result->getItems();
 
-        return $result->getTotalCount() ? array_pop($items) : null;
+        return array_pop($items);
     }
 
     /**
@@ -276,6 +294,7 @@ class SaveTest extends AbstractBackendController
      *
      * @param string $attributeSetName
      * @param int $skeletonAttributeSetId
+     * @return void
      */
     private function createAttributeSetBySkeletonAndAssert(
         string $attributeSetName,
@@ -308,6 +327,7 @@ class SaveTest extends AbstractBackendController
      *
      * @param AttributeSetInterface $createdAttributeSet
      * @param AttributeSetInterface $existAttributeSet
+     * @return void
      */
     private function assertAttributeSetsAttributesAreEquals(
         AttributeSetInterface $createdAttributeSet,
@@ -327,7 +347,19 @@ class SaveTest extends AbstractBackendController
         );
         $this->assertEquals(count($expectedAttributeIds), count($actualAttributeIds));
         foreach ($actualAttributeIds as $attributeId) {
-            $this->assertTrue(in_array($attributeId, $expectedAttributeIds, true));
+            $this->assertContains($attributeId, $expectedAttributeIds);
         }
+    }
+
+    /**
+     * Retrieve default catalog product attribute set ID.
+     *
+     * @return int
+     */
+    private function getCatalogProductDefaultAttributeSetId(): int
+    {
+        return (int)$this->eavConfig
+            ->getEntityType(ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
     }
 }
