@@ -11,7 +11,11 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Type\Date;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Catalog\Model\Product\Option\Type\File;
+use Magento\Catalog\Model\Product\Option\Type\Select;
+use Magento\Catalog\Model\Product\Option\Type\Text;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -159,10 +163,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
         $this->optionGroups = $optionGroups ?: [
-            'date' => 'Magento\Catalog\Model\Product\Option\Type\Date',
-            'file' => 'Magento\Catalog\Model\Product\Option\Type\File',
-            'select' => 'Magento\Catalog\Model\Product\Option\Type\Select',
-            'text' => 'Magento\Catalog\Model\Product\Option\Type\Text',
+            'date' => Date::class,
+            'file' => File::class,
+            'select' => Select::class,
+            'text' => Text::class,
         ];
         $this->optionGroupsToTypes = $optionGroupsToTypes ?: [
             'field' => 'text',
