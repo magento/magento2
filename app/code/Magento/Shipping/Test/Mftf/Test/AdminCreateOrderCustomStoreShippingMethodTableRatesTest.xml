@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderCustomStoreShippingMethodTableRatesTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Shipping method Table Rates"/>
+            <title value="Create order on second store with shipping method Table Rates"/>
+            <description value="Create order on second store with shipping method Table Rates"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6411"/>
+            <useCaseId value="MAGETWO-91702"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <!--Create product and customer-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create website, store group and store view-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!--Create customer associated to website-->
+            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <grabFromCurrentUrl regex="~/website_id/(\d+)/~" stepKey="grabWebsiteIdFromURL"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer">
+                <field key="website_id">$grabWebsiteIdFromURL</field>
+            </createData>
+            <!--Enable Table Rate method and import csv file-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchDefaultWebsite">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethodForDefaultWebsite">
+                <argument name="status" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigForDefaultWebsite"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchCustomWebsite">
+                <argument name="website" value="customWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethod">
+                <argument name="status" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminImportFileTableRatesShippingMethodActionGroup" stepKey="importCSVFile">
+                <argument name="file" value="usa_tablerates.csv"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Assign product to custom website-->
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="unassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!--Create order-->
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!--Choose Best Way shipping Method-->
+        <actionGroup ref="AdminOrderSelectShippingMethodActionGroup" stepKey="chooseBestWayMethod">
+            <argument name="methodTitle" value="bestway"/>
+            <argument name="methodName" value="tablerate"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+    </test>
+</tests>

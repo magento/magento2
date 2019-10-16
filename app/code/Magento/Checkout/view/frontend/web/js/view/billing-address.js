@@ -159,7 +159,6 @@ function (
                     }
                     addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
                     newBillingAddress = createBillingAddress(addressData);
-
                     // New address must be selected as a billing address
                     selectBillingAddress(newBillingAddress);
                     checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
@@ -237,6 +236,30 @@ function (
          */
         getCode: function (parent) {
             return _.isFunction(parent.getCode) ? parent.getCode() : 'shared';
+        },
+
+        /**
+         * Get customer attribute label
+         *
+         * @param {*} attribute
+         * @returns {*}
+         */
+        getCustomAttributeLabel: function (attribute) {
+            var resultAttribute;
+
+            if (typeof attribute === 'string') {
+                return attribute;
+            }
+
+            if (attribute.label) {
+                return attribute.label;
+            }
+
+            resultAttribute = _.findWhere(this.source.get('customAttributes')[attribute['attribute_code']], {
+                value: attribute.value
+            });
+
+            return resultAttribute && resultAttribute.label || attribute.value;
         }
     });
 });
