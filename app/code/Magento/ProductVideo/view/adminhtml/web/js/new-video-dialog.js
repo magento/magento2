@@ -283,6 +283,7 @@ define([
          */
         _onGetVideoInformationClick: function () {
             var videoForm = this.element.find(this._videoFormSelector);
+
             videoForm.validation();
 
             if (this.element.find(this._videoUrlSelector).valid()) {
@@ -304,8 +305,9 @@ define([
          * @private
          */
         _onGetVideoInformationStartRequest: function () {
+            var videoForm = this.element.find(this._videoFormSelector);
+
             try {
-                var videoForm = this.element.find(this._videoFormSelector);
                 videoForm.validation('clearError');
             } catch (e) {
                 // Do nothing
