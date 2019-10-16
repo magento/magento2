@@ -204,7 +204,7 @@ class Price
     }
 
     /**
-     * Gets the 'tear_price' array from the product
+     * Gets the 'tier_price' array from the product
      *
      * @param Product $product
      * @param string $key

@@ -18,7 +18,7 @@ type Mutation {
     setShippingMethodsOnCart(input: SetShippingMethodsOnCartInput): SetShippingMethodsOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingMethodsOnCart")
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
-    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
+    setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
@@ -85,6 +85,7 @@ input SetShippingAddressesOnCartInput {
 input ShippingAddressInput {
     customer_address_id: Int # If provided then will be used address from address book
     address: CartAddressInput
+    customer_notes: String
 }
 
 input SetBillingAddressOnCartInput {
@@ -108,7 +109,7 @@ input CartAddressInput {
     postcode: String
     country_code: String!
     telephone: String!
-    save_in_address_book: Boolean!
+    save_in_address_book: Boolean
 }
 
 input SetShippingMethodsOnCartInput {
@@ -149,9 +150,10 @@ type CartPrices {
     grand_total: Money
     subtotal_including_tax: Money
     subtotal_excluding_tax: Money
-    discount: CartDiscount
+    discount: CartDiscount @deprecated(reason: "Use discounts instead ")
     subtotal_with_discount_excluding_tax: Money
     applied_taxes: [CartTaxItem]
+    discounts: [Discount] @doc(description:"An array of applied discounts") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Discounts")
 }
 
 type CartTaxItem {
@@ -190,13 +192,16 @@ type PlaceOrderOutput {
 
 type Cart {
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
-    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon")
+    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
+    applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
     billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
     available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
+    is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual")
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
@@ -209,7 +214,6 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
     postcode: String
     country: CartAddressCountry
     telephone: String
-    customer_notes: String
 }
 
 type ShippingCartAddress implements CartAddressInterface {
@@ -217,9 +221,11 @@ type ShippingCartAddress implements CartAddressInterface {
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
     items_weight: Float
     cart_items: [CartItemQuantity]
+    customer_notes: String
 }
 
 type BillingCartAddress implements CartAddressInterface {
+    customer_notes: String @deprecated (reason: "The field is used only in shipping address")
 }
 
 type CartItemQuantity {
@@ -238,12 +244,12 @@ type CartAddressCountry {
 }
 
 type SelectedShippingMethod {
-    carrier_code: String
-    method_code: String
-    carrier_title: String
-    method_title: String
-    amount: Money
-    base_amount: Money
+    carrier_code: String!
+    method_code: String!
+    carrier_title: String!
+    method_title: String!
+    amount: Money!
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
 }
 
 type AvailableShippingMethod {
@@ -253,7 +259,7 @@ type AvailableShippingMethod {
     method_title: String @doc(description: "Could be null if method is not available")
     error_message: String
     amount: Money!
-    base_amount: Money @doc(description: "Could be null if method is not available")
+    base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
     price_excl_tax: Money!
     price_incl_tax: Money!
     available: Boolean!
@@ -317,10 +323,17 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     product: ProductInterface!
 }
 
+type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
+    amount: Money! @doc(description:"The amount of the discount")
+    label: String! @doc(description:"A description of the discount")
+}
+
 type CartItemPrices {
     price: Money!
     row_total: Money!
     row_total_including_tax: Money!
+    discounts: [Discount] @doc(description:"An array of discounts to be applied to the cart item")
+    total_item_discount: Money @doc(description:"The total of all discounts applied to the item")
 }
 
 type SelectedCustomizableOption {
@@ -345,5 +358,6 @@ type CartItemSelectedOptionValuePrice {
 }
 
 type Order {
-    order_id: String
+    order_number: String!
+    order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
 }

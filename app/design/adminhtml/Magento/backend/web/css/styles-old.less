@@ -4060,6 +4060,31 @@
     }
 }
 
+.newsletter-template-preview {
+    height: 100%;
+    .cms-revision-preview {
+        height: 100%;
+        .preview_iframe {
+            height: calc(~'100% - 50px');
+        }
+    }
+}
+
+.adminhtml-email_template-preview {
+    .cms-revision-preview {
+        padding-top: 56.25%;
+        position: relative;
+
+        #preview_iframe {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    }
+}
+
 .admin__scope-old {
     .buttons-set {
         margin: 0 0 15px;
