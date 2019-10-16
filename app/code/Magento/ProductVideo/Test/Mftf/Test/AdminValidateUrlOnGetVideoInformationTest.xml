@@ -30,11 +30,13 @@
         </actionGroup>
         <actionGroup ref="AdminOpenProductVideoModalActionGroup" stepKey="openAddProductVideoModal"/>
         <actionGroup ref="AdminGetVideoInformationActionGroup" stepKey="clickOnGetVideoInformation"/>
-        <actionGroup ref="AdminAssertVideoValidationErrorActionGroup" stepKey="seeUrlValidationMessage">
+        <actionGroup ref="AssertAdminVideoValidationErrorActionGroup" stepKey="seeUrlValidationMessage">
             <argument name="inputName" value="video_url"/>
         </actionGroup>
-        <fillField selector="{{AdminProductNewVideoSection.videoUrlTextField}}"
-                   userInput="{{mftfTestProductVideo.videoUrl}}" stepKey="fillFieldVideoUrl"/>
+        <actionGroup ref="AdminFillProductVideoFieldActionGroup" stepKey="fillVideoUrlField">
+            <argument name="input" value="{{AdminProductNewVideoSection.videoUrlTextField}}"/>
+            <argument name="value" value="{{mftfTestProductVideo.videoUrl}}"/>
+        </actionGroup>
         <actionGroup ref="AdminGetVideoInformationActionGroup" stepKey="clickOnGetVideoInformation2"/>
         <actionGroup ref="AdminAssertVideoNoValidationErrorActionGroup" stepKey="dontSeeUrlValidationMessage">
             <argument name="inputName" value="video_url"/>
