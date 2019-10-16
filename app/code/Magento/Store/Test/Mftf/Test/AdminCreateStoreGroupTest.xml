@@ -21,6 +21,14 @@
             <createData stepKey="b2" entity="customStoreGroup"/>
         </before>
         <after>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroupB1">
+                <argument name="storeGroupName" value="$$b1.group[name]$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroupB2">
+                <argument name="storeGroupName" value="$$b2.group[name]$$"/>
+            </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
