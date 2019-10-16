@@ -163,22 +163,22 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
         $this->optionGroups = $optionGroups ?: [
-            'date' => Date::class,
-            'file' => File::class,
-            'select' => Select::class,
-            'text' => Text::class,
+            self::OPTION_GROUP_DATE => Date::class,
+            self::OPTION_GROUP_FILE => File::class,
+            self::OPTION_GROUP_SELECT => Select::class,
+            self::OPTION_GROUP_TEXT => Text::class,
         ];
         $this->optionGroupsToTypes = $optionGroupsToTypes ?: [
-            'field' => 'text',
-            'area' => 'text',
-            'file' => 'file',
-            'drop_down' => 'select',
-            'radio' => 'select',
-            'checkbox' => 'select',
-            'multiple' => 'select',
-            'date' => 'date',
-            'date_time' => 'date',
-            'time' => 'date',
+            self::OPTION_TYPE_FIELD => self::OPTION_GROUP_TEXT,
+            self::OPTION_TYPE_AREA => self::OPTION_GROUP_TEXT,
+            self::OPTION_TYPE_FILE => self::OPTION_GROUP_FILE,
+            self::OPTION_TYPE_DROP_DOWN => self::OPTION_GROUP_SELECT,
+            self::OPTION_TYPE_RADIO => self::OPTION_GROUP_SELECT,
+            self::OPTION_TYPE_CHECKBOX => self::OPTION_GROUP_SELECT,
+            self::OPTION_TYPE_MULTIPLE => self::OPTION_GROUP_SELECT,
+            self::OPTION_TYPE_DATE => self::OPTION_GROUP_DATE,
+            self::OPTION_TYPE_DATE_TIME => self::OPTION_GROUP_DATE,
+            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
         ];
 
         parent::__construct(
