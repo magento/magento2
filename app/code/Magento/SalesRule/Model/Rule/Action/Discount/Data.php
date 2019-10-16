@@ -50,7 +50,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      * @param float $amount
      * @return $this
      */
-    public function setAmount(float $amount)
+    public function setAmount($amount)
     {
         $this->amount = $amount;
         return $this;
@@ -61,7 +61,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      *
      * @return float
      */
-    public function getAmount(): float
+    public function getAmount()
     {
         return $this->amount;
     }
@@ -72,7 +72,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      * @param float $baseAmount
      * @return $this
      */
-    public function setBaseAmount(float $baseAmount)
+    public function setBaseAmount($baseAmount)
     {
         $this->baseAmount = $baseAmount;
         return $this;
@@ -83,7 +83,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      *
      * @return float
      */
-    public function getBaseAmount(): float
+    public function getBaseAmount()
     {
         return $this->baseAmount;
     }
@@ -94,7 +94,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      * @param float $originalAmount
      * @return $this
      */
-    public function setOriginalAmount(float $originalAmount)
+    public function setOriginalAmount($originalAmount)
     {
         $this->originalAmount = $originalAmount;
         return $this;
@@ -105,7 +105,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      *
      * @return float
      */
-    public function getOriginalAmount(): float
+    public function getOriginalAmount()
     {
         return $this->originalAmount;
     }
@@ -116,7 +116,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      * @param float $baseOriginalAmount
      * @return $this
      */
-    public function setBaseOriginalAmount(float $baseOriginalAmount)
+    public function setBaseOriginalAmount($baseOriginalAmount)
     {
         $this->baseOriginalAmount = $baseOriginalAmount;
         return $this;
@@ -127,7 +127,7 @@ class Data implements \Magento\SalesRule\Api\Data\DiscountDataInterface
      *
      * @return float
      */
-    public function getBaseOriginalAmount(): float
+    public function getBaseOriginalAmount()
     {
         return $this->baseOriginalAmount;
     }
