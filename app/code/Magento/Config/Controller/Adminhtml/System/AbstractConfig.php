@@ -7,6 +7,8 @@
 namespace Magento\Config\Controller\Adminhtml\System;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Security\Model\AdminSessionsManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * System Configuration Abstract Controller
@@ -36,18 +38,26 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_sectionChecker;
 
     /**
+     * @var AdminSessionsManager
+     */
+    private $sessionsManager;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param mixed $sectionChecker - deprecated
+     * @param AdminSessionsManager $sessionsManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
-        $sectionChecker
+        $sectionChecker,
+        AdminSessionsManager $sessionsManager = null
     ) {
         parent::__construct($context);
         $this->_configStructure = $configStructure;
         $this->_sectionChecker = $sectionChecker;
+        $this->sessionsManager = $sessionsManager ?: ObjectManager::getInstance()->get(AdminSessionsManager::class);
     }
 
     /**
@@ -58,6 +68,10 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
+        if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
+            $this->messageManager->addErrorMessage($this->sessionsManager->getLogoutReasonMessage());
+            return parent::dispatch($request);
+        }
         if (!$request->getParam('section')) {
             try {
                 $request->setParam('section', $this->_configStructure->getFirstSection()->getId());
