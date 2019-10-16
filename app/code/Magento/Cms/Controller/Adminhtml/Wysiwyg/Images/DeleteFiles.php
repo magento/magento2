@@ -66,7 +66,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
             }
             $files = $this->getRequest()->getParam('files');
 
-            /** @var $helper \Magento\Cms\Helper\Wysiwyg\Images */
+            /** @var \Magento\Cms\Helper\Wysiwyg\Images $helper */
             $helper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
             $path = $this->getStorage()->getSession()->getCurrentPath();
             if (!$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)) {
@@ -84,7 +84,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
                     $this->getStorage()->deleteFile($filePath);
                 }
             }
-            
+
             return $this->resultRawFactory->create();
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];

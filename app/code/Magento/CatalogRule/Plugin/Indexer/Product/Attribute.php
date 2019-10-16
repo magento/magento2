@@ -87,12 +87,12 @@ class Attribute
      */
     protected function checkCatalogRulesAvailability($attributeCode)
     {
-        /* @var $collection RuleCollectionFactory */
+        /* @var RuleCollectionFactory $collection */
         $collection = $this->ruleCollectionFactory->create()->addAttributeInConditionFilter($attributeCode);
 
         $disabledRulesCount = 0;
         foreach ($collection as $rule) {
-            /* @var $rule Rule */
+            /* @var Rule $rule */
             $rule->setIsActive(0);
             /* @var $rule->getConditions() Combine */
             $this->removeAttributeFromConditions($rule->getConditions(), $attributeCode);

@@ -59,7 +59,7 @@ class TaxClassProcessor
         if (empty($this->taxClasses)) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter('class_type', ClassModel::TAX_CLASS_TYPE_PRODUCT);
-            /* @var $collection \Magento\Tax\Model\ResourceModel\TaxClass\Collection */
+            /* @var \Magento\Tax\Model\ResourceModel\TaxClass\Collection $collection */
             foreach ($collection as $taxClass) {
                 $this->taxClasses[$taxClass->getClassName()] = $taxClass->getId();
             }

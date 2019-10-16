@@ -253,7 +253,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
     protected function getDetailsRendererList()
     {
         if (empty($this->rendererListBlock)) {
-            /** @var $layout \Magento\Framework\View\LayoutInterface */
+            /** @var \Magento\Framework\View\LayoutInterface $layout */
             $layout = $this->layoutFactory->create(['cacheable' => false]);
             $layout->getUpdate()->addHandle('catalog_widget_product_list')->load();
             $layout->generateXml();
@@ -299,7 +299,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function createCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->productCollectionFactory->create();
 
         if ($this->getData('store_id') !== null) {

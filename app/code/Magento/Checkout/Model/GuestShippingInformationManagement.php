@@ -37,7 +37,7 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
         $cartId,
         \Magento\Checkout\Api\Data\ShippingInformationInterface $addressInformation
     ) {
-        /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingInformationManagement->saveAddressInformation(
             $quoteIdMask->getQuoteId(),

@@ -308,7 +308,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
         if (!$this->isQuoteMasked() && !$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
             $quoteId = $this->getQuoteId();
-            /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+            /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
             $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId, 'quote_id');
             if ($quoteIdMask->getMaskedId() === null) {
                 $quoteIdMask->setQuoteId($quoteId)->save();

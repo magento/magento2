@@ -150,7 +150,7 @@ class StockIndex implements StockIndexInterface
         $websitesWithStores = $this->getWebsitesWithDefaultStores($websiteId);
 
         foreach (array_keys($websitesWithStores) as $websiteId) {
-            /* @var $website \Magento\Store\Model\Website */
+            /* @var \Magento\Store\Model\Website $website */
             $statuses[$websiteId] = $status;
         }
 
@@ -223,7 +223,7 @@ class StockIndex implements StockIndexInterface
     {
         $parentIds = [];
         foreach ($this->getProductTypeInstances() as $typeInstance) {
-            /* @var $typeInstance AbstractType */
+            /* @var AbstractType $typeInstance */
             $parentIds = array_merge($parentIds, $typeInstance->getParentIdsByChild($productId));
         }
 

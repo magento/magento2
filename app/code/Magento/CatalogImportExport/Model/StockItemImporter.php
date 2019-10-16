@@ -45,7 +45,7 @@ class StockItemImporter implements StockItemImporterInterface
      */
     public function import(array $stockData)
     {
-        /** @var $stockItemResource Item */
+        /** @var Item $stockItemResource */
         $stockItemResource = $this->stockResourceItemFactory->create();
         $entityTable = $stockItemResource->getMainTable();
         try {

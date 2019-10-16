@@ -40,7 +40,7 @@ class Dwstree extends \Magento\Backend\Block\Widget\Tabs
             ]
         );
 
-        /** @var $website \Magento\Store\Model\Website */
+        /** @var \Magento\Store\Model\Website $website */
         foreach ($this->_storeManager->getWebsites(true) as $website) {
             $wCode = $website->getCode();
             $wName = $website->getName();
@@ -53,7 +53,7 @@ class Dwstree extends \Magento\Backend\Block\Widget\Tabs
                     $this->_addBreadcrumb($wName);
                 }
             }
-            /** @var $store \Magento\Store\Model\Store */
+            /** @var \Magento\Store\Model\Store $store */
             foreach ($website->getStores() as $store) {
                 $sCode = $store->getCode();
                 $sName = $store->getName();

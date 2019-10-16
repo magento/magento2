@@ -76,7 +76,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     public function prepareItemUrls()
     {
         $products = [];
-        /* @var $item \Magento\Quote\Model\Quote\Item */
+        /* @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getItems() as $item) {
             $product = $item->getProduct();
             $option = $item->getOptionByCode('product_type');

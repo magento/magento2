@@ -84,7 +84,7 @@ class PostDataProcessor
     public function validate($data)
     {
         if (!empty($data['layout_update_xml']) || !empty($data['custom_layout_update_xml'])) {
-            /** @var $layoutXmlValidator \Magento\Framework\View\Model\Layout\Update\Validator */
+            /** @var \Magento\Framework\View\Model\Layout\Update\Validator $layoutXmlValidator */
             $layoutXmlValidator = $this->validatorFactory->create(
                 [
                     'validationState' => $this->validationState,
@@ -140,7 +140,7 @@ class PostDataProcessor
             if (!empty($data['layout_update_xml']) && !$layoutXmlValidator->isValid($data['layout_update_xml'])) {
                 return false;
             }
-            
+
             if (!empty($data['custom_layout_update_xml']) &&
                 !$layoutXmlValidator->isValid($data['custom_layout_update_xml'])
             ) {

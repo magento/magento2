@@ -68,7 +68,7 @@ class Save extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        /* @var $query \Magento\Search\Model\Query */
+        /* @var \Magento\Search\Model\Query $query */
         $query = $this->queryFactory->get();
 
         $query->setStoreId($this->storeManager->getStore()->getId());

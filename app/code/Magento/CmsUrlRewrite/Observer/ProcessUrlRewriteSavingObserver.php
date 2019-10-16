@@ -41,7 +41,7 @@ class ProcessUrlRewriteSavingObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /** @var $cmsPage \Magento\Cms\Model\Page */
+        /** @var \Magento\Cms\Model\Page $cmsPage */
         $cmsPage = $observer->getEvent()->getObject();
 
         if ($cmsPage->dataHasChangedFor('identifier') || $cmsPage->dataHasChangedFor('store_id')) {

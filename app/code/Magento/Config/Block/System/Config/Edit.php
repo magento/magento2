@@ -73,7 +73,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        /** @var $section \Magento\Config\Model\Config\Structure\Element\Section */
+        /** @var \Magento\Config\Model\Config\Structure\Element\Section $section */
         $section = $this->_configStructure->getElement($this->getRequest()->getParam('section'));
         $this->_formBlockName = $section->getFrontendModel();
         if (empty($this->_formBlockName)) {

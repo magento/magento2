@@ -48,7 +48,7 @@ class CheckoutAgreementsList implements \Magento\CheckoutAgreements\Api\Checkout
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria) : array
     {
-        /** @var $collection \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection */
+        /** @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $this->extensionAttributesJoinProcessor->process($collection);

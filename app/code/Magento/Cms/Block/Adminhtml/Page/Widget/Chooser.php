@@ -141,7 +141,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Cms\Model\ResourceModel\Page\CollectionFactory */
+        /* @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collection */
         $collection->setFirstStoreFlag(true);
         $this->setCollection($collection);
 

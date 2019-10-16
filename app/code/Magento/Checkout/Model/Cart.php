@@ -263,7 +263,7 @@ class Cart extends DataObject implements CartInterface
      */
     public function addOrderItem($orderItem, $qtyFlag = null)
     {
-        /* @var $orderItem \Magento\Sales\Model\Order\Item */
+        /* @var \Magento\Sales\Model\Order\Item $orderItem */
         if ($orderItem->getParentItem() === null) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
