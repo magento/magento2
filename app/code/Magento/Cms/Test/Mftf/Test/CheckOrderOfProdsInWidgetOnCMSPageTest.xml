@@ -31,20 +31,23 @@
             <createData entity="ApiSimpleProduct" stepKey="product2">
                 <requiredEntity createDataKey="createFirstCategory"/>
             </createData>
-            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage"/>
         </before>
         <after>
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createFirstCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
-            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage"/>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage1">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}"
+                          dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
+                          stepKey="clickContentTab1"/>
+        <waitForPageLoad stepKey="waitForContentSectionLoad1"/>
         <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand1"/>
         <click selector="{{CmsNewPagePageActionsSection.showHideEditor}}" stepKey="showHiddenButtons"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="seeWidgetButton"/>
@@ -99,7 +102,10 @@
         <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage2">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}"
+                          dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
+                          stepKey="clickContentTab2"/>
+        <waitForPageLoad stepKey="waitForContentSectionLoad2"/>
         <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand2"/>
         <executeJS function="jQuery('[id=\'cms_page_form_content_ifr\']').attr('name', 'preview-iframe')"
                    stepKey="setPreviewFrameName"/>
