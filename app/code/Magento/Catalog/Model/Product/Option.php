@@ -11,9 +11,9 @@ use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -355,7 +355,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * Group model factory
      *
      * @param string $type Option type
-     * @return DataObject
+     * @return DefaultType
      * @throws LocalizedException
      */
     public function groupFactory($type)
