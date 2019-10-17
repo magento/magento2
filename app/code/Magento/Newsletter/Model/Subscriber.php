@@ -453,7 +453,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             self::XML_PATH_CONFIRMATION_FLAG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         ) == 1 ? true : false;
-
         $isSubscribeOwnEmail = $this->_customerSession->isLoggedIn()
             && $this->_customerSession->getCustomerDataObject()->getEmail() == $email;
 
@@ -471,6 +470,8 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         if ($isSubscribeOwnEmail) {
             try {
                 $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
+                $this->setCustomerFirstName($customer->getFirstname());
+                $this->setCustomerLastName($customer->getLastname());
                 $this->setStoreId($customer->getStoreId());
                 $this->setCustomerId($customer->getId());
             } catch (NoSuchEntityException $e) {
