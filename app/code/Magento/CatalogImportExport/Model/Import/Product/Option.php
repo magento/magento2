@@ -1656,13 +1656,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Rarse required data.
+     * Parse required data.
      *
      * Parse required data from current row and store to class internal variables some data
      * for underlying dependent rows
      *
      * @param array $rowData
-     * @return bool
+     * @return array|bool
      */
     protected function _parseRequiredData(array $rowData)
     {
