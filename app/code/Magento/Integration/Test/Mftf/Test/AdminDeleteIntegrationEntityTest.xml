@@ -32,6 +32,8 @@
                 <argument name="name" value="Integration1"/>
                 <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
+            <!-- Submit The Form -->
+            <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logout"/>

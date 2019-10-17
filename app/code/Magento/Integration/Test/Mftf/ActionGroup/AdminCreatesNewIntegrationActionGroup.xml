@@ -17,7 +17,5 @@
         </arguments>
         <fillField stepKey="fillNameField" selector="{{AddNewIntegrationSection.name}}" userInput="{{name}}"/>
         <fillField stepKey="fillAdminPasswordField" selector="{{AddNewIntegrationSection.password}}" userInput="{{password}}"/>
-        <!--Click the "Save" Button -->
-        <click stepKey="clickSaveButton" selector="{{AddNewIntegrationSection.saveButton}}"/>
     </actionGroup>
 </actionGroups>
