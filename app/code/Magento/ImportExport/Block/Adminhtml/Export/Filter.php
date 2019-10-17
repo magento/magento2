@@ -152,7 +152,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             }
         }
 
-        if ($size = count($options)) {
+        if (!empty($options)) {
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
