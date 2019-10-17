@@ -32,11 +32,6 @@ use Magento\Framework\Logger\Monolog as MagentoMonologLogger;
 class ViewTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @var string
-     */
-    private $systemLogFileName = 'system.log';
-
-    /**
      * @var ProductRepositoryInterface $productRepository
      */
     private $productRepository;
