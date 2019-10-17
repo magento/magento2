@@ -1185,7 +1185,9 @@ define([
                     });
                 }
 
-                gallery.first();
+                if (typeof gallery != "undefined") {
+                    gallery.first();
+                }
 
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
