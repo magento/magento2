@@ -22,6 +22,14 @@ class Dir
     const MODULE_SETUP_DIR = 'Setup';
     /**#@-*/
 
+    private const ALLOWED_DIR_TYPES = [
+        self::MODULE_ETC_DIR => true,
+        self::MODULE_I18N_DIR => true,
+        self::MODULE_VIEW_DIR => true,
+        self::MODULE_CONTROLLER_DIR => true,
+        self::MODULE_SETUP_DIR => true
+    ];
+
     /**#@-*/
     private $componentRegistrar;
 
@@ -52,13 +60,7 @@ class Dir
         }
 
         if ($type) {
-            if (!in_array($type, [
-                self::MODULE_ETC_DIR,
-                self::MODULE_I18N_DIR,
-                self::MODULE_VIEW_DIR,
-                self::MODULE_CONTROLLER_DIR,
-                self::MODULE_SETUP_DIR
-            ])) {
+            if (!isset(self::ALLOWED_DIR_TYPES[$type])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
             $path .= '/' . $type;
