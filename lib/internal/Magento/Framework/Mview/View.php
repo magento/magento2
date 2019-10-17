@@ -240,7 +240,7 @@ class View extends DataObject implements ViewInterface
      */
     public function update()
     {
-        if ($this->getState()->getStatus() !== View\StateInterface::STATUS_IDLE) {
+        if (!$this->isIdle() || !$this->isEnabled()) {
             return;
         }
 
