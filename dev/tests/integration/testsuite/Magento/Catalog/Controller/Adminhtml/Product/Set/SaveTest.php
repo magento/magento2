@@ -310,7 +310,7 @@ class SaveTest extends AbstractBackendController
         );
         $this->dispatch('backend/catalog/product_set/save/');
         $this->assertSessionMessages(
-            $this->contains('You saved the attribute set.'),
+            $this->equalTo([(string)__('You saved the attribute set.')]),
             MessageInterface::TYPE_SUCCESS
         );
         $createdAttributeSet = $this->getAttributeSetByName($attributeSetName);
@@ -339,16 +339,15 @@ class SaveTest extends AbstractBackendController
                 $existAttributeSet->getAttributeSetId()
             )
         );
+        sort($expectedAttributeIds);
         $actualAttributeIds = array_keys(
             $this->attributeManagement->getAttributes(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
                 $createdAttributeSet->getAttributeSetId()
             )
         );
-        $this->assertEquals(count($expectedAttributeIds), count($actualAttributeIds));
-        foreach ($actualAttributeIds as $attributeId) {
-            $this->assertContains($attributeId, $expectedAttributeIds);
-        }
+        sort($actualAttributeIds);
+        $this->assertSame($expectedAttributeIds, $actualAttributeIds);
     }
 
     /**
