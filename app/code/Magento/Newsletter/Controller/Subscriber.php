@@ -3,10 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Newsletter subscribe controller
- */
 namespace Magento\Newsletter\Controller;
 
 use Magento\Framework\App\Action\Context;
@@ -19,6 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\UrlInterface;
 
+/**
+ * Newsletter subscribe controller
+ */
 abstract class Subscriber extends \Magento\Framework\App\Action\Action
 {
     /**
