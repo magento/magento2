@@ -97,17 +97,16 @@ abstract class AbstractGroupPrice extends Price
             );
             foreach ($this->_storeManager->getWebsites() as $website) {
                 /* @var $website \Magento\Store\Model\Website */
-                if ($website->getBaseCurrencyCode() != $baseCurrency) {
+                $websiteBaseCurrency = $website->getBaseCurrencyCode();
+                if ($websiteBaseCurrency !== $baseCurrency) {
                     $rate = $this->_currencyFactory->create()->load(
                         $baseCurrency
-                    )->getRate(
-                        $website->getBaseCurrencyCode()
-                    );
+                    )->getRate($websiteBaseCurrency);
                     if (!$rate) {
                         $rate = 1;
                     }
                     $this->_rates[$website->getId()] = [
-                        'code' => $website->getBaseCurrencyCode(),
+                        'code' => $websiteBaseCurrency,
                         'rate' => $rate,
                     ];
                 } else {
