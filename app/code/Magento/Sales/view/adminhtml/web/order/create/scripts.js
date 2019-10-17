@@ -795,6 +795,20 @@ define([
             grid.reloadParams = {'products[]':this.gridProducts.keys()};
         },
 
+        productGridFilterKeyPress: function (grid, event) {
+            var returnKey = parseInt(Event.KEY_RETURN || 13, 10);
+
+            if (event.keyCode === returnKey) {
+                if (typeof event.stopPropagation === 'function') {
+                    event.stopPropagation();
+                }
+
+                if (typeof event.preventDefault === 'function') {
+                    event.preventDefault();
+                }
+            }
+        },
+
         /**
          * Submit configured products to quote
          */
