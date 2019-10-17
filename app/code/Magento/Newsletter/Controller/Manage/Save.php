@@ -12,6 +12,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Newsletter\Model\Subscriber;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Customers newsletter subscription save controller
@@ -43,6 +45,8 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param ScopeConfigInterface $scopeConfig
+     * @param UrlInterface $url
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param CustomerRepository $customerRepository
@@ -51,6 +55,8 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
+        ScopeConfigInterface $scopeConfig,
+        UrlInterface $url,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         CustomerRepository $customerRepository,
@@ -60,7 +66,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
         $this->formKeyValidator = $formKeyValidator;
         $this->customerRepository = $customerRepository;
         $this->subscriberFactory = $subscriberFactory;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $scopeConfig, $url);
     }
 
     /**
