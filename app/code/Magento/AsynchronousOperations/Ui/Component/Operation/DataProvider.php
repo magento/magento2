@@ -68,7 +68,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $summaryReport = __('%1 items selected for mass update', $operationDetails['operations_total'])->__toString();
         if ($operationDetails['operations_successful'] > 0) {
-            $summaryReport .= __(', %1 successfully updated', $operationDetails['operations_successful']);
+            $summaryReport .= __(', %1 successfully updated', $operationDetails['operations_total']);
         }
 
         if ($operationDetails['operations_failed'] > 0) {

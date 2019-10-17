@@ -97,7 +97,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     /**
      * @inheritDoc
      */
-    public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null)
+    public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null, $count=0)
     {
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
@@ -115,7 +115,11 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
             $bulkSummary->setDescription($description);
             $bulkSummary->setUserId($userId);
             $bulkSummary->setUserType($userType);
-            $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
+            if ($count) {
+                $bulkSummary->setOperationCount($count);
+            } else {
+                $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
+            }
 
             $this->entityManager->save($bulkSummary);
 

@@ -213,18 +213,30 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             }
         }
 
-        if (!empty($operations)) {
+        if (!empty($operations) && empty($attributesData)) {
+            die ('galat');
             $result = $this->bulkManagement->scheduleBulk(
                 $bulkUuid,
                 $operations,
                 $bulkDescription,
                 $this->userContext->getUserId()
             );
-            if (!$result) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while processing the request.')
-                );
-            }
+        }
+
+        if (!empty($operations) && count($attributesData)) {
+            $result = $this->bulkManagement->scheduleBulk(
+                $bulkUuid,
+                $operations,
+                $bulkDescription,
+                $this->userContext->getUserId(),
+                count($productIdsChunk)
+            );
+        }
+
+        if (!$result && !empty($operations)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Something went wrong while processing the request.')
+            );
         }
     }
 
