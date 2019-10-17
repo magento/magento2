@@ -21,7 +21,5 @@
         <fillField stepKey="fillEndpiontField" selector="{{AddNewIntegrationSection.endpoint}}" userInput="{{endpoint}}"/>
         <fillField stepKey="fillLinkUrlField" selector="{{AddNewIntegrationSection.linkUrl}}" userInput="{{linkUrl}}"/>
         <fillField stepKey="fillAdminPasswordField" selector="{{AddNewIntegrationSection.password}}" userInput="{{password}}"/>
-        <!--Click the "Save" Button -->
-        <click stepKey="clickSaveButton" selector="{{AddNewIntegrationSection.save}}"/>
     </actionGroup>
 </actionGroups>
