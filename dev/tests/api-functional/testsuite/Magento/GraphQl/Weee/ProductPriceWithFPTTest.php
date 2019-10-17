@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalog;
+namespace Magento\GraphQl\Weee;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -27,12 +27,64 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     /** @var ObjectManager $objectManager */
     private $objectManager;
 
+    /** @var string[] $objectManager */
+    private $initialConfig;
+
+    /** @var ScopeConfigInterface */
+    private $scopeConfig;
+
     /**
      * @inheritdoc
      */
-    protected function setUp() :void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+
+        /** @var ScopeConfigInterface $scopeConfig */
+        $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+
+        $currentSettingsArray = [
+            'tax/display/type',
+            'tax/weee/enable',
+            'tax/weee/display',
+            'tax/defaults/region',
+            'tax/weee/apply_vat',
+            'tax/calculation/price_includes_tax'
+        ];
+
+        foreach ($currentSettingsArray as $configPath) {
+            $this->initialConfig[$configPath] = $this->scopeConfig->getValue(
+                $configPath
+            );
+        }
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $config */
+        $config = $this->objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
+        $config->reinit();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->writeConfig($this->initialConfig);
+    }
+
+    /**
+     * Write configuration for weee
+     *
+     * @param array $weeTaxSettings
+     * @return void
+     */
+    private function writeConfig(array $weeTaxSettings): void
+    {
+        /** @var WriterInterface $configWriter */
+        $configWriter = $this->objectManager->get(WriterInterface::class);
+
+        foreach ($weeTaxSettings as $path => $value) {
+            $configWriter->save($path, $value);
+        }
+        $this->scopeConfig->clean();
     }
 
     /**
@@ -49,16 +101,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExcludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
-       /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -115,16 +158,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExcludeTaxAndIncludeFPTWithDescription(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -181,16 +215,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
@@ -257,16 +282,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
@@ -333,16 +349,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -400,16 +407,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnly(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         $skus = ['simple-with-ftp'];
         $query = $this->getProductQuery($skus);
@@ -469,16 +467,8 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
     public function testCatalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPT(
         array $weeTaxSettings
     ) {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
+        $this->writeConfig($weeTaxSettings);
 
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
         $taxClassCollection = $taxClassCollectionFactory->create();
@@ -524,7 +514,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
         return [
             [
                 'weeTaxSettings' => [
-                    'tax/calculation/price_includes_tax' > '1',
+                    'tax/calculation/price_includes_tax' => '1',
                     'tax/display/type' => '2',
                     'tax/weee/enable' => '1',
                     'tax/weee/display' => '0',
@@ -552,16 +542,7 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      */
     public function testCatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTs(array $weeTaxSettings)
     {
-        /** @var WriterInterface $configWriter */
-        $configWriter = $this->objectManager->get(WriterInterface::class);
-
-        foreach ($weeTaxSettings as $path => $value) {
-            $configWriter->save($path, $value);
-        }
-
-        /** @var ScopeConfigInterface $scopeConfig */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        $scopeConfig->clean();
+        $this->writeConfig($weeTaxSettings);
 
         /** @var TaxClassCollectionFactory $taxClassCollectionFactory */
         $taxClassCollectionFactory = $this->objectManager->get(TaxClassCollectionFactory::class);
@@ -628,6 +609,65 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
                     'tax/weee/apply_vat' => '1',
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Test FPT disabled feature
+     *
+     * FPT enabled : FALSE
+     *
+     * @param array $weeTaxSettings
+     * @return void
+     *
+     * @dataProvider catalogPriceDisabledFPTSettingsProvider
+     * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
+     */
+    public function testCatalogPriceDisableFPT(array $weeTaxSettings)
+    {
+        $this->writeConfig($weeTaxSettings);
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var Product $product1 */
+        $product1 = $productRepository->get('simple-with-ftp');
+        $product1->setFixedProductAttribute(
+            [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10, 'delete' => '']]
+        );
+        $productRepository->save($product1);
+
+        $skus = ['simple-with-ftp'];
+        $query = $this->getProductQuery($skus);
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertEquals(100, round($product['price_range']['minimum_price']['regular_price']['value'], 2));
+        $this->assertCount(
+            0,
+            $product['price_range']['minimum_price']['fixed_product_taxes'],
+            'Fixed product tax count is incorrect'
+        );
+        $this->assertResponseFields(
+            $product['price_range']['minimum_price']['fixed_product_taxes'],
+            []
+        );
+    }
+
+    /**
+     * CatalogPriceDisableFPT settings data provider
+     *
+     * @return array
+     */
+    public function catalogPriceDisabledFPTSettingsProvider()
+    {
+        return [
+            [
+                'weeTaxSettings' => [
+                    'tax/weee/enable' => '0',
+                    'tax/weee/display' => '1',
+                ],
+            ],
         ];
     }
 
