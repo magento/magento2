@@ -429,7 +429,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
         return $this->getAddressType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING &&
             ($this->_isNotRegisteredCustomer() || $this->_isDefaultShippingNullOrSameAsBillingAddress()) &&
-            ($quoteSameAsBilling || $quoteSameAsBilling === null);
+            ($quoteSameAsBilling || $quoteSameAsBilling === 0 || $quoteSameAsBilling === null);
     }
 
     /**
