@@ -22,6 +22,7 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Framework\UrlInterface;
 
 /**
  * New newsletter subscription action
@@ -48,6 +49,8 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param Session $customerSession
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
+     * @param ScopeConfigInterface $scopeConfig
+     * @param UrlInterface $url
      * @param CustomerAccountManagement $customerAccountManagement
      * @param EmailValidator $emailValidator
      */
@@ -57,6 +60,8 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         Session $customerSession,
         StoreManagerInterface $storeManager,
         CustomerUrl $customerUrl,
+        ScopeConfigInterface $scopeConfig,
+        UrlInterface $url,
         CustomerAccountManagement $customerAccountManagement,
         EmailValidator $emailValidator = null
     ) {
@@ -67,7 +72,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
             $subscriberFactory,
             $customerSession,
             $storeManager,
-            $customerUrl
+            $customerUrl,
+            $scopeConfig,
+            $url
         );
     }
 
