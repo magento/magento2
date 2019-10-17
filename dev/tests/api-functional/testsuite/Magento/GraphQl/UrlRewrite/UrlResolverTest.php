@@ -39,6 +39,7 @@ class UrlResolverTest extends GraphQlAbstract
    id
    relative_url
    type
+   redirectCode
   }
 }
 QUERY;
