@@ -23,4 +23,3 @@
         <fillField stepKey="fillAdminPasswordField" selector="{{AddNewIntegrationSection.password}}" userInput="{{password}}"/>
     </actionGroup>
 </actionGroups>
-git
