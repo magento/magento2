@@ -152,7 +152,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             }
         }
 
-        if (!empty($options)) {
+        if ($size = count($options)) {
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
@@ -243,7 +243,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         } else {
             $options = $attribute->getSource()->getAllOptions(false);
         }
-        if ($size = count($options)) {
+        if (is_array($options) && !empty($options)) {
             // add empty value option
             $firstOption = reset($options);
 
