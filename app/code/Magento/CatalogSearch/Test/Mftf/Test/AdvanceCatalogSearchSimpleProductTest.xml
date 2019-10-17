@@ -13,6 +13,11 @@
             <features value="CatalogSearch"/>
             <group value="CatalogSearch"/>
         </annotations>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameActionGroup" stepKey="search">
             <argument name="name" value="$$product.name$$"/>
@@ -26,6 +31,11 @@
             <features value="CatalogSearch"/>
             <group value="CatalogSearch"/>
         </annotations>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductSkuActionGroup" stepKey="search">
             <argument name="sku" value="$$product.sku$$"/>
@@ -39,6 +49,10 @@
             <features value="CatalogSearch"/>
             <group value="CatalogSearch"/>
         </annotations>
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByDescriptionActionGroup" stepKey="search">
             <argument name="description" value="$$product.custom_attributes[description]$$"/>
@@ -52,6 +66,11 @@
             <features value="CatalogSearch"/>
             <group value="CatalogSearch"/>
         </annotations>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByShortDescriptionActionGroup" stepKey="search">
             <argument name="shortDescription" value="$$product.custom_attributes[short_description]$$"/>
@@ -65,6 +84,11 @@
             <features value="CatalogSearch"/>
             <group value="CatalogSearch"/>
         </annotations>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="search">
             <argument name="name" value="$$arg1.name$$"/>
