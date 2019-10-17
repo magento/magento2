@@ -517,9 +517,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                 $out = $layout->renderElement($childName, $useCache);
             }
         } else {
+            $outParts = [];
             foreach ($layout->getChildNames($name) as $child) {
-                $out .= $layout->renderElement($child, $useCache);
+                $elementHtml = $layout->renderElement($child, $useCache);
+                if (!empty($elementHtml)) {
+                    $outParts[] = $elementHtml;
+                }
             }
+            $out = join('', $outParts);
         }
 
         return $out;
@@ -548,9 +553,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $childChildName = $layout->getChildName($childName, $childChildAlias);
             $out = $layout->renderElement($childChildName, $useCache);
         } else {
+            $outParts = [];
             foreach ($layout->getChildNames($childName) as $childChild) {
-                $out .= $layout->renderElement($childChild, $useCache);
+                $elementHtml = $layout->renderElement($childChild, $useCache);
+                if (!empty($elementHtml)) {
+                    $outParts[] = $elementHtml;
+                }
             }
+            $out = join('', $outParts);
         }
         return $out;
     }
