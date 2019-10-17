@@ -83,6 +83,7 @@ class LinksTest extends TestCase
      * @dataProvider editDeleteRelatedUpSellCrossSellProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @param array $data
      * @return void
