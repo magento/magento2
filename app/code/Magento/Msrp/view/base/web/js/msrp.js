@@ -4,12 +4,11 @@
  */
 define([
     'jquery',
-    'Magento_Catalog/js/price-utils',
     'underscore',
-    'jquery-ui-modules/widget',
+    'jquery/ui',
     'mage/dropdown',
     'mage/template'
-], function ($, priceUtils, _) {
+], function ($) {
     'use strict';
 
     $.widget('mage.addToCart', {
@@ -25,14 +24,7 @@ define([
             // Selectors
             cartForm: '.form.map.checkout',
             msrpLabelId: '#map-popup-msrp',
-            msrpPriceElement: '#map-popup-msrp .price-wrapper',
             priceLabelId: '#map-popup-price',
-            priceElement: '#map-popup-price .price',
-            mapInfoLinks: '.map-show-info',
-            displayPriceElement: '.old-price.map-old-price .price-wrapper',
-            fallbackPriceElement: '.normal-price.map-fallback-price .price-wrapper',
-            displayPriceContainer: '.old-price.map-old-price',
-            fallbackPriceContainer: '.normal-price.map-fallback-price',
             popUpAttr: '[data-role=msrp-popup-template]',
             popupCartButtonId: '#map-popup-button',
             paypalCheckoutButons: '[data-action=checkout-form-submit]',
@@ -67,11 +59,9 @@ define([
             shadowHinter: 'popup popup-pointer'
         },
         popupOpened: false,
-        wasOpened: false,
 
         /**
          * Creates widget instance
-         *
          * @private
          */
         _create: function () {
@@ -83,13 +73,10 @@ define([
                 this.initTierPopup();
             }
             $(this.options.cartButtonId).on('click', this._addToCartSubmit.bind(this));
-            $(document).on('updateMsrpPriceBlock', this.onUpdateMsrpPrice.bind(this));
-            $(this.options.cartForm).on('submit', this._onSubmitForm.bind(this));
         },
 
         /**
          * Init msrp popup
-         *
          * @private
          */
         initMsrpPopup: function () {
@@ -102,7 +89,7 @@ define([
 
             $msrpPopup.find('button')
                 .on('click',
-                    this.handleMsrpAddToCart.bind(this))
+                this.handleMsrpAddToCart.bind(this))
                 .filter(this.options.popupCartButtonId)
                 .text($(this.options.addToCartButton).text());
 
@@ -117,7 +104,6 @@ define([
 
         /**
          * Init info popup
-         *
          * @private
          */
         initInfoPopup: function () {
@@ -226,12 +212,8 @@ define([
             var options = this.tierOptions || this.options;
 
             this.popUpOptions.position.of = $(event.target);
-
-            if (!this.wasOpened) {
-                this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
-                this.$popup.find(this.options.priceLabelId).html(options.realPrice);
-                this.wasOpened = true;
-            }
+            this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+            this.$popup.find(this.options.priceLabelId).html(options.realPrice);
             this.$popup.dropdownDialog(this.popUpOptions).dropdownDialog('open');
             this._toggle(this.$popup);
 
@@ -241,7 +223,6 @@ define([
         },
 
         /**
-         * Toggle MAP popup visibility
          *
          * @param {HTMLElement} $elem
          * @private
@@ -258,7 +239,6 @@ define([
         },
 
         /**
-         * Close MAP information popup
          *
          * @param {HTMLElement} $elem
          */
@@ -269,10 +249,8 @@ define([
 
         /**
          * Handler for addToCart action
-         *
-         * @param {Object} e
          */
-        _addToCartSubmit: function (e) {
+        _addToCartSubmit: function () {
             this.element.trigger('addToCart', this.element);
 
             if (this.element.data('stop-processing')) {
@@ -288,108 +266,9 @@ define([
             if (this.options.addToCartUrl) {
                 $('.mage-dropdown-dialog > .ui-dialog-content').dropdownDialog('close');
             }
-
-            e.preventDefault();
             $(this.options.cartForm).submit();
-        },
 
-        /**
-         * Call on event updatePrice. Proxy to updateMsrpPrice method.
-         *
-         * @param {Event} event
-         * @param {mixed} priceIndex
-         * @param {Object} prices
-         */
-        onUpdateMsrpPrice: function onUpdateMsrpPrice(event, priceIndex, prices) {
-
-            var defaultMsrp,
-                defaultPrice,
-                msrpPrice,
-                finalPrice;
-
-            defaultMsrp = _.chain(prices).map(function (price) {
-                return price.msrpPrice.amount;
-            }).reject(function (p) {
-                return p === null;
-            }).max().value();
-
-            defaultPrice = _.chain(prices).map(function (p) {
-                return p.finalPrice.amount;
-            }).min().value();
-
-            if (typeof prices[priceIndex] !== 'undefined') {
-                msrpPrice = prices[priceIndex].msrpPrice.amount;
-                finalPrice = prices[priceIndex].finalPrice.amount;
-
-                if (msrpPrice === null || msrpPrice <= finalPrice) {
-                    this.updateNonMsrpPrice(priceUtils.formatPrice(finalPrice));
-                } else {
-                    this.updateMsrpPrice(
-                        priceUtils.formatPrice(finalPrice),
-                        priceUtils.formatPrice(msrpPrice),
-                        false);
-                }
-            } else {
-                this.updateMsrpPrice(
-                    priceUtils.formatPrice(defaultPrice),
-                    priceUtils.formatPrice(defaultMsrp),
-                    true);
-            }
-        },
-
-        /**
-         * Update prices for configurable product with MSRP enabled
-         *
-         * @param {String} finalPrice
-         * @param {String} msrpPrice
-         * @param {Boolean} useDefaultPrice
-         */
-        updateMsrpPrice: function (finalPrice, msrpPrice, useDefaultPrice) {
-            var options = this.tierOptions || this.options;
-
-            $(this.options.fallbackPriceContainer).hide();
-            $(this.options.displayPriceContainer).show();
-            $(this.options.mapInfoLinks).show();
-
-            if (useDefaultPrice || !this.wasOpened) {
-                if (typeof $popup !== 'undefined') {
-                    this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
-                    this.$popup.find(this.options.priceLabelId).html(options.realPrice);
-                }
-                $(this.options.displayPriceElement).html(msrpPrice);
-                this.wasOpened = true;
-            }
-
-            if (!useDefaultPrice) {
-                this.$popup.find(this.options.msrpPriceElement).html(msrpPrice);
-                this.$popup.find(this.options.priceElement).html(finalPrice);
-                $(this.options.displayPriceElement).html(msrpPrice);
-            }
-        },
-
-        /**
-         * Display non MAP price for irrelevant products
-         *
-         * @param {String} price
-         */
-        updateNonMsrpPrice: function (price) {
-            $(this.options.fallbackPriceElement).html(price);
-            $(this.options.displayPriceContainer).hide();
-            $(this.options.mapInfoLinks).hide();
-            $(this.options.fallbackPriceContainer).show();
-        },
-
-        /**
-         * Handler for submit form
-         *
-         * @private
-         */
-        _onSubmitForm: function () {
-            if ($(this.options.cartForm).valid()) {
-                $(this.options.cartButtonId).prop('disabled', true);
-            }
         }
-
     });
 
     return $.mage.addToCart;
