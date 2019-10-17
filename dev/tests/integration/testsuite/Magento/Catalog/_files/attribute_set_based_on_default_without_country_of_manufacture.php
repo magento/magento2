@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Group;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\Entity\Type;
