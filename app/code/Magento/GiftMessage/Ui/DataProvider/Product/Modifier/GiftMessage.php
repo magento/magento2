@@ -104,7 +104,9 @@ class GiftMessage extends AbstractModifier
         $groupConfig = $this->arrayManager->get($containerPath, $meta);
         $fieldConfig = $this->arrayManager->get($fieldPath, $meta);
 
-        $meta = $this->arrayManager->merge($containerPath, $meta,
+        $meta = $this->arrayManager->merge(
+            $containerPath,
+            $meta,
             [
                 'arguments' => [
                     'data' => [
