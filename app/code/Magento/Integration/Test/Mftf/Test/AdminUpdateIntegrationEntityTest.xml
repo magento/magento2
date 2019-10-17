@@ -51,6 +51,8 @@
             <argument name="linkUrl" value="https://testlink-updated.com"/>
             <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         </actionGroup>
+        <!-- Submit The Form -->
+        <actionGroup ref="AdminSubmitIntegrationFormActionGroup" stepKey="submitTheForm"/>
         <!-- Assert Success Message -->
         <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="The integration 'Integration Updated' has been saved."/>
