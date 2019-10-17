@@ -57,6 +57,14 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
+        $reorderHelper =  $this->_objectManager->get(\Magento\Sales\Helper\Reorder::class);
+        if (!$reorderHelper->canReorder($order->getEntityId())) {
+            $this->messageManager->addErrorMessage(__("Reorder is disabled."));
+            return $resultRedirect->setPath('checkout/cart');
+        }
+
+        $cart = $this->_objectManager->get(\Magento\Checkout\Model\Cart::class);
+
         /* @var $cart \Magento\Checkout\Model\Cart */
         $cart = $this->_objectManager->get(\Magento\Checkout\Model\Cart::class);
         $items = $order->getItemsCollection();
