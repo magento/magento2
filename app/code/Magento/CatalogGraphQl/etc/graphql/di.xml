@@ -137,4 +137,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Catalog\Block\Product\ImageFactory">
+        <plugin name="designLoader" type="Magento\CatalogGraphQl\Plugin\DesignLoader" />
+    </type>
 </config>
