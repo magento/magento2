@@ -15,7 +15,7 @@ class StaticScope implements ScopeInterface
     /**
      * @var string
      */
-    protected $scope;
+    private $scope;
 
     /**
      * StaticScope constructor.

@@ -3,55 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\CompiledInterception\Generator;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\PluginList\PluginList;
-use Magento\Framework\Interception\ObjectManager\ConfigInterface;
-use Magento\Framework\ObjectManager\Config\Reader\Dom;
-use Magento\Framework\ObjectManager\Relations\Runtime as ObjectManagerRelationsRuntime;
-use Magento\Framework\Interception\Definition\Runtime as InterceptionDefinitionRuntime;
-use Magento\Framework\ObjectManager\Definition\Runtime as ObjectManagerDefinitionRuntime;
+use Magento\Framework\Interception\PluginListInterface;
 
 /**
  * Class CompiledPluginList
  */
-class CompiledPluginList extends PluginList
+class CompiledPluginList implements PluginListInterface
 {
     /**
-     * CompiledPluginList constructor.
-     * @param ObjectManager $objectManager
-     * @param ScopeInterface $scope
-     * @param null|ReaderInterface $reader
-     * @param null|ConfigInterface $omConfig
-     * @param null|string $cachePath
+     * @var PluginList
+     */
+    private $pluginList;
+
+    /**
+     * @param PluginList $pluginList
      */
     public function __construct(
-        ObjectManager $objectManager,
-        ScopeInterface $scope,
-        ReaderInterface $reader = null,
-        ConfigInterface $omConfig = null,
-        $cachePath = null
+        PluginList $pluginList
     ) {
-        if (!$reader || !$omConfig) {
-            $reader = $objectManager->get(Dom::class);
-            $omConfig = $objectManager->get(ConfigInterface::class);
-        }
-        parent::__construct(
-            $reader,
-            $scope,
-            new FileCache($cachePath),
-            new ObjectManagerRelationsRuntime(),
-            $omConfig,
-            new InterceptionDefinitionRuntime(),
-            $objectManager,
-            new ObjectManagerDefinitionRuntime(),
-            ['global'],
-            'compiled_plugins',
-            new NoSerialize()
-        );
+        $this->pluginList = $pluginList;
     }
 
     /**
@@ -68,15 +43,26 @@ class CompiledPluginList extends PluginList
     }
 
     /**
+     * Merge configuration
+     *
+     * @param array $config
+     * @return void
+     */
+    public function merge(array $config)
+    {
+        $this->pluginList->merge($config);
+    }
+
+    /**
      * Get class of a plugin
      *
      * @param string $type
      * @param string $code
      * @return mixed
      */
-    public function getPluginType($type, $code)
+    public function getPluginType(string $type, string $code)
     {
-        return $this->_inherited[$type][$code]['instance'];
+        return $this->pluginList->getPluginType($type, $code);
     }
 
     /**
@@ -86,6 +72,19 @@ class CompiledPluginList extends PluginList
      */
     public function setScope(ScopeInterface $scope)
     {
-        $this->_configScope = $scope;
+        $this->pluginList->setScope($scope);
+    }
+
+    /**
+     * Retrieve next plugins in chain
+     *
+     * @param string $type
+     * @param string $method
+     * @param string $code
+     * @return array
+     */
+    public function getNext($type, $method, $code = null)
+    {
+        return $this->pluginList->getNext($type, $method, $code);
     }
 }

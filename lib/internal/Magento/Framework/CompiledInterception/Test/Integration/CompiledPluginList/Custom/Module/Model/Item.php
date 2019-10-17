@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 // @codingStandardsIgnoreFile
 
-namespace Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model;
+namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model;
 
 class Item
 {

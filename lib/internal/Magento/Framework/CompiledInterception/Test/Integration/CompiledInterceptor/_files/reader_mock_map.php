@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItem;
 use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItemTyped;
 use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\Item;

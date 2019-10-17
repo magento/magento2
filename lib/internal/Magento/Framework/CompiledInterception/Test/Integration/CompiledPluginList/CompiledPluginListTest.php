@@ -3,15 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList;
 
-use Magento\Framework\CompiledInterception\Generator\StaticScope;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
+use Magento\Framework\CompiledInterception\Generator\FileCache;
+use Magento\Framework\CompiledInterception\Generator\NoSerialize;
+use Magento\Framework\CompiledInterception\Generator\StaticScope;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\Item;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\Item\Enhanced;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\ItemPlugin\Advanced;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\ItemPlugin\Simple;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\Interception\PluginList\PluginList;
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
@@ -31,29 +41,37 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
 
     public function createScopeReaders()
     {
-        $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
-        $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
-        $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
+        $readerMap = include __DIR__ . '/_files/reader_mock_map.php';
+        $readerMock = $this->createMock(Dom::class);
+        $readerMock->method('read')->willReturnMap($readerMap);
 
         $omMock = $this->createMock(ObjectManager::class);
-        $omMock->method('get')->with(\Psr\Log\LoggerInterface::class)->willReturn(new NullLogger());
+        $omMock->method('get')->with(LoggerInterface::class)->willReturn(new NullLogger());
 
         $omConfigMock =  $this->getMockForAbstractClass(
-            \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
+            ConfigInterface::class
         );
 
-        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
+        $omConfigMock->method('getOriginalInstanceType')->willReturnArgument(0);
         $ret = [];
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManagerHelper($this);
         foreach ($readerMap as $readerLine) {
+            $pluginList = ObjectManager::getInstance()->create(
+                PluginList::class,
+                [
+                    'objectManager' => $omMock,
+                    'configScope' => new StaticScope($readerLine[0]),
+                    'reader' => $readerMock,
+                    'omConfig' => $omConfigMock,
+                    'cache' => new FileCache(),
+                    'cachePath' => false,
+                    'serializer' => new NoSerialize()
+                ]
+            );
             $ret[$readerLine[0]] = $objectManagerHelper->getObject(
                 CompiledPluginList::class,
                 [
-                    'objectManager' => $omMock,
-                    'scope' => new StaticScope($readerLine[0]),
-                    'reader' => $readerMock,
-                    'omConfig' => $omConfigMock,
-                    'cachePath' => false
+                    'pluginList' => $pluginList,
                 ]
             );
         }
@@ -120,7 +138,8 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
                 'advanced_plugin'
             ],
             // simple plugin is disabled in configuration for
-            // \Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item in frontend
+            // \Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\Item
+            // in frontend
             [null, Item::class, 'getName', 'frontend'],
             // test plugin inheritance
             [

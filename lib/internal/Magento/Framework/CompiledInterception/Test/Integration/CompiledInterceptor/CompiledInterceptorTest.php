@@ -7,6 +7,7 @@
 namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor;
 
 use Magento\Framework\CompiledInterception\Generator\AreasPluginList;
+use Magento\Framework\CompiledInterception\Generator\CompiledPluginListFactory;
 use Magento\Framework\CompiledInterception\Generator\FileCache;
 use Magento\Framework\CompiledInterception\Generator\StaticScope;
 use Magento\Framework\App\AreaList;
@@ -18,8 +19,13 @@ use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\
 use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItem;
 use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItemTyped;
 use Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\Item;
+use Magento\Framework\Config\ScopeInterfaceFactory;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
+use Magento\Framework\Interception\PluginList\PluginList;
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
-use Psr\Log\NullLogger;
 
 /**
  * Class CompiledInterceptorTest
@@ -56,30 +62,42 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
      */
     public function createScopeReaders()
     {
-        $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
-        $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
-        $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
+        $readerMap = include __DIR__ . '/_files/reader_mock_map.php';
+        $readerMock = $this->createMock(Dom::class);
+        $readerMock->method('read')->willReturnMap($readerMap);
 
         $omMock = $this->createMock(ObjectManager::class);
-        $omMock->method('get')->with(\Psr\Log\LoggerInterface::class)->willReturn(new NullLogger());
+
+        $omMock->method('get')
+            ->with(Serialize::class)
+            ->willReturn(
+                ObjectManager::getInstance()->create(Serialize::class)
+            );
 
         $omConfigMock =  $this->getMockForAbstractClass(
-            \Magento\Framework\Interception\ObjectManager\ConfigInterface::class
+            ConfigInterface::class
         );
 
-        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
+        $omConfigMock->method('getOriginalInstanceType')->willReturnArgument(0);
         $ret = [];
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManagerHelper($this);
         //clear static cache
         (new FileCache())->clean();
         foreach ($readerMap as $readerLine) {
+            $pluginList = ObjectManager::getInstance()->create(
+                PluginList::class,
+                [
+                    'objectManager' => $omMock,
+                    'configScope' => new StaticScope($readerLine[0]),
+                    'reader' => $readerMock,
+                    'omConfig' => $omConfigMock
+                ]
+            );
+
             $ret[$readerLine[0]] = $objectManagerHelper->getObject(
                 CompiledPluginList::class,
                 [
-                    'objectManager' => $omMock,
-                    'scope' => new StaticScope($readerLine[0]),
-                    'reader' => $readerMock,
-                    'omConfig' => $omConfigMock
+                    'pluginList' => $pluginList
                 ]
             );
         }
@@ -96,12 +114,14 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerate($className, $resultClassName, $fileName)
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManagerHelper($this);
         /** @var AreasPluginList $areaPlugins */
         $areaPlugins = $objectManagerHelper->getObject(
             AreasPluginList::class,
             [
                 'areaList' => $this->areaList,
+                'scopeInterfaceFactory' => $objectManagerHelper->getObject(ScopeInterfaceFactory::class),
+                'compiledPluginListFactory' => $objectManagerHelper->getObject(CompiledPluginListFactory::class),
                 'plugins' => $this->createScopeReaders()
             ]
         );
@@ -131,16 +151,6 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
 
         $generated = $interceptor->generate();
         $this->assertEquals($fileName . '.php', $generated, 'Generated interceptor is invalid.');
-
-        /*
-        eval( $code );
-        $className  = "\\$resultClassName";
-        $interceptor = new $className(
-            ??,
-            new StaticScope('frontend')
-        );
-        $interceptor->getName();
-        */
     }
 
     /**

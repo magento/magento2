@@ -189,7 +189,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
      * plugin "complex_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Complex
      */
-    private function ____plugin_complex_plugin() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Complex
+    private function ____plugin_complex_plugin()
     {
         if ($this->____plugin_complex_plugin === null) {
         	$this->____plugin_complex_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Complex::class);
@@ -201,7 +201,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
      * plugin "advanced_plugin"
      * @return \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
      */
-    private function ____plugin_advanced_plugin() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
+    private function ____plugin_advanced_plugin()
     {
         if ($this->____plugin_advanced_plugin === null) {
         	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);

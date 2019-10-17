@@ -8,26 +8,28 @@ namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\Code\Generator\CodeGeneratorInterface;
 use Magento\Framework\Code\Generator\DefinedClasses;
-use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Interception\Code\Generator\InterceptorInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
+use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Interception\Code\Generator\InterceptorInterface;
 use Magento\Framework\Interception\DefinitionInterface;
-use Magento\Setup\Module\Di\App\Task\Operation\Area;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Compiled interceptors generator, please see ../README.md for details
  */
 class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
 {
-    /**
-     * Entity type
-     */
-    const ENTITY_TYPE = 'interceptor';
+    public const ENTITY_TYPE = 'interceptor';
 
+    /**
+     * @var array
+     */
     private $classMethods;
 
+    /**
+     * @var array
+     */
     private $classProperties;
 
     /**
@@ -74,8 +76,21 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
      */
     public function setInterceptedMethods($interceptedMethods)
     {
-        //this is not used as methods are read from reflaction
+        // this is not used as methods are read from reflection
         $this->interceptedMethods = $interceptedMethods;
+    }
+
+    /**
+     * Get properties to be injected from DI
+     *
+     * @return array
+     */
+    public static function propertiesToInjectToConstructor()
+    {
+        return [
+            ScopeInterface::class => '____scope',
+            ObjectManagerInterface::class => '____om',
+        ];
     }
 
     /**
@@ -160,19 +175,6 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
     }
 
     /**
-     * Get properties to be injected from DI
-     *
-     * @return array
-     */
-    public static function propertiesToInjectToConstructor()
-    {
-        return [
-            ScopeInterface::class => '____scope',
-            ObjectManagerInterface::class => '____om',
-        ];
-    }
-
-    /**
      * Get reflection of source class
      *
      * @return \ReflectionClass
@@ -192,7 +194,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
      * @param \ReflectionMethod $method
      * @return bool
      */
-    protected function isInterceptedMethod(\ReflectionMethod $method)
+    private function isInterceptedMethod(\ReflectionMethod $method)
     {
         return !($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor()) &&
             !in_array($method->getName(), ['__sleep', '__wakeup', '__clone']);
@@ -559,6 +561,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
             ];
 
             foreach ($cases as $case) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $body = array_merge($body, $case['cases']);
                 $this->addCodeSubBlock(
                     $body,

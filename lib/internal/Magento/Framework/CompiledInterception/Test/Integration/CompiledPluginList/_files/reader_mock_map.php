@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\Item\Enhanced;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Advanced;
-use Magento\Framework\CompiledInterception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
+declare(strict_types=1);
+
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\Item;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\Item\Enhanced;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\ItemPlugin\Advanced;
+use Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList\Custom\Module\Model\ItemPlugin\Simple;
 
 return [
     [

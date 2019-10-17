@@ -765,6 +765,19 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Framework\CompiledInterception\PluginList\PluginList"
+                 type="Magento\Framework\Interception\PluginList\PluginList">
+        <arguments>
+            <argument name="cache" xsi:type="object">\Magento\Framework\CompiledInterception\Generator\FileCache</argument>
+            <argument name="cacheId" xsi:type="string">compiled_plugins</argument>
+            <argument name="serializer" xsi:type="object">\Magento\Framework\CompiledInterception\Generator\NoSerialize</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\CompiledInterception\Generator\CompiledPluginList">
+        <arguments>
+            <argument name="pluginList" xsi:type="object">\Magento\Framework\CompiledInterception\PluginList\PluginList</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\Interception\Code\Generator\Interceptor"/>
     <preference for="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface" type="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution"/>
     <type name="Magento\Framework\App\Cache\Frontend\Pool">
