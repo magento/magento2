@@ -290,11 +290,31 @@ class IndexBuilder
     {
         $this->cleanProductIndex($ids);
 
-        $activeRules = $this->getActiveRules();
+        /** @var Rule[] $activeRules */
+        $activeRules = $this->getActiveRules()->getItems();
         foreach ($activeRules as $rule) {
-            /** @var Rule $rule */
+            $ruleWebsiteIds = $rule->getWebsiteIds();
+            if (!$rule->getIsActive() || empty($ruleWebsiteIds)) {
+                continue;
+            }
+
             $rule->setProductsFilter($ids);
+            $productIds = $rule->getMatchingProductIds();
+            if (!is_array($ruleWebsiteIds)) {
+                $ruleWebsiteIds = explode(',', $ruleWebsiteIds);
+            }
+            foreach ($productIds as $productId => $validationByWebsite) {
+                $productWebsiteIds = array_keys(array_filter($validationByWebsite));
+                $websiteIds = array_intersect($productWebsiteIds, $ruleWebsiteIds);
+                $this->assignProductToRule($rule, $productId, $websiteIds);
+            }
         }
+
+        $this->cleanProductPriceIndex($ids);
+        foreach ($ids as $productId) {
+            $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
+        }
+
         $this->reindexRuleGroupWebsite->execute();
     }
 
