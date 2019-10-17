@@ -62,6 +62,8 @@ class GraphQlInputException extends LocalizedException implements AggregateExcep
     }
 
     /**
+     * Add child error if used as aggregate exception
+     *
      * @param LocalizedException $exception
      * @return $this
      */
@@ -72,6 +74,8 @@ class GraphQlInputException extends LocalizedException implements AggregateExcep
     }
 
     /**
+     * Get child errors if used as aggregate exception
+     *
      * @return LocalizedException[]
      */
     public function getErrors(): array
