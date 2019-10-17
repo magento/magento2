@@ -154,6 +154,10 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
