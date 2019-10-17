@@ -867,7 +867,7 @@
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
                 <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Catalog\Model\Product\Hydrator</item>
             </argument>
         </arguments>
     </type>
