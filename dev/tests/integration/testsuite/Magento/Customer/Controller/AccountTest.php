@@ -789,8 +789,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_objectManager->removeSharedInstance(Request::class);
         $this->_request = null;
 
-        $this->getRequest()->setParam('id', $customer->getId());
-        $this->getRequest()->setParam('key', $confirmation);
+        $this->getRequest()
+            ->setParam('id', $customer->getId())
+            ->setParam('key', $confirmation);
         $this->dispatch('customer/account/confirm');
 
         /** @var StoreManager $store */
