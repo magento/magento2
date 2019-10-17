@@ -473,7 +473,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Declare address quote model object
      *
-     * @param   \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
@@ -693,7 +693,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**
@@ -1227,8 +1227,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Set total amount value
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function setTotalAmount($code, $amount)
@@ -1245,8 +1245,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Set total amount value in base store currency
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function setBaseTotalAmount($code, $amount)
@@ -1263,8 +1263,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Add amount total amount value
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function addTotalAmount($code, $amount)
@@ -1278,8 +1278,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Add amount total amount value in base store currency
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function addBaseTotalAmount($code, $amount)
