@@ -71,7 +71,7 @@ class ItemConverter
      * Converts a specified rate model to a shipping method data object.
      *
      * @param \Magento\Quote\Model\Quote\Item $item
-     * @return \Magento\Quote\Model\Cart\Totals\Item
+     * @return \Magento\Quote\Api\Data\TotalsItemInterface
      * @throws \Exception
      */
     public function modelToDataObject($item)
