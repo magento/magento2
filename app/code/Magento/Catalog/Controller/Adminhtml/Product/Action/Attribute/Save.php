@@ -214,7 +214,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         }
 
         if (!empty($operations) && empty($attributesData)) {
-            die ('galat');
             $result = $this->bulkManagement->scheduleBulk(
                 $bulkUuid,
                 $operations,
