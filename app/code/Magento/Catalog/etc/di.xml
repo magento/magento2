@@ -419,7 +419,7 @@
                 <item name="select" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Select</item>
                 <item name="text" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Text</item>
             </argument>
-            <argument name="optionGroupsToTypes" xsi:type="array">
+            <argument name="optionTypesToGroups" xsi:type="array">
                 <item name="field" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
                 <item name="area" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
                 <item name="file" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_FILE</item>

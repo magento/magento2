@@ -111,7 +111,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * @var string[]
      */
-    private $optionGroupsToTypes;
+    private $optionTypesToGroups;
 
     /**
      * @var MetadataPool
@@ -137,7 +137,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param array $data
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
-     * @param array $optionGroupsToTypes
+     * @param array $optionTypesToGroups
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,7 +154,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         array $data = [],
         ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
         array $optionGroups = [],
-        array $optionGroupsToTypes = []
+        array $optionTypesToGroups = []
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
@@ -168,7 +168,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             self::OPTION_GROUP_SELECT => Select::class,
             self::OPTION_GROUP_TEXT => Text::class,
         ];
-        $this->optionGroupsToTypes = $optionGroupsToTypes ?: [
+        $this->optionTypesToGroups = $optionTypesToGroups ?: [
             self::OPTION_TYPE_FIELD => self::OPTION_GROUP_TEXT,
             self::OPTION_TYPE_AREA => self::OPTION_GROUP_TEXT,
             self::OPTION_TYPE_FILE => self::OPTION_GROUP_FILE,
@@ -352,7 +352,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
             $type = $this->getType();
         }
 
-        return $this->optionGroupsToTypes[$type] ?? '';
+        return $this->optionTypesToGroups[$type] ?? '';
     }
 
     /**
