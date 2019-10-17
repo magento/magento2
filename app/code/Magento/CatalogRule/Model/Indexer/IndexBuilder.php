@@ -290,6 +290,7 @@ class IndexBuilder
     {
         $this->cleanProductIndex($ids);
 
+        $products = $this->productLoader->getProducts($ids);
         /** @var Rule[] $activeRules */
         $activeRules = $this->getActiveRules()->getItems();
         foreach ($activeRules as $rule) {
@@ -298,15 +299,16 @@ class IndexBuilder
                 continue;
             }
 
-            $rule->setProductsFilter($ids);
-            $productIds = $rule->getMatchingProductIds();
             if (!is_array($ruleWebsiteIds)) {
                 $ruleWebsiteIds = explode(',', $ruleWebsiteIds);
             }
-            foreach ($productIds as $productId => $validationByWebsite) {
-                $productWebsiteIds = array_keys(array_filter($validationByWebsite));
-                $websiteIds = array_intersect($productWebsiteIds, $ruleWebsiteIds);
-                $this->assignProductToRule($rule, $productId, $websiteIds);
+            foreach ($products as $product) {
+                if (!$rule->validate($product)) {
+                    continue;
+                }
+
+                $websiteIds = array_intersect($product->getWebsiteIds(), $ruleWebsiteIds);
+                $this->assignProductToRule($rule, $product->getId(), $websiteIds);
             }
         }
 
