@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\CompiledInterception\Test\Unit\CompiledPluginList;
+namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledPluginList;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginList;
@@ -55,6 +55,8 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
         $omConfigMock->method('getOriginalInstanceType')->willReturnArgument(0);
         $ret = [];
         $objectManagerHelper = new ObjectManagerHelper($this);
+        //clear static cache
+        (new FileCache())->clean();
         foreach ($readerMap as $readerLine) {
             $pluginList = ObjectManager::getInstance()->create(
                 PluginList::class,
@@ -80,7 +82,6 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPlugin()
     {
-
         $this->objects['backend']->getNext(Item::class, 'getName');
         $this->assertEquals(
             Simple::class,

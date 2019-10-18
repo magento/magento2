@@ -366,10 +366,7 @@ class DiCompileCommand extends Command
     private function getOperationsConfiguration(
         array $compiledPathsList
     ) {
-        $excludePatterns = [];
-        foreach ($this->excludedPathsList as $excludedPaths) {
-            $excludePatterns = array_merge($excludedPaths, $excludePatterns);
-        }
+        $excludePatterns = array_merge(...array_values($this->excludedPathsList));
 
         $operations = [
             OperationFactory::PROXY_GENERATOR => [],

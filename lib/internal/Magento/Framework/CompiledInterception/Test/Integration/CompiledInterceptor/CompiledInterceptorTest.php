@@ -9,6 +9,7 @@ namespace Magento\Framework\CompiledInterception\Test\Integration\CompiledInterc
 use Magento\Framework\CompiledInterception\Generator\AreasPluginList;
 use Magento\Framework\CompiledInterception\Generator\CompiledPluginListFactory;
 use Magento\Framework\CompiledInterception\Generator\FileCache;
+use Magento\Framework\CompiledInterception\Generator\NoSerialize;
 use Magento\Framework\CompiledInterception\Generator\StaticScope;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\Code\Generator\Io;
@@ -23,7 +24,6 @@ use Magento\Framework\Config\ScopeInterfaceFactory;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\Interception\PluginList\PluginList;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
-use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -68,12 +68,6 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
 
         $omMock = $this->createMock(ObjectManager::class);
 
-        $omMock->method('get')
-            ->with(Serialize::class)
-            ->willReturn(
-                ObjectManager::getInstance()->create(Serialize::class)
-            );
-
         $omConfigMock =  $this->getMockForAbstractClass(
             ConfigInterface::class
         );
@@ -90,7 +84,10 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
                     'objectManager' => $omMock,
                     'configScope' => new StaticScope($readerLine[0]),
                     'reader' => $readerMock,
-                    'omConfig' => $omConfigMock
+                    'omConfig' => $omConfigMock,
+                    'cache' => new FileCache(),
+                    'cachePath' => false,
+                    'serializer' => new NoSerialize()
                 ]
             );
 

@@ -92,6 +92,7 @@ class Interception implements OperationInterface
                 $paths = (array)$paths;
             }
             foreach ($paths as $path) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $classesList = array_merge($classesList, $this->classesScanner->getList($path));
             }
         }

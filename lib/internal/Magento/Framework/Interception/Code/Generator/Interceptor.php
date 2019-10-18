@@ -13,9 +13,6 @@ namespace Magento\Framework\Interception\Code\Generator;
  */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract implements InterceptorInterface
 {
-    /**
-     * Entity type
-     */
     const ENTITY_TYPE = 'interceptor';
 
     /**

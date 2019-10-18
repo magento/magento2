@@ -45,6 +45,7 @@ class CompiledInterceptorSubstitution implements InterceptorSubstitutionInterfac
                             continue 2;
                         }
                     }
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $arguments = array_merge([$name => ['_i_' => $preference]], $arguments);
                 }
 
