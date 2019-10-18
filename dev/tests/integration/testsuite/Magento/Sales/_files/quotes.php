@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Store\Model\StoreRepository;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -18,13 +19,18 @@ $objectManager = Bootstrap::getObjectManager();
 $quoteFactory = $objectManager->get(QuoteFactory::class);
 /** @var QuoteRepository $quoteRepository */
 $quoteRepository = $objectManager->get(QuoteRepository::class);
+/** @var  StoreRepository $storeRepository */
+$storeRepository = $objectManager->get(StoreRepository::class);
+
+$defaultStore = $storeRepository->getActiveStoreByCode('default');
+$secondStore = $storeRepository->getActiveStoreByCode('fixture_second_store');
 
 $quotes = [
     'quote for first store' => [
-        'store' => 1,
+        'store' => $defaultStore->getId(),
     ],
     'quote for second store' => [
-        'store' => 2,
+        'store' => $secondStore->getId(),
     ],
 ];
 
