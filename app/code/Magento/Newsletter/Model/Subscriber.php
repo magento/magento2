@@ -730,7 +730,10 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         )->setTemplateVars(
             [
                 'subscriber' => $this,
-                'store' => $this->_storeManager->getStore()
+                'store' => $this->_storeManager->getStore(),
+                'subscriber_data' => [
+                    'confirmation_link' => $this->getConfirmationLink(),
+                ],
             ]
         )->setFrom(
             $this->_scopeConfig->getValue(
