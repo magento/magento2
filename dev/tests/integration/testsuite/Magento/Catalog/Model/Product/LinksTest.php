@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\Link;
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -61,11 +62,14 @@ class LinksTest extends TestCase
         ],
     ];
 
-    /** @var ProductRepository $productRepository */
+    /** @var ProductRepositoryInterface $productRepository */
     private $productRepository;
 
     /** @var ObjectManager */
     private $objectManager;
+
+    /** @var ProductResource */
+    private $productResource;
 
     /**
      * @inheritdoc
@@ -75,6 +79,7 @@ class LinksTest extends TestCase
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->productResource = $this->objectManager->create(ProductResource::class);
     }
 
     /**
@@ -90,24 +95,23 @@ class LinksTest extends TestCase
      */
     public function testEditRemoveRelatedUpSellCrossSellProducts(array $data): void
     {
-        /** @var Product $product */
+        /** @var ProductInterface|Product $product */
         $product = $this->productRepository->get('simple');
         $this->setCustomProductLinks($product, $this->getProductData($data['defaultLinks']));
         $this->productRepository->save($product);
 
         $productData = $this->getProductData($data['productLinks']);
         $this->setCustomProductLinks($product, $productData);
-        $product->save();
+        $this->productResource->save($product);
 
         $product = $this->productRepository->get('simple');
         $expectedLinks = isset($data['expectedProductLinks'])
             ? $this->getProductData($data['expectedProductLinks'])
             : $productData;
-        $actualLinks = $this->getActualLinks($product);
 
         $this->assertEquals(
             $expectedLinks,
-            $actualLinks,
+            $this->getActualLinks($product),
             "Expected linked products do not match actual linked products!"
         );
     }
@@ -187,19 +191,20 @@ class LinksTest extends TestCase
         foreach ($this->linkTypes as $linkType) {
             $productData[$linkType] = [];
             foreach ($productFixture as $data) {
-                $productData[$linkType][$data['id']] = $data;
+                $productData[$linkType][] = $data;
             }
         }
+
         return $productData;
     }
 
     /**
      * Link related, up-sells, cross-sells products received from the array
      *
-     * @param Product $product
+     * @param ProductInterface|Product $product
      * @param array $productData
      */
-    private function setCustomProductLinks(Product $product, array $productData): void
+    private function setCustomProductLinks(ProductInterface $product, array $productData): void
     {
         $productLinks = [];
         foreach ($productData as $linkType => $links) {
@@ -221,10 +226,10 @@ class LinksTest extends TestCase
     /**
      * Get an array of received related, up-sells, cross-sells products
      *
-     * @param Product $product
+     * @param ProductInterface|Product $product
      * @return array
      */
-    private function getActualLinks(Product $product): array
+    private function getActualLinks(ProductInterface $product): array
     {
         $actualLinks = [];
         foreach ($this->linkTypes as $linkType) {
@@ -241,9 +246,9 @@ class LinksTest extends TestCase
                     $products = $product->getRelatedProducts();
                     break;
             }
-            /** @var Product $product */
+            /** @var ProductInterface|Product $productItem */
             foreach ($products as $productItem) {
-                $actualLinks[$linkType][$productItem->getId()] = [
+                $actualLinks[$linkType][] = [
                     'id' => $productItem->getId(),
                     'sku' => $productItem->getSku(),
                     'position' => $productItem->getPosition(),

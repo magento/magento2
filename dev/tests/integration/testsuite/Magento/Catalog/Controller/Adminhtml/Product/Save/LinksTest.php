@@ -9,7 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Save;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -27,7 +27,7 @@ class LinksTest extends AbstractBackendController
         'related',
     ];
 
-    /** @var ProductRepository $productRepository */
+    /** @var ProductRepositoryInterface $productRepository */
     private $productRepository;
 
     /**
@@ -48,20 +48,15 @@ class LinksTest extends AbstractBackendController
      * @param array $postData
      * @return void
      */
-    public function testAddRelatedUpSellCrossSellProducts(array $postData)
+    public function testAddRelatedUpSellCrossSellProducts(array $postData): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product/save');
-
-        /** @var Product $product */
         $product = $this->productRepository->get('simple');
-
-        $expectedLinks = $this->getExpectedLinks($postData['links']);
-        $actualLinks = $this->getActualLinks($product);
         $this->assertEquals(
-            $expectedLinks,
-            $actualLinks,
+            $this->getExpectedLinks($postData['links']),
+            $this->getActualLinks($product),
             "Expected linked products do not match actual linked products!"
         );
     }
@@ -111,7 +106,7 @@ class LinksTest extends AbstractBackendController
         foreach ($this->linkTypes as $linkType) {
             $expectedLinks[$linkType] = [];
             foreach ($links[$linkType] as $productData) {
-                $expectedLinks[$linkType][$productData['id']] = $productData;
+                $expectedLinks[$linkType][] = $productData['id'];
             }
         }
 
@@ -121,10 +116,10 @@ class LinksTest extends AbstractBackendController
     /**
      * Get an array of received related, up-sells, cross-sells products
      *
-     * @param Product $product
+     * @param ProductInterface|Product $product
      * @return array
      */
-    private function getActualLinks(Product $product): array
+    private function getActualLinks(ProductInterface $product): array
     {
         $actualLinks = [];
         foreach ($this->linkTypes as $linkType) {
@@ -141,11 +136,9 @@ class LinksTest extends AbstractBackendController
                     $products = $product->getRelatedProducts();
                     break;
             }
-            /** @var Product $product */
+            /** @var ProductInterface|Product $productItem */
             foreach ($products as $productItem) {
-                $actualLinks[$linkType][$productItem->getId()] = [
-                    'id' => $productItem->getId(),
-                ];
+                $actualLinks[$linkType][] = $productItem->getId();
             }
         }
 
