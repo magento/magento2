@@ -111,6 +111,15 @@
         </arguments>
     </type>
 
+    <type name="Magento\Elasticsearch6\Model\Client\Elasticsearch">
+        <arguments>
+            <argument name="fieldsMappingPreprocessors" xsi:type="array">
+                <item name="elasticsearch6_copy_searchable_fields_to_search_field" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\CopySearchableFieldsToSearchField</item>
+                <item name="elasticsearch6_add_default_search_field" xsi:type="object">Magento\Elasticsearch6\Model\Adapter\FieldMapper\AddDefaultSearchField</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
             <argument name="intervals" xsi:type="array">
