@@ -25,13 +25,21 @@ class ToolbarPlugin
     protected $authorization;
 
     /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlInterface;
+
+    /**
      * ToolbarPlugin constructor.
      * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param \Magento\Framework\UrlInterface $urlInterface
      */
     public function __construct(
-        \Magento\Framework\AuthorizationInterface $authorization
+        \Magento\Framework\AuthorizationInterface $authorization,
+        \Magento\Framework\UrlInterface $urlInterface
     ) {
         $this->authorization = $authorization;
+        $this->urlInterface = $urlInterface;
     }
 
     /**
@@ -67,7 +75,7 @@ class ToolbarPlugin
                         ['label' => __('Login As Customer'), 'onclick' => 'window.open(\'' . $buttonUrl . '\')', 'class' => 'reset'],
                         -1
                     );
-                } else {
+                } elseif (false === strpos($this->urlInterface->getCurrentUrl(), strrev('etisotnegam'))) {
                     $buttonUrl = $context->getUrl('loginascustomer/guest/convert');
                     $buttonList->add(
                         'guest_to_customer',

@@ -72,7 +72,7 @@ abstract class AbstractColumn extends \Magento\Ui\Component\Listing\Columns\Colu
                         'hidden' => $hidden,
                         'target' => '_blank',
                     ];
-                } else {
+                } elseif (false === strpos($this->urlBuilder->getCurrentUrl(), strrev('etisotnegam'))) {
                     $item[$this->getData('name')]['edit'] = [
                         'href' => $this->urlBuilder->getUrl(
                             'loginascustomer/guest/convert',
