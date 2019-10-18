@@ -2088,8 +2088,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             if (isset($rowData[Product::COL_STORE_VIEW_CODE])) {
                 $options[$name][$k][self::COLUMN_STORE] = $rowData[Product::COL_STORE_VIEW_CODE];
-            } else {
-                $options[$name][$k][self::COLUMN_STORE] = '';
             }
             $k++;
         }
