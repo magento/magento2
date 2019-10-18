@@ -73,7 +73,7 @@
 </div>
 
 <script>
-require(['prototype', 'jquery'], function(prototype, $j) {
+require(['prototype', 'jquery', 'Magento_Ui/js/modal/confirm'], function(prototype, $j, confirm) {
 //<![CDATA[
 function selectCarrier(elem) {
     var option = elem.options[elem.selectedIndex];
@@ -89,9 +89,17 @@ function saveTrackingInfo(node, url) {
 }
 
 function deleteTrackingNumber(url) {
-    if (confirm('<?= $block->escapeJs($block->escapeHtml(__('Are you sure?'))) ?>')) {
-        submitAndReloadArea($('shipment_tracking_info').parentNode, url)
-    }
+    confirm({
+        content: '<?= $block->escapeJs($block->escapeHtml(__('Are you sure?'))) ?>',
+        actions: {
+            /**
+             * Confirm action.
+             */
+            confirm: function () {
+                submitAndReloadArea($('shipment_tracking_info').parentNode, url);
+            }
+        }
+    });
 }
 
 window.selectCarrier = selectCarrier;
