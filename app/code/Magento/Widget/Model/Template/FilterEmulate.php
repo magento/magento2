@@ -5,13 +5,20 @@
  */
 namespace Magento\Widget\Model\Template;
 
+/**
+ * Class FilterEmulate
+ *
+ * @package Magento\Widget\Model\Template
+ */
 class FilterEmulate extends Filter
 {
     /**
      * Generate widget with emulation frontend area
      *
      * @param string[] $construction
-     * @return string
+     *
+     * @return mixed|string
+     * @throws \Exception
      */
     public function widgetDirective($construction)
     {
