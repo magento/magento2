@@ -346,7 +346,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param string|null $type
      * @return string
      */
-    public function getGroupByType($type = null): string
+    public function getGroupByType($type = null)
     {
         if ($type === null) {
             $type = $this->getType();
