@@ -41,6 +41,7 @@ define([
         saveAttributeInNewSet: function () {
 
             var self = this;
+
             this.validate();
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 prompt({
