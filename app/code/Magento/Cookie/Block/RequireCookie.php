@@ -13,6 +13,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
+ * Block Require Cookie
+ *
  * @api
  * @since 100.0.2
  *
