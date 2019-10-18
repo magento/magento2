@@ -590,7 +590,13 @@ QUERY;
         $this->assertNotEmpty($response['category']);
         $category = $response['category'];
         $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl();
-        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . ltrim($categoryModel->getImage(), '/');
+        $expectedImageUrl = str_replace(
+            'index.php',
+            'pub/media',
+            rtrim($storeBaseUrl, '/')
+        )
+            . '/'
+            . ltrim($categoryModel->getImage(), '/');
 
         $this->assertEquals($categoryId, $category['id']);
         $this->assertEquals('Parent Image Category', $category['name']);
