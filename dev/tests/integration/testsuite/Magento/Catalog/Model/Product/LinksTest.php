@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\Link;
@@ -62,7 +63,7 @@ class LinksTest extends TestCase
         ],
     ];
 
-    /** @var ProductRepositoryInterface $productRepository */
+    /** @var ProductRepositoryInterface */
     private $productRepository;
 
     /** @var ObjectManager */
@@ -70,6 +71,9 @@ class LinksTest extends TestCase
 
     /** @var ProductResource */
     private $productResource;
+
+    /** @var ProductLinkInterfaceFactory */
+    private $productLinkInterfaceFactory;
 
     /**
      * @inheritdoc
@@ -80,6 +84,7 @@ class LinksTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->productResource = $this->objectManager->create(ProductResource::class);
+        $this->productLinkInterfaceFactory = $this->objectManager->create(ProductLinkInterfaceFactory::class);
     }
 
     /**
@@ -203,14 +208,15 @@ class LinksTest extends TestCase
      *
      * @param ProductInterface|Product $product
      * @param array $productData
+     * @return void
      */
     private function setCustomProductLinks(ProductInterface $product, array $productData): void
     {
         $productLinks = [];
         foreach ($productData as $linkType => $links) {
             foreach ($links as $data) {
-                /** @var Link $productLink */
-                $productLink = $this->objectManager->create(ProductLinkInterface::class);
+                /** @var ProductLinkInterface|Link $productLink */
+                $productLink = $this->productLinkInterfaceFactory->create();
                 $productLink->setSku('simple');
                 $productLink->setLinkedProductSku($data['sku']);
                 if (isset($data['position'])) {

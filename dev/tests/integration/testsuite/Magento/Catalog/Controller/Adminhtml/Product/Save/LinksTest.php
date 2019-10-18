@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -42,17 +43,21 @@ class LinksTest extends AbstractBackendController
     /**
      * Test add simple related, up-sells, cross-sells product
      *
-     * @dataProvider addRelatedUpSellCrossSellProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDbIsolation enabled
      * @param array $postData
      * @return void
      */
-    public function testAddRelatedUpSellCrossSellProducts(array $postData): void
+    public function testAddRelatedUpSellCrossSellProducts(): void
     {
+        $postData = $this->getPostData();
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product/save');
+        $this->assertSessionMessages(
+            $this->equalTo(['You saved the product.']),
+            MessageInterface::TYPE_SUCCESS
+        );
         $product = $this->productRepository->get('simple');
         $this->assertEquals(
             $this->getExpectedLinks($postData['links']),
@@ -62,34 +67,30 @@ class LinksTest extends AbstractBackendController
     }
 
     /**
-     * Provide test data for testAddRelatedUpSellCrossSellProducts().
+     * Get post data for the request
      *
      * @return array
      */
-    public function addRelatedUpSellCrossSellProductsProvider(): array
+    public function getPostData(): array
     {
         return [
-            [
-                'post_data' => [
-                    'product' => [
-                        'attribute_set_id' => '4',
-                        'status' => '1',
-                        'name' => 'Simple Product',
-                        'sku' => 'simple',
-                        'url_key' => 'simple-product',
-                    ],
-                    'links' => [
-                        'upsell' => [
-                            ['id' => '10'],
-                        ],
-                        'crosssell' => [
-                            ['id' => '11'],
-                        ],
-                        'related' => [
-                            ['id' => '12'],
-                        ],
-                    ]
-                ]
+            'product' => [
+                'attribute_set_id' => '4',
+                'status' => '1',
+                'name' => 'Simple Product',
+                'sku' => 'simple',
+                'url_key' => 'simple-product',
+            ],
+            'links' => [
+                'upsell' => [
+                    ['id' => '10'],
+                ],
+                'crosssell' => [
+                    ['id' => '11'],
+                ],
+                'related' => [
+                    ['id' => '12'],
+                ],
             ]
         ];
     }
@@ -123,23 +124,19 @@ class LinksTest extends AbstractBackendController
     {
         $actualLinks = [];
         foreach ($this->linkTypes as $linkType) {
-            $products = [];
-            $actualLinks[$linkType] = [];
+            $ids = [];
             switch ($linkType) {
                 case 'upsell':
-                    $products = $product->getUpSellProducts();
+                    $ids = $product->getUpSellProductIds();
                     break;
                 case 'crosssell':
-                    $products = $product->getCrossSellProducts();
+                    $ids = $product->getCrossSellProductIds();
                     break;
                 case 'related':
-                    $products = $product->getRelatedProducts();
+                    $ids = $product->getRelatedProductIds();
                     break;
             }
-            /** @var ProductInterface|Product $productItem */
-            foreach ($products as $productItem) {
-                $actualLinks[$linkType][] = $productItem->getId();
-            }
+            $actualLinks[$linkType] = $ids;
         }
 
         return $actualLinks;
