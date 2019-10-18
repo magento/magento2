@@ -97,7 +97,7 @@ class BulkManagement implements \Magento\Framework\Bulk\BulkManagementInterface
     /**
      * @inheritDoc
      */
-    public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null, $count=0)
+    public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null, $count = 0)
     {
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());

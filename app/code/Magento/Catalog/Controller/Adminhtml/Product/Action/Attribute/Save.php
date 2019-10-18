@@ -220,6 +220,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $bulkDescription,
                 $this->userContext->getUserId()
             );
+            if (!$result) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
         }
 
         if (!empty($operations) && count($attributesData)) {
@@ -230,12 +235,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 $this->userContext->getUserId(),
                 count($productIdsChunk)
             );
-        }
-
-        if (!$result && !empty($operations)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Something went wrong while processing the request.')
-            );
+            if (!$result) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
         }
     }
 
