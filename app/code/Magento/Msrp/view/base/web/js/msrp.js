@@ -317,7 +317,7 @@ define([
                 return p.finalPrice.amount;
             }).min().value();
 
-            if (typeof priceIndex !== 'undefined') {
+            if (typeof prices[priceIndex] !== 'undefined') {
                 msrpPrice = prices[priceIndex].msrpPrice.amount;
                 finalPrice = prices[priceIndex].finalPrice.amount;
 
@@ -352,8 +352,10 @@ define([
             $(this.options.mapInfoLinks).show();
 
             if (useDefaultPrice || !this.wasOpened) {
-                this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
-                this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+                if (typeof $popup !== 'undefined') {
+                    this.$popup.find(this.options.msrpLabelId).html(options.msrpPrice);
+                    this.$popup.find(this.options.priceLabelId).html(options.realPrice);
+                }
                 $(this.options.displayPriceElement).html(msrpPrice);
                 this.wasOpened = true;
             }
