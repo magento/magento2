@@ -139,7 +139,7 @@ class CategoryTest extends AbstractController
     /**
      * @return void
      */
-    public function testViewActionInactiveCategory(): void
+    public function testViewActionNotExistingCategory(): void
     {
         $this->dispatch('catalog/category/view/id/8');
 
