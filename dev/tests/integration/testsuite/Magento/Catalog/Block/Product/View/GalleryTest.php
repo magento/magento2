@@ -9,7 +9,6 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Gallery\Processor;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\LayoutInterface;
@@ -43,11 +42,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @var StoreRepositoryInterface
      */
     private $storeRepository;
-
-    /**
-     * @var Processor
-     */
-    private $galleryProcessor;
 
     /**
      * @var Json
@@ -115,7 +109,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
-        $this->galleryProcessor = $this->objectManager->create(Processor::class);
         $this->serializer = $this->objectManager->get(Json::class);
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Gallery::class);
     }
@@ -148,7 +141,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $firstImage = $this->serializer->unserialize($this->block->getGalleryImagesJson());
         $this->assertImages(reset($firstImage), $expectation);
     }
-
 
     /**
      * @dataProvider galleryDisabledImagesDataProvider
@@ -315,9 +307,16 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     {
         $product->setImage(null);
         foreach ($images as $file => $data) {
-            if (!empty($data)) {
-                $this->galleryProcessor->updateImage($product, $file, $data);
+            $mediaGalleryData = $product->getData('media_gallery');
+            foreach ($mediaGalleryData['images'] as &$image) {
+                if ($image['file'] == $file) {
+                    foreach ($data as $key => $value) {
+                        $image[$key] = $value;
+                    }
+                }
             }
+
+            $product->setData('media_gallery', $mediaGalleryData);
 
             if (!empty($data['main'])) {
                 $product->setImage($file);

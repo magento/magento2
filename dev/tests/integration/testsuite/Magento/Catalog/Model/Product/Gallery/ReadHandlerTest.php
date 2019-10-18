@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
@@ -49,14 +48,9 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     private $storeRepository;
 
     /**
-     * @var Processor
+     * @var string
      */
-    private $galleryProcessor;
-
-    /**
-     * @var EntityMetadata
-     */
-    private $metadata;
+    private $productLinkField;
 
     /**
      * @inheritdoc
@@ -68,8 +62,9 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
-        $this->galleryProcessor = $this->objectManager->create(Processor::class);
-        $this->metadata = $this->objectManager->get(MetadataPool::class)->getMetadata(ProductInterface::class);
+        $this->productLinkField =  $this->objectManager->get(MetadataPool::class)
+            ->getMetadata(ProductInterface::class)
+            ->getLinkField();
     }
 
     /**
@@ -117,13 +112,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithTwoImages(array $images, array $expectation): void
     {
-        $product = $this->getProduct();
-        foreach ($images as $file => $data) {
-            if (!empty($data)) {
-                $this->galleryProcessor->updateImage($product, $file, $data);
-            }
-        }
-        $this->saveProduct($product);
+        $this->setGalleryImages($this->getProduct(), $images);
         $productInstance = $this->getProductInstance();
         $this->readHandler->execute($productInstance);
         $data = $productInstance->getData();
@@ -215,9 +204,8 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecuteOnStoreView(string $file, string $field, string $value, array $expectation): void
     {
         $product = $this->getProduct();
-        $this->galleryProcessor->updateImage($product, $file, [$field => $value]);
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
-        $this->saveProduct($product, (int)$secondStoreId);
+        $this->setGalleryImages($product, [$file => [$field => $value]], (int)$secondStoreId);
         $productInstance = $this->getProductInstance($secondStoreId);
         $this->readHandler->execute($productInstance);
         $data = $productInstance->getData();
@@ -281,15 +269,32 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Saves product via resource model.
-     * Uses product resource, because saving via repository requires image in base64 format.
+     * Updates product gallery images and saves product.
      *
      * @param Product $product
+     * @param array $images
      * @param int|null $storeId
      * @return void
      */
-    private function saveProduct(Product $product, int $storeId = null): void
+    private function setGalleryImages(Product $product, array $images, int $storeId = null): void
     {
+        $product->setImage(null);
+        foreach ($images as $file => $data) {
+            $mediaGalleryData = $product->getData('media_gallery');
+            foreach ($mediaGalleryData['images'] as &$image) {
+                if ($image['file'] == $file) {
+                    foreach ($data as $key => $value) {
+                        $image[$key] = $value;
+                    }
+                }
+            }
+
+            $product->setData('media_gallery', $mediaGalleryData);
+            if (!empty($data['main'])) {
+                $product->setImage($file);
+            }
+        }
+
         if ($storeId) {
             $product->setStoreId($storeId);
         }
@@ -308,8 +313,8 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         /** @var Product $product */
         $product = $this->objectManager->create(Product::class);
         $product->setData(
-            $this->metadata->getLinkField(),
-            $this->getProduct()->getData($this->metadata->getLinkField())
+            $this->productLinkField,
+            $this->getProduct()->getData($this->productLinkField)
         );
 
         if ($storeId) {
