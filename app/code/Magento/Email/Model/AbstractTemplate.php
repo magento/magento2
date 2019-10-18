@@ -462,6 +462,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if (!isset($variables['store'])) {
             $variables['store'] = $store;
         }
+        if (!isset($variables['store']['frontend_name'])) {
+            $variables['store']['frontend_name'] = $store->getFrontendName();
+        }
         if (!isset($variables['logo_url'])) {
             $variables['logo_url'] = $this->getLogoUrl($storeId);
         }
