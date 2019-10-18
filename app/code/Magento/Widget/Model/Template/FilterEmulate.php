@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,5 +16,20 @@ class FilterEmulate extends Filter
     public function widgetDirective($construction)
     {
         return $this->_appState->emulateAreaCode('frontend', [$this, 'generateWidget'], [$construction]);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function filter($value) : string
+    {
+        return $this->_appState->emulateAreaCode(
+            \Magento\Framework\App\Area::AREA_FRONTEND,
+            [$this, 'parent::filter'],
+            [$value]
+        );
     }
 }
