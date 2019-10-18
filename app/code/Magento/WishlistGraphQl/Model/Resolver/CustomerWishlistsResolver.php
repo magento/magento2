@@ -47,7 +47,7 @@ class CustomerWishlistsResolver implements ResolverInterface
         }
         $collection = $this->_wishlistCollectionFactory->create()->filterByCustomerId($context->getUserId());
         $wishlistsData = [];
-        if (0 ===  $collection->getSize()) {
+        if (0 === $collection->getSize()) {
             return $wishlistsData;
         }
         $wishlists = $collection->getItems();
