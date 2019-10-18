@@ -4,8 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
-$model->setName(
+/** @var \Magento\Customer\Model\Attribute $model1 */
+$model1 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
+$model1->setName(
     'custom_attribute1'
 )->setEntityTypeId(
     2
@@ -20,8 +21,9 @@ $model->setName(
 )->setIsUserDefined(
     1
 );
-$model->save();
+$model1->save();
 
+/** @var \Magento\Customer\Model\Attribute $model2 */
 $model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 $model2->setName(
     'custom_attribute2'
@@ -45,10 +47,10 @@ $setupResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->cr
     \Magento\Customer\Setup\CustomerSetup::class
 );
 
-$data = [['form_code' => 'customer_address_edit', 'attribute_id' => $model->getAttributeId()]];
+$data1 = [['form_code' => 'customer_address_edit', 'attribute_id' => $model1->getAttributeId()]];
 $setupResource->getSetup()->getConnection()->insertMultiple(
     $setupResource->getSetup()->getTable('customer_form_attribute'),
-    $data
+    $data1
 );
 
 $data2 = [['form_code' => 'customer_address_edit', 'attribute_id' => $model2->getAttributeId()]];
