@@ -15,6 +15,7 @@ use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Eav\Model\AttributeSet;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -80,6 +81,10 @@ class UpdateTest extends AbstractBackendController
         $updateName = 'New attribute set name';
         $postData['attribute_set_name'] = $updateName;
         $this->performRequest((int)$attributeSet->getAttributeSetId(), $postData);
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the attribute set.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
         $updatedAttributeSet = $this->attributeSetRepository->get((int)$attributeSet->getAttributeSetId());
         $this->assertEquals($updateName, $updatedAttributeSet->getAttributeSetName());
         $updatedAttributeSet->setAttributeSetName($currentAttrSetName);
@@ -110,6 +115,10 @@ class UpdateTest extends AbstractBackendController
             $newGroupSortOrder,
         ];
         $this->performRequest($attrSetId, $postData);
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the attribute set.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
         $updatedAttrGroups = $this->getAttributeSetGroupCollection($attrSetId)->getItems();
         $diffGroups = array_diff_key($updatedAttrGroups, $currentAttrGroups);
         $this->assertCount(1, $diffGroups);
@@ -149,6 +158,10 @@ class UpdateTest extends AbstractBackendController
             $customGroup->getAttributeGroupId()
         ];
         $this->performRequest($attrSetId, $postData);
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the attribute set.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
         $updatedAttrGroups = $this->getAttributeSetGroupCollection($attrSetId)->getItems();
         $diffGroups = array_diff_key($currentAttrGroups, $updatedAttrGroups);
         $this->assertCount(1, $diffGroups);
