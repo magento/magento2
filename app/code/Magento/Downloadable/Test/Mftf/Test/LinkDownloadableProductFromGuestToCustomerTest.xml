@@ -24,7 +24,7 @@
             <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+            <createData entity="downloadableLinkSharable" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
         </before>
