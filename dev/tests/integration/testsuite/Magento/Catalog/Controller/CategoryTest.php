@@ -149,7 +149,7 @@ class CategoryTest extends AbstractController
     /**
      * Checks that disabled category is not available in storefront
      *
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/inactive_category.php
      * @return void
      */
