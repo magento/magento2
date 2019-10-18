@@ -78,6 +78,21 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['test_value', 'test_value2'], $result);
     }
 
+    public function testGetEmailCopyToWithSpaceEmail()
+    {
+        $this->scopeConfigInterfaceMock->expects($this->once())
+            ->method('getValue')
+            ->with(
+                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO),
+                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
+                $this->equalTo($this->storeId)
+            )
+            ->will($this->returnValue('test_value, test_value2'));
+        $this->identity->setStore($this->storeMock);
+        $result = $this->identity->getEmailCopyTo();
+        $this->assertEquals(['test_value', 'test_value2'], $result);
+    }
+
     public function testGetEmailCopyToEmptyResult()
     {
         $this->scopeConfigInterfaceMock->expects($this->once())
