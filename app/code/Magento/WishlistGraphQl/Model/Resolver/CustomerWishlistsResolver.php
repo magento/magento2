@@ -41,18 +41,16 @@ class CustomerWishlistsResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customerId = $context->getUserId();
-
         /* Guest checking */
-        if (!$customerId && 0 === $customerId) {
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
-        $collection = $this->_wishlistCollectionFactory->create()->filterByCustomerId($customerId);
-        $wishlists = $collection->getItems();
+        $collection = $this->_wishlistCollectionFactory->create()->filterByCustomerId($context->getUserId());
         $wishlistsData = [];
-        if (0 === count($wishlists)) {
+        if (0 ===  $collection->getSize()) {
             return $wishlistsData;
         }
+        $wishlists = $collection->getItems();
 
         foreach ($wishlists as $wishlist) {
             $wishlistsData [] = [
