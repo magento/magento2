@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\LayoutInterface;
@@ -47,11 +47,6 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @var Json
      */
     private $serializer;
-
-    /**
-     * @var Product
-     */
-    private $product;
 
     /**
      * @var Gallery
@@ -298,12 +293,12 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * Updates product gallery images and saves product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @param array $images
      * @param int|null $storeId
      * @return void
      */
-    private function setGalleryImages(Product $product, array $images, int $storeId = null): void
+    private function setGalleryImages(ProductInterface $product, array $images, int $storeId = null): void
     {
         $product->setImage(null);
         foreach ($images as $file => $data) {
@@ -334,11 +329,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * Returns current product.
      *
      * @param int|null $storeId
-     * @return Product
+     * @return ProductInterface
      */
-    private function getProduct(int $storeId = null): Product
+    private function getProduct(?int $storeId = null): ProductInterface
     {
-        return $this->product = $this->productRepository->get('simple', false, $storeId, true);
+        return $this->productRepository->get('simple', false, $storeId, true);
     }
 
     /**

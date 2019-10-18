@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -38,6 +38,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
+     * @var ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
      * @var ProductResource
      */
     private $productResource;
@@ -60,6 +65,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->readHandler = $this->objectManager->create(ReadHandler::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productFactory = $this->objectManager->get(ProductInterfaceFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
         $this->productLinkField =  $this->objectManager->get(MetadataPool::class)
@@ -258,25 +264,22 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns product for testing.
      *
-     * @return Product
+     * @return ProductInterface
      */
-    private function getProduct(): Product
+    private function getProduct(): ProductInterface
     {
-        /** @var Product $product */
-        $product = $this->productRepository->get('simple', false, Store::DEFAULT_STORE_ID);
-
-        return $product;
+        return $this->productRepository->get('simple', false, Store::DEFAULT_STORE_ID);
     }
 
     /**
      * Updates product gallery images and saves product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @param array $images
      * @param int|null $storeId
      * @return void
      */
-    private function setGalleryImages(Product $product, array $images, int $storeId = null): void
+    private function setGalleryImages(ProductInterface $product, array $images, ?int $storeId = null): void
     {
         $product->setImage(null);
         foreach ($images as $file => $data) {
@@ -306,12 +309,12 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
      * Returns empty product instance.
      *
      * @param int|null $storeId
-     * @return Product
+     * @return ProductInterface
      */
-    private function getProductInstance(int $storeId = null): Product
+    private function getProductInstance(?int $storeId = null): ProductInterface
     {
-        /** @var Product $product */
-        $product = $this->objectManager->create(Product::class);
+        /** @var ProductInterface $product */
+        $product = $this->productFactory->create();
         $product->setData(
             $this->productLinkField,
             $this->getProduct()->getData($this->productLinkField)
