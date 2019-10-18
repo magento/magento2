@@ -9,7 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ClearPageCacheActionGroup">
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToCacheManagementPage" />
+        <annotations>
+            <description>Goes to the Admin Cache Management page. Selects 'Refresh'. Checks the 'Page Cache' row. Clicks on Submit.</description>
+        </annotations>
+
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToCacheManagementPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminCacheManagementSection.actionDropDown}}" stepKey="actionSelection"/>
         <click selector="{{AdminCacheManagementSection.refreshOption}}" stepKey="selectRefreshOption"/>

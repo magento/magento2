@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckUrlRewritesInCatalogCategoriesAfterChangingUrlKeyForStoreViewAndMovingCategoryTest">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Update url rewrites"/>
+            <title value="Check url rewrites in catalog categories after changing url key"/>
+            <description value="Check url rewrites in catalog categories after changing url key for store view and moving category"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5352"/>
+            <group value="url_rewrite"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create two sub-categories in default category with simple products -->
+            <createData entity="_defaultCategory" stepKey="createFirstCategory"/>
+            <createData entity="_defaultProduct" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createSecondCategory"/>
+            </createData>
+
+            <!-- Log in to backend -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create additional Store View in Main Website Store -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
+            <deleteData createDataKey="createSecondCategory" stepKey="deleteSecondCategory"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- On the categories editing page change store view to created additional view -->
+        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
+            <argument name="Store" value="customStore.name"/>
+            <argument name="CatName" value="$$createFirstCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Change url key for category for first category; save -->
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeUrlKey">
+            <argument name="value" value="{{SimpleRootSubCategory.url_key}}"/>
+        </actionGroup>
+
+        <!-- Change store view to "All store views" for first category -->
+        <actionGroup ref="switchCategoryToAllStoreView" stepKey="switchToAllStoreViewProduct">
+            <argument name="CatName" value="$$createFirstCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Move first category inside second category -->
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveFirstCategoryToSecondCategory">
+            <argument name="childCategory" value="$$createFirstCategory.name$$"/>
+            <argument name="parentCategory" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Switch default store view on store view created below for first category -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+
+        <!-- Assert category url with custom store view -->
+        <amOnPage url="{{StorefrontHomePage.url}}$$createSecondCategory.name$$/{{SimpleRootSubCategory.url_key}}.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <dontSee userInput="$$createSecondSimpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
+        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+    </test>
+</tests>

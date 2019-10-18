@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Config\App\Config\Type;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
@@ -13,11 +14,12 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Config\App\Config\Type\System\Reader;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
-use Magento\Store\Model\ScopeInterface as StoreScope;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Store\Model\ScopeInterface as StoreScope;
 
 /**
  * System configuration type
@@ -25,6 +27,7 @@ use Magento\Framework\Encryption\Encryptor;
  * @api
  * @since 100.1.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
  */
 class System implements ConfigTypeInterface
 {
@@ -42,22 +45,6 @@ class System implements ConfigTypeInterface
      * @var string
      */
     private static $lockName = 'SYSTEM_CONFIG';
-    /**
-     * Timeout between retrieves to load the configuration from the cache.
-     *
-     * Value of the variable in microseconds.
-     *
-     * @var int
-     */
-    private static $delayTimeout = 100000;
-    /**
-     * Lifetime of the lock for write in cache.
-     *
-     * Value of the variable in seconds.
-     *
-     * @var int
-     */
-    private static $lockTimeout = 42;
 
     /**
      * @var array
@@ -106,9 +93,9 @@ class System implements ConfigTypeInterface
     private $encryptor;
 
     /**
-     * @var LockManagerInterface
+     * @var LockGuardedCacheLoader
      */
-    private $locker;
+    private $lockQuery;
 
     /**
      * @param ConfigSourceInterface $source
@@ -122,6 +109,7 @@ class System implements ConfigTypeInterface
      * @param Reader|null $reader
      * @param Encryptor|null $encryptor
      * @param LockManagerInterface|null $locker
+     * @param LockGuardedCacheLoader|null $lockQuery
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,7 +124,8 @@ class System implements ConfigTypeInterface
         $configType = self::CONFIG_TYPE,
         Reader $reader = null,
         Encryptor $encryptor = null,
-        LockManagerInterface $locker = null
+        LockManagerInterface $locker = null,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -145,8 +134,8 @@ class System implements ConfigTypeInterface
         $this->reader = $reader ?: ObjectManager::getInstance()->get(Reader::class);
         $this->encryptor = $encryptor
             ?: ObjectManager::getInstance()->get(Encryptor::class);
-        $this->locker = $locker
-            ?: ObjectManager::getInstance()->get(LockManagerInterface::class);
+        $this->lockQuery = $lockQuery
+            ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
     }
 
     /**
@@ -225,83 +214,56 @@ class System implements ConfigTypeInterface
     }
 
     /**
-     * Make lock on data load.
-     *
-     * @param callable $dataLoader
-     * @param bool $flush
-     * @return array
-     */
-    private function lockedLoadData(callable $dataLoader, bool $flush = false): array
-    {
-        $cachedData = $dataLoader(); //optimistic read
-
-        while ($cachedData === false && $this->locker->isLocked(self::$lockName)) {
-            usleep(self::$delayTimeout);
-            $cachedData = $dataLoader();
-        }
-
-        while ($cachedData === false) {
-            try {
-                if ($this->locker->lock(self::$lockName, self::$lockTimeout)) {
-                    if (!$flush) {
-                        $data = $this->readData();
-                        $this->cacheData($data);
-                        $cachedData = $data;
-                    } else {
-                        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
-                        $cachedData = [];
-                    }
-                }
-            } finally {
-                $this->locker->unlock(self::$lockName);
-            }
-
-            if ($cachedData === false) {
-                usleep(self::$delayTimeout);
-                $cachedData = $dataLoader();
-            }
-        }
-
-        return $cachedData;
-    }
-
-    /**
-     * Load configuration data for all scopes
+     * Load configuration data for all scopes.
      *
      * @return array
      */
     private function loadAllData()
     {
-        return $this->lockedLoadData(function () {
+        $loadAction = function () {
             $cachedData = $this->cache->load($this->configType);
             $data = false;
             if ($cachedData !== false) {
                 $data = $this->serializer->unserialize($this->encryptor->decrypt($cachedData));
             }
             return $data;
-        });
+        };
+
+        return $this->lockQuery->lockedLoadData(
+            self::$lockName,
+            $loadAction,
+            \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData'])
+        );
     }
 
     /**
-     * Load configuration data for default scope
+     * Load configuration data for default scope.
      *
      * @param string $scopeType
      * @return array
      */
     private function loadDefaultScopeData($scopeType)
     {
-        return $this->lockedLoadData(function () use ($scopeType) {
+        $loadAction = function () use ($scopeType) {
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
             $scopeData = false;
             if ($cachedData !== false) {
                 $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
             }
             return $scopeData;
-        });
+        };
+
+        return $this->lockQuery->lockedLoadData(
+            self::$lockName,
+            $loadAction,
+            \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData'])
+        );
     }
 
     /**
-     * Load configuration data for a specified scope
+     * Load configuration data for a specified scope.
      *
      * @param string $scopeType
      * @param string $scopeId
@@ -309,7 +271,7 @@ class System implements ConfigTypeInterface
      */
     private function loadScopeData($scopeType, $scopeId)
     {
-        return $this->lockedLoadData(function () use ($scopeType, $scopeId) {
+        $loadAction = function () use ($scopeType, $scopeId) {
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
             $scopeData = false;
             if ($cachedData === false) {
@@ -329,7 +291,14 @@ class System implements ConfigTypeInterface
             }
 
             return $scopeData;
-        });
+        };
+
+        return $this->lockQuery->lockedLoadData(
+            self::$lockName,
+            $loadAction,
+            \Closure::fromCallable([$this, 'readData']),
+            \Closure::fromCallable([$this, 'cacheData'])
+        );
     }
 
     /**
@@ -371,7 +340,7 @@ class System implements ConfigTypeInterface
     }
 
     /**
-     * Walk nested hash map by keys from $pathParts
+     * Walk nested hash map by keys from $pathParts.
      *
      * @param array $data to walk in
      * @param array $pathParts keys path
@@ -408,7 +377,7 @@ class System implements ConfigTypeInterface
     }
 
     /**
-     * Clean cache and global variables cache
+     * Clean cache and global variables cache.
      *
      * Next items cleared:
      * - Internal property intended to store already loaded configuration data
@@ -420,11 +389,13 @@ class System implements ConfigTypeInterface
     public function clean()
     {
         $this->data = [];
-        $this->lockedLoadData(
-            function () {
-                return false;
-            },
-            true
+        $cleanAction = function () {
+            $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
+        };
+
+        $this->lockQuery->lockedCleanData(
+            self::$lockName,
+            $cleanAction
         );
     }
 }

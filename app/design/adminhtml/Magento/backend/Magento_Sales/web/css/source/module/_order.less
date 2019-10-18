@@ -55,6 +55,7 @@
     }
 
     .order-billing-address,
+    .order-billing-method,
     .order-history,
     .order-information,
     .order-payment-method,
@@ -64,6 +65,7 @@
     }
 
     .order-shipping-address,
+    .order-shipping-method,
     .order-totals,
     .order-view-account-information .order-account-information {
         float: right;
@@ -303,6 +305,25 @@
     .label,
     .admin__total-mark {
         padding-left: @collapsible-title-icon__size + .5rem + @admin__table-secondary__padding-horizontal;
+    }
+}
+
+//
+//  Create Order - Add Product Grid
+//  ---------------------------------------------
+
+#sales_order_create_search_grid {
+    .col-in_products {
+        .data-grid-checkbox-cell-inner {
+            position: relative;
+        }
+        .checkbox {
+            width: 1.6rem;
+            height: 1.6rem;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
     }
 }
 

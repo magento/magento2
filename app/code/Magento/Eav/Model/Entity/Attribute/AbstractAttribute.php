@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -1404,6 +1405,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -1429,6 +1433,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

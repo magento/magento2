@@ -7,7 +7,8 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogImportExport\Test\TestCase\ExportProductsTest" summary="Export products">
-        <variation name="ExportProductsTestVariation1" summary="Export simple product and configured products with assigned images" ticketId="MAGETWO-46112">
+        <variation name="ExportProductsTestVariation7" summary="Export simple product and configured products with assigned images" ticketId="MAGETWO-46112">
+            <data name="exportData" xsi:type="string">default</data>
             <data name="products/1" xsi:type="array">
                 <item name="fixture" xsi:type="string">configurableProduct</item>
                 <item name="dataset" xsi:type="string">product_with_size</item>
@@ -18,18 +19,47 @@
                     </item>
                 </item>
             </data>
+            <data name="exportedFields" xsi:type="array">
+                <item name="0" xsi:type="string">sku</item>
+                <item name="1" xsi:type="string">name</item>
+                <item name="2" xsi:type="string">weight</item>
+                <item name="3" xsi:type="string">visibility</item>
+                <item name="4" xsi:type="string">price</item>
+                <item name="5" xsi:type="string">url_key</item>
+                <item name="6" xsi:type="string">additional_images</item>
+            </data>
         </variation>
-        <variation name="ExportProductsTestVariation2" summary="Export simple and configured products with custom options" ticketId="MAGETWO-46113, MAGETWO-46109">
+        <variation name="ExportProductsTestVariation8" summary="Export simple and configured products with custom options" ticketId="MAGETWO-46113, MAGETWO-46109">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="exportData" xsi:type="string">default</data>
             <data name="products/1" xsi:type="array">
                 <item name="fixture" xsi:type="string">configurableProduct</item>
                 <item name="dataset" xsi:type="string">first_product_with_custom_options_and_option_key_1</item>
             </data>
+            <data name="exportedFields" xsi:type="array">
+                <item name="0" xsi:type="string">sku</item>
+                <item name="1" xsi:type="string">name</item>
+                <item name="2" xsi:type="string">weight</item>
+                <item name="3" xsi:type="string">visibility</item>
+                <item name="4" xsi:type="string">price</item>
+                <item name="5" xsi:type="string">url_key</item>
+            </data>
         </variation>
-        <variation name="ExportProductsTestVariation5" summary="Export simple product assigned to Main Website and configurable product assigned to Custom Website" ticketId="MAGETWO-46114">
+        <variation name="ExportProductsTestVariation9" summary="Export simple product assigned to Main Website and configurable product assigned to Custom Website" ticketId="MAGETWO-46114">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
+            <data name="exportData" xsi:type="string">default</data>
             <data name="products/1" xsi:type="array">
                 <item name="fixture" xsi:type="string">configurableProduct</item>
                 <item name="dataset" xsi:type="string">default</item>
                 <item name="store" xsi:type="string">custom_store</item>
+            </data>
+            <data name="exportedFields" xsi:type="array">
+                <item name="0" xsi:type="string">sku</item>
+                <item name="1" xsi:type="string">name</item>
+                <item name="2" xsi:type="string">weight</item>
+                <item name="3" xsi:type="string">visibility</item>
+                <item name="4" xsi:type="string">price</item>
+                <item name="5" xsi:type="string">url_key</item>
             </data>
         </variation>
     </testCase>

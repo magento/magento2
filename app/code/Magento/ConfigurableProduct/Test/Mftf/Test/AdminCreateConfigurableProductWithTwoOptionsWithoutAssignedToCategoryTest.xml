@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithTwoOptionsWithoutAssignedToCategoryTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Create configurable product with two new options without assigned to category with not visible child products"/>
+            <description value="Admin should be able to create configurable product with two options without assigned to category, child products are not visible individually"/>
+            <testCaseId value="MC-13686"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete children products -->
+            <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            </actionGroup>
+
+            <!-- Delete attribute set -->
+            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create configurable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Create product configurations-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="fillConfigurableProductValues"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+
+        <!--Create new attribute with two option -->
+        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+            <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Change product configurations in grid -->
+        <actionGroup ref="changeProductConfigurationsInGrid" stepKey="changeProductConfigurationsInGrid">
+            <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+            <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Save configurable product; add product to new attribute set -->
+        <actionGroup ref="saveConfigurableProductWithNewAttributeSet" stepKey="saveConfigurableProduct"/>
+
+        <!-- Assert Child Products in grid -->
+        <actionGroup ref="viewProductInAdminGrid" stepKey="viewFirstChildProductInAdminGrid">
+            <argument name="product" value="colorConfigurableProductAttribute1"/>
+        </actionGroup>
+        <actionGroup ref="viewProductInAdminGrid" stepKey="viewSecondChildProductInAdminGrid">
+            <argument name="product" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Assert Configurable Product in grid -->
+        <actionGroup ref="filterProductGridBySkuAndName" stepKey="findCreatedConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="{{ApiConfigurableProduct.type_id}}"  stepKey="seeProductTypeInGrid"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+
+        <!-- Flash cache -->
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!-- Assert configurable product on product page -->
+        <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="storefrontCheckConfigurableProductOptions" stepKey="checkConfigurableProductOptions">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+            <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Add configurable product to the cart with selected first option -->
+        <selectOption userInput="{{colorConfigurableProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOptionForAddingToCart"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+
+        <!-- Assert configurable product in cart -->
+        <amOnPage url="/checkout/cart/" stepKey="amOnShoppingCartPage"/>
+        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="storefrontCheckCartConfigurableProductActionGroup">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
+            <argument name="productQuantity" value="CONST.one"/>
+        </actionGroup>
+
+        <!-- Assert child products are not displayed separately: two next step -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
+
+        <!-- Quick search the storefront for the first attribute option -->
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFirstChildProduct"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductTitleByName(colorConfigurableProductAttribute1.name)}}" stepKey="dontSeeConfigurableProductFirstChild"/>
+
+        <!-- Quick search the storefront for the second attribute option -->
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute2.sku}}]" stepKey="searchStorefrontSecondChildProduct"/>
+        <dontSee selector="{{StorefrontCategoryProductSection.ProductTitleByName(colorConfigurableProductAttribute2.name)}}" stepKey="dontSeeConfigurableProductSecondChild"/>
+    </test>
+</tests>

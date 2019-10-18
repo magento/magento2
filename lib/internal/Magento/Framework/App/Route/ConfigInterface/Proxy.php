@@ -60,7 +60,12 @@ class Proxy implements
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -71,6 +76,9 @@ class Proxy implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

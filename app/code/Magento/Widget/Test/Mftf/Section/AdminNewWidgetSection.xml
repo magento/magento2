@@ -17,6 +17,7 @@
         <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
         <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
         <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
+        <element name="selectTemplate" type="select" selector=".widget-layout-updates .block_template_container .select"/>
         <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
         <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
         <element name="selectCondition" type="input" selector="#conditions__1__new_child"/>

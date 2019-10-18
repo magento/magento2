@@ -77,7 +77,8 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         parent::_construct();
         $this->setId('customer_view_cart_grid');
-        $this->setDefaultSort('added_at', 'desc');
+        $this->setDefaultSort('added_at');
+        $this->setDefaultDir('desc');
         $this->setSortable(false);
         $this->setPagerVisibility(false);
         $this->setFilterVisibility(false);

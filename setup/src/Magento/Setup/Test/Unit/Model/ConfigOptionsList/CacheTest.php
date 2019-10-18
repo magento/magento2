@@ -45,7 +45,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(6, $options);
+        $this->assertCount(8, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -69,7 +69,15 @@ class CacheTest extends \PHPUnit\Framework\TestCase
 
         $this->assertArrayHasKey(5, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[5]);
-        $this->assertEquals('cache-id-prefix', $options[5]->getName());
+        $this->assertEquals('cache-backend-redis-compress-data', $options[5]->getName());
+
+        $this->assertArrayHasKey(6, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
+        $this->assertEquals('cache-backend-redis-compression-lib', $options[6]->getName());
+
+        $this->assertArrayHasKey(7, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
+        $this->assertEquals('cache-id-prefix', $options[7]->getName());
     }
 
     /**
@@ -88,7 +96,9 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'server' => '',
                             'port' => '',
                             'database' => '',
-                            'password' => ''
+                            'password' => '',
+                            'compress_data' => '',
+                            'compression_lib' => '',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -115,18 +125,23 @@ class CacheTest extends \PHPUnit\Framework\TestCase
                             'server' => 'localhost',
                             'port' => '1234',
                             'database' => '5',
-                            'password' => ''
+                            'password' => '',
+                            'compress_data' => '1',
+                            'compression_lib' => 'gzip',
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ]
             ]
         ];
+
         $options = [
             'cache-backend' => 'redis',
             'cache-backend-redis-server' => 'localhost',
             'cache-backend-redis-port' => '1234',
-            'cache-backend-redis-db' => '5'
+            'cache-backend-redis-db' => '5',
+            'cache-backend-redis-compress-data' => '1',
+            'cache-backend-redis-compression-lib' => 'gzip'
         ];
 
         $configData = $this->configOptionsList->createConfig($options, $this->deploymentConfigMock);

@@ -7,12 +7,13 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Framework\Serialize\Serializer\FormData;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute as AttributeAction;
+use Magento\Framework\Serialize\Serializer\FormData;
 
 /**
  * Product attribute validate controller.
@@ -44,6 +45,11 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private $formDataSerializer;
 
     /**
+     * @var AttributeCodeValidator
+     */
+    private $attributeCodeValidator;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -54,6 +60,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param array $multipleAttributeList
      * @param FormData|null $formDataSerializer
+     * @param AttributeCodeValidator|null $attributeCodeValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -63,7 +70,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
-        FormData $formDataSerializer = null
+        FormData $formDataSerializer = null,
+        AttributeCodeValidator $attributeCodeValidator = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -71,6 +79,9 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         $this->multipleAttributeList = $multipleAttributeList;
         $this->formDataSerializer = $formDataSerializer ?: ObjectManager::getInstance()
             ->get(FormData::class);
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
+            AttributeCodeValidator::class
+        );
     }
 
     /**
@@ -115,6 +126,12 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             $response->setError(true);
             $response->setProductAttribute($attribute->toArray());
         }
+
+        if (!$this->attributeCodeValidator->isValid($attributeCode)) {
+            $this->setMessageToResponse($response, $this->attributeCodeValidator->getMessages());
+            $response->setError(true);
+        }
+
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
             /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */

@@ -77,7 +77,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
@@ -207,6 +207,6 @@
         <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <see userInput="$$createConfigProduct.name$$" stepKey="assertProductPresent"/>
-        <See userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
+        <see userInput="$$createConfigChildProduct1.price$$" stepKey="assertProductPricePresent"/>
     </test>
 </tests>

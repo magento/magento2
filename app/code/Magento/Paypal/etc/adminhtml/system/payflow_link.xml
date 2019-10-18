@@ -13,7 +13,7 @@
         <comment><![CDATA[Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
         <attribute type="activity_path">payment/payflow_link/active</attribute>
         <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-            <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
+            <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
         </group>
         <group id="payflow_link_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
@@ -70,13 +70,15 @@
                     </depends>
                     <attribute type="shared">1</attribute>
                 </field>
-                <field id="proxy_port" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
+                <field id="proxy_port" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1">
                     <label>Proxy Port</label>
+                    <comment>Please enter at least 0 and at most 65535</comment>
                     <config_path>payment/payflow_link/proxy_port</config_path>
                     <depends>
                         <field id="use_proxy">1</field>
                     </depends>
                     <attribute type="shared">1</attribute>
+                    <validate>validate-digits validate-digits-range digits-range-0-65535</validate>
                 </field>
                 <field id="payflowlink_info" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="90">
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Info</frontend_model>

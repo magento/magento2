@@ -126,16 +126,21 @@ class Loader
      *
      * @param array $origList
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @throws \Exception
      */
-    private function sortBySequence($origList)
+    private function sortBySequence(array $origList): array
     {
         ksort($origList);
+        $modules = $this->prearrangeModules($origList);
+
         $expanded = [];
-        foreach ($origList as $moduleName => $value) {
+        foreach (array_keys($modules) as $moduleName) {
+            $sequence = $this->expandSequence($origList, $moduleName);
+            asort($sequence);
+
             $expanded[] = [
                 'name' => $moduleName,
-                'sequence' => $this->expandSequence($origList, $moduleName),
+                'sequence' => $sequence,
             ];
         }
 
@@ -143,7 +148,7 @@ class Loader
         $total = count($expanded);
         for ($i = 0; $i < $total - 1; $i++) {
             for ($j = $i; $j < $total; $j++) {
-                if (in_array($expanded[$j]['name'], $expanded[$i]['sequence'])) {
+                if (in_array($expanded[$j]['name'], $expanded[$i]['sequence'], true)) {
                     $temp = $expanded[$i];
                     $expanded[$i] = $expanded[$j];
                     $expanded[$j] = $temp;
@@ -157,6 +162,27 @@ class Loader
         }
 
         return $result;
+    }
+
+    /**
+     * Prearrange all modules by putting those from Magento before the others
+     *
+     * @param array $modules
+     * @return array
+     */
+    private function prearrangeModules(array $modules): array
+    {
+        $breakdown = ['magento' => [], 'others' => []];
+
+        foreach ($modules as $moduleName => $moduleDetails) {
+            if (strpos($moduleName, 'Magento_') !== false) {
+                $breakdown['magento'][$moduleName] = $moduleDetails;
+            } else {
+                $breakdown['others'][$moduleName] = $moduleDetails;
+            }
+        }
+
+        return array_merge($breakdown['magento'], $breakdown['others']);
     }
 
     /**

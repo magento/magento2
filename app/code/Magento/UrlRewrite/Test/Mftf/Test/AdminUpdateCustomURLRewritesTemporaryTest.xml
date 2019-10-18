@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCustomURLRewritesTemporaryTest">
+        <annotations>
+            <stories value="Update Custom URL Rewrites"/>
+            <title value="Update Custom URL Rewrites, temporary"/>
+            <description value="Test log in to URL Rewrites and Update Custom URL Rewrites, temporary"/>
+            <testCaseId value="MC-5354"/>
+            <severity value="CRITICAL"/>
+            <group value="urlRewrite"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="defaultUrlRewrite" stepKey="urlRewrite"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+                <argument name="requestPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Filter Product in product page and get the Product ID -->
+        <actionGroup ref="filterAndSelectProduct" stepKey="filterProduct">
+            <argument name="productSku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!--Search default custom url rewrite in grid-->
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewrite">
+            <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
+        </actionGroup>
+
+        <!--Update default custom url rewrite as per requirement and verify AssertUrlRewriteSaveMessage-->
+        <actionGroup ref="AdminUpdateCustomUrlRewrite" stepKey="updateUrlRewrite">
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
+            <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
+            <argument name="redirectTypeValue" value="{{customTemporaryUrlRewrite.redirect_type_label}}"/>
+            <argument name="description" value="{{customTemporaryUrlRewrite.description}}"/>
+        </actionGroup>
+
+        <!--Search and verify AssertUrlRewriteInGrid-->
+        <actionGroup ref="AdminSearchByRequestPath" stepKey="verifyUpdatedUrlRewriteInGrid">
+            <argument name="redirectPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
+            <argument name="redirectType" value="{{customTemporaryUrlRewrite.redirect_type_label}}"/>
+            <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
+        </actionGroup>
+
+        <!-- AssertUrlRewriteCustomSearchRedirect-->
+        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="verifyProductInStoreFrontPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productSku" value="$$createProduct.sku$$"/>
+            <argument name="productRequestPath" value="$$createProduct.name$$.html"/>
+        </actionGroup>
+    </test>
+</tests>

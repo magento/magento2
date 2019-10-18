@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithDisabledChildrenProductsTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Create configurable product with disabled children products"/>
+            <description value="Admin should be able to create configurable product with disabled children products, assigned to category"/>
+            <testCaseId value="MC-13711"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create attribute with one options -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the child that will be a part of the configurable product -->
+            <createData entity="SimpleProductOffline" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Don't display out of stock product -->
+            <actionGroup ref="noDisplayOutOfStockProduct" stepKey="revertDisplayOutOfStockProduct"/>
+
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete created data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create configurable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Create product configurations and add attribute and select all options -->
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+        <!-- Add configurable product to category -->
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillConfigurableProductValues"/>
+
+        <!-- Add child product to configurations grid -->
+        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addSimpleProduct">
+            <argument name="sku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="name" value="$$createConfigProductAttributeOption.option[store_labels][1][label]$$"/>
+        </actionGroup>
+
+        <!-- Save configurable product -->
+        <actionGroup ref="saveProductForm" stepKey="saveConfigurableProduct"/>
+
+        <!-- Find configurable product in grid -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Assert configurable product on admin product page -->
+        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="assertConfigurableProductOnAdminProductPage" stepKey="assertConfigurableProductOnAdminProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+         <!--Assert configurable attributes block is present on product page -->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToSearchEngineTab" />
+        <seeElement selector="{{AdminProductFormConfigurationsSection.createdConfigurationsBlock}}" stepKey="seeCreatedConfigurations"/>
+        <see userInput="$$createSimpleProduct.name$$" selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" stepKey="seeProductNameInConfigurations"/>
+
+        <!-- Display out of stock product -->
+        <actionGroup ref="displayOutOfStockProduct" stepKey="displayOutOfStockProduct"/>
+
+        <!-- Flash cache -->
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!-- Assert configurable product is not present in category -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+
+        <!-- Assert configurable product is out of stock-->
+        <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see stepKey="checkForOutOfStock" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="OUT OF STOCK"/>
+    </test>
+</tests>

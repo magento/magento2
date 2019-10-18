@@ -5,16 +5,29 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\Match as MatchRequestQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class MatchTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var AttributeProvider|MockObject
+     */
+    private $attributeProvider;
+
+    /**
+     * @var TypeResolver|MockObject
+     */
+    private $fieldTypeResolver;
+
     /**
      * @var MatchQueryBuilder
      */
@@ -25,6 +38,9 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->attributeProvider = $this->createMock(AttributeProvider::class);
+        $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
+
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
         $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
         $valueTransformerPoolMock->method('get')
@@ -37,6 +53,8 @@ class MatchTest extends \PHPUnit\Framework\TestCase
             [
                 'fieldMapper' => $this->getFieldMapper(),
                 'preprocessorContainer' => [],
+                'attributeProvider' => $this->attributeProvider,
+                'fieldTypeResolver' => $this->fieldTypeResolver,
                 'valueTransformerPool' => $valueTransformerPoolMock,
             ]
         );
@@ -49,6 +67,16 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild()
     {
+        $attributeAdapter = $this->createMock(AttributeAdapter::class);
+        $this->attributeProvider->expects($this->once())
+            ->method('getByAttributeCode')
+            ->with('some_field')
+            ->willReturn($attributeAdapter);
+        $this->fieldTypeResolver->expects($this->once())
+            ->method('getFieldType')
+            ->with($attributeAdapter)
+            ->willReturn('text');
+
         $rawQueryValue = 'query_value';
         $selectQuery = $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'not');
 
@@ -80,6 +108,16 @@ class MatchTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildMatchQuery($rawQueryValue, $queryValue, $match)
     {
+        $attributeAdapter = $this->createMock(AttributeAdapter::class);
+        $this->attributeProvider->expects($this->once())
+            ->method('getByAttributeCode')
+            ->with('some_field')
+            ->willReturn($attributeAdapter);
+        $this->fieldTypeResolver->expects($this->once())
+            ->method('getFieldType')
+            ->with($attributeAdapter)
+            ->willReturn('text');
+
         $query = $this->matchQueryBuilder->build([], $this->getMatchRequestQuery($rawQueryValue), 'should');
 
         $expectedSelectQuery = [

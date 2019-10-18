@@ -40,7 +40,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
         $this->file = $objectManager->getObject(
             \Magento\Config\Block\System\Config\Form\Field\File::class,
-            ['data' => $this->testData]
+            [
+                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class),
+                'data' => $this->testData,
+
+            ]
         );
 
         $formMock = new \Magento\Framework\DataObject();

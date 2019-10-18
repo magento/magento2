@@ -6,11 +6,14 @@
 namespace Magento\NewRelicReporting\Model\Module;
 
 use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Module;
 
+/**
+ * Class for collecting data for the report
+ */
 class Collect
 {
     /**
@@ -19,7 +22,7 @@ class Collect
     protected $moduleList;
 
     /**
-     * @var Manager
+     * @var ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -43,14 +46,14 @@ class Collect
      *
      * @param ModuleListInterface $moduleList
      * @param FullModuleList $fullModuleList
-     * @param Manager $moduleManager
+     * @param ModuleManagerInterface $moduleManager
      * @param \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory
      * @param \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
      */
     public function __construct(
         ModuleListInterface $moduleList,
         FullModuleList $fullModuleList,
-        Manager $moduleManager,
+        ModuleManagerInterface $moduleManager,
         \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory,
         \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
     ) {
@@ -92,7 +95,6 @@ class Collect
      * @param string $active
      * @param string $setupVersion
      * @param string $state
-     *
      * @return array
      */
     protected function getNewModuleChanges($moduleName, $active, $setupVersion, $state)
@@ -277,9 +279,7 @@ class Collect
                 $changes = array_diff($module, $changeTest);
                 $changesCleanArray = $this->getCleanChangesArray($changes);
 
-                if (count($changesCleanArray) > 0 ||
-                    ($this->moduleManager->isOutputEnabled($changeTest['name']) &&
-                        $module['setup_version'] != null)) {
+                if (!empty($changesCleanArray)) {
                     $data = [
                         'entity_id' => $changeTest['entity_id'],
                         'name' => $changeTest['name'],

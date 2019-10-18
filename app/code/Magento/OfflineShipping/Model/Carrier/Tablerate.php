@@ -278,7 +278,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         /** @var  \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
         $method = $this->_resultMethodFactory->create();
 
-        $method->setCarrier('tablerate');
+        $method->setCarrier($this->getCarrierCode());
         $method->setCarrierTitle($this->getConfigData('title'));
 
         $method->setMethod('bestway');

@@ -10,6 +10,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminChooseAffectedAttributeSetPopup">
         <element name="confirm" type="button" selector="button[data-index='confirm_button']" timeout="30"/>
+        <element name="addNewAttrSet" type="radio" selector="//input[@data-index='affectedAttributeSetNew']" timeout="30"/>
+        <element name="createNewAttrSetName" type="input" selector="//input[@name='configurableNewAttributeSetName']" timeout="30"/>
         <element name="closePopUp" type="button" selector="//*[contains(@class,'product_form_product_form_configurable_attribute_set')]//button[@data-role='closeBtn']" timeout="30"/>
     </section>
 </sections>

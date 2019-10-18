@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.cache.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">cache_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Backend\Model\Cache\ResourceModel\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Backend\Model\Cache\ResourceModel\Grid\Collection</argument>
                     <argument name="pager_visibility" xsi:type="string">0</argument>
                 </arguments>
                 <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.cache.massaction" as="grid.massaction">

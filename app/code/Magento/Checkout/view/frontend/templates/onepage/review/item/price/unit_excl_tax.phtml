@@ -4,12 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
 /** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
 $_item = $block->getItem();
 ?>
 <span class="cart-price">
-    <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
+    <?= $block->escapeHtml(
+        $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()),
+        ['span']
+    ) ?>
 </span>

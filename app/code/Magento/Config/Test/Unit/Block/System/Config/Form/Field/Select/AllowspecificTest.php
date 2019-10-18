@@ -21,7 +21,10 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class
+            \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            [
+                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+            ]
         );
         $this->_object->setData('html_id', 'spec_element');
         $this->_formMock = $this->createPartialMock(

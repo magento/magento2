@@ -24,10 +24,10 @@ class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
             'selector' => 'input[name="order_increment_id"]',
         ],
         'grand_total_from' => [
-            'selector' => 'input[name="grand_total[from]"]',
+            'selector' => 'input[name="base_grand_total[from]"]',
         ],
         'grand_total_to' => [
-            'selector' => 'input[name="grand_total[to]"]',
+            'selector' => 'input[name="base_grand_total[to]"]',
         ],
     ];
 

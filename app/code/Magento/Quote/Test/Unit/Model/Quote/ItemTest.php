@@ -135,27 +135,24 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     public function testGetAddress()
     {
         $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
-            ->setMethods(['getShippingAddress', 'getBillingAddress', 'getStoreId', '__wakeup'])
+            ->setMethods(['getShippingAddress', 'getBillingAddress', 'getStoreId', '__wakeup', 'isVirtual'])
             ->disableOriginalConstructor()
             ->getMock();
         $quote->expects($this->once())
             ->method('getShippingAddress')
-            ->will($this->returnValue('shipping'));
+            ->willReturn('shipping');
         $quote->expects($this->once())
             ->method('getBillingAddress')
-            ->will($this->returnValue('billing'));
+            ->willReturn('billing');
         $quote->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
+        $quote->expects($this->exactly(2))
+            ->method('isVirtual')
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $this->model->setQuote($quote);
-
-        $quote->setItemsQty(2);
-        $quote->setVirtualItemsQty(1);
         $this->assertEquals('shipping', $this->model->getAddress(), 'Wrong shipping address');
-
-        $quote->setItemsQty(2);
-        $quote->setVirtualItemsQty(2);
         $this->assertEquals('billing', $this->model->getAddress(), 'Wrong billing address');
     }
 
@@ -855,18 +852,20 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     private function createOptionMock($optionCode, $optionData = [])
     {
         $optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
-            ->setMethods([
-                'setData',
-                'setItem',
-                'getItem',
-                'getCode',
-                '__wakeup',
-                'isDeleted',
-                'delete',
-                'getValue',
-                'getProduct',
-                'save'
-            ])
+            ->setMethods(
+                [
+                    'setData',
+                    'setItem',
+                    'getItem',
+                    'getCode',
+                    '__wakeup',
+                    'isDeleted',
+                    'delete',
+                    'getValue',
+                    'getProduct',
+                    'save'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $optionMock->expects($this->any())
