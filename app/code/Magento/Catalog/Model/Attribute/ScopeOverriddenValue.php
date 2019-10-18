@@ -81,7 +81,7 @@ class ScopeOverriddenValue
         if ((int)$storeId === Store::DEFAULT_STORE_ID) {
             return false;
         }
-        if ($this->attributesValues === null) {
+        if (!isset($this->attributesValues[$storeId])) {
             $this->initAttributeValues($entityType, $entity, (int)$storeId);
         }
 

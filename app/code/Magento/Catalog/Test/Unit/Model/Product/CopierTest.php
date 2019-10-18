@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Copier;
 
@@ -46,6 +47,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
      */
     protected $metadata;
 
+    /**
+     * @var ScopeOverriddenValue|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeOverriddenValue;
+
     protected function setUp()
     {
         $this->copyConstructorMock = $this->createMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
@@ -59,6 +65,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->optionRepositoryMock;
         $this->productMock = $this->createMock(Product::class);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
+        $this->scopeOverriddenValue = $this->createMock(ScopeOverriddenValue::class);
 
         $this->metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
@@ -67,9 +74,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($this->metadata);
+
         $this->_model = new Copier(
             $this->copyConstructorMock,
-            $this->productFactoryMock
+            $this->productFactoryMock,
+            $this->scopeOverriddenValue
         );
 
         $this->setProperties($this->_model, [
