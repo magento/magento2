@@ -25,7 +25,6 @@
         "ext-pdo_mysql": "*",
         "ext-simplexml": "*",
         "ext-soap": "*",
-        "ext-spl": "*",
         "ext-xsl": "*",
         "ext-zip": "*",
         "lib-libxml": "*",

@@ -486,6 +486,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($websiteIDs, $this->model->getStoreIds());
     }
 
+    /**
+     * @return array
+     */
     public function getSingleStoreIds()
     {
         return [
