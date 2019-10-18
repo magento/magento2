@@ -18,7 +18,7 @@
             <argument name="product_2"/>
         </arguments>
 
-        <amOnPage url="{{page}}" stepKey="goToStoreFrontPage"/>
+        <amOnPage url="{{page}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" userInput="alt" stepKey="grabFirstProductName1_1"/>
         <assertEquals  expected="{{product_1.name}}" actual="($grabFirstProductName1_1)" message="notExpectedOrder" stepKey="compare1"/>
