@@ -12,6 +12,7 @@
         <element name="trackingNumber" type="text" selector="#tracking-shipping-form #tracking_number"/>
         <element name="trackingTitle" type="text" selector="#tracking-shipping-form #tracking_title"/>
         <element name="addTrackingNumber" type="button" selector="#tracking-shipping-form button.save"/>
+        <element name="deleteTrackingNumber" type="button" selector="#tracking-shipping-form button.action-delete"/>
         <element name="trackingInfoErrorElement" type="text" selector="#tracking-shipping-form #{{inputName}}-error" parameterized="true" />
     </section>
 </sections>

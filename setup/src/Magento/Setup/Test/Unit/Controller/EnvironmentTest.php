@@ -294,6 +294,13 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $model);
     }
 
+    /**
+     * @param \PHPUnit\Framework\MockObject\MockObject $request
+     * @param \PHPUnit\Framework\MockObject\MockObject $response
+     * @param \PHPUnit\Framework\MockObject\MockObject $routeMatch
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
     protected function getMvcEventMock(
         MockObject $request,
         MockObject $response,
