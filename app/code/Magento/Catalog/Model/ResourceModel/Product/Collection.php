@@ -24,6 +24,7 @@ use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 /**
  * Product collection
@@ -310,6 +311,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $categoryResourceModel;
 
     /**
+     * Flag to add stock data to result
+     *
+     * @var bool
+     */
+    protected $needToAddStockDataToResult;
+
+    /**
+     * @var StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -338,6 +351,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
      * @param Category|null $categoryResourceModel
+     * @param StockRegistryInterface $stockRegistry
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -367,7 +381,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        Category $categoryResourceModel = null
+        Category $categoryResourceModel = null,
+        StockRegistryInterface $stockRegistry = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -384,6 +399,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         );
         $this->_productLimitationFilters = $productLimitationFactory->create();
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->stockRegistry = $stockRegistry ?? ObjectManager::getInstance()->get(
+            StockRegistryInterface::class
+        );
         parent::__construct(
             $entityFactory,
             $logger,
@@ -821,6 +839,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * Set flag for adding data about stock items for each product.
+     *
+     * @return $this
+     */
+    public function addStockDataToResult()
+    {
+        $this->needToAddStockDataToResult = true;
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function load($printQuery = false, $logQuery = false)
@@ -833,6 +862,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($this->needToAddWebsiteNamesToResult) {
             $this->doAddWebsiteNamesToResult();
         }
+
+        if ($this->needToAddStockDataToResult) {
+            $this->doAddStockDataToResult();
+        }
+
         return $this;
     }
 
@@ -875,6 +909,22 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $product->setData('website_ids', $productWebsites[$product->getId()]);
             }
         }
+        return $this;
+    }
+
+    /**
+     * Adding information about stock item to each product.
+     *
+     * @return $this
+     */
+    protected function doAddStockDataToResult()
+    {
+        foreach ($this as &$product) {
+            $productExtension = $product->getExtensionAttributes();
+            $productExtension->setStockItem($this->stockRegistry->getStockItem($product->getId()));
+            $product->setExtensionAttributes($productExtension);
+        }
+
         return $this;
     }
 

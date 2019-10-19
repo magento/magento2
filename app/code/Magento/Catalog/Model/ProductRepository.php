@@ -628,6 +628,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
+        $collection->addStockDataToResult();
+
         $collection->load();
 
         $collection->addCategoryIds();
