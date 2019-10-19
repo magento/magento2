@@ -28,17 +28,25 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     protected $_coreRegistry;
 
     /**
+     * @var \Magento\Sales\Helper\Reorder
+     */
+    protected $_reorderHelper;
+
+    /**
      * @param Action\Context $context
      * @param OrderLoaderInterface $orderLoader
      * @param Registry $registry
+     * @param \Magento\Sales\Helper\Reorder $reorderHelper
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
-        Registry $registry
+        Registry $registry,
+        \Magento\Sales\Helper\Reorder $reorderHelper
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
+        $this->_reorderHelper = $reorderHelper;
         parent::__construct($context);
     }
 
@@ -57,8 +65,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $reorderHelper =  $this->_objectManager->get(\Magento\Sales\Helper\Reorder::class);
-        if (!$reorderHelper->canReorder($order->getEntityId())) {
+        if (!$this->_reorderHelper->canReorder($order->getEntityId())) {
             $this->messageManager->addErrorMessage(__("Reorder not available."));
             return $resultRedirect->setPath('checkout/cart');
         }
