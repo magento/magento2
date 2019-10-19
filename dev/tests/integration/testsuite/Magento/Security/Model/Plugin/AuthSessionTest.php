@@ -156,6 +156,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
 
         $expireDate = new \DateTime();
         $expireDate->modify('-10 days');
+        /** @var \Magento\User\Model\User $user */
         $user = $this->objectManager->create(\Magento\User\Model\User::class);
         $user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $userExpirationFactory = $this->objectManager->create(\Magento\Security\Model\UserExpirationFactory::class);
@@ -178,5 +179,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
         $this->adminSessionInfo->load($sessionId, 'session_id');
         $this->authSession->prolong();
         static::assertFalse($this->auth->isLoggedIn());
+        $user->reload();
+        static::assertFalse((bool)$user->getIsActive());
     }
 }

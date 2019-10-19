@@ -79,7 +79,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpirationManager::class,
-            ['isUserExpired']
+            ['isUserExpired', 'deactivateExpiredUsers']
         );
 
         $this->userMock = $this->createMock(\Magento\User\Model\User::class);
@@ -188,26 +188,30 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             ->method('isLoggedInStatus')
             ->willReturn(true);
 
-        $this->authSessionMock->expects($this->once())
+        $this->authSessionMock->expects($this->exactly(2))
             ->method('getUser')
             ->willReturn($this->userMock);
 
-        $this->userMock->expects($this->once())
+        $this->userMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($adminUserId);
+
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('isAjax')
+            ->willReturn(false);
 
         $this->userExpirationManagerMock->expects($this->once())
             ->method('isUserExpired')
             ->with($adminUserId)
             ->willReturn(true);
 
+        $this->userExpirationManagerMock->expects($this->once())
+            ->method('deactivateExpiredUsers')
+            ->with([$adminUserId]);
+
         $this->authSessionMock->expects($this->once())
             ->method('destroy');
-
-        $this->requestMock->expects($this->once())
-            ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(false);
 
         $this->adminSessionsManagerMock->expects($this->once())
             ->method('getLogoutReasonMessage')
