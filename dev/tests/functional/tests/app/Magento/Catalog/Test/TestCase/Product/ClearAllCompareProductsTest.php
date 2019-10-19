@@ -42,6 +42,7 @@ class ClearAllCompareProductsTest extends AbstractCompareProductsTest
     public function test($products, ConfigData $config, CustomerAccountIndex $customerAccountIndex)
     {
         // Preconditions
+        $this->envWhitelist->addHost('example.com');
         $config->persist();
         $products = $this->createProducts($products);
 
@@ -51,5 +52,13 @@ class ClearAllCompareProductsTest extends AbstractCompareProductsTest
         $this->addProducts($products);
         $this->cmsIndex->getLinksBlock()->openLink("My Account");
         $customerAccountIndex->getCompareProductsBlock()->clickClearAll();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }

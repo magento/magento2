@@ -96,10 +96,10 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function checkInteraction($interactionType)
     {
-        $dialog = $this->createMock(\Symfony\Component\Console\Helper\DialogHelper::class);
+        $dialog = $this->createMock(\Symfony\Component\Console\Helper\QuestionHelper::class);
         $dialog
             ->expects($this->once())
-            ->method('askConfirmation')
+            ->method('ask')
             ->will($this->returnValue($interactionType));
 
         /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
@@ -107,7 +107,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $helperSet
             ->expects($this->once())
             ->method('get')
-            ->with('dialog')
+            ->with('question')
             ->will($this->returnValue($dialog));
         $this->command->setHelperSet($helperSet);
 

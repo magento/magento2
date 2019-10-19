@@ -220,7 +220,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Disable fields if they are using default values.
+     * Add 'use default checkbox' to attributes that can have it.
      *
      * @param Category $category
      * @param array $meta
@@ -564,7 +564,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * List of fields groups and fields.
+     * List form field sets and fields.
      *
      * @return array
      * @since 101.0.0

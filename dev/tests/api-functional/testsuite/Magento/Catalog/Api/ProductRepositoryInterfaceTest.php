@@ -14,6 +14,7 @@ use Magento\Downloadable\Model\Link;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -89,9 +90,26 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         parent::setUp();
 
-        $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
-        $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
-        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['example.com']);
+        $this->roleFactory = $objectManager->get(RoleFactory::class);
+        $this->rulesFactory = $objectManager->get(RulesFactory::class);
+        $this->adminTokens = $objectManager->get(AdminTokenServiceInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['example.com']);
     }
 
     /**

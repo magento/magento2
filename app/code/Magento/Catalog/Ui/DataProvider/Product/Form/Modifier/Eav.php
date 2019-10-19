@@ -677,6 +677,7 @@ class Eav extends AbstractModifier
             'scopeLabel' => $this->getScopeLabel($attribute),
             'globalScope' => $this->isScopeGlobal($attribute),
             'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
+            '__disableTmpl' => ['label' => true, 'code' => true]
         ]);
         $product = $this->locator->getProduct();
 
@@ -838,6 +839,7 @@ class Eav extends AbstractModifier
                 'breakLine' => false,
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'required' => $attribute->getIsRequired(),
+                '__disableTmpl' => ['label' => true]
             ]
         );
 

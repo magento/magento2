@@ -79,6 +79,7 @@ class PostDataProcessor
      *
      * @param array $data
      * @return bool     Return FALSE if some item is invalid
+     * @deprecated
      */
     public function validate($data)
     {
@@ -139,7 +140,7 @@ class PostDataProcessor
             if (!empty($data['layout_update_xml']) && !$layoutXmlValidator->isValid($data['layout_update_xml'])) {
                 return false;
             }
-
+            
             if (!empty($data['custom_layout_update_xml']) &&
                 !$layoutXmlValidator->isValid($data['custom_layout_update_xml'])
             ) {

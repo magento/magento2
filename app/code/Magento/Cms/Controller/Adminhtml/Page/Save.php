@@ -110,7 +110,7 @@ class Save extends \Magento\Backend\App\Action
                     ['page' => $model, 'request' => $this->getRequest()]
                 );
 
-                $this->savePage($model);
+                $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 $this->dataPersistor->clear('cms_page');
                 if ($this->getRequest()->getParam('back')) {
@@ -127,20 +127,5 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['page_id' => $this->getRequest()->getParam('page_id')]);
         }
         return $resultRedirect->setPath('*/*/');
-    }
-
-    /**
-     * Save the page.
-     *
-     * @param Page $page
-     * @return void
-     * @throws \Throwable
-     */
-    private function savePage(Page $page): void
-    {
-        if (!$this->dataProcessor->validate($page->getData())) {
-            throw new \InvalidArgumentException('Page is invalid');
-        }
-        $this->pageRepository->save($page);
     }
 }
