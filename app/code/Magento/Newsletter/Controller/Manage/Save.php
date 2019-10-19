@@ -94,7 +94,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                     ->getParam('is_subscribed', false);
                 if ($isSubscribedParam !== $isSubscribedState) {
                     // No need to validate customer and customer address while saving subscription preferences
-                    $this->setIgnoreValidationFlag($customer);
+                    $customer->setData('ignore_validation_flag', true);
                     $this->customerRepository->save($customer);
                     if ($isSubscribedParam) {
                         $subscribeModel = $this->subscriberFactory->create()
@@ -118,16 +118,5 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
             }
         }
         return $this->_redirect('customer/account/');
-    }
-
-    /**
-     * Set ignore_validation_flag to skip unnecessary address and customer validation
-     *
-     * @param CustomerInterface $customer
-     * @return void
-     */
-    private function setIgnoreValidationFlag(CustomerInterface $customer): void
-    {
-        $customer->setData('ignore_validation_flag', true);
     }
 }
