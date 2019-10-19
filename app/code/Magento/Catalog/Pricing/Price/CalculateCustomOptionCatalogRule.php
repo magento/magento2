@@ -53,24 +53,31 @@ class CalculateCustomOptionCatalogRule
         float $optionPriceValue,
         bool $isPercent
     ): float {
-        $basePrice = $this->getGetBasePriceWithOutCatalogRules($product);
-        if ($isPercent) {
-            $optionPrice = $basePrice * $optionPriceValue / 100;
+        $regularPrice = (float)$product->getPriceInfo()
+            ->getPrice(RegularPrice::PRICE_CODE)
+            ->getValue();
+        $catalogRulePrice = $this->priceModifier->modifyPrice(
+            $regularPrice,
+            $product
+        );
+        $basePriceWithOutCatalogRules = (float)$this->getGetBasePriceWithOutCatalogRules($product);
+        // Apply catalog price rules to product options only if catalog price rules are applied to product.
+        if ($catalogRulePrice < $basePriceWithOutCatalogRules) {
+            $optionPrice = $this->getOptionPriceWithoutPriceRule($optionPriceValue, $isPercent, $regularPrice);
+            $totalCatalogRulePrice = $this->priceModifier->modifyPrice(
+                $regularPrice + $optionPrice,
+                $product
+            );
+            $finalOptionPrice = $totalCatalogRulePrice - $catalogRulePrice;
         } else {
-            $optionPrice = $optionPriceValue;
+            $finalOptionPrice = $this->getOptionPriceWithoutPriceRule(
+                $optionPriceValue,
+                $isPercent,
+                $this->getGetBasePriceWithOutCatalogRules($product)
+            );
         }
 
-        $totalPriceModified = $this->priceModifier->modifyPrice(
-            $basePrice + $optionPrice,
-            $product
-        );
-        $basePriceModified = $this->priceModifier->modifyPrice(
-            $basePrice,
-            $product
-        );
-        $price = $totalPriceModified - $basePriceModified;
-
-        return $this->priceCurrency->convertAndRound($price);
+        return $this->priceCurrency->convertAndRound($finalOptionPrice);
     }
 
     /**
@@ -95,5 +102,18 @@ class CalculateCustomOptionCatalogRule
         }
 
         return $basePrice ?? $product->getPrice();
+    }
+
+    /**
+     * Calculate option price without catalog price rule discount.
+     *
+     * @param float $optionPriceValue
+     * @param bool $isPercent
+     * @param float $basePrice
+     * @return float
+     */
+    private function getOptionPriceWithoutPriceRule(float $optionPriceValue, bool $isPercent, float $basePrice): float
+    {
+        return $isPercent ? $basePrice * $optionPriceValue / 100 : $optionPriceValue;
     }
 }
