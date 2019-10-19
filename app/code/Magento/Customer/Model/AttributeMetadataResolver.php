@@ -280,7 +280,7 @@ class AttributeMetadataResolver
      * Change prefix and suffix to select with correct options if configured
      *
      * @param AttributeInterface $attribute
-     * @param $meta
+     * @param array $meta
      * @param int|null $websiteId
      * @throws NoSuchEntityException
      * @throws LocalizedException
