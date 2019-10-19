@@ -144,7 +144,7 @@
                 </select>
             </formElements>
         </field>
-        <field name="prefix" formElement="input">
+        <field name="prefix">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -237,7 +237,7 @@
                 <dataType>text</dataType>
             </settings>
         </field>
-        <field name="suffix" formElement="input">
+        <field name="suffix">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>

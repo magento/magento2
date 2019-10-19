@@ -126,7 +126,7 @@
                 </checkbox>
             </formElements>
         </field>
-        <field name="prefix" sortOrder="10" formElement="input">
+        <field name="prefix" sortOrder="10">
             <settings>
                 <dataType>text</dataType>
                 <visible>true</visible>
@@ -153,7 +153,7 @@
                 </validation>
             </settings>
         </field>
-        <field name="suffix" sortOrder="40" formElement="input">
+        <field name="suffix" sortOrder="40">
             <settings>
                 <dataType>text</dataType>
                 <visible>true</visible>
