@@ -108,7 +108,9 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockStatus($productId, $scopeId = null)
     {
-        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        if (!$scopeId) {
+            $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        }
         return $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
     }
 
