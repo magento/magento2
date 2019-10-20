@@ -314,11 +314,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Flag to add stock data to result
      *
      * @var bool
+     * @since 101.1.0
      */
     protected $needToAddStockDataToResult;
 
     /**
      * @var StockRegistryInterface
+     * @since 101.1.0
      */
     protected $stockRegistry;
 
@@ -842,6 +844,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Set flag for adding data about stock items for each product.
      *
      * @return $this
+     * @since 101.1.0
      */
     public function addStockDataToResult()
     {
@@ -916,6 +919,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Adding information about stock item to each product.
      *
      * @return $this
+     * @since 101.1.0
      */
     protected function doAddStockDataToResult()
     {
