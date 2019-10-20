@@ -28,6 +28,17 @@ define([
             this._super();
 
             this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
+            /* Unescape <a> tag to display correct HTML messages */
+            this.cookieMessages.forEach(function (value) {
+                if (value.text.match(/&lt;a(.*?)&gt;/g)) {
+                    value.text.match(/&lt;a(.*?)&gt;/g).forEach(function (tagMatch) {
+                        value.text = value.text.replace(tagMatch, _.unescape(tagMatch));
+                    });
+                    value.text = value.text.replace('&lt;/a&gt;', '</a>');
+                }
+
+                return value;
+            });
             this.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
             });
