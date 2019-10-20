@@ -235,11 +235,13 @@ class RulesApplier
             $discount->setBaseAmount($discountData->getBaseAmount());
             $discount->setOriginalAmount($discountData->getOriginalAmount());
             $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
+            $data = [
+                'discount' => $discount,
+                'rule' => $ruleLabel,
+                'rule_id' => $rule->getId(),
+            ];
             /** @var \Magento\SalesRule\Model\Data\RuleDiscount $itemDiscount */
-            $itemDiscount = $this->discountInterfaceFactory->create();
-            $itemDiscount->setDiscountData($discount);
-            $itemDiscount->setRuleLabel($ruleLabel);
-            $itemDiscount->setRuleID($rule->getId());
+            $itemDiscount = $this->discountInterfaceFactory->create(['data' => $data]);
             $this->discountAggregator[] = $itemDiscount;
             $item->getExtensionAttributes()->setDiscounts($this->discountAggregator);
         }

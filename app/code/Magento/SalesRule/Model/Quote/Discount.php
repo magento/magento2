@@ -280,11 +280,13 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $discountData->setAmount($discount->getAmount());
                     $discountData->setOriginalAmount($discount->getOriginalAmount());
                     $discountData->setBaseOriginalAmount($discount->getBaseOriginalAmount());
+                    $data = [
+                        'discount' => $discountData,
+                        'rule' => $ruleLabel,
+                        'rule_id' => $ruleID,
+                    ];
                     /** @var \Magento\SalesRule\Model\Data\RuleDiscount $cartDiscount */
-                    $cartDiscount = $this->discountInterfaceFactory->create();
-                    $cartDiscount->setDiscountData($discountData);
-                    $cartDiscount->setRuleLabel($ruleLabel);
-                    $cartDiscount->setRuleID($ruleID);
+                    $cartDiscount = $this->discountInterfaceFactory->create(['data' => $data]);
                     $addressDiscountAggregator[$ruleID] = $cartDiscount;
                 }
             }

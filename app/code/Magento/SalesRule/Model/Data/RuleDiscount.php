@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Data;
 
+use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Api\Data\RuleDiscountInterface;
-use Magento\SalesRule\Api\Data\DiscountDataInterface;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 
 /**
@@ -23,9 +23,9 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * Get Discount Data
      *
-     * @return DiscountDataInterface
+     * @return Data
      */
-    public function getDiscountData(): DiscountDataInterface
+    public function getDiscountData()
     {
         return $this->_get(self::KEY_DISCOUNT_DATA);
     }
@@ -35,31 +35,9 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
      *
      * @return string
      */
-    public function getRuleLabel(): ?string
+    public function getRuleLabel()
     {
         return $this->_get(self::KEY_RULE_LABEL);
-    }
-
-    /**
-     * Set Discount Data
-     *
-     * @param DiscountDataInterface $discountData
-     * @return RuleDiscount
-     */
-    public function setDiscountData(DiscountDataInterface $discountData)
-    {
-        return $this->setData(self::KEY_DISCOUNT_DATA, $discountData);
-    }
-
-    /**
-     * Set Rule Label
-     *
-     * @param string $ruleLabel
-     * @return RuleDiscount
-     */
-    public function setRuleLabel(string $ruleLabel)
-    {
-        return $this->setData(self::KEY_RULE_LABEL, $ruleLabel);
     }
 
     /**
@@ -67,20 +45,9 @@ class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject imple
      *
      * @return int
      */
-    public function getRuleID(): ?int
+    public function getRuleID()
     {
         return $this->_get(self::KEY_RULE_ID);
-    }
-
-    /**
-     * Set Rule ID
-     *
-     * @param int $ruleID
-     * @return RuleDiscount
-     */
-    public function setRuleID(int $ruleID)
-    {
-        return $this->setData(self::KEY_RULE_ID, $ruleID);
     }
 
     /**

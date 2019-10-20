@@ -9,52 +9,28 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Api\Data;
 
 /**
- * @api
+ * Rule discount Interface
  */
 interface RuleDiscountInterface
 {
     /**
      * Get Discount Data
      *
-     * @return \Magento\SalesRule\Api\Data\DiscountDataInterface
+     * @return mixed | \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
-    public function getDiscountData(): DiscountDataInterface;
-
-    /**
-     * Set discount data
-     *
-     * @param DiscountDataInterface $discountData
-     * @return $this
-     */
-    public function setDiscountData(DiscountDataInterface $discountData);
-
-    /**
-     * Set Rule Label
-     *
-     * @param string $ruleLabel
-     * @return $this
-     */
-    public function setRuleLabel(string $ruleLabel);
+    public function getDiscountData();
 
     /**
      * Get Rule Label
      *
      * @return string
      */
-    public function getRuleLabel(): ?string;
-
-    /**
-     * Set Rule Id
-     *
-     * @param int $ruleID
-     * @return $this
-     */
-    public function setRuleID(int $ruleID);
+    public function getRuleLabel();
 
     /**
      * Get Rule ID
      *
      * @return int
      */
-    public function getRuleID(): ?int;
+    public function getRuleID();
 }
