@@ -89,7 +89,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
     public function prepareExportData()
     {
         try {
-            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
 
             $this->prepareDirectory($tmpDirectory, $this->getTmpFilesDirRelativePath());
             $this->reportWriter->write($tmpDirectory, $this->getTmpFilesDirRelativePath());
@@ -157,7 +157,9 @@ class ExportDataHandler implements ExportDataHandlerInterface
     private function prepareFileDirectory(WriteInterface $directory, $path)
     {
         $directory->delete($path);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (dirname($path) !== '.') {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $directory->create(dirname($path));
         }
 
@@ -176,6 +178,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
         $this->archive->pack(
             $source,
             $destination,
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             is_dir($source) ?: false
         );
 

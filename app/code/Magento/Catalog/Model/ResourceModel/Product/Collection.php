@@ -1645,6 +1645,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         } else {
             return parent::addAttributeToFilter($attribute, $condition, $joinType);
         }
+
+        return $this;
     }
 
     /**
@@ -2163,13 +2165,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $firstCategory = array_shift($categories);
         if ($firstCategory['is_anchor'] == 1) {
-            $anchorCategory[] = (int)$firstCategory['entity_id'];
+            $linkField = $this->getProductEntityMetadata()->getLinkField();
+            $anchorCategory[] = (int)$firstCategory[$linkField];
             foreach ($categories as $category) {
                 if (in_array($category['parent_id'], $categoryIds)
                     && in_array($category['parent_id'], $anchorCategory)) {
-                    $categoryIds[] = (int)$category['entity_id'];
+                    $categoryIds[] = (int)$category[$linkField];
                     if ($category['is_anchor'] == 1) {
-                        $anchorCategory[] = (int)$category['entity_id'];
+                        $anchorCategory[] = (int)$category[$linkField];
                     }
                 }
             }

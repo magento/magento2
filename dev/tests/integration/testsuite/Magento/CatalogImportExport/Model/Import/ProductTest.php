@@ -24,10 +24,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
-use Magento\ImportExport\Model\Import\Source\Csv;
 
 /**
  * Class ProductTest
@@ -1744,7 +1744,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
-
+        $listOfProductUrlKeys = [
+            sprintf('%s.html', $product->getUrlKey()),
+            sprintf('men/tops/%s.html', $product->getUrlKey()),
+            sprintf('men/%s.html', $product->getUrlKey())
+        ];
         $repUrlRewriteCol = $this->objectManager->create(
             UrlRewriteCollection::class
         );
@@ -1754,18 +1758,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
             ->addFieldToFilter('entity_type', ['eq'=> 'product'])
             ->load();
+        $listOfUrlRewriteIds = $collUrlRewrite->getAllIds();
+        $this->assertCount(3, $collUrlRewrite);
 
-        $this->assertCount(2, $collUrlRewrite);
-
-        $this->assertEquals(
-            sprintf('%s.html', $product->getUrlKey()),
-            $collUrlRewrite->getFirstItem()->getRequestPath()
-        );
-
-        $this->assertContains(
-            sprintf('men/tops/%s.html', $product->getUrlKey()),
-            $collUrlRewrite->getLastItem()->getRequestPath()
-        );
+        foreach ($listOfUrlRewriteIds as $key => $id) {
+            $this->assertEquals(
+                $listOfProductUrlKeys[$key],
+                $collUrlRewrite->getItemById($id)->getRequestPath()
+            );
+        }
     }
 
     /**
