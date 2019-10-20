@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Data;
 
 use Magento\SalesRule\Model\Rule\Action\Discount\Data;
-use Magento\SalesRule\Api\Data\RuleDiscountInterface;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 
 /**

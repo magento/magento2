@@ -7,7 +7,7 @@ namespace Magento\SalesRule\Model\Quote;
 
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Framework\App\ObjectManager;
-use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
+use Magento\SalesRule\Model\Data\RuleDiscountInterfaceFactory;
 
 /**
  * Discount totals calculation model.

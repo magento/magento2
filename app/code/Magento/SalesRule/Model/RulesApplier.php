@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
-use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
+use Magento\SalesRule\Model\Data\RuleDiscountInterfaceFactory;
 
 /**
  * Class RulesApplier
