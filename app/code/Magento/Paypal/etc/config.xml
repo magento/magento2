@@ -164,7 +164,6 @@
                 <title>Credit Card (Payflow Advanced)</title>
                 <partner>PayPal</partner>
                 <vendor>PayPal</vendor>
-                <user>PayPal</user>
                 <csc_required>1</csc_required>
                 <csc_editable>1</csc_editable>
                 <url_method>GET</url_method>
