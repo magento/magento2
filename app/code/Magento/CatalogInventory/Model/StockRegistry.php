@@ -68,6 +68,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve stock by scope id
+     * 
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
@@ -78,6 +80,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve stock item
+     * 
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
@@ -89,6 +93,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve stock item by sku
+     * 
      * @param string $productSku
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
@@ -102,6 +108,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve stock status by sku
+     * 
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -115,6 +123,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve stock status by sku
+     * 
      * @param string $productSku
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -129,6 +139,7 @@ class StockRegistry implements StockRegistryInterface
 
     /**
      * Retrieve Product stock status
+     * 
      * @param int $productId
      * @param int $scopeId
      * @return int
@@ -141,6 +152,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve Product stock status by sku
+     * 
      * @param string $productSku
      * @param null $scopeId
      * @return int
@@ -184,6 +197,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Retrieve product by sku
+     * 
      * @param string $productSku
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
