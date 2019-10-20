@@ -688,6 +688,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Exception $e
     ): void {
+        $eventName = "sales_model_service_quote_submit_failure";
         try {
             if (!empty($this->addressesToSync)) {
                 foreach ($this->addressesToSync as $addressId) {
@@ -695,7 +696,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 }
             }
             $this->eventManager->dispatch(
-                'sales_model_service_quote_submit_failure',
+                $eventName,
                 [
                     'order' => $order,
                     'quote' => $quote,
@@ -705,7 +706,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
-                "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
+                "An exception occurred on '%s' event: %s",
+                $eventName,
                 $consecutiveException->getMessage()
             );
             // phpcs:ignore Magento2.Exceptions.DirectThrow
