@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Data;
 
 use Magento\SalesRule\Api\Data\DiscountDataInterface;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 
 /**
  * Discount Data Model
@@ -102,5 +103,27 @@ class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject imple
     public function setBaseOriginalAmount(float $amount)
     {
         return $this->setData(self::BASE_ORIGINAL_AMOUNT, $amount);
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return ExtensionAttributesInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param ExtensionAttributesInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        ExtensionAttributesInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
