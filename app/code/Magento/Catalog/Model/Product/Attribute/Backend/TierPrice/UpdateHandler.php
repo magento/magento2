@@ -134,7 +134,7 @@ class UpdateHandler extends AbstractHandler
     {
         $isChanged = false;
         foreach ($valuesToUpdate as $key => $value) {
-            if ((!is_null($value['value'])
+            if ((($value['value']) !== NULL
                     && (float)$oldValues[$key]['price'] !== $this->localeFormat->getNumber($value['value'])
                 ) || $this->getPercentage($oldValues[$key]) !== $this->getPercentage($value)
             ) {
