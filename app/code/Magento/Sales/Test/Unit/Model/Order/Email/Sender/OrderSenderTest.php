@@ -63,6 +63,9 @@ class OrderSenderTest extends AbstractSenderTest
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Processing';
+        $isNotVirtual = true;
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -103,6 +106,22 @@ class OrderSenderTest extends AbstractSenderTest
                     ->with(2)
                     ->willReturn($createdAtFormatted);
 
+                $this->orderMock->expects($this->any())
+                    ->method('getCustomerName')
+                    ->willReturn($customerName);
+
+                $this->orderMock->expects($this->once())
+                    ->method('getIsNotVirtual')
+                    ->willReturn($isNotVirtual);
+
+                $this->orderMock->expects($this->once())
+                    ->method('getEmailCustomerNote')
+                    ->willReturn('');
+
+                $this->orderMock->expects($this->once())
+                    ->method('getFrontendStatusLabel')
+                    ->willReturn($frontendStatusLabel);
+
                 $this->templateContainerMock->expects($this->once())
                     ->method('setTemplateVars')
                     ->with(
@@ -113,7 +132,14 @@ class OrderSenderTest extends AbstractSenderTest
                             'store' => $this->storeMock,
                             'formattedShippingAddress' => $address,
                             'formattedBillingAddress' => $address,
-                            'created_at_formatted'=>$createdAtFormatted
+                            'created_at_formatted'=>$createdAtFormatted,
+                            'order_data' => [
+                                'customer_name' => $customerName,
+                                'is_not_virtual' => $isNotVirtual,
+                                'email_customer_note' => '',
+                                'frontend_status_label' => $frontendStatusLabel
+                            ]
+
                         ]
                     );
 
@@ -213,6 +239,9 @@ class OrderSenderTest extends AbstractSenderTest
         $address = 'address_test';
         $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Complete';
+        $isNotVirtual = false;
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -245,6 +274,22 @@ class OrderSenderTest extends AbstractSenderTest
             ->with(2)
             ->willReturn($createdAtFormatted);
 
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+
+        $this->orderMock->expects($this->once())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
+
+        $this->orderMock->expects($this->once())
+            ->method('getEmailCustomerNote')
+            ->willReturn('');
+
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
+
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -255,7 +300,13 @@ class OrderSenderTest extends AbstractSenderTest
                     'store' => $this->storeMock,
                     'formattedShippingAddress' => $expectedShippingAddress,
                     'formattedBillingAddress' => $address,
-                    'created_at_formatted'=>$createdAtFormatted
+                    'created_at_formatted'=>$createdAtFormatted,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'is_not_virtual' => $isNotVirtual,
+                        'email_customer_note' => '',
+                        'frontend_status_label' => $frontendStatusLabel
+                    ]
                 ]
             );
 

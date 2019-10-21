@@ -98,7 +98,8 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
                 'getCustomerEmail', 'getShippingAddress', 'setSendEmail',
-                'setEmailSent', 'getCreatedAtFormatted'
+                'setEmailSent', 'getCreatedAtFormatted', 'getIsNotVirtual',
+                'getEmailCustomerNote', 'getFrontendStatusLabel'
             ]
         );
         $this->orderMock->expects($this->any())

@@ -55,7 +55,7 @@
                         <h3>{{trans "Billing Info"}}</h3>
                         <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
-                    {{depend order.is_not_virtual}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="address-details">
                         <h3>{{trans "Shipping Info"}}</h3>
                         <p>{{var formattedShippingAddress|raw}}</p>
@@ -67,7 +67,7 @@
                         <h3>{{trans "Payment Method"}}</h3>
                         {{var payment_html|raw}}
                     </td>
-                    {{depend order.is_not_virtual}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="method-info">
                         <h3>{{trans "Shipping Method"}}</h3>
                         <p>{{var order.shipping_description}}</p>
