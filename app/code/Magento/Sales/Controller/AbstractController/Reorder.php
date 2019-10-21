@@ -30,7 +30,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     /**
      * @var \Magento\Sales\Helper\Reorder
      */
-    protected $_reorderHelper;
+    protected $reorderHelper;
 
     /**
      * @param Action\Context $context
@@ -46,7 +46,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
-        $this->_reorderHelper = $reorderHelper;
+        $this->reorderHelper = $reorderHelper ?? $this->_objectManager->get(\Magento\Sales\Helper\Reorder::class);
         parent::__construct($context);
     }
 
