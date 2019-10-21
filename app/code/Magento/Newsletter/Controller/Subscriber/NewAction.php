@@ -34,7 +34,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * @var CustomerAccountManagement
      */
-    protected $customerAccountManagement;
+    private $customerAccountManagement;
 
     /**
      * @var EmailValidator
@@ -87,9 +87,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      */
     protected function validateEmailAvailable($email)
     {
-        $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if ($this->_customerSession->isLoggedIn()
-            && ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
+        $websiteId = $this->storeManager->getStore()->getWebsiteId();
+        if ($this->customerSession->isLoggedIn()
+            && ($this->customerSession->getCustomerDataObject()->getEmail() !== $email
             && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId))
         ) {
             throw new LocalizedException(
@@ -111,12 +111,12 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                     Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
                     ScopeInterface::SCOPE_STORE
                 ) != 1
-            && !$this->_customerSession->isLoggedIn()
+            && !$this->customerSession->isLoggedIn()
         ) {
             throw new LocalizedException(
                 __(
                     'Sorry, but the administrator denied subscription for guests. Please <a href="%1">register</a>.',
-                    $this->_customerUrl->getRegisterUrl()
+                    $this->customerUrl->getRegisterUrl()
                 )
             );
         }

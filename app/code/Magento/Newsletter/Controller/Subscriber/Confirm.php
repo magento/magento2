@@ -27,7 +27,7 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber implements HttpG
 
         if ($id && $code) {
             /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
-            $subscriber = $this->_subscriberFactory->create()->load($id);
+            $subscriber = $this->subscriberFactory->create()->load($id);
 
             if ($subscriber->getId() && $subscriber->getCode()) {
                 if ($subscriber->confirm($code)) {
@@ -41,7 +41,7 @@ class Confirm extends \Magento\Newsletter\Controller\Subscriber implements HttpG
         }
         /** @var \Magento\Framework\Controller\Result\Redirect $redirect */
         $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
-        $redirectUrl = $this->_storeManager->getStore()->getBaseUrl();
+        $redirectUrl = $this->storeManager->getStore()->getBaseUrl();
         return $redirect->setUrl($redirectUrl);
     }
 }

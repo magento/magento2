@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * Newsletter subscribe controller
+ */
 namespace Magento\Newsletter\Controller;
 
 use Magento\Framework\App\Action\Context;
@@ -15,9 +19,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\UrlInterface;
 
-/**
- * Newsletter subscribe controller
- */
 abstract class Subscriber extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -30,34 +31,34 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
      *
      * @var Session
      */
-    protected $_customerSession;
+    protected $customerSession;
 
     /**
      * Subscriber factory
      *
      * @var SubscriberFactory
      */
-    protected $_subscriberFactory;
+    protected $subscriberFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * @var CustomerUrl
      */
-    protected $_customerUrl;
+    protected $customerUrl;
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var UrlInterface
      */
-    protected $_url;
+    private $url;
 
     /**
      * @param Context $context
@@ -78,12 +79,12 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
         UrlInterface $url
     ) {
         parent::__construct($context);
-        $this->_storeManager = $storeManager;
-        $this->_subscriberFactory = $subscriberFactory;
-        $this->_customerSession = $customerSession;
-        $this->_customerUrl = $customerUrl;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_url = $url;
+        $this->storeManager = $storeManager;
+        $this->subscriberFactory = $subscriberFactory;
+        $this->customerSession = $customerSession;
+        $this->customerUrl = $customerUrl;
+        $this->scopeConfig = $scopeConfig;
+        $this->url = $url;
     }
 
     /**
@@ -94,17 +95,17 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_scopeConfig->getValue(
+        if (!$this->scopeConfig->getValue(
             self::XML_PATH_NEWSLETTER_ACTIVE,
             ScopeInterface::SCOPE_STORE
         )
         ) {
-            $defaultNoRouteUrl = $this->_scopeConfig->getValue(
+            $defaultNoRouteUrl = $this->scopeConfig->getValue(
                 'web/default/no_route',
                 ScopeInterface::SCOPE_STORE
             );
 
-            $redirectUrl = $this->_url->getUrl($defaultNoRouteUrl);
+            $redirectUrl = $this->url->getUrl($defaultNoRouteUrl);
             return $this->resultRedirectFactory
                         ->create()
                         ->setUrl($redirectUrl);
