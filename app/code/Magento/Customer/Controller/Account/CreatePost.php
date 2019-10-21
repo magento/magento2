@@ -162,8 +162,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @param CustomerExtractor $customerExtractor
      * @param DataObjectHelper $dataObjectHelper
      * @param AccountRedirect $accountRedirect
-     * @param CustomerRepository $customerRepository
      * @param Validator $formKeyValidator
+     * @param CustomerRepository $customerRepository
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -187,7 +187,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
         Validator $formKeyValidator = null,
-        CustomerRepository $customerRepository = null,
+        CustomerRepository $customerRepository = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
