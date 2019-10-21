@@ -570,39 +570,34 @@ QUERY;
 
         $query = <<<QUERY
     {
-  category(id: {$categoryId}) {
+categoryList(filters: {ids: {in: ["$categoryId"]}}) {
+    id
+  name
+  url_key
+  image
+  children {
     id
     name
     url_key
     image
-    children {
-      id
-      name
-      url_key
-      image
-    }
   }
+
+ }
 }
 QUERY;
 
         $response = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $response);
-        $this->assertNotEmpty($response['category']);
-        $category = $response['category'];
-        $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl();
-        $expectedImageUrl = str_replace(
-            'index.php',
-            'pub/media',
-            rtrim($storeBaseUrl, '/')
-        )
-            . '/'
-            . ltrim($categoryModel->getImage(), '/');
+        $this->assertNotEmpty($response['categoryList']);
+        $categoryList = $response['categoryList'];
+        $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl('media');
+        $expectedImageUrl = rtrim($storeBaseUrl, '/'). '/' . ltrim($categoryModel->getImage(), '/');
 
-        $this->assertEquals($categoryId, $category['id']);
-        $this->assertEquals('Parent Image Category', $category['name']);
-        $this->assertEquals($expectedImageUrl, $category['image']);
+        $this->assertEquals($categoryId, $categoryList[0]['id']);
+        $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
+        $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
 
-        $childCategory = $category['children'][0];
+        $childCategory = $categoryList[0]['children'][0];
         $this->assertEquals('Child Image Category', $childCategory['name']);
         $this->assertEquals($expectedImageUrl, $childCategory['image']);
     }
