@@ -21,24 +21,31 @@ use Magento\Framework\UrlInterface;
 class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
+     * Customer session
+     *
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
+
+    /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
-    protected $formKeyValidator;
+    private $formKeyValidator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var CustomerRepository
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
      */
-    protected $subscriberFactory;
+    private $subscriberFactory;
 
     /**
      * Initialize dependencies.
@@ -62,6 +69,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
         CustomerRepository $customerRepository,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
     ) {
+        $this->customerSession = $customerSession;
         $this->storeManager = $storeManager;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerRepository = $customerRepository;
@@ -80,7 +88,7 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
             return $this->_redirect('customer/account/');
         }
 
-        $customerId = $this->_customerSession->getCustomerId();
+        $customerId = $this->customerSession->getCustomerId();
         if ($customerId === null) {
             $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
         } else {

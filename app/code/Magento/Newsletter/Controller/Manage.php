@@ -25,17 +25,17 @@ abstract class Manage extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    private $customerSession;
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var UrlInterface
      */
-    protected $_url;
+    private $url;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -50,9 +50,9 @@ abstract class Manage extends \Magento\Framework\App\Action\Action
         UrlInterface $url
     ) {
         parent::__construct($context);
-        $this->_customerSession = $customerSession;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_url = $url;
+        $this->customerSession = $customerSession;
+        $this->scopeConfig = $scopeConfig;
+        $this->url = $url;
     }
 
     /**
@@ -63,23 +63,23 @@ abstract class Manage extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_scopeConfig->getValue(
+        if (!$this->scopeConfig->getValue(
             self::XML_PATH_NEWSLETTER_ACTIVE,
             ScopeInterface::SCOPE_STORE
         )
         ) {
-            $defaultNoRouteUrl = $this->_scopeConfig->getValue(
+            $defaultNoRouteUrl = $this->scopeConfig->getValue(
                 'web/default/no_route',
                 ScopeInterface::SCOPE_STORE
             );
 
-            $redirectUrl = $this->_url->getUrl($defaultNoRouteUrl);
+            $redirectUrl = $this->url->getUrl($defaultNoRouteUrl);
             return $this->resultRedirectFactory
                         ->create()
                         ->setUrl($redirectUrl);
         }
 
-        if (!$this->_customerSession->authenticate()) {
+        if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
         return parent::dispatch($request);
