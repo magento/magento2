@@ -100,7 +100,6 @@ class AttributeSetGroupsTest extends TestCase
     /**
      * Check that custom group for custom attribute set not added to product form modifier meta data.
      *
-     * @magentoDataFixture Magento/Catalog/_files/attribute_set_based_on_default_with_custom_group.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_test_attribute_set.php
      *
      * @magentoDbIsolation disabled

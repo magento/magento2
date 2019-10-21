@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+require __DIR__ . '/attribute_set_based_on_default_with_custom_group.php';
+
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
