@@ -9,7 +9,6 @@ define([
     'Magento_Ui/js/modal/prompt',
     'Magento_Ui/js/modal/alert'
 ], function ($, Form, prompt, alert) {
-    'use strict';
 
     return Form.extend({
         defaults: {
