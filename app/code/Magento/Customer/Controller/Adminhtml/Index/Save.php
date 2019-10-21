@@ -354,7 +354,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->_getSession()->unsCustomerFormData();
                 // Done Saving customer, finish save action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
-                $this->messageManager->addSuccess(__('You saved the customer.'));
+                $this->messageManager->addSuccessMessage(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             } catch (\Magento\Framework\Validator\Exception $exception) {
                 $messages = $exception->getMessages();
@@ -378,7 +378,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
+                $this->messageManager->addExceptionMessage(
+                    $exception,
+                    __('Something went wrong while saving the customer.')
+                );
                 $this->_getSession()->setCustomerFormData($this->retrieveFormattedFormData());
                 $returnToEdit = true;
             }

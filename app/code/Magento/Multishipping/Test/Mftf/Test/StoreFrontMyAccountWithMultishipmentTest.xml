@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontMyAccountWithMultishipmentTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Shipping price shows 0 on Order view page after multiple address checkout"/>
+            <title value="Verify Shipping price for Storefront after multiple address checkout"/>
+            <description value="Verify that shipping price on My account matches with shipping method prices after multiple addresses checkout (Order view page)"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19303"/>
+            <group value="multishipping"/>
+        </annotations>
+
+        <before>
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData stepKey="product2" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="enableFlatRateShipping"/>
+            <magentoCLI command="config:set payment/checkmo/active 1" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+        </before>
+
+        <amOnPage url="$$product1.name$$.html" stepKey="goToProduct1"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct1">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <amOnPage url="$$product2.name$$.html" stepKey="goToProduct2"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShipping"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
+        <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment"/>
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToSalesOrder"/>
+        <actionGroup ref="SalesOrderForMultiShipmentActionGroup" stepKey="salesOrderForMultiShipment"/>
+        <waitForPageLoad stepKey="waitForAdminPageToLoad"/>
+        <!-- Go to Stores > Configuration > Sales > Orders -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
+        <actionGroup ref="AdminSalesOrderActionGroup" stepKey="ValidateOrderTotals"/>
+        <after>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+    </test>
+</tests>
