@@ -185,7 +185,7 @@ class UploadTest extends AbstractBackendController
                     'name' => 'invalid_file.txt',
                 ],
                 'expectation' => [
-                    'message' => 'Disallowed file type.',
+                    'message' => 'Disallowed File Type.',
                     'errorcode' => 0,
                     'tmp_media_path' => '/i/n/invalid_file.txt',
                 ],
@@ -198,7 +198,7 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'message' => 'Wrong file size.',
+                    'message' => 'Disallowed File Type.',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/a/magento_empty.jpg',
                 ],
