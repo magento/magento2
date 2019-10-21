@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Api\Data;
 
+/**
+ * Discount Data Interface
+ */
 interface DiscountDataInterface
 {
     /**
@@ -14,26 +17,26 @@ interface DiscountDataInterface
      *
      * @return float
      */
-    public function getAmount(): float;
+    public function getAmount();
 
     /**
      * Get Base Amount
      *
      * @return float
      */
-    public function getBaseAmount(): float;
+    public function getBaseAmount();
 
     /**
      * Get Original Amount
      *
      * @return float
      */
-    public function getOriginalAmount(): float;
+    public function getOriginalAmount();
 
     /**
      * Get Base Original Amount
      *
      * @return float
      */
-    public function getBaseOriginalAmount(): float;
+    public function getBaseOriginalAmount();
 }

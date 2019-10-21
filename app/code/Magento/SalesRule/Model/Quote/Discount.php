@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model\Quote;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
+use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 
 /**
  * Discount totals calculation model.
@@ -51,12 +52,18 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     private $discountInterfaceFactory;
 
     /**
+     * @var DiscountDataInterfaceFactory
+     */
+    private $discountDataInterfaceFactory;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param DataFactory|null $discountDataFactory
      * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
+     * @param DiscountDataInterfaceFactory|null $discountDataInterfaceFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -64,7 +71,8 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\SalesRule\Model\Validator $validator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         DataFactory $discountDataFactory = null,
-        RuleDiscountInterfaceFactory $discountInterfaceFactory = null
+        RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
+        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;
@@ -74,6 +82,8 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
         $this->discountInterfaceFactory = $discountInterfaceFactory
             ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
+        $this->discountDataInterfaceFactory = $discountDataInterfaceFactory
+            ?: ObjectManager::getInstance()->get(DiscountDataInterfaceFactory::class);
     }
 
     /**
@@ -260,7 +270,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $discountBreakdown = $item->getExtensionAttributes()->getDiscounts();
         if ($discountBreakdown) {
             foreach ($discountBreakdown as $value) {
-                /* @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
+                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discount */
                 $discount = $value->getDiscountData();
                 $ruleLabel = $value->getRuleLabel();
                 $ruleID = $value->getRuleID();
@@ -275,11 +285,13 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                         $discountData->getBaseOriginalAmount()+$discount->getBaseOriginalAmount()
                     );
                 } else {
-                    $discountData = $this->discountFactory->create();
-                    $discountData->setBaseAmount($discount->getBaseAmount());
-                    $discountData->setAmount($discount->getAmount());
-                    $discountData->setOriginalAmount($discount->getOriginalAmount());
-                    $discountData->setBaseOriginalAmount($discount->getBaseOriginalAmount());
+                    $data = [
+                        'amount' => $discount->getAmount(),
+                        'base_amount' => $discount->getBaseAmount(),
+                        'original_amount' => $discount->getOriginalAmount(),
+                        'base_original_amount' => $discount->getBaseOriginalAmount()
+                    ];
+                    $discountData = $this->discountDataInterfaceFactory->create(['data' => $data]);
                     $data = [
                         'discount' => $discountData,
                         'rule' => $ruleLabel,

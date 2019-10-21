@@ -13,6 +13,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
+use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 
 /**
  * Class RulesApplier
@@ -54,17 +55,24 @@ class RulesApplier
     private $discountInterfaceFactory;
 
     /**
+     * @var DiscountDataInterfaceFactory
+     */
+    private $discountDataInterfaceFactory;
+
+    /**
      * @var array
      */
     private $discountAggregator;
 
     /**
+     * RulesApplier constructor.
      * @param CalculatorFactory $calculatorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Utility $utility
      * @param ChildrenValidationLocator|null $childrenValidationLocator
      * @param DataFactory|null $discountDataFactory
      * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
+     * @param DiscountDataInterfaceFactory|null $discountDataInterfaceFactory
      */
     public function __construct(
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
@@ -72,7 +80,8 @@ class RulesApplier
         \Magento\SalesRule\Model\Utility $utility,
         ChildrenValidationLocator $childrenValidationLocator = null,
         DataFactory $discountDataFactory = null,
-        RuleDiscountInterfaceFactory $discountInterfaceFactory = null
+        RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
+        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
@@ -82,6 +91,8 @@ class RulesApplier
         $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
         $this->discountInterfaceFactory = $discountInterfaceFactory
             ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
+        $this->discountDataInterfaceFactory = $discountDataInterfaceFactory
+            ?: ObjectManager::getInstance()->get(DiscountDataInterfaceFactory::class);
     }
 
     /**
@@ -228,21 +239,22 @@ class RulesApplier
     private function setDiscountBreakdown($discountData, $item, $rule, $address)
     {
         if ($discountData->getAmount() > 0 && $item->getExtensionAttributes()) {
-            /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discount */
-            $discount = $this->discountFactory->create();
-            $discount->setBaseOriginalAmount($discountData->getBaseOriginalAmount());
-            $discount->setAmount($discountData->getAmount());
-            $discount->setBaseAmount($discountData->getBaseAmount());
-            $discount->setOriginalAmount($discountData->getOriginalAmount());
+            $data = [
+                'amount' => $discountData->getAmount(),
+                'base_amount' => $discountData->getBaseAmount(),
+                'original_amount' => $discountData->getOriginalAmount(),
+                'base_original_amount' => $discountData->getBaseOriginalAmount()
+            ];
+            $itemDiscount = $this->discountDataInterfaceFactory->create(['data' => $data]);
             $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore()) ?: __('Discount');
             $data = [
-                'discount' => $discount,
+                'discount' => $itemDiscount,
                 'rule' => $ruleLabel,
                 'rule_id' => $rule->getId(),
             ];
             /** @var \Magento\SalesRule\Model\Data\RuleDiscount $itemDiscount */
-            $itemDiscount = $this->discountInterfaceFactory->create(['data' => $data]);
-            $this->discountAggregator[] = $itemDiscount;
+            $ruleDiscount = $this->discountInterfaceFactory->create(['data' => $data]);
+            $this->discountAggregator[] = $ruleDiscount;
             $item->getExtensionAttributes()->setDiscounts($this->discountAggregator);
         }
         return $this;
