@@ -195,7 +195,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         ClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $asyncHttpClient = null,
-        ?ProxyDeferredFactory $proxyDeferredFactory
+        ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
         parent::__construct(
             $scopeConfig,
