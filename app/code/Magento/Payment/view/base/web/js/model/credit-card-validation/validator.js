@@ -39,7 +39,7 @@ define([
                     
                     type = allowedTypes[i].type;
                     
-                    if( (!!type) && type.constructor === Array && type.includes(cardInfo.title)){ // Check if an arry
+                     if( !!type && type.constructor === Array && type.includes(cardInfo.title)){ // Check if an arry
                         return true;                     
                     }
                     if (cardInfo.title == type) {  //eslint-disable-line eqeqeq
