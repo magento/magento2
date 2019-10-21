@@ -101,7 +101,6 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
         $exchange2->expects($this->never())
             ->method('getBindings');
 
-
         $this->connnectionTypeResolver->method('getConnectionType')->willReturnOnConsecutiveCalls(['db', null]);
         $envelopeBody = 'serializedMessage';
         $this->messageQueueConfig->expects($this->once())
