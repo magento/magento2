@@ -9,6 +9,7 @@ define([
     'Magento_Ui/js/modal/prompt',
     'Magento_Ui/js/modal/alert'
 ], function ($, Form, prompt, alert) {
+    'use strict';
 
     return Form.extend({
         defaults: {
@@ -42,6 +43,7 @@ define([
             var self = this;
 
             this.validate();
+
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 prompt({
                     content: this.newSetPromptMessage,
