@@ -57,6 +57,12 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     protected $layout;
 
     /**
+     *
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
@@ -64,6 +70,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * @param ItemPoolInterface $itemPoolInterface
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -73,7 +80,8 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         \Magento\Checkout\Helper\Data $checkoutHelper,
         ItemPoolInterface $itemPoolInterface,
         \Magento\Framework\View\LayoutInterface $layout,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
     ) {
         parent::__construct($data);
         $this->checkoutSession = $checkoutSession;
@@ -82,6 +90,8 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         $this->checkoutHelper = $checkoutHelper;
         $this->itemPoolInterface = $itemPoolInterface;
         $this->layout = $layout;
+        $this->localeResolver = $localeResolver ?: \Magento\Framework\App\ObjectManager::getInstance()
+        ->get(\Magento\Framework\Locale\ResolverInterface::class);
     }
 
     /**
@@ -92,9 +102,11 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         $totals = $this->getQuote()->getTotals();
         $subtotalAmount = $totals['subtotal']->getValue();
         $summaryCount = $this->getSummaryCount();
-        if ($summaryCount>0) {
-            $store = ObjectManager::getInstance()->get(\Magento\Framework\Locale\Resolver::class);
-            $summaryCount = \Zend_Locale_Format::toNumber($this->getSummaryCount(), ['locale' => $store->getLocale()]);
+        if ($summaryCount > 0) {
+            $summaryCount = \Zend_Locale_Format::toNumber($summaryCount, [
+                'locale' => $this->localeResolver->getLocale()
+                ]
+            );
         }
         return [
             'summary_count' => $summaryCount,
