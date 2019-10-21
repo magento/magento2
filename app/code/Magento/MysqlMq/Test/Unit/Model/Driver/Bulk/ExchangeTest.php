@@ -37,7 +37,9 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
-        $this->messageQueueConfig = $this->getMockBuilder(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class)
+        $this->messageQueueConfig = $this->getMockBuilder(
+            \Magento\Framework\MessageQueue\Topology\ConfigInterface::class
+        )
             ->disableOriginalConstructor()->getMock();
         $this->queueManagement = $this->getMockBuilder(\Magento\MysqlMq\Model\QueueManagement::class)
             ->disableOriginalConstructor()->getMock();
@@ -64,27 +66,35 @@ class ExchangeTest extends \PHPUnit\Framework\TestCase
     {
         $topicName = 'topic.name';
         $queueNames = ['queue0'];
-        $binding1 = $this->createMock(\Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface::class);
+        $binding1 = $this->createMock(
+            \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface::class
+        );
         $binding1->expects($this->once())
             ->method('getTopic')
             ->willReturn($topicName);
         $binding1->expects($this->once())
             ->method('getDestination')
             ->willReturn($queueNames[0]);
-        $binding2 = $this->createMock(\Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface::class);
+        $binding2 = $this->createMock(
+            \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface::class
+        );
         $binding2->expects($this->once())
             ->method('getTopic')
             ->willReturn('different.topic');
         $binding2->expects($this->never())
             ->method('getDestination');
-        $exchange1 = $this->createMock(\Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface::class);
+        $exchange1 = $this->createMock(
+            \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface::class
+        );
         $exchange1->expects($this->once())
             ->method('getConnection')
             ->willReturn('db');
         $exchange1->expects($this->once())
             ->method('getBindings')
             ->willReturn([$binding1, $binding2]);
-        $exchange2 = $this->createMock(\Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface::class);
+        $exchange2 = $this->createMock(
+            \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface::class
+        );
         $exchange2->expects($this->once())
             ->method('getConnection')
             ->willReturn('amqp');

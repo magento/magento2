@@ -12,6 +12,10 @@ use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfi
 use Magento\MysqlMq\Model\ConnectionTypeResolver;
 use Magento\MysqlMq\Model\QueueManagement;
 
+/**
+ * Class Exchange
+ * @package Magento\MysqlMq\Model\Driver
+ */
 class Exchange implements ExchangeInterface
 {
     /**

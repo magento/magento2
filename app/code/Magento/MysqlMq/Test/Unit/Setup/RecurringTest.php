@@ -34,7 +34,9 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->messageQueueConfig = $this->getMockBuilder(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class)
+        $this->messageQueueConfig = $this->getMockBuilder(
+            \Magento\Framework\MessageQueue\Topology\ConfigInterface::class
+        )
             ->getMockForAbstractClass();
         $this->model = $this->objectManager->getObject(
             \Magento\MysqlMq\Setup\Recurring::class,
@@ -49,7 +51,7 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
      */
     public function testInstall()
     {
-        for ($i = 1; $i <=3; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $queue = $this->createMock(\Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface::class);
             $queue->expects($this->once())
                 ->method('getName')
