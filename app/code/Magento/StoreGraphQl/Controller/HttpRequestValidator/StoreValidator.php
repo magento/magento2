@@ -44,13 +44,19 @@ class StoreValidator implements HttpRequestValidatorInterface
         if (!empty($headerValue)) {
             $storeCode = ltrim(rtrim($headerValue));
             $stores = $this->storeManager->getStores(false, true);
-            if (!isset($stores[$storeCode])) {
-                if (strtolower($storeCode) !== 'default') {
-                    $this->storeManager->setCurrentStore(null);
+            try {
+                if (!isset($stores[$storeCode]) && strtolower($storeCode) !== 'default') {
                     throw new GraphQlInputException(
-                        __("Requested store is not found")
+                        __("Requested store is not found.")
+                    );
+                } elseif (!$stores[$storeCode]->getIsActive()) {
+                    throw new GraphQlInputException(
+                        __("Requested store is not enabled.")
                     );
                 }
+            } catch (GraphQlInputException $e) {
+                $this->storeManager->setCurrentStore(null);
+                throw $e;
             }
         }
     }
