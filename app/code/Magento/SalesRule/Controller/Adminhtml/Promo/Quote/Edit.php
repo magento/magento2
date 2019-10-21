@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,6 +7,9 @@ namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ * Class Edit
+ */
 class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implements HttpGetActionInterface
 {
     /**
@@ -57,7 +59,7 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                 $this->_redirect('sales_rule/*');
                 return;
             }
-            
+
             // set entered data if was error when we do save
             $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getPageData(true);
             if (!empty($data)) {
