@@ -14,7 +14,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 /**
  * Attribute set additional functions.
  */
-class AttributeSet
+class GetAttributeSetByName
 {
     /**
      * @var SearchCriteriaBuilder
@@ -44,7 +44,7 @@ class AttributeSet
      * @param string $attributeSetName
      * @return AttributeSetInterface|null
      */
-    public function getAttributeSetByName(string $attributeSetName): ?AttributeSetInterface
+    public function execute(string $attributeSetName): ?AttributeSetInterface
     {
         $this->searchCriteriaBuilder->addFilter('attribute_set_name', $attributeSetName);
         $searchCriteria = $this->searchCriteriaBuilder->create();

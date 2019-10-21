@@ -17,7 +17,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\Eav\Model\AttributeSet;
+use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -46,9 +46,9 @@ class UpdateTest extends AbstractBackendController
     private $attributeGroupCollectionFactory;
 
     /**
-     * @var AttributeSet
+     * @var GetAttributeSetByName
      */
-    private $attributeSet;
+    private $getAttributeSetByName;
 
     /**
      * @inheritdoc
@@ -60,7 +60,7 @@ class UpdateTest extends AbstractBackendController
         $this->attributeSetRepository = $this->_objectManager->get(AttributeSetRepositoryInterface::class);
         $this->attributeManagement = $this->_objectManager->get(AttributeManagementInterface::class);
         $this->attributeGroupCollectionFactory = $this->_objectManager->get(CollectionFactory::class);
-        $this->attributeSet = $this->_objectManager->get(AttributeSet::class);
+        $this->getAttributeSetByName = $this->_objectManager->get(GetAttributeSetByName::class);
     }
 
     /**
@@ -74,7 +74,7 @@ class UpdateTest extends AbstractBackendController
      */
     public function testUpdateAttributeSetName(): void
     {
-        $attributeSet = $this->attributeSet->getAttributeSetByName('new_attribute_set');
+        $attributeSet = $this->getAttributeSetByName->execute('new_attribute_set');
         $currentAttrSetName = $attributeSet->getAttributeSetName();
         $this->assertNotNull($attributeSet);
         $postData = $this->prepareDataToRequest($attributeSet);
@@ -102,7 +102,7 @@ class UpdateTest extends AbstractBackendController
      */
     public function testUpdateAttributeSetWithNewGroup(): void
     {
-        $currentAttrSet = $this->attributeSet->getAttributeSetByName('new_attribute_set');
+        $currentAttrSet = $this->getAttributeSetByName->execute('new_attribute_set');
         $this->assertNotNull($currentAttrSet);
         $attrSetId = (int)$currentAttrSet->getAttributeSetId();
         $currentAttrGroups = $this->getAttributeSetGroupCollection($attrSetId)->getItems();
@@ -140,18 +140,14 @@ class UpdateTest extends AbstractBackendController
     public function testDeleteCustomGroupFromCustomAttributeSet(): void
     {
         $testGroupName = 'Test attribute group name';
-        $currentAttrSet = $this->attributeSet->getAttributeSetByName('new_attribute_set');
+        $currentAttrSet = $this->getAttributeSetByName->execute('new_attribute_set');
         $this->assertNotNull($currentAttrSet);
         $attrSetId = (int)$currentAttrSet->getAttributeSetId();
-        $currentAttrGroups = $this->getAttributeSetGroupCollection($attrSetId)->getItems();
-        $customGroup = null;
-        /** @var AttributeGroupInterface $attrGroup */
-        foreach ($currentAttrGroups as $attrGroup) {
-            if ($attrGroup->getAttributeGroupName() === $testGroupName) {
-                $customGroup = $attrGroup;
-                break;
-            }
-        }
+        $currentAttrGroupsCollection = $this->getAttributeSetGroupCollection($attrSetId);
+        $customGroup = $currentAttrGroupsCollection->getItemByColumnValue(
+            AttributeGroupInterface::GROUP_NAME,
+            $testGroupName
+        );
         $this->assertNotNull($customGroup);
         $postData = $this->prepareDataToRequest($currentAttrSet);
         $postData['removeGroups'] = [
@@ -163,7 +159,7 @@ class UpdateTest extends AbstractBackendController
             MessageInterface::TYPE_SUCCESS
         );
         $updatedAttrGroups = $this->getAttributeSetGroupCollection($attrSetId)->getItems();
-        $diffGroups = array_diff_key($currentAttrGroups, $updatedAttrGroups);
+        $diffGroups = array_diff_key($currentAttrGroupsCollection->getItems(), $updatedAttrGroups);
         $this->assertCount(1, $diffGroups);
         /** @var AttributeGroupInterface $deletedGroup */
         $deletedGroup = reset($diffGroups);

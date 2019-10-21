@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -22,8 +23,8 @@ $stockRegistryStorage = $objectManager->get(StockRegistryStorage::class);
 try {
     $product = $productRepository->get('simple');
     $productRepository->delete($product);
-} catch (\Exception $e) {
-
+} catch (NoSuchEntityException $e) {
+    //Product already deleted.
 }
 $stockRegistryStorage->clean();
 $registry->unregister('isSecureArea');

@@ -9,7 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\TestFramework\Eav\Model\AttributeSet;
+use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -20,13 +20,12 @@ $storeManager = $objectManager->get(StoreManagerInterface::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */
 $productFactory = $objectManager->get(ProductFactory::class);
-/** @var AttributeSet $attributeSet */
-$attributeSet = $objectManager->get(AttributeSet::class);
-$customAttributeSet = $attributeSet->getAttributeSetByName('new_attribute_set');
+/** @var GetAttributeSetByName $attributeSet */
+$attributeSet = $objectManager->get(GetAttributeSetByName::class);
+$customAttributeSet = $attributeSet->execute('new_attribute_set');
 $product = $productFactory->create();
 $product
     ->setTypeId('simple')
-    ->setId(1)
     ->setAttributeSetId($customAttributeSet->getAttributeSetId())
     ->setWebsiteIds([1])
     ->setStoreId($storeManager->getStore('admin')->getId())
