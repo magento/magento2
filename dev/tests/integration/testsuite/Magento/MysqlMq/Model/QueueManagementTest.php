@@ -185,17 +185,13 @@ class QueueManagementTest extends \PHPUnit\Framework\TestCase
         $messages = $this->queueManagement->readMessages('queue1', 1);
         $message = array_shift($messages);
         $messageRelationId = $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
-        $this->queueManagement->pushToQueueForRetry($messageRelationId);
 
-        $retryMessage = null;
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 0; $i < 2; $i++) {
+            $this->assertEquals($i, $message[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
+            $this->queueManagement->pushToQueueForRetry($message[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
             $messages = $this->queueManagement->readMessages('queue1', 1);
             $message = array_shift($messages);
-            if ($message[QueueManagement::MESSAGE_QUEUE_RELATION_ID] == $messageRelationId) {
-                $retryMessage = $message;
-            }
+            $this->assertEquals($messageRelationId, $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
         }
-        $this->assertNotNull($retryMessage, 'Made retry message not found in queue');
-        $this->assertEquals(1, $retryMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
     }
 }
