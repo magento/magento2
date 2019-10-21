@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\File\FileList\Factory;
@@ -37,6 +38,11 @@ class Aggregated implements CollectorInterface
     protected $overriddenBaseFiles;
 
     /**
+     * @var \Magento\Framework\Module\ModuleManagerInterface
+     */
+    protected $moduleManager;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -46,6 +52,7 @@ class Aggregated implements CollectorInterface
      * @param CollectorInterface $libraryFiles
      * @param CollectorInterface $baseFiles
      * @param CollectorInterface $overriddenBaseFiles
+     * @param ModuleManagerInterface $moduleManager
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -53,12 +60,14 @@ class Aggregated implements CollectorInterface
         CollectorInterface $libraryFiles,
         CollectorInterface $baseFiles,
         CollectorInterface $overriddenBaseFiles,
+        ModuleManagerInterface $moduleManager,
         LoggerInterface $logger
     ) {
         $this->fileListFactory = $fileListFactory;
         $this->libraryFiles = $libraryFiles;
         $this->baseFiles = $baseFiles;
         $this->overriddenBaseFiles = $overriddenBaseFiles;
+        $this->moduleManager = $moduleManager;
         $this->logger = $logger;
     }
 
@@ -83,11 +92,32 @@ class Aggregated implements CollectorInterface
             $list->replace($files);
         }
         $result = $list->getAll();
-        if (empty($result)) {
+
+        $finalResult = [];
+
+        if(!empty($result))
+        {
+            foreach ($result as $file)
+            {
+                if ($this->hasEnabledModule($file)) {
+                    $finalResult[] = $file;
+                }
+            }
+        }
+
+        if (empty($finalResult)) {
             $this->logger->notice(
                 'magento_import returns empty result by path ' . $filePath . ' for theme ' . $theme->getCode()
             );
         }
-        return $result;
+
+
+        return $finalResult;
+    }
+
+    private function hasEnabledModule(\Magento\Framework\View\File $file)
+    {
+        return $file instanceof \Magento\Framework\View\File && (!$file->getModule() ||
+                $this->moduleManager->isEnabled($file->getModule()));
     }
 }

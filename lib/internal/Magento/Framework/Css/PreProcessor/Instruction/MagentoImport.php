@@ -116,12 +116,13 @@ class MagentoImport implements PreProcessorInterface
             $isReference = !empty($matchedContent['reference']);
             $relatedAsset = $this->assetRepo->createRelated($matchedFileId, $asset);
             $resolvedPath = $relatedAsset->getFilePath();
+
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
-                if ($importFile->getModule() && !$this->moduleManager->isEnabled($importFile->getModule())) {
-                    continue;
-                }
+//                if ($importFile->getModule() && !$this->moduleManager->isEnabled($importFile->getModule())) {
+//                    continue;
+//                }
                 $referenceString = $isReference ? '(reference) ' : '';
                 $importsContent .= $importFile->getModule()
                     ? "@import $referenceString'{$importFile->getModule()}::{$resolvedPath}';\n"

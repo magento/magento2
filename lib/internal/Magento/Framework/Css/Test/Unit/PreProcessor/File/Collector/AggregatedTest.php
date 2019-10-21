@@ -43,6 +43,11 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
     protected $themeMock;
 
     /**
+     * @var \Magento\Framework\Module\ModuleManagerInterface
+     */
+    protected $moduleManagerMock;
+
+    /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
@@ -61,6 +66,8 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->fileListMock));
         $this->libraryFilesMock = $this->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)
             ->getMock();
+        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleManagerInterface::class)
+                                 ->getMock();
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMock();
 
@@ -81,6 +88,7 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
             $this->libraryFilesMock,
             $this->baseFilesMock,
             $this->overriddenBaseFilesMock,
+            $this->moduleManagerMock,
             $this->loggerMock
         );
 
@@ -106,9 +114,12 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFiles($libraryFiles, $baseFiles, $themeFiles)
     {
+
+        $returnFile = new \Magento\Framework\View\File('returnFile','myModule');
+
         $this->fileListMock->expects($this->at(0))->method('add')->with($this->equalTo($libraryFiles));
         $this->fileListMock->expects($this->at(1))->method('add')->with($this->equalTo($baseFiles));
-        $this->fileListMock->expects($this->any())->method('getAll')->will($this->returnValue(['returnedFile']));
+        $this->fileListMock->expects($this->any())->method('getAll')->will($this->returnValue([$returnFile]));
 
         $subPath = '*';
         $this->libraryFilesMock->expects($this->atLeastOnce())
@@ -125,11 +136,14 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
             ->method('getFiles')
             ->will($this->returnValue($themeFiles));
 
+        $this->moduleManagerMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+
         $aggregated = new Aggregated(
             $this->fileListFactoryMock,
             $this->libraryFilesMock,
             $this->baseFilesMock,
             $this->overriddenBaseFilesMock,
+            $this->moduleManagerMock,
             $this->loggerMock
         );
 
@@ -137,7 +151,7 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
         $this->themeMock->expects($this->any())->method('getInheritedThemes')
             ->will($this->returnValue([$inheritedThemeMock]));
 
-        $this->assertEquals(['returnedFile'], $aggregated->getFiles($this->themeMock, $subPath));
+        $this->assertEquals([$returnFile], $aggregated->getFiles($this->themeMock, $subPath));
     }
 
     /**
