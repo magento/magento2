@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -61,6 +62,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10
         ],
     ];
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['example.com']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['example.com']);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_related.php

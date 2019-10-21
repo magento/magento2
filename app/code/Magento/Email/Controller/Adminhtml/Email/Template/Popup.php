@@ -45,6 +45,11 @@ class Popup extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            $this->_forward('noroute');
+            return;
+        }
+
         return $this->resultPageFactory->create();
     }
 }

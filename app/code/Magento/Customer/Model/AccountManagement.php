@@ -970,6 +970,7 @@ class AccountManagement implements AccountManagementInterface
                 null,
                 $extensions
             );
+            $customer->setConfirmation(null);
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);

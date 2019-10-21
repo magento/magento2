@@ -6,6 +6,8 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\App\ObjectManager;
 
@@ -18,7 +20,6 @@ use Magento\Framework\App\ObjectManager;
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
-
     /**
      * HTTP scheme
      * used to compare against the filename and select the proper DriverPool adapter
@@ -104,6 +105,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected $_coreFileStorage;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Instance of random data generator.
      *
      * @var \Magento\Framework\Math\Random
@@ -116,6 +122,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     private $directoryResolver;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     */
+    private $directoryReadFactory;
+
+    /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -125,8 +136,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string|null $filePath
      * @param \Magento\Framework\App\Filesystem\DirectoryResolver|null $directoryResolver
      * @param \Magento\Framework\Math\Random|null $random
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory|null $directoryReadFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
@@ -137,7 +148,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
         $filePath = null,
         \Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null,
-        \Magento\Framework\Math\Random $random = null
+        \Magento\Framework\Math\Random $random = null,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
     ) {
         if ($filePath !== null) {
             $this->_setUploadFile($filePath);
@@ -148,10 +160,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_validator = $validator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
+        $this->filesystem = $filesystem;
         $this->directoryResolver = $directoryResolver
             ?: ObjectManager::getInstance()->get(\Magento\Framework\App\Filesystem\DirectoryResolver::class);
         $this->random = $random
             ?: ObjectManager::getInstance()->get(\Magento\Framework\Math\Random::class);
+        $this->directoryReadFactory = $directoryReadFactory
+            ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->downloadDir = DirectoryList::getDefaultConfig()[DirectoryList::TMP][DirectoryList::PATH];
     }
 
@@ -177,7 +192,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string $fileName
      * @param bool $renameFileOff
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function move($fileName, $renameFileOff = false)
     {
@@ -242,7 +257,20 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     protected function _setUploadFile($filePath)
     {
-        if (!$this->_directory->isReadable($filePath)) {
+        try {
+            $fullPath = $this->_directory->getAbsolutePath($filePath);
+            if ($this->getTmpDir()) {
+                $tmpDir = $this->getDirectoryReadByPath(
+                    $this->_directory->getAbsolutePath($this->getTmpDir())
+                );
+            } else {
+                $tmpDir = $this->_directory;
+            }
+            $readable = $tmpDir->isReadable($fullPath);
+        } catch (ValidatorException $exception) {
+            $readable = false;
+        }
+        if (!$readable) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('File \'%1\' was not found or has read restriction.', $filePath)
             );
@@ -396,5 +424,18 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected function chmod($file)
     {
         return;
+    }
+
+    /**
+     * Create an instance of directory with read permissions by path.
+     *
+     * @param string $path
+     * @param string $driverCode
+     *
+     * @return ReadInterface
+     */
+    private function getDirectoryReadByPath(string $path, string $driverCode = DriverPool::FILE): ReadInterface
+    {
+        return $this->directoryReadFactory->create($path, $driverCode);
     }
 }

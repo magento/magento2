@@ -6,6 +6,8 @@
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -63,6 +65,11 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|CartRepositoryInterface
+     */
+    private $quoteRepositoryMock;
+
     protected function setUp()
     {
         $this->sessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
@@ -78,6 +85,7 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getRequestUri', 'getServer'])
             ->getMockForAbstractClass();
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->model = new \Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver(
             $this->sessionMock,
@@ -86,7 +94,8 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
             $this->eventManagerMock,
             $this->customerSessionMock,
             $this->checkoutSessionMock,
-            $this->requestMock
+            $this->requestMock,
+            $this->quoteRepositoryMock
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->setMethods(['getCustomerIsGuest', 'getIsPersistent'])
@@ -107,12 +116,19 @@ class CheckExpirePersistentQuoteObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWhenPersistentIsNotEnabled()
     {
+        $quoteId = 'quote_id_1';
+
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
             ->will($this->returnValue(true));
         $this->persistentHelperMock->expects($this->exactly(2))->method('isEnabled')->will($this->returnValue(false));
+        $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuoteId')->willReturn($quoteId);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')
+            ->with($quoteId)
+            ->willThrowException(new NoSuchEntityException());
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->model->execute($this->observerMock);
     }
