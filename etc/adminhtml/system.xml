@@ -28,9 +28,7 @@
                 </field>
                 <field id="key" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Product Key</label>
-                    <comment><![CDATA[
-                            You can find product key in your <a href="https://magefan.com/downloadable/customer/products/" target="_blank">Magefan account</a>.
-                        ]]></comment>
+                    <frontend_model>Magefan\Community\Block\Adminhtml\System\Config\Form\ProductKeyField</frontend_model>
                 </field>
                 <field id="disable_page_cache" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Disable Page Cache For Admin User</label>
