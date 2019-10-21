@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\SalesRule\Model\Data;
+namespace Magento\SalesRule\Api\Data;
 
 /**
  * Rule discount Interface
@@ -16,7 +16,7 @@ interface RuleDiscountInterface
     /**
      * Get Discount Data
      *
-     * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @return \Magento\SalesRule\Api\Data\DiscountDataInterface
      */
     public function getDiscountData();
 
