@@ -29,3 +29,5 @@ try {
 $stockRegistryStorage->clean();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+require __DIR__ . '/attribute_set_based_on_default_with_custom_group_rollback.php';

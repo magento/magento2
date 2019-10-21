@@ -11,13 +11,11 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Store\Model\StoreManagerInterface;
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var StoreManagerInterface $storeManager */
-$storeManager = $objectManager->get(StoreManagerInterface::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */
@@ -30,7 +28,7 @@ $product
     ->setTypeId('simple')
     ->setAttributeSetId($customAttributeSet->getAttributeSetId())
     ->setWebsiteIds([1])
-    ->setStoreId($storeManager->getStore('admin')->getId())
+    ->setStoreId(Store::DEFAULT_STORE_ID)
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
