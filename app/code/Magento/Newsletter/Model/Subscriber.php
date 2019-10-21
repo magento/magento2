@@ -471,8 +471,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         if ($isSubscribeOwnEmail) {
             try {
                 $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
-                $this->setCustomerFirstName($customer->getFirstname());
-                $this->setCustomerLastName($customer->getLastname());
                 $this->setStoreId($customer->getStoreId());
                 $this->setCustomerId($customer->getId());
             } catch (NoSuchEntityException $e) {
