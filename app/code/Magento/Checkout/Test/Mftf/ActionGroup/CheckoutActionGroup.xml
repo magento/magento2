@@ -64,6 +64,7 @@
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="waitForShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
         <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
@@ -221,7 +222,7 @@
     <!-- Check product in checkout cart items -->
     <actionGroup name="CheckProductInCheckoutCartItemsActionGroup">
         <annotations>
-            <description>Validates the the provided Product appears in the Storefront Checkout 'Order Summary' section.</description>
+            <description>Validates the provided Product appears in the Storefront Checkout 'Order Summary' section.</description>
         </annotations>
         <arguments>
             <argument name="productVar"/>
