@@ -94,13 +94,17 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->model->loadByEmail($customerEmail);
         $this->model->confirm($this->model->getSubscriberConfirmCode());
 
+        /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
         $transportBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
         );
 
+        $output = $transportBuilder->getSentMessage()->getRawMessage();
+        $output = \str_replace('\n\r','',$output);
+
         $this->assertContains(
             'You have been successfully subscribed to our newsletter.',
-            $transportBuilder->getSentMessage()->getRawMessage()
+            $output
         );
     }
 }
