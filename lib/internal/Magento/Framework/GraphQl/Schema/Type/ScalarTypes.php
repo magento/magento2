@@ -21,7 +21,7 @@ class ScalarTypes
     public function isScalarType(string $typeName) : bool
     {
         $standardTypes = \GraphQL\Type\Definition\Type::getStandardTypes();
-        return isset($standardTypes[$typeName]) ? true : false;
+        return isset($standardTypes[$typeName]);
     }
 
     /**
