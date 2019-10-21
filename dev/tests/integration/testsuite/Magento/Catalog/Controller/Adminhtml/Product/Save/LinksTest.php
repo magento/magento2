@@ -45,7 +45,6 @@ class LinksTest extends AbstractBackendController
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDbIsolation enabled
-     * @param array $postData
      * @return void
      */
     public function testAddRelatedUpSellCrossSellProducts(): void
@@ -71,7 +70,7 @@ class LinksTest extends AbstractBackendController
      *
      * @return array
      */
-    public function getPostData(): array
+    private function getPostData(): array
     {
         return [
             'product' => [
