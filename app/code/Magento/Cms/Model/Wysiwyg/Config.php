@@ -89,8 +89,6 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
     /**
      * @var array
-     * @deprecated
-     * @see \Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider
      */
     protected $_windowSize;
 
@@ -207,6 +205,12 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
 
         if ($this->_authorization->isAllowed('Magento_Cms::media_gallery')) {
             $this->configProvider->processGalleryConfig($config);
+            $config->addData(
+                [
+                    'files_browser_window_width' => $this->_windowSize['width'],
+                    'files_browser_window_height' => $this->_windowSize['height'],
+                ]
+            );
         }
         if ($config->getData('add_widgets')) {
             $this->configProvider->processWidgetConfig($config);

@@ -107,7 +107,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getRssData()
     {

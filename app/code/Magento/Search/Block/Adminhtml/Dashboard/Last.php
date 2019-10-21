@@ -24,7 +24,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     protected $_queriesFactory;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $_moduleManager;
 
@@ -36,14 +36,14 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Search\Model\ResourceModel\Query\CollectionFactory $queriesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Search\Model\ResourceModel\Query\CollectionFactory $queriesFactory,
         array $data = []
     ) {
@@ -53,6 +53,8 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -62,7 +64,10 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Prepare collection.
+     *
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _prepareCollection()
     {
@@ -85,7 +90,10 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Prepare columns.
+     *
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareColumns()
     {
@@ -118,7 +126,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {

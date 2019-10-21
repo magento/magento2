@@ -9,7 +9,8 @@
 
 & when (@media-common = true) {
     .multicheckout {
-        &.results, &.success {
+        &.results,
+        &.success {
             h3 {
                 font-size: 1.6rem;
                 margin-bottom: @indent__base;
@@ -33,22 +34,26 @@
 
                 .shipping-list {
                     .shipping-item {
-                        margin-left:84px;
+                        margin-left: 84px;
                     }
+
                     .shipping-label {
                         font-weight: @font-weight__bold;
                         margin-right: @indent__s;
                     }
+
                     .shipping-address {
                         font-weight: @font-weight__regular;
                     }
+
                     .error-block {
-                        color: @color-red10;
+                        color: @error__color;
 
                         .error-label {
                             font-weight: @font-weight__bold;
                             margin-right: @indent__s;
                         }
+
                         .error-description {
                             font-weight: @font-weight__regular;
                         }
@@ -62,10 +67,11 @@
 
                     .shipping-list {
                         .order-id {
-                            float:left;
+                            float: left;
                         }
+
                         .shipping-item {
-                            margin-left:100px;
+                            margin-left: 100px;
                         }
                     }
                 }
@@ -106,14 +112,6 @@
                         margin-left: @indent__s;
                     }
                 }
-            }
-
-            .cart-price {
-                &:extend(.abs-checkout-cart-price all);
-            }
-
-            .product-item-name {
-                &:extend(.abs-checkout-product-name all);
             }
         }
 
@@ -224,7 +222,7 @@
             }
 
             .error-description {
-                color: @color-red10;
+                color: @error__color;
                 font-weight: @font-weight__regular;
                 margin-bottom: @indent__s;
                 margin-top: -@indent__s;

@@ -39,6 +39,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function dataRoles()
     {
         return [

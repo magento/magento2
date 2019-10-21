@@ -6,22 +6,24 @@
 
 defined('MTF_BOOT_FILE') || define('MTF_BOOT_FILE', __FILE__);
 defined('MTF_BP') || define('MTF_BP', str_replace('\\', '/', (__DIR__)));
+defined('BP') || define('BP', str_replace('\\', '/', dirname(dirname(dirname((__DIR__))))));
 defined('MTF_TESTS_PATH') || define('MTF_TESTS_PATH', MTF_BP . '/tests/app/');
 defined('MTF_STATES_PATH') || define('MTF_STATES_PATH', MTF_BP . '/lib/Magento/Mtf/App/State/');
 
-require_once __DIR__ . '/../../../app/bootstrap.php';
 restore_error_handler();
-$vendorAutoload = __DIR__ . '/vendor/autoload.php';
-
-if (isset($composerAutoloader)) {
-    /** var $mtfComposerAutoload \Composer\Autoload\ClassLoader */
-    $mtfComposerAutoload = include $vendorAutoload;
-    $composerAutoloader->addClassMap($mtfComposerAutoload->getClassMap());
-} else {
-    $composerAutoloader = include $vendorAutoload;
-}
-
+include __DIR__ . '/vendor/autoload.php';
 setCustomErrorHandler();
+
+/* Custom umask value may be provided in optional mage_umask file in root */
+$umaskFile = BP . '/magento_umask';
+$mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
+umask($mask);
+
+date_default_timezone_set('UTC');
+
+/*  For data consistency between displaying (printing) and serialization a float number */
+ini_set('precision', 14);
+ini_set('serialize_precision', 14);
 
 /**
  * Set custom error handler

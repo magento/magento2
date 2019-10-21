@@ -55,7 +55,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
         }
 
         if ($this->_getProduct()->getId()) {
-            $this->_addProductLinkBlock($this->_getProduct());
+            $this->_addProductLinkBlock();
         }
 
         if ($this->_getCategory()->getId()) {

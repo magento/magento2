@@ -81,6 +81,7 @@ define([
         maxItemsToDisplay: window.checkout.maxItemsToDisplay,
         cart: {},
 
+        // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
         /**
          * @override
          */
@@ -94,10 +95,6 @@ define([
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
                 this.update(updatedCart);
-
-                if (cartData()['website_id'] !== window.checkout.websiteId) {
-                    customerData.reload(['cart'], false);
-                }
                 initSidebar();
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function () {
@@ -105,8 +102,17 @@ define([
                 self.isLoading(true);
             });
 
+            if (
+                cartData().website_id !== window.checkout.websiteId && cartData().website_id !== undefined ||
+                cartData().storeId !== window.checkout.storeId && cartData().storeId !== undefined
+            ) {
+                customerData.reload(['cart'], false);
+            }
+
             return this._super();
         },
+        //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
         isLoading: ko.observable(false),
         initSidebar: initSidebar,
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- @TODO: Get rid off this workaround and its usages after MQE-498 is implemented -->
+    <entity name="CONST" type="CONST">
+        <data key="one">1</data>
+        <data key="two">2</data>
+    </entity>
+    <entity name="prodNameWithSpecChars">
+        <data key="trademark">"Pursuit Lumaflex™ Tone Band"</data>
+        <data key="skumark">"x™"</data>
+    </entity>
+</entities>

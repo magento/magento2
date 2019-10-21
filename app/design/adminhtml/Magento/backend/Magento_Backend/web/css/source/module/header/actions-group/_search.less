@@ -86,6 +86,8 @@
         position: absolute;
         right: 0;
         top: 100%;
+        word-break: break-word;
+        word-wrap: break-word;
         z-index: 2;
 
         &:after {
@@ -153,7 +155,7 @@
     background-color: transparent;
     border: 1px solid transparent;
     font-size: @search-global-input__font-size;
-    height: @search-global-input__height;
+    height: @search-global-input__height + .2;
     padding: @search-global-input__padding-top @search-global-input__padding-side @search-global-input__padding-bottom;
     position: absolute;
     right: 0;

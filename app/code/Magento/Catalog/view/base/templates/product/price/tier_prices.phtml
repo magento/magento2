@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Generic.WhiteSpace.ScopeIndent
+
 /** @var \Magento\Catalog\Pricing\Render\PriceBox $block */
 
 /** @var \Magento\Catalog\Pricing\Price\TierPrice $tierPriceModel */
@@ -18,17 +18,17 @@ $msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?= /* @escapeNotVerified */ ($block->hasListClass() ? $block->getListClass() : 'prices-tier items') ?>">
-    <?php foreach ($tierPrices as $index => $price) : ?>
-        <li class="item">
-            <?php
+    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
+        <?php foreach ($tierPrices as $index => $price) : ?>
+            <li class="item">
+                <?php
                 $productId = $product->getId();
                 $isSaleable = $product->isSaleable();
                 $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
-                if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()):
+                if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()) :
                     $addToCartUrl = '';
                     if ($isSaleable) {
-                        $addToCartUrl = $this->helper('\Magento\Checkout\Helper\Cart')
+                        $addToCartUrl = $this->helper(\Magento\Checkout\Helper\Cart::class)
                             ->getAddUrl($product, ['qty' => $price['price_qty']]);
                     }
                     $tierPriceData = [
@@ -54,13 +54,13 @@ $product = $block->getSaleableItem();
                     if ($block->getCanDisplayQty($product)) {
                         $tierPriceData['qty'] = $price['price_qty'];
                     }
-                ?>
-                <?= /* @escapeNotVerified */ __('Buy %1 for: ', $price['price_qty']) ?>
-                <a href="javascript:void(0);"
-                   id="<?= /* @escapeNotVerified */ ($popupId) ?>"
-                   data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
-                    <?= /* @escapeNotVerified */ __('Click for price') ?></a>
-                <?php else:
+                    ?>
+                    <?= $block->escapeHtml(__('Buy %1 for: ', $price['price_qty'])) ?>
+                    <a href="javascript:void(0);"
+                       id="<?= $block->escapeHtmlAttr($popupId) ?>"
+                       data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
+                        <?= $block->escapeHtml(__('Click for price')) ?></a>
+                <?php else :
                     $priceAmountBlock = $block->renderAmount(
                         $price['price'],
                         [
@@ -70,22 +70,22 @@ $product = $block->getSaleableItem();
                             'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION
                         ]
                     );
-                ?>
-                <?php /* @escapeNotVerified */ echo ($block->getShowDetailedPrice() !== false)
-                        ? __(
-                            'Buy %1 for %2 each and <strong class="benefit">save<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
-                            $price['price_qty'],
-                            $priceAmountBlock,
-                            $index,
-                            $tierPriceModel->getSavePercent($price['price'])
-                        )
-                        : __('Buy %1 for %2 each', $price['price_qty'], $priceAmountBlock);
-                ?>
-            <?php endif; ?>
-        </li>
-    <?php endforeach; ?>
+                    ?>
+                    <?= /* @noEscape */ ($block->getShowDetailedPrice() !== false)
+                    ? __(
+                        'Buy %1 for %2 each and <strong class="benefit">save<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
+                        $price['price_qty'],
+                        $priceAmountBlock,
+                        $index,
+                        $block->formatPercent($price['percentage_value'] ?? $tierPriceModel->getSavePercent($price['price']))
+                    )
+                    : __('Buy %1 for %2 each', $price['price_qty'], $priceAmountBlock);
+                    ?>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
     </ul>
-    <?php if ($msrpShowOnGesture):?>
+    <?php if ($msrpShowOnGesture) :?>
         <script type="text/x-magento-init">
             {
                 ".product-info-main": {
@@ -95,9 +95,9 @@ $product = $block->getSaleableItem();
                         "inputQty": "#qty",
                         "attr": "[data-tier-price]",
                         "productForm": "#product_addtocart_form",
-                        "productId": "<?= /* @escapeNotVerified */ $productId ?>",
+                        "productId": "<?= (int) $productId ?>",
                         "productIdInput": "input[type=hidden][name=product]",
-                        "isSaleable": "<?= /* @escapeNotVerified */ $isSaleable ?>"
+                        "isSaleable": "<?= (bool) $isSaleable ?>"
                     }
                 }
             }

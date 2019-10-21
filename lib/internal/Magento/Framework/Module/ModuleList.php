@@ -90,7 +90,7 @@ class ModuleList implements ModuleListInterface
     public function getOne($name)
     {
         $enabled = $this->getAll();
-        return isset($enabled[$name]) ? $enabled[$name] : null;
+        return $enabled[$name] ?? null;
     }
 
     /**

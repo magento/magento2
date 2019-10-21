@@ -16,5 +16,5 @@ class ImportExportHeader extends \Magento\Backend\Block\Widget
      *
      * @var string
      */
-    protected $_template = 'importExportHeader.phtml';
+    protected $_template = 'Magento_TaxImportExport::importExportHeader.phtml';
 }

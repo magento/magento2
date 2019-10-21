@@ -6,5 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_CatalogUrlRewriteGraphQl" />
+    <module name="Magento_CatalogUrlRewriteGraphQl" >
+        <sequence>
+            <module name="Magento_UrlRewriteGraphQl"/>
+            <module name="Magento_CatalogGraphQl"/>
+        </sequence>
+    </module>
 </config>

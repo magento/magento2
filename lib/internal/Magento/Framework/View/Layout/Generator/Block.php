@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
@@ -102,9 +103,7 @@ class Block implements Layout\GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getType()
     {
@@ -223,9 +222,13 @@ class Block implements Layout\GeneratorInterface
         // create block
         $className = isset($attributes['class']) && !empty($attributes['class']) ?
             $attributes['class'] : $this->defaultClass;
-        $block = $this->createBlock($className, $elementName, [
-            'data' => $this->evaluateArguments($data['arguments'])
-        ]);
+        $block = $this->createBlock(
+            $className,
+            $elementName,
+            [
+                'data' => $this->evaluateArguments($data['arguments'])
+            ]
+        );
         if (!empty($attributes['template'])) {
             $block->setTemplate($attributes['template']);
         }
@@ -272,7 +275,7 @@ class Block implements Layout\GeneratorInterface
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 new \Magento\Framework\Phrase(
                     'Invalid block type: %1',
                     [is_object($block) ? get_class($block) : (string) $block]

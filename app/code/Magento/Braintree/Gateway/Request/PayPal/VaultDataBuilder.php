@@ -49,6 +49,8 @@ class VaultDataBuilder implements BuilderInterface
 
         $payment = $paymentDO->getPayment();
         $data = $payment->getAdditionalInformation();
+        // the payment token could be stored only if a customer checks the Vault flow on storefront
+        // see https://developers.braintreepayments.com/guides/paypal/vault/javascript/v2#invoking-the-vault-flow
         if (!empty($data[VaultConfigProvider::IS_ACTIVE_CODE])) {
             $result[self::$optionsKey] = [
                 self::$storeInVaultOnSuccess => true

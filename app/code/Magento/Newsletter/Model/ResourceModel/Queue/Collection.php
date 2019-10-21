@@ -141,8 +141,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Checks if field is 'subscribers_total', 'subscribers_sent'
-     * to add specific filter or adds regular filter
+     * Checks if field is 'subscribers_total', 'subscribers_sent' to add specific filter or adds regular filter
      *
      * @param string $field
      * @param null|string|array $condition
@@ -210,7 +209,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Add filter by only ready fot sending item
+     * Add filter by only ready for sending item
      *
      * @return $this
      */
@@ -221,7 +220,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             [\Magento\Newsletter\Model\Queue::STATUS_SENDING, \Magento\Newsletter\Model\Queue::STATUS_NEVER]
         )->where(
             'main_table.queue_start_at < ?',
-            $this->_date->gmtdate()
+            $this->_date->gmtDate()
         )->where(
             'main_table.queue_start_at IS NOT NULL'
         );

@@ -119,7 +119,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * @param int $websiteId
      * @return array
      */
-    public function lockProductsStock(array $productIds, int $websiteId)
+    public function lockProductsStock(array $productIds, $websiteId)
     {
         if (empty($productIds)) {
             return [];
@@ -206,6 +206,8 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * Set items out of stock basing on their quantities and config settings
      *
+     * @deprecated
+     * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetOutOfStock
      * @param string|int $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
@@ -241,6 +243,8 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * Set items in stock basing on their quantities and config settings
      *
+     * @deprecated
+     * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetInStock
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
@@ -274,6 +278,8 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     /**
      * Update items low stock date basing on their quantities and config settings
      *
+     * @deprecated
+     * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateLowStockDate
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void

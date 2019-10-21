@@ -15,4 +15,7 @@
         <synchronousInvocationOnly />
     </service>
 
+    <route url="async/V1/products" method="POST" alias="asyncProducts"/>
+    <route url="async/bulk/V1/cmsPage" method="POST" alias="asyncBulkCmsPages"/>
+    <route url="async/V1/customers" method="POST" alias="/asyncCustomers"/>
 </services>

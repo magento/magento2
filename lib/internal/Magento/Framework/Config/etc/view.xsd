@@ -49,13 +49,13 @@
             <xs:element name="image" minOccurs="1" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="width" type="xs:positiveInteger" minOccurs="0"/>
-                        <xs:element name="height" type="xs:positiveInteger" minOccurs="0"/>
-                        <xs:element name="constrain" type="xs:boolean" minOccurs="0"/>
-                        <xs:element name="aspect_ratio" type="xs:boolean" minOccurs="0"/>
-                        <xs:element name="frame" type="xs:boolean" minOccurs="0"/>
-                        <xs:element name="transparency" type="xs:boolean" minOccurs="0"/>
-                        <xs:element name="background" minOccurs="0">
+                        <xs:element name="width" type="xs:positiveInteger" minOccurs="0" nillable="true"/>
+                        <xs:element name="height" type="xs:positiveInteger" minOccurs="0" nillable="true"/>
+                        <xs:element name="constrain" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="aspect_ratio" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="frame" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="transparency" type="xs:boolean" minOccurs="0" nillable="true"/>
+                        <xs:element name="background" minOccurs="0" nillable="true">
                             <xs:simpleType>
                                 <xs:restriction base="xs:string">
                                     <xs:pattern value="\[(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\]"/>

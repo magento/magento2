@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Code\Generator;
 
+/**
+ * Class Interceptor
+ ˚*
+ * @package Magento\Framework\Interception\Code\Generator
+ */
 class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
 {
     /**
@@ -14,6 +20,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     const ENTITY_TYPE = 'interceptor';
 
     /**
+     * Returns default result class name
+     *
      * @param string $modelClassName
      * @return string
      */
@@ -51,6 +59,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 ? "parent::__construct({$this->_getParameterList($parameters)});"
                 : "parent::__construct();";
         }
+
         return [
             'name' => '__construct',
             'parameters' => $parameters,
@@ -74,6 +83,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
+
         return $methods;
     }
 
@@ -102,10 +112,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
-        $returnType = $method->getReturnType();
-        $returnTypeValue = $returnType
-            ? ($returnType->allowsNull() ? '?' : '') .$returnType->getName()
-            : null;
+        $returnTypeValue = $this->getReturnTypeValue($method);
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
@@ -129,14 +136,16 @@ if (!$pluginInfo) {
 }
 METHOD_BODY
             ),
-            'returnType' => $returnTypeValue,
-            'docblock' => ['shortDescription' => '{@inheritdoc}'],
+                'returnType' => $returnTypeValue,
+                'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
         return $methodInfo;
     }
 
     /**
+     * Return parameters list
+     *
      * @param array $parameters
      * @return string
      */
@@ -175,14 +184,17 @@ METHOD_BODY
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
         }
-        $this->_classGenerator->addTrait('\\'. \Magento\Framework\Interception\Interceptor::class);
-        $interfaces[] =  '\\'. \Magento\Framework\Interception\InterceptorInterface::class;
+        $this->_classGenerator->addTrait('\\' . \Magento\Framework\Interception\Interceptor::class);
+        $interfaces[] = '\\' . \Magento\Framework\Interception\InterceptorInterface::class;
         $this->_classGenerator->setImplementedInterfaces($interfaces);
+
         return parent::_generateCode();
     }
 
     /**
-     * {@inheritdoc}
+     * Validates data
+     *
+     * @return bool
      */
     protected function _validateData()
     {
@@ -203,6 +215,27 @@ METHOD_BODY
                 $result = false;
             }
         }
+
         return $result;
+    }
+
+    /**
+     * Returns return type
+     *
+     * @param \ReflectionMethod $method
+     * @return null|string
+     */
+    private function getReturnTypeValue(\ReflectionMethod $method): ?string
+    {
+        $returnTypeValue = null;
+        $returnType = $method->getReturnType();
+        if ($returnType) {
+            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
+            $returnTypeValue .= ($returnType->getName() === 'self')
+                ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
+                : $returnType->getName();
+        }
+
+        return $returnTypeValue;
     }
 }

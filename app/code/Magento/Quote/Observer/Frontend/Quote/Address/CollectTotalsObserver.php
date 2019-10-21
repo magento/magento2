@@ -7,6 +7,11 @@ namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Handle customer VAT number on collect_totals_before event of quote address.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
@@ -108,6 +113,8 @@ class CollectTotalsObserver implements ObserverInterface
 
             $customerCountryCode = $customerAddress->getCountryId();
             $customerVatNumber = $customerAddress->getVatId();
+            $address->setCountryId($customerCountryCode);
+            $address->setVatId($customerVatNumber);
         }
 
         $groupId = null;
@@ -124,7 +131,7 @@ class CollectTotalsObserver implements ObserverInterface
             );
         }
 
-        if ($groupId) {
+        if ($groupId !== null) {
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
             $this->customerSession->setCustomerGroupId($groupId);

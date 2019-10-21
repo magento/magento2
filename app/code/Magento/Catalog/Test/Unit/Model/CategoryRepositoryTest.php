@@ -280,6 +280,9 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($categoryMock);
     }
 
+    /**
+     * @return array
+     */
     public function saveWithValidateCategoryExceptionDataProvider()
     {
         return [

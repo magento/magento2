@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Create handler for catalog product gallery
@@ -75,6 +80,16 @@ class CreateHandler implements ExtensionInterface
     private $mediaAttributeCodes;
 
     /**
+     * @var array
+     */
+    private $imagesGallery;
+
+    /**
+     * @var  \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
@@ -82,6 +97,8 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -90,7 +107,8 @@ class CreateHandler implements ExtensionInterface
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
@@ -99,9 +117,12 @@ class CreateHandler implements ExtensionInterface
         $this->mediaConfig = $mediaConfig;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fileStorageDb = $fileStorageDb;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
+     * Execute create handler
+     *
      * @param object $product
      * @param array $arguments
      * @return object
@@ -135,6 +156,10 @@ class CreateHandler implements ExtensionInterface
 
         if ($product->getIsDuplicate() != true) {
             foreach ($value['images'] as &$image) {
+                if (!empty($image['removed']) && !$this->canRemoveImage($product, $image['file'])) {
+                    $image['removed'] = '';
+                }
+
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id'])) {
@@ -150,6 +175,10 @@ class CreateHandler implements ExtensionInterface
             // For duplicating we need copy original images.
             $duplicate = [];
             foreach ($value['images'] as &$image) {
+                if (!empty($image['removed']) && !$this->canRemoveImage($product, $image['file'])) {
+                    $image['removed'] = '';
+                }
+
                 if (empty($image['value_id']) || !empty($image['removed'])) {
                     continue;
                 }
@@ -167,23 +196,19 @@ class CreateHandler implements ExtensionInterface
             if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
                 continue;
             }
-            if (in_array($attrData, $clearImages)) {
-                $product->setData($mediaAttrCode, 'no_selection');
-            }
-
-            if (in_array($attrData, array_keys($newImages))) {
-                $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
-                $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
-            }
-
-            if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
-                $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
-            }
-            if (!empty($product->getData($mediaAttrCode))) {
-                $product->addAttributeUpdate(
+            $this->processMediaAttribute(
+                $product,
+                $mediaAttrCode,
+                $clearImages,
+                $newImages
+            );
+            if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])) {
+                $this->processMediaAttributeLabel(
+                    $product,
                     $mediaAttrCode,
-                    $product->getData($mediaAttrCode),
-                    $product->getStoreId()
+                    $clearImages,
+                    $newImages,
+                    $existImages
                 );
             }
         }
@@ -208,6 +233,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns media gallery attribute instance
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -223,17 +250,22 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Process delete images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 101.0.0
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function processDeletedImages($product, array &$images)
     {
     }
 
     /**
+     * Process images
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $images
      * @return void
@@ -296,6 +328,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Duplicate attribute
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      * @since 101.0.0
@@ -312,7 +346,7 @@ class CreateHandler implements ExtensionInterface
 
         $this->resourceModel->duplicate(
             $this->getAttribute()->getAttributeId(),
-            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
+            $mediaGalleryData['duplicate'] ?? [],
             $product->getOriginalLinkId(),
             $product->getData($this->metadata->getLinkField())
         );
@@ -364,6 +398,8 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
+     * Returns file name according to tmp name
+     *
      * @param string $file
      * @return string
      * @since 101.0.0
@@ -392,6 +428,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $forTmp
                 ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/' . FileUploader::getNewFileName($destinationFile);
         }
 
@@ -412,6 +449,7 @@ class CreateHandler implements ExtensionInterface
             $destinationFile = $this->getUniqueFileName($file);
 
             if (!$this->mediaDirectory->isFile($this->mediaConfig->getMediaPath($file))) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception();
             }
 
@@ -429,6 +467,7 @@ class CreateHandler implements ExtensionInterface
             }
 
             return str_replace('\\', '/', $destinationFile);
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $file = $this->mediaConfig->getMediaPath($file);
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -448,5 +487,124 @@ class CreateHandler implements ExtensionInterface
             $this->mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
         }
         return $this->mediaAttributeCodes;
+    }
+
+    /**
+     * Process media attribute
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+     * @param array $clearImages
+     * @param array $newImages
+     */
+    private function processMediaAttribute(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages
+    ) {
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode, 'no_selection');
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
+        }
+        if (!empty($product->getData($mediaAttrCode))) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode,
+                $product->getData($mediaAttrCode),
+                $product->getStoreId()
+            );
+        }
+    }
+
+    /**
+     * Process media attribute label
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $mediaAttrCode
+     * @param array $clearImages
+     * @param array $newImages
+     * @param array $existImages
+     */
+    private function processMediaAttributeLabel(
+        \Magento\Catalog\Model\Product $product,
+        $mediaAttrCode,
+        array $clearImages,
+        array $newImages,
+        array $existImages
+    ) {
+        $resetLabel = false;
+        $attrData = $product->getData($mediaAttrCode);
+        if (in_array($attrData, $clearImages)) {
+            $product->setData($mediaAttrCode . '_label', null);
+            $resetLabel = true;
+        }
+
+        if (in_array($attrData, array_keys($newImages))) {
+            $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
+        }
+
+        if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
+            $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
+        }
+
+        if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {
+            $product->setData($mediaAttrCode . '_label', null);
+            $resetLabel = true;
+        }
+        if (!empty($product->getData($mediaAttrCode . '_label'))
+            || $resetLabel === true
+        ) {
+            $product->addAttributeUpdate(
+                $mediaAttrCode . '_label',
+                $product->getData($mediaAttrCode . '_label'),
+                $product->getStoreId()
+            );
+        }
+    }
+
+    /**
+     * Get product images for all stores
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function getImagesForAllStores(ProductInterface $product)
+    {
+        if ($this->imagesGallery ===  null) {
+            $storeIds = array_keys($this->storeManager->getStores());
+            $storeIds[] = 0;
+
+            $this->imagesGallery = $this->resourceModel->getProductImages($product, $storeIds);
+        }
+
+        return $this->imagesGallery;
+    }
+
+    /**
+     * Check possibility to remove image
+     *
+     * @param ProductInterface $product
+     * @param string $imageFile
+     * @return bool
+     */
+    private function canRemoveImage(ProductInterface $product, string $imageFile) :bool
+    {
+        $canRemoveImage = true;
+        $gallery = $this->getImagesForAllStores($product);
+        $storeId = $product->getStoreId();
+
+        if (!empty($gallery)) {
+            foreach ($gallery as $image) {
+                if ($image['filepath'] === $imageFile && (int) $image['store_id'] !== $storeId) {
+                    $canRemoveImage = false;
+                }
+            }
+        }
+
+        return $canRemoveImage;
     }
 }

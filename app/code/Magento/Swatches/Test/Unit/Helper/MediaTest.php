@@ -106,6 +106,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $expectedResult);
     }
 
+    /**
+     * @return array
+     */
     public function dataForFullPath()
     {
         return [
@@ -194,6 +197,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
+    /**
+     * @return array
+     */
     public function dataForFolderName()
     {
         return [
@@ -281,6 +287,9 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->mediaHelperObject->getSwatchCachePath($swatchType));
     }
 
+    /**
+     * @return array
+     */
     public function getSwatchTypes()
     {
         return [

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminRoleGridSection">
+        <element name="idFilterTextField" type="input" selector="#roleGrid_filter_role_id"/>
+        <element name="roleNameFilterTextField" type="input" selector="#roleGrid_filter_role_name"/>
+        <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]"/>
+        <element name="resetButton" type="button" selector="button[title='Reset Filter']"/>
+        <element name="roleNameInFirstRow" type="text" selector=".col-role_name"/>
+        <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
+    </section>
+
+    <section name="AdminDeleteRoleSection">
+        <element name="theRole" selector="//td[contains(text(), 'Role')]" type="button"/>
+        <element name="role" parameterized="true" selector="//td[contains(text(), '{{args}}')]" type="button"/>
+        <element name="current_pass" type="button" selector="#current_password"/>
+        <element name="delete" selector="//button/span[contains(text(), 'Delete Role')]" type="button"/>
+        <element name="confirm" selector="//*[@class='action-primary action-accept']" type="button"/>
+    </section>
+</sections>

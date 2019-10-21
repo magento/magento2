@@ -122,7 +122,7 @@ class Compiler implements CompilerInterface
         return preg_replace_callback(
             '#' . $patternTag . '(.+?)' . $patternTag . '#',
             function ($match) {
-                return isset($this->data[$match[1]]) ? $this->data[$match[1]] : '';
+                return $this->data[$match[1]] ?? '';
             },
             $content
         );

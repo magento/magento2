@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CatalogSection">
+        <element name="storefront" type="select" selector="#catalog_frontend-head"/>
+        <element name="CheckIfTabExpand" type="button" selector="#catalog_frontend-head:not(.open)"/>
+        <element name="price" type="button" selector="#catalog_price-head"/>
+        <element name="checkIfPriceExpand" type="button" selector="//a[@id='catalog_price-head' and @class='open']"/>
+        <element name="catalogPriceScope" type="select" selector="#catalog_price_scope"/>
+        <element name="catalogPriceScopeValue" type="select" selector="//select[@id='catalog_price_scope']/option[text()='{{args}}']" parameterized="true"/>
+        <element name="defaultProductPrice" type="input" selector="#catalog_price_default_product_price"/>
+        <element name="save" type="button" selector="#save"/>
+        <element name="flatCatalogCategoryCheckBox" type="checkbox" selector="#catalog_frontend_flat_catalog_category_inherit"/>
+        <element name="flatCatalogCategory" type="select" selector="#catalog_frontend_flat_catalog_category"/>
+        <element name="flatCatalogProduct" type="select" selector="#catalog_frontend_flat_catalog_product"/>
+        <element name="seo" type="button" selector="#catalog_seo-head"/>
+        <element name="CheckIfSeoTabExpand" type="button" selector="#catalog_seo-head:not(.open)"/>
+        <element name="GenerateUrlRewrites" type="select" selector="#catalog_seo_generate_category_product_rewrites"/>
+        <element name="successMessage" type="text" selector="#messages"/>
+    </section>
+    <section name="GenerateUrlRewritesConfirm">
+        <element name="title" type="text" selector=".modal-popup.confirm h1.modal-title"/>
+        <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
+        <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
+    </section>
+</sections>

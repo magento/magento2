@@ -30,7 +30,7 @@ class OrderSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\OrderIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -64,7 +64,7 @@ class OrderSenderTest extends AbstractSenderTest
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
-            ->with(true);
+            ->with($emailSendingResult);
 
         $this->globalConfig->expects($this->once())
             ->method('getValue')
@@ -72,11 +72,15 @@ class OrderSenderTest extends AbstractSenderTest
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
-            $this->identityContainerMock->expects($this->once())
+            $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($senderSendException ? $this->never() : $this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
                 $this->addressRenderer->expects($this->any())
@@ -118,7 +122,7 @@ class OrderSenderTest extends AbstractSenderTest
 
                     $this->orderMock->expects($this->once())
                         ->method('setEmailSent')
-                        ->with(true);
+                        ->with($emailSendingResult);
 
                     $this->orderResourceMock->expects($this->once())
                         ->method('saveAttribute')
@@ -210,9 +214,13 @@ class OrderSenderTest extends AbstractSenderTest
             ->with('sales_email/general/async_sending')
             ->willReturn(false);
 
-        $this->identityContainerMock->expects($this->once())
+        $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(true);
+
+        $this->identityContainerMock->expects($this->once())
+            ->method('getCopyMethod')
+            ->willReturn('copy');
 
         $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 

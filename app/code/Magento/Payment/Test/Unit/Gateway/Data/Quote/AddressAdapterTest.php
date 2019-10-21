@@ -54,6 +54,9 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getStreetLine1());
     }
 
+    /**
+     * @return array
+     */
     public function streetLine1DataProvider()
     {
         return [
@@ -73,6 +76,9 @@ class AddressAdapterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getStreetLine2());
     }
 
+    /**
+     * @return array
+     */
     public function streetLine2DataProvider()
     {
         return [

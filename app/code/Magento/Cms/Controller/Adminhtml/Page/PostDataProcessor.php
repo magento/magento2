@@ -119,7 +119,7 @@ class PostDataProcessor
         foreach ($data as $field => $value) {
             if (in_array($field, array_keys($requiredFields)) && $value == '') {
                 $errorNo = false;
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('To apply changes you should fill in hidden required "%1" field', $requiredFields[$field])
                 );
             }
@@ -140,6 +140,7 @@ class PostDataProcessor
             if (!empty($data['layout_update_xml']) && !$layoutXmlValidator->isValid($data['layout_update_xml'])) {
                 return false;
             }
+            
             if (!empty($data['custom_layout_update_xml']) &&
                 !$layoutXmlValidator->isValid($data['custom_layout_update_xml'])
             ) {

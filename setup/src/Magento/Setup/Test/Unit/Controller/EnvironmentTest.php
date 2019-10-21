@@ -9,6 +9,7 @@ use Magento\Setup\Controller\Environment;
 use Magento\Setup\Controller\ReadinessCheckInstaller;
 use Magento\Setup\Controller\ReadinessCheckUpdater;
 use Magento\Setup\Controller\ResponseTypeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Zend\View\Model\JsonModel;
 
 /**
@@ -61,11 +62,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $this->permissions->expects($this->once())->method('getMissingWritablePathsForInstallation');
         $this->environment->setEvent($mvcEvent);
         $this->environment->dispatch($request, $response);
@@ -78,11 +76,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckInstaller::INSTALLER);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion');
         $this->environment->setEvent($mvcEvent);
@@ -96,11 +91,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckUpdater::UPDATER);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpVersion');
         $read =
@@ -120,11 +112,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckInstaller::INSTALLER);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpSettings');
         $this->environment->setEvent($mvcEvent);
@@ -138,11 +127,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckUpdater::UPDATER);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpSettings');
         $read =
@@ -162,11 +148,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckInstaller::INSTALLER);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions');
         $this->environment->setEvent($mvcEvent);
@@ -180,11 +163,8 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
         $response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
         $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
+
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckUpdater::UPDATER);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpExtensions');
         $read =
@@ -312,5 +292,27 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
     {
         $model = $this->environment->indexAction();
         $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $model);
+    }
+
+    /**
+     * @param \PHPUnit\Framework\MockObject\MockObject $request
+     * @param \PHPUnit\Framework\MockObject\MockObject $response
+     * @param \PHPUnit\Framework\MockObject\MockObject $routeMatch
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getMvcEventMock(
+        MockObject $request,
+        MockObject $response,
+        MockObject $routeMatch
+    ) {
+        $mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
+        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $mvcEvent->expects($this->any())->method('getName')->willReturn('dispatch');
+
+        return $mvcEvent;
     }
 }

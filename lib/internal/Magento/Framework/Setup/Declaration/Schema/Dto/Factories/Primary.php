@@ -45,6 +45,7 @@ class Primary implements FactoryInterface
     public function create(array $data)
     {
         $data['name'] = Internal::PRIMARY_NAME;
+        $data['nameWithoutPrefix'] = $data['name'];
         return $this->objectManager->create($this->className, $data);
     }
 }

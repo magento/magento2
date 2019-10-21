@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Robots\Model\Config;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -14,9 +15,11 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Backend model for design/search_engine_robots/custom_instructions configuration value.
+ *
  * Required to implement Page Cache functionality.
  *
  * @api
@@ -30,17 +33,16 @@ class Value extends ConfigValue implements IdentityInterface
     const CACHE_TAG = 'robots';
 
     /**
-     * Model cache tag for clear cache in after save and after delete
+     * @inheritdoc
      *
-     * @var string
      * @since 100.2.0
      */
-    protected $_cacheTag = true;
+    protected $_cacheTag = [self::CACHE_TAG];
 
     /**
-     * @var StoreResolver
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @param Context $context
@@ -48,9 +50,12 @@ class Value extends ConfigValue implements IdentityInterface
      * @param ScopeConfigInterface $config
      * @param TypeListInterface $cacheTypeList
      * @param StoreResolver $storeResolver
+     * @param StoreManagerInterface|null $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -58,11 +63,13 @@ class Value extends ConfigValue implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreResolver $storeResolver,
+        StoreManagerInterface $storeManager = null,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeResolver = $storeResolver;
+        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
 
         parent::__construct(
             $context,
@@ -84,7 +91,7 @@ class Value extends ConfigValue implements IdentityInterface
     public function getIdentities()
     {
         return [
-            self::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            self::CACHE_TAG . '_' . $this->storeManager->getStore()->getId(),
         ];
     }
 }

@@ -116,7 +116,7 @@ class AssertProductDuplicateForm extends AssertProductForm
     protected function prepareUrlKey($urlKey)
     {
         preg_match("~\d+$~", $urlKey, $matches);
-        $key = intval($matches[0]) + 1;
+        $key = (int)$matches[0] + 1;
         return str_replace($matches[0], $key, $urlKey);
     }
 

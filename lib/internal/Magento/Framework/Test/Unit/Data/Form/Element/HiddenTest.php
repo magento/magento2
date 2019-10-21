@@ -21,7 +21,15 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->element = $objectManager->getObject(\Magento\Framework\Data\Form\Element\Hidden::class);
+        $escaper = $objectManager->getObject(
+            \Magento\Framework\Escaper::class
+        );
+        $this->element = $objectManager->getObject(
+            \Magento\Framework\Data\Form\Element\Hidden::class,
+            [
+                'escaper' => $escaper
+            ]
+        );
     }
 
     /**
@@ -45,6 +53,9 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
         $this->assertContains($value, $html);
     }
 
+    /**
+     * @return array
+     */
     public function getElementHtmlDataProvider()
     {
         return [

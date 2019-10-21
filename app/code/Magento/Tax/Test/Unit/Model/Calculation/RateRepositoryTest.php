@@ -252,7 +252,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         foreach ($taxRateData as $key => $value) {
             // convert key from snake case to upper case
             $taxRateMock->expects($this->any())
-                ->method('get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key))))
+                ->method('get' . str_replace('_', '', ucwords($key, '_')))
                 ->will($this->returnValue($value));
         }
 
@@ -312,6 +312,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($rateMock);
     }
 
+    /**
+     * @return array
+     */
     public function saveThrowsExceptionIfCannotSaveTitlesDataProvider()
     {
         return [

@@ -12,8 +12,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
- * This observer prepares stock data for saving by combining stock data from the stock data property
- * and quantity_and_stock_status attribute and setting it to the single point represented by stock data property.
+ * Prepares stock data for saving
  *
  * @deprecated 100.2.0 Stock data should be processed using the module API
  * @see StockItemInterface when you want to change the stock data
@@ -74,7 +73,6 @@ class ProcessInventoryDataObserver implements ObserverInterface
                 $this->setStockDataToProduct($product, $stockItem, $quantityAndStockStatus);
             }
         }
-        $product->unsetData('quantity_and_stock_status');
     }
 
     /**

@@ -10,7 +10,7 @@
     <table name="patch_list" resource="default" comment="List of data/schema patches">
         <column xsi:type="int" name="patch_id" identity="true" comment="Patch Auto Increment" />
         <column xsi:type="varchar" name="patch_name" length="1024" nullable="false" comment="Patch Class Name" />
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="patch_id" />
         </constraint>
     </table>

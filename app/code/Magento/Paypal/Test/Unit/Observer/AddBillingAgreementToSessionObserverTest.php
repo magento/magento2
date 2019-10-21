@@ -166,6 +166,9 @@ class AddBillingAgreementToSessionObserverTest extends \PHPUnit\Framework\TestCa
         $this->_model->execute($this->_observer);
     }
 
+    /**
+     * @return array
+     */
     public function addBillingAgreementToSessionDataProvider()
     {
         return [[true], [false]];

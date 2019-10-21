@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Test Image </data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>image</item>
+            <item>small_image</item>
+            <item>thumbnail</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="ImageContent">TestImageContent</requiredEntity>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryMagentoLogo" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Magento Logo </data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>small_image</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="ImageContent">MagentoLogoImageContent</requiredEntity>
+    </entity>
+    <!-- From file "export_import_configurable_product.csv" -->
+    <entity name="ApiProductAttributeMediaGalleryForExportImport" extends="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
+        <data key="label">Magento Logo</data>
+        <requiredEntity type="ImageContent">MagentoLogoImageContentExportImport</requiredEntity>
+    </entity>
+</entities>

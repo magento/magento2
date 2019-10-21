@@ -7,6 +7,9 @@ namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Paypal\Model\Cart;
 
+/**
+ * @see \Magento\Paypal\Model\Cart
+ */
 class CartTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -85,6 +88,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0.3, $this->_model->getDiscount());
     }
 
+    /**
+     * @return array
+     */
     public function invalidGetAllItemsDataProvider()
     {
         return [
@@ -150,6 +156,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($transferDiscount ? 0.0 : $values['base_discount_amount'], $this->_model->getDiscount());
     }
 
+    /**
+     * @return array
+     */
     public function invalidTotalsGetAllItemsDataProvider()
     {
         return [
@@ -222,6 +231,9 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
     }
 
+    /**
+     * @return array
+     */
     public function invalidGetAmountsDataProvider()
     {
         $data = [];

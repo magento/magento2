@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontMinicartSection">
+        <element name="blockMiniCart" type="block" selector=".block-minicart" timeout="30"/>
+        <element name="productCount" type="text" selector="//header//div[contains(@class, 'minicart-wrapper')]//a[contains(@class, 'showcart')]//span[@class='counter-number']"/>
+        <element name="productLinkByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details']//a[contains(text(), '{{var1}}')]"  parameterized="true"/>
+        <element name="productPriceByName" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[@class='price']"  parameterized="true"/>
+        <element name="productPriceByItsName" type="text" selector="//a[normalize-space()='{{prodName}}']/../following-sibling::*//*[@class='price']"  parameterized="true"/>
+        <element name="productImageByName" type="text" selector="header ol[id='mini-cart'] span[class='product-image-container'] img[alt='{{prodName}}']"  parameterized="true"/>
+        <element name="productImageByItsName" type="text" selector="img[alt='{{prodName}}']"  parameterized="true"/>
+        <element name="productName" type="text" selector=".product-item-name"/>
+        <element name="productOptionsDetailsByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[.='See Details']"  parameterized="true"/>
+        <element name="productOptionByNameAndAttribute" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//dt[@class='label' and .='{{var2}}']/following-sibling::dd[@class='values']//span"  parameterized="true"/>
+        <element name="showCart" type="button" selector="a.showcart" timeout="60"/>
+        <element name="quantity" type="button" selector="span.counter-number"/>
+        <element name="miniCartOpened" type="button" selector="a.showcart.active"/>
+        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
+        <element name="viewAndEditCart" type="button" selector=".action.viewcart" timeout="30"/>
+        <element name="miniCartItemsText" type="text" selector=".minicart-items"/>
+        <element name="deleteMiniCartItem" type="button" selector=".action.delete" timeout="30"/>
+        <element name="deleteMiniCartItemByName" type="button" selector="//ol[@id='mini-cart']//div[contains(., '{{var}}')]//a[contains(@class, 'delete')]" parameterized="true"/>
+        <element name="miniCartSubtotalField" type="text" selector=".block-minicart .amount span.price"/>
+        <element name="itemQuantityBySku" type="input" selector="#minicart-content-wrapper input[data-cart-item-id='{{productSku}}']" parameterized="true"/>
+        <element name="itemQuantityUpdateBySku" type="button" selector="//div[@id='minicart-content-wrapper']//input[@data-cart-item-id='{{productSku}}']/../button[contains(@class, 'update-cart-item')]" parameterized="true"/>
+        <element name="itemQuantity" type="input" selector="//a[text()='{{productName}}']/../..//input[contains(@class,'cart-item-qty')]" parameterized="true"/>
+        <element name="itemQuantityUpdate" type="button" selector="//a[text()='{{productName}}']/../..//span[text()='Update']" parameterized="true"/>
+        <element name="itemDiscount" type="text" selector="//tr[@class='totals']//td[@class='amount']/span"/>
+        <element name="subtotal" type="text" selector="//tr[@class='totals sub']//td[@class='amount']/span"/>
+        <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
+        <element name="minicartContent" type="block" selector="#minicart-content-wrapper"/>
+        <element name="messageEmptyCart" type="text" selector="//*[@id='minicart-content-wrapper']//*[contains(@class,'subtitle empty')]"/>
+        <element name="visibleItemsCountText" type="text" selector="//div[@class='items-total']"/>
+        <element name="productQuantity" type="input" selector="//*[@id='mini-cart']//a[contains(text(),'{{productName}}')]/../..//div[@class='details-qty qty']//input[@data-item-qty='{{qty}}']" parameterized="true"/>
+        <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>
+        <element name="productSubTotal" type="text" selector="//div[@class='subtotal']//span/span[@class='price']"/>
+    </section>
+</sections>

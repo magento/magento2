@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Service;
 
+use Magento\Sales\Api\PaymentFailuresInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Class OrderUnHoldTest
  *
@@ -140,6 +143,12 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject  $paymentFailures */
+        $paymentFailures = $this->createMock(PaymentFailuresInterface::class);
+
+        /** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+
         $this->orderService = new \Magento\Sales\Model\Service\OrderService(
             $this->orderRepositoryMock,
             $this->orderStatusHistoryRepositoryMock,
@@ -147,7 +156,9 @@ class OrderServiceTest extends \PHPUnit\Framework\TestCase
             $this->filterBuilderMock,
             $this->orderNotifierMock,
             $this->eventManagerMock,
-            $this->orderCommentSender
+            $this->orderCommentSender,
+            $paymentFailures,
+            $logger
         );
     }
 

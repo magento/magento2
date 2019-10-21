@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderBraintreeFillActionGroup">
+        <annotations>
+            <description>Fills in the Payment Method using Braintree details. PLEASE NOTE: The Braintree details are Hardcoded using 'PaymentAndShippingInfo'.</description>
+        </annotations>
+
+        <!--Select Braintree Payment method on Admin Order Create Page-->
+        <click stepKey="chooseBraintree" selector="{{NewOrderSection.creditCardBraintree}}"/>
+        <waitForPageLoad stepKey="waitForBraintreeConfigs"/>
+        <click stepKey="openCardTypes" selector="{{NewOrderSection.openCardTypes}}"/>
+        <waitForPageLoad stepKey="waitForCardTypes"/>
+        <click stepKey="chooseCardType" selector="{{NewOrderSection.masterCard}}"/>
+        <waitForPageLoad stepKey="waitForCardSelected"/>
+
+        <!--Choose Master Card from drop-down list-->
+        <switchToIFrame stepKey="switchToCardNumber" selector="{{NewOrderSection.cardFrame}}"/>
+        <waitForElementVisible selector="{{NewOrderSection.creditCardNumber}}" stepKey="waitForFillCardNumber"/>
+        <fillField stepKey="fillCardNumber" selector="{{NewOrderSection.creditCardNumber}}" userInput="{{PaymentAndShippingInfo.cardNumber}}"/>
+        <switchToIFrame stepKey="switchBackFromCard"/>
+
+        <!--Fill expire date-->
+        <switchToIFrame stepKey="switchToExpirationMonth" selector="{{NewOrderSection.monthFrame}}"/>
+        <waitForElementVisible selector="{{NewOrderSection.expirationMonth}}" stepKey="waitForFillMonth"/>
+        <fillField stepKey="fillMonth" selector="{{NewOrderSection.expirationMonth}}" userInput="{{PaymentAndShippingInfo.month}}"/>
+        <switchToIFrame stepKey="switchBackFromMonth"/>
+        <switchToIFrame stepKey="switchToExpirationYear" selector="{{NewOrderSection.yearFrame}}"/>
+        <waitForElementVisible selector="{{NewOrderSection.expirationYear}}" stepKey="waitForFillYear"/>
+        <fillField stepKey="fillYear" selector="{{NewOrderSection.expirationYear}}" userInput="{{PaymentAndShippingInfo.year}}"/>
+        <switchToIFrame stepKey="switchBackFromYear"/>
+
+        <!--Fill CVW code-->
+        <switchToIFrame stepKey="switchToCVV" selector="{{NewOrderSection.cvvFrame}}"/>
+        <waitForElementVisible selector="{{NewOrderSection.cvv}}" stepKey="waitForFillCVV"/>
+        <fillField stepKey="fillCVV" selector="{{NewOrderSection.cvv}}" userInput="{{PaymentAndShippingInfo.cvv}}"/>
+        <switchToIFrame stepKey="switchBackFromCVV"/>
+    </actionGroup>
+</actionGroups>

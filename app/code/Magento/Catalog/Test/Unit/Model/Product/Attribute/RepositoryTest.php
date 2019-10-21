@@ -10,7 +10,6 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product\Attribute\Repository;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Eav\Api\Data\AttributeFrontendLabelInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,6 +71,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $optionManagementMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->attributeResourceMock =
@@ -116,6 +118,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGet()
     {
         $attributeCode = 'some attribute code';
@@ -128,6 +133,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->get($attributeCode);
     }
 
+    /**
+     * @return void
+     */
     public function testGetList()
     {
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
@@ -141,6 +149,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->getList($searchCriteriaMock);
     }
 
+    /**
+     * @return void
+     */
     public function testDelete()
     {
         $attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -149,6 +160,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $this->model->delete($attributeMock));
     }
 
+    /**
+     * @return void
+     */
     public function testDeleteById()
     {
         $attributeCode = 'some attribute code';
@@ -164,6 +178,9 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $this->model->deleteById($attributeCode));
     }
 
+    /**
+     * @return void
+     */
     public function testGetCustomAttributesMetadata()
     {
         $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
@@ -235,15 +252,18 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         );
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
-        $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeFrontendLabelInterface::class);
-        $attributeMock->expects($this->exactly(4))->method('getFrontendLabels')->willReturn([$labelMock]);
-        $attributeMock->expects($this->exactly(2))->method('getDefaultFrontendLabel')->willReturn('test');
+        $labelMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\FrontendLabel::class);
+        $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
+        $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn(null);
         $labelMock->expects($this->once())->method('getStoreId')->willReturn(0);
         $labelMock->expects($this->once())->method('getLabel')->willReturn(null);
 
         $this->model->save($attributeMock);
     }
 
+    /**
+     * @return void
+     */
     public function testSaveDoesNotSaveAttributeOptionsIfOptionsAreAbsentInPayload()
     {
         $attributeId = 1;
@@ -260,7 +280,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
             ->willReturn($existingModelMock);
-
+        $existingModelMock->expects($this->once())->method('getDefaultFrontendLabel')->willReturn('default_label');
         // Attribute code must not be changed after attribute creation
         $attributeMock->expects($this->once())->method('setAttributeCode')->with($attributeCode);
         $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
@@ -269,9 +289,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->save($attributeMock);
     }
 
+    /**
+     * @return void
+     */
     public function testSaveSavesDefaultFrontendLabelIfItIsPresentInPayload()
     {
-        $labelMock = $this->createMock(AttributeFrontendLabelInterface::class);
+        $labelMock = $this->createMock(\Magento\Eav\Api\Data\AttributeFrontendLabelInterface::class);
         $labelMock->expects($this->any())->method('getStoreId')->willReturn(1);
         $labelMock->expects($this->any())->method('getLabel')->willReturn('Store Scope Label');
 
@@ -280,11 +303,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $attributeMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
-        $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('Default Label');
+        $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn(null);
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
         $attributeMock->expects($this->any())->method('getOptions')->willReturn([]);
 
         $existingModelMock = $this->createMock(Attribute::class);
+        $existingModelMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('Default Label');
         $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
         $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
 
@@ -295,12 +319,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
         $attributeMock->expects($this->once())
             ->method('setDefaultFrontendLabel')
-            ->with(
-                [
-                    0 => 'Default Label',
-                    1 => 'Store Scope Label'
-                ]
-            );
+            ->with('Default Label');
         $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
 
         $this->model->save($attributeMock);

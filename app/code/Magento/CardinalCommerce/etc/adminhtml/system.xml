@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="three_d_secure" translate="label" type="text" sortOrder="410" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>3D Secure</label>
+            <tab>sales</tab>
+            <resource>Magento_Sales::three_d_secure</resource>
+            <group id="cardinal" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="config" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>CardinalCommerce</label>
+                    <comment><![CDATA[Please visit <a href="https://www.cardinalcommerce.com/" target="_blank">www.cardinalcommerce.com</a> to get the CardinalCommerce credentials and find out more details about PSD2 SCA requirements. For support contact <a href="mailto:support@cardinalcommerce.com">support@cardinalcommerce.com</a>.]]></comment>
+                    <field id="environment" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Environment</label>
+                        <source_model>Magento\CardinalCommerce\Model\Adminhtml\Source\Environment</source_model>
+                        <config_path>three_d_secure/cardinal/environment</config_path>
+                    </field>
+                    <field id="org_unit_id" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Org Unit Id</label>
+                        <config_path>three_d_secure/cardinal/org_unit_id</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                    <field id="api_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>API Key</label>
+                        <config_path>three_d_secure/cardinal/api_key</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                    <field id="api_identifier" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>API Identifier</label>
+                        <config_path>three_d_secure/cardinal/api_identifier</config_path>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    </field>
+                    <field id="debug" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Debug</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>three_d_secure/cardinal/debug</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

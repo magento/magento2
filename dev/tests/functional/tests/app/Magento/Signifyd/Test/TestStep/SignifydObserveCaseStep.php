@@ -76,6 +76,11 @@ class SignifydObserveCaseStep implements TestStepInterface
     private $testStepFactory;
 
     /**
+     * @var int
+     */
+    private $searchAttempts = 10;
+
+    /**
      * @param AssertCaseInfoOnSignifydConsole $assertCaseInfoOnSignifydConsole
      * @param SignifydAddress $signifydAddress
      * @param SignifydCases $signifydCases
@@ -111,8 +116,16 @@ class SignifydObserveCaseStep implements TestStepInterface
     public function run()
     {
         $this->signifydCases->open();
-        $this->signifydCases->getCaseSearchBlock()
-            ->searchCaseByCustomerName($this->signifydAddress->getFirstname());
+        // Search case few times because it can appear with delay.
+        for ($attempts = $this->searchAttempts; $attempts > 0; $attempts--) {
+            $this->signifydCases->getCaseSearchBlock()
+                ->searchCaseByCustomerName($this->signifydAddress->getFirstname());
+            if ($this->signifydCases->getCaseSearchBlock()->isAnyCaseVisible()) {
+                break;
+            }
+            sleep(3);
+        }
+
         $this->signifydCases->getCaseSearchBlock()->selectCase();
         $this->signifydCases->getCaseInfoBlock()->flagCase($this->signifydData->getCaseFlag());
 

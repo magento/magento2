@@ -10,7 +10,6 @@ namespace Magento\WebapiAsync\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
-use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 use Magento\Webapi\Model\Config\Converter as WebapiConverter;
 use Magento\Webapi\Model\Config;
 
@@ -42,7 +41,7 @@ class BulkServiceConfig implements \Magento\Webapi\Model\ConfigInterface
      * Initialize dependencies.
      *
      * @param WebapiCache $cache
-     * @param Config $configReader
+     * @param Config $webapiConfig
      * @param SerializerInterface $serializer
      */
     public function __construct(
@@ -75,6 +74,9 @@ class BulkServiceConfig implements \Magento\Webapi\Model\ConfigInterface
         return $this->services;
     }
 
+    /**
+     * @return array
+     */
     private function getBulkServicesConfig()
     {
         $bulkServices = [];

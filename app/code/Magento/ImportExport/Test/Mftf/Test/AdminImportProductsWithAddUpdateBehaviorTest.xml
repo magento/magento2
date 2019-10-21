@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportProductsWithAddUpdateBehaviorTest">
+        <annotations>
+            <description value="Verify Magento native import products with add/update behavior."/>
+            <stories value="Import Products"/>
+            <features value="Import/Export"/>
+            <title value="Verify Magento native import products with add/update behavior."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14077"/>
+            <group value="importExport"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product1 -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <field key="name">SimpleProductForTest1</field>
+                <field key="sku">SimpleProductForTest1</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create Website -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
+                <argument name="newWebsiteName" value="secondWebsite"/>
+                <argument name="websiteCode" value="second_website"/>
+            </actionGroup>
+
+            <!-- Create store group -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateStore">
+                <argument name="website" value="secondWebsite"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+
+            <!-- Create store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete all products that replaced products in the before block post import -->
+            <deleteData stepKey="deleteSimpleProduct1" url="/V1/products/SimpleProductForTest1"/>
+            <deleteData stepKey="deleteSimpleProduct2" url="/V1/products/SimpleProductForTest2"/>
+            <deleteData stepKey="deleteSimpleProduct3" url="/V1/products/SimpleProductForTest3"/>
+
+            <!-- Delete category created in the before block -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!--Delete website created in the before block -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite" before="logoutFromAdmin">
+                <argument name="websiteName" value="secondWebsite"/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import products with add/update behavior -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="catalog_import_products.csv"/>
+            <argument name="importNoticeMessage" value="Created: 2, Updated: 1, Deleted: 0"/>
+        </actionGroup>
+
+        <!-- Assert Simple Product1 on grid-->
+        <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct1OnAdminGrid">
+            <argument name="product" value="SimpleProductAfterImport1"/>
+        </actionGroup>
+
+        <!-- Assert Simple Product1 on edit page-->
+        <actionGroup ref="AssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct1OnEditPage">
+            <argument name="product" value="SimpleProductAfterImport1"/>
+        </actionGroup>
+
+        <!-- Assert Simple Product2 on grid-->
+        <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct2OnAdminGrid">
+            <argument name="product" value="SimpleProductAfterImport2"/>
+        </actionGroup>
+
+        <!-- Assert Simple Product2 on edit page-->
+        <actionGroup ref="AssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct2OnEditPage">
+            <argument name="product" value="SimpleProductAfterImport2"/>
+        </actionGroup>
+
+        <!-- Assert Simple Product3 on grid-->
+        <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct3OnAdminGrid">
+            <argument name="product" value="SimpleProductAfterImport3"/>
+        </actionGroup>
+
+        <!-- Assert Simple Product3 on edit page-->
+        <actionGroup ref="AssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct3OnEditPage">
+            <argument name="product" value="SimpleProductAfterImport3"/>
+        </actionGroup>
+
+        <!-- Assert SimpleProduct1 on store front-->
+        <actionGroup ref="StoreFrontProductValidationActionGroup" stepKey="storeFrontSimpleProduct1Validation">
+            <argument name="product" value="SimpleProductAfterImport1"/>
+        </actionGroup>
+
+        <!-- Assert SimpleProduct2 on store front-->
+        <actionGroup ref="StoreFrontProductValidationActionGroup" stepKey="storeFrontSimpleProduct2Validation">
+            <argument name="product" value="SimpleProductAfterImport2"/>
+        </actionGroup>
+
+        <!-- Assert SimpleProduct3 on store front-->
+        <actionGroup ref="StoreFrontProductValidationActionGroup" stepKey="storeFrontSimpleProduct3Validation">
+            <argument name="product" value="SimpleProductAfterImport3"/>
+        </actionGroup>
+    </test>
+</tests>

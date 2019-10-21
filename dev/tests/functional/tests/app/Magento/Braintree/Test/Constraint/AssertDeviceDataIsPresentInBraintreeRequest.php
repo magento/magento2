@@ -17,7 +17,7 @@ class AssertDeviceDataIsPresentInBraintreeRequest extends AbstractConstraint
     /**
      * Log file name.
      */
-    const FILE_NAME = 'debug.log';
+    const FILE_NAME = 'payment.log';
 
     /**
      * Device data pattern for regular expression.

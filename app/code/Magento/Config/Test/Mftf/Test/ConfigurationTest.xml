@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyAllowDynamicMediaURLsSettingIsRemoved">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Dynamic Media URL"/>
+            <title value="Verify that Allow Dynamic Media URLs setting is removed from configuration page"/>
+            <description value="Verify that Allow Dynamic Media URLs setting is removed from configuration page"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-1364"/>
+            <testCaseId value="MC-3178"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPage" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandStorefrontTab" selector="{{CatalogSection.storefront}}" dependentSelector="{{CatalogSection.CheckIfTabExpand}}" visible="true" />
+        <dontSee stepKey="dontSeeDynamicMediaURLsSetting" userInput="Allow Dynamic Media URLs"/>
+    </test>
+</tests>

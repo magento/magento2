@@ -15,7 +15,7 @@ class WidgetTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testLoadOptionsAction()
     {
-        $this->getRequest()->setPostValue(
+        $this->getRequest()->setParam(
             'widget',
             '{"widget_type":"Magento\\\\Cms\\\\Block\\\\Widget\\\\Page\\\\Link","values":{}}'
         );

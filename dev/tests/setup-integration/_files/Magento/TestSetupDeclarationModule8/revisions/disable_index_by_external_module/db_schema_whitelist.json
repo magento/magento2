@@ -1,0 +1,7 @@
+{
+  "test_table": {
+    "index": {
+      "TEST_TABLE_VARCHAR": true
+    }
+  }
+}

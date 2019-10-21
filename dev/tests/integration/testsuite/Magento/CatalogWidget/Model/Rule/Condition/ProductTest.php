@@ -6,6 +6,8 @@
 
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -18,6 +20,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -28,19 +33,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->conditionProduct->setRule($rule);
     }
 
+    /**
+     * @return void
+     */
     public function testLoadAttributeOptions()
     {
         $this->conditionProduct->loadAttributeOptions();
         $options = $this->conditionProduct->getAttributeOption();
-        $this->assertArrayHasKey('sku', $options);
-        $this->assertArrayHasKey('attribute_set_id', $options);
+        $this->assertArrayHasKey(ProductInterface::SKU, $options);
+        $this->assertArrayHasKey(ProductInterface::ATTRIBUTE_SET_ID, $options);
         $this->assertArrayHasKey('category_ids', $options);
+        $this->assertArrayNotHasKey(ProductInterface::STATUS, $options);
         foreach ($options as $code => $label) {
             $this->assertNotEmpty($label);
             $this->assertNotEmpty($code);
         }
     }
 
+    /**
+     * @return void
+     */
     public function testAddGlobalAttributeToCollection()
     {
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
@@ -53,6 +65,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('at_special_price.value', $this->conditionProduct->getMappedSqlField());
     }
 
+    /**
+     * @return void
+     */
     public function testAddNonGlobalAttributeToCollectionNoProducts()
     {
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);

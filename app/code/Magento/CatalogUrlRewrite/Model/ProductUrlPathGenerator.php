@@ -3,10 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Store\Model\Store;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class ProductUrlPathGenerator
+ */
 class ProductUrlPathGenerator
 {
     const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
@@ -19,36 +30,36 @@ class ProductUrlPathGenerator
     protected $productUrlSuffix = [];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @var CategoryUrlPathGenerator
      */
     protected $categoryUrlPathGenerator;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param ScopeConfigInterface $scopeConfig
      * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        StoreManagerInterface $storeManager,
+        ScopeConfigInterface $scopeConfig,
+        CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
@@ -59,8 +70,8 @@ class ProductUrlPathGenerator
     /**
      * Retrieve Product Url path (with category if exists)
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Product $product
+     * @param Category $category
      *
      * @return string
      */
@@ -80,10 +91,10 @@ class ProductUrlPathGenerator
     /**
      * Prepare URL Key with stored product data (fallback for "Use Default Value" logic)
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    protected function prepareProductDefaultUrlKey(\Magento\Catalog\Model\Product $product)
+    protected function prepareProductDefaultUrlKey(Product $product)
     {
         $storedProduct = $this->productRepository->getById($product->getId());
         $storedUrlKey = $storedProduct->getUrlKey();
@@ -93,9 +104,9 @@ class ProductUrlPathGenerator
     /**
      * Retrieve Product Url path with suffix
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param int $storeId
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @return string
      */
     public function getUrlPathWithSuffix($product, $storeId, $category = null)
@@ -106,8 +117,8 @@ class ProductUrlPathGenerator
     /**
      * Get canonical product url path
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Category|null $category
+     * @param Product $product
+     * @param Category|null $category
      * @return string
      */
     public function getCanonicalUrlPath($product, $category = null)
@@ -119,24 +130,27 @@ class ProductUrlPathGenerator
     /**
      * Generate product url key based on url_key entered by merchant or product name
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @param Product $product
+     * @return string|null
      */
     public function getUrlKey($product)
     {
-        return $product->getUrlKey() === false ? false : $this->prepareProductUrlKey($product);
+        $generatedProductUrlKey = $this->prepareProductUrlKey($product);
+        return ($product->getUrlKey() === false || empty($generatedProductUrlKey)) ? null : $generatedProductUrlKey;
     }
 
     /**
      * Prepare url key for product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    protected function prepareProductUrlKey(\Magento\Catalog\Model\Product $product)
+    protected function prepareProductUrlKey(Product $product)
     {
-        $urlKey = $product->getUrlKey();
-        return $product->formatUrlKey($urlKey === '' || $urlKey === null ? $product->getName() : $urlKey);
+        $urlKey = (string)$product->getUrlKey();
+        $urlKey = trim(strtolower($urlKey));
+
+        return $urlKey ?: $product->formatUrlKey($product->getName());
     }
 
     /**
@@ -154,7 +168,7 @@ class ProductUrlPathGenerator
         if (!isset($this->productUrlSuffix[$storeId])) {
             $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::XML_PATH_PRODUCT_URL_SUFFIX,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }

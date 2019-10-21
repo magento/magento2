@@ -28,7 +28,7 @@ class AssertImportSuccessMessage extends AbstractConstraint
     public function processAssert(AdminImportIndex $adminImportIndex)
     {
         $validationMessage = $adminImportIndex->getMessagesBlock()->getImportResultMessage();
-        \PHPUnit\Framework\Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertStringEndsWith(
             self::SUCCESS_MESSAGE,
             $validationMessage,
             'Wrong validation result is displayed.'

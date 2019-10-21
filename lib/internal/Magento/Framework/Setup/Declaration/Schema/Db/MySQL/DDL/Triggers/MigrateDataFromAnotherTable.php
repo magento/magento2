@@ -49,7 +49,7 @@ class MigrateDataFromAnotherTable implements DDLTriggerInterface
     /**
      * @inheritdoc
      */
-    public function getCallback(ElementHistory $tableHistory) : Callable
+    public function getCallback(ElementHistory $tableHistory) : callable
     {
         /** @var Table $table */
         $table = $tableHistory->getNew();

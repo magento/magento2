@@ -35,15 +35,7 @@ class Composite
         uasort(
             $declaredComponents,
             function ($firstComponent, $secondComponent) {
-                $firstComponentSortOrder = (int)$firstComponent['sortOrder'];
-                $secondComponentSortOrder = (int)$secondComponent['sortOrder'];
-                if ($firstComponentSortOrder == $secondComponentSortOrder) {
-                    return 0;
-                } elseif ($firstComponentSortOrder < $secondComponentSortOrder) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+                return (int)$firstComponent['sortOrder'] <=> (int)$secondComponent['sortOrder'];
             }
         );
         $declaredComponents = array_values($declaredComponents);

@@ -242,7 +242,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'price_type' => 'fixed',
                         'shipment_type' => '1',
                         'default_qty' => '1',
-                        'is_defaul' => '1',
+                        'is_default' => '1',
                         'position' => '1',
                         'option_id' => '1']
                 ]
@@ -264,7 +264,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'price_type' => 'percent',
                         'shipment_type' => 0,
                         'default_qty' => '2',
-                        'is_defaul' => '1',
+                        'is_default' => '1',
                         'position' => '6',
                         'option_id' => '6']
                 ]
@@ -324,7 +324,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                          . 'price_type=fixed,'
                          . 'shipment_type=separately,'
                          . 'default_qty=1,'
-                         . 'is_defaul=1,'
+                         . 'is_default=1,'
                          . 'position=1,'
                          . 'option_id=1 | name=Bundle2,'
                          . 'type=dropdown,'
@@ -333,7 +333,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                          . 'price=10,'
                          . 'price_type=fixed,'
                          . 'default_qty=1,'
-                         . 'is_defaul=1,'
+                         . 'is_default=1,'
                          . 'position=2,'
                          . 'option_id=2'
                 ],

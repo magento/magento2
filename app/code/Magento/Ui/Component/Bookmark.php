@@ -82,11 +82,11 @@ class Bookmark extends AbstractComponent
             }
         }
 
-        $this->setData('config', array_replace_recursive($config, $this->getConfiguration($this)));
+        $this->setData('config', array_replace_recursive($config, $this->getConfiguration()));
 
         parent::prepare();
 
-        $jsConfig = $this->getConfiguration($this);
+        $jsConfig = $this->getConfiguration();
         $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 }

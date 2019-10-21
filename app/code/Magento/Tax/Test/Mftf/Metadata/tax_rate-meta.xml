@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateTaxRate" dataType="taxRate" type="create" auth="adminOauth" url="/V1/taxRates" method="POST">
+        <contentType>application/json</contentType>
+        <object key="taxRate" dataType="taxRate">
+            <field key="id">integer</field>
+            <field key="tax_country_id">string</field>
+            <field key="tax_region_id">integer</field>
+            <field key="tax_postcode">string</field>
+            <field key="zip_is_range">integer</field>
+            <field key="zip_from">integer</field>
+            <field key="zip_to">integer</field>
+            <field key="rate">integer</field>
+            <field key="code">string</field>
+        </object>
+    </operation>
+    <operation name="DeleteTaxRate" dataType="taxRate" type="delete" auth="adminOauth" url="/V1/taxRates/{id}" method="DELETE">
+        <contentType>application/json</contentType>
+    </operation>
+</operations>

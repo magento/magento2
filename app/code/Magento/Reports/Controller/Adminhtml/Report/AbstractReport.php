@@ -9,13 +9,18 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
+ * Reports api controller
+ *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
@@ -42,21 +47,29 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected $timezone;
 
     /**
+     * @var BackendHelper
+     */
+    private $backendHelper;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param TimezoneInterface $timezone
+     * @param BackendHelper|null $backendHelperData
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        BackendHelper $backendHelperData = null
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;
         $this->_dateFilter = $dateFilter;
         $this->timezone = $timezone;
+        $this->backendHelper = $backendHelperData ?: $this->_objectManager->get(BackendHelper::class);
     }
 
     /**
@@ -103,25 +116,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             $blocks = [$blocks];
         }
 
-        $requestData = $this->_objectManager->get(
-            \Magento\Backend\Helper\Data::class
-        )->prepareFilterString(
-            $this->getRequest()->getParam('filter')
-        );
-        $inputFilter = new \Zend_Filter_Input(
-            ['from' => $this->_dateFilter, 'to' => $this->_dateFilter],
-            [],
-            $requestData
-        );
-        $requestData = $inputFilter->getUnescaped();
-        $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
-        $params = new \Magento\Framework\DataObject();
-
-        foreach ($requestData as $key => $value) {
-            if (!empty($value)) {
-                $params->setData($key, $value);
-            }
-        }
+        $params = $this->initFilterData();
 
         foreach ($blocks as $block) {
             if ($block) {
@@ -147,7 +142,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             ->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
-            $updatedAt =  $this->timezone->formatDate(
+            $updatedAt = $this->timezone->formatDate(
                 $flag->getLastUpdate(),
                 \IntlDateFormatter::MEDIUM,
                 true
@@ -155,17 +150,51 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
-        $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent', ['code' => $refreshCode]);
+        $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent');
 
         $this->messageManager->addNotice(
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
-                'click <a href="%3">here</a>.',
+                'click <a href="#2" data-post="%3">here</a>.',
                 $updatedAt,
                 $refreshStatsLink,
-                $directRefreshLink
+                str_replace(
+                    '"',
+                    '&quot;',
+                    json_encode(['action' => $directRefreshLink, 'data' => ['code' => $refreshCode]])
+                )
             )
         );
         return $this;
+    }
+
+    /**
+     * Init filter data
+     *
+     * @return \Magento\Framework\DataObject
+     */
+    private function initFilterData(): \Magento\Framework\DataObject
+    {
+        $requestData = $this->backendHelper
+            ->prepareFilterString(
+                $this->getRequest()->getParam('filter')
+            );
+
+        $filterRules = ['from' => $this->_dateFilter, 'to' => $this->_dateFilter];
+        $inputFilter = new \Zend_Filter_Input($filterRules, [], $requestData);
+
+        $requestData = $inputFilter->getUnescaped();
+        $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
+        $requestData['group'] = $this->getRequest()->getParam('group');
+        $requestData['website'] = $this->getRequest()->getParam('website');
+
+        $params = new \Magento\Framework\DataObject();
+
+        foreach ($requestData as $key => $value) {
+            if (!empty($value)) {
+                $params->setData($key, $value);
+            }
+        }
+        return $params;
     }
 }

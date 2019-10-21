@@ -6,7 +6,9 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Customer;
 
-class Orders extends \Magento\Reports\Controller\Adminhtml\Report\Customer
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Orders extends \Magento\Reports\Controller\Adminhtml\Report\Customer implements HttpGetActionInterface
 {
     /**
      * Customers by number of orders action

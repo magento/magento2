@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-    <page name="ContactIndex" mca="contact/index/index" module="Magento_Contact">
+    <page name="ContactIndexCaptcha" mca="contact/index/index" module="Magento_Captcha">
         <block name="contactUs" class="Magento\Captcha\Test\Block\Form\ContactUs" locator="#contact-form" strategy="css selector" />
     </page>
 </config>

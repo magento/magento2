@@ -2,9 +2,12 @@ type Query {
     placeholder: String @doc(description: "comment for placeholder.")
 }
 
+type Mutation {
+    placeholder: String @doc(description: "comment for placeholder.")
+}
+
 input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
     eq: String @doc(description:"Equal")
-    finset: [String]
     from: String
     gt: String
     gteq: String

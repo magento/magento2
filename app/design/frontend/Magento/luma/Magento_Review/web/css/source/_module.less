@@ -14,7 +14,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .data.switch .counter {
         .lib-css(color, @text__color__muted);
 
@@ -118,13 +117,13 @@
 
             strong {
                 display: block;
-                font-weight: 600;
+                font-weight: @font-weight__semibold;
             }
         }
 
         .fieldset &-field-ratings {
             > .label {
-                font-weight: 600;
+                font-weight: @font-weight__semibold;
                 margin-bottom: @indent__s;
                 padding: 0;
             }
@@ -140,11 +139,11 @@
 
         &-field-rating {
             .label {
-                font-weight: 600;
+                font-weight: @font-weight__semibold;
             }
 
             .control {
-                margin-bottom: 1.2*@indent__xl;
+                margin-bottom: 1.2 * @indent__xl;
                 margin-top: @indent__s;
             }
         }
@@ -181,7 +180,7 @@
             display: inline;
 
             .review-details-value {
-                font-weight: 400;
+                font-weight: @font-weight__regular;
             }
         }
 
@@ -298,6 +297,9 @@
             a:not(:last-child) {
                 margin-right: 30px;
             }
+            .action.add {
+                white-space: nowrap;
+            }
         }
     }
 
@@ -341,7 +343,7 @@
     .block-reviews-dashboard {
         .items {
             .item {
-                .lib-css(margin-bottom, @indent__base);
+                margin-bottom: @indent__base;
 
                 &:last-child {
                     margin-bottom: 0;
@@ -353,14 +355,15 @@
             display: inline-block;
 
             &:not(:last-child) {
-                .lib-css(margin-bottom, @indent__xs);
+                margin-bottom: @indent__xs;
             }
         }
 
         .rating-summary {
             .label {
-                .lib-css(font-weight, @font-weight__semibold);
-                .lib-css(margin-right, @indent__s);
+                font-weight: @font-weight__semibold;
+                margin-right: @indent__s;
+                vertical-align: middle;
             }
         }
     }
@@ -368,7 +371,7 @@
     .table-reviews,
     .block-reviews-dashboard {
         .product-name {
-            .lib-css(font-weight, @font-weight__regular);
+            font-weight: @font-weight__regular;
         }
     }
 
@@ -416,6 +419,7 @@
         .product-details {
             &:extend(.abs-add-clearfix all);
             &:extend(.abs-margin-for-blocks-and-widgets all);
+            
             .rating-average-label {
                 &:extend(.abs-visually-hidden all);
             }
@@ -436,9 +440,10 @@
             }
 
             .customer-review-rating {
-                .lib-css(margin-bottom, @indent__base);
+                margin-bottom: @indent__base;
+                
                 .item {
-                    .lib-css(margin-bottom, @indent__s);
+                    margin-bottom: @indent__s;
 
                     &:last-child {
                         margin-bottom: 0;
@@ -450,13 +455,13 @@
 
             .review-title {
                 .lib-heading(h3);
-                .lib-css(font-weight, @font-weight__semibold);
-                .lib-css(margin-bottom, @indent__base);
+                font-weight: @font-weight__semibold;
+                margin-bottom: @indent__base;
             }
 
             .review-content {
                 margin: 0;
-                .lib-css(margin-bottom, @indent__base);
+                margin-bottom: @indent__base;
             }
 
             .review-date {
@@ -473,13 +478,13 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .customer-review {
         .product-name {
-            .lib-css(margin-bottom, @indent__xs);
+            margin-bottom: @indent__xs;
         }
 
         .product-reviews-summary {
             .rating-summary {
                 display: block;
-                .lib-css(margin-bottom, @indent__xs);
+                margin-bottom: @indent__xs;
             }
         }
     }

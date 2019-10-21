@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.catalog.search.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">search_term_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Search\Model\ResourceModel\Query\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Search\Model\ResourceModel\Query\Collection</argument>
                     <argument name="default_sort" xsi:type="string">name</argument>
                     <argument name="default_dir" xsi:type="string">ASC</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
@@ -81,16 +81,7 @@
                             <argument name="sortable" xsi:type="string">1</argument>
                             <argument name="index" xsi:type="string">display_in_terms</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="array">
-                                <item name="yes" xsi:type="array">
-                                    <item name="value" xsi:type="string">1</item>
-                                    <item name="label" xsi:type="string" translate="true">yes</item>
-                                </item>
-                                <item name="no" xsi:type="array">
-                                    <item name="value" xsi:type="string">0</item>
-                                    <item name="label" xsi:type="string" translate="true">no</item>
-                                </item>
-                            </argument>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Yesno"/>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.action" as="action">

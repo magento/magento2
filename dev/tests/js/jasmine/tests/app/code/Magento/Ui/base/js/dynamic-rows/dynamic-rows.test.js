@@ -151,12 +151,14 @@ define([
                     }
                 }],
                 result = [{
+                    defaultLabelVisible: true,
                     label: 'Label 2',
                     name: 'Name 2',
                     required: false,
                     columnsHeaderClasses: '',
                     sortOrder: 5
                 }, {
+                    defaultLabelVisible: true,
                     label: 'Label 1',
                     name: 'Name 1',
                     required: false,

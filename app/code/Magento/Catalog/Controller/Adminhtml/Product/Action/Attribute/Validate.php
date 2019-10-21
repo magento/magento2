@@ -6,7 +6,11 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
-class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute as AttributeAction;
+
+class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -68,7 +72,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );

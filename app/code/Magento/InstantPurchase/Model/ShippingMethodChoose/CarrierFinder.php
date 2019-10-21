@@ -11,7 +11,7 @@ use Magento\Shipping\Model\Config as CarriersConfig;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Collect shipping rates for customer address without packaging estiamtion.
+ * Collect shipping rates for customer address without packaging estimation.
  */
 class CarrierFinder
 {

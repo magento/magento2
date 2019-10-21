@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
 use Magento\Customer\Model\Session;
@@ -83,6 +84,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $variationPricesMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         $this->mockContextObject();
@@ -174,7 +178,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function cacheKeyProvider() : array
+    public function cacheKeyProvider(): array
     {
         return [
             'without_currency_and_customer_group' => [
@@ -313,11 +317,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->localeFormat->expects($this->atLeastOnce())->method('getPriceFormat')->willReturn([]);
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
-            ->willReturnMap([
-                [$amount, $amount],
-                [$priceQty, $priceQty],
-                [$percentage, $percentage],
-            ]);
+            ->willReturnArgument(0);
 
         $this->variationPricesMock->expects($this->once())
             ->method('getFormattedPrices')
@@ -349,13 +349,13 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve array with expected parameters for method getJsonConfig()
      *
-     * @param $productId
-     * @param $amount
-     * @param $priceQty
-     * @param $percentage
+     * @param int $productId
+     * @param double $amount
+     * @param int $priceQty
+     * @param int $percentage
      * @return array
      */
-    private function getExpectedArray($productId, $amount, $priceQty, $percentage)
+    private function getExpectedArray($productId, $amount, $priceQty, $percentage): array
     {
         $expectedArray = [
             'attributes' => [],
@@ -379,6 +379,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
                             'percentage' => $percentage,
                         ],
                     ],
+                    'msrpPrice' => [
+                        'amount' => null    ,
+                    ]
                 ],
             ],
             'priceFormat' => [],

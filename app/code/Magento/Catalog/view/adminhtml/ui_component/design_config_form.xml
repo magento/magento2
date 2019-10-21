@@ -18,7 +18,7 @@
                     <level>2</level>
                     <label translate="true">Base</label>
                 </settings>
-                <field name="watermark_image_image" formElement="fileUploader">
+                <field name="watermark_image_image" formElement="imageUploader">
                     <settings>
                         <notice translate="true">Allowed file types: jpeg, gif, png.</notice>
                         <label translate="true">Image</label>
@@ -78,7 +78,7 @@
                     <level>2</level>
                     <label translate="true">Thumbnail</label>
                 </settings>
-                <field name="watermark_thumbnail_image" formElement="fileUploader">
+                <field name="watermark_thumbnail_image" formElement="imageUploader">
                     <settings>
                         <label translate="true">Image</label>
                         <componentType>imageUploader</componentType>
@@ -137,7 +137,7 @@
                     <level>2</level>
                     <label translate="true">Small</label>
                 </settings>
-                <field name="watermark_small_image_image" formElement="fileUploader">
+                <field name="watermark_small_image_image" formElement="imageUploader">
                     <settings>
                         <label translate="true">Image</label>
                         <componentType>imageUploader</componentType>

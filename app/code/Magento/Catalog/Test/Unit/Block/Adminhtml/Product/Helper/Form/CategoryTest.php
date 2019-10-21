@@ -50,6 +50,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function isAllowedDataProvider()
     {
         return [

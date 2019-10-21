@@ -22,7 +22,7 @@
                 <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Widget\Config</item>
             </argument>
             <argument name="galleryConfigProvider" xsi:type="array">
-                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Cms\Model\WysiwygDefaultConfig</item>
+                <item name="Magento_Tinymce3/tinymce3Adapter" xsi:type="string">Magento\Tinymce3\Model\Config\Gallery\Config</item>
             </argument>
         </arguments>
     </type>

@@ -9,6 +9,9 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  * Adminhtml catalog product downloadable items tab links section
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ *
+ * @deprecated
+ * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Samples
  */
 class Samples extends \Magento\Backend\Block\Widget
 {
@@ -22,7 +25,7 @@ class Samples extends \Magento\Backend\Block\Widget
     /**
      * @var string
      */
-    protected $_template = 'product/edit/downloadable/samples.phtml';
+    protected $_template = 'Magento_Downloadable::product/edit/downloadable/samples.phtml';
 
     /**
      * Downloadable file

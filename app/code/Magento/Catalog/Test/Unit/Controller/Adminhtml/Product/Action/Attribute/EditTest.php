@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->setMethods([])
             ->disableOriginalConstructor()->getMock();
-        $messageManager->expects($this->any())->method('addError')->willReturn(true);
+        $messageManager->expects($this->any())->method('addErrorMessage')->willReturn(true);
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->setMethods(['getRequest', 'getObjectManager', 'getMessageManager', 'getResultRedirectFactory'])
             ->disableOriginalConstructor()->getMock();

@@ -6,6 +6,8 @@
 namespace Magento\Elasticsearch\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Search\Model\EngineResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
@@ -55,25 +57,41 @@ class Config implements ClientOptionsInterface
     private $clientResolver;
 
     /**
-     * Constructor
+     * @var EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
+     * Available Elasticsearch engines.
      *
+     * @var array
+     */
+    private $engineList;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param ClientResolver $clientResolver
-     * @param string $prefix
+     * @param ClientResolver|null $clientResolver
+     * @param EngineResolverInterface|null $engineResolver
+     * @param string|null $prefix
+     * @param array $engineList
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ClientResolver $clientResolver = null,
-        $prefix = null
+        EngineResolverInterface $engineResolver = null,
+        $prefix = null,
+        $engineList = []
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->clientResolver = $clientResolver ?:
-            ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->clientResolver = $clientResolver ?: ObjectManager::getInstance()->get(ClientResolver::class);
+        $this->engineResolver = $engineResolver ?: ObjectManager::getInstance()->get(EngineResolverInterface::class);
         $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
+        $this->engineList = $engineList;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.1.0
      */
     public function prepareClientOptions($options = [])
@@ -88,7 +106,15 @@ class Config implements ClientOptionsInterface
             'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
         ];
         $options = array_merge($defaultOptions, $options);
-        return $options;
+        $allowedOptions = array_merge(array_keys($defaultOptions), ['engine']);
+
+        return array_filter(
+            $options,
+            function (string $key) use ($allowedOptions) {
+                return in_array($key, $allowedOptions);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**
@@ -126,7 +152,7 @@ class Config implements ClientOptionsInterface
      */
     public function isElasticsearchEnabled()
     {
-        return $this->getSearchConfigData('engine') == self::ENGINE_NAME;
+        return in_array($this->engineResolver->getCurrentSearchEngine(), $this->engineList);
     }
 
     /**
@@ -141,7 +167,7 @@ class Config implements ClientOptionsInterface
     }
 
     /**
-     * get Elasticsearch entity type
+     * Get Elasticsearch entity type
      *
      * @return string
      * @since 100.1.0

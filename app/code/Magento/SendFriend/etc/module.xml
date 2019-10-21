@@ -10,6 +10,7 @@
     <module name="Magento_SendFriend" >
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Captcha"/>
         </sequence>
     </module>
 </config>

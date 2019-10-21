@@ -89,11 +89,11 @@ class BlockTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $literal
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $scheduleStructureCount
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $scheduleStructureCount
      * @param string $ifconfigValue
      * @param array $expectedConditions
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCondition
      * @param string $aclKey
      * @param string $aclValue
      *
@@ -114,11 +114,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([
-                'actions' => [
-                    ['someMethod', [], 'action_config_path', 'scope'],
-                ],
-            ]);
+            ->willReturn(
+                [
+                    'actions' => [
+                        ['someMethod', [], 'action_config_path', 'scope'],
+                    ],
+                ]
+            );
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(
@@ -238,9 +240,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $literal
      * @param string $remove
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $getCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setCondition
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setRemoveCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setCondition
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
      * @dataProvider processReferenceDataProvider
      */
     public function testProcessReference(
@@ -266,11 +268,13 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $this->scheduledStructure->expects($getCondition)
             ->method('getStructureElementData')
             ->with($literal, [])
-            ->willReturn([
-                'actions' => [
-                    ['someMethod', [], 'action_config_path', 'scope'],
-                ],
-            ]);
+            ->willReturn(
+                [
+                    'actions' => [
+                        ['someMethod', [], 'action_config_path', 'scope'],
+                    ],
+                ]
+            );
         $this->scheduledStructure->expects($setCondition)
             ->method('setStructureElementData')
             ->with(

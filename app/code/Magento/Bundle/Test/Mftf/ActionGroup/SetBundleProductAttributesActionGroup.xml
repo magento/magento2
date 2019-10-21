@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetBundleProductAttributes">
+        <annotations>
+            <description>Requires navigation to the Product Creation page. Fills in the arguments listed below on the product page. Saves the changes.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeSet" defaultValue="Default" type="string"/>
+            <argument name="bundleProductName" defaultValue="defaultBundleProductNameAndSku" type="string"/>
+            <argument name="bundleProductSku" defaultValue="defaultBundleProductNameAndSku" type="string"/>
+            <argument name="price" defaultValue="10" type="string"/>
+            <argument name="stock" defaultValue="In Stock" type="string"/>
+            <argument name="weight" defaultValue="10" type="string"/>
+            <argument name="visibility" defaultValue="Catalog, Search" type="string"/>
+            <argument name="fromDate" defaultValue="10/10/2018" type="string"/>
+            <argument name="toDate" defaultValue="10/10/2018" type="string"/>
+            <argument name="country" defaultValue="Italy" type="string"/>
+        </arguments>
+
+        <!--
+        Pre-Reqs:
+        1) Go to bundle product creation page
+        2) Will not Enable/Disable
+        -->
+        <!--Apply Attribute Set-->
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSet}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+
+        <!--Product name and SKU-->
+        <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{bundleProductName}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{bundleProductSku}}" stepKey="fillProductSku"/>
+        <click selector="{{AdminProductFormBundleSection.productName}}" stepKey="clickUnselectField"/>
+
+        <!--Dynamic SKU Toggle-->
+        <checkOption selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="clickOnToggle"/>
+        <click selector="{{AdminProductFormBundleSection.productName}}" stepKey="clickUnselectFieldAgain"/>
+
+        <!--Dynamic Price Toggle-->
+        <checkOption selector="{{AdminProductFormBundleSection.dynamicPriceToggle}}" stepKey="clickOnDynamicPriceToggle"/>
+
+        <!--Tax Class-->
+        <selectOption selector="{{AdminProductFormBundleSection.taxClassDropDown}}" userInput="Taxable Goods" stepKey="taxClassDropDown"/>
+
+        <!--Fill out price-->
+        <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="{{price}}" stepKey="fillOutPrice"/>
+
+        <!--Stock status-->
+        <selectOption selector="{{AdminProductFormBundleSection.stockStatusField}}" userInput="{{stock}}" stepKey="stockStatus"/>
+
+        <!--Dynamic weight-->
+        <checkOption selector="{{AdminProductFormBundleSection.dynamicWeightToggle}}" stepKey="dynamicWeight"/>
+
+        <!--Weight-->
+        <fillField selector="{{AdminProductFormBundleSection.weightField}}" userInput="{{weight}}" stepKey="fillIn"/>
+
+        <!--Visibility-->
+        <selectOption selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="{{visibility}}" stepKey="openVisibility"/>
+
+        <!--Categories-->
+        <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="clickOnCategoriesDropDown"/>
+        <click selector="{{AdminProductFormBundleSection.defaultCategory}}" stepKey="selectDefaultCategory"/>
+        <click selector="{{AdminProductFormBundleSection.categoryDone}}" stepKey="clickOnCategoriesDoneToCloseOptions"/>
+
+        <!--New from - to-->
+        <fillField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="{{fromDate}}" stepKey="fillInFirstDate"/>
+        <fillField selector="{{AdminProductFormBundleSection.toDate}}" userInput="{{toDate}}" stepKey="fillInSecondDate"/>
+
+        <!--Country of manufacture-->
+        <selectOption selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="{{country}}" stepKey="countryOfManufactureDropDown"/>
+
+        <!--Save the product-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+    </actionGroup>
+</actionGroups>

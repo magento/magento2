@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -79,7 +79,9 @@ define([
                     $(element).is('textarea') ||
                     $('#' + element.id + ' option:selected').length
                 ) {
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    if ($(element).data('selector') || $(element).attr('name')) {
+                        dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    }
 
                     return;
                 }
@@ -162,18 +164,12 @@ define([
                 $.each(elementValue, function (key, option) {
                     data[elementName + '[' + option + ']'] = option;
                 });
-            } else {
-                if (elementValue) { //eslint-disable-line no-lonely-if
-                    if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
-                        elementName = elementName.substring(0, elementName.length - 2);
+            } else if (elementName.substr(elementName.length - 2) == '[]') { //eslint-disable-line eqeqeq, max-depth
+                elementName = elementName.substring(0, elementName.length - 2);
 
-                        if (elementValue) { //eslint-disable-line max-depth
-                            data[elementName + '[' + elementValue + ']'] = elementValue;
-                        }
-                    } else {
-                        data[elementName] = elementValue;
-                    }
-                }
+                data[elementName + '[' + elementValue + ']'] = elementValue;
+            } else {
+                data[elementName] = elementValue;
             }
 
             return data;

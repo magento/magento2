@@ -198,6 +198,9 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /**
+     * @return array
+     */
     private function getAttributes()
     {
         /* Attribute with the code we want to copy */

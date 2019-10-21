@@ -16,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Shopping cart model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  * @see \Magento\Quote\Api\Data\CartInterface
@@ -365,21 +366,15 @@ class Cart extends DataObject implements CartInterface
     public function addProduct($productInfo, $requestInfo = null)
     {
         $product = $this->_getProduct($productInfo);
-        $request = $this->_getProductRequest($requestInfo);
         $productId = $product->getId();
 
         if ($productId) {
-            $stockItem = $this->stockRegistry->getStockItem($productId, $product->getStore()->getWebsiteId());
-            $minimumQty = $stockItem->getMinSaleQty();
-            //If product quantity is not specified in request and there is set minimal qty for it
-            if ($minimumQty
-                && $minimumQty > 0
-                && !$request->getQty()
-            ) {
-                $request->setQty($minimumQty);
-            }
-
+            $request = $this->getQtyRequest($product, $requestInfo);
             try {
+                $this->_eventManager->dispatch(
+                    'checkout_cart_product_add_before',
+                    ['info' => $requestInfo, 'product' => $product]
+                );
                 $result = $this->getQuote()->addProduct($product, $request);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_checkoutSession->setUseNotice(false);
@@ -434,8 +429,9 @@ class Cart extends DataObject implements CartInterface
                 }
                 $product = $this->_getProduct($productId);
                 if ($product->getId() && $product->isVisibleInCatalog()) {
+                    $request = $this->getQtyRequest($product);
                     try {
-                        $this->getQuote()->addProduct($product);
+                        $this->getQuote()->addProduct($product, $request);
                     } catch (\Exception $e) {
                         $allAdded = false;
                     }
@@ -615,6 +611,8 @@ class Cart extends DataObject implements CartInterface
     }
 
     /**
+     * Get product ids.
+     *
      * @return int[]
      */
     public function getProductIds()
@@ -755,5 +753,28 @@ class Cart extends DataObject implements CartInterface
                 ->get(\Magento\Checkout\Model\Cart\RequestInfoFilterInterface::class);
         }
         return $this->requestInfoFilter;
+    }
+
+    /**
+     * Get request quantity
+     *
+     * @param Product $product
+     * @param \Magento\Framework\DataObject|int|array $request
+     * @return int|DataObject
+     */
+    private function getQtyRequest($product, $request = 0)
+    {
+        $request = $this->_getProductRequest($request);
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+        $minimumQty = $stockItem->getMinSaleQty();
+        //If product quantity is not specified in request and there is set minimal qty for it
+        if ($minimumQty
+            && $minimumQty > 0
+            && !$request->getQty()
+        ) {
+            $request->setQty($minimumQty);
+        }
+
+        return $request;
     }
 }

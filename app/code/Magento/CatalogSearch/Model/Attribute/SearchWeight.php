@@ -7,8 +7,9 @@
 namespace Magento\CatalogSearch\Model\Attribute;
 
 /**
- * This plugin is responsible for processing of search_weight property of a product attribute,
- * which is used to boost matches by specific attributes.
+ * This plugin is responsible for processing of search_weight property of a product attribute.
+ *
+ * 'search_weight' is used to boost matches by specific attributes.
  *
  * This is part of search accuracy customization functionality.
  */

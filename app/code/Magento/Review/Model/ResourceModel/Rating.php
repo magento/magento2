@@ -5,6 +5,9 @@
  */
 namespace Magento\Review\Model\ResourceModel;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Rating resource model
  *
@@ -12,6 +15,7 @@ namespace Magento\Review\Model\ResourceModel;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -25,7 +29,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -35,25 +39,33 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_logger;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary
+     * @param Review\Summary $reviewSummary
      * @param string $connectionName
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary,
-        $connectionName = null
+        $connectionName = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_reviewSummary = $reviewSummary;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -178,6 +190,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Process rating codes
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -201,6 +215,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Process rating stores
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -224,6 +240,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Delete rating data
+     *
      * @param int $ratingId
      * @param string $table
      * @param array $storeIds
@@ -247,6 +265,8 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Insert rating data
+     *
      * @param string $table
      * @param array $data
      * @return void
@@ -269,6 +289,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Perform actions after object delete
+     *
      * Prepare rating data for reaggregate all data for reviews
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -277,7 +298,12 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
-        if (!$this->moduleManager->isEnabled('Magento_Review')) {
+        if (!$this->moduleManager->isEnabled('Magento_Review') &&
+            !$this->scopeConfig->getValue(
+                \Magento\Review\Observer\PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        ) {
             return $this;
         }
         $data = $this->_getEntitySummaryData($object);
@@ -425,9 +451,11 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $data = $connection->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
+        $currentStore = $this->_storeManager->isSingleStoreMode() ? $this->_storeManager->getStore()->getId() : null;
+
         if ($onlyForCurrentStore) {
             foreach ($data as $row) {
-                if ($row['store_id'] == $this->_storeManager->getStore()->getId()) {
+                if ($row['store_id'] !== $currentStore) {
                     $object->addData($row);
                 }
             }

@@ -7,29 +7,59 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/ui-select',
-    'ko',
-    'jquery'
-], function (_, registry, Constr, ko, $) {
+    'squire',
+    'ko'
+], function (_, registry, Squire, ko) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
-        var obj, originaljQueryAjax;
+        var obj, jq, originaljQueryAjax,
+            injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            dataScope = 'abstract';
 
-        beforeEach(function () {
-            obj = new Constr({
-                name: 'uiSelect',
-                dataScope: '',
-                provider: 'provider'
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/ui-select',
+                'jquery',
+                'knockoutjs/knockout-es5'
+            ], function (Constr, $) {
+                obj = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope,
+                    options: {
+                        showsTime: true
+                    }
+                });
+
+                obj.value = ko.observableArray([]);
+                obj.cacheOptions.plain = [];
+                originaljQueryAjax = $.ajax;
+                jq = $;
+                done();
             });
-
-            obj.value = ko.observableArray([]);
-            obj.cacheOptions.plain = [];
-            originaljQueryAjax = $.ajax;
         });
 
         afterEach(function () {
-            $.ajax = originaljQueryAjax;
+            jq.ajax = originaljQueryAjax;
+            injector.clean();
         });
 
         describe('"initialize" method', function () {

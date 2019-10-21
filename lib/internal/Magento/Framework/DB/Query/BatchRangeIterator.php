@@ -122,7 +122,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     /**
      * Return the key of the current element
      *
-     * Сan return the number of the current sub-select in the iteration.
+     * Can return the number of the current sub-select in the iteration.
      *
      * @return int
      */
@@ -201,7 +201,7 @@ class BatchRangeIterator implements BatchIteratorInterface
             );
             $row = $this->connection->fetchRow($wrapperSelect);
 
-            $this->totalItemCount = intval($row['cnt']);
+            $this->totalItemCount = (int)$row['cnt'];
         }
 
         $rangeField = is_array($this->rangeField) ? $this->rangeField : [$this->rangeField];

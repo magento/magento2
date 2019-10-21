@@ -23,24 +23,31 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
     private $config;
 
     /**
+     * Additional attributes that are not retrieved by getting fields from ProductInterface
+     *
      * @var array
      */
-    private $additionalAttributes;
+    private $additionalAttributes = ['min_price', 'max_price', 'category_id'];
 
     /**
      * @param ConfigInterface $config
-     * @param array $additionalAttributes
+     * @param string[] $additionalAttributes
      */
     public function __construct(
         ConfigInterface $config,
-        array $additionalAttributes = ['min_price', 'max_price', 'category_ids']
+        array $additionalAttributes = []
     ) {
         $this->config = $config;
-        $this->additionalAttributes = $additionalAttributes;
+        $this->additionalAttributes = array_merge($this->additionalAttributes, $additionalAttributes);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * Gather all the product entity attributes that can be filtered by search criteria.
+     * Example format ['attributeNameInGraphQl' => ['type' => 'String'. 'fieldName' => 'attributeNameInSearchCriteria']]
+     *
+     * @return array
      */
     public function getEntityAttributes() : array
     {
@@ -55,14 +62,20 @@ class ProductEntityAttributesForAst implements FieldEntityAttributesInterface
             $configElement = $this->config->getConfigElement($interface['interface']);
 
             foreach ($configElement->getFields() as $field) {
-                $fields[$field->getName()] = 'String';
+                $fields[$field->getName()] = [
+                    'type' => 'String',
+                    'fieldName' => $field->getName(),
+                ];
             }
         }
 
-        foreach ($this->additionalAttributes as $attribute) {
-            $fields[$attribute] = 'String';
+        foreach ($this->additionalAttributes as $attributeName) {
+            $fields[$attributeName] = [
+                'type' => 'String',
+                'fieldName' => $attributeName,
+            ];
         }
 
-        return array_keys($fields);
+        return $fields;
     }
 }

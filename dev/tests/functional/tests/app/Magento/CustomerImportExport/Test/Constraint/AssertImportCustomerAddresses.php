@@ -116,8 +116,7 @@ class AssertImportCustomerAddresses extends AbstractConstraint
         foreach ($customers as $customer) {
             $this->customerIndexEdit->open(['id' => $customer->getId()]);
             $customerForm->openTab('addresses');
-            $addresses = $customerForm->getTab('addresses')->getDataAddresses($addressTemplate);
-            $address = array_shift($addresses);
+            $address = $customerForm->getTab('addresses')->getAddressFromFirstRow($addressTemplate);
             if (!empty($address)) {
                 $resultAddressesArray[] = $address;
             }

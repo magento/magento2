@@ -21,3 +21,5 @@ General,General
 "This is located by navigating to Settings from the New Relic APM website","This is located by navigating to Settings from the New Relic APM website"
 Cron,Cron
 "Enable Cron","Enable Cron"
+"Send Adminhtml and Frontend as Separate Apps","Send Adminhtml and Frontend as Separate Apps"
+"In addition to the main app (which includes all PHP execution), separate apps for adminhtml and frontend will be created. Requires New Relic Application Name to be set.","In addition to the main app (which includes all PHP execution), separate apps for adminhtml and frontend will be created. Requires New Relic Application Name to be set."

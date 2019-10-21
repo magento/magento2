@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Catalog product upsell items block
@@ -61,7 +60,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     protected $_checkoutCart;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var \Magento\Framework\Module\ModuleManagerInterface
      */
     protected $moduleManager;
 
@@ -70,7 +69,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      * @param \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -78,7 +77,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
         \Magento\Checkout\Model\ResourceModel\Cart $checkoutCart,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
         array $data = []
     ) {
         $this->_checkoutCart = $checkoutCart;
@@ -92,11 +91,13 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
         $this->_itemCollection = $product->getUpSellProductCollection()->setPositionOrder()->addStoreFilter();
         if ($this->moduleManager->isEnabled('Magento_Checkout')) {
@@ -122,6 +123,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -131,6 +134,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get items collection
+     *
      * @return Collection
      */
     public function getItemCollection()
@@ -146,6 +151,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get collection items
+     *
      * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
@@ -157,6 +164,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get row count
+     *
      * @return float
      */
     public function getRowCount()
@@ -165,18 +174,22 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Set column count
+     *
      * @param string $columns
      * @return $this
      */
     public function setColumnCount($columns)
     {
-        if (intval($columns) > 0) {
-            $this->_columnCount = intval($columns);
+        if ((int) $columns > 0) {
+            $this->_columnCount = (int) $columns;
         }
         return $this;
     }
 
     /**
+     * Get column count
+     *
      * @return int
      */
     public function getColumnCount()
@@ -185,6 +198,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Reset items iterator
+     *
      * @return void
      */
     public function resetItemsIterator()
@@ -194,6 +209,8 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get iterable item
+     *
      * @return mixed
      */
     public function getIterableItem()
@@ -205,6 +222,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
 
     /**
      * Set how many items we need to show in upsell block
+     *
      * Notice: this parameter will be also applied
      *
      * @param string $type
@@ -213,13 +231,15 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements
      */
     public function setItemLimit($type, $limit)
     {
-        if (intval($limit) > 0) {
-            $this->_itemLimits[$type] = intval($limit);
+        if ((int) $limit > 0) {
+            $this->_itemLimits[$type] = (int) $limit;
         }
         return $this;
     }
 
     /**
+     * Get item limit
+     *
      * @param string $type
      * @return array|int
      */

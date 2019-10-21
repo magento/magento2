@@ -64,6 +64,7 @@ class ReportModulesInfo
             $moduleData = $this->collect->getModuleData();
             if (count($moduleData['changes']) > 0) {
                 foreach ($moduleData['changes'] as $change) {
+                    $modelData = [];
                     switch ($change['type']) {
                         case Config::ENABLED:
                             $modelData = [

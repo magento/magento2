@@ -4,20 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\UrlRewrite\Block\Edit $block */
 ?>
 <?= $block->getChildHtml() ?>
-<?php if ($block->getChildBlock('form')): ?>
-<script>
-require([
-    'jquery',
-    'mage/backend/form',
-    'mage/backend/validation'
-], function($){
-    $('#edit_form').form()
-        .validation({validationUrl: '<?= $block->escapeUrl($block->getValidationUrl()) ?>'});
-});
+<?php if ($block->getChildBlock('form')) : ?>
+<script type="text/x-magento-init">
+    {
+        "#edit_form": {
+            "Magento_UrlRewrite/js/url-rewrite-validation" : {
+                "url": "<?= $block->escapeUrl($block->getValidationUrl()) ?>"
+            }
+        }
+    }
 </script>
 <?php endif; ?>

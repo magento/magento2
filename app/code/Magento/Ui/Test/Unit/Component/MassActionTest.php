@@ -93,6 +93,9 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['actions' => [$action->getConfiguration()]], $massAction->getConfiguration());
     }
 
+    /**
+     * @return array
+     */
     public function getPrepareDataProvider()
     {
         return [

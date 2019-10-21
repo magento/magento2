@@ -104,6 +104,9 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function setLinkStatusPendingDataProvider()
     {
         return [

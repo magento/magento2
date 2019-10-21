@@ -16,6 +16,9 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Add joins to select.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class SelectBuilder
 {

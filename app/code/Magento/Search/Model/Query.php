@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
 use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
@@ -147,6 +146,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve collection of suggest queries
      *
      * @return QueryCollection
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getSuggestCollection()
     {
@@ -167,6 +167,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated 100.1.0 "synonym for" feature has been removed
      */
     public function loadByQuery($text)
@@ -180,6 +181,7 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByQueryText($text)
     {
@@ -204,6 +206,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve store Id
      *
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getStoreId()
     {
@@ -217,6 +220,7 @@ class Query extends AbstractModel implements QueryInterface
      * Prepare save query for result
      *
      * @return $this
+     * @throws \Exception
      */
     public function prepare()
     {
@@ -264,6 +268,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve minimum query length
      *
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMinQueryLength()
     {
@@ -278,6 +283,7 @@ class Query extends AbstractModel implements QueryInterface
      * Retrieve maximum query length
      *
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getMaxQueryLength()
     {
@@ -289,8 +295,7 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
-     * @return string
-     * @codeCoverageIgnore
+     * @inheritdoc
      */
     public function getQueryText()
     {
@@ -298,6 +303,8 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
+     * Check if query maximum length exceeded.
+     *
      * @return bool
      * @codeCoverageIgnore
      */
@@ -307,6 +314,8 @@ class Query extends AbstractModel implements QueryInterface
     }
 
     /**
+     * Check if minimum query length reached.
+     *
      * @return bool
      * @codeCoverageIgnore
      * @since 100.1.0

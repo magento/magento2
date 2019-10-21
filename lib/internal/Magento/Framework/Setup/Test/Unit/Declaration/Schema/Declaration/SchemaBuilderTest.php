@@ -241,14 +241,16 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @param Table $table
      * @param array $columns
+     * @param string $nameWithoutPrefix
      * @return Internal
      */
-    private function createPrimaryConstraint(Table $table, array $columns)
+    private function createPrimaryConstraint(Table $table, array $columns, $nameWithoutPrefix = 'PRIMARY')
     {
         return new Internal(
             'PRIMARY',
             'primary',
             $table,
+            $nameWithoutPrefix,
             $columns
         );
     }
@@ -259,16 +261,18 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @param string $indexName
      * @param Table $table
      * @param array $columns
+     * @param string|null $nameWithoutPrefix
      * @return Index
      */
-    private function createIndex($indexName, Table $table, array $columns)
+    private function createIndex($indexName, Table $table, array $columns, $nameWithoutPrefix = null)
     {
         return new Index(
             $indexName,
             'index',
             $table,
             $columns,
-            'btree'
+            'btree',
+            $nameWithoutPrefix ?: $indexName
         );
     }
 
@@ -295,13 +299,14 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
      * @dataProvider tablesProvider
      * @param array $tablesData
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Magento\Framework\Setup\Exception
      */
     public function testBuild(array $tablesData)
     {
         $table = $this->createTable('first_table');
         $refTable = $this->createTable('second_table');
         $refColumn = $this->createIntegerColumn('ref_column', $refTable);
-        $index = $this->createIndex('FIRST_INDEX', $table, [$refColumn]);
+        $index = $this->createIndex('PRE_FIRST_INDEX', $table, [$refColumn], 'FIRST_INDEX');
         $refTable->addColumns([$refColumn]);
         $refTable->addIndexes([$index]);
         $firstColumn = $this->createIntegerAIColumn('first_column', $table);
@@ -312,6 +317,7 @@ class SchemaBuilderTest extends \PHPUnit\Framework\TestCase
             'some_foreign_key',
             'foreign',
             $table,
+            'some_foreign_key',
             $foreignColumn,
             $refTable,
             $refColumn,

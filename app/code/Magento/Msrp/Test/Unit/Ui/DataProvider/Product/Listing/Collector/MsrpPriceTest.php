@@ -50,6 +50,9 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
      */
     private $priceInfoExtensionFactory;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
@@ -86,6 +89,9 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testCollect()
     {
         $product = $this->getMockBuilder(Product::class)
@@ -101,7 +107,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface::class
         )
             ->setMethods(['setMsrp'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])

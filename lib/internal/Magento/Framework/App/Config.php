@@ -50,7 +50,7 @@ class Config implements ScopeConfigInterface
      *
      * @param string $path
      * @param string $scope
-     * @param null|string $scopeCode
+     * @param null|int|string $scopeCode
      * @return mixed
      */
     public function getValue(
@@ -85,7 +85,7 @@ class Config implements ScopeConfigInterface
      *
      * @param string $path
      * @param string $scope
-     * @param null|string $scopeCode
+     * @param null|int|string $scopeCode
      * @return bool
      */
     public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
@@ -95,6 +95,7 @@ class Config implements ScopeConfigInterface
 
     /**
      * Invalidate cache by type
+     *
      * Clean scopeCodeResolver
      *
      * @return void

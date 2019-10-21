@@ -19,13 +19,13 @@
                 <cutoff_cost />
                 <dest_type>RES</dest_type>
                 <free_method>GND</free_method>
-                <gateway_url>http://www.ups.com/using/services/rave/qcostcgi.cgi</gateway_url>
+                <gateway_url>https://www.ups.com/using/services/rave/qcostcgi.cgi</gateway_url>
                 <gateway_xml_url>https://onlinetools.ups.com/ups.app/xml/Rate</gateway_xml_url>
                 <handling>0</handling>
                 <model>Magento\Ups\Model\Carrier</model>
                 <pickup>CC</pickup>
                 <title>United Parcel Service</title>
-                <tracking_xml_url>https://www.ups.com/ups.app/xml/Track</tracking_xml_url>
+                <tracking_xml_url>https://onlinetools.ups.com/ups.app/xml/Track</tracking_xml_url>
                 <unit_of_measure>LBS</unit_of_measure>
                 <username backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -37,7 +37,7 @@
                 <negotiated_active>0</negotiated_active>
                 <include_taxes>0</include_taxes>
                 <mode_xml>1</mode_xml>
-                <type>UPS</type>
+                <type>UPS_XML</type>
                 <is_account_live>0</is_account_live>
                 <active_rma>0</active_rma>
                 <is_online>1</is_online>

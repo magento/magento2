@@ -63,6 +63,13 @@
             }
         }
 
+        dl {
+            &.product.options.list {
+                display: inline-block;
+                vertical-align: top;
+            }
+        }
+
         .text {
             &.empty {
                 text-align: center;
@@ -107,23 +114,23 @@
 
     .minicart-wrapper {
         .lib-dropdown(
-        @_toggle-selector: ~'.action.showcart',
-        @_options-selector: ~'.block-minicart',
-        @_dropdown-list-width: 320px,
-        @_dropdown-list-position-right: 0px,
-        @_dropdown-list-pointer-position: right,
-        @_dropdown-list-pointer-position-left-right: 26px,
-        @_dropdown-list-z-index: 101,              
-        @_dropdown-toggle-icon-content: @icon-cart,
-        @_dropdown-toggle-active-icon-content: @icon-cart,
-        @_dropdown-list-item-padding: false,
-        @_dropdown-list-item-hover: false,
-        @_icon-font-position: before,
-        @_icon-font-size: 22px,
-        @_icon-font-line-height: 28px,
-        @_icon-font-color: @minicart-icons-color,
-        @_icon-font-color-hover: @minicart-icons-color-hover,
-        @_icon-font-color-active: @minicart-icons-color
+            @_toggle-selector: ~'.action.showcart',
+            @_options-selector: ~'.block-minicart',
+            @_dropdown-list-width: 320px,
+            @_dropdown-list-position-right: -10px,
+            @_dropdown-list-pointer-position: right,
+            @_dropdown-list-pointer-position-left-right: 12px,
+            @_dropdown-list-z-index: 101,              
+            @_dropdown-toggle-icon-content: @icon-cart,
+            @_dropdown-toggle-active-icon-content: @icon-cart,
+            @_dropdown-list-item-padding: false,
+            @_dropdown-list-item-hover: false,
+            @_icon-font-position: before,
+            @_icon-font-size: 22px,
+            @_icon-font-line-height: 28px,
+            @_icon-font-color: @minicart-icons-color,
+            @_icon-font-color-hover: @minicart-icons-color-hover,
+            @_icon-font-color-active: @minicart-icons-color
         );
         float: right;
 
@@ -153,17 +160,17 @@
 
         .action {
             &.close {
-                height: 40px;
+                height: 30px;
                 position: absolute;
                 right: 0;
                 top: 0;
-                width: 40px;
+                width: 25px;
                 .lib-button-reset();
                 .lib-button-icon(
                     @icon-remove,
                     @_icon-font-color: @minicart-icons-color,
-                    @_icon-font-size: 16px,
-                    @_icon-font-line-height: 16px,
+                    @_icon-font-size: 14px,
+                    @_icon-font-line-height: 14px,
                     @_icon-font-text-hide: true
                 );
             }
@@ -226,6 +233,7 @@
 
     .minicart-items {
         .lib-list-reset-styles();
+        
         .product-item {
             padding: @indent__base 0;
 
@@ -287,6 +295,15 @@
             .details-qty {
                 margin-top: @indent__s;
             }
+
+            .product {
+                .options {
+                    &.list {
+                        &:extend(.abs-product-options-list all);
+                        &:extend(.abs-add-clearfix all);
+                    }
+                }
+            }
         }
 
         .product {
@@ -297,13 +314,14 @@
 
             .toggle {
                 &:extend(.abs-toggling-title all);
+                border: 0;
+                padding: 0 @indent__xl @indent__xs 0;
+                
                 &:after {
                     .lib-css(color, @color-gray56);
                     margin: 0 0 0 @indent__xs;
                     position: static;
                 }
-                border: 0;
-                padding: 0 @indent__xl @indent__xs 0;
             }
 
             .active {
@@ -323,14 +341,15 @@
                 .toggle {
                     &.tooltip {
                         .lib-icon-font(
-                        @icon-down,
-                        @_icon-font-size: 12px,
-                        @_icon-font-line-height: 12px,
-                        @_icon-font-text-hide: true,
-                        @_icon-font-margin: -3px 0 0 7px,
-                        @_icon-font-position: after
+                            @icon-down,
+                            @_icon-font-size: 12px,
+                            @_icon-font-line-height: 12px,
+                            @_icon-font-text-hide: true,
+                            @_icon-font-margin: -3px 0 0 7px,
+                            @_icon-font-position: after
                         );
                     }
+                    
                     > span {
                         &:extend(.abs-visually-hidden-reset all);
                     }
@@ -352,7 +371,7 @@
         .item-qty {
             margin-right: @indent__s;
             text-align: center;
-            width: 40px;
+            width: 60px;
         }
 
         .update-cart-item {
@@ -368,19 +387,19 @@
             &.edit,
             &.delete {
                 .lib-icon-font(
-                @icon-edit,
-                @_icon-font-size: 18px,
-                @_icon-font-line-height: 20px,
-                @_icon-font-text-hide: true,
-                @_icon-font-color: @minicart-icons-color,
-                @_icon-font-color-hover: @primary__color,
-                @_icon-font-color-active: @minicart-icons-color
+                    @icon-edit,
+                    @_icon-font-size: 18px,
+                    @_icon-font-line-height: 20px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-color: @minicart-icons-color,
+                    @_icon-font-color-hover: @primary__color,
+                    @_icon-font-color-active: @minicart-icons-color
                 );
             }
 
             &.delete {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-trash
+                    @_icon-font-content: @icon-trash
                 );
             }
         }
@@ -397,7 +416,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .minicart-wrapper {
         margin-top: @indent__s;
     }
@@ -412,7 +431,6 @@
         margin-left: 13px;
 
         .block-minicart {
-            right: -15px;
             width: 390px;
         }
     }

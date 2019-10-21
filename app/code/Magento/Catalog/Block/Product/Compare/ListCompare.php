@@ -122,12 +122,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getAddToWishlistParams($product)
     {
-        $continueUrl = $this->urlEncoder->encode($this->getUrl('customer/account'));
-        $urlParamName = Action::PARAM_NAME_URL_ENCODED;
-
-        $continueUrlParams = [$urlParamName => $continueUrl];
-
-        return $this->_wishlistHelper->getAddParams($product, $continueUrlParams);
+        return $this->_wishlistHelper->getAddParams($product);
     }
 
     /**
@@ -211,6 +206,22 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             $value = $product->getData($attribute->getAttributeCode());
         }
         return (string)$value == '' ? __('No') : $value;
+    }
+
+    /**
+     * Check if any of the products has a value set for the attribute
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @return bool
+     */
+    public function hasAttributeValueForProducts($attribute)
+    {
+        foreach ($this->getItems() as $item) {
+            if ($item->hasData($attribute->getAttributeCode())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

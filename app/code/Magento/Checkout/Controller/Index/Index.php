@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Controller\Index;
 
-class Index extends \Magento\Checkout\Controller\Onepage
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Checkout\Controller\Onepage implements HttpGetActionInterface
 {
     /**
      * Checkout page

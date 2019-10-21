@@ -78,7 +78,7 @@ class ProductImage
             && ($location == self::CATEGORY_PAGE_GRID_LOCATION || $location == self::CATEGORY_PAGE_LIST_LOCATION)) {
             $request = $this->request->getParams();
             if (is_array($request)) {
-                $filterArray = $this->getFilterArray($request);
+                $filterArray = $this->getFilterArray($request, $product);
                 if (!empty($filterArray)) {
                     $product = $this->loadSimpleVariation($product, $filterArray);
                 }
@@ -108,16 +108,17 @@ class ProductImage
      * Get filters from request
      *
      * @param array $request
+     * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
-    private function getFilterArray(array $request)
+    private function getFilterArray(array $request, Product $product)
     {
         $filterArray = [];
-        $attributeCodes = $this->eavConfig->getEntityAttributeCodes(Product::ENTITY);
+        $attributes = $this->eavConfig->getEntityAttributes(Product::ENTITY, $product);
         foreach ($request as $code => $value) {
-            if (in_array($code, $attributeCodes)) {
-                $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $code);
-                if ($attribute->getId() && $this->canReplaceImageWithSwatch($attribute)) {
+            if (isset($attributes[$code])) {
+                $attribute = $attributes[$code];
+                if ($this->canReplaceImageWithSwatch($attribute)) {
                     $filterArray[$code] = $value;
                 }
             }

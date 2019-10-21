@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Process;
 
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Service\DeployPackage;
 use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Psr\Log\LoggerInterface;
 
 /**
  * Deployment Queue
@@ -125,6 +127,8 @@ class Queue
     }
 
     /**
+     * Adds deployment package.
+     *
      * @param Package $package
      * @param Package[] $dependencies
      * @return bool true on success
@@ -140,6 +144,8 @@ class Queue
     }
 
     /**
+     * Returns packages array.
+     *
      * @return Package[]
      */
     public function getPackages()
@@ -159,9 +165,11 @@ class Queue
         $packages = $this->packages;
         while (count($packages) && $this->checkTimeout()) {
             foreach ($packages as $name => $packageJob) {
+                // Unsets each member of $packages array (passed by reference) as each is executed
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
             $this->logger->info('.');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             sleep(3);
             foreach ($this->inProgress as $name => $package) {
                 if ($this->isDeployed($package)) {
@@ -209,18 +217,16 @@ class Queue
     }
 
     /**
+     * Executes deployment package.
+     *
      * @param Package $package
      * @param string $name
      * @param array $packages
      * @param bool $dependenciesNotFinished
      * @return void
      */
-    private function executePackage(
-        Package $package,
-        string $name,
-        array &$packages,
-        bool $dependenciesNotFinished
-    ) {
+    private function executePackage(Package $package, string $name, array &$packages, bool $dependenciesNotFinished)
+    {
         if (!$dependenciesNotFinished
             && !$this->isDeployed($package)
             && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
@@ -244,6 +250,7 @@ class Queue
                 }
             }
             $this->logger->info('.');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             sleep(5);
         }
         if ($this->isCanBeParalleled()) {
@@ -253,6 +260,8 @@ class Queue
     }
 
     /**
+     * Checks if can be parallel.
+     *
      * @return bool
      */
     private function isCanBeParalleled()
@@ -261,9 +270,11 @@ class Queue
     }
 
     /**
+     * Executes the process.
+     *
      * @param Package $package
      * @return bool true on success for main process and exit for child process
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     * @throws \RuntimeException
      */
     private function execute(Package $package)
     {
@@ -291,6 +302,7 @@ class Queue
         );
 
         if ($this->isCanBeParalleled()) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $pid = pcntl_fork();
             if ($pid === -1) {
                 throw new \RuntimeException('Unable to fork a new process');
@@ -305,6 +317,7 @@ class Queue
             // process child process
             $this->inProgress = [];
             $this->deployPackageService->deploy($package, $this->options, true);
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(0);
         } else {
             $this->deployPackageService->deploy($package, $this->options);
@@ -313,6 +326,8 @@ class Queue
     }
 
     /**
+     * Checks if package is deployed.
+     *
      * @param Package $package
      * @return bool
      */
@@ -320,12 +335,41 @@ class Queue
     {
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
-                $pid = pcntl_waitpid($this->getPid($package), $status, WNOHANG);
-                if ($pid === $this->getPid($package)) {
+                $pid = $this->getPid($package);
+
+                // When $pid comes back as null the child process for this package has not yet started; prevents both
+                // hanging until timeout expires (which was behaviour in 2.2.x) and the type error from strict_types
+                if ($pid === null) {
+                    return false;
+                }
+
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $result = pcntl_waitpid($pid, $status, WNOHANG);
+                if ($result === $pid) {
                     $package->setState(Package::STATE_COMPLETED);
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $exitStatus = pcntl_wexitstatus($status);
+
+                    $this->logger->info(
+                        "Exited: " . $package->getPath() . "(status: $exitStatus)",
+                        [
+                            'process' => $package->getPath(),
+                            'status' => $exitStatus,
+                        ]
+                    );
 
                     unset($this->inProgress[$package->getPath()]);
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     return pcntl_wexitstatus($status) === 0;
+                } elseif ($result === -1) {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $errno = pcntl_errno();
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $strerror = pcntl_strerror($errno);
+
+                    throw new \RuntimeException(
+                        "Error encountered checking child process status (PID: $pid): $strerror (errno: $errno)"
+                    );
                 }
                 return false;
             }
@@ -334,17 +378,19 @@ class Queue
     }
 
     /**
+     * Returns process ID or null if not found.
+     *
      * @param Package $package
      * @return int|null
      */
     private function getPid(Package $package)
     {
-        return isset($this->processIds[$package->getPath()])
-            ? $this->processIds[$package->getPath()]
-            : null;
+        return $this->processIds[$package->getPath()] ?? null;
     }
 
     /**
+     * Checks timeout.
+     *
      * @return bool
      */
     private function checkTimeout()
@@ -357,14 +403,31 @@ class Queue
      *
      * Protect against zombie process
      *
+     * @throws \RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @return void
      */
     public function __destruct()
     {
         foreach ($this->inProgress as $package) {
-            if (pcntl_waitpid($this->getPid($package), $status) === -1) {
+            $pid = $this->getPid($package);
+            $this->logger->info(
+                "Reaping child process: {$package->getPath()} (PID: $pid)",
+                [
+                    'process' => $package->getPath(),
+                    'pid' => $pid,
+                ]
+            );
+
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            if (pcntl_waitpid($pid, $status) === -1) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $errno = pcntl_errno();
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $strerror = pcntl_strerror($errno);
+
                 throw new \RuntimeException(
-                    'Error while waiting for package deployed: ' . $this->getPid($package) . '; Status: ' . $status
+                    "Error encountered waiting for child process (PID: $pid): $strerror (errno: $errno)"
                 );
             }
         }

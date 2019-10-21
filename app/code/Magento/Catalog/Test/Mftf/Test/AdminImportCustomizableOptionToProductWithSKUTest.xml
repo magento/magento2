@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportCustomizableOptionToProductWithSKUTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Customizable options"/>
+            <title value="Import customizable options to a product with existing SKU"/>
+            <description value="Import customizable options to a product with existing SKU"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98211"/>
+            <useCaseId value="MAGETWO-70232"/>
+            <group value="catalog"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create category-->
+            <comment userInput="Create category" stepKey="commentCreateCategory"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create two product -->
+            <comment userInput="Create two product" stepKey="commentCreateTwoProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete second product with changed sku-->
+            <comment userInput="Delete second product with changed sku" stepKey="commentDeleteProduct"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondProduct">
+                <argument name="sku" value="$$createFirstProduct.sku$$-1"/>
+            </actionGroup>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Go to product page -->
+        <comment userInput="Go to product page" stepKey="commentGoToProductPage"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createFirstProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
+        <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption1">
+            <argument name="option" value="ProductOptionField"/>
+        </actionGroup>
+        <actionGroup ref="AddProductCustomOptionField" stepKey="addCutomOption2">
+            <argument name="option" value="ProductOptionField2"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <!--Change second product sku to first product sku-->
+        <comment userInput="Change second product sku to first product sku" stepKey="commentChangeSecondProduct"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createSecondProduct.id$$)}}" stepKey="goToProductEditPage1"/>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="$$createFirstProduct.sku$$" stepKey="fillProductSku1"/>
+        <!--Import customizable options and check-->
+        <comment userInput="Import customizable options and check" stepKey="commentImportOptions"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <actionGroup ref="importProductCustomizableOptions" stepKey="importOptions">
+            <argument name="productName" value="$$createFirstProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="checkCustomizableOptionImport" stepKey="checkFirstOptionImport">
+            <argument name="option" value="ProductOptionField"/>
+            <argument name="optionIndex" value="0"/>
+        </actionGroup>
+        <actionGroup ref="checkCustomizableOptionImport" stepKey="checkSecondOptionImport">
+            <argument name="option" value="ProductOptionField2"/>
+            <argument name="optionIndex" value="1"/>
+        </actionGroup>
+        <!--Save product and check sku changed message-->
+        <comment userInput="Save product and check sku changed message" stepKey="commentSAveProductAndCheck"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <see userInput="SKU for product $$createSecondProduct.name$$ has been changed to $$createFirstProduct.sku$$-1." stepKey="seeSkuChangedMessage"/>
+    </test>
+</tests>

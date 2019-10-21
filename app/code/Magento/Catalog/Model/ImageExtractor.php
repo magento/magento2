@@ -9,6 +9,9 @@ use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface;
 
+/**
+ * Image extractor from xml configuration
+ */
 class ImageExtractor implements TypeDataExtractorInterface
 {
     /**
@@ -17,6 +20,7 @@ class ImageExtractor implements TypeDataExtractorInterface
      * @param \DOMElement $mediaNode
      * @param string $mediaParentTag
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(\DOMElement $mediaNode, $mediaParentTag)
     {
@@ -32,12 +36,22 @@ class ImageExtractor implements TypeDataExtractorInterface
                     continue;
                 }
                 $attributeTagName = $attribute->tagName;
-                if ($attributeTagName === 'background') {
-                    $nodeValue = $this->processImageBackground($attribute->nodeValue);
-                } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
-                    $nodeValue = intval($attribute->nodeValue);
+                if ((bool)$attribute->getAttribute('xsi:nil') !== true) {
+                    if ($attributeTagName === 'background') {
+                        $nodeValue = $this->processImageBackground($attribute->nodeValue);
+                    } elseif ($attributeTagName === 'width' || $attributeTagName === 'height') {
+                        $nodeValue = (int) $attribute->nodeValue;
+                    } elseif ($attributeTagName === 'constrain'
+                        || $attributeTagName === 'aspect_ratio'
+                        || $attributeTagName === 'frame'
+                        || $attributeTagName === 'transparency'
+                    ) {
+                        $nodeValue = in_array($attribute->nodeValue, [true, 1, 'true', '1'], true) ?? false;
+                    } else {
+                        $nodeValue = $attribute->nodeValue;
+                    }
                 } else {
-                    $nodeValue = !in_array($attribute->nodeValue, ['false', '0']);
+                    $nodeValue = null;
                 }
                 $result[$mediaParentTag][$moduleNameImage][Image::MEDIA_TYPE_CONFIG_NODE][$imageId][$attribute->tagName]
                     = $nodeValue;

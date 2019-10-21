@@ -341,7 +341,7 @@ class DomMerger implements DomMergerInterface
      * Validate dom document
      *
      * @param \DOMDocument $domDocument
-     * @param string|null $schemaFilePath
+     * @param string|null $schema
      * @return array of errors
      * @throws \Exception
      */

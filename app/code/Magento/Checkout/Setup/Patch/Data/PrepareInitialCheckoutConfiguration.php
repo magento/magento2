@@ -817,7 +817,7 @@ class PrepareInitialCheckoutConfiguration implements DataPatchInterface, PatchVe
 
                 $connection->commit();
             } catch (\Exception $e) {
-                $connection->rollback();
+                $connection->rollBack();
                 throw $e;
             }
         }

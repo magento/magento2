@@ -6,7 +6,9 @@
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-class Index extends \Magento\Integration\Controller\Adminhtml\Integration
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
      * Integrations grid.

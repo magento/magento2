@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * Downloadable Products Download Helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -186,19 +187,20 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     public function getContentType()
     {
         $this->_getHandle();
-        if ($this->_linkType == self::LINK_TYPE_FILE) {
-            if (function_exists(
-                'mime_content_type'
-            ) && ($contentType = mime_content_type(
-                $this->_workingDirectory->getAbsolutePath($this->_resourceFile)
-            ))
+        if ($this->_linkType === self::LINK_TYPE_FILE) {
+            if (function_exists('mime_content_type')
+                && ($contentType = mime_content_type(
+                    $this->_workingDirectory->getAbsolutePath($this->_resourceFile)
+                ))
             ) {
                 return $contentType;
-            } else {
-                return $this->_downloadableFile->getFileType($this->_resourceFile);
             }
-        } elseif ($this->_linkType == self::LINK_TYPE_URL) {
-            return $this->_handle->stat($this->_resourceFile)['type'];
+            return $this->_downloadableFile->getFileType($this->_resourceFile);
+        }
+        if ($this->_linkType === self::LINK_TYPE_URL) {
+            return (is_array($this->_handle->stat($this->_resourceFile)['type'])
+                ? end($this->_handle->stat($this->_resourceFile)['type'])
+                : $this->_handle->stat($this->_resourceFile)['type']);
         }
         return $this->_contentType;
     }
@@ -252,10 +254,21 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                 );
             }
         }
-
+        
         $this->_resourceFile = $resourceFile;
+        
+        /**
+        * check header for urls
+        */
+        if ($linkType === self::LINK_TYPE_URL) {
+            $headers = array_change_key_case(get_headers($this->_resourceFile, 1), CASE_LOWER);
+            if (isset($headers['location'])) {
+                $this->_resourceFile  = is_array($headers['location']) ? current($headers['location'])
+                    : $headers['location'];
+            }
+        }
+        
         $this->_linkType = $linkType;
-
         return $this;
     }
 

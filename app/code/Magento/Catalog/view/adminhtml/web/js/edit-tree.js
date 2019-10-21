@@ -18,7 +18,10 @@ require([
     /**
      * Delete some category
      * This routine get categoryId explicitly, so even if currently selected tree node is out of sync
-     * with this form, we surely delete same category in the tree and at backend
+     * with this form, we surely delete same category in the tree and at backend.
+     *
+     * @deprecated
+     * @see deleteConfirm
      */
     function categoryDelete(url) {
         confirm({

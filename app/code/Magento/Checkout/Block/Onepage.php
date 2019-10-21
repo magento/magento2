@@ -38,7 +38,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
     protected $layoutProcessors;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
 
@@ -48,8 +48,9 @@ class Onepage extends \Magento\Framework\View\Element\Template
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $layoutProcessors
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\Framework\Serialize\SerializerInterface $serializerInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -57,7 +58,8 @@ class Onepage extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        \Magento\Framework\Serialize\SerializerInterface $serializerInterface = null
     ) {
         parent::__construct($context, $data);
         $this->formKey = $formKey;
@@ -65,12 +67,12 @@ class Onepage extends \Magento\Framework\View\Element\Template
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializerInterface ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\JsonHexTag::class);
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getJsLayout()
     {
@@ -78,7 +80,7 @@ class Onepage extends \Magento\Framework\View\Element\Template
             $this->jsLayout = $processor->process($this->jsLayout);
         }
 
-        return json_encode($this->jsLayout, JSON_HEX_TAG);
+        return $this->serializer->serialize($this->jsLayout);
     }
 
     /**
@@ -115,11 +117,13 @@ class Onepage extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve serialized checkout config.
+     *
      * @return bool|string
      * @since 100.2.0
      */
     public function getSerializedCheckoutConfig()
     {
-        return json_encode($this->getCheckoutConfig(), JSON_HEX_TAG);
+        return  $this->serializer->serialize($this->getCheckoutConfig());
     }
 }

@@ -5,7 +5,6 @@
  */
 namespace Magento\Developer\Console\Command;
 
-use Magento\Framework\App\State;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -81,7 +80,7 @@ class SourceThemeDeployCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -129,7 +128,7 @@ class SourceThemeDeployCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)

@@ -86,7 +86,7 @@ class Table implements FactoryInterface
         $tablePrefix = $this->resourceConnection->getTablePrefix();
         $nameWithoutPrefix = $data['name'];
         if (!empty($tablePrefix) && strpos($nameWithoutPrefix, $tablePrefix) === 0) {
-            $data['nameWithoutPrefix'] = str_replace($tablePrefix, "", $data['name']);
+            $data['nameWithoutPrefix'] = preg_replace('/^' . $tablePrefix . '/i', '', $data['name']);
         } else {
             $data['name'] = $tablePrefix . $data['name'];
             $data['nameWithoutPrefix'] = $nameWithoutPrefix;
