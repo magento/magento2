@@ -10,7 +10,6 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
@@ -161,7 +160,14 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturnArgument(2);
 
         $modifyMeta = $this->createModel()->modifyMeta($meta);
-        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['category_ids']['arguments']['data']['config']['disabled']
+        );
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['create_category_button']['arguments']['data']['config']['disabled']
+        );
     }
 
     /**

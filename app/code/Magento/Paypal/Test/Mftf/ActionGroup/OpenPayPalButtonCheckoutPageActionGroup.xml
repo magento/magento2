@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="OpenPayPalButtonCheckoutPage">
+        <annotations>
+            <description>Clicks on 'Configure' for 'PayPal Express Checkout' on the Admin Configuration page. Expands the 'Advanced Settings' tab. Expands the 'Frontend Experience Settings' tab. Expands the 'Checkout Page' tab.</description>
+        </annotations>
         <arguments>
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
+        
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
         <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="waitForAdvancedSettingTab"/>
         <click selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="openAdvancedSettingTab"/>

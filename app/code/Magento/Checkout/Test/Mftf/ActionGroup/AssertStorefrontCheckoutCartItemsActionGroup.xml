@@ -5,9 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontCheckoutCartItemsActionGroup">
+        <annotations>
+            <description>Validates that the provided Product details (Name, SKU, Price, Subtotal and Quantity) are present and correct on the Storefront Shopping Cart page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="productSku" type="string"/>
@@ -15,6 +19,7 @@
             <argument name="subtotal" type="string"/>
             <argument name="qty" type="string"/>
         </arguments>
+        
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{productName}}"  stepKey="seeProductNameInCheckoutSummary"/>
         <see selector="{{CheckoutCartProductSection.checkoutCartProductPrice}}" userInput="{{productPrice}}" stepKey="seeProductPriceInCart"/>
         <see selector="{{CheckoutCartProductSection.checkoutCartSubtotal}}" userInput="{{subtotal}}" stepKey="seeSubtotalPrice"/>

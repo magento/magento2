@@ -58,6 +58,8 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     }
 
     /**
+     * Collect and get rates
+     *
      * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -75,6 +77,6 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
      */
     public function getAllowedMethods()
     {
-        return ['pickup' => __('Store Pickup')];
+        return [$this->_code => __('Store Pickup')];
     }
 }

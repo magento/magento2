@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCatalogPriceRuleStagingSection">
         <element name="status" type="select" selector=".modal-component [data-index='is_active'] select"/>
+        <element name="isActive" type="select" selector=".modals-wrapper input[name='is_active']+label"/>
     </section>
 </sections>

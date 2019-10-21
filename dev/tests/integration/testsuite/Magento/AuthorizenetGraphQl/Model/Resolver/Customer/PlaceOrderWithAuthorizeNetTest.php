@@ -94,11 +94,10 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-          additional_data:
-         {authorizenet_acceptjs: 
+          authorizenet_acceptjs: 
             {opaque_data_descriptor: "mydescriptor",
              opaque_data_value: "myvalue",
-             cc_last_4: 1111}}
+             cc_last_4: 1111}
       }
   }) {    
        cart {
@@ -109,7 +108,7 @@ class PlaceOrderWithAuthorizeNetTest extends TestCase
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -143,12 +142,12 @@ QUERY;
         );
 
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
 
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 

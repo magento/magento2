@@ -29,7 +29,7 @@
                 </field>
                 <field id="text_limit" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Email Text Length Limit</label>
-                    <comment>255 by default</comment>
+                    <comment>255 by default. Max - 10000</comment>
                     <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
                 </field>
             </group>

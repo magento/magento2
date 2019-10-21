@@ -173,23 +173,25 @@ class TemplateTest extends TestCase
     {
         return $this->getMockBuilder(Template::class)
             ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
-            ->setConstructorArgs([
-                $this->context,
-                $this->design,
-                $this->registry,
-                $this->appEmulation,
-                $this->storeManager,
-                $this->assetRepo,
-                $this->filesystem,
-                $this->scopeConfig,
-                $this->emailConfig,
-                $this->templateFactory,
-                $this->filterManager,
-                $this->urlModel,
-                $this->filterFactory,
-                [],
-                $this->serializerMock
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->context,
+                    $this->design,
+                    $this->registry,
+                    $this->appEmulation,
+                    $this->storeManager,
+                    $this->assetRepo,
+                    $this->filesystem,
+                    $this->scopeConfig,
+                    $this->emailConfig,
+                    $this->templateFactory,
+                    $this->filterManager,
+                    $this->urlModel,
+                    $this->filterFactory,
+                    [],
+                    $this->serializerMock
+                ]
+            )
             ->getMock();
     }
 
@@ -257,9 +259,7 @@ class TemplateTest extends TestCase
         $expectedOrigTemplateVariables,
         $expectedTemplateStyles
     ) {
-        $model = $this->getModelMock([
-            'getDesignParams'
-        ]);
+        $model = $this->getModelMock(['getDesignParams']);
 
         $designParams = [
             'area' => Area::AREA_FRONTEND,
@@ -382,13 +382,15 @@ class TemplateTest extends TestCase
     public function testLoadByConfigPath($loadFromDatabase)
     {
         $configPath = 'design/email/header_template';
-        $model = $this->getModelMock([
-            'getDesignConfig',
-            'loadDefault',
-            'load',
-            'getTemplateText',
-            'setTemplateText',
-        ]);
+        $model = $this->getModelMock(
+            [
+                'getDesignConfig',
+                'loadDefault',
+                'load',
+                'getTemplateText',
+                'setTemplateText',
+            ]
+        );
 
         $designConfig = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->setMethods(['getStore'])
@@ -611,21 +613,19 @@ class TemplateTest extends TestCase
                 'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
                 . '"var customer.name":"Customer Name"}',
                 'expectedResult' => [
-                    [
-                        'label' => __('Template Variables'),
-                        'value' => [
-                            [
-                                'value' => '{{store url=""}}',
-                                'label' => __('%1', 'Store Url'),
-                            ],
-                            [
-                                'value' => '{{var logo_url}}',
-                                'label' => __('%1', 'Email Logo Image Url'),
-                            ],
-                            [
-                                'value' => '{{var customer.name}}',
-                                'label' => __('%1', 'Customer Name'),
-                            ],
+                    'label' => __('Template Variables'),
+                    'value' => [
+                        [
+                            'value' => '{{store url=""}}',
+                            'label' => __('%1', 'Store Url'),
+                        ],
+                        [
+                            'value' => '{{var logo_url}}',
+                            'label' => __('%1', 'Email Logo Image Url'),
+                        ],
+                        [
+                            'value' => '{{var customer.name}}',
+                            'label' => __('%1', 'Customer Name'),
                         ],
                     ],
                 ],
@@ -640,13 +640,15 @@ class TemplateTest extends TestCase
      */
     public function testProcessTemplate($templateId, $expectedResult)
     {
-        $model = $this->getModelMock([
-            'load',
-            'loadDefault',
-            'getProcessedTemplate',
-            'applyDesignConfig',
-            'cancelDesignConfig',
-        ]);
+        $model = $this->getModelMock(
+            [
+                'load',
+                'loadDefault',
+                'getProcessedTemplate',
+                'applyDesignConfig',
+                'cancelDesignConfig',
+            ]
+        );
         $model->setId($templateId);
         if (is_numeric($templateId)) {
             $model->expects($this->once())
@@ -698,10 +700,7 @@ class TemplateTest extends TestCase
      */
     public function testProcessTemplateThrowsExceptionNonExistentTemplate()
     {
-        $model = $this->getModelMock([
-            'loadDefault',
-            'applyDesignConfig',
-        ]);
+        $model = $this->getModelMock(['loadDefault', 'applyDesignConfig',]);
         $model->expects($this->once())
             ->method('loadDefault')
             ->willReturn(true);
@@ -753,23 +752,25 @@ class TemplateTest extends TestCase
         /** @var Template $model */
         $model = $this->getMockBuilder(Template::class)
             ->setMethods(['_init'])
-            ->setConstructorArgs([
-                $this->createMock(Context::class),
-                $this->createMock(Design::class),
-                $this->createMock(Registry::class),
-                $this->createMock(Emulation::class),
-                $this->createMock(StoreManager::class),
-                $this->createMock(Repository::class),
-                $this->createMock(Filesystem::class),
-                $this->createMock(ScopeConfigInterface::class),
-                $emailConfig,
-                $this->createMock(TemplateFactory::class),
-                $this->createMock(FilterManager::class),
-                $this->createMock(Url::class),
-                $this->createMock(FilterFactory::class),
-                [],
-                $this->createMock(Json::class)
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->createMock(Context::class),
+                    $this->createMock(Design::class),
+                    $this->createMock(Registry::class),
+                    $this->createMock(Emulation::class),
+                    $this->createMock(StoreManager::class),
+                    $this->createMock(Repository::class),
+                    $this->createMock(Filesystem::class),
+                    $this->createMock(ScopeConfigInterface::class),
+                    $emailConfig,
+                    $this->createMock(TemplateFactory::class),
+                    $this->createMock(FilterManager::class),
+                    $this->createMock(Url::class),
+                    $this->createMock(FilterFactory::class),
+                    [],
+                    $this->createMock(Json::class)
+                ]
+            )
             ->getMock();
 
         $model->setTemplateId(10);

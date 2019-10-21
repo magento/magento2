@@ -130,7 +130,7 @@ class Subscriber extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
-        $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
+        $storeIds = $this->storeManager->getWebsite()->getStoreIds();
 
         if ($customer->getId()) {
             $select = $this->connection
