@@ -105,8 +105,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         if ($summaryCount > 0) {
             $summaryCount = \Zend_Locale_Format::toNumber($summaryCount, [
                 'locale' => $this->localeResolver->getLocale()
-                ]
-            );
+                ]);
         }
         return [
             'summary_count' => $summaryCount,
