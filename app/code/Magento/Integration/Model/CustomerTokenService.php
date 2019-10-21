@@ -15,6 +15,7 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as Tok
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Customer\Model\CustomerFactory;
 
 /**
  * @inheritdoc
@@ -56,6 +57,11 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
      * @var RequestThrottler
      */
     private $requestThrottler;
+    
+    /**
+     * @var CustomerFactory
+     */
+    protected $_customerFactory;      
 
     /**
      * Initialize service
@@ -71,7 +77,8 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
-        ManagerInterface $eventManager = null
+        ManagerInterface $eventManager = null,
+        CustomerFactory $customerFactory
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
@@ -79,6 +86,7 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         $this->validatorHelper = $validatorHelper;
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ManagerInterface::class);
+        $this->_customerFactory = $customerFactory;
     }
 
     /**
@@ -99,7 +107,8 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
                 )
             );
         }
-        $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
+        $customerModel = $this->_customerFactory->create()->updateData($customerDataObject);
+        $this->eventManager->dispatch('customer_login', ['customer' => $customerModel]);
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
     }
