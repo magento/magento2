@@ -7,6 +7,7 @@
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Instruction;
 
 use Magento\Framework\Css\PreProcessor\Instruction\MagentoImport;
+use Magento\Framework\Module\ModuleManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
@@ -46,6 +47,10 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
     private $themeProvider;
 
     /**
+     * @var ModuleManagerInterface||\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $moduleManager;
+    /**
      * @var \Magento\Framework\Css\PreProcessor\Instruction\Import
      */
     private $object;
@@ -61,12 +66,15 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
         $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
         $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $this->moduleManager = $this->createMock(ModuleManagerInterface::class);
         $this->object = (new ObjectManager($this))->getObject(MagentoImport::class, [
             'design' => $this->design,
             'fileSource' => $this->fileSource,
             'errorHandler' => $this->errorHandler,
             'assetRepo' => $this->assetRepo,
-            'themeProvider' => $this->themeProvider
+            'themeProvider' => $this->themeProvider,
+            'moduleManager' => $this->moduleManager
+
         ]);
     }
 
@@ -94,16 +102,23 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
         $relatedAsset->expects($this->once())->method('getContext')->will($this->returnValue($context));
         $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->will($this->returnValue($theme));
+
+        $this->moduleManager->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+
         $files = [];
         foreach ($foundFiles as $file) {
             $fileObject = $this->createMock(\Magento\Framework\View\File::class);
             $fileObject->expects($this->any())
-                ->method('getModule')
-                ->will($this->returnValue($file['module']));
+                       ->method('getModule')
+                       ->will($this->returnValue($file['module']));
             $fileObject->expects($this->any())
-                ->method('getFilename')
-                ->will($this->returnValue($file['filename']));
-            $files[] = $fileObject;
+                       ->method('getFilename')
+                       ->will($this->returnValue($file['filename']));
+
+            if(\is_null($file['module']) || (isset($file['isEnabled']) && $file['isEnabled'] === true))
+            {
+                $files[] = $fileObject;
+            }
         }
         $this->fileSource->expects($this->once())
             ->method('getFiles')
@@ -135,10 +150,32 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
                 'Magento_Module::some/file.css',
                 'some/file.css',
                 [
-                    ['module' => 'Magento_Module', 'filename' => 'some/file.css'],
-                    ['module' => 'Magento_Two', 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Module','isEnabled' => true, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two','isEnabled' => true, 'filename' => 'some/file.css'],
                 ],
                 "@import 'Magento_Module::some/file.css';\n@import 'Magento_Two::some/file.css';\n",
+            ],
+            'modular one module disabled' => [
+                '//@magento_import "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module','isEnabled' => true, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two','isEnabled' => true, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Disabled','isEnabled' => false, 'filename' => 'some/file.css'],
+                ],
+                "@import 'Magento_Module::some/file.css';\n@import 'Magento_Two::some/file.css';\n",
+            ],
+            'modular all modules disabled' => [
+                '//@magento_import "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module','isEnabled' => false, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two','isEnabled' => false, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Disabled','isEnabled' => false, 'filename' => 'some/file.css'],
+                ],
+                "",
             ],
             'non-modular reference notation' => [
                 '//@magento_import (reference) "some/file.css";',
@@ -155,11 +192,34 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
                 'Magento_Module::some/file.css',
                 'some/file.css',
                 [
-                    ['module' => 'Magento_Module', 'filename' => 'some/file.css'],
-                    ['module' => 'Magento_Two', 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Module','isEnabled' => true, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two','isEnabled' => true, 'filename' => 'some/file.css'],
                 ],
                 "@import (reference) 'Magento_Module::some/file.css';\n" .
                 "@import (reference) 'Magento_Two::some/file.css';\n",
+            ],
+            'modular reference one disabled module' => [
+                '//@magento_import (reference) "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module','isEnabled' => true, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two','isEnabled' => true, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Disabled','isEnabled' => false, 'filename' => 'some/file.css'],
+                ],
+                "@import (reference) 'Magento_Module::some/file.css';\n" .
+                "@import (reference) 'Magento_Two::some/file.css';\n",
+            ],
+            'modular reference all modules disabled' => [
+                '//@magento_import (reference) "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module','isEnabled' => false, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two','isEnabled' => false, 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Disabled','isEnabled' => false, 'filename' => 'some/file.css'],
+                ],
+                "",
             ],
         ];
     }

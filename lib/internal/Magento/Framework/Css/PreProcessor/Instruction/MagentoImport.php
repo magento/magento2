@@ -16,6 +16,8 @@ use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\Module\ModuleManagerInterface;
 
 /**
+ * Processes import statements for css files
+ *
  * @magento_import instruction preprocessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Must be deleted after moving themeProvider to construct
  */
@@ -88,7 +90,7 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
@@ -149,6 +151,8 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
+     * Get theme provider
+     *
      * @return ThemeProviderInterface
      * @deprecated 100.1.1
      */
