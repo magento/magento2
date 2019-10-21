@@ -115,8 +115,7 @@ class MagentoImportTest extends \PHPUnit\Framework\TestCase
                        ->method('getFilename')
                        ->will($this->returnValue($file['filename']));
 
-            if(\is_null($file['module']) || (isset($file['isEnabled']) && $file['isEnabled'] === true))
-            {
+            if (\is_null($file['module']) || (isset($file['isEnabled']) && $file['isEnabled'] === true)) {
                 $files[] = $fileObject;
             }
         }

@@ -100,7 +100,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         );
 
         $output = $transportBuilder->getSentMessage()->getRawMessage();
-        $output = \str_replace('\n\r','',$output);
+        $output = \str_replace('=\r\n', '', $output);
 
         $this->assertContains(
             'You have been successfully subscribed to our newsletter.',
