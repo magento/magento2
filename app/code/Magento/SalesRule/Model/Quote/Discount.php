@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
-use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
@@ -42,11 +41,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected $priceCurrency;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory
-     */
-    private $discountFactory;
-
-    /**
      * @var RuleDiscountInterfaceFactory
      */
     private $discountInterfaceFactory;
@@ -61,7 +55,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param DataFactory|null $discountDataFactory
      * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
      * @param DiscountDataInterfaceFactory|null $discountDataInterfaceFactory
      */
@@ -70,7 +63,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\SalesRule\Model\Validator $validator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        DataFactory $discountDataFactory = null,
         RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
         DiscountDataInterfaceFactory $discountDataInterfaceFactory = null
     ) {
@@ -79,7 +71,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $this->calculator = $validator;
         $this->storeManager = $storeManager;
         $this->priceCurrency = $priceCurrency;
-        $this->discountFactory = $discountDataFactory ?: ObjectManager::getInstance()->get(DataFactory::class);
         $this->discountInterfaceFactory = $discountInterfaceFactory
             ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
         $this->discountDataInterfaceFactory = $discountDataInterfaceFactory
