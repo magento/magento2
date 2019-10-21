@@ -9,10 +9,12 @@ declare(strict_types=1);
 namespace Magento\OfflineShipping\Controller\Adminhtml\System\Config;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate\Grid;
-use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Filesystem;
@@ -36,9 +38,14 @@ class ImportExportTableratesTest extends \Magento\TestFramework\TestCase\Abstrac
     private $fileSystem;
 
     /**
-     * @var DirectoryList
+     * @var StoreManagerInterface
      */
-    private $varDirectory;
+    private $storeManager;
+
+    /**
+     * @var int
+     */
+    private $websiteId;
 
     /**
      * @inheritdoc
@@ -47,7 +54,8 @@ class ImportExportTableratesTest extends \Magento\TestFramework\TestCase\Abstrac
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(Filesystem::class);
-        $this->varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->websiteId = $this->storeManager->getWebsite()->getId();
 
         parent::setUp();
     }
@@ -85,34 +93,38 @@ class ImportExportTableratesTest extends \Magento\TestFramework\TestCase\Abstrac
             ]
         )->setMethod(HttpRequest::METHOD_POST);
 
-        $this->dispatch('backend/admin/system_config/save/section/carriers/website/1/');
+        $this->dispatch('backend/admin/system_config/save/section/carriers/website/' . $this->websiteId . '/');
         $this->assertSessionMessages(
             $this->equalTo([(string)__('You saved the configuration.')]),
             MessageInterface::TYPE_SUCCESS
         );
 
-        $tablerateResourceModel = $this->objectManager->create(Tablerate::class);
-        $connection = $tablerateResourceModel->getConnection();
+        /** @var Collection $tablerateCollection */
+        $tablerateCollection = $this->objectManager->create(Collection::class);
+        $tablerateData = $tablerateCollection->setConditionFilter('package_weight')->getItems()[0]->getData();
+        $this->assertEquals('666.0000', $tablerateData['price']);
+        $this->assertEquals('USA', $tablerateData['dest_country']);
+        $this->assertEquals('10.0000', $tablerateData['condition_value']);
 
-        $selectData = $connection->select()->from($tablerateResourceModel->getTable('shipping_tablerate'));
-        $this->assertNotEmpty($connection->fetchRow($selectData));
-
-        $exportCsv = $this->getTablerateCsv();
-        $exportCsvContent = $this->varDirectory->openFile($exportCsv['value'], 'r')->readAll();
+        $exportCsvContent = $this->getTablerateCsv();
         $importCsvContent = $tmpDirectory->openFile($importCsvPath, 'r')->readAll();
 
         $this->assertEquals($importCsvContent, $exportCsvContent);
     }
 
     /**
-     * @return array
+     * @return string
      */
-    private function getTablerateCsv(): array
+    private function getTablerateCsv(): string
     {
+        /** @var WriteInterface $varDirectory */
+        $varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+
         /** @var Grid $gridBlock */
         $gridBlock = $this->objectManager->get(LayoutInterface::class)->createBlock(Grid::class);
-        $exportCsv = $gridBlock->setWebsiteId(1)->setConditionName('package_weight')->getCsvFile();
+        $exportCsv = $gridBlock->setWebsiteId($this->websiteId)->setConditionName('package_weight')->getCsvFile();
+        $exportCsvContent = $varDirectory->openFile($exportCsv['value'], 'r')->readAll();
 
-        return $exportCsv;
+        return $exportCsvContent;
     }
 }
