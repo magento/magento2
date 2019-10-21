@@ -25,6 +25,7 @@ define([
         'validate-card-type': [
             function (number, item, allowedTypes) {
                 var cardInfo,
+                    type,
                     i,
                     l;
 
@@ -35,10 +36,12 @@ define([
                 cardInfo = creditCardNumberValidator(number).card;
 
                 for (i = 0, l = allowedTypes.length; i < l; i++) {
-                     var type = allowedTypes[i].type;
-                    if( (!!type) && (type.constructor === Array) && type.includes(cardInfo.title)) // Check if aarry
+                    
+                    type = allowedTypes[i].type;
+                    
+                    if( (!!type) && (type.constructor === Array) && type.includes(cardInfo.title)){ // Check if an arry
                         return true;                     
-                     
+                    }
                     if (cardInfo.title == type) {  //eslint-disable-line eqeqeq
                         return true;
                     }
