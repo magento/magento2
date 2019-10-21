@@ -163,23 +163,26 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $captchaForName = 'share_wishlist_form';
-        /** @var CaptchaModel $captchaModel */
-        $captchaModel = $this->captchaHelper->getCaptcha($captchaForName);
 
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
 
-        $isCorrectCaptcha = $this->validateCaptcha($captchaModel, $captchaForName);
+        if ($this->captchaHelper->isModuleOutputEnabled()) {
+            $captchaForName = 'share_wishlist_form';
+            /** @var CaptchaModel $captchaModel */
+            $captchaModel = $this->captchaHelper->getCaptcha($captchaForName);
 
-        $this->logCaptchaAttempt($captchaModel);
+            $isCorrectCaptcha = $this->validateCaptcha($captchaModel, $captchaForName);
 
-        if (!$isCorrectCaptcha) {
-            $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
-            $resultRedirect->setPath('*/*/share');
-            return $resultRedirect;
+            $this->logCaptchaAttempt($captchaModel);
+
+            if (!$isCorrectCaptcha) {
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
+                $resultRedirect->setPath('*/*/share');
+                return $resultRedirect;
+            }
         }
 
         $wishlist = $this->wishlistProvider->getWishlist();
