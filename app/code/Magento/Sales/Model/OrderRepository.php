@@ -104,6 +104,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
      * @param JsonSerializer|null $serializer
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Metadata $metadata,
