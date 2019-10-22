@@ -232,7 +232,6 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     /**
      * Load product model with data by passed id.
      * Return false if product was not loaded or has incorrect status.
-     *
      * @param int $productId
      * @return bool|CatalogProduct
      */
