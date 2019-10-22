@@ -43,6 +43,26 @@ class ConfigurableProductHandler
 
     /**
      * @param \Magento\CatalogRule\Model\Rule $rule
+     * @param int|array $productIds
+     * @return array
+     */
+    public function beforeSetProductsFilter(\Magento\CatalogRule\Model\Rule $rule, $productIds)
+    {
+        if ($productIds) {
+            $configurableProductIds = $this->configurable->getParentIdsByChild($productIds);
+            if ($configurableProductIds) {
+                $productIds = array_merge((array) $productIds, $configurableProductIds);
+
+            }
+        }
+
+        return [
+            $productIds,
+        ];
+    }
+
+    /**
+     * @param \Magento\CatalogRule\Model\Rule $rule
      * @param array $productIds
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
