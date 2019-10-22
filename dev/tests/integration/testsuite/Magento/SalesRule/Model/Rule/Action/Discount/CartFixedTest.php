@@ -164,6 +164,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         /** @var CartItemInterface $item */
         $item = $quote->getItems()[0];
         $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
+        $this->assertArrayHasKey('0', $quoteItemDiscounts);
         $discountData = $quoteItemDiscounts[0]->getDiscountData();
         $ruleLabel = $quoteItemDiscounts[0]->getRuleLabel();
         $this->assertEquals(5, $discountData->getAmount());
@@ -173,6 +174,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('TestRule_Coupon', $ruleLabel);
 
         $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
+        $this->assertArrayHasKey('0', $quoteAddressItemDiscount);
         $discountData = $quoteAddressItemDiscount[0]->getDiscountData();
         $ruleLabel = $quoteAddressItemDiscount[0]->getRuleLabel();
         $this->assertEquals(5, $discountData->getAmount());

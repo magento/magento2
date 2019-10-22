@@ -9,11 +9,12 @@ namespace Magento\SalesRule\Model\Data;
 
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\SalesRule\Api\Data\RuleDiscountInterface;
+use Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * Data Model for Rule Discount
  */
-class RuleDiscount extends \Magento\Framework\Api\AbstractExtensibleObject implements RuleDiscountInterface
+class RuleDiscount extends AbstractExtensibleObject implements RuleDiscountInterface
 {
     const KEY_DISCOUNT_DATA = 'discount';
     const KEY_RULE_LABEL = 'rule';

@@ -42,7 +42,7 @@ class Discounts implements ResolverInterface
         $discountValues=[];
         $address = $quote->getShippingAddress();
         $totalDiscounts = $address->getExtensionAttributes()->getDiscounts();
-        if ($totalDiscounts) {
+        if ($totalDiscounts && is_array($totalDiscounts)) {
             foreach ($totalDiscounts as $value) {
                 $discount = [];
                 $amount = [];

@@ -41,7 +41,6 @@ $salesRule->setData(
 
             'store_id' => 0,
             'store_label' => 'TestRule_Coupon',
-
         ]
     ]
 );
