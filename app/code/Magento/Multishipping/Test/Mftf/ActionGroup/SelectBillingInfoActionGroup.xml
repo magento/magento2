@@ -13,4 +13,3 @@
         <click stepKey="goToReviewOrder" selector="{{PaymentMethodSection.goToReviewOrder}}"/>
     </actionGroup>
 </actionGroups>
-
