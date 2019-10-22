@@ -28,7 +28,6 @@
         "ext-xsl": "*",
         "ext-zip": "*",
         "lib-libxml": "*",
-        "braintree/braintree_php": "3.35.0",
         "colinmollenhour/cache-backend-file": "~1.4.1",
         "colinmollenhour/cache-backend-redis": "1.10.6",
         "colinmollenhour/credis": "1.10.0",
