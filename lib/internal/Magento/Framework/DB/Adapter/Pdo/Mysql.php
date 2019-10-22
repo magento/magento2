@@ -1481,6 +1481,16 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function quoteInto($text, $value, $type = null, $count = null)
     {
+        // ensure that integers are passed as integer,
+        // to avoid negative effects on performance
+        if (is_array($value)) {
+            foreach($value as &$val) {
+                $val = $this->castNumeric($val);
+            }
+        } else {
+            $value = $this->castNumeric($value);
+        }
+
         if (is_array($value) && empty($value)) {
             $value = new \Zend_Db_Expr('NULL');
         }
@@ -1490,6 +1500,20 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         return parent::quoteInto($text, $value, $type, $count);
+    }
+
+    /**
+     * Cast numeric values to int / float
+     *
+     * @param $val
+     *
+     * @return int|string
+     */
+    private function castNumeric($val) {
+        if (is_numeric($val)) {
+            return $val + 0;
+        }
+        return $val;
     }
 
     /**
