@@ -627,7 +627,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
-        $this->assertEquals(false, $activeQuoteMock);
         $quoteMock->expects($this->never())->method('merge');
 
         $quoteMock->expects($this->once())->method('setCustomer')->with($customerMock);
