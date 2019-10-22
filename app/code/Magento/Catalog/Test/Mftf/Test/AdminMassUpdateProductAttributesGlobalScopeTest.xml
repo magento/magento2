@@ -59,7 +59,7 @@
         <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="30" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
