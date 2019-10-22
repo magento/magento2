@@ -165,14 +165,17 @@ class Account extends AbstractForm
     {
         try {
             $customer = $this->customerRepository->getById($this->getCustomerId());
-            $data = $this->_extensibleDataObjectConverter->toFlatArray(
+        } catch (\Exception $e) {
+            /** If customer does not exist do nothing. */
+        }
+        $data = isset($customer)
+            ? $this->_extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
-                CustomerInterface::class
-            );
-        } catch (\Exception $e) {
-            $data = [];
-        }
+                \Magento\Customer\Api\Data\CustomerInterface::class
+            )
+            : [];
+
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;
