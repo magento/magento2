@@ -11,7 +11,7 @@
         <indexerModel instance="Instance_Type_Two" />
         <stockIndexerModel instance="Instance_Type_Three" />
     </type>
-    <type name="type_two" modelInstance="Instance_Type">
+    <type name="type_two" label="Label Two" modelInstance="Instance_Type">
         <allowedSelectionTypes>
             <type name="type_two" />
         </allowedSelectionTypes>
