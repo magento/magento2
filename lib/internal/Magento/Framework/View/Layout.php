@@ -586,16 +586,13 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     protected function _renderContainer($name, $useCache = true)
     {
-        $htmlParts = [];
+        $html = '';
         $children = $this->getChildNames($name);
         foreach ($children as $child) {
-            $childHtml = $this->renderElement($child, $useCache);
-            if (!empty($childHtml)) {
-                $htmlParts[] = $childHtml;
-            }
+            $html .= $this->renderElement($child, $useCache);
         }
-        if (empty($htmlParts) || !$this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG)) {
-            return join('', $htmlParts);
+        if ($html == '' || !$this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG)) {
+            return $html;
         }
 
         $htmlId = $this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_ID);
@@ -609,7 +606,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         }
 
         $htmlTag = $this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG);
-        $html = sprintf('<%1$s%2$s%3$s>%4$s</%1$s>', $htmlTag, $htmlId, $htmlClass, join('', $htmlParts));
+
+        $html = sprintf('<%1$s%2$s%3$s>%4$s</%1$s>', $htmlTag, $htmlId, $htmlClass, $html);
 
         return $html;
     }
