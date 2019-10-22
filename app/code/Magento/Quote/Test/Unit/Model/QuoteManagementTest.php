@@ -576,7 +576,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $cartId = 220;
         $customerId = 455;
         $storeId = 5;
-        $activeQuoteMock = null;
 
         $this->getPropertyValue($this->model, 'quoteIdMaskFactory')
             ->expects($this->once())
