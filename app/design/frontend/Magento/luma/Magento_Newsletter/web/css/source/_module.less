@@ -83,11 +83,21 @@
 }
 
 //
+//  Tablet
+//  _____________________________________________
+@media only screen and (max-width: @screen__m) {
+    .footer .block.newsletter {
+      width: 42%;
+    }
+}
+
+
+//
 //  Mobile
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .block {
+    .footer .block {
         &.newsletter {
             input {
                 font-size: 12px;
