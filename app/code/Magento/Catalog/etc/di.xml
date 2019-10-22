@@ -1176,4 +1176,38 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="name" xsi:type="string">catalog_product</item>
+                <item name="short_description" xsi:type="string">catalog_product</item>
+                <item name="price" xsi:type="string">catalog_product</item>
+                <item name="image" xsi:type="string">catalog_product</item>
+                <item name="status" xsi:type="string">catalog_product</item>
+                <item name="visibility" xsi:type="string">catalog_product</item>
+                <item name="tier_price" xsi:type="string">catalog_product</item>
+                <item name="weight" xsi:type="string">catalog_product</item>
+                <item name="special_price" xsi:type="string">catalog_product</item>
+                <item name="special_from_date" xsi:type="string">catalog_product</item>
+                <item name="special_to_date" xsi:type="string">catalog_product</item>
+                <item name="small_image" xsi:type="string">catalog_product</item>
+                <item name="thumbnail" xsi:type="string">catalog_product</item>
+                <item name="news_from_date" xsi:type="string">catalog_product</item>
+                <item name="news_to_date" xsi:type="string">catalog_product</item>
+                <item name="price_type" xsi:type="string">catalog_product</item>
+                <item name="weight_type" xsi:type="string">catalog_product</item>
+                <item name="price_view" xsi:type="string">catalog_product</item>
+                <item name="shipment_type" xsi:type="string">catalog_product</item>
+                <item name="msrp" xsi:type="string">catalog_product</item>
+                <item name="msrp_display_actual_price_type" xsi:type="string">catalog_product</item>
+                <item name="giftcard_amounts" xsi:type="string">catalog_product</item>
+                <item name="allow_open_amount" xsi:type="string">catalog_product</item>
+                <item name="open_amount_min" xsi:type="string">catalog_product</item>
+                <item name="open_amount_max" xsi:type="string">catalog_product</item>
+                <item name="tax_class_id" xsi:type="string">catalog_product</item>
+                <item name="category_ids" xsi:type="string">catalog_product</item>
+                <item name="media_gallery" xsi:type="string">catalog_product</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

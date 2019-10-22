@@ -133,6 +133,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param SerializerInterface $serializer
+     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -149,7 +150,8 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_configFactory = $configFactory;
@@ -165,7 +167,8 @@ class Config extends \Magento\Eav\Model\Config
             $entityTypeCollectionFactory,
             $cacheState,
             $universalFactory,
-            $serializer
+            $serializer,
+            $data
         );
     }
 
