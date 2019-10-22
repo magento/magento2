@@ -40,7 +40,8 @@ class AllPurposeActionTest extends TestCase
     {
         return [
             [
-                new class implements ActionInterface, HttpGetActionInterface {
+                new class implements ActionInterface, HttpGetActionInterface
+                {
                     /**
                      * @inheritDoc
                      */
@@ -52,7 +53,8 @@ class AllPurposeActionTest extends TestCase
                 false
             ],
             [
-                new class implements ActionInterface {
+                new class implements ActionInterface
+                {
                     /**
                      * @inheritDoc
                      */
@@ -64,7 +66,8 @@ class AllPurposeActionTest extends TestCase
                 true
             ],
             [
-                new class implements HttpGetActionInterface {
+                new class implements HttpGetActionInterface
+                {
                     /**
                      * @inheritDoc
                      */
@@ -76,7 +79,8 @@ class AllPurposeActionTest extends TestCase
                 false
             ],
             [
-                new class {
+                new class
+                {
 
                 },
                 false
@@ -94,13 +98,15 @@ class AllPurposeActionTest extends TestCase
         $node = $this->getMockBuilder(ClassNode::class)
             ->disableOriginalConstructor()
             ->disableProxyingToOriginalMethods()
-            ->setMethods([
-                // disable name lookup from AST artifact
-                'getNamespaceName',
-                'getParentName',
-                'getName',
-                'getFullQualifiedName',
-            ])
+            ->setMethods(
+                [
+                    // disable name lookup from AST artifact
+                    'getNamespaceName',
+                    'getParentName',
+                    'getName',
+                    'getFullQualifiedName',
+                ]
+            )
             ->getMock();
         $node->expects($this->any())
             ->method('getFullQualifiedName')
@@ -114,10 +120,8 @@ class AllPurposeActionTest extends TestCase
      * @param bool $expects
      * @return InvocationMocker
      */
-    private function expectsRuleViolation(
-        AllPurposeAction $rule,
-        bool $expects
-    ): InvocationMocker {
+    private function expectsRuleViolation(AllPurposeAction $rule, bool $expects): InvocationMocker
+    {
         /** @var Report|MockObject $report */
         $report = $this->getMockBuilder(Report::class)->getMock();
         if ($expects) {
