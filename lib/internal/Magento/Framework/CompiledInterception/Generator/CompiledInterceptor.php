@@ -45,8 +45,8 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
     /**
      * CompiledInterceptor constructor.
      * @param AreasPluginList $areasPlugins
-     * @param null|string $sourceClassName
-     * @param null|string $resultClassName
+     * @param string|null $sourceClassName
+     * @param string|null $resultClassName
      * @param Io|null $ioObject
      * @param CodeGeneratorInterface|null $classGenerator
      * @param DefinedClasses|null $definedClasses
@@ -221,7 +221,6 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
         foreach ($allPlugins as $plugins) {
             foreach ($plugins as $plugin) {
                 $this->classMethods[] = $this->getPluginGetterInfo($plugin);
-                $this->classProperties[] = $this->getPluginPropertyInfo($plugin);
             }
         }
     }
@@ -274,7 +273,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
             'name' => '__construct',
             'parameters' => $parameters,
             'body' => implode("\n", $body),
-            'docblock' => ['shortDescription' => '{@inheritdoc}'],
+            'docblock' => ['shortDescription' => '@inheritdoc'],
         ];
     }
 
@@ -496,23 +495,6 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
     }
 
     /**
-     * Get plugin property cache attribute
-     *
-     * @param array $plugin
-     * @return array
-     */
-    private function getPluginPropertyInfo($plugin)
-    {
-        return [
-            'name' => '____plugin_' . $plugin['clean_name'],
-            'visibility' => 'private',
-            'docblock' => [
-                'tags' => [['name' => 'var', 'description' => '\\' . $plugin['class']]],
-            ]
-        ];
-    }
-
-    /**
      * Prepares plugin getter for code generator
      *
      * @param array $plugin
@@ -520,19 +502,11 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
      */
     private function getPluginGetterInfo($plugin)
     {
-        $body = [];
-        $varName = "\$this->____plugin_" . $plugin['clean_name'];
-
-        $body[] = "if ($varName === null) {";
-        $body[] = "\t$varName = \$this->____om->get(\\" . "{$plugin['class']}::class);";
-        $body[] = "}";
-        $body[] = "return $varName;";
-
         return [
             'name' => $this->getGetterName($plugin),
             'visibility' => 'private',
             'parameters' => [],
-            'body' => implode("\n", $body),
+            'body' => "return \$this->____om->get(\\" . "{$plugin['class']}::class);",
             'docblock' => [
                 'shortDescription' => 'plugin "' . $plugin['code'] . '"' . "\n" . '@return \\' . $plugin['class']
             ],
@@ -588,7 +562,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
             'parameters' =>array_map([$this, '_getMethodParameterInfo'], $parameters),
             'body' => implode("\n", $body),
             'returnType' => $returnTypeValue,
-            'docblock' => ['shortDescription' => '{@inheritdoc}'],
+            'docblock' => ['shortDescription' => '@inheritdoc'],
         ];
     }
 
@@ -623,7 +597,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
      * @param string $code
      * @param string $className
      * @param array $allPlugins
-     * @param null|string $next
+     * @param string|null $next
      * @return mixed
      */
     private function getPluginInfo(CompiledPluginList $plugins, $code, $className, &$allPlugins, $next = null)

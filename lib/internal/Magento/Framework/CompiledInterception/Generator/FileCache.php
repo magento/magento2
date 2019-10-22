@@ -18,7 +18,7 @@ class FileCache implements CacheInterface
 
     /**
      * FileCache constructor.
-     * @param null|string $cachePath
+     * @param string|null $cachePath
      */
     public function __construct($cachePath = null)
     {

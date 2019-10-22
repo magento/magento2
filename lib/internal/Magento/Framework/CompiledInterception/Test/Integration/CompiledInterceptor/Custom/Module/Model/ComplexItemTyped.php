@@ -18,7 +18,7 @@ class ComplexItemTyped
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getNullableValue(): ?string
     {

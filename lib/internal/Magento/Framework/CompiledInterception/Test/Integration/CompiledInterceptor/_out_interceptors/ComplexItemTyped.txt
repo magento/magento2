@@ -19,17 +19,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     private $____om = null;
 
     /**
-     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Complex
-     */
-    private $____plugin_complex_plugin = null;
-
-    /**
-     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
-     */
-    private $____plugin_advanced_plugin = null;
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $____om, \Magento\Framework\Config\ScopeInterface $____scope)
     {
@@ -38,7 +28,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function returnVoid() : void
     {
@@ -55,7 +45,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNullableValue() : ?string
     {
@@ -70,7 +60,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName() : string
     {
@@ -93,7 +83,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setValue(string $value)
     {
@@ -111,7 +101,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function firstVariadicParameter(string ... $variadicValue)
     {
@@ -126,7 +116,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function secondVariadicParameter(string $value, string ... $variadicValue)
     {
@@ -141,7 +131,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function byRefVariadic(string &... $variadicValue)
     {
@@ -156,7 +146,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function returnsSelf() : \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ComplexItemTyped
     {
@@ -171,7 +161,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function returnsType() : \Magento\Framework\Something
     {
@@ -191,10 +181,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
      */
     private function ____plugin_complex_plugin()
     {
-        if ($this->____plugin_complex_plugin === null) {
-        	$this->____plugin_complex_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Complex::class);
-        }
-        return $this->____plugin_complex_plugin;
+        return $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Complex::class);
     }
 
     /**
@@ -203,9 +190,6 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
      */
     private function ____plugin_advanced_plugin()
     {
-        if ($this->____plugin_advanced_plugin === null) {
-        	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
-        }
-        return $this->____plugin_advanced_plugin;
+        return $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
     }
 }

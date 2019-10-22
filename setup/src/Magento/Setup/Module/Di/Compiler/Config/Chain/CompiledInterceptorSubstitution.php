@@ -41,7 +41,7 @@ class CompiledInterceptorSubstitution implements InterceptorSubstitutionInterfac
                 foreach (CompiledInterceptor::propertiesToInjectToConstructor() as $type => $name) {
                     $preference = isset($config['preferences'][$type]) ? $config['preferences'][$type] : $type;
                     foreach ($arguments as $argument) {
-                        if (isset($argument['_i_']) && $argument['_i_'] == $preference) {
+                        if (isset($argument['_i_']) && $argument['_i_'] === $preference) {
                             continue 2;
                         }
                     }

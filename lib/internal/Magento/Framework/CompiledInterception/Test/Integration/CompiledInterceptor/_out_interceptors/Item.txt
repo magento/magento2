@@ -19,17 +19,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     private $____om = null;
 
     /**
-     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple
-     */
-    private $____plugin_simple_plugin = null;
-
-    /**
-     * @var \Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced
-     */
-    private $____plugin_advanced_plugin = null;
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $____om, \Magento\Framework\Config\ScopeInterface $____scope)
     {
@@ -38,7 +28,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName()
     {
@@ -67,10 +57,7 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
      */
     private function ____plugin_simple_plugin()
     {
-        if ($this->____plugin_simple_plugin === null) {
-        	$this->____plugin_simple_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple::class);
-        }
-        return $this->____plugin_simple_plugin;
+        return $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Simple::class);
     }
 
     /**
@@ -79,9 +66,6 @@ class Interceptor extends \Magento\Framework\CompiledInterception\Test\Integrati
      */
     private function ____plugin_advanced_plugin()
     {
-        if ($this->____plugin_advanced_plugin === null) {
-        	$this->____plugin_advanced_plugin = $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
-        }
-        return $this->____plugin_advanced_plugin;
+        return $this->____om->get(\Magento\Framework\CompiledInterception\Test\Integration\CompiledInterceptor\Custom\Module\Model\ItemPlugin\Advanced::class);
     }
 }

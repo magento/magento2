@@ -66,6 +66,7 @@ class AreasPluginList
             //this is to emulate order M2 is reading scopes config to use scope cache
             //"global|primary" should be loaded first and then "global|primary|frontend" etc.
             $defaultScopePluginList = $defaultScope = null;
+            $objectManager = ObjectManager::getInstance();
             foreach ($this->scope->getAllScopes() as $scope) {
                 $configScope = $this->scopeInterfaceFactory->create(
                     [
@@ -75,7 +76,7 @@ class AreasPluginList
                 if ($defaultScopePluginList === null) {
                     $defaultScopePluginList = $this->compiledPluginListFactory->create(
                         [
-                            'objectManager' => ObjectManager::getInstance(),
+                            'objectManager' => $objectManager,
                             'scope' => $configScope
                         ]
                     );
