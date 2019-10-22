@@ -17,7 +17,7 @@
         <plugin name="persistent-session-depersonalize"
                 type="Magento\Persistent\Model\Layout\DepersonalizePlugin"
                 sortOrder="10"
-        />
+      />
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>

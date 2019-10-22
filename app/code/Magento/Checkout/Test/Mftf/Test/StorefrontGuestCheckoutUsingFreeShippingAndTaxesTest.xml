@@ -121,7 +121,7 @@
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$createTaxRule.code$$" stepKey="fillTaxRateSearch"/>
         <wait stepKey="waitForSearch" time="5" />
-        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$createTaxRule.code$$)}}" stepKey="selectNeededItem"  />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$createTaxRule.code$$)}}" stepKey="selectNeededItem" />
         <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule" />
         <waitForPageLoad stepKey="waitForTaxRuleSaved" />
 

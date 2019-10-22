@@ -37,7 +37,7 @@
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
         <wait stepKey="waitForSearch" time="5" />
-        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$initialTaxRate.code$$)}}" stepKey="selectNeededItem"  />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$initialTaxRate.code$$)}}" stepKey="selectNeededItem" />
         <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule" />
         <waitForPageLoad stepKey="waitForTaxRuleSaved" />
         <!-- Verify we see success message -->
@@ -52,6 +52,6 @@
 
         <!-- Verify we see created tax rule with defaults on the tax rule form page -->
         <seeInField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="seeInTaxRuleField" />
-        <seeElement selector="{{AdminTaxRuleFormSection.taxRateSelected($$initialTaxRate.code$$)}}" stepKey="seeTaxRateSelected"  />
+        <seeElement selector="{{AdminTaxRuleFormSection.taxRateSelected($$initialTaxRate.code$$)}}" stepKey="seeTaxRateSelected" />
     </test>
 </tests>
