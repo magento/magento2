@@ -8,7 +8,10 @@ namespace Magento\Review\Controller;
 use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Review controller
@@ -17,6 +20,11 @@ use Magento\Review\Model\Review;
  */
 abstract class Product extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * Configuration path to review active setting
+     */
+    const XML_PATH_REVIEW_ACTIVE = 'catalog/review/active';
+
     /**
      * Core registry
      *
@@ -95,6 +103,11 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     protected $formKeyValidator;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -107,6 +120,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Session\Generic $reviewSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param ScopeConfigInterface $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -121,7 +135,8 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Framework\Session\Generic $reviewSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
@@ -134,6 +149,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         $this->ratingFactory = $ratingFactory;
         $this->catalogDesign = $catalogDesign;
         $this->formKeyValidator = $formKeyValidator;
+        $this->scopeConfig = $scopeConfig;
 
         parent::__construct($context);
     }
@@ -146,6 +162,15 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
+        if (!$this->scopeConfig->getValue(
+            self::XML_PATH_REVIEW_ACTIVE,
+            ScopeInterface::SCOPE_STORE
+        )
+        ) {
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            return $resultForward->forward('noroute');
+        }
+
         $allowGuest = $this->_objectManager->get(\Magento\Review\Helper\Data::class)->getIsGuestAllowToWrite();
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
