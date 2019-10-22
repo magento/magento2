@@ -34,7 +34,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * @var CustomerAccountManagement
      */
-    private $customerAccountManagement;
+    protected $customerAccountManagement;
 
     /**
      * @var EmailValidator
