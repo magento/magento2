@@ -9,6 +9,8 @@ namespace Magento\SalesRule\Plugin;
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Service\OrderService;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\SalesRule\Exception\CouponUsageExceeded;
 use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 /**
@@ -34,14 +36,16 @@ class CouponUsagesIncrement
      * Increments number of coupon usages after placing order.
      *
      * @param OrderService $subject
-     * @param OrderInterface $result
-     * @return OrderInterface
+     * @param OrderInterface $order
+     * @return array
+     * @throws CouponUsageExceeded
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterPlace(OrderService $subject, OrderInterface $result): OrderInterface
+    public function beforePlace(OrderService $subject, OrderInterface $order): array
     {
-        $this->updateCouponUsages->execute($result, true);
+        $this->updateCouponUsages->execute($order, true);
 
-        return $result;
+        return [$order];
     }
 }

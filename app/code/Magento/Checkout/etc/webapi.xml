@@ -86,6 +86,16 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+    <!-- My place order with payment information saving -->
+    <route url="/V1/carts/mine/place-order" method="POST">
+        <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
     <!-- Get payment information -->
     <route url="/V1/carts/mine/payment-information" method="GET">
         <service class="Magento\Checkout\Api\PaymentInformationManagementInterface" method="getPaymentInformation"/>

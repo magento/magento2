@@ -184,17 +184,19 @@ class TotalsCollector
     protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
     {
         $code = $quote->getData('coupon_code');
-        if (strlen($code)) {
+        if (!empty($code)) {
             $addressHasCoupon = false;
             $addresses = $quote->getAllAddresses();
             if (count($addresses) > 0) {
                 foreach ($addresses as $address) {
-                    if ($address->hasCouponCode()) {
+                    if (!empty($address->getCouponCode())) {
                         $addressHasCoupon = true;
                     }
                 }
                 if (!$addressHasCoupon) {
                     $quote->setCouponCode('');
+                    $quote->setHasError(true);
+                    $quote->addMessage(__("The coupon code isn't valid. Verify the code and try again."));
                 }
             }
         }
@@ -273,7 +275,7 @@ class TotalsCollector
             /** @var CollectorInterface $collector */
             $collector->collect($quote, $shippingAssignment, $total);
         }
-        
+
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_after',
             [

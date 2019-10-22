@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Collection;
 
 /**
@@ -145,6 +146,16 @@ class CouponRepository implements \Magento\SalesRule\Api\CouponRepositoryInterfa
         if (!$coupon->getCouponId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException();
         }
+        return $coupon;
+    }
+
+    /**
+     * @param string $couponCode
+     * @return CouponInterface
+     */
+    public function getByCode(string $couponCode): CouponInterface {
+        $coupon = $this->couponFactory->create();
+        $this->resourceModel->load($coupon, $couponCode, 'code');
         return $coupon;
     }
 

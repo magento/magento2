@@ -91,7 +91,7 @@ class Utility
          */
         if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
             $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
+            if ('' !== $couponCode) {
                 /** @var \Magento\SalesRule\Model\Coupon $coupon */
                 $coupon = $this->couponFactory->create();
                 $coupon->load($couponCode, 'code');
@@ -99,6 +99,7 @@ class Utility
                     // check entire usage limit
                     if ($coupon->getUsageLimit() && $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
                         $rule->setIsValidForAddress($address, false);
+                        $address->setCouponCode('');
                         return false;
                     }
                     // check per customer usage limit
@@ -114,6 +115,7 @@ class Utility
                             $couponUsage->getTimesUsed() >= $coupon->getUsagePerCustomer()
                         ) {
                             $rule->setIsValidForAddress($address, false);
+                            $address->setCouponCode('');
                             return false;
                         }
                     }
@@ -153,6 +155,8 @@ class Utility
     }
 
     /**
+     * We can't use row total here because row total not include tax. Discount can be applied on price included tax
+     *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
@@ -293,6 +297,8 @@ class Utility
     }
 
     /**
+     * Reset deltas used in apply
+     *
      * @return void
      */
     public function resetRoundingDeltas()

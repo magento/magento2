@@ -7,9 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Plugin;
 
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\Service\OrderService;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\SalesRule\Exception\CouponUsageExceeded;
 use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
+use Throwable;
 
 /**
  * Decrements number of coupon usages after cancelling order.
@@ -45,13 +50,23 @@ class CouponUsagesDecrement
      * @param bool $result
      * @param int $orderId
      * @return bool
+     * @throws CouponUsageExceeded
+     * @throws LocalizedException
+     * @throws InputException
+     * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterCancel(OrderService $subject, bool $result, $orderId): bool
     {
         $order = $this->orderRepository->get($orderId);
         if ($result) {
-            $this->updateCouponUsages->execute($order, false);
+            try {
+                $this->updateCouponUsages->execute($order, false);
+            } catch (CouponUsageExceeded|LocalizedException $exception) {
+                throw $exception;
+            } catch (Throwable $throwable) {
+                throw new LocalizedException(__('Unable to cancel coupon code.'));
+            }
         }
 
         return $result;

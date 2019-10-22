@@ -72,7 +72,7 @@ class CouponManagement implements CouponManagementInterface
                 $e
             );
         }
-        if ($quote->getCouponCode() != $couponCode) {
+        if ($quote->getCouponCode() !== $couponCode) {
             throw new NoSuchEntityException(__("The coupon code isn't valid. Verify the code and try again."));
         }
         return true;
@@ -97,7 +97,7 @@ class CouponManagement implements CouponManagementInterface
                 __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
             );
         }
-        if ($quote->getCouponCode() != '') {
+        if ($quote->getCouponCode() !== '') {
             throw new CouldNotDeleteException(
                 __("The coupon code couldn't be deleted. Verify the coupon code and try again.")
             );

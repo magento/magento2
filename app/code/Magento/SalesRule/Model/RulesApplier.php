@@ -159,17 +159,15 @@ class RulesApplier
         $label = '';
         if ($ruleLabel) {
             $label = $ruleLabel;
-        } else {
-            if (strlen($address->getCouponCode())) {
-                $label = $address->getCouponCode();
+        } elseif ($address->getCouponCode() !== '') {
+            $label = $address->getCouponCode();
 
-                if ($rule->getDescription()) {
-                    $label = $rule->getDescription();
-                }
+            if ($rule->getDescription()) {
+                $label = $rule->getDescription();
             }
         }
 
-        if (strlen($label)) {
+        if ('' !== $label) {
             $description[$rule->getId()] = $label;
         }
 
@@ -343,7 +341,7 @@ class RulesApplier
         $address = $item->getAddress();
         $quote = $item->getQuote();
 
-        $item->setAppliedRuleIds(join(',', $appliedRuleIds));
+        $item->setAppliedRuleIds(implode(',', $appliedRuleIds));
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
 

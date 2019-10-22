@@ -24,7 +24,7 @@ define([
         };
 
         if (customer.isLoggedIn()) {
-            serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
+            serviceUrl = urlBuilder.createUrl('/carts/mine/place-order', {});
         } else {
             serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/payment-information', {
                 quoteId: quote.getQuoteId()

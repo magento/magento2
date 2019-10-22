@@ -37,7 +37,9 @@ define(
                         'newCustomerBillingAddress': null
                     };
 
-                    if (response.responseType !== 'error') {
+                    if (response.order_id !== undefined && response.order_id > 0 ||
+                        response.order_id === undefined && response.responseType !== 'error'
+                    ) {
                         customerData.set('checkout-data', clearData);
                     }
                 }

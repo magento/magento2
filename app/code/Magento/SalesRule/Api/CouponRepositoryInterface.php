@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Api;
 
+use Magento\SalesRule\Api\Data\CouponInterface;
+
 /**
  * Coupon CRUD interface
  *
@@ -33,6 +35,16 @@ interface CouponRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($couponId);
+
+    /**
+     * Get coupon by coupon code
+     *
+     * @param string $couponCode
+     * @return \Magento\SalesRule\Api\Data\CouponInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $couponCode is not found
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getByCode(string $couponCode): CouponInterface;
 
     /**
      * Retrieve a coupon using the specified search criteria.

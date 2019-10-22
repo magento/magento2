@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Ui/js/model/messages',
     'uiLayout',
-    'Magento_Checkout/js/action/redirect-on-success'
+    'Magento_Checkout/js/action/redirect-on-success',
+    'Magento_Checkout/js/model/payment/after-place-order-callbacks'
 ], function (
     ko,
     $,
@@ -34,13 +35,18 @@ define([
     additionalValidators,
     Messages,
     layout,
-    redirectOnSuccessAction
+    redirectOnSuccessAction,
+    afterOrderPlaceCallbacks
 ) {
     'use strict';
 
     return Component.extend({
         redirectAfterPlaceOrder: true,
         isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
+
+        afterPlaceOrderCallbackResults: {
+            redirectAfterPlaceOrder: true
+        },
 
         /**
          * After place order callback
@@ -128,6 +134,7 @@ define([
          */
         placeOrder: function (data, event) {
             var self = this;
+            this.afterPlaceOrderCallbackResults.redirectAfterPlaceOrder = self.redirectAfterPlaceOrder;
 
             if (event) {
                 event.preventDefault();
@@ -141,11 +148,22 @@ define([
 
                 this.getPlaceOrderDeferredObject()
                     .done(
-                        function () {
+                        function (response) {
                             self.afterPlaceOrder();
 
-                            if (self.redirectAfterPlaceOrder) {
-                                redirectOnSuccessAction.execute();
+                            if (typeof response === 'object' && response['order_id'] === 0) {
+                                let previousTotals = quote.totals();
+
+                                if (response.totals !== undefined) {
+                                    quote.setTotals(response.totals);
+                                }
+                                self.callAfterPlaceOrderCallbacks(response, previousTotals);
+                            } else {
+                                if (self.redirectAfterPlaceOrder &&
+                                    self.afterPlaceOrderCallbackResults.redirectAfterPlaceOrder
+                                ) {
+                                    redirectOnSuccessAction.execute();
+                                }
                             }
                         }
                     ).always(
@@ -236,6 +254,19 @@ define([
             registry.async('checkoutProvider')(function (checkoutProvider) {
                 checkoutProvider.off(billingAddressCode);
             });
+        },
+
+        /**
+         * Execute callbacks when a coupon is successfully canceled.
+         */
+        callAfterPlaceOrderCallbacks: function (response, previousTotals) {
+            let self = this;
+
+            afterOrderPlaceCallbacks.each(
+                function (callback) {
+                    callback(self, response, previousTotals);
+                }
+            );
         }
     });
 });

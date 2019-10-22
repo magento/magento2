@@ -18,6 +18,21 @@ interface PaymentInformationManagementInterface
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return \Magento\Checkout\Api\Data\PlaceOrderDetailsInterface
+     */
+    public function placeOrder(
+        $cartId,
+        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+    ): \Magento\Checkout\Api\Data\PlaceOrderDetailsInterface;
+
+    /**
+     * Set payment information and place order for a specified cart.
+     *
+     * @param int $cartId
+     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
+     * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
     public function savePaymentInformationAndPlaceOrder(

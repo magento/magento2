@@ -5,6 +5,10 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Coupon;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\SalesRule\Exception\CouponUsageExceeded;
+use Magento\SalesRule\Model\Coupon;
+
 /**
  * SalesRule Model Resource Coupon_Usage
  *
@@ -23,15 +27,12 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Increment times_used counter
-     *
+     * @param int $couponId
      * @param int $customerId
-     * @param mixed $couponId
-     * @param bool $increment
-     * @return void
+     * @return int
+     * @throws LocalizedException
      */
-    public function updateCustomerCouponTimesUsed($customerId, $couponId, $increment = true): void
-    {
+    public function getUsagePerCustomer(int $couponId, int $customerId): int {
         $connection = $this->getConnection();
         $select = $connection->select();
         $select->from(
@@ -43,19 +44,49 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'customer_id = :customer_id'
         );
 
-        $timesUsed = $connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
+        return (int)$connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
+    }
 
-        if ($timesUsed !== false) {
-            $this->getConnection()->update(
-                $this->getMainTable(),
-                ['times_used' => $timesUsed + ($increment ? 1 : -1)],
-                ['coupon_id = ?' => $couponId, 'customer_id = ?' => $customerId]
-            );
-        } elseif ($increment) {
-            $this->getConnection()->insert(
-                $this->getMainTable(),
-                ['coupon_id' => $couponId, 'customer_id' => $customerId, 'times_used' => 1]
-            );
+    /**
+     * Increment times_used counter
+     *
+     * @param mixed $couponId
+     * @param int $customerId
+     * @param int $timesUsed
+     * @return void
+     * @throws LocalizedException
+     */
+    public function updateUsagePerCustomer(int $couponId, int $customerId, int $timesUsed): void
+    {
+        $this->getConnection()->insertOnDuplicate(
+            $this->getMainTable(),
+            [
+                'coupon_id' => $couponId,
+                'customer_id' => $customerId,
+                'times_used' => $timesUsed
+            ],
+            ['times_used']
+        );
+    }
+
+    /**
+     * @deprecated
+     * Increment times_used counter
+     *
+     * @param int $customerId
+     * @param mixed $couponId
+     * @param bool $increment
+     * @return void
+     * @throws LocalizedException
+     */
+    public function updateCustomerCouponTimesUsed($customerId, $couponId, $increment = true): void
+    {
+        $timesUsed = $this->getUsagePerCustomer($couponId, $customerId);
+        if ($timesUsed === 0 && $increment) {
+            $timesUsed = 1;
+        }
+        if ($timesUsed) {
+            $this->updateUsagePerCustomer($couponId, $customerId, $timesUsed);
         }
     }
 
@@ -66,6 +97,7 @@ class Usage extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $customerId
      * @param mixed $couponId
      * @return $this
+     * @throws LocalizedException
      */
     public function loadByCustomerCoupon(\Magento\Framework\DataObject $object, $customerId, $couponId)
     {
