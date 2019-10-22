@@ -204,6 +204,27 @@ MUTATION;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @expectedException Exception
+     * @expectedExceptionMessage "input" value should be specified
+     */
+    public function testCreateCustomerAddressWithMissingInput()
+    {
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $mutation = <<<MUTATION
+mutation {
+  createCustomerAddress(
+    input: {}
+  ) {
+    city
+  }
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreateCustomerAddressWithRedundantStreetLine()
