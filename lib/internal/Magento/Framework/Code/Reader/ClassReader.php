@@ -17,7 +17,7 @@ class ClassReader implements ClassReaderInterface
     /**
      * Read class constructor signature
      *
-     * @param string $className
+     * @param  string $className
      * @return array|null
      * @throws \ReflectionException
      */
@@ -35,7 +35,8 @@ class ClassReader implements ClassReaderInterface
                         $parameter->getName(),
                         $parameter->getClass() !== null ? $parameter->getClass()->getName() : null,
                         !$parameter->isOptional() && !$parameter->isDefaultValueAvailable(),
-                        $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null,
+                        $this->getReflectionParameterDefaultValue($parameter),
+                        $parameter->isVariadic(),
                     ];
                 } catch (\ReflectionException $e) {
                     $message = $e->getMessage();
@@ -48,6 +49,21 @@ class ClassReader implements ClassReaderInterface
     }
 
     /**
+     * Get reflection parameter default value
+     *
+     * @param  \ReflectionParameter $parameter
+     * @return array|mixed|null
+     */
+    private function getReflectionParameterDefaultValue(\ReflectionParameter $parameter)
+    {
+        if ($parameter->isVariadic()) {
+            return [];
+        }
+
+        return $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null;
+    }
+
+    /**
      * Retrieve parent relation information for type in a following format
      * array(
      *     'Parent_Class_Name',
@@ -56,7 +72,7 @@ class ClassReader implements ClassReaderInterface
      *     ...
      * )
      *
-     * @param string $className
+     * @param  string $className
      * @return string[]
      */
     public function getParents($className)
