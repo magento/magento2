@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyErrorMessageWhenSubscribeGuestTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Subscribe as Guest"/>
+            <title value="Verify the error message when Allow Guest Subscription is No"/>
+            <description value="Verify that when Allow Guest Subscription is No, the error message will display correctly"/>
+            <severity value="MAJOR"/>
+            <group value="newsletter"/>
+            <group value="subscription"/>
+            <group value="dont_allow_guest_subscribe"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set newsletter/subscription/allow_guest_subscribe 0" stepKey="dontAllowGuestSubscribe"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set newsletter/subscription/allow_guest_subscribe 1" stepKey="allowGuestSubscribe"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </after>
+        <!-- Go to storefront page -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad1"/>
+        <fillField selector="{{SubscribeFooterSection.email}}" userInput="{{guest_subscriber.email}}" stepKey="fillEmail" />
+        <click selector="{{SubscribeFooterSection.subscribe}}" stepKey="subscribe" />
+        <waitForPageLoad stepKey="waitForStorefrontPageLoad2"/>
+        <!-- Throw validation error message -->
+        <see userInput="Sorry, but the administrator denied subscription for guests. Please" stepKey="seeValidationErrorMessage"/>
+        <grabAttributeFrom selector="{{SubscribeFooterSection.alertMessageLink}}" userInput="href" stepKey="dataHref" />
+        <assertContains expected="/customer/account/create/"
+                      expectedType="string" actual="$dataHref" actualType="variable"
+                      stepKey="assertLinkInErrorMessage"/>
+        <grabTextFrom selector="{{SubscribeFooterSection.alertMessageLink}}" stepKey="textInLink"/>
+        <assertEquals expected="register"
+                        expectedType="string" actual="$textInLink" actualType="variable"
+                        stepKey="assertTextInLink"/>
+    </test>
+</tests>

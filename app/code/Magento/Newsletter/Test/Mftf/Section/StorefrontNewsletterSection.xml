@@ -12,4 +12,11 @@
         <element name="mediaDescription" type="text" selector="body>p>img" />
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
     </section>
+
+    <section name="SubscribeFooterSection">
+        <element name="email" type="text" selector="#newsletter" />
+        <element name="subscribe" type="button" selector=".actions .subscribe"/>
+        <element name="alertMessage" type="text" selector=".page.messages [role=alert]"/>
+        <element name="alertMessageLink" type="text" selector=".page.messages [role=alert] a"/>
+    </section>
 </sections>
