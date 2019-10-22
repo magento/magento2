@@ -39,12 +39,12 @@
 
         <div class="control">
             <div class="tree x-tree" data-role="resource-tree" data-mage-init='<?= /* @noEscape */
-                $block->getJsonSerializer()->serialize([
+                $block->escapeHtmlAttr($block->getJsonSerializer()->serialize([
                     'rolesTree' => [
                         "treeInitData" => $block->getTree(),
                         "treeInitSelectedData" => $block->getSelectedResources(),
                     ],
-                ]); ?>'>
+                ])); ?>'>
             </div>
         </div>
     </div>
