@@ -37,6 +37,19 @@ interface CategoryLinkRepositoryInterface
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink);
 
     /**
+     * Remove the product assignment from the category by category id and array of sku
+     *
+     * @param int $categoryId
+     * @param array $sku
+     * @return bool will returned True if products successfully deleted
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    public function deleteByIds($categoryId, $sku);
+
+    /**
      * Remove the product assignment from the category by category id and sku
      *
      * @param int $categoryId
@@ -47,5 +60,5 @@ interface CategoryLinkRepositoryInterface
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function deleteByIds($categoryId, $sku);
+    public function deleteById($categoryId, $sku);
 }

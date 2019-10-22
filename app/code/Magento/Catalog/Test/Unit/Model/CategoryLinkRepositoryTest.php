@@ -113,7 +113,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->once())->method('getId')->willReturn($productId);
         $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
         $categoryMock->expects($this->once())->method('save');
-        $this->assertTrue($this->model->deleteByIds($categoryId, $productSku));
+        $this->assertTrue($this->model->deleteById($categoryId, $productSku));
     }
 
     /**
@@ -140,7 +140,7 @@ class CategoryLinkRepositoryTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())->method('setPostedProducts')->with([]);
         $categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
         $categoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
-        $this->model->deleteByIds($categoryId, $productSku);
+        $this->model->deleteById($categoryId, $productSku);
     }
 
     /**

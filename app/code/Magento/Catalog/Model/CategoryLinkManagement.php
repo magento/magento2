@@ -93,7 +93,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
         $product = $this->getProductRepository()->get($productSku);
         $assignedCategories = $this->getProductResource()->getCategoryIds($product);
         foreach (array_diff($assignedCategories, $categoryIds) as $categoryId) {
-            $this->getCategoryLinkRepository()->deleteByIds($categoryId, $productSku);
+            $this->getCategoryLinkRepository()->deleteById($categoryId, $productSku);
         }
 
         foreach (array_diff($categoryIds, $assignedCategories) as $categoryId) {

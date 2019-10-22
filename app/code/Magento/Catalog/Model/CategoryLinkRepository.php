@@ -22,15 +22,23 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     protected $productRepository;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product
+     */
+    private $productResource;
+
+    /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
+        $this->productResource = $productResource;
     }
 
     /**
@@ -64,13 +72,47 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
-        return $this->deleteByIds($productLink->getCategoryId(), $productLink->getSku());
+        return $this->deleteById($productLink->getCategoryId(), $productLink->getSku());
     }
 
     /**
      * {@inheritdoc}
      */
     public function deleteByIds($categoryId, $sku)
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        $products = $this->productResource->getProductsIdsBySkus($sku);
+
+        $productPositions = $category->getProductsPosition();
+
+        foreach ($products as $productSku => $productId) {
+            if (isset($productPositions[$productId])) {
+                unset($productPositions[$productId]);
+            }
+        }
+
+        $category->setPostedProducts($productPositions);
+        try {
+            $category->save();
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save products "%products" to category %category',
+                    [
+                        "products" => implode(',', $sku),
+                        "category" => $category->getId()
+                    ]
+                ),
+                $e
+            );
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteById($categoryId, $sku)
     {
         $category = $this->categoryRepository->get($categoryId);
         $product = $this->productRepository->get($sku);
