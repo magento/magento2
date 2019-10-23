@@ -17,7 +17,8 @@
             "SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY": true,
             "SEARCH_QUERY_STORE_ID": true,
             "SEARCH_QUERY_IS_PROCESSED": true,
-            "SEARCH_QUERY_SYNONYM_FOR": true
+            "SEARCH_QUERY_SYNONYM_FOR": true,
+            "SEARCH_QUERY_STORE_ID_POPULARITY": true
         },
         "constraint": {
             "PRIMARY": true,
