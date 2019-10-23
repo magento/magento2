@@ -42,63 +42,6 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-        address: {
-          firstname: "test firstname"
-          lastname: "test lastname"
-          company: "test company"
-          street: ["test street 1", "test street 2"]
-          city: "test city"
-          region: "test region"
-          postcode: "887766"
-          country_code: "US"
-          telephone: "88776655"
-        }
-      }
-    }
-  ) {
-    cart {
-      billing_address {
-        firstname
-        lastname
-        company
-        street
-        city
-        postcode
-        telephone
-        country {
-          code
-          label
-        }
-        __typename
-      }
-    }
-  }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
-
-        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
-        $cartResponse = $response['setBillingAddressOnCart']['cart'];
-        self::assertArrayHasKey('billing_address', $cartResponse);
-        $billingAddressResponse = $cartResponse['billing_address'];
-        $this->assertNewAddressFields($billingAddressResponse);
-    }
-
-    /**
- * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
- * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
- * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
- */
-    public function testSetNewBillingAddressWithSameAsShippingParameter()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query = <<<QUERY
-mutation {
-  setBillingAddressOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      billing_address: {
          address: {
           firstname: "test firstname"
           lastname: "test lastname"
@@ -153,6 +96,7 @@ QUERY;
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
         self::assertArrayHasKey('billing_address', $cartResponse);
         $billingAddressResponse = $cartResponse['billing_address'];
+        $this->assertNewAddressFields($billingAddressResponse);
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewAddressFields($billingAddressResponse);
@@ -160,6 +104,8 @@ QUERY;
     }
 
     /**
+     * Test case for deprecated `use_for_shipping` param.
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
