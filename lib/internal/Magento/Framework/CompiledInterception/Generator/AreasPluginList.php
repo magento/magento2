@@ -6,9 +6,7 @@
 
 namespace Magento\Framework\CompiledInterception\Generator;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Scope;
-use Magento\Framework\Config\ScopeInterfaceFactory;
 
 /**
  * Class AreasPluginList
@@ -21,9 +19,9 @@ class AreasPluginList
     private $scope;
 
     /**
-     * @var ScopeInterfaceFactory
+     * @var StaticScopeFactory
      */
-    private $scopeInterfaceFactory;
+    private $staticScopeFactory;
 
     /**
      * @var CompiledPluginListFactory
@@ -36,22 +34,21 @@ class AreasPluginList
     private $plugins;
 
     /**
-     * AreasPluginList constructor.
      * @param Scope $scope
-     * @param ScopeInterfaceFactory $scopeInterfaceFactory
+     * @param StaticScopeFactory $staticScopeFactory
      * @param CompiledPluginListFactory $compiledPluginListFactory
      * @param array|null $plugins
      */
     public function __construct(
         Scope $scope,
-        ScopeInterfaceFactory $scopeInterfaceFactory,
+        StaticScopeFactory $staticScopeFactory,
         CompiledPluginListFactory $compiledPluginListFactory,
         ?array $plugins = null
     ) {
         $this->scope = $scope;
-        $this->scopeInterfaceFactory = $scopeInterfaceFactory;
-        $this->plugins = $plugins;
+        $this->staticScopeFactory = $staticScopeFactory;
         $this->compiledPluginListFactory = $compiledPluginListFactory;
+        $this->plugins = $plugins;
     }
 
     /**
@@ -66,29 +63,38 @@ class AreasPluginList
             //this is to emulate order M2 is reading scopes config to use scope cache
             //"global|primary" should be loaded first and then "global|primary|frontend" etc.
             $defaultScopePluginList = $defaultScope = null;
-            $objectManager = ObjectManager::getInstance();
             foreach ($this->scope->getAllScopes() as $scope) {
-                $configScope = $this->scopeInterfaceFactory->create(
+                $configScope = $this->staticScopeFactory->create(
                     [
                         'scope' => $scope,
                     ]
                 );
+                $pluginList = $this->prepareCompiledPluginList($configScope);
                 if ($defaultScopePluginList === null) {
-                    $defaultScopePluginList = $this->compiledPluginListFactory->create(
-                        [
-                            'objectManager' => $objectManager,
-                            'scope' => $configScope
-                        ]
-                    );
-                    $defaultScopePluginList->getNext('dummy', 'dummy');
+                    $defaultScopePluginList = $pluginList;
                     $defaultScope = $scope;
                 } else {
-                    $this->plugins[$scope] = clone $defaultScopePluginList;
-                    $this->plugins[$scope]->setScope($configScope);
+                    $this->plugins[$scope] = $pluginList;
                 }
             }
             $this->plugins[$defaultScope] = $defaultScopePluginList;
         }
+
         return $this->plugins;
+    }
+
+    /**
+     * Create CompiledPluginList and prepare it for use.
+     *
+     * @param StaticScope $configScope
+     * @return CompiledPluginList
+     */
+    private function prepareCompiledPluginList(StaticScope $configScope): CompiledPluginList
+    {
+        $pluginList = $this->compiledPluginListFactory->create();
+        $pluginList->setScope($configScope);
+        $pluginList->getNext('dummy', 'dummy');
+
+        return $pluginList;
     }
 }
