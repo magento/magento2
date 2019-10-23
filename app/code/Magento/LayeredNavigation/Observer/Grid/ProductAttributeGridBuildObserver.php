@@ -7,7 +7,7 @@
  */
 namespace Magento\LayeredNavigation\Observer\Grid;
 
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -16,16 +16,16 @@ use Magento\Framework\Event\ObserverInterface;
 class ProductAttributeGridBuildObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
      * Construct.
      *
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      */
-    public function __construct(ModuleManagerInterface $moduleManager)
+    public function __construct(Manager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
     }
