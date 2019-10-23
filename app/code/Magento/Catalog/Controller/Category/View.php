@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Helper\Category as CategoryHelper;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
@@ -18,6 +19,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
@@ -101,6 +103,16 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     private $customLayoutManager;
 
     /**
+     * @var CategoryHelper
+     */
+    private $categoryHelper;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -115,6 +127,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * @param CategoryRepositoryInterface $categoryRepository
      * @param ToolbarMemorizer|null $toolbarMemorizer
      * @param LayoutUpdateManager|null $layoutUpdateManager
+     * @param CategoryHelper $categoryHelper
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -129,7 +143,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         ToolbarMemorizer $toolbarMemorizer = null,
-        ?LayoutUpdateManager $layoutUpdateManager = null
+        ?LayoutUpdateManager $layoutUpdateManager = null,
+        CategoryHelper $categoryHelper = null,
+        LoggerInterface $logger = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -141,9 +157,13 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->resultForwardFactory = $resultForwardFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
-        $this->toolbarMemorizer = $toolbarMemorizer ?: $context->getObjectManager()->get(ToolbarMemorizer::class);
+        $this->toolbarMemorizer = $toolbarMemorizer ?: ObjectManager::getInstance()->get(ToolbarMemorizer::class);
         $this->customLayoutManager = $layoutUpdateManager
-            ?? $context->getObjectManager()->get(LayoutUpdateManager::class);
+            ?? ObjectManager::getInstance()->get(LayoutUpdateManager::class);
+        $this->categoryHelper = $categoryHelper ?: ObjectManager::getInstance()
+            ->get(CategoryHelper::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()
+            ->get(LoggerInterface::class);
     }
 
     /**
@@ -163,7 +183,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         } catch (NoSuchEntityException $e) {
             return false;
         }
-        if (!$this->_objectManager->get(\Magento\Catalog\Helper\Category::class)->canShow($category)) {
+        if (!$this->categoryHelper->canShow($category)) {
             return false;
         }
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
@@ -175,7 +195,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ['category' => $category, 'controller_action' => $this]
             );
         } catch (LocalizedException $e) {
-            $this->_objectManager->get(LoggerInterface::class)->critical($e);
+            $this->logger->critical($e);
             return false;
         }
 

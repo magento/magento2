@@ -6,7 +6,7 @@
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 use Magento\Framework\ObjectManager\Config\Compiled;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CompiledTest extends \PHPUnit\Framework\TestCase
 {

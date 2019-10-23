@@ -13,6 +13,7 @@ use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
@@ -87,6 +88,22 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
         $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['example.com']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['example.com']);
     }
 
     /**
@@ -670,6 +687,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductWithMediaGallery()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        // @codingStandardsIgnoreLine
         $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
         $filename1 = 'tiny1' . time() . '.jpg';

@@ -175,7 +175,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -369,7 +369,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
      * @param Product\Type $catalogProductType
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param ResourceModel\Product $resource
      * @param ResourceModel\Product\Collection $resourceCollection
@@ -410,7 +410,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         Product\Type $catalogProductType,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Model\ResourceModel\Product $resource,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection,
