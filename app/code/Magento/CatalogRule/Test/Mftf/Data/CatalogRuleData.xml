@@ -173,4 +173,19 @@
         <data key="defaultRuleLabelAllStoreViews">Free Shipping in conditions</data>
         <data key="defaultStoreView">Free Shipping in conditions</data>
     </entity>
+
+    <entity name="catalogRuleWithInvalid" type="catalogRule">
+        <data key="name" unique="suffix">CatalogPriceRule</data>
+        <data key="description">Catalog Price Rule Description</data>
+        <data key="is_active">1</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+        <data key="priority">ten</data>
+    </entity>
 </entities>
