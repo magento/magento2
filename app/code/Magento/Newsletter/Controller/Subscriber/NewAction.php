@@ -108,8 +108,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         ) {
             throw new LocalizedException(
                 __(
-                    'Sorry, but the administrator denied subscription for guests. Please <a href="%1">register</a>.',
-                    $this->_customerUrl->getRegisterUrl()
+                    'Sorry, but the administrator denied subscription for guests. Please register'
                 )
             );
         }
@@ -138,10 +137,18 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     {
         if ($this->getRequest()->isPost() && $this->getRequest()->getPost('email')) {
             $email = (string)$this->getRequest()->getPost('email');
+            try {
+                $this->validateGuestSubscription();
+                
+            } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+                $redirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+                $redirectUrl = $this->_customerUrl->getRegisterUrl();
+                return $redirect->setUrl($redirectUrl);
+            }
 
             try {
                 $this->validateEmailFormat($email);
-                $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
                 $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
