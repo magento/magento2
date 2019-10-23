@@ -34,8 +34,8 @@ class CanonicalUrl implements ResolverInterface
 
         /* @var $product Product */
         $product = $value['model'];
-        $url = $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
+        $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
         
-        return $url;
+        return $product->getRequestPath();
     }
 }
