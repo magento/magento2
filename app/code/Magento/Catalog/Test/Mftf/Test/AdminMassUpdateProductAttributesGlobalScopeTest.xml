@@ -16,11 +16,12 @@
             <description value="Admin should be able to mass update product attributes in global scope"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-56"/>
-            <group value="Catalog"/>
-            <group value="Product Attributes"/>
+            <group value="catalog"/>
+            <group value="product_attributes"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProductOne">
@@ -36,6 +37,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -70,7 +72,7 @@
         <!-- Assert on storefront default view -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameDefault">
-            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
             <argument name="priceFrom" value="$$createProductOne.price$$0"/>
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
@@ -82,7 +84,7 @@
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameCustom">
-            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
             <argument name="priceFrom" value="$$createProductOne.price$$0"/>
             <argument name="priceTo" value="$$createProductOne.price$$0"/>
         </actionGroup>
