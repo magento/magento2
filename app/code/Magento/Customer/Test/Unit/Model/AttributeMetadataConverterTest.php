@@ -5,42 +5,57 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\Customer\Api\Data\OptionInterfaceFactory;
-use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
+use Magento\Customer\Api\Data\OptionInterface;
+use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
+use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\AttributeMetadataConverter;
+use Magento\Customer\Model\Data\AttributeMetadata;
+use Magento\Customer\Model\Data\Option;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\Api\DataObjectHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class AttributeMetadataConverterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\Customer\Test\Unit\Model
  */
-class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
+class AttributeMetadataConverterTest extends TestCase
 {
     /**
-     * @var OptionInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var OptionInterfaceFactory|MockObject
      */
     private $optionFactory;
 
     /**
-     * @var ValidationRuleInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ValidationRuleInterfaceFactory|MockObject
      */
     private $validationRuleFactory;
 
     /**
-     * @var AttributeMetadataInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataInterfaceFactory|MockObject
      */
     private $attributeMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var DataObjectHelper|MockObject
      */
     private $dataObjectHelper;
 
-    /** @var  AttributeMetadataConverter */
+    /**
+     * @var AttributeMetadataConverter
+     */
     private $model;
 
-    /** @var  \Magento\Customer\Model\Attribute | \PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var Attribute|MockObject
+     */
     private $attribute;
 
     public function setUp()
@@ -57,18 +72,22 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectHelper =  $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataObjectHelper =  $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attribute = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+        $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new AttributeMetadataConverter(
-            $this->optionFactory,
-            $this->validationRuleFactory,
-            $this->attributeMetadataFactory,
-            $this->dataObjectHelper
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            AttributeMetadataConverter::class,
+            [
+                'optionFactory' => $this->optionFactory,
+                'validationRuleFactory' => $this->validationRuleFactory,
+                'attributeMetadataFactory' => $this->attributeMetadataFactory,
+                'dataObjectHelper' => $this->dataObjectHelper
+            ]
         );
     }
 
@@ -106,14 +125,14 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
     {
         $validatedRules = $this->prepareValidateRules();
         $options = $this->prepareOptions();
-        $optionDataObjectForSimpleValue1 = $this->getMockBuilder(\Magento\Customer\Model\Data\Option::class)
+        $optionDataObjectForSimpleValue1 = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $optionDataObjectForSimpleValue2 = $this->getMockBuilder(\Magento\Customer\Model\Data\Option::class)
+        $optionDataObjectForSimpleValue2 = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $optionObject1 = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
-        $optionObject2 = $this->createMock(\Magento\Customer\Api\Data\OptionInterface::class);
+        $optionObject1 = $this->createMock(OptionInterface::class);
+        $optionObject2 = $this->createMock(OptionInterface::class);
         $this->optionFactory->expects($this->exactly(4))
             ->method('create')
             ->will(
@@ -124,7 +143,7 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
                     $optionDataObjectForSimpleValue1
                 )
             );
-        $source = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class)
+        $source = $this->getMockBuilder(AbstractSource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $source->expects($this->once())
@@ -148,11 +167,11 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectHelper->expects($this->exactly(2))
             ->method('populateWithArray')
             ->withConsecutive(
-                [$optionObject1, ['1'], \Magento\Customer\Api\Data\OptionInterface::class],
-                [$optionObject2, ['2'], \Magento\Customer\Api\Data\OptionInterface::class]
+                [$optionObject1, ['1'], OptionInterface::class],
+                [$optionObject2, ['2'], OptionInterface::class]
             );
-        $validationRule1 = $this->createMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
-        $validationRule2 = $this->createMock(\Magento\Customer\Api\Data\ValidationRuleInterface::class);
+        $validationRule1 = $this->createMock(ValidationRuleInterface::class);
+        $validationRule2 = $this->createMock(ValidationRuleInterface::class);
         $this->validationRuleFactory->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($validationRule1, $validationRule2));
@@ -172,7 +191,7 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $mockMethods = ['setAttributeCode', 'setFrontendInput'];
-        $attributeMetaData = $this->getMockBuilder(\Magento\Customer\Model\Data\AttributeMetadata::class)
+        $attributeMetaData = $this->getMockBuilder(AttributeMetadata::class)
             ->setMethods($mockMethods)
             ->disableOriginalConstructor()
             ->getMock();
@@ -186,7 +205,7 @@ class AttributeMetadatConverterTest extends \PHPUnit\Framework\TestCase
         $this->attributeMetadataFactory->expects($this->once())
             ->method('create')
             ->willReturn($attributeMetaData);
-        $frontend = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
+        $frontend = $this->getMockBuilder(AbstractFrontend::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attribute->expects($this->once())
