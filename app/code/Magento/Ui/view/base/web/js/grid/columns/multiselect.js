@@ -311,7 +311,9 @@ define([
             var total = this.totalRecords(),
                 excluded = this.excluded().length,
                 selected = this.selected().length;
-
+            if (total < selected && total > -1) {
+                total =  selected;
+            }
             if (this.excludeMode()) {
                 selected = total - excluded;
             }
