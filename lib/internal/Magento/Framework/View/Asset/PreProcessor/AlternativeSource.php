@@ -6,9 +6,9 @@
 namespace Magento\Framework\View\Asset\PreProcessor;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LockerProcessInterface;
-use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
 
 /**
@@ -139,11 +139,13 @@ class AlternativeSource implements AlternativeSourceInterface
                 ->setTheme($context->getThemePath())
                 ->setLocale($context->getLocale())
                 ->setModule($module)
-                ->setPath(preg_replace(
-                    '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#',
-                    '.' . $name,
-                    $path
-                ))->build();
+                ->setPath(
+                    preg_replace(
+                        '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#',
+                        '.' . $name,
+                        $path
+                    )
+                )->build();
 
             $processor = $this->objectManager->get($alternative[self::PROCESSOR_CLASS]);
             if (!$processor  instanceof ContentProcessorInterface) {
@@ -167,5 +169,16 @@ class AlternativeSource implements AlternativeSourceInterface
     public function getAlternativesExtensionsNames()
     {
         return array_keys($this->alternatives);
+    }
+
+    /**
+     * Check if file extension supported
+     *
+     * @param string $ext
+     * @return bool
+     */
+    public function isExtensionSupported($ext)
+    {
+        return isset($this->alternatives[$ext]);
     }
 }

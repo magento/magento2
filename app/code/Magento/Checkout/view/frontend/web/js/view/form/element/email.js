@@ -185,6 +185,10 @@ define([
          * @returns {Boolean} - initial visibility state.
          */
         resolveInitialPasswordVisibility: function () {
+            if (checkoutData.getInputFieldEmailValue() !== '' && checkoutData.getCheckedEmailValue() === '') {
+                return true;
+            }
+
             if (checkoutData.getInputFieldEmailValue() !== '') {
                 return checkoutData.getInputFieldEmailValue() === checkoutData.getCheckedEmailValue();
             }

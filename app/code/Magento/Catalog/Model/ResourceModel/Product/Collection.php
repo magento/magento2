@@ -193,7 +193,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager = null;
 
@@ -322,7 +322,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -352,7 +352,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -1595,6 +1595,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         } else {
             return parent::addAttributeToFilter($attribute, $condition, $joinType);
         }
+
+        return $this;
     }
 
     /**
@@ -2113,13 +2115,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $firstCategory = array_shift($categories);
         if ($firstCategory['is_anchor'] == 1) {
-            $anchorCategory[] = (int)$firstCategory['entity_id'];
+            $linkField = $this->getProductEntityMetadata()->getLinkField();
+            $anchorCategory[] = (int)$firstCategory[$linkField];
             foreach ($categories as $category) {
                 if (in_array($category['parent_id'], $categoryIds)
                     && in_array($category['parent_id'], $anchorCategory)) {
-                    $categoryIds[] = (int)$category['entity_id'];
+                    $categoryIds[] = (int)$category[$linkField];
                     if ($category['is_anchor'] == 1) {
-                        $anchorCategory[] = (int)$category['entity_id'];
+                        $anchorCategory[] = (int)$category[$linkField];
                     }
                 }
             }
