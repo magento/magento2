@@ -269,6 +269,8 @@ class Bootstrap
             }
         } catch (\Exception $e) {
             $this->terminate($e);
+        } catch (\Error $e) {
+            $this->terminate($e);
         }
     } // phpcs:enable
 
@@ -418,12 +420,12 @@ class Bootstrap
     /**
      * Display an exception and terminate program execution
      *
-     * @param \Exception $e
+     * @param \Throwable $e
      * @return void
      *
      * phpcs:disable Magento2.Security.LanguageConstruct, Squiz.Commenting.FunctionCommentThrowTag
      */
-    protected function terminate(\Exception $e)
+    protected function terminate(\Throwable $e)
     {
 
         if ($this->isDeveloperMode()) {
