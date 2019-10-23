@@ -10,7 +10,7 @@ namespace Magento\Swatches\Test\Unit\Observer;
  */
 class AddFieldsToAttributeObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $moduleManagerMock;
 
     /** @var \Magento\Config\Model\Config\Source\Yesno|\PHPUnit_Framework_MockObject_MockObject */

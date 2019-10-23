@@ -19,6 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
@@ -207,6 +208,7 @@
             <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRate"/>
         </before>
         <after>
+            <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
             <deleteData createDataKey="downloadableProduct" stepKey="deleteProduct"/>
 
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
