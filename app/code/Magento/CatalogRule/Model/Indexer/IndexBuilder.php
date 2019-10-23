@@ -298,12 +298,11 @@ class IndexBuilder
                 continue;
             }
 
-            $rule->setProductsFilter($ids);
-            $matchingProductIds = $rule->getMatchingProductIds();
-            $matchingProductIds = array_intersect_key($matchingProductIds, array_flip($ids));
-            foreach ($matchingProductIds as $matchingProductId => $validationByWebsite) {
-                $websiteIds = array_keys(array_filter($validationByWebsite));
-                $this->assignProductToRule($rule, $matchingProductId, $websiteIds);
+            foreach ($ids as $productId) {
+                $rule->setProductsFilter([$productId]);
+                if ($rule->getMatchingProductIds()) {
+                    $this->assignProductToRule($rule, $productId, $ruleWebsiteIds);
+                }
             }
         }
 
