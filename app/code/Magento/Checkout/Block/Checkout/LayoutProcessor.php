@@ -241,7 +241,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         } else {
             $component['billing-address-form'] = $this->getBillingAddressComponent('shared', $elements);
             $paymentLayout['afterMethods']['children'] =
-                array_merge_recursive(
+                array_replace_recursive(
                     $component,
                     $paymentLayout['afterMethods']['children']
                 );
