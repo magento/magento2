@@ -36,7 +36,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Search and select products -->
@@ -63,8 +63,8 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
-        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="cronSchedule"/>
-        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="cronRun"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron1"/>
+        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron2"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
         <!-- Assert on storefront default view -->
