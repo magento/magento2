@@ -296,7 +296,7 @@ class Extended extends \Magento\Backend\Block\Widget
             $idsSelect->columns($massActionIdField);
             $idList = $allIdsCollection->getConnection()->fetchCol($idsSelect);
         } else {
-            $idList = $allIdsCollection->setPageSize(0)->getColumnValues($massActionIdField);
+            $idList = $allIdsCollection->getAllIds();
         }
 
         return implode(',', $idList);
