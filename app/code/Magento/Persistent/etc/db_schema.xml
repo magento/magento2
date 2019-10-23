@@ -9,10 +9,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="persistent_session" resource="default" engine="innodb" comment="Persistent Session">
         <column xsi:type="int" name="persistent_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Session id"/>
+                comment="Session ID"/>
         <column xsi:type="varchar" name="key" nullable="false" length="50" comment="Unique cookie key"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
-                comment="Customer id"/>
+                comment="Customer ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
         <column xsi:type="text" name="info" nullable="true" comment="Session Data"/>
