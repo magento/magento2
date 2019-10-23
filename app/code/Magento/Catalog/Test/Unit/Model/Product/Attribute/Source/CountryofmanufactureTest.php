@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\Serialize\SerializerInterface;
 
 class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
@@ -37,15 +38,31 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
      */
     private $serializerMock;
 
+    /** @var \Magento\Eav\Model\Entity\Collection\AbstractCollection|\PHPUnit_Framework_MockObject_MockObject */
+    private $collection;
+
+    /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $countryFactory;
+
+    /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject */
+    private $attributeModel;
+
+    /**
+     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $entity;
+
     protected function setUp()
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $this->cacheConfig = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+        $this->countryFactory = $this->createMock(\Magento\Directory\Model\CountryFactory::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->countryOfManufacture = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture::class,
             [
+                'countryFactory' => $this->countryFactory,
                 'storeManager' => $this->storeManagerMock,
                 'configCacheType' => $this->cacheConfig,
             ]
@@ -57,6 +74,55 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
             'serializer',
             $this->serializerMock
         );
+
+        $this->collection = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [
+                '__wakeup',
+                'getSelect',
+                'joinLeft',
+                'order',
+                'getStoreId',
+                'getConnection',
+                'getCheckSql'
+            ]
+        );
+        $this->attributeModel = $this->createPartialMock(
+            \Magento\Catalog\Model\Entity\Attribute::class,
+            [
+                '__wakeup',
+                'getAttributeCode',
+                'getBackend',
+                'getId',
+                'isScopeGlobal',
+                'getEntity',
+                'getAttribute'
+            ]
+        );
+        $this->backendAttributeModel = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Attribute\Backend\Sku::class,
+            ['__wakeup', 'getTable']
+        );
+
+        $this->attributeModel->expects($this->any())->method('getAttribute')
+            ->will($this->returnSelf());
+        $this->attributeModel->expects($this->any())->method('getAttributeCode')
+            ->will($this->returnValue('attribute_code'));
+        $this->attributeModel->expects($this->any())->method('getId')
+            ->will($this->returnValue('1'));
+        $this->attributeModel->expects($this->any())->method('getBackend')
+            ->will($this->returnValue($this->backendAttributeModel));
+        $this->collection->expects($this->any())->method('getSelect')
+            ->will($this->returnSelf());
+        $this->collection->expects($this->any())->method('joinLeft')
+            ->will($this->returnSelf());
+        $this->backendAttributeModel->expects($this->any())->method('getTable')
+            ->will($this->returnValue('table_name'));
+
+        $this->entity = $this->getMockBuilder(AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkField'])
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -92,5 +158,40 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
             [
                 ['cachedDataSrl' => json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
             ];
+    }
+
+    public function testAddValueSortToCollectionGlobal()
+    {
+        $this->attributeModel->expects($this->any())->method('isScopeGlobal')
+            ->will($this->returnValue(true));
+        $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
+            ->will($this->returnSelf());
+
+        $this->attributeModel->expects($this->once())->method('getEntity')->willReturn($this->entity);
+        $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
+
+        $this->countryOfManufacture->setAttribute($this->attributeModel);
+        $this->countryOfManufacture->addValueSortToCollection($this->collection);
+    }
+
+    public function testAddValueSortToCollectionNotGlobal()
+    {
+        $this->attributeModel->expects($this->any())->method('isScopeGlobal')
+            ->will($this->returnValue(false));
+
+        $this->collection->expects($this->once())->method('order')->with('check_sql asc')
+            ->will($this->returnSelf());
+        $this->collection->expects($this->once())->method('getStoreId')
+            ->will($this->returnValue(1));
+        $this->collection->expects($this->any())->method('getConnection')
+            ->will($this->returnSelf());
+        $this->collection->expects($this->any())->method('getCheckSql')
+            ->will($this->returnValue('check_sql'));
+
+        $this->attributeModel->expects($this->any())->method('getEntity')->willReturn($this->entity);
+        $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
+
+        $this->countryOfManufacture->setAttribute($this->attributeModel);
+        $this->countryOfManufacture->addValueSortToCollection($this->collection);
     }
 }
