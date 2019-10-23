@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\QuoteGraphQl\Model\Cart\Address\SaveQuoteAddressToCustomerAddressBook;
 
 /**
  * Set billing address for a specified shopping cart
@@ -30,15 +31,23 @@ class SetBillingAddressOnCart
     private $assignBillingAddressToCart;
 
     /**
+     * @var SaveQuoteAddressToCustomerAddressBook
+     */
+    private $saveQuoteAddressToCustomerAddressBook;
+
+    /**
      * @param QuoteAddressFactory $quoteAddressFactory
      * @param AssignBillingAddressToCart $assignBillingAddressToCart
+     * @param SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
      */
     public function __construct(
         QuoteAddressFactory $quoteAddressFactory,
-        AssignBillingAddressToCart $assignBillingAddressToCart
+        AssignBillingAddressToCart $assignBillingAddressToCart,
+        SaveQuoteAddressToCustomerAddressBook $saveQuoteAddressToCustomerAddressBook
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->assignBillingAddressToCart = $assignBillingAddressToCart;
+        $this->saveQuoteAddressToCustomerAddressBook = $saveQuoteAddressToCustomerAddressBook;
     }
 
     /**
@@ -101,6 +110,15 @@ class SetBillingAddressOnCart
     ): Address {
         if (null === $customerAddressId) {
             $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
+
+            $customerId = $context->getUserId();
+            // need to save address only for registered user and if save_in_address_book = true
+            if (0 !== $customerId
+                && isset($addressInput['save_in_address_book'])
+                && (bool)$addressInput['save_in_address_book'] === true
+            ) {
+                $this->saveQuoteAddressToCustomerAddressBook->execute($billingAddress, $customerId);
+            }
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
@@ -112,46 +130,9 @@ class SetBillingAddressOnCart
             );
         }
 
+
         $this->validateAddress($billingAddress);
 
         return $billingAddress;
-    }
-
-    /**
-     * Validate quote address.
-     *
-     * @param Address $shippingAddress
-     *
-     * @throws GraphQlInputException
-     */
-    private function validateAddress(Address $shippingAddress)
-    {
-        $errors = $shippingAddress->validate();
-
-        if (true !== $errors) {
-            throw new GraphQlInputException(
-                __('Shipping address error: %message', ['message' => $this->getAddressErrors($errors)])
-            );
-        }
-    }
-
-    /**
-     * Collecting errors.
-     *
-     * @param array $errors
-     * @return string
-     *
-     * @todo change implementation in https://github.com/magento/graphql-ce/issues/970.
-     */
-    private function getAddressErrors(array $errors): string
-    {
-        $errorMessages = [];
-
-        /** @var \Magento\Framework\Phrase $error */
-        foreach ($errors as $error) {
-            $errorMessages[] = $error->render();
-        }
-
-        return implode(PHP_EOL, $errorMessages);
     }
 }

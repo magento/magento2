@@ -191,6 +191,9 @@ class FileInfoTest extends TestCase
         $this->assertTrue($this->model->isExist($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function isExistProvider()
     {
         return [
@@ -213,6 +216,9 @@ class FileInfoTest extends TestCase
         $this->assertEquals($expected, $this->model->isBeginsWithMediaDirectoryPath($fileName));
     }
 
+    /**
+     * @return array
+     */
     public function isBeginsWithMediaDirectoryPathProvider()
     {
         return [

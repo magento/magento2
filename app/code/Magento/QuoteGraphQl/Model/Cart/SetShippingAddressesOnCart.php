@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -22,6 +21,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
      * @var AssignShippingAddressToCart
      */
     private $assignShippingAddressToCart;
+
     /**
      * @var GetShippingAddress
      */

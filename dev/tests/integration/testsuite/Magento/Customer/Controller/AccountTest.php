@@ -769,9 +769,21 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        $this->assertContains('To: John Smith <' . $email . '>', $rawMessage);
+        /** @var \Zend\Mime\Part $messageBodyPart */
+        $messageBodyParts = $message->getBody()->getParts();
+        $messageBodyPart = reset($messageBodyParts);
+        $messageEncoding = $messageBodyPart->getCharset();
+        $name = 'John Smith';
 
-        $content = $message->getBody()->getParts()[0]->getRawContent();
+        if (strtoupper($messageEncoding) !== 'ASCII') {
+            $name = \Zend\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
+        }
+
+        $nameEmail = sprintf('%s <%s>', $name, $email);
+
+        $this->assertContains('To: ' . $nameEmail, $rawMessage);
+
+        $content = $messageBodyPart->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
         $this->setRequestInfo($confirmationUrl, 'confirm');
         $this->clearCookieMessagesList();
@@ -796,21 +808,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             [0, 'index.php/'],
             [1, 'index.php/customer/account/'],
         ];
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoAppArea frontend
-     */
-    public function testCheckVisitorModel()
-    {
-        /** @var \Magento\Customer\Model\Visitor $visitor */
-        $visitor = $this->_objectManager->get(\Magento\Customer\Model\Visitor::class);
-        $this->login(1);
-        $this->assertNull($visitor->getId());
-        $this->dispatch('customer/account/index');
-        $this->assertNotNull($visitor->getId());
     }
 
     /**
