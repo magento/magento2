@@ -287,17 +287,7 @@ class Extended extends \Magento\Backend\Block\Widget
             $massActionIdField = $this->getParentBlock()->getMassactionIdField();
         }
 
-        if ($allIdsCollection instanceof AbstractDb) {
-            $idsSelect = clone $allIdsCollection->getSelect();
-            $idsSelect->reset(Select::ORDER);
-            $idsSelect->reset(Select::LIMIT_COUNT);
-            $idsSelect->reset(Select::LIMIT_OFFSET);
-            $idsSelect->reset(Select::COLUMNS);
-            $idsSelect->columns($massActionIdField);
-            $idList = $allIdsCollection->getConnection()->fetchCol($idsSelect);
-        } else {
-            $idList = $allIdsCollection->getAllIds();
-        }
+        $idList = $allIdsCollection->getAllIds();
 
         return implode(',', $idList);
     }
