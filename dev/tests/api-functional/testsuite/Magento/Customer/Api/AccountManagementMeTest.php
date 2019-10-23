@@ -228,14 +228,21 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
                 'token' => $this->token
             ]
         ];
-        $requestData = ['confirmationKey' => $this->customerData[CustomerInterface::CONFIRMATION]];
+
+        $requestData = ['confirmationKey' => CustomerHelper::CONFIRMATION];
         if (TESTS_WEB_API_ADAPTER === 'soap') {
             $requestData['customerId'] = 0;
         }
-        $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertEquals($this->customerData[CustomerInterface::ID], $customerResponseData[CustomerInterface::ID]);
-        // Confirmation key is removed after confirmation
-        $this->assertFalse(isset($customerResponseData[CustomerInterface::CONFIRMATION]));
+
+        try {
+            $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals(
+                $this->customerData[CustomerInterface::ID],
+                $customerResponseData[CustomerInterface::ID]
+            );
+        } catch (\Exception $e) {
+            $this->fail('Customer is not activated.');
+        }
     }
 
     /**

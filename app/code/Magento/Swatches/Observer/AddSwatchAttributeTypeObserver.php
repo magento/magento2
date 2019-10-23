@@ -6,7 +6,7 @@
 namespace Magento\Swatches\Observer;
 
 use Magento\Config\Model\Config\Source;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -16,14 +16,14 @@ use Magento\Framework\Event\ObserverInterface;
 class AddSwatchAttributeTypeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      */
-    public function __construct(ModuleManagerInterface $moduleManager)
+    public function __construct(Manager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
     }
