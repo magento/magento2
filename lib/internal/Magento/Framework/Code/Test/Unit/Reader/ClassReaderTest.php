@@ -76,12 +76,14 @@ class ClassReaderTest extends TestCase
                             1 => 'stdClass',
                             2 => true,
                             3 => null,
+                            4 => false,
                         ],
                         1 => [
                             0 => 'runeTimeException',
                             1 => 'ClassExtendsDefaultPhpType',
                             2 => true,
                             3 => null,
+                            4 => false
                         ],
                         2 => [
                             0 => 'arrayVariable',
@@ -89,7 +91,8 @@ class ClassReaderTest extends TestCase
                             2 => false,
                             3 => [
                                 'key' => 'value',
-                            ]
+                            ],
+                            4 => false
                         ]
                     ]
                 ]
