@@ -19,7 +19,7 @@ class Stock extends Extended
     /**
      * Catalog data
      *
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -32,14 +32,14 @@ class Stock extends Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ProductAlert\Model\StockFactory $stockFactory
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ProductAlert\Model\StockFactory $stockFactory,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
         $this->_stockFactory = $stockFactory;
