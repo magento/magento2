@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "86a1369b80e7beabe9ea3dcb38b89ca4",
+    "content-hash": "ac243d11cd92b4d01c2e2c7407808c61",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -7135,21 +7135,22 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.5.0",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "5aa379674def88d1efc180d936dae1e4654c238a"
+                "reference": "e254e738b3a3fa2eceec9be0590c2aad0e689640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/5aa379674def88d1efc180d936dae1e4654c238a",
-                "reference": "5aa379674def88d1efc180d936dae1e4654c238a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e254e738b3a3fa2eceec9be0590c2aad0e689640",
+                "reference": "e254e738b3a3fa2eceec9be0590c2aad0e689640",
                 "shasum": ""
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.3.0",
                 "codeception/codeception": "~2.3.4 || ~2.4.0 ",
+                "composer/composer": "^1.4",
                 "consolidation/robo": "^1.0.0",
                 "csharpru/vault-php": "~3.5.3",
                 "csharpru/vault-php-guzzle6-transport": "^2.0",
@@ -7208,7 +7209,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-09-18T14:52:11+00:00"
+            "time": "2019-10-23T14:50:28+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -7782,20 +7783,20 @@
             "authors": [
                 {
                     "name": "Manuel Pichler",
-                    "role": "Project Founder",
                     "email": "github@manuel-pichler.de",
-                    "homepage": "https://github.com/manuelpichler"
+                    "homepage": "https://github.com/manuelpichler",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Marc Würth",
-                    "role": "Project Maintainer",
                     "email": "ravage@bluewin.ch",
-                    "homepage": "https://github.com/ravage84"
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
                 },
                 {
                     "name": "Other contributors",
-                    "role": "Contributors",
-                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors"
+                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
