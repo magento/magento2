@@ -138,7 +138,7 @@ class Config
      *
      * @var array
      */
-    private $data;
+    private $systemAttributes;
 
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -147,7 +147,7 @@ class Config
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param SerializerInterface $serializer
-     * @param array $data
+     * @param array $systemAttributes
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -157,7 +157,7 @@ class Config
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         SerializerInterface $serializer = null,
-        $data = []
+        $systemAttributes = []
     ) {
         $this->_cache = $cache;
         $this->_entityTypeFactory = $entityTypeFactory;
@@ -165,7 +165,7 @@ class Config
         $this->_cacheState = $cacheState;
         $this->_universalFactory = $universalFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-        $this->data = $data;
+        $this->systemAttributes = $systemAttributes;
     }
 
     /**
@@ -527,8 +527,10 @@ class Config
             return $this->attributes[$entityTypeCode][$code];
         }
 
-        if (array_key_exists($code, $this->data) && in_array($entityTypeCode, array_values($this->data), true)) {
-            $this->initSystemAttributes($entityType, $this->data);
+        if (array_key_exists($code, $this->systemAttributes)
+            && in_array($entityTypeCode, array_values($this->systemAttributes), true)
+        ) {
+            $this->initSystemAttributes($entityType, $this->systemAttributes);
         }
         if (isset($this->attributes[$entityTypeCode][$code])) {
             \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
