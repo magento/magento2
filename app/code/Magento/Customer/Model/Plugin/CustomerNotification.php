@@ -15,6 +15,11 @@ use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Plugin before \Magento\Framework\App\Action\AbstractAction::dispatch.
+ *
+ * Plugin to remove notifications from cache.
+ */
 class CustomerNotification
 {
     /**
@@ -66,6 +71,8 @@ class CustomerNotification
     }
 
     /**
+     * Removes notifications from cache.
+     *
      * @param AbstractAction $subject
      * @param RequestInterface $request
      * @return void
@@ -82,10 +89,10 @@ class CustomerNotification
             )
         ) {
             try {
+                $this->session->regenerateId();
                 $customer = $this->customerRepository->getById($customerId);
                 $this->session->setCustomerData($customer);
                 $this->session->setCustomerGroupId($customer->getGroupId());
-                $this->session->regenerateId();
                 $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customer->getId());
             } catch (NoSuchEntityException $e) {
                 $this->logger->error($e);
