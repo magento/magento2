@@ -230,8 +230,8 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Load product model with data by passed id.
-     * Return false if product was not loaded or has incorrect status.
+     * Load product by product id.
+     *
      * @param int $productId
      * @return bool|CatalogProduct
      */
@@ -245,13 +245,13 @@ abstract class Product extends \Magento\Framework\App\Action\Action
             $product = $this->productRepository->getById($productId);
 
             if (!in_array($this->storeManager->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
-                throw new NoSuchEntityException();
+                return false;
             }
 
             if (!$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
-                throw new NoSuchEntityException();
+                return false;
             }
-        } catch (NoSuchEntityException $noEntityException) {
+        } catch (\Exception $e) {
             return false;
         }
 
