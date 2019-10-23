@@ -59,8 +59,8 @@
         <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="60" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" time="60" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Run cron twice -->
         <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron1"/>
