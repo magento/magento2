@@ -32,10 +32,10 @@
         <waitForPageLoad stepKey="waitForAdminUserRoleTabLoad"/>
         <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="{{role.name}}" stepKey="filterRole"/>
         <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear1"/>
         <click selector="{{AdminEditUserSection.searchResultFirstRow}}" stepKey="selectRole"/>
         <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveUser"/>
-        <waitForPageLoad stepKey="waitForAdminUserRoleSavePageLoad"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see userInput="You saved the user." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
