@@ -27,7 +27,7 @@
         </before>
 
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!-- Create a CMS page containing the New Products widget -->

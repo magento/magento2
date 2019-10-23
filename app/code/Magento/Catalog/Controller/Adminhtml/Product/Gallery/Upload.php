@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Upload
@@ -25,6 +26,16 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      * @var \Magento\Framework\Controller\Result\RawFactory
      */
     protected $resultRawFactory;
+
+    /**
+     * @var array
+     */
+    private $allowedMimeTypes = [
+        'jpg' => 'image/jpg',
+        'jpeg' => 'image/jpeg',
+        'gif' => 'image/png',
+        'png' => 'image/gif'
+    ];
 
     /**
      * @var \Magento\Framework\Image\AdapterFactory
@@ -66,7 +77,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     }
 
     /**
-     * Image upload in product gallery
+     * Upload image(s) to the product gallery.
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
@@ -77,9 +88,13 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 \Magento\MediaStorage\Model\File\Uploader::class,
                 ['fileId' => 'image']
             );
-            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-            $imageAdapter = $this->adapterFactory->create();
-            $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
+            $uploader->setAllowedExtensions($this->getAllowedExtensions());
+
+            if (!$uploader->checkMimeType($this->getAllowedMimeTypes())) {
+                throw new LocalizedException(__('Disallowed File Type.'));
+            }
+
+            $imageAdapter = $this->adapterFactory->create();            $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
@@ -106,5 +121,25 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
         $response->setHeader('Content-type', 'text/plain');
         $response->setContents(json_encode($result));
         return $response;
+    }
+
+    /**
+     * Get the set of allowed file extensions.
+     *
+     * @return array
+     */
+    private function getAllowedExtensions()
+    {
+        return array_keys($this->allowedMimeTypes);
+    }
+
+    /**
+     * Get the set of allowed mime types.
+     *
+     * @return array
+     */
+    private function getAllowedMimeTypes()
+    {
+        return array_values($this->allowedMimeTypes);
     }
 }
