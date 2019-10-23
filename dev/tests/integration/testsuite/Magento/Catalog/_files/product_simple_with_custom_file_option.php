@@ -16,8 +16,6 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
-Bootstrap::getInstance()->reinitialize();
-
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
