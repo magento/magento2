@@ -51,7 +51,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ['getView']
         );
         $this->actionFactoryMock = $this->createPartialMock(\Magento\Framework\Mview\ActionFactory::class, ['get']);
-        $this->stateMock = $this->createPartialMock(\Magento\Indexer\Model\Mview\View\State::class, ['getViewId',
+        $this->stateMock = $this->createPartialMock(
+            \Magento\Indexer\Model\Mview\View\State::class,
+            [
+                'getViewId',
                 'loadByView',
                 'getVersionId',
                 'setVersionId',
@@ -62,7 +65,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 'setMode',
                 'save',
                 '__wakeup',
-            ]);
+            ]
+        );
         $this->changelogMock = $this->createPartialMock(
             \Magento\Framework\Mview\View\Changelog::class,
             ['getViewId', 'setViewId', 'create', 'drop', 'getVersion', 'getList', 'clear']
@@ -182,11 +186,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
         $this->changelogMock->expects($this->once())
             ->method('create')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function () {
                     throw new \Exception();
                 }
-            ));
+            );
 
         $this->loadView();
         $this->model->subscribe();
@@ -245,11 +249,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))
             ->method('remove')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function () {
                     throw new \Exception();
                 }
-            ));
+            );
         $this->subscriptionFactoryMock->expects($this->exactly(1))
             ->method('create')
             ->will($this->returnValue($subscriptionMock));
@@ -273,6 +277,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->stateMock->expects($this->once())
             ->method('setVersionId')
             ->will($this->returnSelf());
+        $this->stateMock->expects($this->atLeastOnce())
+            ->method('getMode')
+            ->willReturn(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
         $this->stateMock->expects($this->exactly(2))
             ->method('getStatus')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::STATUS_IDLE));
@@ -335,6 +342,9 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($lastVersionId));
         $this->stateMock->expects($this->never())
             ->method('setVersionId');
+        $this->stateMock->expects($this->atLeastOnce())
+            ->method('getMode')
+            ->willReturn(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED);
         $this->stateMock->expects($this->exactly(2))
             ->method('getStatus')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::STATUS_IDLE));
