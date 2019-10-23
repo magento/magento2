@@ -10,6 +10,7 @@ namespace Magento\Catalog\ViewModel\Product\Checker;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Check is available add to compare.
@@ -37,7 +38,11 @@ class AddToCompareAvailability implements ArgumentInterface
      */
     public function isAvailableForCompare(ProductInterface $product): bool
     {
-        return $this->isInStock($product) || $this->stockConfiguration->isShowOutOfStock();
+        if ((int)$product->getStatus() !== Status::STATUS_DISABLED) {
+            return $this->isInStock($product) || $this->stockConfiguration->isShowOutOfStock();
+        }
+
+        return false;
     }
 
     /**
@@ -53,6 +58,6 @@ class AddToCompareAvailability implements ArgumentInterface
             return $product->isSalable();
         }
 
-        return isset($quantityAndStockStatus['is_in_stock']) && $quantityAndStockStatus['is_in_stock'];
+        return $quantityAndStockStatus['is_in_stock'] ?? false;
     }
 }

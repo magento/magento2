@@ -40,12 +40,7 @@ class DownloadableLinksDataProvider implements BuyRequestDataProviderInterface
 
         if (isset($cartItemData['data']) && isset($cartItemData['data']['sku'])) {
             $sku = $cartItemData['data']['sku'];
-
-            try {
-                $product = $this->productRepository->get($sku);
-            } catch (NoSuchEntityException $e) {
-                throw new GraphQlNoSuchEntityException(__('Could not find specified product.'));
-            }
+            $product = $this->productRepository->get($sku);
 
             if ($product->getLinksPurchasedSeparately() && isset($cartItemData['downloadable_product_links'])) {
                 $downloadableLinks = $cartItemData['downloadable_product_links'];
