@@ -75,7 +75,10 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         );
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['cart_items']);
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['cart_items_v2']);
-        self::assertEquals('simple_product', $response['cart']['shipping_addresses'][0]['cart_items_v2'][0]['product']['sku']);
+        self::assertEquals(
+            'simple_product',
+            $response['cart']['shipping_addresses'][0]['cart_items_v2'][0]['product']['sku']
+        );
     }
 
     /**
