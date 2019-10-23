@@ -94,7 +94,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 throw new LocalizedException(__('Disallowed File Type.'));
             }
 
-            $imageAdapter = $this->adapterFactory->create();            $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
+            $imageAdapter = $this->adapterFactory->create();
+            $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
