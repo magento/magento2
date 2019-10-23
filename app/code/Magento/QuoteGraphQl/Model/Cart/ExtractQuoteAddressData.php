@@ -68,10 +68,13 @@ class ExtractQuoteAddressData
             } else {
                 $itemId = $addressItem->getQuoteItemId();
             }
-
+            $productData = $addressItem->getProduct()->getData();
+            $productData['model'] = $addressItem->getProduct();
             $addressItemsData[] = [
-                'cart_item_id' => $itemId,
-                'quantity' => $addressItem->getQty()
+                'id' => $itemId,
+                'quantity' => $addressItem->getQty(),
+                'product' => $productData,
+                'model' => $addressItem,
             ];
         }
         $addressData['cart_items'] = $addressItemsData;

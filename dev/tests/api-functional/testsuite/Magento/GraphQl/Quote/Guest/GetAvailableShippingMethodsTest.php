@@ -137,8 +137,11 @@ query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
       cart_items {
-        cart_item_id
+        id
         quantity
+        product {
+          sku
+        }
       }
       available_shipping_methods {
         amount {
