@@ -221,7 +221,8 @@ type ShippingCartAddress implements CartAddressInterface {
     selected_shipping_method: SelectedShippingMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddress\\SelectedShippingMethod")
     customer_notes: String
     items_weight: Float @deprecated(reason: "This information shoud not be exposed on frontend")
-    cart_items: [CartItemInterface]
+    cart_items: [CartItemQuantity] @deprecated(reason: "`cart_items_v2` should be used instead")
+    cart_items_v2: [CartItemInterface]
 }
 
 type BillingCartAddress implements CartAddressInterface {
