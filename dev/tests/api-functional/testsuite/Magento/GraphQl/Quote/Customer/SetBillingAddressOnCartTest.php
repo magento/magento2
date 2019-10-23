@@ -658,6 +658,22 @@ QUERY;
                     }',
                 '"regionId" is required. Enter and try again.'
             ],
+            'missed_multiple_fields' => [
+                'cart_id: "cart_id_value"
+                 billing_address: {
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        city: "test city"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }',
+                '"postcode" is required. Enter and try again.
+"regionId" is required. Enter and try again.'
+            ]
         ];
     }
 
