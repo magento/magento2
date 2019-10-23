@@ -114,3 +114,4 @@ Title,Title
 Mode,Mode
 "This enables or disables SSL verification of the Magento server by UPS.","This enables or disables SSL verification of the Magento server by UPS."
 Debug,Debug
+"UPS API endpoint URL's must use ups.com","UPS API endpoint URL's must use ups.com"

@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    createBraintreeClientToken: String! @resolver(class: "\\Magento\\BraintreeGraphQl\\Model\\Resolver\\CreateBraintreeClientToken") @doc(description:"Creates Braintree Client Token for creating client-side nonce.")
+    createBraintreeClientToken: String! @resolver(class: "\\Magento\\BraintreeGraphQl\\Model\\Resolver\\CreateBraintreeClientToken") @doc(description:"Creates Client Token for Braintree Javascript SDK initialization.")
 }
 
 input PaymentMethodInput {

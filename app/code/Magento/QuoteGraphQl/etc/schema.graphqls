@@ -109,7 +109,7 @@ input CartAddressInput {
     postcode: String
     country_code: String!
     telephone: String!
-    save_in_address_book: Boolean!
+    save_in_address_book: Boolean
 }
 
 input SetShippingMethodsOnCartInput {
@@ -196,7 +196,7 @@ type Cart {
     applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
-    billing_address: BillingCartAddress! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
+    billing_address: BillingCartAddress @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
     available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
     prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
@@ -205,15 +205,15 @@ type Cart {
 }
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
-    firstname: String
-    lastname: String
+    firstname: String!
+    lastname: String!
     company: String
-    street: [String]
-    city: String
+    street: [String!]!
+    city: String!
     region: CartAddressRegion
     postcode: String
-    country: CartAddressCountry
-    telephone: String
+    country: CartAddressCountry!
+    telephone: String!
 }
 
 type ShippingCartAddress implements CartAddressInterface {
@@ -234,13 +234,13 @@ type CartItemQuantity {
 }
 
 type CartAddressRegion {
-    code: String
-    label: String
+    code: String!
+    label: String!
 }
 
 type CartAddressCountry {
-    code: String
-    label: String
+    code: String!
+    label: String!
 }
 
 type SelectedShippingMethod {
@@ -358,5 +358,6 @@ type CartItemSelectedOptionValuePrice {
 }
 
 type Order {
-    order_id: String
+    order_number: String!
+    order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
 }
