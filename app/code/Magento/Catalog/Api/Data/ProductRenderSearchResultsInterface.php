@@ -42,8 +42,7 @@ interface ProductRenderSearchResultsInterface
      * @return $this
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
-
-
+    
     /**
      * Get total count
      *
