@@ -30,7 +30,7 @@ To suggest documentation improvements, click [here][4].
 [4]: https://devdocs.magento.com
 
 <h3>Community Maintainers</h3>
-The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks to these Community Maintainers for their valuable contributions.
 
 <a href="https://magento.com/magento-contributors#maintainers">
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>
@@ -48,7 +48,7 @@ Please review the [Code Contributions guide](https://devdocs.magento.com/guides/
 
 ## Reporting Security Issues
 
-To report security vulnerabilities or learn more about reporting security issues in Magento software or web sites visit the [Magento Bug Bounty Program](https://hackerone.com/magento) on hackerone. Please create a hackerone account [there](https://hackerone.com/magento) to submit and follow-up on your issue.
+To report security vulnerabilities or learn more about reporting security issues in Magento software or web sites visit the [Magento Bug Bounty Program](https://hackerone.com/magento) on hackerone. Please create a hacker one account [there](https://hackerone.com/magento) to submit and follow-up on your issue.
 
 Stay up-to-date on the latest security news and patches for Magento by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
