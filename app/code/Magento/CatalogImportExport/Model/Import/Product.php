@@ -260,6 +260,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_mediaGalleryAttributeId = null;
 
     /**
+     * Existing product ids in product import
+     *
+     * @var array
+     */
+    private $existingProductIds = [];
+
+    /**
      * Validation failure message template definitions
      *
      * @var array
@@ -1342,6 +1349,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->_connection->quoteInto('product_id IN (?)', $delProductId)
                 );
             }
+            // Checking and removing categories from existing product
+            if ($this->existingProductIds && Import::BEHAVIOR_APPEND == $this->getBehavior()) {
+                $delProductId = array_intersect($this->existingProductIds, $delProductId);
+                $this->_connection->delete(
+                    $tableName,
+                    $this->_connection->quoteInto('product_id IN (?)', $delProductId)
+                );
+            }
             if ($categoriesIn) {
                 $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['product_id', 'category_id']);
             }
@@ -1368,6 +1383,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         if ($entityRowsUp) {
             $this->_connection->insertOnDuplicate($entityTable, $entityRowsUp, ['updated_at', 'attribute_set_id']);
+            // Collecting existing product ids in variable to remove old ctegories
+            foreach ($entityRowsUp as $entityRowUp) {
+                $this->existingProductIds[] = $entityRowUp['entity_id'];
+            }
         }
         if ($entityRowsIn) {
             $this->_connection->insertMultiple($entityTable, $entityRowsIn);
