@@ -9,6 +9,7 @@ namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
@@ -56,6 +57,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10
         ],
     ];
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['example.com']);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['example.com']);
+    }
 
     /**
      * Test get() method
@@ -638,6 +665,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductWithMediaGallery()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        // @codingStandardsIgnoreLine
         $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
         $filename1 = 'tiny1' . time() . '.jpg';
@@ -766,12 +794,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
-            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$customAttribute) {
+                if ($customAttribute['attribute_code'] == 'category_ids'
+                    && !is_array($customAttribute['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $customAttribute['value'] = [""];
                 }
             }
         }
@@ -1212,12 +1239,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product, $storeCode = null)
     {
         if (isset($product['custom_attributes'])) {
-            $countOfProductCustomAttributes = sizeof($product['custom_attributes']);
-            for ($i = 0; $i < $countOfProductCustomAttributes; $i++) {
-                if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
-                    && !is_array($product['custom_attributes'][$i]['value'])
+            foreach ($product['custom_attributes'] as &$customAttribute) {
+                if ($customAttribute['attribute_code'] == 'category_ids'
+                    && !is_array($customAttribute['value'])
                 ) {
-                    $product['custom_attributes'][$i]['value'] = [""];
+                    $customAttribute['value'] = [""];
                 }
             }
         }
