@@ -133,7 +133,7 @@ class SetBillingAddressOnCart
 
         if (true !== $errors) {
             $e = new GraphQlInputException(__('Billing address errors'));
-            foreach ($errors as $error){
+            foreach ($errors as $error) {
                 $e->addError(new GraphQlInputException($error));
             }
             throw $e;

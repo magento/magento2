@@ -56,8 +56,8 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         $errors = $shippingAddress->validate();
 
         if (true !== $errors) {
-            $e = new GraphQlInputException(__('Shipping address error'));
-            foreach ($errors as $error){
+            $e = new GraphQlInputException(__('Shipping address errors'));
+            foreach ($errors as $error) {
                 $e->addError(new GraphQlInputException($error));
             }
             throw $e;
