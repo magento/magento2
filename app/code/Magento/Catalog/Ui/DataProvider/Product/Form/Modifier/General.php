@@ -243,6 +243,8 @@ class General extends AbstractModifier
                 $containerPath . static::META_CONFIG_PATH,
                 $meta,
                 [
+                    'label' => false,
+                    'required' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
                 ]
             );
@@ -319,7 +321,8 @@ class General extends AbstractModifier
                 $fromContainerPath . self::META_CONFIG_PATH,
                 $meta,
                 [
-                    'label' => __('Set Product as New From'),
+                    'label' => false,
+                    'required' => false,
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
