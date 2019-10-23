@@ -2,6 +2,7 @@
 /**
  * Application entry point
  *
+ change from rajath
  * Example - run a particular store or website:
  * --------------------------------------------
  * require __DIR__ . '/app/bootstrap.php';
