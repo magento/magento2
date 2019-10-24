@@ -30,9 +30,9 @@ class Config
     /**#@-*/
 
     /**
-     * Xml path to non user defined eav caching attributes configuration.
+     * Xml path to caching user defined eav attributes configuration.
      */
-    private const XML_PATH_CACHE_NON_USER_DEFINED_ATTRIBUTES = 'dev/caching/cache_non_user_defined_attributes';
+    private const XML_PATH_CACHE_USER_DEFINED_ATTRIBUTES = 'dev/caching/cache_user_defined_attributes';
 
     /**#@-*/
     protected $_entityTypeData;
@@ -551,7 +551,7 @@ class Config
             return $this->attributes[$entityTypeCode][$code];
         }
 
-        if ($this->scopeConfig->getValue(self::XML_PATH_CACHE_NON_USER_DEFINED_ATTRIBUTES)) {
+        if ($this->scopeConfig->getValue(self::XML_PATH_CACHE_USER_DEFINED_ATTRIBUTES)) {
             $cacheKey = self::ATTRIBUTES_CACHE_ID . '-attribute-' . $entityTypeCode . '-' . $code;
             $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
                 ? $this->serializer->unserialize($attribute)

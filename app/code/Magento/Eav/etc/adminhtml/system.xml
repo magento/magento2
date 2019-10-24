@@ -10,8 +10,8 @@
         <section id="dev">
             <group id="caching" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Caching Settings</label>
-                <field id="cache_non_user_defined_attributes" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
-                    <label>Cache Non User Defined Attributes</label>
+                <field id="cache_user_defined_attributes" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Cache User Defined Attributes</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>By default only system EAV attributes are cached.</comment>
                 </field>
