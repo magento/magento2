@@ -53,7 +53,7 @@ class UpdateQuoteOnDisableSalesrule implements ObserverInterface
     {
         /** @var Rule $rule */
         $rule = $observer->getRule();
-        if ($rule->getIsActive()) {
+        if ($rule->getIsActive() && !$rule->isDeleted()) {
             return;
         }
 

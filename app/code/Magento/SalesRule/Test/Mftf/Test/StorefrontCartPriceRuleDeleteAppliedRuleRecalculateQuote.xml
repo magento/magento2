@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCartPriceRuleDisableAppliedRuleRecalculateQuote">
+    <test name="StorefrontCartPriceRuleDeleteAppliedRuleRecalculateQuote">
         <annotations>
             <features value="SalesRule"/>
             <stories value="Create cart price rule"/>
-            <title value="Quote Totals should be invalidated if cart rule was applied to it was disabled." />
-            <description value="Quote Totals should be invalidated if cart rule was applied to it was disabled."/>
+            <title value="Quote Totals should be invalidated if applied cart rule was deleted." />
+            <description value="Quote Totals should be invalidated if applied cart rule was deleted."/>
             <severity value="AVERAGE"/>
             <testCaseId value=""/>
             <group value="SalesRule"/>
@@ -28,9 +28,6 @@
         </before>
 
         <after>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
-                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
-            </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
             <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
@@ -80,11 +77,12 @@
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList2"/>
         <click selector="{{AdminCartPriceRulesSection.rowContainingText(SimpleSalesRule.name)}}"
                stepKey="goToEditRule"/>
-        <click stepKey="disableCartRule" selector="{{AdminCartPriceRulesFormSection.active}}" />
-        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton2"/>
-        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage2"/>
+        <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton2"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You deleted the rule." stepKey="seeSuccessMessage2"/>
 
-        <!-- Now we should NOT see the discount because the rule was disabled and quote totals were recalculated -->
+        <!-- Now we should NOT see the discount because the rule was deleted and quote totals were recalculated -->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage2"/>
         <waitForPageLoad stepKey="waitForCartPage2"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$123.00" stepKey="seeSubtotal2"/>
