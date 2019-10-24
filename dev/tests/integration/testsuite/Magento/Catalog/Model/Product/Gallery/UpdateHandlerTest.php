@@ -73,6 +73,10 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @var string
      */
     private $fileName;
+
+    /**
+     * @var int
+     */
     private $mediaAttributeId;
 
     /**
@@ -87,7 +91,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
         $this->galleryResource = $this->objectManager->create(Gallery::class);
         $this->productResource = $this->objectManager->create(ProductResource::class);
-        $this->mediaAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
+        $this->mediaAttributeId = (int)$this->productResource->getAttribute('media_gallery')->getAttributeId();
         $this->config = $this->objectManager->get(Config::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
