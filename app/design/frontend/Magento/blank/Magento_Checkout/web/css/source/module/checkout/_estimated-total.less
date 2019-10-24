@@ -15,7 +15,6 @@
 
     .opc-estimated-wrapper {
         &:extend(.abs-add-clearfix all);
-        &:extend(.abs-no-display-desktop all);
         .lib-css(border-bottom, @border-width__base solid @color-gray80);
         margin: 0 0 15px;
         padding: 18px 15px;
@@ -37,7 +36,7 @@
                     &:before {
                         .lib-css(color, @button__color);
                     }
-                    
+
                     &:hover:before {
                         .lib-css(color, @button__hover__color);
                     }
@@ -53,6 +52,6 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-estimated-wrapper {
-        display: none;
+        &:extend(.abs-no-display-desktop all);
     }
 }

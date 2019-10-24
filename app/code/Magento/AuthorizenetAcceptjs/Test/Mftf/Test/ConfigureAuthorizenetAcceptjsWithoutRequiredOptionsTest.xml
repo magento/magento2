@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfigureAuthorizenetAcceptjsWithoutRequiredOptionsTest">
+        <annotations>
+            <stories value="Authorize.net Accept.js"/>
+            <title value="Unable to configure Authorize.net Accept.js without required options"/>
+            <description value="Unable to configure Authorize.net Accept.js without required options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-17805"/>
+            <useCaseId value="MC-17753"/>
+            <group value="AuthorizenetAcceptjs"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <actionGroup ref="EnableAuthorizenetAcceptjs" stepKey="enableAuthorizenetAcceptjs"/>
+        <actionGroup ref="AssertAuthorizenetAcceptjsRequiredFieldsValidationIsPresentOnSave" stepKey="assertErrorMessages"/>
+    </test>
+</tests>

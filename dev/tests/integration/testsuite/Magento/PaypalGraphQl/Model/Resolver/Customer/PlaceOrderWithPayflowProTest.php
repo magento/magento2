@@ -10,7 +10,6 @@ namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\DataObject;
 
 /**
@@ -72,9 +71,6 @@ class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
         $cart = $this->getQuoteByReservedOrderId($reservedQuoteId);
         $cartId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
 
-        $url = $this->objectManager->get(UrlInterface::class);
-        $baseUrl = $url->getBaseUrl();
-
         $query = <<<QUERY
 mutation {
     setPaymentMethodOnCart(input: {
@@ -101,9 +97,9 @@ mutation {
         input: {
           cart_id:"{$cartId}",
           urls: {
-            cancel_url: "{$baseUrl}paypal/transparent/cancel/"
-            error_url: "{$baseUrl}paypal/transparent/error/"
-            return_url: "{$baseUrl}paypal/transparent/response/"
+            cancel_url: "paypal/transparent/cancel/"
+            error_url: "paypal/transparent/error/"
+            return_url: "paypal/transparent/response/"
           }
         }
       ) {
@@ -126,7 +122,7 @@ mutation {
       }
       placeOrder(input: {cart_id: "{$cartId}"}) {
         order {
-          order_id
+          order_number
         }
       }
 }
@@ -211,11 +207,11 @@ QUERY;
         );
 
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 }

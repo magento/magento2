@@ -17,7 +17,8 @@ define([
     'Magento_Vault/js/view/payment/vault-enabler',
     'Magento_Checkout/js/action/create-billing-address',
     'Magento_Braintree/js/view/payment/kount',
-    'mage/translate'
+    'mage/translate',
+    'Magento_Ui/js/model/messageList'
 ], function (
     $,
     _,
@@ -31,7 +32,8 @@ define([
     VaultEnabler,
     createBillingAddress,
     kount,
-    $t
+    $t,
+    globalMessageList
 ) {
     'use strict';
 
@@ -187,17 +189,17 @@ define([
          */
         setBillingAddress: function (customer, address) {
             var billingAddress = {
-                street: [address.streetAddress],
-                city: address.locality,
+                street: [address.line1],
+                city: address.city,
                 postcode: address.postalCode,
-                countryId: address.countryCodeAlpha2,
+                countryId: address.countryCode,
                 email: customer.email,
                 firstname: customer.firstName,
                 lastname: customer.lastName,
-                telephone: customer.phone
+                telephone: customer.phone,
+                regionCode: address.state
             };
 
-            billingAddress['region_code'] = address.region;
             billingAddress = createBillingAddress(billingAddress);
             quote.billingAddress(billingAddress);
         },
@@ -209,10 +211,12 @@ define([
         beforePlaceOrder: function (payload) {
             this.setPaymentPayload(payload);
 
-            if ((this.isRequiredBillingAddress() || quote.billingAddress() === null) &&
-                typeof payload.details.billingAddress !== 'undefined'
-            ) {
-                this.setBillingAddress(payload.details, payload.details.billingAddress);
+            if (this.isRequiredBillingAddress() || quote.billingAddress() === null)  {
+                if (typeof payload.details.billingAddress !== 'undefined') {
+                    this.setBillingAddress(payload.details, payload.details.billingAddress);
+                } else {
+                    this.setBillingAddress(payload.details, payload.details.shippingAddress);
+                }
             }
 
             if (this.isSkipOrderReview()) {
@@ -332,7 +336,7 @@ define([
             }
 
             return {
-                line1: address.street[0],
+                line1: _.isUndefined(address.street) || _.isUndefined(address.street[0]) ? '' : address.street[0],
                 city: address.city,
                 state: address.regionCode,
                 postalCode: address.postcode,
@@ -413,6 +417,18 @@ define([
          */
         onVaultPaymentTokenEnablerChange: function () {
             this.reInitPayPal();
+        },
+
+        /**
+         * Show error message
+         *
+         * @param {String} errorMessage
+         * @private
+         */
+        showError: function (errorMessage) {
+            globalMessageList.addErrorMessage({
+                message: errorMessage
+            });
         }
     });
 });

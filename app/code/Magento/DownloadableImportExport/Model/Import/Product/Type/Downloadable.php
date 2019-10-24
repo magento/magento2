@@ -15,6 +15,7 @@ use \Magento\Store\Model\Store;
 /**
  * Class Downloadable
  *
+ * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
@@ -786,6 +787,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $rowCol
         );
         foreach ($options as $option) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $result[] = array_merge(
                 $this->dataSample,
                 ['product_id' => $entityId],
@@ -810,6 +812,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $rowCol
         );
         foreach ($options as $option) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $result[] = array_merge(
                 $this->dataLink,
                 ['product_id' => $entityId],

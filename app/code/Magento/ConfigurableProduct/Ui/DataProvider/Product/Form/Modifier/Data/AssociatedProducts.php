@@ -21,7 +21,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 
 /**
- * Loads data for product configurations.
+ * Associated products helper
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -234,6 +234,7 @@ class AssociatedProducts
      *
      * @return void
      * @throws \Zend_Currency_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function prepareVariations()
@@ -267,14 +268,15 @@ class AssociatedProducts
                                 'chosen' => [],
                                 '__disableTmpl' => true
                             ];
-                            foreach ($attribute->getOptions() as $option) {
-                                if (!empty($option->getValue())) {
-                                    $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                            $options = $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : [];
+                            foreach ($options as $option) {
+                                if (!empty($option['value'])) {
+                                    $attributes[$attribute->getAttributeId()]['options'][$option['value']] = [
                                         'attribute_code' => $attribute->getAttributeCode(),
                                         'attribute_label' => $attribute->getStoreLabel(0),
-                                        'id' => $option->getValue(),
-                                        'label' => $option->getLabel(),
-                                        'value' => $option->getValue(),
+                                        'id' => $option['value'],
+                                        'label' => $option['label'],
+                                        'value' => $option['value'],
                                         '__disableTmpl' => true
                                     ];
                                 }

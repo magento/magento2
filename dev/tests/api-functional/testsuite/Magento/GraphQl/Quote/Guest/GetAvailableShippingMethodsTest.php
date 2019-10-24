@@ -54,10 +54,6 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
-            'base_amount' => [
-                'value' => 10,
-                'currency' => 'USD',
-            ],
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
@@ -71,6 +67,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
+            'base_amount' => null,
         ];
         self::assertEquals(
             $expectedAddressData,
@@ -103,7 +100,9 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_offline_shipping_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 0
+     * @magentoConfigFixture default_store carriers/tablerate/active 0
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
      */
     public function testGetAvailableShippingMethodsIfShippingMethodsAreNotPresent()
     {
@@ -137,29 +136,46 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
 query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
-        available_shipping_methods {
-          amount {
-            value
-            currency
-          }
-          base_amount {
-            value
-            currency
-          }
-          carrier_code
-          carrier_title
-          error_message
-          method_code
-          method_title
-          price_excl_tax {
-            value
-            currency
-          }
-          price_incl_tax {
-            value
-            currency
-          }
+      cart_items {
+        cart_item_id
+        quantity
+      }
+      available_shipping_methods {
+        amount {
+          value
+          currency
         }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+        base_amount {
+          value
+          currency
+        }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+      }
     }
   }
 }

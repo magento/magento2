@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\MessageQueue\ConsumerFactory;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
  * Command for starting MessageQueue consumers.
@@ -22,6 +22,7 @@ class StartConsumerCommand extends Command
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
     const OPTION_BATCH_SIZE = 'batch-size';
     const OPTION_AREACODE = 'area-code';
+    const OPTION_SINGLE_THREAD = 'single-thread';
     const PID_FILE_PATH = 'pid-file-path';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
@@ -36,9 +37,9 @@ class StartConsumerCommand extends Command
     private $appState;
 
     /**
-     * @var PidConsumerManager
+     * @var LockManagerInterface
      */
-    private $pidConsumerManager;
+    private $lockManager;
 
     /**
      * StartConsumerCommand constructor.
@@ -47,23 +48,23 @@ class StartConsumerCommand extends Command
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
-     * @param PidConsumerManager $pidConsumerManager
+     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
         $name = null,
-        PidConsumerManager $pidConsumerManager = null
+        LockManagerInterface $lockManager = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;
-        $this->pidConsumerManager = $pidConsumerManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(PidConsumerManager::class);
+        $this->lockManager = $lockManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(LockManagerInterface::class);
         parent::__construct($name);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -71,30 +72,36 @@ class StartConsumerCommand extends Command
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
         $batchSize = (int)$input->getOption(self::OPTION_BATCH_SIZE);
         $areaCode = $input->getOption(self::OPTION_AREACODE);
-        $pidFilePath = $input->getOption(self::PID_FILE_PATH);
 
-        if ($pidFilePath && $this->pidConsumerManager->isRun($pidFilePath)) {
-            $output->writeln('<error>Consumer with the same PID is running</error>');
+        if ($input->getOption(self::PID_FILE_PATH)) {
+            $input->setOption(self::OPTION_SINGLE_THREAD, true);
+        }
+
+        $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
+
+        if ($singleThread && $this->lockManager->isLocked(md5($consumerName))) { //phpcs:ignore
+            $output->writeln('<error>Consumer with the same name is running</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        if ($pidFilePath) {
-            $this->pidConsumerManager->savePid($pidFilePath);
+        if ($singleThread) {
+            $this->lockManager->lock(md5($consumerName)); //phpcs:ignore
         }
 
-        if ($areaCode !== null) {
-            $this->appState->setAreaCode($areaCode);
-        } else {
-            $this->appState->setAreaCode('global');
-        }
+        $this->appState->setAreaCode($areaCode ?? 'global');
 
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
+
+        if ($singleThread) {
+            $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
+        }
+
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -126,10 +133,16 @@ class StartConsumerCommand extends Command
             . 'default is global.'
         );
         $this->addOption(
+            self::OPTION_SINGLE_THREAD,
+            null,
+            InputOption::VALUE_NONE,
+            'This option prevents running multiple copies of one consumer simultaneously.'
+        );
+        $this->addOption(
             self::PID_FILE_PATH,
             null,
             InputOption::VALUE_REQUIRED,
-            'The file path for saving PID'
+            'The file path for saving PID (This option is deprecated, use --single-thread instead)'
         );
         $this->setHelp(
             <<<HELP
@@ -150,8 +163,12 @@ To specify the number of messages per batch for the batch consumer:
 To specify the preferred area:
 
     <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
+    
+To do not run multiple copies of one consumer simultaneously:
 
-To save PID enter path:
+    <comment>%command.full_name% someConsumer --single-thread'</comment>
+
+To save PID enter path (This option is deprecated, use --single-thread instead):
 
     <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
 HELP

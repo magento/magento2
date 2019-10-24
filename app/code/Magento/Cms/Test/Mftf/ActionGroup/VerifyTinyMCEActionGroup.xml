@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="VerifyTinyMCEActionGroup">
+        <annotations>
+            <description>Goes to Admin CMS Page creation page. Validates that all of the Tiny MCE buttons are present.</description>
+        </annotations>
+        
         <seeElement selector="{{TinyMCESection.Style}}" stepKey="assertInfo2"/>
         <seeElement selector="{{TinyMCESection.Bold}}" stepKey="assertInfo3"/>
         <seeElement selector="{{TinyMCESection.Italic}}" stepKey="assertInfo4"/>
@@ -22,7 +27,12 @@
         <seeElement selector="{{TinyMCESection.InsertTable}}" stepKey="assertInfo13"/>
         <seeElement selector="{{TinyMCESection.SpecialCharacter}}" stepKey="assertInfo14"/>
     </actionGroup>
+    
     <actionGroup name="VerifyMagentoEntityActionGroup">
+        <annotations>
+            <description>Validates that the Insert Widget and Insert Variables buttons are present.</description>
+        </annotations>
+        
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="assertInfo15"/>
         <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="assertInfo16"/>
     </actionGroup>

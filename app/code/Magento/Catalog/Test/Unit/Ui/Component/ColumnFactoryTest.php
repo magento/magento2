@@ -67,9 +67,10 @@ class ColumnFactoryTest extends TestCase
         $this->uiComponentFactory->method('create')
             ->willReturn($this->column);
 
-        $this->columnFactory = $this->objectManager->getObject(ColumnFactory::class, [
-            'componentFactory' => $this->uiComponentFactory
-        ]);
+        $this->columnFactory = $this->objectManager->getObject(
+            ColumnFactory::class,
+            ['componentFactory' => $this->uiComponentFactory]
+        );
     }
 
     /**

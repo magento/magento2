@@ -214,18 +214,18 @@ class Config
      */
     protected function _getAccessList()
     {
-        $result = '';
-        $tpl = "    \"%s\";";
+        $tpl = '    "%s";';
         $accessList = $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_ACCESS_LIST);
         if (!empty($accessList)) {
-            $result = [];
+            $ipsList = [];
             $ips = explode(',', $accessList);
             foreach ($ips as $ip) {
-                $result[] = sprintf($tpl, trim($ip));
+                $ipsList[] = sprintf($tpl, trim($ip));
             }
-            return implode("\n", $result);
+            return implode("\n", $ipsList);
         }
-        return $result;
+
+        return '';
     }
 
     /**

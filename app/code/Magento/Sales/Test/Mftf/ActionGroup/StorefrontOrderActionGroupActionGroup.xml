@@ -10,11 +10,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Fill order information fields and click continue-->
     <actionGroup name="StorefrontSearchGuestOrderActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Customer Orders and Returns page. Fills in the provided Order ID, Billing Last Name and Email. Clicks on Continue. Validates that the URL is correct.</description>
+        </annotations>
         <arguments>
             <argument name="orderId" type="string"/>
             <argument name="orderLastName" type="string"/>
             <argument name="orderEmail" type="string"/>
         </arguments>
+
         <amOnPage url="{{StorefrontOrdersAndReturnsPage.url}}" stepKey="navigateToOrderAndReturnPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField selector="{{StorefrontOrderAndReturnInformationSection.orderId}}" userInput="{{orderId}}" stepKey="fillOrderId"/>

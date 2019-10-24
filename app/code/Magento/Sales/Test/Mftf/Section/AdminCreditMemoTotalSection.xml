@@ -22,5 +22,7 @@
         <element name="creditMemoItem" type="text" selector="#sales_order_view_tabs_order_creditmemos"/>
         <element name="viewMemo" type="text" selector="div#sales_order_view_tabs_order_creditmemos_content a.action-menu-item"/>
         <element name="refundOffline" type="button"  selector=".order-totals-actions button[data-ui-id='order-items-submit-offline']"/>
+        <element name="updateTotals" type="button" selector=".update-totals-button" timeout="30"/>
+        <element name="disabledUpdateTotals" type="button" selector=".update-totals-button.disabled" timeout="30"/>
     </section>
 </sections>

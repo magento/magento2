@@ -234,8 +234,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             . '/_files/dependency_test/tables_*.php';
         $dbRuleTables = [];
         foreach (glob($replaceFilePattern) as $fileName) {
-            //phpcs:ignore Generic.PHP.NoSilencedErrors
-            $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $dbRuleTables = array_merge($dbRuleTables, include $fileName);
         }
         self::$_rulesInstances = [
             new PhpRule(
@@ -267,11 +267,11 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $routesWhitelistFilePattern = realpath(__DIR__) . '/_files/dependency_test/whitelist/routes_*.php';
             $routesWhitelist = [];
             foreach (glob($routesWhitelistFilePattern) as $fileName) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $routesWhitelist = array_merge($routesWhitelist, include $fileName);
             }
             self::$routesWhitelist = $routesWhitelist;
         }
-
         return self::$routesWhitelist;
     }
 
@@ -284,24 +284,26 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getCleanedFileContents($fileType, $file)
     {
-        $contents = (string)file_get_contents($file);
+        $contents = null;
         switch ($fileType) {
             case 'php':
-                //Removing php comments
-                $contents = preg_replace('~/\*.*?\*/~m', '', $contents);
-                $contents = preg_replace('~^\s*/\*.*?\*/~sm', '', $contents);
-                $contents = preg_replace('~^\s*//.*$~m', '', $contents);
+                $contents = php_strip_whitespace($file);
                 break;
             case 'layout':
             case 'config':
                 //Removing xml comments
-                $contents = preg_replace('~\<!\-\-/.*?\-\-\>~s', '', $contents);
+                $contents = preg_replace(
+                    '~\<!\-\-/.*?\-\-\>~s',
+                    '',
+                    file_get_contents($file)
+                );
                 break;
             case 'template':
+                $contents = php_strip_whitespace($file);
                 //Removing html
                 $contentsWithoutHtml = '';
                 preg_replace_callback(
-                    '~(<\?php\s+.*\?>)~sU',
+                    '~(<\?(php|=)\s+.*\?>)~sU',
                     function ($matches) use ($contents, &$contentsWithoutHtml) {
                         $contentsWithoutHtml .= $matches[1];
                         return $contents;
@@ -309,10 +311,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                     $contents
                 );
                 $contents = $contentsWithoutHtml;
-                //Removing php comments
-                $contents = preg_replace('~/\*.*?\*/~s', '', $contents);
-                $contents = preg_replace('~^\s*//.*$~s', '', $contents);
                 break;
+            default:
+                $contents = file_get_contents($file);
         }
         return $contents;
     }
@@ -393,9 +394,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach (self::$_rulesInstances as $rule) {
             /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
             $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $dependencies = array_merge($dependencies, $newDependencies);
         }
-
         foreach ($dependencies as $key => $dependency) {
             foreach (self::$whiteList as $namespace) {
                 if (strpos($dependency['source'], $namespace) !== false) {
@@ -509,12 +510,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $found = array_merge(
                 $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
                 $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
                 $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
             );
-
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
@@ -578,37 +579,16 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     public function getAllFiles()
     {
-        $files = [];
-
-        // Get all php files
-        $files = array_merge(
-            $files,
+        return array_merge(
             $this->_prepareFiles(
                 'php',
                 Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::AS_DATA_SET | Files::INCLUDE_NON_CLASSES),
                 true
-            )
-        );
-
-        // Get all configuration files
-        $files = array_merge(
-            $files,
-            $this->_prepareFiles('config', Files::init()->getConfigFiles())
-        );
-
-        //Get all layout updates files
-        $files = array_merge(
-            $files,
-            $this->_prepareFiles('layout', Files::init()->getLayoutFiles())
-        );
-
-        // Get all template files
-        $files = array_merge(
-            $files,
+            ),
+            $this->_prepareFiles('config', Files::init()->getConfigFiles()),
+            $this->_prepareFiles('layout', Files::init()->getLayoutFiles()),
             $this->_prepareFiles('template', Files::init()->getPhtmlFiles())
         );
-
-        return $files;
     }
 
     /**

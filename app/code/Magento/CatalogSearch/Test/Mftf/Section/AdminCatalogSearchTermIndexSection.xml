@@ -21,5 +21,6 @@
         <element name="emptyRecords" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
         <element name="gridRow" type="text" selector="//tr[@data-role='row']"/>
         <element name="numberOfSearchTermResults" type="text" selector="//tr[@data-role='row']/td[@data-column='num_results']"/>
+        <element name="selectMassActionCheckbox" type="select" selector="//select[@id='search_term_grid_massaction-mass-select']"/>
     </section>
 </sections>

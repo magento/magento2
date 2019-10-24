@@ -45,4 +45,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver">
+        <arguments>
+            <argument name="invalidValues" xsi:type="array">
+                <item name="0" xsi:type="string">admin</item>
+                <item name="1" xsi:type="string">soap</item>
+                <item name="2" xsi:type="string">rest</item>
+                <item name="3" xsi:type="string">graphql</item>
+                <item name="4" xsi:type="string">standard</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
