@@ -94,7 +94,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare implements HttpPos
                 $product = null;
             }
 
-            if ($product) {
+            if ($product && !$product->isDisabled()) {
                 $this->_catalogProductCompareList->addProduct($product);
                 $productName = $this->_objectManager->get(
                     \Magento\Framework\Escaper::class
