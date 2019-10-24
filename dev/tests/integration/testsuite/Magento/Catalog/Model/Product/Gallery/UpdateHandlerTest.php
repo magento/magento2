@@ -73,6 +73,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @var string
      */
     private $fileName;
+    private $mediaAttributeId;
 
     /**
      * @inheritdoc
@@ -86,6 +87,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
         $this->galleryResource = $this->objectManager->create(Gallery::class);
         $this->productResource = $this->objectManager->create(ProductResource::class);
+        $this->mediaAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
         $this->config = $this->objectManager->get(Config::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
@@ -109,7 +111,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                 'images' => [
                     'image' => [
                         'value_id' => '100',
-                        'file' => str_repeat('/..', 2) . DIRECTORY_SEPARATOR . $this->fileName,
+                        'file' => '/../..' . DIRECTORY_SEPARATOR . $this->fileName,
                         'label' => 'New image',
                         'removed' => 1,
                     ],
@@ -130,13 +132,11 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithOneImage(): void
     {
         $product = $this->getProduct();
-        $this->prepareProductWithOneImage($product, ['label' => 'New image', 'disabled' => '1']);
+        $this->updateProductGalleryImages($product, ['label' => 'New image', 'disabled' => '1']);
         $this->updateHandler->execute($product);
-        $productImages = $this->galleryResource->loadProductGalleryByAttributeId(
-            $product,
-            $this->productResource->getAttribute('media_gallery')->getAttributeId()
-        );
+        $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         $updatedImage = reset($productImages);
+        $this->assertTrue(is_array($updatedImage));
         $this->assertEquals('New image', $updatedImage['label']);
         $this->assertEquals('New image', $updatedImage['label_default']);
         $this->assertEquals('1', $updatedImage['disabled']);
@@ -248,8 +248,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->setData('store_id', Store::DEFAULT_STORE_ID);
         $product->setData('media_gallery', ['images' => $images]);
         $this->updateHandler->execute($product);
-        $galleryAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
-        $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $galleryAttributeId);
+        $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         foreach ($productImages as $updatedImage) {
             $this->assertEquals($positionMap[$updatedImage['file']], $updatedImage['position']);
             $this->assertEquals($positionMap[$updatedImage['file']], $updatedImage['position_default']);
@@ -266,12 +265,9 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithImageToDelete(): void
     {
         $product = $this->getProduct();
-        $this->prepareProductWithOneImage($product, ['removed' => '1']);
+        $this->updateProductGalleryImages($product, ['removed' => '1']);
         $this->updateHandler->execute($product);
-        $productImages = $this->galleryResource->loadProductGalleryByAttributeId(
-            $product,
-            $this->productResource->getAttribute('media_gallery')->getAttributeId()
-        );
+        $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         $this->assertCount(0, $productImages);
         $this->assertFileNotExists(
             $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . '/m/a/magento_image.jpg')
@@ -324,8 +320,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         }
         $product->setData('media_gallery', ['images' => $images]);
         $this->updateHandler->execute($product);
-        $galleryAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
-        $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $galleryAttributeId);
+        $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         foreach ($productImages as $image) {
             $imageToAssert = [
                 'label' => $image['label'],
@@ -363,10 +358,10 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @param array $imageData
      * @return void
      */
-    private function prepareProductWithOneImage(ProductInterface $product, array $imageData): void
+    private function updateProductGalleryImages(ProductInterface $product, array $imageData): void
     {
         $images = $product->getData('media_gallery')['images'];
-        $image = reset($images);
+        $image = reset($images) ?: [];
         $product->setData('store_id', Store::DEFAULT_STORE_ID);
         $product->setData('media_gallery', ['images' => ['image' => array_merge($image, $imageData)]]);
     }
