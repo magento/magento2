@@ -295,18 +295,17 @@ class IndexBuilder
         foreach ($ids as $productId) {
             foreach ($activeRules as $activeRule) {
                 $rule = clone $activeRule;
-                $rule->setProductsFilter($productId);
+                $rule->setProductsFilter($ids);
                 $matchedProductIds = $rule->getMatchingProductIds();
-                if (!isset($matchedProductIds[$productId])) {
-                    continue;
-                }
+                $matchedProductIds = array_intersect_key($matchedProductIds, array_flip($ids));
+                foreach ($matchedProductIds as $matchedProductId => $validationByWebsite) {
+                    $websiteIds = array_keys(array_filter($validationByWebsite));
+                    if (empty($websiteIds)) {
+                        continue;
+                    }
 
-                $websiteIds = array_keys(array_filter($matchedProductIds[$productId]));
-                if (empty($websiteIds)) {
-                    continue;
+                    $this->assignProductToRule($rule, $matchedProductId, $websiteIds);
                 }
-
-                $this->assignProductToRule($rule, $productId, $websiteIds);
             }
 
             $this->cleanProductPriceIndex([$productId]);
