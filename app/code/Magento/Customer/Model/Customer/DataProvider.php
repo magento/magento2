@@ -344,7 +344,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code]['arguments']['data']['config'][$metaName] = ($metaName === 'label') ? __($value) : $value;
+                if ($metaName === 'label') {
+                    $meta[$code]['arguments']['data']['config'][$metaName] = __($value);
+                    $meta[$code]['arguments']['data']['config']['__disableTmpl'] = [$metaName => true];
+                } else {
+                    $meta[$code]['arguments']['data']['config'][$metaName] = $value;
+                }
                 if ('frontend_input' === $origName) {
                     $meta[$code]['arguments']['data']['config']['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
@@ -357,7 +362,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     $meta[$code]['arguments']['data']['config']['options'] = $this->getCountryWithWebsiteSource()
                         ->getAllOptions();
                 } else {
-                    $meta[$code]['arguments']['data']['config']['options'] = $attribute->getSource()->getAllOptions();
+                    $options = $attribute->getSource()->getAllOptions();
+                    array_walk(
+                        $options,
+                        function (&$item) {
+                            $item['__disableTmpl'] = ['label' => true];
+                        }
+                    );
+                    $meta[$code]['arguments']['data']['config']['options'] = $options;
                 }
             }
 
@@ -371,7 +383,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
-
         $this->processWebsiteMeta($meta);
         return $meta;
     }
