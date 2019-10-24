@@ -177,6 +177,63 @@ MUTATION;
     }
 
     /**
+     * Test custom attributes of the customer's address
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_address_custom_attribute.php
+     */
+    public function testUpdateCustomerAddressHasCustomAndExtensionAttributes()
+    {
+        /** @var AddressRepositoryInterface $addressRepositoryInterface */
+        $addressRepositoryInterface = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
+        /** @var \Magento\Customer\Api\Data\AddressInterface $address */
+        $address = $addressRepositoryInterface->getById(1);
+        $address
+            ->setCustomAttribute('custom_attribute1', '')
+            ->setCustomAttribute('custom_attribute2', '');
+        $addressRepositoryInterface->save($address);
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $addressId = 1;
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(
+    id: {$addressId}
+    input: {
+      firstname: "John"
+      lastname: "Doe"
+      custom_attributes: [
+        {
+          attribute_code: "custom_attribute1"
+          value: "[line1,line2]"
+        }
+         {
+          attribute_code: "custom_attribute2"
+          value: "line3"
+        }
+      ]
+    }
+  ) {
+    custom_attributes {
+      attribute_code
+      value
+    }
+  }
+}
+MUTATION;
+
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $actualCustomAttributes = $response['updateCustomerAddress']['custom_attributes'];
+        $this->assertEquals($actualCustomAttributes['0']['attribute_code'], 'custom_attribute1');
+        $this->assertEquals($actualCustomAttributes['0']['value'], '[line1,line2]');
+        $this->assertEquals($actualCustomAttributes['1']['attribute_code'], 'custom_attribute2');
+        $this->assertEquals($actualCustomAttributes['1']['value'], 'line3');
+    }
+
+    /**
      * Verify the fields for Customer address
      *
      * @param AddressInterface $address
