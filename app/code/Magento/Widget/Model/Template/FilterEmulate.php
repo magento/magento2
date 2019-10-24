@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\Template;
 
 /**
@@ -26,16 +28,18 @@ class FilterEmulate extends Filter
     }
 
     /**
+     * Filter the string as template with frontend area emulation
+     *
      * @param string $value
      *
      * @return string
      * @throws \Exception
      */
-    public function filter($value) : string
+    public function filterDirective($value) : string
     {
         return $this->_appState->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            [$this, 'parent::filter'],
+            [$this, 'filter'],
             [$value]
         );
     }
