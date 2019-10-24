@@ -8,107 +8,108 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
-    //  Newsletter subscription
-    .block.newsletter {
-        margin-bottom: 20px;
-
-        .form.subscribe {
-            display: table;
-            width: 100%;
-        }
-
-        .fieldset {
-            display: table-cell;
-            margin: 0;
-            padding: 0;
-            vertical-align: top;
-        }
-
-        .field {
-            margin: 0;
-
-            .control {
-                .lib-icon-font(
-                @icon-envelope,
-                @_icon-font-size: 16px,
-                @_icon-font-line-height: 32px,
-                @_icon-font-color: @form-element-input-placeholder__color,
-                @_icon-font-margin: 0 0 0 8px
-                );
-
-                &:before {
-                    position: absolute;
-                }
-
-                display: block;
+    
+        //  Newsletter subscription
+        .block.newsletter {
+            margin-bottom: 20px;
+    
+            .form.subscribe {
+                display: table;
+                width: 100%;
             }
-        }
-
-        input {
-            padding-left: 35px;
-        }
-
-        .title {
-            display: none;
-        }
-
-        .label {
-            &:extend(.abs-visually-hidden all);
-        }
-
-        .actions {
-            display: table-cell;
-            vertical-align: top;
-            width: 1%;
-        }
-
-        .action.subscribe {
-            border-bottom-left-radius: 0;
-            border-top-left-radius: 0;
-            margin-left: -1px;
-            white-space: nowrap;
-        }
-    }
-}
-
-//
-//  Desktop
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .block.newsletter {
-        width: 34%;
-    }
-}
-
-//
-//  Tablet
-//  _____________________________________________
-@media only screen and (max-width: @screen__m) {
-    .footer .block.newsletter {
-      width: 42%;
-    }
-}
-
-
-//
-//  Mobile
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .footer .block {
-        &.newsletter {
-            input {
-                font-size: 12px;
-                padding-left: 30px;
+    
+            .fieldset {
+                display: table-cell;
+                margin: 0;
+                padding: 0;
+                vertical-align: top;
             }
-
+    
             .field {
-                .control:before {
-                    font-size: 13px;
+                margin: 0;
+    
+                .control {
+                    .lib-icon-font(
+                    @icon-envelope,
+                    @_icon-font-size: 16px,
+                    @_icon-font-line-height: 32px,
+                    @_icon-font-color: @form-element-input-placeholder__color,
+                    @_icon-font-margin: 0 0 0 8px
+                    );
+    
+                    &:before {
+                        position: absolute;
+                    }
+    
+                    display: block;
+                }
+            }
+    
+            input {
+                padding-left: 35px;
+            }
+    
+            .title {
+                display: none;
+            }
+    
+            .label {
+                &:extend(.abs-visually-hidden all);
+            }
+    
+            .actions {
+                display: table-cell;
+                vertical-align: top;
+                width: 1%;
+            }
+    
+            .action.subscribe {
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+                margin-left: -1px;
+                white-space: nowrap;
+            }
+        }
+    }
+    
+    //
+    //  Desktop
+    //  _____________________________________________
+    
+    .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+        .block.newsletter {
+            width: 34%;
+        }
+    }
+    
+    //
+    //  Tablet
+    //  _____________________________________________
+
+    @media only screen and (max-width: @screen__m) {
+        .footer .block.newsletter {
+            width: 42%;
+        }
+    }
+    
+    
+    //
+    //  Mobile
+    //  _____________________________________________
+    
+    .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+        .footer .block {
+            &.newsletter {
+                input {
+                    font-size: 12px;
+                    padding-left: 30px;
+                }
+    
+                .field {
+                    .control:before {
+                        font-size: 13px;
+                    }
                 }
             }
         }
     }
-}
