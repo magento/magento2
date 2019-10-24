@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+/**
+ * Image adapter from ImageMagick
+ */
 class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
 {
     /**
@@ -80,12 +83,14 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
             throw new \Exception(sprintf('Unsupported image format. File: %s', $this->_fileName), $e->getCode(), $e);
         }
 
+        $this->ensureColorspace();
         $this->backgroundColor();
         $this->getMimeType();
     }
 
     /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination
@@ -124,6 +129,8 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     }
 
     /**
+     * Render image and return its binary contents
+     *
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
      */
@@ -498,5 +505,21 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     protected function _getImagickPixelObject($color = null)
     {
         return new \ImagickPixel($color);
+    }
+
+    /**
+     * Converts colorspace to RGB when required
+     */
+    protected function ensureColorspace()
+    {
+        $colorspace = $this->_imageHandler->getColorspace();
+        switch ($colorspace) {
+            case \Imagick::COLORSPACE_RGB:
+                return;
+            case \Imagick::COLORSPACE_CMYK:
+            case \Imagick::COLORSPACE_UNDEFINED:
+                $this->_imageHandler->transformImageColorspace(\Imagick::COLORSPACE_SRGB);
+
+        }
     }
 }
