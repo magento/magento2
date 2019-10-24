@@ -8,7 +8,7 @@ namespace Magento\Weee\Observer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
@@ -52,13 +52,13 @@ class CustomerLoggedIn implements ObserverInterface
 
     /**
      * @param Data $weeeHelper
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
         Data $weeeHelper,
-        ModuleManagerInterface $moduleManager,
+        Manager $moduleManager,
         Config $cacheConfig,
         TaxAddressManagerInterface $addressManager
     ) {
