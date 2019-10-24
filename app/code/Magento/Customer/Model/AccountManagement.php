@@ -640,7 +640,17 @@ class AccountManagement implements AccountManagementInterface
         // No need to validate customer address while saving customer reset password token
         $this->disableAddressValidation($customer);
 
-        $newPasswordToken = $this->mathRandom->getUniqueHash();
+        try {
+            // Use the old token if it's still valid
+            $customerSecureData = $this->customerRegistry->retrieveSecureData($customer->getId());
+            $newPasswordToken = $customerSecureData->getRpToken();
+            $this->validateResetPasswordToken($customer->getId(), $newPasswordToken);
+        } catch (\Exception $exception) {
+            // Otherwise generate a new token
+            $newPasswordToken = $this->mathRandom->getUniqueHash();
+        }
+
+        // Always set/renew expiry time for token
         $this->changeResetPasswordLinkToken($customer, $newPasswordToken);
 
         try {

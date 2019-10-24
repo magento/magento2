@@ -15,6 +15,7 @@ use Magento\User\Model\UserFactory;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Security\Model\PasswordResetRequestEvent;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SecurityViolationException;
 use Magento\User\Controller\Adminhtml\Auth;
 use Magento\Backend\Helper\Data;
@@ -111,7 +112,16 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                             /** @var \Magento\User\Model\User $user */
                             $user = $this->_userFactory->create()->load($item->getId());
                             if ($user->getId()) {
-                                $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
+                                try {
+                                    // Use the old token if it's still valid
+                                    $newPassResetToken = $user->getRpToken();
+                                    $this->_validateResetPasswordLinkToken((int)$user->getId(), $newPassResetToken);
+                                } catch (LocalizedException $exception) {
+                                    // Otherwise generate a new token
+                                    $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
+                                }
+
+                                // Always set/renew expiry time for token
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
                                 $this->notificator->sendForgotPassword($user);
