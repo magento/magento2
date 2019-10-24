@@ -49,7 +49,8 @@ class Fields
         } catch (\Exception $e) {
             // If a syntax error is encountered do not collect fields
         }
-        if (isset($queryFields['IntrospectionQuery'])) {
+        if (isset($queryFields['IntrospectionQuery']) || (isset($queryFields['__schema'])) ||
+            (isset($queryFields['__type']))) {
             // It must be possible to query any fields during introspection query
             $queryFields = [];
         }
@@ -60,7 +61,7 @@ class Fields
      * Get list of fields used in GraphQL query.
      *
      * This method is stateful and relies on the query being set with setQuery.
-     *
+     *-
      * @return string[]
      */
     public function getFieldsUsedInQuery()
