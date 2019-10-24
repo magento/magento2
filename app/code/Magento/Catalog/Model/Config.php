@@ -133,7 +133,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param SerializerInterface $serializer
-     * @param array $systemAttributes
+     * @param array $attributesForPreload
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -151,7 +151,7 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         SerializerInterface $serializer = null,
-        $systemAttributes = []
+        $attributesForPreload = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_configFactory = $configFactory;
@@ -168,7 +168,8 @@ class Config extends \Magento\Eav\Model\Config
             $cacheState,
             $universalFactory,
             $serializer,
-            $systemAttributes
+            $scopeConfig,
+            $attributesForPreload
         );
     }
 
