@@ -12,6 +12,7 @@
         <element name="saveButton" type="button" selector=".action-primary.video-create-button" timeout="30"/>
         <element name="saveButtonDisabled" type="text" selector="//button[@class='action-primary video-create-button' and @disabled='disabled']"/>
         <element name="cancelButton" type="button" selector=".video-cancel-button" timeout="30"/>
+        <element name="getVideoInformationButton" type="button" selector="#new_video_get"/>
         <element name="videoUrlTextField" type="input" selector="#video_url"/>
         <element name="videoTitleTextField" type="input" selector="#video_title"/>
         <element name="videoDescriptionTextField" type="input" selector="#video_description"/>
@@ -20,5 +21,6 @@
         <element name="swatchCheckbox" type="checkbox" selector="#video_swatch_image"/>
         <element name="thumbnailCheckbox" type="checkbox" selector="#video_thumbnail"/>
         <element name="hideFromProductPageCheckbox" type="checkbox" selector="#new_video_disabled"/>
+        <element name="errorElement" type="text" selector="#{{inputName}}-error" parameterized="true" />
     </section>
 </sections>

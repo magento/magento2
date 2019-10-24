@@ -11,6 +11,7 @@ use Magento\Downloadable\Model\Product\Type;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Downloadable\Helper\File as DownloadableFile;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\UrlInterface;
 use Magento\Downloadable\Api\Data\SampleInterface;
 
@@ -136,7 +137,7 @@ class Samples
         $sampleFile = $sample->getSampleFile();
         if ($sampleFile) {
             $file = $this->downloadableFile->getFilePath($this->sampleModel->getBasePath(), $sampleFile);
-            if ($this->downloadableFile->ensureFileInFilesystem($file)) {
+            if ($this->isSampleFileValid($file)) {
                 $sampleData['file'][0] = [
                     'file' => $sampleFile,
                     'name' => $this->downloadableFile->getFileFromPathFile($sampleFile),
@@ -151,5 +152,20 @@ class Samples
         }
 
         return $sampleData;
+    }
+
+    /**
+     * Check that Sample file is valid.
+     *
+     * @param string $file
+     * @return bool
+     */
+    private function isSampleFileValid(string $file): bool
+    {
+        try {
+            return $this->downloadableFile->ensureFileInFilesystem($file);
+        } catch (ValidatorException $e) {
+            return false;
+        }
     }
 }
