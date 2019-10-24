@@ -9,6 +9,7 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken;
+use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Result\PageFactory;
@@ -43,6 +44,11 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
     private $confirmByToken;
 
     /**
+     * @var \Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken
+     */
+    private $getByToken;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -54,13 +60,16 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
         Session $customerSession,
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
-        ConfirmCustomerByToken $confirmByToken = null
+        ConfirmCustomerByToken $confirmByToken = null,
+        GetCustomerByToken $getByToken = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;
         $this->accountManagement = $accountManagement;
         $this->confirmByToken = $confirmByToken
             ?? ObjectManager::getInstance()->get(ConfirmCustomerByToken::class);
+        $this->getByToken = $getByToken
+            ?? ObjectManager::getInstance()->get(GetCustomerByToken::class);
 
         parent::__construct($context);
     }
@@ -82,6 +91,15 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
             $this->accountManagement->validateResetPasswordLinkToken(null, $resetPasswordToken);
 
             $this->confirmByToken->execute($resetPasswordToken);
+
+            try {
+                // Extend token validity to avoid expiration while this form is
+                // being completed by the user.
+                $customer = $this->getByToken->execute($resetPasswordToken);
+                $this->accountManagement->changeResetPasswordLinkToken($customer, $resetPasswordToken);
+            } catch (\Exception $exception) {
+                // Intentionally ignoring failures here
+            }
 
             if ($isDirectLink) {
                 $this->session->setRpToken($resetPasswordToken);
