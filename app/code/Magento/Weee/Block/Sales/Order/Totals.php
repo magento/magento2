@@ -54,6 +54,8 @@ class Totals extends \Magento\Framework\View\Element\Template
         $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
         $weeeBaseTotal = $this->weeeData->getBaseTotalAmounts($items, $store);
         if ($weeeTotal) {
+            $totals = $this->getParentBlock()->getTotals();
+
             // Add our total information to the set of other totals
             $total = new \Magento\Framework\DataObject(
                 [
@@ -63,10 +65,10 @@ class Totals extends \Magento\Framework\View\Element\Template
                     'base_value' => $weeeBaseTotal
                 ]
             );
-            if ($this->getBeforeCondition()) {
-                $this->getParentBlock()->addTotalBefore($total, $this->getBeforeCondition());
+            if (isset($totals['grand_total_incl'])) {
+                $this->getParentBlock()->addTotalBefore($total, 'grand_total');
             } else {
-                $this->getParentBlock()->addTotal($total, $this->getAfterCondition());
+                $this->getParentBlock()->addTotalBefore($total, $this->getBeforeCondition());
             }
         }
         return $this;
