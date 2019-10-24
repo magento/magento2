@@ -54,7 +54,7 @@ class PageRepositoryTest extends TestCase
         $page = $this->repo->save($page);
 
         //New value is not accepted.
-        $page->setCustomLayoutUpdateXml($page->getCustomLayoutUpdateXml() .'TEST');
+        $page->setCustomLayoutUpdateXml('<container name="new_container_for_save_update_xml" />');
         $forbidden = false;
         try {
             $page = $this->repo->save($page);
@@ -64,7 +64,7 @@ class PageRepositoryTest extends TestCase
         $this->assertTrue($forbidden);
 
         //New value is not accepted.
-        $page->setLayoutUpdateXml($page->getLayoutUpdateXml() .'TEST');
+        $page->setLayoutUpdateXml('<container name="new_container_for_save_update_xml2" />');
         $forbidden = false;
         try {
             $page = $this->repo->save($page);
