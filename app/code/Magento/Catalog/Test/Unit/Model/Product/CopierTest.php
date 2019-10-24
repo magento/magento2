@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Copier;
 
@@ -46,6 +47,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
      */
     protected $metadata;
 
+    /**
+     * @var ScopeOverriddenValue|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeOverriddenValue;
+
     protected function setUp()
     {
         $this->copyConstructorMock = $this->createMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
@@ -59,6 +65,7 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         $this->optionRepositoryMock;
         $this->productMock = $this->createMock(Product::class);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
+        $this->scopeOverriddenValue = $this->createMock(ScopeOverriddenValue::class);
 
         $this->metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
@@ -67,15 +74,20 @@ class CopierTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($this->metadata);
+
         $this->_model = new Copier(
             $this->copyConstructorMock,
-            $this->productFactoryMock
+            $this->productFactoryMock,
+            $this->scopeOverriddenValue
         );
 
-        $this->setProperties($this->_model, [
-            'optionRepository' => $this->optionRepositoryMock,
-            'metadataPool' => $metadataPool,
-        ]);
+        $this->setProperties(
+            $this->_model,
+            [
+                'optionRepository' => $this->optionRepositoryMock,
+                'metadataPool' => $metadataPool,
+            ]
+        );
     }
 
     /**
@@ -103,10 +115,12 @@ class CopierTest extends \PHPUnit\Framework\TestCase
         ];
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
-        $this->productMock->expects($this->any())->method('getData')->willReturnMap([
-            ['', null, $productData],
-            ['linkField', null, '1'],
-        ]);
+        $this->productMock->expects($this->any())->method('getData')->willReturnMap(
+            [
+                ['', null, $productData],
+                ['linkField', null, '1'],
+            ]
+        );
 
         $entityMock = $this->getMockForAbstractClass(
             \Magento\Eav\Model\Entity\AbstractEntity::class,
@@ -191,9 +205,11 @@ class CopierTest extends \PHPUnit\Framework\TestCase
 
         $this->metadata->expects($this->any())->method('getLinkField')->willReturn('linkField');
 
-        $duplicateMock->expects($this->any())->method('getData')->willReturnMap([
-            ['linkField', null, '2'],
-        ]);
+        $duplicateMock->expects($this->any())->method('getData')->willReturnMap(
+            [
+                ['linkField', null, '2'],
+            ]
+        );
         $this->optionRepositoryMock->expects($this->once())
             ->method('duplicate')
             ->with($this->productMock, $duplicateMock);

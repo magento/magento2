@@ -429,7 +429,7 @@ class Installer
         $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
-            if ((isset($currentModules[$module]) && !$currentModules[$module])) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
                 $result[$module] = 0;
             } else {
                 $result[$module] = 1;
@@ -925,7 +925,7 @@ class Installer
      */
     private function handleDBSchemaData($setup, $type, array $request)
     {
-        if (!(($type === 'schema') || ($type === 'data'))) {
+        if (!($type === 'schema' || $type === 'data')) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
@@ -1375,32 +1375,7 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $driverOptionKeys = [
-            ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY =>
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS . '/' .
-                ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY,
-
-            ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT =>
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS . '/' .
-                ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT,
-
-            ConfigOptionsListConstants::KEY_MYSQL_SSL_CA =>
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS . '/' .
-                ConfigOptionsListConstants::KEY_MYSQL_SSL_CA,
-
-            ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY =>
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS . '/' .
-                ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY
-        ];
-        $driverOptions = [];
-        foreach ($driverOptionKeys as $driverOptionKey => $driverOptionConfig) {
-            $config = $this->deploymentConfig->get($driverOptionConfig);
-            if ($config !== null) {
-                $driverOptions[$driverOptionKey] = $config;
-            }
-        }
-
-        $this->dbValidator->checkDatabaseConnectionWithDriverOptions(
+        $this->dbValidator->checkDatabaseConnection(
             $this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
                 '/' . ConfigOptionsListConstants::KEY_NAME
@@ -1416,8 +1391,7 @@ class Installer
             $this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
                 '/' . ConfigOptionsListConstants::KEY_PASSWORD
-            ),
-            $driverOptions
+            )
         );
         $prefix = $this->deploymentConfig->get(
             ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .

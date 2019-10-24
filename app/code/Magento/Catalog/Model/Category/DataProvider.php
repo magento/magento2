@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -20,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
@@ -28,10 +31,9 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use Magento\Framework\AuthorizationInterface;
 
 /**
- * Class DataProvider
+ * Category form data provider.
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 101.0.0
@@ -52,6 +54,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
     /**
      * EAV attribute properties to fetch from meta storage
+     *
      * @var array
      * @since 101.0.0
      */
@@ -144,6 +147,11 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $arrayManager;
 
     /**
+     * @var ArrayUtils
+     */
+    private $arrayUtils;
+
+    /**
      * @var Filesystem
      */
     private $fileInfo;
@@ -154,8 +162,6 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $auth;
 
     /**
-     * DataProvider constructor
-     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -170,6 +176,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $data
      * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
+     * @param ArrayUtils|null $arrayUtils
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -186,7 +194,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         array $meta = [],
         array $data = [],
         PoolInterface $pool = null,
-        ?AuthorizationInterface $auth = null
+        ?AuthorizationInterface $auth = null,
+        ?ArrayUtils $arrayUtils = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -197,6 +206,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->arrayUtils = $arrayUtils ?? ObjectManager::getInstance()->get(ArrayUtils::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
@@ -226,7 +236,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $meta
      * @return array
      */
-    private function addUseDefaultValueCheckbox(Category $category, array $meta)
+    private function addUseDefaultValueCheckbox(Category $category, array $meta): array
     {
         /** @var EavAttributeInterface $attribute */
         foreach ($category->getAttributes() as $attribute) {
@@ -290,7 +300,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $fieldsMeta
      * @return array
      */
-    private function prepareFieldsMeta($fieldsMap, $fieldsMeta)
+    private function prepareFieldsMeta(array $fieldsMap, array $fieldsMeta): array
     {
         $canEditDesign = $this->auth->isAllowed('Magento_Catalog::edit_category_design');
 
@@ -350,6 +360,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     {
         $meta = [];
         $attributes = $entityType->getAttributeCollection();
+        $fields = $this->getFields();
+        $category = $this->getCurrentCategory();
         /* @var EavAttribute $attribute */
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
@@ -364,6 +376,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
                 }
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                    foreach ($meta[$code]['options'] as &$option) {
+                        $option['__disableTmpl'] = true;
+                    }
                 }
             }
 
@@ -374,6 +389,16 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
             $meta[$code]['scopeLabel'] = $this->getScopeLabel($attribute);
             $meta[$code]['componentType'] = Field::NAME;
+
+            // disable fields
+            if ($category) {
+                $attributeIsLocked = $category->isLockedAttribute($code);
+                $meta[$code]['disabled'] = $attributeIsLocked;
+                $hasUseConfigField = (bool) array_search('use_config.' . $code, $fields, true);
+                if ($hasUseConfigField && $meta[$code]['disabled']) {
+                    $meta['use_config.' . $code]['disabled'] = true;
+                }
+            }
         }
 
         $result = [];
@@ -505,7 +530,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param array $categoryData
      * @return array
      */
-    private function convertValues($category, $categoryData)
+    private function convertValues($category, $categoryData): array
     {
         foreach ($category->getAttributes() as $attributeCode => $attribute) {
             if (!isset($categoryData[$attributeCode])) {
@@ -617,12 +642,23 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     }
 
     /**
+     * Return list of fields names.
+     *
+     * @return array
+     */
+    private function getFields(): array
+    {
+        $fieldsMap = $this->getFieldsMap();
+        return $this->arrayUtils->flatten($fieldsMap);
+    }
+
+    /**
      * Retrieve scope overridden value
      *
      * @return ScopeOverriddenValue
      * @deprecated 101.1.0
      */
-    private function getScopeOverriddenValue()
+    private function getScopeOverriddenValue(): ScopeOverriddenValue
     {
         if (null === $this->scopeOverriddenValue) {
             $this->scopeOverriddenValue = \Magento\Framework\App\ObjectManager::getInstance()->get(
@@ -639,7 +675,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @return ArrayManager
      * @deprecated 101.1.0
      */
-    private function getArrayManager()
+    private function getArrayManager(): ArrayManager
     {
         if (null === $this->arrayManager) {
             $this->arrayManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
@@ -657,7 +693,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      *
      * @deprecated 101.1.0
      */
-    private function getFileInfo()
+    private function getFileInfo(): FileInfo
     {
         if ($this->fileInfo === null) {
             $this->fileInfo = ObjectManager::getInstance()->get(FileInfo::class);
