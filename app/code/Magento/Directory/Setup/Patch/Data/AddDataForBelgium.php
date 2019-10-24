@@ -60,17 +60,15 @@ class AddDataForBelgium implements DataPatchInterface
         return [
             ['BE', 'VAN', 'Antwerpen'],
             ['BE', 'WBR', 'Brabant wallon'],
-            ['BE', 'BRU', 'Brussels Hoofdstedelijk Gewest'],
+            ['BE', 'BRU', 'Brussels-Capital Region'],
             ['BE', 'WHT', 'Hainaut'],
             ['BE', 'VLI', 'Limburg'],
-            ['BE', 'WLG', 'Liege'],
+            ['BE', 'WLG', 'Liège'],
             ['BE', 'WLX', 'Luxembourg'],
             ['BE', 'WNA', 'Namur'],
             ['BE', 'VOV', 'Oost-Vlaanderen'],
-            ['BE', 'VLG', 'Vlaams Gewest'],
             ['BE', 'VBR', 'Vlaams-Brabant'],
             ['BE', 'VWV', 'West-Vlaanderen'],
-            ['BE', 'WAL', 'Wallonne, Region']
         ];
     }
 
