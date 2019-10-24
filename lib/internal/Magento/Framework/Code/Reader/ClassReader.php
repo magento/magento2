@@ -7,9 +7,13 @@ namespace Magento\Framework\Code\Reader;
 
 /**
  * Class ClassReader
+ *
+ * @package Magento\Framework\Code\Reader
  */
 class ClassReader implements ClassReaderInterface
 {
+    private $parentsCache = [];
+
     /**
      * Read class constructor signature
      *
@@ -73,6 +77,10 @@ class ClassReader implements ClassReaderInterface
      */
     public function getParents($className)
     {
+        if (isset($this->parentsCache[$className])) {
+            return $this->parentsCache[$className];
+        }
+
         $parentClass = get_parent_class($className);
         if ($parentClass) {
             $result = [];
@@ -94,6 +102,9 @@ class ClassReader implements ClassReaderInterface
                 $result = [];
             }
         }
+
+        $this->parentsCache[$className] = $result;
+
         return $result;
     }
 }
