@@ -7,14 +7,19 @@
 <!--@subject {{trans "Credit memo for your %store_name order" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var comment":"Credit Memo Comment",
+"var comment|escape|nl2br":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
 "layout handle=\"sales_email_order_creditmemo_items\" creditmemo=$creditmemo order=$order":"Credit Memo Items Grid",
 "var billing.name":"Guest Customer Name (Billing)",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.shipping_description":"Shipping Description"
+"var order.shipping_description":"Shipping Description",
+"var store.frontend_name":"Store Frontend Name",
+"var store_email":"Store Email",
+"var creditmemo":"Credit Memo",
+"var order":"Order",
+"var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
 

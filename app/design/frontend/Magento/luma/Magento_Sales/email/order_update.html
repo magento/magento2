@@ -6,11 +6,15 @@
 -->
 <!--@subject {{trans "Update to your %store_name order" store_name=$store.frontend_name}} @-->
 <!--@vars {
-"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
 "var order_data.customer_name":"Customer Name",
-"var comment":"Order Comment",
+"var comment|escape|nl2br":"Order Comment",
 "var order.increment_id":"Order Id",
-"var order_data.frontend_status_label":"Order Status"
+"var order_data.frontend_status_label":"Order Status",
+"var store.frontend_name":"Store Frontend name",
+"var store_email":"Store Email",
+"var order":"Order",
+"var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
 

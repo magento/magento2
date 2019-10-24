@@ -10,12 +10,18 @@
 "var billing.name":"Guest Customer Name",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
-"var comment":"Shipment Comment",
+"var comment|escape|nl2br":"Shipment Comment",
 "var shipment.increment_id":"Shipment Id",
 "layout handle=\"sales_email_order_shipment_items\" shipment=$shipment order=$order":"Shipment Items Grid",
 "block class='Magento\\\\Framework\\\\View\\\\Element\\\\Template' area='frontend' template='Magento_Sales::email\/shipment\/track.phtml' shipment=$shipment order=$order":"Shipment Track Details",
 "var formattedShippingAddress|raw":"Shipping Address",
 "var order.shipping_description":"Shipping Description",
+"var store.frontend_name":"Store Frontend Name",
+"var store_email":"Store Email",
+"var order_data.is_not_virtual": "Order Type",
+"var shipment": "Shipment",
+"var order": "Order",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL"
 } @-->
 {{template config_path="design/email/header_template"}}
 

@@ -7,7 +7,7 @@
 <!--@subject {{trans "Your %store_name order confirmation" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var order_data.email_customer_note":"Email Order Note",
+"var order_data.email_customer_note|escape|nl2br":"Email Order Note",
 "var order.billing_address.name":"Guest Customer Name",
 "var created_at_formatted":"Order Created At (datetime)",
 "var order.increment_id":"Order Id",
@@ -15,7 +15,13 @@
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
 "var order.shipping_description":"Shipping Description",
-"var shipping_msg":"Shipping message"
+"var shipping_msg":"Shipping message",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours",
+"var order_data.is_not_virtual":"Order Type",
+"var order":"Order"
 } @-->
 {{template config_path="design/email/header_template"}}
 

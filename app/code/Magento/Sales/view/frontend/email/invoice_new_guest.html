@@ -8,13 +8,20 @@
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var billing.name":"Guest Customer Name",
-"var comment":"Invoice Comment",
+"var comment|escape|nl2br":"Invoice Comment",
 "var invoice.increment_id":"Invoice Id",
 "layout handle=\"sales_email_order_invoice_items\" invoice=$invoice order=$order":"Invoice Items Grid",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.shipping_description":"Shipping Description"
+"var order.shipping_description":"Shipping Description",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours",
+"var invoice": "Invoice",
+"var order": "Order",
+"var order_data.is_not_virtual": "Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
 

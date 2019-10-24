@@ -7,10 +7,14 @@
 <!--@subject {{trans "Update to your %store_name shipment" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var billing.name":"Guest Customer Name",
-"var comment":"Order Comment",
+"var comment|escape|nl2br":"Order Comment",
 "var order.increment_id":"Order Id",
 "var order_data.frontend_status_label":"Order Status",
-"var shipment.increment_id":"Shipment Id"
+"var shipment.increment_id":"Shipment Id",
+"var store.frontend_name":"Store Frontend Name",
+"var store_phone":"Store Phone",
+"var store_email":"Store Email",
+"var store_hours":"Store Hours"
 } @-->
 {{template config_path="design/email/header_template"}}
 
