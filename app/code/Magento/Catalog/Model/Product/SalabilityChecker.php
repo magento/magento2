@@ -26,15 +26,24 @@ class SalabilityChecker
     private $storeManager;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface $storeManager
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager;
+        $this->stockConfiguration = $stockConfiguration ?:\Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\CatalogInventory\Api\StockConfigurationInterface::class);
     }
 
     /**
@@ -53,5 +62,28 @@ class SalabilityChecker
         $product = $this->productRepository->getById($productId, false, $storeId);
 
         return $product->isSalable();
+    }
+    
+    /**
+     * Check if product is visible on frontend.
+     *
+     * @param int|string $productId
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isProductVisible($productId, $storeId = null): bool
+    {
+        if ($storeId === null) {
+            $storeId = $this->storeManager->getStore()->getId();
+        }
+        try {
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product = $this->productRepository->getById($productId, false, $storeId);
+
+            return  ($this->stockConfiguration->isShowOutOfStock() || $product->isAvailable()) &&
+            $product->isInStock() && $product->isVisibleInSiteVisibility();
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

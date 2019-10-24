@@ -46,7 +46,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
         $sampleId = $this->getRequest()->getParam('sample_id', 0);
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $this->_objectManager->create(\Magento\Downloadable\Model\Sample::class)->load($sampleId);
-        if ($sample->getId() && $this->salabilityChecker->isSalable($sample->getProductId())) {
+        if ($sample->getId() && $this->salabilityChecker->isProductVisible($sample->getProductId())) {
             $resource = '';
             $resourceType = '';
             if ($sample->getSampleType() == DownloadHelper::LINK_TYPE_URL) {

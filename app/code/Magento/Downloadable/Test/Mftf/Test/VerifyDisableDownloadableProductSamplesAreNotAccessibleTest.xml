@@ -21,9 +21,6 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <!-- Add downloadable domains -->
-            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
-
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -43,9 +40,6 @@
             </createData>
         </before>
         <after>
-            <!-- Remove downloadable domains -->
-            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
-
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteDownloadableProduct"/>
 
@@ -107,7 +101,7 @@
         </actionGroup>
 
         <!-- Link Sample url is not accessible. You are redirected to Home Page -->
-        <seeInCurrentUrl url="{{StorefrontHomePage.url}}" stepKey="seeRedirectToHomePage"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeRedirectToHomePage"/>
 
         <!-- Navigate to Sample url on Storefront -->
         <actionGroup ref="StorefrontOpenDownloadableSampleActionGroup" stepKey="openDownloadableSample">
@@ -115,6 +109,6 @@
         </actionGroup>
 
         <!-- Sample url is not accessible. You are redirected to Home Page -->
-        <seeInCurrentUrl url="{{StorefrontHomePage.url}}" stepKey="seeHomePage"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}" stepKey="seeHomePage"/>
     </test>
 </tests>
