@@ -37,6 +37,8 @@ class ValidateOptionsObserver implements ObserverInterface
     }
 
     /**
+     * Validate configurable product options
+     *
      * @param EventObserver $observer
      * @return void
      */
