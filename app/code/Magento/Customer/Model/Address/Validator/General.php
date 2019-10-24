@@ -78,7 +78,8 @@ class General implements ValidatorInterface
     }
 
     /**
-     * @deprecated
+     * @deprecated because function name incorrect spelled
+     * 
      * Check fields that are generally required.
      *
      * @param AbstractAddress $address
