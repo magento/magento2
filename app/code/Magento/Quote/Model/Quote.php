@@ -948,8 +948,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             } else {
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
+                    // no address found
                 }
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
@@ -962,8 +963,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if (null === $shippingAddress) {
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
+                    // no address found
                 }
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
