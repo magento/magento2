@@ -23,6 +23,11 @@ class HtmlDirectiveSniff implements Sniff
     private $usedVariables = [];
 
     /**
+     * @var array
+     */
+    private $unfilteredVariables = [];
+
+    /**
      * @inheritDoc
      */
     public function register()
@@ -40,6 +45,7 @@ class HtmlDirectiveSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr)
     {
         $this->usedVariables = [];
+        $this->unfilteredVariables = [];
         if ($stackPtr !== 0) {
             return;
         }
@@ -172,6 +178,9 @@ class HtmlDirectiveSniff implements Sniff
     private function validateVariableUsage(File $phpcsFile, string $body): void
     {
         $this->usedVariables[] = 'var ' . trim($body);
+        if (strpos($body, '|') !== false) {
+            $this->unfilteredVariables[] = 'var ' . trim(explode('|', $body, 2)[0]);
+        }
         $variableTokenizer = new Template\Tokenizer\Variable();
         $variableTokenizer->setString($body);
         $stack = $variableTokenizer->tokenize();
@@ -228,9 +237,14 @@ class HtmlDirectiveSniff implements Sniff
             }
 
             $definedVariables = array_keys($definedVariables);
+            foreach ($definedVariables as $definedVariable) {
+                if (strpos($definedVariable, '|') !== false) {
+                    $definedVariables[] = trim(explode('|', $definedVariable, 2)[0]);
+                }
+            }
         }
 
-        $undefinedVariables = array_diff($this->usedVariables, $definedVariables);
+        $undefinedVariables = array_diff($this->usedVariables, $definedVariables, $this->unfilteredVariables);
         foreach ($undefinedVariables as $undefinedVariable) {
             $phpcsFile->addError(
                 'Template @vars comment block is missing a variable used in the template.' . PHP_EOL
