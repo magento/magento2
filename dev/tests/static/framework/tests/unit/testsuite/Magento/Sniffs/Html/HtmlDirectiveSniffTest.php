@@ -24,6 +24,10 @@ class HtmlDirectiveSniffTest extends AbstractHtmlSniffTest
             [
                 'test-html-directive.html',
                 'test-html-directive-errors.txt'
+            ],
+            [
+                'test-html-directive-invalid-json.html',
+                'test-html-directive-invalid-json-errors.txt'
             ]
         ];
     }

@@ -51,6 +51,30 @@ class HtmlDirectiveSniff implements Sniff
 
         $this->usedVariables = [];
 
+        if (preg_match_all(Template::CONSTRUCTION_IF_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+                // validate {{if <var>}}
+                $this->validateVariableUsage($phpcsFile, $construction[1]);
+                $html = str_replace($construction[0], $construction[2] . ($construction[4] ?? ''), $html);
+            }
+        }
+
+        if (preg_match_all(Template::CONSTRUCTION_DEPEND_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+                // validate {{depend <var>}}
+                $this->validateVariableUsage($phpcsFile, $construction[1]);
+                $html = str_replace($construction[0], $construction[2], $html);
+            }
+        }
+
+        if (preg_match_all(Template::LOOP_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
+            foreach ($constructions as $construction) {
+                // validate {{for in <var>}}
+                $this->validateVariableUsage($phpcsFile, $construction['loopData']);
+                $html = str_replace($construction[0], $construction['loopBody'], $html);
+            }
+        }
+
         if (preg_match_all(Template::CONSTRUCTION_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 if (empty($construction[2])) {
@@ -63,7 +87,6 @@ class HtmlDirectiveSniff implements Sniff
                     $this->validateDirectiveBody($phpcsFile, $construction[2]);
                 }
             }
-
         }
 
         $this->validateDefinedVariables($phpcsFile, $html);
@@ -139,6 +162,17 @@ class HtmlDirectiveSniff implements Sniff
                     'HtmlTemplates.DirectiveUsage.InvalidVarsJSON'
                 );
                 return;
+            }
+
+            foreach ($definedVariables as $var => $label) {
+                if (empty($label)) {
+                    $phpcsFile->addError(
+                        'Template @vars comment block contains invalid label.' . PHP_EOL
+                        . 'Label for variable "' . $var . '" is empty.',
+                        null,
+                        'HtmlTemplates.DirectiveUsage.InvalidVariableLabel'
+                    );
+                }
             }
 
             $definedVariables = array_keys($definedVariables);
