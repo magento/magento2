@@ -13,7 +13,8 @@ define([
     'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
-    'mage/cookies'
+    'mage/cookies',
+    'jquery-ui-modules/effect-fade'
 ], function ($, authenticationPopup, customerData, alert, confirm, _) {
     'use strict';
 

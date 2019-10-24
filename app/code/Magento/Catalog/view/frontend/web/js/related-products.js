@@ -26,8 +26,8 @@ define([
          * @private
          */
         _create: function () {
-            $(this.options.selectAllLink).on('click', $.proxy(this._selectAllRelated, this));
-            $(this.options.relatedCheckbox).on('click', $.proxy(this._addRelatedToProduct, this));
+            $(this.options.selectAllLink, this.element).on('click', $.proxy(this._selectAllRelated, this));
+            $(this.options.relatedCheckbox, this.element).on('click', $.proxy(this._addRelatedToProduct, this));
             this._showRelatedProducts(
                 this.element.find(this.options.elementsSelector),
                 this.element.data('limit'),
