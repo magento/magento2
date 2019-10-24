@@ -26,7 +26,7 @@ class IdentityMap
      * @throws \InvalidArgumentException When page doesn't have an ID.
      * @return void
      */
-    public function add(Page $page): void
+    public function add(Page $page)
     {
         if (!$page->getId()) {
             throw new \InvalidArgumentException('Cannot add non-persisted page to identity map');
@@ -40,7 +40,7 @@ class IdentityMap
      * @param int $id
      * @return Page|null
      */
-    public function get(int $id): ?Page
+    public function get(int $id)
     {
         if (array_key_exists($id, $this->pages)) {
             return $this->pages[$id];
@@ -55,7 +55,7 @@ class IdentityMap
      * @param int $id
      * @return void
      */
-    public function remove(int $id): void
+    public function remove(int $id)
     {
         unset($this->pages[$id]);
     }
@@ -65,7 +65,7 @@ class IdentityMap
      *
      * @return void
      */
-    public function clear(): void
+    public function clear()
     {
         $this->pages = [];
     }

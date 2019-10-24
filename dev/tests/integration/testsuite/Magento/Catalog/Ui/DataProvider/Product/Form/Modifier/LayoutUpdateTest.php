@@ -93,7 +93,7 @@ class LayoutUpdateTest extends TestCase
      * @return void
      * @throws \Throwable
      */
-    public function testModifyData(): void
+    public function testModifyData()
     {
         $product = $this->repo->get('simple');
         $this->locator->method('getProduct')->willReturn($product);
@@ -139,7 +139,7 @@ class LayoutUpdateTest extends TestCase
      * @throws \Throwable
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testEntitySpecificData(): void
+    public function testEntitySpecificData()
     {
         //Testing a category without layout xml
         $product = $this->repo->get('simple');

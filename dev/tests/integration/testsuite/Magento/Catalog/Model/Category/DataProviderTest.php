@@ -95,7 +95,7 @@ class DataProviderTest extends TestCase
      *
      * @return void
      */
-    public function testOldCustomLayoutInvisible(): void
+    public function testOldCustomLayoutInvisible()
     {
         //Testing a category without layout xml
         /** @var Category $category */
@@ -122,7 +122,7 @@ class DataProviderTest extends TestCase
      *
      * @return void
      */
-    public function testCustomLayoutFileAttribute(): void
+    public function testCustomLayoutFileAttribute()
     {
         //File has value
         /** @var Category $category */
@@ -174,7 +174,7 @@ class DataProviderTest extends TestCase
      *
      * @return void
      */
-    public function testCustomLayoutMeta(): void
+    public function testCustomLayoutMeta()
     {
         //Testing a category without layout xml
         /** @var Category $category */

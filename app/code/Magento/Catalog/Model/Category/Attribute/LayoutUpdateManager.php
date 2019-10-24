@@ -96,7 +96,7 @@ class LayoutUpdateManager
 
         return array_filter(
             array_map(
-                function (string $handle) use ($category) : ?string {
+                function (string $handle) use ($category) {
                     preg_match(
                         '/^catalog\_category\_view\_selectable\_' .$category->getId() .'\_([a-z0-9]+)/i',
                         $handle,
@@ -140,7 +140,7 @@ class LayoutUpdateManager
      * @param DataObject $intoSettings
      * @return void
      */
-    public function extractCustomSettings(CategoryInterface $category, DataObject $intoSettings): void
+    public function extractCustomSettings(CategoryInterface $category, DataObject $intoSettings)
     {
         if ($category->getId() && $value = $this->extractAttributeValue($category)) {
             $handles = $intoSettings->getPageLayoutHandles() ?? [];

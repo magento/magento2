@@ -48,7 +48,7 @@ class RecurringData implements InstallDataInterface
      * @param ModuleDataSetupInterface $setup
      * @return void
      */
-    private function addCustomLayoutFileAttributes(ModuleDataSetupInterface $setup): void
+    private function addCustomLayoutFileAttributes(ModuleDataSetupInterface $setup)
     {
         /** @var CategorySetup $eavSetup */
         $eavSetup = $this->categorySetupFactory->create(['setup' => $setup]);

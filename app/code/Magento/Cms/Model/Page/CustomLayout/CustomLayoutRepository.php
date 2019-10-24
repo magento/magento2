@@ -103,7 +103,7 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
      * @throws \InvalidArgumentException When invalid file was selected.
      * @throws NoSuchEntityException
      */
-    private function saveLayout(int $pageId, ?string $layoutFile): void
+    private function saveLayout(int $pageId, $layoutFile)
     {
         $page = $this->findPage($pageId);
         if ($layoutFile !== null && !$this->isLayoutValidFor($page, $layoutFile)) {
@@ -121,7 +121,7 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function save(CustomLayoutSelectedInterface $layout): void
+    public function save(CustomLayoutSelectedInterface $layout)
     {
         $this->saveLayout($layout->getPageId(), $layout->getLayoutFileId());
     }
@@ -133,7 +133,7 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
      * @return void
      * @throws LocalizedException
      */
-    public function validateLayoutSelectedFor(PageModel $page): void
+    public function validateLayoutSelectedFor(PageModel $page)
     {
         $layoutFile = $page->getData('layout_update_selected');
         if ($layoutFile && (!$page->getId() || !$this->isLayoutValidFor($page, $layoutFile))) {
@@ -144,7 +144,7 @@ class CustomLayoutRepository implements CustomLayoutRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function deleteFor(int $pageId): void
+    public function deleteFor(int $pageId)
     {
         $this->saveLayout($pageId, null);
     }

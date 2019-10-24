@@ -77,7 +77,7 @@ class CustomLayoutRepositoryTest extends TestCase
      * @magentoDataFixture Magento/Cms/_files/pages.php
      * @return void
      */
-    public function testCustomLayout(): void
+    public function testCustomLayout()
     {
         $page = $this->createPage('page100');
         $pageId = (int)$page->getId();
@@ -119,7 +119,7 @@ class CustomLayoutRepositoryTest extends TestCase
      * @magentoDataFixture Magento/Cms/_files/pages.php
      * @return void
      */
-    public function testSaved(): void
+    public function testSaved()
     {
         $page = $this->createPage('page100');
         $this->fakeManager->fakeAvailableFiles((int)$page->getId(), ['select1', 'select2']);

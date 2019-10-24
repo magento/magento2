@@ -32,5 +32,5 @@ interface CustomLayoutManagerInterface
      * @param CustomLayoutSelectedInterface $layoutSelected
      * @return void
      */
-    public function applyUpdate(View $layout, CustomLayoutSelectedInterface $layoutSelected): void;
+    public function applyUpdate(View $layout, CustomLayoutSelectedInterface $layoutSelected);
 }

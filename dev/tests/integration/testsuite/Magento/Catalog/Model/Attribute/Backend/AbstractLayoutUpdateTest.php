@@ -44,7 +44,7 @@ class AbstractLayoutUpdateTest extends TestCase
      *
      * @return void
      */
-    private function recreateCategory(): void
+    private function recreateCategory()
     {
         $this->category = $this->categoryFactory->create();
         $this->category->load(2);
@@ -67,7 +67,7 @@ class AbstractLayoutUpdateTest extends TestCase
      * @return void
      * @throws \Throwable
      */
-    public function testDependsOnNewUpdate(): void
+    public function testDependsOnNewUpdate()
     {
         //New selected file value is set
         $this->layoutManager->setCategoryFakeFiles(2, ['new']);

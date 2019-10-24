@@ -29,7 +29,7 @@ class CustomLayoutManager extends \Magento\Cms\Model\Page\CustomLayout\CustomLay
      * @param string[]|null $files
      * @return void
      */
-    public function fakeAvailableFiles(int $forPageId, ?array $files): void
+    public function fakeAvailableFiles(int $forPageId, $files)
     {
         if ($files === null) {
             unset($this->files[$forPageId]);

@@ -83,7 +83,7 @@ class CustomLayoutManagerTest extends TestCase
      * @throws \Throwable
      * @return void
      */
-    public function testCustomLayoutUpdate(): void
+    public function testCustomLayoutUpdate()
     {
         /** @var Page $page */
         $page = $this->pageFactory->create(['customLayoutRepository' => $this->repo]);

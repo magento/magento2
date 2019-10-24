@@ -27,7 +27,7 @@ interface CustomLayoutRepositoryInterface
      * @param CustomLayoutSelectedInterface $layout
      * @return void
      */
-    public function save(CustomLayoutSelectedInterface $layout): void;
+    public function save(CustomLayoutSelectedInterface $layout);
 
     /**
      * Do not use custom layout update when rendering the page.
@@ -37,7 +37,7 @@ interface CustomLayoutRepositoryInterface
      * @param int $pageId
      * @return void
      */
-    public function deleteFor(int $pageId): void;
+    public function deleteFor(int $pageId);
 
     /**
      * Find custom layout settings for a page.

@@ -252,7 +252,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param string|null $token
      * @return array
      */
-    protected function createCategory(array $category, ?string $token = null)
+    protected function createCategory(array $category, $token = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -302,7 +302,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param string|null $token
      * @return array
      */
-    protected function updateCategory($id, $data, ?string $token = null)
+    protected function updateCategory($id, $data, $token = null)
     {
         $serviceInfo =
             [
@@ -336,7 +336,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param string[] $resources
      * @return void
      */
-    private function updateRoleResources(string $roleName, array $resources): void
+    private function updateRoleResources(string $roleName, array $resources)
     {
         /** @var Role $role */
         $role = $this->roleFactory->create();
@@ -372,7 +372,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @throws \Throwable
      * @return void
      */
-    public function testSaveDesign(): void
+    public function testSaveDesign()
     {
         //Updating our admin user's role to allow saving categories but not their design settings.
         $roleName = 'test_custom_role';

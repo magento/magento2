@@ -674,7 +674,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @return void
      * @throws \Throwable
      */
-    public function testSaveDesignWithDefaults(): void
+    public function testSaveDesignWithDefaults()
     {
         /** @var $store \Magento\Store\Model\Store */
         $store = Bootstrap::getObjectManager()->create(Store::class);
@@ -736,7 +736,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @throws \Throwable
      * @return void
      */
-    public function testSaveCustomLayout(): void
+    public function testSaveCustomLayout()
     {
         $file = 'test_file';
         /** @var $store \Magento\Store\Model\Store */

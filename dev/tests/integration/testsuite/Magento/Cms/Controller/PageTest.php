@@ -76,7 +76,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
      * @throws \Throwable
      * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
      */
-    public function testCustomHandles(): void
+    public function testCustomHandles()
     {
         /** @var PageRepositoryInterface $repo */
         $repo = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class);

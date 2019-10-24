@@ -103,7 +103,7 @@ class Customlayoutupdate extends AbstractBackend
      * @param string|null $value
      * @return void
      */
-    private function putValue(AbstractModel $object, ?string $value): void
+    private function putValue(AbstractModel $object, $value)
     {
         $attributeCode = $this->getAttribute()->getName();
         if ($object->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {

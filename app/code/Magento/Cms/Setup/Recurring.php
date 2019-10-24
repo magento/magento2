@@ -32,7 +32,7 @@ class Recurring implements InstallSchemaInterface
      * @param SchemaSetupInterface $setup
      * @return void
      */
-    private function addLayoutSelected(SchemaSetupInterface $setup): void
+    private function addLayoutSelected(SchemaSetupInterface $setup)
     {
         $table = $setup->getTable('cms_page');
         $connection = $setup->getConnection();

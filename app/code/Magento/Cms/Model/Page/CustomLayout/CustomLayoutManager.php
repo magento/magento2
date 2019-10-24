@@ -119,7 +119,7 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
 
         return array_filter(
             array_map(
-                function (string $handle) use ($identifier) : ?string {
+                function (string $handle) use ($identifier) {
                     preg_match(
                         '/^cms\_page\_view\_selectable\_' .preg_quote($identifier) .'\_([a-z0-9]+)/i',
                         $handle,
@@ -139,7 +139,7 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
     /**
      * @inheritDoc
      */
-    public function applyUpdate(PageLayout $layout, CustomLayoutSelectedInterface $layoutSelected): void
+    public function applyUpdate(PageLayout $layout, CustomLayoutSelectedInterface $layoutSelected)
     {
         $page = $this->identityMap->get($layoutSelected->getPageId());
         if (!$page) {

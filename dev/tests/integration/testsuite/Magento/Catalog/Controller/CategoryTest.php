@@ -135,7 +135,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      * @return void
      */
-    public function testViewWithCustomUpdate(): void
+    public function testViewWithCustomUpdate()
     {
         //Setting a fake file for the category.
         $file = 'test-file';

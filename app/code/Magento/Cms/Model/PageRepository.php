@@ -99,7 +99,7 @@ class PageRepository implements PageRepositoryInterface
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
         CollectionProcessorInterface $collectionProcessor = null,
-        ?IdentityMap $identityMap = null
+        IdentityMap $identityMap = null
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;

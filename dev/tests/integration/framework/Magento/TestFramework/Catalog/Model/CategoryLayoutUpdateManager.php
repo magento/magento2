@@ -27,7 +27,7 @@ class CategoryLayoutUpdateManager extends LayoutUpdateManager
      * @param int $forCategoryId
      * @param string[]|null $files Pass null to reset.
      */
-    public function setCategoryFakeFiles(int $forCategoryId, ?array $files): void
+    public function setCategoryFakeFiles(int $forCategoryId, $files)
     {
         if ($files === null) {
             unset($this->fakeFiles[$forCategoryId]);

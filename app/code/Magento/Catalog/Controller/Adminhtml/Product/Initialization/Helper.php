@@ -131,7 +131,7 @@ class Helper
         ProductRepositoryInterface $productRepository = null,
         LinkTypeProvider $linkTypeProvider = null,
         AttributeFilter $attributeFilter = null,
-        ?ProductAuthorization $productAuthorization = null
+        ProductAuthorization $productAuthorization = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;

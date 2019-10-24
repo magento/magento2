@@ -17,9 +17,9 @@ use Magento\Catalog\Model\AbstractModel;
  */
 abstract class AbstractLayoutUpdate extends AbstractBackend
 {
-    public const VALUE_USE_UPDATE_XML = '__existing__';
+    const VALUE_USE_UPDATE_XML = '__existing__';
 
-    public const VALUE_NO_UPDATE = '__no_update__';
+    const VALUE_NO_UPDATE = '__no_update__';
 
     /**
      * Extract attribute value.
@@ -49,7 +49,7 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
      * @param AbstractModel $model
      * @return string|null
      */
-    private function prepareValue(AbstractModel $model): ?string
+    private function prepareValue(AbstractModel $model)
     {
         $value = $this->extractAttributeValue($model);
         if (!is_string($value)) {
@@ -74,7 +74,7 @@ abstract class AbstractLayoutUpdate extends AbstractBackend
      * @param string|null $attrCode
      * @return void
      */
-    private function setAttributeValue(?string $value, AbstractModel $forObject, ?string $attrCode = null): void
+    private function setAttributeValue($value, AbstractModel $forObject, $attrCode = null)
     {
         $attrCode = $attrCode ?? $this->getAttribute()->getAttributeCode();
         if ($forObject->hasData(AbstractModel::CUSTOM_ATTRIBUTES)) {

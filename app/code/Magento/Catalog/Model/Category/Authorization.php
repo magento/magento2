@@ -80,7 +80,7 @@ class Authorization
      * @param array|null $oldCategory
      * @return mixed[]
      */
-    private function fetchOldValue(AttributeInterface $attribute, ?array $oldCategory): array
+    private function fetchOldValue(AttributeInterface $attribute, $oldCategory): array
     {
         $oldValues = [null];
         $attrCode = $attribute->getAttributeCode();
@@ -105,7 +105,7 @@ class Authorization
      * @param array|null $oldCategory
      * @return bool
      */
-    private function hasChanges(CategoryModel $category, ?array $oldCategory): bool
+    private function hasChanges(CategoryModel $category, $oldCategory): bool
     {
         foreach ($category->getDesignAttributes() as $designAttribute) {
             $oldValues = $this->fetchOldValue($designAttribute, $oldCategory);
@@ -132,7 +132,7 @@ class Authorization
      * @param CategoryInterface|CategoryModel $category
      * @return void
      */
-    public function authorizeSavingOf(CategoryInterface $category): void
+    public function authorizeSavingOf(CategoryInterface $category)
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_category_design')) {
             $oldData = null;

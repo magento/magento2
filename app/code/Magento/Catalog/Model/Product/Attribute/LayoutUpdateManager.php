@@ -108,7 +108,7 @@ class LayoutUpdateManager
 
         return array_filter(
             array_map(
-                function (string $handle) use ($identifier) : ?string {
+                function (string $handle) use ($identifier) {
                     preg_match(
                         '/^catalog\_product\_view\_selectable\_' .preg_quote($identifier) .'\_([a-z0-9]+)/i',
                         $handle,
@@ -152,7 +152,7 @@ class LayoutUpdateManager
      * @param DataObject $intoSettings
      * @return void
      */
-    public function extractCustomSettings(ProductInterface $product, DataObject $intoSettings): void
+    public function extractCustomSettings(ProductInterface $product, DataObject $intoSettings)
     {
         if ($product->getSku() && $value = $this->extractAttributeValue($product)) {
             $handles = $intoSettings->getPageLayoutHandles() ?? [];

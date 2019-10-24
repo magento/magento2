@@ -117,7 +117,7 @@ class PageDesignTest extends AbstractBackendController
      * @magentoDbIsolation disabled
      * @return void
      */
-    public function testSaveDesign(): void
+    public function testSaveDesign()
     {
         //Expected list of sessions messages collected throughout the controller calls.
         $sessionMessages = ['You are not allowed to change CMS pages design settings'];
@@ -179,7 +179,7 @@ class PageDesignTest extends AbstractBackendController
      * @throws \Throwable
      * @return void
      */
-    public function testSaveLayoutXml(): void
+    public function testSaveLayoutXml()
     {
         $page = $this->findPage('test_custom_layout_page_1');
         $requestData = [

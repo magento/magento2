@@ -78,7 +78,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ?CustomLayoutRepository $customLayoutRepository = null
+        CustomLayoutRepository $customLayoutRepository = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->customLayoutRepository = $customLayoutRepository
@@ -569,7 +569,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * @return void
      * @throws LocalizedException
      */
-    private function validateNewIdentifier(): void
+    private function validateNewIdentifier()
     {
         $originalIdentifier = $this->getOrigData('identifier');
         $currentIdentifier = $this->getIdentifier();

@@ -59,7 +59,7 @@ class Authorization
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function hasPageChanged(PageInterface $page, ?PageInterface $oldPage): bool
+    private function hasPageChanged(PageInterface $page, $oldPage): bool
     {
         if (!$oldPage) {
             //Finding default page layout value.
@@ -111,7 +111,7 @@ class Authorization
      * @throws AuthorizationException
      * @throws \Magento\Framework\Exception\LocalizedException When it is impossible to perform authorization.
      */
-    public function authorizeFor(PageInterface $page): void
+    public function authorizeFor(PageInterface $page)
     {
         //Validate design changes.
         if (!$this->authorization->isAllowed('Magento_Cms::save_design')) {

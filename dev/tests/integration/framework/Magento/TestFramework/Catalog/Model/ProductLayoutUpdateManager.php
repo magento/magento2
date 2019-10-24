@@ -27,7 +27,7 @@ class ProductLayoutUpdateManager extends LayoutUpdateManager
      * @param int $forProductId
      * @param string[]|null $files Pass null to reset.
      */
-    public function setFakeFiles(int $forProductId, ?array $files): void
+    public function setFakeFiles(int $forProductId, $files)
     {
         if ($files === null) {
             unset($this->fakeFiles[$forProductId]);

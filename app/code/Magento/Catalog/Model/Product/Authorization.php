@@ -80,7 +80,7 @@ class Authorization
      * @param array|null $oldProduct
      * @return array
      */
-    private function fetchOldValues(AttributeInterface $attribute, ?array $oldProduct): array
+    private function fetchOldValues(AttributeInterface $attribute, $oldProduct): array
     {
         $attrCode = $attribute->getAttributeCode();
         if ($oldProduct) {
@@ -104,7 +104,7 @@ class Authorization
      * @param array|null $oldProduct
      * @return bool
      */
-    private function hasProductChanged(ProductModel $product, ?array $oldProduct = null): bool
+    private function hasProductChanged(ProductModel $product, $oldProduct = null): bool
     {
         $designAttributes = [
             'custom_design',
@@ -145,7 +145,7 @@ class Authorization
      * @param ProductInterface|ProductModel $product
      * @return void
      */
-    public function authorizeSavingOf(ProductInterface $product): void
+    public function authorizeSavingOf(ProductInterface $product)
     {
         if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
             $oldData = null;

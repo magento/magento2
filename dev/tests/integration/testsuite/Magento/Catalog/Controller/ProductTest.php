@@ -225,7 +225,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
      * @return void
      */
-    public function testViewWithCustomUpdate(): void
+    public function testViewWithCustomUpdate()
     {
         //Setting a fake file for the product.
         $file = 'test-file';

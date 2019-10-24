@@ -94,7 +94,7 @@ class DataProviderTest extends TestCase
      * @throws \Throwable
      * @return void
      */
-    public function testCustomLayoutData(): void
+    public function testCustomLayoutData()
     {
         $data = $this->provider->getData();
         $page1Data = null;
@@ -123,7 +123,7 @@ class DataProviderTest extends TestCase
      * @throws \Throwable
      * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
      */
-    public function testCustomLayoutMeta(): void
+    public function testCustomLayoutMeta()
     {
         //Testing a page without layout xml
         $page = $this->findPage('test_custom_layout_page_3');

@@ -40,7 +40,7 @@ class CustomlayoutupdateTest extends TestCase
      *
      * @return void
      */
-    private function recreateCategory(): void
+    private function recreateCategory()
     {
         $this->category = $this->categoryFactory->create();
         $this->category->load(2);
@@ -63,7 +63,7 @@ class CustomlayoutupdateTest extends TestCase
      * @throws \Throwable
      * @magentoDbIsolation enabled
      */
-    public function testImmutable(): void
+    public function testImmutable()
     {
         //Value is empty
         $this->category->setCustomAttribute('custom_layout_update', false);
