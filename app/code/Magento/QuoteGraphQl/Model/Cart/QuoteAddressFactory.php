@@ -11,6 +11,7 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -58,7 +59,6 @@ class QuoteAddressFactory
         $this->getCustomerAddress = $getCustomerAddress;
         $this->addressHelper = $addressHelper;
         $this->countryInformationAcquirer = $countryInformationAcquirer;
-        $this->countryInformationAcquirer = $countryInformationAcquirer;
     }
 
     /**
@@ -78,7 +78,11 @@ class QuoteAddressFactory
         }
 
         if ($addressInput['country_id'] && isset($addressInput['region'])) {
-            $countryInformation = $this->countryInformationAcquirer->getCountryInfo($addressInput['country_id']);
+            try {
+                $countryInformation = $this->countryInformationAcquirer->getCountryInfo($addressInput['country_id']);
+            } catch (NoSuchEntityException $e) {
+                throw new GraphQlInputException(__('The country isn\'t available.'));
+            }
             $availableRegions = $countryInformation->getAvailableRegions();
             if (null !== $availableRegions) {
                 $addressInput['region_code'] = $addressInput['region'];
