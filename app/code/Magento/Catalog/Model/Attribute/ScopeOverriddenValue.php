@@ -81,7 +81,7 @@ class ScopeOverriddenValue
         if ((int)$storeId === Store::DEFAULT_STORE_ID) {
             return false;
         }
-        if ($this->attributesValues === null) {
+        if (!isset($this->attributesValues[$storeId])) {
             $this->initAttributeValues($entityType, $entity, (int)$storeId);
         }
 
@@ -110,6 +110,8 @@ class ScopeOverriddenValue
     }
 
     /**
+     * Init attribute values.
+     *
      * @param string $entityType
      * @param \Magento\Catalog\Model\AbstractModel $entity
      * @param int $storeId
@@ -158,6 +160,8 @@ class ScopeOverriddenValue
     }
 
     /**
+     * Returns entity attributes.
+     *
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      */

@@ -66,8 +66,6 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return ['_subject', '_isShared'];
     }
 
@@ -81,8 +79,6 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     }
 
@@ -112,7 +108,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function merge(array $config)
     {
@@ -120,7 +116,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function get($path = null, $default = null)
     {
@@ -128,7 +124,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function reset()
     {

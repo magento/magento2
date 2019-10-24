@@ -3,16 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Adminhtml system template preview block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Email\Block\Adminhtml\Template;
 
 /**
- * Template Preview Block
+ * Email template preview block.
  *
  * @api
  * @since 100.0.2
@@ -55,22 +51,23 @@ class Preview extends \Magento\Backend\Block\Widget
      * Prepare html output
      *
      * @return string
+     * @throws \Exception
      */
     protected function _toHtml()
     {
+        $request = $this->getRequest();
+
         $storeId = $this->getAnyStoreView()->getId();
         /** @var $template \Magento\Email\Model\Template */
         $template = $this->_emailFactory->create();
 
-        if ($id = (int)$this->getRequest()->getParam('id')) {
+        if ($id = (int)$request->getParam('id')) {
             $template->load($id);
         } else {
-            $template->setTemplateType($this->getRequest()->getParam('type'));
-            $template->setTemplateText($this->getRequest()->getParam('text'));
-            $template->setTemplateStyles($this->getRequest()->getParam('styles'));
+            $template->setTemplateType($request->getParam('type'));
+            $template->setTemplateText($request->getParam('text'));
+            $template->setTemplateStyles($request->getParam('styles'));
         }
-
-        $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));
 
         \Magento\Framework\Profiler::start($this->profilerName);
 
@@ -80,6 +77,7 @@ class Preview extends \Magento\Backend\Block\Widget
             [$template, 'getProcessedTemplate']
         );
         $template->revertDesign();
+        $templateProcessed = $this->_maliciousCode->filter($templateProcessed);
 
         if ($template->isPlain()) {
             $templateProcessed = "<pre>" . $this->escapeHtml($templateProcessed) . "</pre>";

@@ -29,6 +29,9 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteGroupedProduct">
+                <argument name="sku" value="{{GroupedProduct.sku}}"/>
+            </actionGroup>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>

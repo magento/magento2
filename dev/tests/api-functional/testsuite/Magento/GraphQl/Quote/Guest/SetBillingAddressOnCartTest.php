@@ -52,7 +52,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -110,7 +109,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
          }
          use_for_shipping: true
       }
@@ -186,7 +184,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -263,7 +260,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -391,7 +387,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
         use_for_shipping: true
       }
@@ -437,7 +432,6 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-          save_in_address_book: false
         }
       }
     }
@@ -453,6 +447,63 @@ QUERY;
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressWithLowerCaseCountry()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "test region"
+          postcode: "887766"
+          country_code: "us"
+          telephone: "88776655"
+        }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        self::assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        $this->assertNewAddressFields($billingAddressResponse);
     }
 
     /**

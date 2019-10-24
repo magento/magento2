@@ -52,7 +52,7 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <!--Clean up category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
          <!--Create a configurable product with long name and sku-->
@@ -86,6 +86,9 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="seeChildProductSku1"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductSku2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
          <!--Assert storefront category list page-->
         <amOnPage url="/" stepKey="amOnStorefront"/>

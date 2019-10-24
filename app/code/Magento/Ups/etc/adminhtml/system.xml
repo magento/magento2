@@ -56,9 +56,11 @@
                 </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Gateway URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="gateway_xml_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Gateway XML URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="handling_type" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Calculate Handling Fee</label>
@@ -97,12 +99,14 @@
                 </field>
                 <field id="sort_order" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
+                    <validate>validate-number validate-zero-or-greater</validate>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
                 <field id="tracking_xml_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Tracking XML URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>UPS Type</label>

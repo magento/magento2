@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -79,7 +79,9 @@ define([
                     $(element).is('textarea') ||
                     $('#' + element.id + ' option:selected').length
                 ) {
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    if ($(element).data('selector') || $(element).attr('name')) {
+                        dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    }
 
                     return;
                 }

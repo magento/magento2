@@ -73,7 +73,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
         self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('order_number', $response['setPaymentMethodAndPlaceOrder']['order']);
     }
 
     /**
@@ -111,7 +111,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
 
         self::assertArrayHasKey('setPaymentMethodAndPlaceOrder', $response);
         self::assertArrayHasKey('order', $response['setPaymentMethodAndPlaceOrder']);
-        self::assertArrayHasKey('order_id', $response['setPaymentMethodAndPlaceOrder']['order']);
+        self::assertArrayHasKey('order_number', $response['setPaymentMethodAndPlaceOrder']['order']);
     }
 
     /**
@@ -148,8 +148,14 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -226,7 +232,7 @@ mutation {
       }
   }) {    
     order {
-      order_id
+      order_number
     }
   }
 }

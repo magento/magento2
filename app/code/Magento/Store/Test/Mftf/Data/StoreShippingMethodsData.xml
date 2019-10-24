@@ -35,6 +35,13 @@
         <data key="value">90</data>
     </entity>
 
+    <entity name="MinimumOrderAmount100" type="minimum_order_amount">
+        <requiredEntity type="free_shipping_subtotal">FreeShippingSubtotal100</requiredEntity>
+    </entity>
+    <entity name="FreeShippingSubtotal100" type="free_shipping_subtotal">
+        <data key="value">100</data>
+    </entity>
+
     <entity name="DefaultMinimumOrderAmount" type="minimum_order_amount">
         <requiredEntity type="free_shipping_subtotal">DefaultPrice</requiredEntity>
     </entity>

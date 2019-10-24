@@ -64,11 +64,10 @@ class SetAuthorizeNetPaymentMethodOnCartTest extends TestCase
       cart_id: "$maskedQuoteId"
       payment_method: {
           code: "$methodCode"
-          additional_data:
-         {authorizenet_acceptjs: 
+          authorizenet_acceptjs: 
             {opaque_data_descriptor: "COMMON.ACCEPT.INAPP.PAYMENT",
              opaque_data_value: "abx",
-             cc_last_4: 1111}}
+             cc_last_4: 1111}
       }
   }) {    
     cart {

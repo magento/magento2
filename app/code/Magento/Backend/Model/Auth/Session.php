@@ -192,6 +192,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
+                    return false;
                 }
             }
         }
@@ -324,6 +325,8 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 $user = $this->userFactory->create();
                 $this->userHydrator->hydrate($user, $userData);
                 $this->user = $user;
+            } elseif ($user = parent::getUser()) {
+                $this->setUser($user);
             }
         }
 
@@ -354,7 +357,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function hasUser()
     {
-        return $this->user || $this->hasUserData();
+        return (bool)$this->getUser();
     }
 
     /**
@@ -365,6 +368,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function unsUser()
     {
         $this->user = null;
+        parent::unsUser();
         return $this->unsUserData();
     }
 
@@ -382,6 +386,8 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 $acl = $this->aclFactory->create();
                 $this->aclHydrator->hydrate($acl, $aclData);
                 $this->acl = $acl;
+            } elseif ($acl = parent::getAcl()) {
+                $this->setAcl($acl);
             }
         }
 
@@ -412,7 +418,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function hasAcl()
     {
-        return $this->acl || $this->hasUserAclData();
+        return (bool)$this->getAcl();
     }
 
     /**
@@ -423,6 +429,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function unsAcl()
     {
         $this->acl = null;
+        parent::unsAcl();
         return $this->unsUserAclData();
     }
 

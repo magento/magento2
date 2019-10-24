@@ -28,7 +28,8 @@ input CustomerAddressInput {
     city: String @doc(description: "The city or town")
     region: CustomerAddressRegionInput @doc(description: "An object containing the region name, region code, and region ID")
     postcode: String @doc(description: "The customer's ZIP or postal code")
-    country_id: CountryCodeEnum @doc(description: "The customer's country")
+    country_id: CountryCodeEnum @doc(description: "Deprecated: use `country_code` instead.")
+    country_code: CountryCodeEnum @doc(description: "The customer's country")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
     default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
     fax: String @doc(description: "The fax number")
@@ -36,13 +37,13 @@ input CustomerAddressInput {
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Address custom attributes")
+    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
 }
 
 input CustomerAddressRegionInput @doc(description: "CustomerAddressRegionInput defines the customer's state or province") {
     region_code: String @doc(description: "The address region code")
     region: String @doc(description: "The state or province name")
-    region_id: Int @doc(description: "Uniquely identifies the region")
+    region_id: Int @doc(description: "region_id is deprecated. Region ID is excessive on storefront and region code should suffice for all scenarios")
 }
 
 input CustomerAddressAttributeInput {
@@ -60,10 +61,11 @@ input CustomerInput {
     middlename: String @doc(description: "The customer's middle name")
     lastname: String @doc(description: "The customer's family name")
     suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    email: String @doc(description: "The customer's email address. Required")
-    dob: String @doc(description: "The customer's date of birth")
+    email: String! @doc(description: "The customer's email address. Required")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead")
+    date_of_birth: String @doc(description: "The customer's date of birth")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    gender: Int @doc(description: "The customer's gender(Male - 1, Female - 2)")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
     password: String @doc(description: "The customer's password")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
 }
@@ -78,7 +80,7 @@ type RevokeCustomerTokenOutput {
 
 type Customer @doc(description: "Customer defines the customer name and address and other details") {
     created_at: String @doc(description: "Timestamp indicating when the account was created")
-    group_id: Int @doc(description: "The group assigned to the user. Default values are 0 (Not logged in), 1 (General), 2 (Wholesale), and 3 (Retailer)")
+    group_id: Int @deprecated(reason: "Customer group should not be exposed in the storefront scenarios")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     firstname: String @doc(description: "The customer's first name")
     middlename: String @doc(description: "The customer's middle name")
@@ -87,20 +89,22 @@ type Customer @doc(description: "Customer defines the customer name and address 
     email: String @doc(description: "The customer's email address. Required")
     default_billing: String @doc(description: "The ID assigned to the billing address")
     default_shipping: String @doc(description: "The ID assigned to the shipping address")
-    dob: String @doc(description: "The customer's date of birth")
-    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
-    id: Int @doc(description: "The ID assigned to the customer")
+    dob: String @doc(description: "The customer's date of birth") @deprecated(reason: "Use `date_of_birth` instead")
+    date_of_birth: String @doc(description: "The customer's date of birth")
+    taxvat: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
+    id: Int @doc(description: "The ID assigned to the customer") @deprecated(reason: "id is not needed as part of Customer because on server side it can be identified based on customer token used for authentication. There is no need to know customer ID on the client side.")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
-    gender: Int @doc(description: "The customer's gender(Male - 1, Female - 2)")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
 }
 
 type CustomerAddress @doc(description: "CustomerAddress contains detailed information about a customer's billing and shipping addresses"){
     id: Int @doc(description: "The ID assigned to the address object")
-    customer_id: Int @doc(description: "The customer ID")
+    customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "customer_id is not needed as part of CustomerAddress, address ID (id) is unique identifier for the addresses.")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID")
-    region_id: Int @doc(description: "A number that uniquely identifies the state, province, or other area")
-    country_id: String @doc(description: "The customer's country")
+    region_id: Int @deprecated(reason: "Region ID is excessive on storefront and region code should suffice for all scenarios")
+    country_id: String @doc(description: "The customer's country") @deprecated(reason: "Use `country_code` instead.")
+    country_code: CountryCodeEnum @doc(description: "The customer's country")
     street: [String] @doc(description: "An array of strings that define the street number and name")
     company: String @doc(description: "The customer's company")
     telephone: String @doc(description: "The telephone number")
@@ -112,22 +116,22 @@ type CustomerAddress @doc(description: "CustomerAddress contains detailed inform
     middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III")
-    vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address")
     default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address")
-    custom_attributes: [CustomerAddressAttribute] @doc(description: "Address custom attributes")
+    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into container")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Address extension attributes")
 }
 
 type CustomerAddressRegion @doc(description: "CustomerAddressRegion defines the customer's state or province") {
     region_code: String @doc(description: "The address region code")
     region: String @doc(description: "The state or province name")
-    region_id: Int @doc(description: "Uniquely identifies the region")
+    region_id: Int @deprecated(reason: "Region ID is excessive on storefront and region code should suffice for all scenarios")
 }
 
 type CustomerAddressAttribute {
-     attribute_code: String  @doc(description: "Attribute code")
-     value: String  @doc(description: "Attribute value")
+     attribute_code: String @doc(description: "Attribute code")
+     value: String @doc(description: "Attribute value")
 }
 
 type IsEmailAvailableOutput {
@@ -185,8 +189,8 @@ enum CountryCodeEnum @doc(description: "The list of countries codes") {
     CC @doc(description: "Cocos (Keeling) Islands")
     CO @doc(description: "Colombia")
     KM @doc(description: "Comoros")
-    CG @doc(description: "Congo -Brazzaville")
-    CD @doc(description: "Congo - Kinshasa")
+    CG @doc(description: "Congo-Brazzaville")
+    CD @doc(description: "Congo-Kinshasa")
     CK @doc(description: "Cook Islands")
     CR @doc(description: "Costa Rica")
     CI @doc(description: "Côte d’Ivoire")
