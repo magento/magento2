@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "533ae73b9c552944f7ee209f0291b2d5",
+    "content-hash": "442cb063bf4e64cca09382ed4516dd7b",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -6683,21 +6683,22 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.5.1",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "774497746061e74ee18066554d0b2dcd2377eb74"
+                "reference": "e254e738b3a3fa2eceec9be0590c2aad0e689640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/774497746061e74ee18066554d0b2dcd2377eb74",
-                "reference": "774497746061e74ee18066554d0b2dcd2377eb74",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e254e738b3a3fa2eceec9be0590c2aad0e689640",
+                "reference": "e254e738b3a3fa2eceec9be0590c2aad0e689640",
                 "shasum": ""
             },
             "require": {
                 "allure-framework/allure-codeception": "~1.3.0",
                 "codeception/codeception": "~2.3.4 || ~2.4.0 ",
+                "composer/composer": "^1.4",
                 "consolidation/robo": "^1.0.0",
                 "csharpru/vault-php": "~3.5.3",
                 "csharpru/vault-php-guzzle6-transport": "^2.0",
@@ -6756,7 +6757,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-10-10T17:15:46+00:00"
+            "time": "2019-10-23T14:50:28+00:00"
         },
         {
             "name": "mikey179/vfsstream",
