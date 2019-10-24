@@ -40,6 +40,10 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
         if (isset($condition['fulltext']) && (string)$condition['fulltext'] !== '') {
             $this->searchCollection->addBackendSearchFilter($condition['fulltext']);
             $productIds = $this->searchCollection->load()->getAllIds();
+            if (empty($productIds)) {
+                //add dummy id to prevent returning full unfiltered collection
+                $productIds = -1;
+            }
             $collection->addIdFilter($productIds);
         }
     }

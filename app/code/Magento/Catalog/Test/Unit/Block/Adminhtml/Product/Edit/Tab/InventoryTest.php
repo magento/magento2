@@ -85,7 +85,7 @@ class InventoryTest extends \PHPUnit\Framework\TestCase
         $this->backordersMock = $this->createMock(\Magento\CatalogInventory\Model\Source\Backorders::class);
         $this->stockMock = $this->createMock(\Magento\CatalogInventory\Model\Source\Stock::class);
         $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->moduleManager = $this->createMock(\Magento\Framework\Module\ModuleManagerInterface::class);
+        $this->moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
             [],

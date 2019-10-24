@@ -40,7 +40,7 @@ abstract class AbstractElement implements StructureElementInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -50,15 +50,11 @@ abstract class AbstractElement implements StructureElementInterface
     private $elementVisibility;
 
     /**
-     * Construct.
-     *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      */
-    public function __construct(
-        StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager
-    ) {
+    public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
+    {
         $this->_storeManager = $storeManager;
         $this->moduleManager = $moduleManager;
     }
