@@ -62,5 +62,6 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             }
             throw $e;
         }
+        $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 }
