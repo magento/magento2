@@ -39,6 +39,7 @@ class HtmlDirectiveSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr)
     {
+        $this->usedVariables = [];
         if ($stackPtr !== 0) {
             return;
         }
