@@ -35,7 +35,6 @@
         <fillField userInput="{{adjustmentRefund}}" selector="{{AdminCreditMemoTotalSection.adjustmentRefund}}" stepKey="fillAdjustmentRefund"/>
         <fillField userInput="{{adjustmentFee}}" selector="{{AdminCreditMemoTotalSection.adjustmentFee}}" stepKey="fillAdjustmentFee"/>
         <checkOption selector="{{AdminCreditMemoTotalSection.emailCopy}}" stepKey="checkSendEmailCopy"/>
-        <conditionalClick selector="{{AdminCreditMemoTotalSection.updateTotals}}" dependentSelector="{{AdminCreditMemoTotalSection.disabledUpdateTotals}}" visible="false" stepKey="clickUpdateTotalsButton"/>
     </actionGroup>
     
     <!-- Open and fill CreditMemo refund with back to stock -->

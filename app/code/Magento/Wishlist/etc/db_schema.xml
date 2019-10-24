@@ -64,11 +64,11 @@
     </table>
     <table name="wishlist_item_option" resource="default" engine="innodb" comment="Wishlist Item Option Table">
         <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Option Id"/>
+                comment="Option ID"/>
         <column xsi:type="int" name="wishlist_item_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Wishlist Item Id"/>
+                comment="Wishlist Item ID"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Product Id"/>
+                comment="Product ID"/>
         <column xsi:type="varchar" name="code" nullable="false" length="255" comment="Code"/>
         <column xsi:type="text" name="value" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -76,6 +76,10 @@
         </constraint>
         <constraint xsi:type="foreign" referenceId="FK_A014B30B04B72DD0EAB3EECD779728D6" table="wishlist_item_option"
                     column="wishlist_item_id" referenceTable="wishlist_item" referenceColumn="wishlist_item_id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="WISHLIST_ITEM_OPTION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+                    table="wishlist_item_option"
+                    column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
     </table>
 </schema>

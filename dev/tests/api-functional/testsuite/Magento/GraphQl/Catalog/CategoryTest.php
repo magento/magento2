@@ -476,7 +476,7 @@ QUERY;
 {
   category(id: {$categoryId}) {
     name
-    products(sort: {sku: ASC}) {
+    products(sort: {name: DESC}) {
       total_count
       items {
         sku
@@ -493,9 +493,60 @@ QUERY;
                     'total_count' => 3,
                     'items' => [
                         ['sku' => '12345'],
-                        ['sku' => 'simple'],
-                        ['sku' => 'simple-4']
+                        ['sku' => 'simple-4'],
+                        ['sku' => 'simple']
                     ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testBreadCrumbs()
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->create(CategoryCollection::class);
+        $categoryCollection->addFieldToFilter('name', 'Category 1.1.1');
+        /** @var CategoryInterface $category */
+        $category = $categoryCollection->getFirstItem();
+        $categoryId = $category->getId();
+        $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+    name
+    breadcrumbs {
+      category_id
+      category_name
+      category_level
+      category_url_key
+      category_url_path
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = [
+            'category' => [
+                'name' => 'Category 1.1.1',
+                'breadcrumbs' => [
+                    [
+                        'category_id' => 3,
+                        'category_name' => "Category 1",
+                        'category_level' => 2,
+                        'category_url_key' => "category-1",
+                        'category_url_path' => "category-1"
+                    ],
+                    [
+                        'category_id' => 4,
+                        'category_name' => "Category 1.1",
+                        'category_level' => 3,
+                        'category_url_key' => "category-1-1",
+                        'category_url_path' => "category-1/category-1-1"
+                    ],
                 ]
             ]
         ];

@@ -67,6 +67,11 @@ class Delete extends ExportController implements HttpPostActionInterface
             }
             $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
             $path = $directory->getAbsolutePath() . 'export/' . $fileName;
+
+            if (!$directory->isFile($path)) {
+                throw new LocalizedException(__('Sorry, but the data is invalid or the file is not uploaded.'));
+            }
+
             $this->file->deleteFile($path);
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

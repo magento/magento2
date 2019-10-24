@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\View\Asset;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\View\Asset\Image;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContextInterface;
@@ -103,9 +104,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $filePath
      * @param array $miscParams
+     * @param string $readableParams
      * @dataProvider getPathDataProvider
      */
-    public function testGetPath($filePath, $miscParams)
+    public function testGetPath($filePath, $miscParams, $readableParams)
     {
         $imageModel = $this->objectManager->getObject(
             Image::class,
@@ -118,11 +120,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'miscParams' => $miscParams
             ]
         );
-        $miscParams['background'] = isset($miscParams['background']) ? implode(',', $miscParams['background']) : '';
         $absolutePath = '/var/www/html/magento2ce/pub/media/catalog/product';
-        $hashPath = md5(implode('_', $miscParams));
+        $hashPath = 'somehash';
         $this->context->method('getPath')->willReturn($absolutePath);
-        $this->encryptor->method('hash')->willReturn($hashPath);
+        $this->encryptor->expects(static::once())
+            ->method('hash')
+            ->with($readableParams, $this->anything())
+            ->willReturn($hashPath);
         static::assertEquals(
             $absolutePath . '/cache/'. $hashPath . $filePath,
             $imageModel->getPath()
@@ -132,9 +136,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $filePath
      * @param array $miscParams
+     * @param string $readableParams
      * @dataProvider getPathDataProvider
      */
-    public function testGetUrl($filePath, $miscParams)
+    public function testGetUrl($filePath, $miscParams, $readableParams)
     {
         $imageModel = $this->objectManager->getObject(
             Image::class,
@@ -147,11 +152,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                 'miscParams' => $miscParams
             ]
         );
-        $miscParams['background'] = isset($miscParams['background']) ? implode(',', $miscParams['background']) : '';
         $absolutePath = 'http://localhost/pub/media/catalog/product';
-        $hashPath = md5(implode('_', $miscParams));
+        $hashPath = 'somehash';
         $this->context->expects(static::once())->method('getBaseUrl')->willReturn($absolutePath);
-        $this->encryptor->expects(static::once())->method('hash')->willReturn($hashPath);
+        $this->encryptor->expects(static::once())
+            ->method('hash')
+            ->with($readableParams, $this->anything())
+            ->willReturn($hashPath);
         static::assertEquals(
             $absolutePath . '/cache/' . $hashPath . $filePath,
             $imageModel->getUrl()
@@ -166,7 +173,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 '/some_file.png',
-                [], //default value for miscParams
+                [], //default value for miscParams,
+                'h:empty_w:empty_q:empty_r:empty_nonproportional_noframe_notransparency_notconstrainonly_nobackground',
             ],
             [
                 '/some_file_2.png',
@@ -174,15 +182,32 @@ class ImageTest extends \PHPUnit\Framework\TestCase
                     'image_type' => 'thumbnail',
                     'image_height' => 75,
                     'image_width' => 75,
-                    'keep_aspect_ratio' => 'proportional',
-                    'keep_frame' => 'frame',
-                    'keep_transparency' => 'transparency',
-                    'constrain_only' => 'doconstrainonly',
+                    'keep_aspect_ratio' => true,
+                    'keep_frame' => true,
+                    'keep_transparency' => true,
+                    'constrain_only' => true,
                     'background' => [233,1,0],
                     'angle' => null,
                     'quality' => 80,
                 ],
-            ]
+                'h:75_w:75_proportional_frame_transparency_doconstrainonly_rgb233,1,0_r:empty_q:80',
+            ],
+            [
+                '/some_file_3.png',
+                [
+                    'image_type' => 'thumbnail',
+                    'image_height' => 75,
+                    'image_width' => 75,
+                    'keep_aspect_ratio' => false,
+                    'keep_frame' => false,
+                    'keep_transparency' => false,
+                    'constrain_only' => false,
+                    'background' => [233,1,0],
+                    'angle' => 90,
+                    'quality' => 80,
+                ],
+                'h:75_w:75_nonproportional_noframe_notransparency_notconstrainonly_rgb233,1,0_r:90_q:80',
+            ],
         ];
     }
 }
