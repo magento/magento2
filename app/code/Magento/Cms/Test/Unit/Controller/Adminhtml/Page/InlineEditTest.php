@@ -102,10 +102,6 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->with($postData[1])
             ->willReturnArgument(0);
-        $this->dataProcessor->expects($this->once())
-            ->method('validate')
-            ->with($postData[1])
-            ->willReturn(false);
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)
@@ -122,19 +118,23 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willReturn('1');
         $this->cmsPage->expects($this->atLeastOnce())
             ->method('getData')
-            ->willReturn([
-                'layout' => '1column',
-                'identifier' => 'test-identifier'
-            ]);
+            ->willReturn(
+                [
+                    'layout' => '1column',
+                    'identifier' => 'test-identifier'
+                ]
+            );
         $this->cmsPage->expects($this->once())
             ->method('setData')
-            ->with([
-                'layout' => '1column',
-                'title' => '404 Not Found',
-                'identifier' => 'no-route',
-                'custom_theme' => '1',
-                'custom_root_template' => '2'
-            ]);
+            ->with(
+                [
+                    'layout' => '1column',
+                    'title' => '404 Not Found',
+                    'identifier' => 'no-route',
+                    'custom_theme' => '1',
+                    'custom_root_template' => '2'
+                ]
+            );
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -149,13 +149,15 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('LocalizedException')));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Page ID: 1] Error message',
-                    '[Page ID: 1] LocalizedException'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        '[Page ID: 1] Error message',
+                        '[Page ID: 1] LocalizedException'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());
@@ -170,13 +172,15 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \RuntimeException(__('RuntimeException')));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Page ID: 1] Error message',
-                    '[Page ID: 1] RuntimeException'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        '[Page ID: 1] Error message',
+                        '[Page ID: 1] RuntimeException'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());
@@ -191,13 +195,15 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception(__('Exception')));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Page ID: 1] Error message',
-                    '[Page ID: 1] Something went wrong while saving the page.'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        '[Page ID: 1] Error message',
+                        '[Page ID: 1] Something went wrong while saving the page.'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());
@@ -218,12 +224,14 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             );
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    'Please correct the data sent.'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        'Please correct the data sent.'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());

@@ -145,7 +145,7 @@ class Item
     protected $_moduleList;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     private $_moduleManager;
 
@@ -163,7 +163,7 @@ class Item
      * @param \Magento\Backend\Model\MenuFactory $menuFactory
      * @param \Magento\Backend\Model\UrlInterface $urlModel
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -173,7 +173,7 @@ class Item
         \Magento\Backend\Model\MenuFactory $menuFactory,
         \Magento\Backend\Model\UrlInterface $urlModel,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         array $data = []
     ) {
         $this->_validator = $validator;
