@@ -85,7 +85,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
         $this->galleryResource = $this->objectManager->create(Gallery::class);
-        $this->productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->productResource = $this->objectManager->create(ProductResource::class);
         $this->config = $this->objectManager->get(Config::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
@@ -156,22 +156,18 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $imageRoles = ['image', 'small_image', 'thumbnail', 'swatch_image'];
         $product = $this->getProduct();
-        foreach ($roles as $role => $value) {
-            $product->setData($role, $value);
-        }
+        $product->addData($roles);
         $this->updateHandler->execute($product);
         $productsImageData = $this->productResource->getAttributeRawValue(
             $product->getId(),
             $imageRoles,
             $product->getStoreId()
         );
-        foreach ($roles as $role => $value) {
-            $this->assertEquals($value, $productsImageData[$role]);
-        }
+        $this->assertEquals($roles, $productsImageData);
     }
 
     /**
-     * Tests updating image roles during product save on non default store view..
+     * Tests updating image roles during product save on non default store view.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
@@ -185,9 +181,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
         $imageRoles = ['image', 'small_image', 'thumbnail', 'swatch_image'];
         $product = $this->getProduct($secondStoreId);
-        foreach ($roles as $role => $value) {
-            $product->setData($role, $value);
-        }
+        $product->addData($roles);
         $this->updateHandler->execute($product);
 
         $storeImages = $this->productResource->getAttributeRawValue(
@@ -195,9 +189,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
             $imageRoles,
             $secondStoreId
         );
-        foreach ($roles as $role => $value) {
-            $this->assertEquals($value, $storeImages[$role]);
-        }
+        $this->assertEquals($roles, $storeImages);
 
         $defaultImages = $this->productResource->getAttributeRawValue(
             $product->getId(),
@@ -335,12 +327,15 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $galleryAttributeId = $this->productResource->getAttribute('media_gallery')->getAttributeId();
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $galleryAttributeId);
         foreach ($productImages as $image) {
-            $this->assertEquals($storeImages[$image['file']]['label'], $image['label']);
-            $this->assertEquals($storeImages[$image['file']]['label_default'], $image['label_default']);
-            $this->assertEquals($storeImages[$image['file']]['disabled'], $image['disabled']);
-            $this->assertEquals($storeImages[$image['file']]['disabled_default'], $image['disabled_default']);
-            $this->assertEquals($storeImages[$image['file']]['position'], $image['position']);
-            $this->assertEquals($storeImages[$image['file']]['position_default'], $image['position_default']);
+            $imageToAssert = [
+                'label' => $image['label'],
+                'label_default' =>$image['label_default'],
+                'disabled' =>$image['disabled'],
+                'disabled_default' => $image['disabled_default'],
+                'position' => $image['position'],
+                'position_default' => $image['position_default'],
+            ];
+            $this->assertEquals($storeImages[$image['file']], $imageToAssert);
         }
     }
 
@@ -355,7 +350,6 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Returns current product.
      *
-     * @param array $data
      * @param int|null $storeId
      * @return ProductInterface|Product
      */
