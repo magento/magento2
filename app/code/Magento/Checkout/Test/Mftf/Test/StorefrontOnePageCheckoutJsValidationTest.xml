@@ -11,6 +11,7 @@
     <test name="StorefrontOnePageCheckoutJsValidationTest">
         <annotations>
             <features value="Checkout"/>
+            <stories value="Checkout"/>
             <title value="Js validation error messages must be absent for required fields after checkout start."/>
             <description value="Js validation error messages must be absent for required fields after checkout start."/>
             <severity value="MAJOR" />

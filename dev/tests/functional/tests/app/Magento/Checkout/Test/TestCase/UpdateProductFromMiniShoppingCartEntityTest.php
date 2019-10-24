@@ -12,6 +12,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -59,21 +60,31 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected $fixtureFactory;
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
      * Inject data.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
      * @param FixtureFactory $fixtureFactory
+     * @param EnvWhitelist $envWhitelist
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
-        FixtureFactory $fixtureFactory
+        FixtureFactory $fixtureFactory,
+        EnvWhitelist $envWhitelist
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->catalogProductView = $catalogProductView;
         $this->fixtureFactory = $fixtureFactory;
+        $this->envWhitelist = $envWhitelist;
     }
 
     /**
@@ -97,6 +108,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
         Customer $customer = null
     ) {
         // Preconditions:
+        $this->envWhitelist->addHost('example.com');
         if ($customer !== null) {
             $customer->persist();
         }
@@ -161,5 +173,15 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
             ['products' => [$product]]
         );
         $addToCartStep->run();
+    }
+
+    /**
+     * Clean data after running test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }
