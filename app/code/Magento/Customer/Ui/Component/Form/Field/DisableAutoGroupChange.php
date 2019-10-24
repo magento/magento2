@@ -29,7 +29,7 @@ class DisableAutoGroupChange extends \Magento\Ui\Component\Form\Field
      *
      * @var AddressHelper
      */
-    protected $addressHelper;
+    private $addressHelper;
 
     /**
      * Constructor
