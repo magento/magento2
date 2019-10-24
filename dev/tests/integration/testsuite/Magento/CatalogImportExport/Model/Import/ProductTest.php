@@ -99,7 +99,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             try {
                 $product = $productRepository->get($productSku, false, null, true);
                 $productRepository->delete($product);
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (NoSuchEntityException $e) {
                 // nothing to delete
             }
@@ -2531,6 +2531,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
     {
+        $this->loginAdminUserWithUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -2633,5 +2635,24 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var $productAfterImport \Magento\Catalog\Model\Product */
         $productAfterImport = $this->getProductBySku('simple_new');
         $this->assertNotEquals('/no/exists/image/magento_image.jpg', $productAfterImport->getData('image'));
+    }
+
+
+    /**
+     * Set the current admin session user based on a username
+     *
+     * @param string $username
+     */
+    private function loginAdminUserWithUsername(string $username)
+    {
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername($username);
+
+        /** @var $session \Magento\Backend\Model\Auth\Session */
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Auth\Session::class
+        );
+        $session->setUser($user);
     }
 }

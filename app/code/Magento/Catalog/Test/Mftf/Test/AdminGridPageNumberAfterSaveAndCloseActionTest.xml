@@ -25,9 +25,7 @@
             <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridToDefaultView"/>
             <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteProductIfTheyExist"/>
             <createData stepKey="category1" entity="SimpleSubCategory"/>
             <createData stepKey="product1" entity="SimpleProduct">
