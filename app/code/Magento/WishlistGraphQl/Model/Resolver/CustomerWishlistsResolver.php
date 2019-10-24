@@ -21,14 +21,14 @@ class CustomerWishlistsResolver implements ResolverInterface
     /**
      * @var CollectionFactory
      */
-    private $_wishlistCollectionFactory;
+    private $wishlistCollectionFactory;
 
     /**
      * @param CollectionFactory $wishlistCollectionFactory
      */
     public function __construct(CollectionFactory $wishlistCollectionFactory)
     {
-        $this->_wishlistCollectionFactory = $wishlistCollectionFactory;
+        $this->wishlistCollectionFactory = $wishlistCollectionFactory;
     }
 
     /**
@@ -43,9 +43,9 @@ class CustomerWishlistsResolver implements ResolverInterface
     ) {
         /* Guest checking */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-        $collection = $this->_wishlistCollectionFactory->create()->filterByCustomerId($context->getUserId());
+        $collection = $this->wishlistCollectionFactory->create()->filterByCustomerId($context->getUserId());
         $wishlistsData = [];
         if (0 === $collection->getSize()) {
             return $wishlistsData;
