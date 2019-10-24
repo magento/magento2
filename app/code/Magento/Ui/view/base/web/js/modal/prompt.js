@@ -22,6 +22,7 @@ define([
             modalClass: 'prompt',
             promptContentTmpl: promptContentTmpl,
             promptField: '[data-role="promptField"]',
+            formSelector: 'form',
             attributesForm: {},
             attributesField: {},
             value: '',
@@ -71,10 +72,15 @@ define([
          * Create widget.
          */
         _create: function () {
+            var modalContentElem;
+            
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
-            this.modal.find(this.options.modalContent).append(this.getFormTemplate());
+            modalContentElem = this.modal.find(this.options.modalContent).append(this.getFormTemplate());
+            if(this.options.formSelector) {
+                modalContentElem.find(this.options.formSelector).on('submit', _.bind(this.submitForm, this));
+            }
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
 
             if (this.options.validation) {
@@ -116,6 +122,15 @@ define([
             }));
 
             return formTemplate;
+        },
+
+        /**
+         * Handle submit of the form inside prompt
+         * @param event {Event} Event triggered by submit
+         */
+        submitForm: function (event) {
+            event.preventDefault();
+            this.closeModal(true);
         },
 
         /**
