@@ -1335,12 +1335,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $categoriesIn = [];
             $delProductId = [];
 
+            $productCategoriesData = [];
             foreach ($categoriesData as $delSku => $categories) {
                 $productId = $this->skuProcessor->getNewSku($delSku)['entity_id'];
                 $delProductId[] = $productId;
 
                 foreach (array_keys($categories) as $categoryId) {
                     $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 0];
+                    $productCategoriesData[$productId][] = $categoryId;
                 }
             }
             if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
@@ -1350,12 +1352,33 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
             }
             // Checking and removing categories from existing product
-            if ($this->existingProductIds && Import::BEHAVIOR_APPEND == $this->getBehavior()) {
-                $delProductId = array_intersect($this->existingProductIds, $delProductId);
-                $this->_connection->delete(
+            if (!empty($this->existingProductIds) && Import::BEHAVIOR_APPEND == $this->getBehavior()) {
+                $select = $this->_connection->select()->from(
                     $tableName,
-                    $this->_connection->quoteInto('product_id IN (?)', $delProductId)
+                    ['entity_id', 'product_id', 'category_id']
+                )->where(
+                    $this->_connection->quoteInto('product_id IN (?)', $this->existingProductIds)
                 );
+                $categoriesData = $this->_connection->fetchAll($select);
+
+                $delCategoryMappingIds = [];
+                foreach ($categoriesData as $data) {
+                    if (empty($productCategoriesData[$data['product_id']])) {
+                        $delCategoryMappingIds[] = $data['entity_id'];
+                        continue;
+                    }
+
+                    if (!in_array($data['category_id'], $productCategoriesData[$data['product_id']])) {
+                        $delCategoryMappingIds[] = $data['entity_id'];
+                    }
+                }
+
+                if (!empty($delCategoryMappingIds)) {
+                    $this->_connection->delete(
+                        $tableName,
+                        $this->_connection->quoteInto('entity_id IN (?)', $delCategoryMappingIds)
+                    );
+                }
             }
             if ($categoriesIn) {
                 $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['product_id', 'category_id']);
