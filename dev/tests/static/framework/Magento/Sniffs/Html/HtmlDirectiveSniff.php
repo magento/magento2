@@ -49,8 +49,23 @@ class HtmlDirectiveSniff implements Sniff
             return;
         }
 
-        $this->usedVariables = [];
+        $html = $this->processIfDirectives($html, $phpcsFile);
+        $html = $this->processDependDirectives($html, $phpcsFile);
+        $html = $this->processForDirectives($html, $phpcsFile);
+        $html = $this->processVarDirectivesAndParams($html, $phpcsFile);
 
+        $this->validateDefinedVariables($phpcsFile, $html);
+    }
+
+    /**
+     * Process the {{if}} directives in the file
+     *
+     * @param string $html
+     * @param File $phpcsFile
+     * @return string The processed template
+     */
+    private function processIfDirectives(string $html, File $phpcsFile): string
+    {
         if (preg_match_all(Template::CONSTRUCTION_IF_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 // validate {{if <var>}}
@@ -59,6 +74,18 @@ class HtmlDirectiveSniff implements Sniff
             }
         }
 
+        return $html;
+    }
+
+    /**
+     * Process the {{depend}} directives in the file
+     *
+     * @param string $html
+     * @param File $phpcsFile
+     * @return string The processed template
+     */
+    private function processDependDirectives(string $html, File $phpcsFile): string
+    {
         if (preg_match_all(Template::CONSTRUCTION_DEPEND_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 // validate {{depend <var>}}
@@ -67,6 +94,18 @@ class HtmlDirectiveSniff implements Sniff
             }
         }
 
+        return $html;
+    }
+
+    /**
+     * Process the {{for}} directives in the file
+     *
+     * @param string $html
+     * @param File $phpcsFile
+     * @return string The processed template
+     */
+    private function processForDirectives(string $html, File $phpcsFile): string
+    {
         if (preg_match_all(Template::LOOP_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 // validate {{for in <var>}}
@@ -75,6 +114,18 @@ class HtmlDirectiveSniff implements Sniff
             }
         }
 
+        return $html;
+    }
+
+    /**
+     * Process the all var directives and var directive params in the file
+     *
+     * @param string $html
+     * @param File $phpcsFile
+     * @return string The processed template
+     */
+    private function processVarDirectivesAndParams(string $html, File $phpcsFile): string
+    {
         if (preg_match_all(Template::CONSTRUCTION_PATTERN, $html, $constructions, PREG_SET_ORDER)) {
             foreach ($constructions as $construction) {
                 if (empty($construction[2])) {
@@ -89,7 +140,7 @@ class HtmlDirectiveSniff implements Sniff
             }
         }
 
-        $this->validateDefinedVariables($phpcsFile, $html);
+        return $html;
     }
 
     /**
@@ -185,19 +236,6 @@ class HtmlDirectiveSniff implements Sniff
                  . 'Missing variable: ' . $undefinedVariable,
                 null,
                 'HtmlTemplates.DirectiveUsage.UndefinedVariable'
-            );
-        }
-
-        $extraDefinedVariables = array_diff($definedVariables, $this->usedVariables);
-        foreach ($extraDefinedVariables as $extraDefinedVariable) {
-            if (substr($extraDefinedVariable, 0, 4) !== 'var ') {
-                continue;
-            }
-            $phpcsFile->addError(
-                'Template @vars comment block contains a variable not used in the template.' . PHP_EOL
-                 . 'Extra variable: ' . $extraDefinedVariable,
-                null,
-                'HtmlTemplates.DirectiveUsage.ExtraVariable'
             );
         }
     }

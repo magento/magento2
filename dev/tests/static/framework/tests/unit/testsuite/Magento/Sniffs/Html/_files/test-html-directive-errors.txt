@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------------------------------------------
-FOUND 21 ERRORS AFFECTING 1 LINE
+FOUND 20 ERRORS AFFECTING 1 LINE
 ------------------------------------------------------------------------------------------------------------------------------------
  1 | ERROR | Template directives may not invoke methods. Only scalar array access is allowed.
    |       | Found "foo.badif().bad"
@@ -41,8 +41,6 @@ FOUND 21 ERRORS AFFECTING 1 LINE
    |       | Missing variable: var foo.undeclared.baz
  1 | ERROR | Template @vars comment block is missing a variable used in the template.
    |       | Missing variable: var undeclared.var.error
- 1 | ERROR | Template @vars comment block contains a variable not used in the template.
-   |       | Extra variable: var extra.var.getOhNo()
 ------------------------------------------------------------------------------------------------------------------------------------
 
 
