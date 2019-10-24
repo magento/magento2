@@ -154,7 +154,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
-                    
+
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
@@ -166,6 +166,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                 if ($this->getCustomerId() && $this->getCustomerId() != $this->_quote->getCustomerId()) {
                     $customer = $this->customerRepository->getById($this->getCustomerId());
                     $this->_quote->assignCustomer($customer);
+                    $this->_quote->setCustomerIsGuest(false);
                     $this->quoteRepository->save($this->_quote);
                 }
             }
