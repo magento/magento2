@@ -34,7 +34,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * @var CustomerAccountManagement
      */
-    protected $customerAccountManagement;
+    private $customerAccountManagement;
 
     /**
      * @var EmailValidator
@@ -151,7 +151,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
-                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                $subscriber = $this->subscriberFactory->create()->loadByEmail($email);
                 if ($subscriber->getId()
                     && (int) $subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED
                 ) {
@@ -160,7 +160,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                     );
                 }
 
-                $status = (int) $this->_subscriberFactory->create()->subscribe($email);
+                $status = (int) $this->subscriberFactory->create()->subscribe($email);
                 $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
