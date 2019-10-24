@@ -61,7 +61,7 @@ class Fields
      * Get list of fields used in GraphQL query.
      *
      * This method is stateful and relies on the query being set with setQuery.
-     *-
+     *
      * @return string[]
      */
     public function getFieldsUsedInQuery()
