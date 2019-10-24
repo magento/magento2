@@ -11,7 +11,7 @@ use Magento\Customer\Api\Data\GroupInterface as CustomerGroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
