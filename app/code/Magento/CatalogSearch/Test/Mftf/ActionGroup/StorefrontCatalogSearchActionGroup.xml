@@ -51,6 +51,7 @@
             <argument name="productUrlKey" type="string"/>
         </arguments>
 
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
         <click stepKey="openProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
         <waitForPageLoad stepKey="waitForProductLoad"/>
         <seeInCurrentUrl url="{{productUrlKey}}" stepKey="checkUrl"/>
@@ -66,7 +67,8 @@
             <argument name="productName" type="string"/>
         </arguments>
 
-        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}"/>
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}" stepKey="scrollToProduct"/>
+        <moveMouseOver selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}" stepKey="hoverOverProduct"/>
         <click selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
@@ -101,7 +103,7 @@
 
         <dontSee selector="{{StorefrontQuickSearchResultsSection.allResults}}" userInput="{{productName}}" stepKey="dontSeeProductName"/>
     </actionGroup>
-    
+
     <!-- Open advanced search page -->
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
         <annotations>
