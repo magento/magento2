@@ -13,8 +13,8 @@
             <stories value="Wishlist"/>
             <title value="Delete Dynamic Bundle Product from Wishlist on Frontend"/>
             <description value="Delete Dynamic Bundle Product from Wishlist on Frontend"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-28874"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14215"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -84,7 +84,7 @@
         <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="amOnWishListPage"/>
         <waitForPageLoad stepKey="waitForWishlistPageLoad"/>
 
-        <!-- Click "Remove item". -->
+        <!-- Click "Remove item" -->
         <scrollTo selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName($$createBundleProduct.name$$)}}" stepKey="scrollToProduct"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName($$createBundleProduct.name$$)}}" stepKey="mouseOverOnProduct"/>
         <click selector="{{StorefrontCustomerWishlistProductSection.removeProduct}}" stepKey="clickRemoveButton"/>

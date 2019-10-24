@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontAddConfigurableProductWithoutConfigureToWishlistTest">
+    <test name="StorefrontDeleteConfigurableProductFromWishlistTest">
         <annotations>
             <stories value="Wishlist"/>
             <title value="Delete Configurable Product from Wishlist on Frontend"/>
             <description value="Delete Configurable Product from Wishlist on Frontend"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-28874"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14217"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -133,12 +133,11 @@
             <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
 
-
         <!--  Navigate to My Account > My Wishlist -->
         <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="amOnWishListPage"/>
         <waitForPageLoad stepKey="waitForWishlistPageLoad"/>
 
-        <!-- Click "Remove item". -->
+        <!-- Click "Remove item" -->
         <scrollTo selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName($$createConfigProduct.name$$)}}" stepKey="scrollToProduct"/>
         <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName($$createConfigProduct.name$$)}}" stepKey="mouseOverOnProduct"/>
         <click selector="{{StorefrontCustomerWishlistProductSection.removeProduct}}" stepKey="clickRemoveButton"/>
