@@ -267,11 +267,10 @@ class Bootstrap
                     throw $e;
                 }
             }
-        } catch (\Exception $e) {
-            $this->terminate($e);
-        } catch (\Error $e) {
+        } catch (\Throwable $e) {
             $this->terminate($e);
         }
+
     } // phpcs:enable
 
     /**
