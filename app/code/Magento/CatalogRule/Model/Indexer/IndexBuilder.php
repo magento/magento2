@@ -292,25 +292,30 @@ class IndexBuilder
 
         /** @var Rule[] $activeRules */
         $activeRules = $this->getActiveRules()->getItems();
-        foreach ($ids as $productId) {
-            foreach ($activeRules as $activeRule) {
-                $rule = clone $activeRule;
-                $rule->setProductsFilter($ids);
-                $matchedProductIds = $rule->getMatchingProductIds();
-                $matchedProductIds = array_intersect_key($matchedProductIds, array_flip($ids));
-                foreach ($matchedProductIds as $matchedProductId => $validationByWebsite) {
-                    $websiteIds = array_keys(array_filter($validationByWebsite));
-                    if (empty($websiteIds)) {
-                        continue;
-                    }
-
-                    $this->assignProductToRule($rule, $matchedProductId, $websiteIds);
-                }
+        foreach ($activeRules as $activeRule) {
+            $rule = clone $activeRule;
+            $rule->setProductsFilter($ids);
+            $matchedProductIds = $rule->getMatchingProductIds();
+            if (empty($matchedProductIds)) {
+                continue;
             }
 
+            $matchedProductIds = array_intersect_key($matchedProductIds, array_flip($ids));
+            foreach ($matchedProductIds as $matchedProductId => $validationByWebsite) {
+                $websiteIds = array_keys(array_filter($validationByWebsite));
+                if (empty($websiteIds)) {
+                    continue;
+                }
+
+                $this->assignProductToRule($rule, $matchedProductId, $websiteIds);
+            }
+        }
+
+        foreach ($ids as $productId) {
             $this->cleanProductPriceIndex([$productId]);
             $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
         }
+
         $this->reindexRuleGroupWebsite->execute();
     }
 
