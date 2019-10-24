@@ -6,7 +6,9 @@
 -->
 <!--@subject {{trans "Welcome to %store_name" store_name=$store.frontend_name}} @-->
 <!--@vars {
-"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
+"var store.frontend_name":"Store Name",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
+"var this.getUrl($store,'customer/account/createPassword/',[_query:[id:$customer.id,token:$customer.rp_token],_nosid:1])":"Password Reset URL",
 "var customer.email":"Customer Email",
 "var customer.name":"Customer Name"
 } @-->
