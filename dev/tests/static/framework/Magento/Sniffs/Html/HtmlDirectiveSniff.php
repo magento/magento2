@@ -190,6 +190,9 @@ class HtmlDirectiveSniff implements Sniff
 
         $extraDefinedVariables = array_diff($definedVariables, $this->usedVariables);
         foreach ($extraDefinedVariables as $extraDefinedVariable) {
+            if (substr($extraDefinedVariable, 0, 4) !== 'var ') {
+                continue;
+            }
             $phpcsFile->addError(
                 'Template @vars comment block contains a variable not used in the template.' . PHP_EOL
                  . 'Extra variable: ' . $extraDefinedVariable,
