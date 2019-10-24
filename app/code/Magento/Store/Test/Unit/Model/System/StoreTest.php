@@ -271,11 +271,15 @@ class StoreTest extends \PHPUnit\Framework\TestCase
                     [
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $groupName,
                         'value' => [
-                            ['label' => str_repeat($nonEscapableNbspChar, 4) . $storeName, 'value' => $storeId]
+                            [
+                                'label' => str_repeat($nonEscapableNbspChar, 4) . $storeName,
+                                'value' => $storeId,
+                                '__disableTmpl' => true,
+                            ],
                         ],
                         '__disableTmpl' => true
                     ],
-                ]
+                ],
             ],
         ];
     }
