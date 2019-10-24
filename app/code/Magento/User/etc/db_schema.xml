@@ -46,9 +46,9 @@
     </table>
     <table name="admin_passwords" resource="default" engine="innodb" comment="Admin Passwords">
         <column xsi:type="int" name="password_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Password Id"/>
+                comment="Password ID"/>
         <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
-                comment="User Id"/>
+                comment="User ID"/>
         <column xsi:type="varchar" name="password_hash" nullable="true" length="100" comment="Password Hash"/>
         <column xsi:type="int" name="expires" padding="10" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Deprecated"/>

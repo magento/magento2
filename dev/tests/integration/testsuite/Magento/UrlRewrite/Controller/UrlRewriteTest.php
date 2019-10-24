@@ -15,6 +15,7 @@ class UrlRewriteTest extends AbstractController
 {
     /**
      * @magentoDataFixture Magento/UrlRewrite/_files/url_rewrite.php
+     * @magentoDbIsolation disabled
      *
      * @covers \Magento\UrlRewrite\Controller\Router::match
      * @covers \Magento\UrlRewrite\Model\Storage\DbStorage::doFindOneByData

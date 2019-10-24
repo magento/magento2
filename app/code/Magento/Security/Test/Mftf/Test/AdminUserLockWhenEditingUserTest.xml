@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUserLockWhenEditingUserTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Runs Lock admin user when editing existing user test."/>
+            <title value="Lock admin user when creating new user."/>
+            <description value="Runs Lock admin user when editing existing user test."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14372" />
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--
+                @TODO: Remove "executeJS" in scope of MQE-1561
+                Hack to be able to pass current admin user password without hardcoding it.
+            -->
+            <executeJS function="return '{{DefaultAdminUser.password}}'" stepKey="adminPassword" />
+            <createData entity="NewAdminUser" stepKey="user">
+                <field key="current_password">{$adminPassword}</field>
+            </createData>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unlock Admin user -->
+            <magentoCLI command="admin:user:unlock {{DefaultAdminUser.username}}" stepKey="unlockAdminUser"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteUserViaCurlActionGroup" stepKey="deleteUser">
+                <argument name="user" value="$$user$$" />
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenUserEditPageActionGroup" stepKey="openEditUserPageFirstAttempt">
+            <argument name="user" value="$$user$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFirstAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFirstAttempt" />
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorFirstAttempt" >
+            <argument name="messageType" value="error" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsSecondAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveSecondAttempt" />
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorSecondAttempt" >
+            <argument name="messageType" value="error" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsThirdAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveThirdAttempt" />
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorThirdAttempt" >
+            <argument name="messageType" value="error" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFourthAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFourthAttempt" />
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorFourthAttempt" >
+            <argument name="messageType" value="error" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsFifthAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveFifthAttempt" />
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorFifthAttempt" >
+            <argument name="messageType" value="error" />
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillEditUserFieldsLastAttempt">
+            <argument name="user" value="EditAdminUserWrongCurrentPassword" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveLastAttempt" />
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeErrorLastAttempt" >
+            <argument name="message" value="Your account is temporarily disabled. Please try again later." />
+        </actionGroup>
+
+        <!-- Try to login as admin and check error -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLoginErrorMessage" />
+    </test>
+</tests>

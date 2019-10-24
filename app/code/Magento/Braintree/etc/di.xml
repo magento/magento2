@@ -381,7 +381,7 @@
                 <item name="customer" xsi:type="string">Magento\Braintree\Gateway\Request\CustomerDataBuilder</item>
                 <item name="payment" xsi:type="string">Magento\Braintree\Gateway\Request\PaymentDataBuilder</item>
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
-                <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\BillingAddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="store" xsi:type="string">Magento\Braintree\Gateway\Request\StoreConfigBuilder</item>
                 <item name="merchant_account" xsi:type="string">Magento\Braintree\Gateway\Request\MerchantAccountDataBuilder</item>
@@ -626,5 +626,8 @@
 
     <type name="Magento\Quote\Api\CartManagementInterface">
         <plugin name="order_cancellation" type="Magento\Braintree\Plugin\OrderCancellation"/>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="disable_quote_address_validation" type="Magento\Braintree\Plugin\DisableQuoteAddressValidation"/>
     </type>
 </config>

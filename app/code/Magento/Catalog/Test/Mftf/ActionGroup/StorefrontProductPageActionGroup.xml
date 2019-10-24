@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Click Add to Cart button in storefront product page-->
     <actionGroup name="addToCartFromStorefrontProductPage">
+        <annotations>
+            <description>Click on the Add to Cart button. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="productName"/>
         </arguments>
+
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
@@ -22,18 +27,26 @@
     </actionGroup>
 
     <actionGroup name="AddProductWithQtyToCartFromStorefrontProductPage" extends="addToCartFromStorefrontProductPage">
+        <annotations>
+            <description>EXTENDS: addToCartFromStorefrontProductPage. Fills in the provided Product Quantity for the provided Product Name.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
             <argument name="productQty" type="string"/>
         </arguments>
+
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQuantity" before="addToCart"/>
     </actionGroup>
 
     <!--Verify text length validation hint with multiple inputs-->
     <actionGroup name="testDynamicValidationHint">
+        <annotations>
+            <description>Validates that the Product Text Option Text Length Hint displays the correct Count for multiple inputs based on the provided Character Limit.</description>
+        </annotations>
         <arguments>
             <argument name="charLimit"/>
         </arguments>
+
         <fillField userInput="abcde" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput1"/>
         <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(15 remaining)" stepKey="assertHint1"/>
         <fillField userInput="abcdefghjklansdmnbv" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput2"/>
@@ -45,19 +58,29 @@
         <fillField userInput="abcdefghjklansdmnbvdsasdfghjmn" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput5"/>
         <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(10 too many)" stepKey="assertHint5"/>
     </actionGroup>
+
     <actionGroup name="checkAttributeInMoreInformationTab">
+        <annotations>
+            <description>Validates that the Product More Information area contains the provided Text.</description>
+        </annotations>
         <arguments>
             <argument name="attributeLabel" type="string"/>
             <argument name="attributeValue" type="string"/>
         </arguments>
+
         <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickTab"/>
         <see userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeLabel"/>
         <see userInput="{{attributeValue}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeValue"/>
     </actionGroup>
+
     <actionGroup name="checkAttributeNotInMoreInformationTab">
+        <annotations>
+            <description>Validate that the More Information area does not contain the provided Text.</description>
+        </annotations>
         <arguments>
             <argument name="attributeLabel" type="string"/>
         </arguments>
+
         <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickTab"/>
         <dontSee userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeLabel"/>
     </actionGroup>

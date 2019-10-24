@@ -7,7 +7,7 @@ define([
     'jquery',
     'mage/template',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/validation'
 ], function ($, mageTemplate, _) {
     'use strict';
@@ -161,6 +161,9 @@ define([
 
             this._clearError();
             this._checkRegionRequired(country);
+
+            $(regionList).find('option:selected').removeAttr('selected');
+            regionInput.val('');
 
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {

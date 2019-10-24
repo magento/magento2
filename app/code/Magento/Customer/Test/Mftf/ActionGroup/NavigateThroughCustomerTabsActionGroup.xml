@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="NavigateThroughCustomerTabsActionGroup">
+        <annotations>
+            <description>Clicks on the provided Storefront Customer Dashboard Side Bar tab names.</description>
+        </annotations>
         <arguments>
-            <argument name="navigationItemName" type="string" />
+            <argument name="navigationItemName" type="string"/>
         </arguments>
-        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab(navigationItemName)}}" stepKey="clickOnDesiredNavItem" />
+
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab(navigationItemName)}}" stepKey="clickOnDesiredNavItem"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

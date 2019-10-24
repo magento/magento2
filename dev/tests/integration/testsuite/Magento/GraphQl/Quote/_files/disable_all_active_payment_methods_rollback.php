@@ -3,7 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
+/**
+ * @deprecated use @magentoConfigFixture instead.
+ */
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\ScopeConfigInterface;

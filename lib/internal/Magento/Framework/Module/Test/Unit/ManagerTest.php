@@ -16,7 +16,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     const XML_PATH_OUTPUT_ENABLED = 'custom/is_module_output_enabled';
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     private $_model;
 
@@ -73,7 +73,6 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
 
     public function testIsOutputEnabledReturnsFalseForDisabledModule()
     {
-        $this->_moduleList->expects($this->once())->method('has')->with('Disabled_Module')->willReturn(false);
         $this->_outputConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
         $this->assertFalse($this->_model->isOutputEnabled('Disabled_Module'));
     }

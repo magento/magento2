@@ -10,6 +10,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- action group to create a new catalog price rule giving a catalogRule entity -->
     <actionGroup name="newCatalogPriceRuleByUI">
+        <annotations>
+            <description>Goes to the Catalog Price Rule grid. Clicks on Add. Fills in the provided Catalog Rule details.</description>
+        </annotations>
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
         </arguments>
@@ -22,6 +25,7 @@
         <!-- Fill the form according the attributes of the entity -->
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
         <selectOption stepKey="selectSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
         <click stepKey="clickFromCalender" selector="{{AdminNewCatalogPriceRule.fromDateButton}}"/>
         <click stepKey="clickFromToday" selector="{{AdminNewCatalogPriceRule.todayDate}}"/>
@@ -38,21 +42,45 @@
     </actionGroup>
 
     <actionGroup name="createCatalogPriceRule">
+        <annotations>
+            <description>Clicks on the Add button. Fills Rule Name, Description, Website and Discount Value.</description>
+        </annotations>
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
         </arguments>
-
         <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
         <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"  stepKey="fillName" />
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
         <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}" stepKey="fillDescription" />
         <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="{{catalogRule.website_ids}}" stepKey="selectSite" />
         <click stepKey="openActionDropdown" selector="{{AdminNewCatalogPriceRule.actionsTab}}"/>
         <fillField stepKey="fillDiscountValue" selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="{{catalogRule.discount_amount}}"/>
-
         <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForApplied"/>
     </actionGroup>
 
+    <actionGroup name="AdminCreateCatalogPriceRuleWithConditionActionGroup" extends="createCatalogPriceRule">
+        <arguments>
+            <argument name="catalogRuleType" type="entity" defaultValue="PriceRuleWithCondition"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad" after="addNewRule"/>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="expandConditions" before="openActionDropdown"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="scrollToConditionsTab" after="expandConditions"/>
+        <waitForElementVisible selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="waitForNewRule" after="scrollToConditionsTab"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule" after="waitForNewRule"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionsDropdown}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="selectProductAttribute" after="clickNewRule"/>
+        <waitForPageLoad stepKey="waitForAttributeLoad" after="selectProductAttribute"/>
+        <!--Assert that attribute contains today date without time-->
+        <comment userInput="Assert that attribute contains today date without time" stepKey="assertDate" after="waitForAttributeLoad"/>
+        <generateDate date="now" format="Y-m-d" stepKey="today" after="assertDate"/>
+        <grabTextFrom selector="{{PriceRuleConditionsSection.firstProductAttributeSelected}}"  stepKey="grabTextFromSelectedAttribute" after="today"/>
+        <assertEquals expected="$today" actual="$grabTextFromSelectedAttribute" stepKey="assertTodayDate" after="grabTextFromSelectedAttribute"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateMultipleWebsiteCatalogPriceRule" extends="createCatalogPriceRule">
+        <remove keyForRemoval="selectSite"/>
+        <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsite"/>
+    </actionGroup>
     <actionGroup name="CreateCatalogPriceRuleViaTheUi">
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
@@ -74,6 +102,9 @@
     </actionGroup>
 
     <actionGroup name="CreateCatalogPriceRuleConditionWithAttribute">
+        <annotations>
+            <description>Add Conditional Requirements to a Catalog Price Rule from the creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="targetValue" type="string"/>
@@ -93,6 +124,10 @@
 
     <!-- Apply all of the saved catalog price rules -->
     <actionGroup name="applyCatalogPriceRules">
+        <annotations>
+            <description>Goes to the Catalog Price Rule grid page. Clicks on Apply Rules. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
         <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
         <waitForPageLoad stepKey="waitForPriceRulePage"/>
         <click stepKey="applyRules" selector="{{AdminCatalogPriceRuleGrid.applyRules}}"/>
@@ -101,9 +136,13 @@
 
     <!--Add Catalog Rule Condition With product SKU-->
     <actionGroup name="newCatalogPriceRuleByUIWithConditionIsSKU" extends="newCatalogPriceRuleByUI">
+        <annotations>
+            <description>EXTENDS: newCatalogPriceRuleByUI. Add a Catalog Price Rule Condition based on the provided SKU.</description>
+        </annotations>
         <arguments>
             <argument name="productSku"/>
         </arguments>
+
         <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
         <waitForPageLoad after="openConditionsTab" stepKey="waitForConditionTabOpened"/>
         <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" after="waitForConditionTabOpened" stepKey="addNewCondition"/>
@@ -116,9 +155,13 @@
 
     <!--Add Catalog Rule Condition With Category-->
     <actionGroup name="newCatalogPriceRuleByUIWithConditionIsCategory" extends="newCatalogPriceRuleByUI">
+        <annotations>
+            <description>EXTENDS: newCatalogPriceRuleByUI. Add a Catalog Price Rule Condition based on the provided Category ID.</description>
+        </annotations>
         <arguments>
             <argument name="categoryId"/>
         </arguments>
+
         <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" after="discardSubsequentRules" stepKey="openConditionsTab"/>
         <waitForPageLoad after="openConditionsTab" stepKey="waitForConditionTabOpened"/>
         <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" after="waitForConditionTabOpened" stepKey="addNewCondition"/>
@@ -130,10 +173,18 @@
     </actionGroup>
 
     <actionGroup name="selectGeneralCustomerGroupActionGroup">
+        <annotations>
+            <description>Selects the 'General' Customer Group for a Catalog Price Rule on the creation/edit page.</description>
+        </annotations>
+
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="General" stepKey="selectCustomerGroup"/>
     </actionGroup>
 
     <actionGroup name="selectNotLoggedInCustomerGroupActionGroup">
+        <annotations>
+            <description>Selects the 'NOT LOGGED IN' Customer Group for a Catalog Price Rule on the creation/edit page.</description>
+        </annotations>
+
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
     </actionGroup>
 
