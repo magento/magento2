@@ -7,7 +7,7 @@ namespace Magento\Weee\Block\Sales\Order;
 
 /**
  * Wee tax total column block
- * 
+ *
  * @api
  * @since 100.0.2
  */
