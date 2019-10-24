@@ -259,6 +259,7 @@ EXPECTED_RESULT;
             ['getTemplateProcessor'],
             ['varDirective'],
             ['delete'],
+            ['getDataUsingMethod']
         ];
     }
 

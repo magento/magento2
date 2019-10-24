@@ -11,6 +11,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 use Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory;
 
+/**
+ * Class BackendModelFactory
+ */
 class BackendModelFactory extends ValueFactory
 {
     /**
@@ -58,13 +61,15 @@ class BackendModelFactory extends ValueFactory
      */
     public function create(array $data = [])
     {
+        $storedData = $this->getStoredData($data['scope'], $data['scopeId'], $data['config']['path']);
+
         $backendModelData = array_replace_recursive(
-            $this->getStoredData($data['scope'], $data['scopeId'], $data['config']['path']),
+            $storedData,
             [
                 'path' => $data['config']['path'],
                 'scope' => $data['scope'],
                 'scope_id' => $data['scopeId'],
-                'field_config' => $data['config'],
+                'field_config' => $data['config']
             ]
         );
 
@@ -75,6 +80,13 @@ class BackendModelFactory extends ValueFactory
         /** @var Value $backendModel */
         $backendModel = $this->getNewBackendModel($backendType, $backendModelData);
         $backendModel->setValue($data['value']);
+
+        if ($storedData) {
+            foreach ($storedData as $key => $value) {
+                $backendModel->setOrigData($key, $value);
+            }
+            $backendModel->setOrigData('field_config', $data['config']);
+        }
 
         return $backendModel;
     }
@@ -166,9 +178,12 @@ class BackendModelFactory extends ValueFactory
     {
         if (!$this->metadata) {
             $this->metadata = $this->metadataProvider->get();
-            array_walk($this->metadata, function (&$value) {
-                $value = $value['path'];
-            });
+            array_walk(
+                $this->metadata,
+                function (&$value) {
+                    $value = $value['path'];
+                }
+            );
         }
         return $this->metadata;
     }

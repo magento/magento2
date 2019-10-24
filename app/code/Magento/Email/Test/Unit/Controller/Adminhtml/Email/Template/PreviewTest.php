@@ -61,11 +61,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
     private $pageTitleMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $responseMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -93,16 +88,11 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
-            ->setMethods(['setHeader'])
-            ->getMockForAbstractClass();
-
         $this->context = $objectManager->getObject(
             \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->requestMock,
-                'view' => $this->viewMock,
-                'response' => $this->responseMock,
+                'view' => $this->viewMock
             ]
         );
         $this->object = $objectManager->getObject(
@@ -131,9 +121,6 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $this->pageTitleMock->expects($this->once())
             ->method('prepend')
             ->willReturnSelf();
-        $this->responseMock->expects($this->once())
-            ->method('setHeader')
-            ->with('Content-Security-Policy', "script-src 'self'");
 
         $this->assertNull($this->object->execute());
     }
