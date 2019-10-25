@@ -2520,10 +2520,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add is_saleable attribute to filter
      *
-     * @param array|null $condition
+     * @param mixed $condition
      * @return $this
      */
-    private function addIsSaleableAttributeToFilter(?array $condition): self
+    private function addIsSaleableAttributeToFilter($condition): self
     {
         $columns = $this->getSelect()->getPart(Select::COLUMNS);
         foreach ($columns as $columnEntry) {
@@ -2551,10 +2551,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add tier price attribute to filter
      *
      * @param string $attribute
-     * @param array|null $condition
+     * @param mixed $condition
      * @return $this
      */
-    private function addTierPriceAttributeToFilter(string $attribute, ?array $condition): self
+    private function addTierPriceAttributeToFilter(string $attribute, $condition): self
     {
         $attrCode = $attribute;
         $connection = $this->getConnection();
