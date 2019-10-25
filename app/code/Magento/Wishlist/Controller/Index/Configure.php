@@ -11,9 +11,11 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * Wishlist Configure Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configure extends \Magento\Wishlist\Controller\AbstractIndex
+class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpGetActionInterface
 {
     /**
      * Core registry

@@ -1,13 +1,18 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * WishlistProvider Controller
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class WishlistProvider implements WishlistProviderInterface
 {
     /**
@@ -54,7 +59,8 @@ class WishlistProvider implements WishlistProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getWishlist($wishlistId = null)

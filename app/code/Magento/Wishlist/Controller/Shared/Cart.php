@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\App\Action\Context as ActionContext;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
@@ -18,9 +19,11 @@ use Magento\Wishlist\Model\ItemFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollection;
 
 /**
+ * Wishlist Cart Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Framework\App\Action\Action
+class Cart extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
      * @var CustomerCart

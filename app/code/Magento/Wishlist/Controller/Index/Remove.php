@@ -14,9 +14,11 @@ use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Product\AttributeValueProvider;
 
 /**
+ * Wishlist Remove Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Remove extends \Magento\Wishlist\Controller\AbstractIndex
+class Remove extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var WishlistProviderInterface

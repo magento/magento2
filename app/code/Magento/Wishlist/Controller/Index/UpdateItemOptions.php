@@ -14,9 +14,11 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
+ * Wishlist UpdateItemOptions Controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
+class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
 {
     /**
      * @var WishlistProviderInterface
