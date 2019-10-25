@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,6 +12,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use Magento\Framework\Serialize\Serializer\FormData;
 
 /**
@@ -50,6 +50,11 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private $attributeCodeValidator;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -61,6 +66,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param array $multipleAttributeList
      * @param FormData|null $formDataSerializer
      * @param AttributeCodeValidator|null $attributeCodeValidator
+     * @param Escaper $escaper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +78,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
         FormData $formDataSerializer = null,
-        AttributeCodeValidator $attributeCodeValidator = null
+        AttributeCodeValidator $attributeCodeValidator = null,
+        Escaper $escaper = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -79,9 +87,10 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         $this->multipleAttributeList = $multipleAttributeList;
         $this->formDataSerializer = $formDataSerializer ?: ObjectManager::getInstance()
             ->get(FormData::class);
-        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()->get(
-            AttributeCodeValidator::class
-        );
+        $this->attributeCodeValidator = $attributeCodeValidator ?: ObjectManager::getInstance()
+            ->get(AttributeCodeValidator::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()
+            ->get(Escaper::class);
     }
 
     /**
@@ -99,8 +108,10 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             $optionsData = $this->formDataSerializer
                 ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
-            $message = __("The attribute couldn't be validated due to an error. Verify your information and try again. "
-                . "If the error persists, please try again later.");
+            $message = __(
+                "The attribute couldn't be validated due to an error. Verify your information and try again. "
+                . "If the error persists, please try again later."
+            );
             $this->setMessageToResponse($response, [$message]);
             $response->setError(true);
         }
@@ -138,7 +149,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             $attributeSet = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
-                $setName = $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($setName);
+                $setName = $this->escaper->escapeHtml($setName);
                 $this->messageManager->addErrorMessage(__('An attribute set named \'%1\' already exists.', $setName));
 
                 $layout = $this->layoutFactory->create();

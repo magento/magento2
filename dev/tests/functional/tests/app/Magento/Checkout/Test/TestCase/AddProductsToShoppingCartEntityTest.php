@@ -14,6 +14,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\TestStep\TestStepFactory;
 use Magento\Mtf\Util\Command\Cli\Cache;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -100,6 +101,13 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     private $cache;
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
      * Prepare test data.
      *
      * @param BrowserInterface $browser
@@ -108,6 +116,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
      * @param CheckoutCart $cartPage
      * @param TestStepFactory $testStepFactory
      * @param Cache $cache
+     * @param EnvWhitelist $envWhitelist
      * @return void
      */
     public function __prepare(
@@ -116,7 +125,8 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         CatalogProductView $catalogProductView,
         CheckoutCart $cartPage,
         TestStepFactory $testStepFactory,
-        Cache $cache
+        Cache $cache,
+        EnvWhitelist $envWhitelist
     ) {
         $this->browser = $browser;
         $this->fixtureFactory = $fixtureFactory;
@@ -124,6 +134,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         $this->cartPage = $cartPage;
         $this->testStepFactory = $testStepFactory;
         $this->cache = $cache;
+        $this->envWhitelist = $envWhitelist;
     }
 
     /**
@@ -146,6 +157,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
         // Preconditions
         $this->configData = $configData;
         $this->flushCache = $flushCache;
+        $this->envWhitelist->addHost('example.com');
 
         $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
@@ -224,7 +236,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
             $_ENV['app_frontend_url'] = preg_replace('/(http[s]?)/', 'http', $_ENV['app_frontend_url']);
             $this->cache->flush();
         }
-
+        $this->envWhitelist->removeHost('example.com');
         $this->testStepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
