@@ -15,10 +15,7 @@
     </label>
     <div class="control">
             <?php
-            $_validationClass = $block->escapeHtmlAttr(
-                $this->helper(\Magento\Customer\Helper\Address::class)
-                     ->getAttributeValidationClass('telephone')
-            );
+            $_validationClass = $block->escapeHtmlAttr($block->getAttributeValidationClass('telephone'));
             ?>
         <input type="tel"
                name="telephone"

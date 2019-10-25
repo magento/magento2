@@ -165,7 +165,13 @@ class AttributeMerger
         }
 
         if ($attributeConfig['formElement'] == 'multiline') {
-            return $this->getMultilineFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix, $additionalConfig);
+            return $this->getMultilineFieldConfig(
+                $attributeCode,
+                $attributeConfig,
+                $providerName,
+                $dataScopePrefix,
+                $additionalConfig
+            );
         }
 
         $uiComponent = isset($this->formElementMap[$attributeConfig['formElement']])
@@ -272,7 +278,13 @@ class AttributeMerger
      * @param array $additionalConfig
      * @return array
      */
-    protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix, array $additionalConfig)
+    protected function getMultilineFieldConfig(
+        $attributeCode,
+        array $attributeConfig,
+        $providerName,
+        $dataScopePrefix,
+        array $additionalConfig
+        )
     {
         $lines = [];
         unset($attributeConfig['validation']['required-entry']);

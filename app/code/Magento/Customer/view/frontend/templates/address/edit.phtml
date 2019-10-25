@@ -37,7 +37,7 @@
     </fieldset>
     <fieldset class="fieldset">
         <legend class="legend"><span><?= $block->escapeHtml(__('Address')) ?></span></legend><br>
-        <?php $_streetValidationClass = $this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('street'); ?>
+        <?php $_streetValidationClass = $block->getAttributeValidationClass('street'); ?>
         <div class="field street required">
             <label for="street_1" class="label">
                 <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?></span>
@@ -52,7 +52,7 @@
                        autocomplete="address-line1"/>
                 <div class="nested">
                     <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
-                    <?php for ($_i = 1, $_n = $this->helper(\Magento\Customer\Helper\Address::class)->getStreetLines(); $_i < $_n; $_i++) : ?>
+                    <?php for ($_i = 1, $_n = $block->getStreetLines(); $_i < $_n; $_i++) : ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <?php if ($this->helper(\Magento\Customer\Helper\Address::class)->isVatAttributeVisible()) : ?>
+        <?php if ($block->isVatAttributeVisible()) : ?>
             <div class="field taxvat">
                 <label class="label" for="vat_id">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
@@ -81,7 +81,7 @@
                            name="vat_id"
                            value="<?= $block->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
-                           class="input-text <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('vat_id')) ?>"
+                           class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('vat_id')) ?>"
                            id="vat_id">
                 </div>
             </div>
@@ -93,7 +93,7 @@
                        name="city"
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
                        title="<?= $block->escapeHtmlAttr(__('City')) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('city')) ?>"
+                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('city')) ?>"
                        id="city"
                        autocomplete="address-level2">
             </div>
@@ -113,7 +113,7 @@
                        name="region"
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
-                       class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>
+                       class="input-text validate-not-number-first <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('region')) ?>"<?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>
                        autocomplete="address-level1"/>
             </div>
         </div>
@@ -127,7 +127,7 @@
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
-                       class="input-text validate-zip-international <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)->getAttributeValidationClass('postcode')) ?>"
+                       class="input-text validate-zip-international <?= $block->escapeHtmlAttr($block->getAttributeValidationClass('postcode')) ?>"
                        autocomplete="postal-code">
                 <div role="alert" class="message warning" style="display:none">
                     <span></span>

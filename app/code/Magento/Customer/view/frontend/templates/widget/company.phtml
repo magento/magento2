@@ -14,10 +14,7 @@
     </label>
     <div class="control">
             <?php
-            $_validationClass = $block->escapeHtmlAttr(
-                $this->helper(\Magento\Customer\Helper\Address::class)
-                     ->getAttributeValidationClass('company')
-            );
+            $_validationClass = $block->escapeHtmlAttr($block->getAttributeValidationClass('company'));
             ?>
         <input type="text"
                name="company"
