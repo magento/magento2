@@ -26,9 +26,9 @@
             <createData entity="ABC_dfj_SimpleProduct" stepKey="createProduct"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
             <!-- Delete data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="logout" stepKey="logoutAdmin"/>
         </after>
 
         <!-- Perform reindex and flush cache -->
