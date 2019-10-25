@@ -235,6 +235,9 @@ define([
         * @returns {Multiselect} Chainable.
         */
         togglePage: function () {
+            if (this.isPageSelected() && this.selected().length != this.totalRecords()) {
+                return this.selectPage();
+            }
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
