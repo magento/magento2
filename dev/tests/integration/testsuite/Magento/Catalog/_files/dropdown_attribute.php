@@ -37,7 +37,6 @@ if (!$attribute->loadByCode(4, 'dropdown_attribute')->getId()) {
             'used_for_sort_by'              => 0,
             'frontend_label'                => ['Drop-Down Attribute'],
             'backend_type'                  => 'varchar',
-            'backend_model'                 => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class,
             'option'                        => [
                 'value' => [
                     'option_1' => ['Option 1'],

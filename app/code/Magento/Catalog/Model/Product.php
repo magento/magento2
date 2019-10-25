@@ -177,7 +177,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -381,7 +381,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
      * @param Product\Type $catalogProductType
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param ResourceModel\Product $resource
      * @param ResourceModel\Product\Collection $resourceCollection
@@ -422,7 +422,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         Product\Type $catalogProductType,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Model\ResourceModel\Product $resource,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection,
@@ -832,12 +832,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
-                if ($this->_storeManager->isSingleStoreMode()) {
+                if (!$this->isObjectNew() && $this->_storeManager->isSingleStoreMode()) {
                     $websiteIds = array_keys($websiteIds);
                 }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
-                    $storeIds = array_merge($storeIds, $websiteStores);
+                    foreach ($websiteStores as $websiteStore) {
+                        $storeIds []= $websiteStore;
+                    }
                 }
             }
             $this->setStoreIds($storeIds);
@@ -920,9 +922,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         //Validate changing of design.
         $userType = $this->getUserContext()->getUserType();
         if ((
-                $userType === UserContextInterface::USER_TYPE_ADMIN
+            $userType === UserContextInterface::USER_TYPE_ADMIN
                 || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
+        )
             && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_product_design')
         ) {
             $this->setData('custom_design', $this->getOrigData('custom_design'));

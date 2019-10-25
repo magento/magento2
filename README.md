@@ -9,12 +9,16 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 ## Install Magento
 
-*	[Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
+*    [Installation Guide](https://devdocs.magento.com/guides/v2.3/install-gde/bk-install-guide.html).
+
+## Learn More About GraphQL in Magento 2
+
+* [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.3/graphql/index.html)
 
 <h2>Contributing to the Magento 2 Code Base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
 
-To learn about how to make a contribution, click [here][1].
+To learn about how to contribute, click [here][1].
 
 To learn about issues, click [here][2]. To open an issue, click [here][3].
 
@@ -33,7 +37,7 @@ The members of this team have been recognized for their outstanding commitment t
 </a>
 
 <h3>Top Contributors</h3>
-Magento is thankful for any contribution that can improve our code base, documentation or increase test coverage. We always recognize our most active members, as their contributions are the foundation of the Magento Open Source platform.
+Magento is thankful for any contribution that can improve our codebase, documentation or increase test coverage. We always recognize our most active members, as their contributions are the foundation of the Magento Open Source platform.
 <a href="https://magento.com/magento-contributors">
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png"/>
 </a>
@@ -44,7 +48,7 @@ Please review the [Code Contributions guide](https://devdocs.magento.com/guides/
 
 ## Reporting Security Issues
 
-To report security vulnerabilities or learn more about reporting security issues in Magento software or web sites visit the [Magento Bug Bounty Program](https://hackerone.com/magento) on hackerone. Please create a hackerone account [there](https://hackerone.com/magento) to submit and follow-up your issue.
+To report security vulnerabilities or learn more about reporting security issues in Magento software or web sites visit the [Magento Bug Bounty Program](https://hackerone.com/magento) on hackerone. Please create a hackerone account [there](https://hackerone.com/magento) to submit and follow-up on your issue.
 
 Stay up-to-date on the latest security news and patches for Magento by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
@@ -60,7 +64,7 @@ Please see LICENSE_EE.txt for the full text of the MEE License or visit https://
 
 ## Community Engineering Slack
 
-To connect with Magento and the Community, join us on the [Magento Community Engineering Slack](https://magentocommeng.slack.com). If you are interested in joining Slack, or a specific channel, send us request at [engcom@adobe.com](mailto:engcom@adobe.com) or [self signup](https://tinyurl.com/engcom-slack).
+To connect with Magento and the Community, join us on the [Magento Community Engineering Slack](https://magentocommeng.slack.com). If you are interested in joining Slack, or a specific channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com) or [self signup](https://opensource.magento.com/slack).
 
 
 We have channels for each project. These channels are recommended for new members:

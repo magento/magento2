@@ -5,11 +5,15 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+
 /**
  * Test class for \Magento\Catalog\Model\Product\Url.
  *
  * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
@@ -49,6 +53,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @magentoDbIsolation disabled
      * @dataProvider getUrlsWithSecondStoreProvider
      * @magentoAppArea adminhtml
      */
@@ -131,5 +136,49 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
         $product->setId(100);
         $this->assertContains('catalog/product/view/id/100/', $this->_model->getUrl($product));
+    }
+
+    /**
+     * Check that rearranging product url rewrites do not influence on whether to use category in product links
+     *
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
+     */
+    public function testGetProductUrlWithRearrangedUrlRewrites()
+    {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+        $categoryRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\CategoryRepository::class
+        );
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\Registry::class
+        );
+        $urlFinder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\UrlRewrite\Model\UrlFinderInterface::class
+        );
+        $urlPersist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\UrlRewrite\Model\UrlPersistInterface::class
+        );
+
+        $product = $productRepository->get('simple');
+        $category = $categoryRepository->get($product->getCategoryIds()[0]);
+        $registry->register('current_category', $category);
+        $this->assertNotContains($category->getUrlPath(), $this->_model->getProductUrl($product));
+
+        $rewrites = $urlFinder->findAllByData(
+            [
+                UrlRewrite::ENTITY_ID => $product->getId(),
+                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE
+            ]
+        );
+        $this->assertGreaterThan(1, count($rewrites));
+        foreach ($rewrites as $rewrite) {
+            if ($rewrite->getRequestPath() === 'simple-product.html') {
+                $rewrite->setUrlRewriteId($rewrite->getUrlRewriteId() + 1000);
+            }
+        }
+        $urlPersist->replace($rewrites);
+        $this->assertNotContains($category->getUrlPath(), $this->_model->getProductUrl($product));
     }
 }

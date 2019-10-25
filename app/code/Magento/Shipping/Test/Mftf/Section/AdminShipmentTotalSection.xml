@@ -12,5 +12,6 @@
         <element name="CommentText" type="textarea" selector="#shipment_comment_text"/>
         <element name="AppendComments" type="checkbox" selector=".order-totals input#notify_customer"/>
         <element name="EmailCopy" type="checkbox" selector=".order-totals input#send_email"/>
+        <element name="createShippingLabel" type="checkbox" selector="input#create_shipping_label"/>
     </section>
 </sections>

@@ -8,6 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
+        <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
@@ -215,6 +216,7 @@
         <element name="textAttributeByName" type="text" selector="//div[@data-index='attributes']//fieldset[contains(@class, 'admin__field') and .//*[contains(.,'{{var}}')]]//input" parameterized="true"/>
         <element name="dropDownAttribute" type="select" selector="//select[@name='product[{{arg}}]']" parameterized="true" timeout="30"/>
         <element name="attributeSection" type="block" selector="//div[@data-index='attributes']/div[contains(@class, 'admin__collapsible-content _show')]" timeout="30"/>
+        <element name="customAttribute" type="text" selector="product[{{attributecode}}]" timeout="30" parameterized="true"/>
         <element name="attributeGroupByName" type="button" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']" parameterized="true"/>
         <element name="attributeByGroupAndName" type="text" selector="//div[@class='fieldset-wrapper-title']//span[text()='{{group}}']/../../following-sibling::div//span[contains(text(),'attribute')]" parameterized="true"/>
     </section>

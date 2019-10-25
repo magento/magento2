@@ -9,8 +9,9 @@ define([
     'jquery',
     'Magento_Checkout/js/model/new-customer-address',
     'Magento_Customer/js/customer-data',
-    'mage/utils/objects'
-], function ($, address, customerData, mageUtils) {
+    'mage/utils/objects',
+    'underscore'
+], function ($, address, customerData, mageUtils, _) {
     'use strict';
 
     var countryData = customerData.get('directory-data');
@@ -18,6 +19,7 @@ define([
     return {
         /**
          * Convert address form data to Address object
+         *
          * @param {Object} formData
          * @returns {Object}
          */
@@ -59,13 +61,15 @@ define([
             delete addressData['region_id'];
 
             if (addressData['custom_attributes']) {
-                addressData['custom_attributes'] = Object.entries(addressData['custom_attributes'])
-                    .map(function (customAttribute) {
+                addressData['custom_attributes'] = _.map(
+                    addressData['custom_attributes'],
+                    function (value, key) {
                         return {
-                            'attribute_code': customAttribute[0],
-                            'value': customAttribute[1]
+                            'attribute_code': key,
+                            'value': value
                         };
-                    });
+                    }
+                );
             }
 
             return address(addressData);
