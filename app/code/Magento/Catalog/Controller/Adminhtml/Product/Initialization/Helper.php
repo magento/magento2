@@ -128,8 +128,8 @@ class Helper
      * @param ProductRepositoryInterface|null $productRepository
      * @param LinkTypeProvider|null $linkTypeProvider
      * @param AttributeFilter|null $attributeFilter
-     * @param ProductAuthorization|null $productAuthorization
      * @param FormatInterface|null $localeFormat
+     * @param ProductAuthorization|null $productAuthorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -144,8 +144,8 @@ class Helper
         ProductRepositoryInterface $productRepository = null,
         LinkTypeProvider $linkTypeProvider = null,
         AttributeFilter $attributeFilter = null,
-        ?ProductAuthorization $productAuthorization = null,
-        FormatInterface $localeFormat = null
+        FormatInterface $localeFormat = null,
+        ?ProductAuthorization $productAuthorization = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -160,8 +160,8 @@ class Helper
         $this->productRepository = $productRepository ?: $objectManager->get(ProductRepositoryInterface::class);
         $this->linkTypeProvider = $linkTypeProvider ?: $objectManager->get(LinkTypeProvider::class);
         $this->attributeFilter = $attributeFilter ?: $objectManager->get(AttributeFilter::class);
-        $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
         $this->localeFormat = $localeFormat ?: $objectManager->get(FormatInterface::class);
+        $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
     }
 
     /**
