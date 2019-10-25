@@ -6,6 +6,11 @@
  */
 namespace Magento\PageCache\Controller\Block;
 
+/**
+ * Page cache render controller
+ *
+ * @deprecated
+ */
 class Render extends \Magento\PageCache\Controller\Block
 {
     /**
