@@ -42,7 +42,7 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
-        \Magento\Sales\Helper\Reorder $reorderHelper
+        \Magento\Sales\Helper\Reorder $reorderHelper = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
