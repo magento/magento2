@@ -343,7 +343,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**
      * Get group name of option by given option type
      *
-     * @param string|null $type
+     * @param string $type
      * @return string
      */
     public function getGroupByType($type = null)
