@@ -43,7 +43,7 @@
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
             <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCatalogRuleGridFilters"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a catalog price rule -->
