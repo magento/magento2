@@ -24,7 +24,7 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Topology\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $messageQueueConfig;
 
@@ -34,7 +34,9 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->messageQueueConfig = $this->getMockBuilder(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class)
+        $this->messageQueueConfig = $this->getMockBuilder(
+            \Magento\Framework\MessageQueue\Topology\ConfigInterface::class
+        )
             ->getMockForAbstractClass();
         $this->model = $this->objectManager->getObject(
             \Magento\MysqlMq\Setup\Recurring::class,
@@ -45,15 +47,15 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for install method
+     * {@inheritdoc}
      */
     public function testInstall()
     {
-        for ($i = 1; $i <=3; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $queue = $this->createMock(\Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface::class);
             $queue->expects($this->once())
                 ->method('getName')
-                ->willReturn('queue_name_'. $i);
+                ->willReturn('queue_name_' . $i);
             $queues[] = $queue;
         }
 

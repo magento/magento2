@@ -37,8 +37,9 @@ class Recurring implements InstallSchemaInterface
 
         $queues = [];
         foreach ($this->messageQueueConfig->getQueues() as $queue) {
-          $queues[] = $queue->getName();
+            $queues[] = $queue->getName();
         }
+
         $connection = $setup->getConnection();
         $existingQueues = $connection->fetchCol($connection->select()->from($setup->getTable('queue'), 'name'));
         $queues = array_unique(array_diff($queues, $existingQueues));
