@@ -7,10 +7,10 @@ namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
+use Magento\Framework\Url\RouteParamsResolverFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @codingStandardsIgnoreFile
  */
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
@@ -81,7 +81,14 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_menuMock = $this->createPartialMock(\Magento\Backend\Model\Menu::class, ['getFirstAvailableChild', 'get', 'getFirstAvailable']);
+        $this->_menuMock = $this->createPartialMock(
+            \Magento\Backend\Model\Menu::class,
+            [
+                'getFirstAvailableChild',
+                'get',
+                'getFirstAvailable',
+            ]
+        );
 
         $this->_menuConfigMock = $this->createMock(\Magento\Backend\Model\Menu\Config::class);
         $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
@@ -136,7 +143,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ->method('getHash')
             ->willReturnArgument(0);
         $routeParamsResolver = $this->createMock(\Magento\Framework\Url\RouteParamsResolver::class);
-        $this->routeParamsResolverFactoryMock = $this->createMock(\Magento\Framework\Url\RouteParamsResolverFactory::class);
+        $this->routeParamsResolverFactoryMock = $this->createMock(RouteParamsResolverFactory::class);
         $this->routeParamsResolverFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($routeParamsResolver);

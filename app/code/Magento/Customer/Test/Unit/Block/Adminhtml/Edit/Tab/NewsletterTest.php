@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Model\Session;
@@ -61,7 +59,10 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->formFactoryMock = $this->createMock(\Magento\Framework\Data\FormFactory::class);
-        $this->subscriberFactoryMock = $this->createPartialMock(\Magento\Newsletter\Model\SubscriberFactory::class, ['create']);
+        $this->subscriberFactoryMock = $this->createPartialMock(
+            \Magento\Newsletter\Model\SubscriberFactory::class,
+            ['create']
+        );
         $this->accountManagementMock = $this->createMock(\Magento\Customer\Api\AccountManagementInterface::class);
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->backendSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
@@ -94,7 +95,10 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $fieldsetMock = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
         $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Checkbox::class, ['setIsChecked']);
-        $formMock = $this->createPartialMock(\Magento\Framework\Data\Form::class, ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']);
+        $formMock = $this->createPartialMock(
+            \Magento\Framework\Data\Form::class,
+            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']
+        );
         $this->registryMock->expects($this->exactly(3))
             ->method('registry')
             ->willReturnMap(
@@ -139,7 +143,10 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
         $fieldsetMock = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
         $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Checkbox::class, ['setIsChecked']);
-        $formMock = $this->createPartialMock(\Magento\Framework\Data\Form::class, ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']);
+        $formMock = $this->createPartialMock(
+            \Magento\Framework\Data\Form::class,
+            ['setHtmlIdPrefix', 'addFieldset', 'setValues', 'getElement', 'setForm', 'setParent', 'setBaseUrl']
+        );
         $this->registryMock->expects($this->exactly(3))
             ->method('registry')
             ->willReturnMap(

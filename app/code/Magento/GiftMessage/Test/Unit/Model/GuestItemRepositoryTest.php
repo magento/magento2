@@ -1,12 +1,10 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\GiftMessage\Test\Unit\Model;
 
-// @codingStandardsIgnoreFile
+namespace Magento\GiftMessage\Test\Unit\Model;
 
 use Magento\GiftMessage\Model\ItemRepository;
 

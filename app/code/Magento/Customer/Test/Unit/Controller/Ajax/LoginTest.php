@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Controller\Ajax;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -109,7 +107,10 @@ class LoginTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->response = $this->createPartialMock(ResponseInterface::class, ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']);
+        $this->response = $this->createPartialMock(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse', 'representJson', 'setHttpResponseCode']
+        );
         $this->customerSession = $this->createPartialMock(Session::class, [
                 'isLoggedIn',
                 'getLastCustomerId',

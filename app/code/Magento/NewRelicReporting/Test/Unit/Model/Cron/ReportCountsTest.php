@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
 
 use Magento\NewRelicReporting\Model\Cron\ReportCounts;
@@ -11,9 +12,7 @@ use Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface;
 use Magento\Catalog\Api\CategoryManagementInterface;
 
 /**
- * Class ReportCountsTest
- *
- * @codingStandardsIgnoreFile
+ * Test for Magento\NewRelicReporting\Model\Cron\ReportCounts
  */
 class ReportCountsTest extends \PHPUnit\Framework\TestCase
 {

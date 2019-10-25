@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\UrlRewrite\Model\OptionProvider;
@@ -321,7 +319,8 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                 ],
                 'url_key_create_redirect' => 0,
                 'url_key' => 'url-key',
-            ]);
+            ]
+        );
         $category->setStoreId($storeId);
         $repository->save($category);
 
@@ -340,8 +339,9 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
                 'use_default' => [
                     'url_key' => 1,
                 ],
-               'url_key' => '',
-            ]);
+                'url_key' => '',
+            ]
+        );
 
         $repository->save($category);
 

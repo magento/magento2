@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type\Bundle;
 
 class OptionTest extends \PHPUnit\Framework\TestCase
@@ -62,12 +60,10 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $selectionId = 315;
         $this->product->expects($this->atLeastOnce())
             ->method('hasPreconfiguredValues')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->product->expects($this->atLeastOnce())
             ->method('getPreconfiguredValues')
-            ->will($this->returnValue(
-                new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]]))
-            );
+            ->willReturn(new \Magento\Framework\DataObject(['bundle_option' => [15 => 315, 16 => 316]]));
 
         $option = $this->createMock(\Magento\Bundle\Model\Option::class);
         $option->expects($this->any())->method('getId')->will($this->returnValue(15));

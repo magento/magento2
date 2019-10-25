@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
@@ -195,6 +196,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $salableProcessor;
 
     /**
+     * @var AppState
+     */
+    private $appState;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -217,6 +223,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param ProductInterfaceFactory $productFactory
      * @param SalableProcessor $salableProcessor
+     * @param AppState|null $appState
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -241,7 +248,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Customer\Model\Session $customerSession = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ProductInterfaceFactory $productFactory = null,
-        SalableProcessor $salableProcessor = null
+        SalableProcessor $salableProcessor = null,
+        AppState $appState = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -256,6 +264,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->productFactory = $productFactory ?: ObjectManager::getInstance()
             ->get(ProductInterfaceFactory::class);
         $this->salableProcessor = $salableProcessor ?: ObjectManager::getInstance()->get(SalableProcessor::class);
+        $this->appState = $appState ?? ObjectManager::getInstance()->get(AppState::class);
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -1246,6 +1255,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $product->getData($metadata->getLinkField()),
             $product->getStoreId(),
             $this->getCustomerSession()->getCustomerGroupId(),
+            $this->appState->getAreaCode(),
             $requiredAttributeIds
         ];
         $cacheKey = $this->getUsedProductsCacheKey($keyParts);

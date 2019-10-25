@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
@@ -905,8 +903,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $usedOptions = $product->getData($this->_keyUsedOptions);
         $usedOptionsIds = $product->getData($this->_keyUsedOptionsIds);
 
-        if (
-            !$usedOptions
+        if (!$usedOptions
             || $this->serializer->serialize($usedOptionsIds) != $this->serializer->serialize($optionIds)
         ) {
             $usedOptions = $this->_bundleOption
@@ -1266,7 +1263,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
             foreach ($optionsCollection->getItems() as $option) {
                 if ($option->getRequired() && !isset($options[$option->getId()])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Please select all required options.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Please select all required options.')
+                    );
                 }
             }
         }

@@ -28,7 +28,9 @@
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertCheckoutCartUrl"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
         <click selector="{{StorefrontCheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
     </actionGroup>
 
     <!-- Checkout place order -->

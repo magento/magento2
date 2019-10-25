@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
@@ -65,9 +63,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $this->reportResource = $this->createPartialMock(\Magento\Sales\Model\ResourceModel\Report::class, ['getConnection', 'getMainTable']);
+        $this->reportResource = $this->createPartialMock(
+            \Magento\Sales\Model\ResourceModel\Report::class,
+            ['getConnection', 'getMainTable']
+        );
 
-        $this->connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['select', 'getDateFormatSql', 'quoteInto']);
+        $this->connection = $this->createPartialMock(
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            ['select', 'getDateFormatSql', 'quoteInto']
+        );
 
         $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where', 'group']);
 
@@ -82,11 +86,18 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));
 
-        $this->ruleFactory = $this->createPartialMock(\Magento\SalesRule\Model\ResourceModel\Report\RuleFactory::class, ['create']);
+        $this->ruleFactory = $this->createPartialMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory::class,
+            ['create']
+        );
 
         $this->object = new \Magento\SalesRule\Model\ResourceModel\Report\Collection(
-            $this->entityFactory, $this->loggerMock, $this->fetchStrategy,
-            $this->eventManager, $this->reportResource, $this->ruleFactory
+            $this->entityFactory,
+            $this->loggerMock,
+            $this->fetchStrategy,
+            $this->eventManager,
+            $this->reportResource,
+            $this->ruleFactory
         );
     }
 
@@ -176,6 +187,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected function getRuleMock()
     {
-        return $this->createPartialMock(\Magento\SalesRule\Model\ResourceModel\Report\Rule::class, ['getUniqRulesNamesList']);
+        return $this->createPartialMock(
+            \Magento\SalesRule\Model\ResourceModel\Report\Rule::class,
+            ['getUniqRulesNamesList']
+        );
     }
 }

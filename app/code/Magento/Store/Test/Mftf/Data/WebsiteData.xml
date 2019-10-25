@@ -25,4 +25,8 @@
         <data key="code" unique="suffix">second_website_</data>
         <data key="sort_order">10</data>
     </entity>
+    <entity name="secondCustomWebsite" extends="CustomWebSite">
+        <data key="name" unique="suffix">Custom Website</data>
+        <data key="code" unique="suffix">custom_website</data>
+    </entity>
 </entities>

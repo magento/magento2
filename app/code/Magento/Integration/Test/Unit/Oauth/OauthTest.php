@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Oauth;
 
 /**
@@ -166,8 +164,8 @@ class OauthTest extends \PHPUnit\Framework\TestCase
         $requiredParams = [
             'oauth_version' => '1.0',
             'oauth_consumer_key' => $this->_generateRandomString(
-                    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY
-                ),
+                \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY
+            ),
             'oauth_nonce' => '',
             'oauth_timestamp' => time(),
             'oauth_signature_method' => \Magento\Framework\Oauth\OauthInterface::SIGNATURE_SHA1,
@@ -875,8 +873,8 @@ class OauthTest extends \PHPUnit\Framework\TestCase
     {
         $requiredParams = [
             'oauth_consumer_key' => $this->_generateRandomString(
-                    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY
-                ),
+                \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY
+            ),
             'oauth_signature' => '',
             'oauth_signature_method' => \Magento\Framework\Oauth\OauthInterface::SIGNATURE_SHA1,
             'oauth_nonce' => '',

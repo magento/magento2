@@ -21,5 +21,9 @@
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="country" type="select" selector="select[name=country_id]"/>
         <element name="company" type="input" selector="input[name=company]"/>
+
+        <!--Order Summary-->
+        <element name="itemInCart" type="button" selector="//div[@class='title']"/>
+        <element name="productName" type="text" selector="//strong[@class='product-item-name']"/>
     </section>
 </sections>

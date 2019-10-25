@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 
 use Magento\Framework\Data\AbstractCriteria;
@@ -20,7 +18,8 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
      */
     public function __construct($mapper = '')
     {
-        $this->mapperInterfaceName = $mapper ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper::class;
+        $this->mapperInterfaceName = $mapper
+            ?: \Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper::class;
         $this->data['initial_condition'] = true;
     }
 

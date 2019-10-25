@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Test\Unit\Helper;
 
 use Magento\Checkout\Helper\Data;
@@ -40,12 +38,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private  $_checkoutSession;
+    private $_checkoutSession;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private  $_scopeConfig;
+    private $_scopeConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject

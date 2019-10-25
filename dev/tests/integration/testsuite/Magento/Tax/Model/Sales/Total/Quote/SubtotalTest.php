@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -78,9 +76,9 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
         $customerGroup = $this->objectManager->create(
             \Magento\Customer\Model\Group::class
         )->load(
-                'custom_group',
-                'customer_group_code'
-            );
+            'custom_group',
+            'customer_group_code'
+        );
         $customerGroup->setTaxClassId($customerTaxClassId)->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
@@ -98,21 +96,15 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->setStoreId(
-                1
-            )->setIsActive(
-                true
-            )->setIsMultiShipping(
-                false
-            )->assignCustomerWithAddressChange(
+        $quote->setStoreId(1)
+            ->setIsActive(true)
+            ->setIsMultiShipping(false)
+            ->assignCustomerWithAddressChange(
                 $this->getCustomerById($customer->getId())
-            )->setShippingAddress(
-                $quoteShippingAddress
-            )->setBillingAddress(
-                $quoteShippingAddress
-            )->setCheckoutMethod(
-                $customer->getMode()
-            )->setPasswordHash(
+            )->setShippingAddress($quoteShippingAddress)
+            ->setBillingAddress($quoteShippingAddress)
+            ->setCheckoutMethod($customer->getMode())
+            ->setPasswordHash(
                 $customer->encryptPassword($customer->getPassword())
             )->addProduct(
                 $product->load($product->getId()),
@@ -197,9 +189,9 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
         $customerGroup = $this->objectManager->create(
             \Magento\Customer\Model\Group::class
         )->load(
-                'custom_group',
-                'customer_group_code'
-            );
+            'custom_group',
+            'customer_group_code'
+        );
         $customerGroup->setTaxClassId($customerTaxClassId)->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
@@ -222,21 +214,15 @@ class SubtotalTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->setStoreId(
-                1
-            )->setIsActive(
-                true
-            )->setIsMultiShipping(
-                false
-            )->assignCustomerWithAddressChange(
+        $quote->setStoreId(1)
+            ->setIsActive(true)
+            ->setIsMultiShipping(false)
+            ->assignCustomerWithAddressChange(
                 $this->getCustomerById($customer->getId())
-            )->setShippingAddress(
-                $quoteShippingAddress
-            )->setBillingAddress(
-                $quoteShippingAddress
-            )->setCheckoutMethod(
-                $customer->getMode()
-            )->setPasswordHash(
+            )->setShippingAddress($quoteShippingAddress)
+            ->setBillingAddress($quoteShippingAddress)
+            ->setCheckoutMethod($customer->getMode())
+            ->setPasswordHash(
                 $customer->encryptPassword($customer->getPassword())
             )->addProduct(
                 $product->load($product->getId()),

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -519,7 +517,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeSetId = $object->getAttributeSetId() ?: 0;
         $storeId = $object->getStoreId() ?: 0;
         return $storeId . '-' . $attributeSetId;
-     }
+    }
 
     /**
      * Retrieve partial load flag
@@ -1020,7 +1018,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         } else {
             $object->isObjectNew(true);
         }
-
 
         \Magento\Framework\Profiler::stop('EAV:load_entity');
         return $this;

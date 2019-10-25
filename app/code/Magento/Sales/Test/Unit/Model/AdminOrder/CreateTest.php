@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
 use Magento\Backend\Model\Session\Quote as SessionQuote;
@@ -224,15 +222,16 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $quote->method('getCustomer')->willReturn($customer);
         $quote->method('addData')
             ->with(
-            [
-                'customer_group_id' => $attributes[1][1],
-                'customer_tax_class_id' => $taxClassId
-            ]
-        );
+                [
+                    'customer_group_id' => $attributes[1][1],
+                    'customer_tax_class_id' => $taxClassId,
+                ]
+            );
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
-                ['group_id' => 1], CustomerInterface::class
+                ['group_id' => 1],
+                CustomerInterface::class
             );
 
         $this->formFactory->method('create')

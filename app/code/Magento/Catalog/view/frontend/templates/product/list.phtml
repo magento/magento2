@@ -92,7 +92,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit"
                                                     title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
-                                                    class="action tocart primary">
+                                                    class="action tocart primary" disabled>
                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>

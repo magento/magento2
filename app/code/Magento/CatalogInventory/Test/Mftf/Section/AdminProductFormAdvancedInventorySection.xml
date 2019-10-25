@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormAdvancedInventorySection">
+        <element name="maxiQtyConfigSetting" type="checkbox" selector="[name='product[stock_data][use_config_max_sale_qty]']"/>
+        <element name="maxiQtyAllowedInCart" type="input" selector="[name='product[stock_data][max_sale_qty]']"/>
+        <element name="maxiQtyAllowedInCartError" type="text" selector="[name='product[stock_data][max_sale_qty]'] + label.admin__field-error"/>
+        <element name="advancedInventoryModal" type="block" selector=".product_form_product_form_advanced_inventory_modal[data-role=modal]"/>
+    </section>
+</sections>

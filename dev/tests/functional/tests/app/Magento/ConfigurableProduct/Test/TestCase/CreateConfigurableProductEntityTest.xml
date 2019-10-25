@@ -251,7 +251,7 @@
             <data name="configData">display_out_of_stock_products</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCategory" />
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsAbsentOnProductPage" />
+            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertOutOfStockOptionIsPresentOnProductPage" />
         </variation>
         <variation name="CreateConfigurableProductEntityTestVariation16" summary="Create Configurable Product with 1 out of stock and several in stock options" ticketId="MAGETWO-69508">
             <data name="product/data/url_key" xsi:type="string">configurable-product-%isolation%</data>

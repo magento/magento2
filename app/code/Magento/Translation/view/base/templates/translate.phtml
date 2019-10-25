@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Translation\Block\Js $block */
 ?>
-<?php if ($block->dictionaryEnabled()): ?>
+<?php if ($block->dictionaryEnabled()) : ?>
     <script>
         require.config({
             deps: [

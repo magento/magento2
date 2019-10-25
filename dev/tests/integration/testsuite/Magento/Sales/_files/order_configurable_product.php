@@ -6,8 +6,6 @@
 
 use Magento\Sales\Model\Order\Payment;
 
-// @codingStandardsIgnoreFile
-
 require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
 
 /** @var \Magento\Catalog\Model\Product $product */

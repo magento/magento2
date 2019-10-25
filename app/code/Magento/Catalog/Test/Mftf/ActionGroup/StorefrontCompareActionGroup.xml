@@ -67,4 +67,19 @@
         <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You cleared the comparison list." stepKey="assertMessageCleared"/>
         <waitForElementVisible selector="{{StorefrontComparisonSidebarSection.noItemsMessage}}" stepKey="assertNoItems"/>
     </actionGroup>
+
+    <actionGroup name="RemoveProductFromComparisonList">
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+        <click selector="{{StorefrontProductCompareMainSection.removeProduct(product.name)}}" stepKey="clickRemoveProductButton"/>
+        <waitForElementVisible selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="waitForConfirmationPopup"/>
+        <click selector="{{StorefrontModalConfirmationSection.okButton}}" stepKey="confirmProductRemove"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.successMessage}}" stepKey="waitForProductRemoveSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.successMessage}}" userInput="You removed product {{product.name}} from the comparison list." stepKey="assertProductRemoveSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontCheckCompareOutOfStockProductActionGroup" extends="StorefrontCheckCompareSimpleProductActionGroup">
+        <remove keyForRemoval="assertProductAddToCart"/>
+    </actionGroup>
 </actionGroups>

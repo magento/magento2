@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
@@ -56,7 +53,10 @@ class ShippingMethodConverterTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->shippingMethodDataFactoryMock = $this->createPartialMock(\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory::class, ['create']);
+        $this->shippingMethodDataFactoryMock = $this->createPartialMock(
+            \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory::class,
+            ['create']
+        );
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->currencyMock = $this->createMock(\Magento\Directory\Model\Currency::class);
         $this->shippingMethodMock = $this->createPartialMock(\Magento\Quote\Model\Cart\ShippingMethod::class, [

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -146,8 +144,8 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             ['addSuccessMessage', 'addMessage', 'addExceptionMessage', 'addErrorMessage']
         )->getMock();
 
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class)
+        $this->resultRedirectFactoryMock =
+            $this->getMockBuilder(\Magento\Backend\Model\View\Result\RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -235,7 +233,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -289,7 +287,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -528,7 +526,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }

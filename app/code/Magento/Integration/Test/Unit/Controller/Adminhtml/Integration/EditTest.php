@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -15,30 +13,18 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
 {
     public function testEditAction()
     {
-        $this->_integrationSvcMock->expects(
-            $this->any()
-        )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getSampleIntegrationData())
-            );
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-                'getParam'
-            )->with(
-                $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
-            )->will(
-                $this->returnValue(self::INTEGRATION_ID)
-            );
+        $this->_integrationSvcMock->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->willReturn($this->_getSampleIntegrationData());
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->with($this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID))
+            ->willReturn(self::INTEGRATION_ID);
         // put data in session, the magic function getFormData is called so, must match __call method name
-        $this->_backendSessionMock->expects(
-            $this->any()
-        )->method(
-                '__call'
-            )->will(
+        $this->_backendSessionMock->expects($this->any())
+            ->method('__call')
+            ->will(
                 $this->returnValueMap(
                     [
                         ['setIntegrationData'],
@@ -66,22 +52,14 @@ class EditTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_messageManager->expects($this->once())->method('addError')->with($this->equalTo($exceptionMessage));
         $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(self::INTEGRATION_ID));
         // put data in session, the magic function getFormData is called so, must match __call method name
-        $this->_backendSessionMock->expects(
-            $this->any()
-        )->method(
-                '__call'
-            )->will(
-                $this->returnValue(['name' => 'nonExistentInt'])
-            );
+        $this->_backendSessionMock->expects($this->any())
+            ->method('__call')
+            ->willReturn(['name' => 'nonExistentInt']);
 
         $invalidIdException = new IntegrationException(__($exceptionMessage));
-        $this->_integrationSvcMock->expects(
-            $this->any()
-        )->method(
-                'get'
-            )->will(
-                $this->throwException($invalidIdException)
-            );
+        $this->_integrationSvcMock->expects($this->any())
+            ->method('get')
+            ->willThrowException($invalidIdException);
         $this->_escaper->expects($this->once())
             ->method('escapeHtml')
             ->willReturnArgument(0);

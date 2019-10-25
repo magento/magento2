@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
 use \Magento\Catalog\Model\Layer\FilterList;
@@ -40,7 +38,9 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->attributeListMock = $this->createMock(\Magento\Catalog\Model\Layer\Category\FilterableAttributeList::class);
+        $this->attributeListMock = $this->createMock(
+            \Magento\Catalog\Model\Layer\Category\FilterableAttributeList::class
+        );
         $this->attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $filters = [
             FilterList::CATEGORY_FILTER => 'CategoryFilterClass',

@@ -6,6 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Product\Compare;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -31,7 +32,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare
                 $product = null;
             }
 
-            if ($product && $product->isSalable()) {
+            if ($product && (int)$product->getStatus() !== Status::STATUS_DISABLED) {
                 /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
                 $item = $this->_compareItemFactory->create();
                 if ($this->_customerSession->isLoggedIn()) {

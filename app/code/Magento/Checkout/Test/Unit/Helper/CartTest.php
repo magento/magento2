@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Test\Unit\Helper;
 
 use \Magento\Checkout\Helper\Cart;
@@ -188,7 +186,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $productEntityId = 1;
         $storeId = 1;
         $isRequestSecure = false;
-        $productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup']);
+        $productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup']
+        );
         $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
         $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
         $productMock->expects($this->any())->method('getUrlDataObject')

@@ -1,11 +1,8 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
@@ -154,7 +151,9 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $this->customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $this->customerDetailsMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->customerDetailsFactoryMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
+        $this->customerDetailsFactoryMock = $this->createMock(
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
+        );
 
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\Manager::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -168,7 +167,10 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
         $formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
 
         $this->subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
-        $subscriberFactoryMock = $this->createPartialMock(\Magento\Newsletter\Model\SubscriberFactory::class, ['create']);
+        $subscriberFactoryMock = $this->createPartialMock(
+            \Magento\Newsletter\Model\SubscriberFactory::class,
+            ['create']
+        );
         $subscriberFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->subscriberMock));
@@ -183,8 +185,8 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
 
         $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Controller\Result\RedirectFactory::class)
+        $this->resultRedirectFactoryMock =
+            $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

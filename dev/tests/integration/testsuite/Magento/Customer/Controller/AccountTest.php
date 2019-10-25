@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Controller;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -101,12 +99,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * Test that forgot password email message displays special characters correctly.
      *
+     * @codingStandardsIgnoreStart
      * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
      * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoConfigFixture current_store general/store_information/name Test special' characters
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @codingStandardsIgnoreEnd
      */
     public function testForgotPasswordEmailMessageWithSpecialCharacters()
     {
@@ -328,11 +328,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @codingStandardsIgnoreStart
      * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
      * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @codingStandardsIgnoreEnd
      */
     public function testForgotPasswordPostAction()
     {
@@ -456,9 +458,11 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @codingStandardsIgnoreStart
      * @magentoConfigFixture current_store customer/account_information/change_email_template customer_account_information_change_email_and_password_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @codingStandardsIgnoreEnd
      */
     public function testEditPostAction()
     {
@@ -497,9 +501,11 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @codingStandardsIgnoreStart
      * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template customer_account_information_change_email_and_password_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @codingStandardsIgnoreEnd
      */
     public function testChangePasswordEditPostAction()
     {

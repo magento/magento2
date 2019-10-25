@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Product\ProductList;
 
+use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog product upsell items block
@@ -18,7 +17,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
-class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
+class Upsell extends AbstractProduct implements IdentityInterface
 {
     /**
      * @var int

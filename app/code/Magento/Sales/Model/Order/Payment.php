@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\ObjectManager;
@@ -783,7 +781,9 @@ class Payment extends Info implements OrderPaymentInterface
         if ($amount != $baseGrandTotal) {
             $order->addStatusHistoryComment(
                 __(
-                    'IPN "Refunded". Refund issued by merchant. Registered notification about refunded amount of %1. Transaction ID: "%2". Credit Memo has not been created. Please create offline Credit Memo.',
+                    'IPN "Refunded". Refund issued by merchant. '
+                    . 'Registered notification about refunded amount of %1. Transaction ID: "%2". '
+                    . 'Credit Memo has not been created. Please create offline Credit Memo.',
                     $this->formatPrice($notificationAmount),
                     $this->getTransactionId()
                 ),
@@ -1270,14 +1270,12 @@ class Payment extends Info implements OrderPaymentInterface
     {
         $preparedMessage = $this->getPreparedMessage();
         if ($preparedMessage) {
-            if (
-                is_string($preparedMessage)
+            if (is_string($preparedMessage)
                 || $preparedMessage instanceof \Magento\Framework\Phrase
             ) {
                 return $preparedMessage . ' ' . $messagePrependTo;
-            } elseif (is_object(
-                    $preparedMessage
-                ) && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
+            } elseif (is_object($preparedMessage)
+                && $preparedMessage instanceof \Magento\Sales\Model\Order\Status\History
             ) {
                 $comment = $preparedMessage->getComment() . ' ' . $messagePrependTo;
                 $preparedMessage->setComment($comment);
@@ -1422,7 +1420,8 @@ class Payment extends Info implements OrderPaymentInterface
         return $this->transactionManager->isTransactionExists(
             $this->getTransactionId(),
             $this->getId(),
-            $this->getOrder()->getId());
+            $this->getOrder()->getId()
+        );
     }
 
     /**
@@ -1442,9 +1441,8 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
         foreach ($this->getOrder()->getInvoiceCollection() as $invoice) {
-            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN && $invoice->load(
-                    $invoice->getId()
-                )
+            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
+                && $invoice->load($invoice->getId())
             ) {
                 $invoice->setTransactionId($transactionId);
 

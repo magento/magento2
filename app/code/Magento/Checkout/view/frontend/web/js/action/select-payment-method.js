@@ -12,10 +12,11 @@ define([
     'use strict';
 
     return function (paymentMethod) {
-        paymentMethod.__disableTmpl = {
-            title: true
-        };
-
+        if (paymentMethod) {
+            paymentMethod.__disableTmpl = {
+                title: true
+            };
+        }
         quote.paymentMethod(paymentMethod);
     };
 });

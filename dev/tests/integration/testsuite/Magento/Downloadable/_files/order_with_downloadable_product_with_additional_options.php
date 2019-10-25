@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Sales\Model\Order\Address::class,
     [
@@ -25,11 +23,13 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
 $billingAddress->setAddressType('billing');
 
 $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Sales\Model\Order\Payment::class);
+    \Magento\Sales\Model\Order\Payment::class
+);
 $payment->setMethod('checkmo');
 
 $orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Sales\Model\Order\Item::class);
+    \Magento\Sales\Model\Order\Item::class
+);
 $orderItem->setProductId(
     1
 )->setProductType(
@@ -43,19 +43,11 @@ $orderItem->setProductOptions(['additional_options' => ['additional_option_key' 
 
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
 $order->setCustomerEmail('mail@to.co')
-    ->addItem(
-    $orderItem
-)->setIncrementId(
-    '100000001'
-)->setCustomerIsGuest(
-    true
-)->setStoreId(
-    1
-)->setEmailSent(
-    1
-)->setBillingAddress(
-    $billingAddress
-)->setPayment(
-    $payment
-);
+    ->addItem($orderItem)
+    ->setIncrementId('100000001')
+    ->setCustomerIsGuest(true)
+    ->setStoreId(1)
+    ->setEmailSent(1)
+    ->setBillingAddress($billingAddress)
+    ->setPayment($payment);
 $order->save();

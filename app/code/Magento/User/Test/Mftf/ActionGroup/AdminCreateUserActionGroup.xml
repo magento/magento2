@@ -29,4 +29,31 @@
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveUser" />
         <see userInput="You saved the user." stepKey="seeSuccessMessage" />
     </actionGroup>
+
+    <!--Create new user with role-->
+    <actionGroup name="AdminCreateUserWithRoleActionGroup">
+        <arguments>
+            <argument name="role"/>
+            <argument name="user" defaultValue="newAdmin"/>
+        </arguments>
+        <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
+        <waitForPageLoad stepKey="waitForUsersPage" />
+        <fillField selector="{{AdminNewUserFormSection.username}}" userInput="{{user.username}}" stepKey="enterUserName" />
+        <fillField selector="{{AdminNewUserFormSection.firstname}}" userInput="{{user.firstName}}" stepKey="enterFirstName" />
+        <fillField selector="{{AdminNewUserFormSection.lastname}}" userInput="{{user.lastName}}" stepKey="enterLastName" />
+        <fillField selector="{{AdminNewUserFormSection.email}}" userInput="{{user.username}}@magento.com" stepKey="enterEmail" />
+        <fillField selector="{{AdminNewUserFormSection.password}}" userInput="{{user.password}}" stepKey="enterPassword" />
+        <fillField selector="{{AdminNewUserFormSection.passwordConfirmation}}" userInput="{{user.password}}" stepKey="confirmPassword" />
+        <fillField selector="{{AdminNewUserFormSection.currentPassword}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
+        <scrollToTopOfPage stepKey="scrollToTopOfPage" />
+        <click stepKey="clickUserRole" selector="{{AdminNewUserFormSection.userRoleTab}}"/>
+        <click stepKey="chooseRole" selector="{{AdminStoreSection.createdRoleInUserPage(role.name)}}"/>
+        <click selector="{{AdminNewUserFormSection.save}}" stepKey="clickSaveUser" />
+        <waitForPageLoad stepKey="waitForSaveTheUser" />
+        <see userInput="You saved the user." stepKey="seeSuccessMessage" />
+    </actionGroup>
+
+    <actionGroup name="AdminCreateUserWithApiRoleActionGroup" extends="AdminCreateUserWithRoleActionGroup">
+        <click stepKey="chooseRole" selector="{{AdminNewUserFormSection.roleRadiobutton(role.rolename)}}"/>
+    </actionGroup>
 </actionGroups>

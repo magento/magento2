@@ -1,18 +1,16 @@
 <?php
 /**
- * Google Optimizer Data Helper
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\GoogleOptimizer\Helper;
 
 use \Magento\Store\Model\ScopeInterface;
 
 /**
+ * Google Optimizer Data Helper.
+ *
  * @api
  * @since 100.0.2
  */

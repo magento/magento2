@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Grid\Child;
 
 class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
@@ -31,7 +29,9 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
 
     public function testUpdateIfOrderExists()
     {
-        $collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class);
+        $collectionMock = $this->createMock(
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class
+        );
         $transactionMock = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
         $this->registryMock
             ->expects($this->once())

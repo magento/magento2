@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -350,13 +348,9 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMinDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->willReturn($validationRules);
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -420,13 +414,9 @@ class DobTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetMaxDateRange($validationRules, $expectedValue)
     {
-        $this->attribute->expects(
-            $this->once()
-        )->method(
-                'getValidationRules'
-            )->will(
-                $this->returnValue($validationRules)
-            );
+        $this->attribute->expects($this->once())
+            ->method('getValidationRules')
+            ->willReturn($validationRules);
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 
@@ -508,7 +498,6 @@ class DobTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}')
             ->will($this->returnValue('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"}}'));
-
 
         $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
 
