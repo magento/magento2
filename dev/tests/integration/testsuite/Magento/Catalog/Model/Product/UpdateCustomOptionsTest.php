@@ -25,8 +25,6 @@ use PHPUnit\Framework\TestCase;
  * Testing option types: "Area", "File", "Drop-down", "Radio-Buttons",
  * "Checkbox", "Multiple Select", "Date", "Date & Time" and "Time".
  *
- * @magentoAppArea adminhtml
- * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
 class UpdateCustomOptionsTest extends TestCase
@@ -72,11 +70,11 @@ class UpdateCustomOptionsTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->optionRepository = $this->objectManager->create(ProductCustomOptionRepositoryInterface::class);
-        $this->customOptionFactory = $this->objectManager->create(ProductCustomOptionInterfaceFactory::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->optionRepository = $this->objectManager->get(ProductCustomOptionRepositoryInterface::class);
+        $this->customOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
         $this->customOptionValueFactory = $this->objectManager
-            ->create(ProductCustomOptionValuesInterfaceFactory::class);
+            ->get(ProductCustomOptionValuesInterfaceFactory::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->currentStoreId = $this->storeManager->getStore()->getId();
         $adminStoreId = $this->storeManager->getStore('admin')->getId();
