@@ -9,9 +9,14 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Delete
+ */
 class Delete extends RatingController implements HttpPostActionInterface
 {
     /**
+     * Delete action
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()

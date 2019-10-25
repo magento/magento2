@@ -9,6 +9,9 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Review\Controller\Adminhtml\Rating as RatingController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Save
+ */
 class Save extends RatingController implements HttpPostActionInterface
 {
     /**

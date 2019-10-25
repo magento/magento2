@@ -10,6 +10,9 @@ use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
+/**
+ * Class Post
+ */
 class Post extends ProductController implements HttpPostActionInterface
 {
     /**
