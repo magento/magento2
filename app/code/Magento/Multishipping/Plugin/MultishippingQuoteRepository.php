@@ -90,7 +90,13 @@ class MultishippingQuoteRepository
     {
         $extensionAttributes = $quote->getExtensionAttributes();
         if ($quote->getIsMultiShipping() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
-            $quote->getExtensionAttributes()->setShippingAssignments([]);
+            /** @var \Magento\Quote\Model\Quote $quote */
+            $shippingAddress = $quote->getShippingAddress();
+            /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
+            $shippingAssignment = $this->shippingAssignmentFactory->create();
+            $shippingAssignment->setItems($quote->getItems());
+            $shippingAssignment->setShipping($this->shippingProcessor->create($shippingAddress));
+            $quote->getExtensionAttributes()->setShippingAssignments([$shippingAssignment]);
         }
 
         return [$quote];
