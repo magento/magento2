@@ -1438,7 +1438,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $product->load(1);
         $categories = $product->getCategoryIds();
-        $this->assertTrue(count($categories) == 1);
+        $this->assertTrue(count($categories) == 0);
     }
 
     protected function loadCategoryByName($categoryName)
