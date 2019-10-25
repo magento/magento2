@@ -79,7 +79,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpirationManager::class,
-            ['isUserExpired', 'deactivateExpiredUsers']
+            ['isUserExpired', 'deactivateExpiredUsersById']
         );
 
         $this->userMock = $this->createMock(\Magento\User\Model\User::class);
@@ -207,7 +207,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->userExpirationManagerMock->expects($this->once())
-            ->method('deactivateExpiredUsers')
+            ->method('deactivateExpiredUsersById')
             ->with([$adminUserId]);
 
         $this->authSessionMock->expects($this->once())

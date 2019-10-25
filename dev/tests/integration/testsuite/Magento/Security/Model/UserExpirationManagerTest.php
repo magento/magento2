@@ -71,7 +71,7 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
         $user = $this->loadUserByUsername($adminUsernameFromFixture);
         $sessionId = $this->authSession->getSessionId();
         $this->expireUser($user);
-        $this->userExpirationManager->deactivateExpiredUsers([$user->getId()]);
+        $this->userExpirationManager->deactivateExpiredUsersById([$user->getId()]);
         $this->adminSessionInfo->load($sessionId, 'session_id');
         $user->reload();
         $userExpirationModel = $this->loadExpiredUserModelByUser($user);
@@ -90,7 +90,7 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
         $this->loginUser($adminUsernameFromFixture);
         $user = $this->loadUserByUsername($adminUsernameFromFixture);
         $sessionId = $this->authSession->getSessionId();
-        $this->userExpirationManager->deactivateExpiredUsers([$user->getId()]);
+        $this->userExpirationManager->deactivateExpiredUsersById([$user->getId()]);
         $user->reload();
         $userExpirationModel = $this->loadExpiredUserModelByUser($user);
         $this->adminSessionInfo->load($sessionId, 'session_id');

@@ -58,7 +58,7 @@ class AdminUserAuthenticateBefore implements ObserverInterface
         $user->loadByUsername($username);
 
         if ($user->getId() && $this->userExpirationManager->isUserExpired($user->getId())) {
-            $this->userExpirationManager->deactivateExpiredUsers([$user->getId()]);
+            $this->userExpirationManager->deactivateExpiredUsersById([$user->getId()]);
             throw new AuthenticationException(
                 __(
                     'The account sign-in was incorrect or your account is disabled temporarily. '

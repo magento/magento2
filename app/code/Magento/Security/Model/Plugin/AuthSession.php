@@ -76,7 +76,7 @@ class AuthSession
             $this->addUserLogoutNotification();
             return null;
         } elseif ($this->userExpirationManager->isUserExpired($session->getUser()->getId())) {
-            $this->userExpirationManager->deactivateExpiredUsers([$session->getUser()->getId()]);
+            $this->userExpirationManager->deactivateExpiredUsersById([$session->getUser()->getId()]);
             $session->destroy();
             $this->addUserLogoutNotification();
             return null;

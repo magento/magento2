@@ -76,17 +76,34 @@ class UserExpirationManager
 
     /**
      * Deactivate expired user accounts and invalidate their sessions.
-     *
-     * @param array|null $userIds
      */
-    public function deactivateExpiredUsers(?array $userIds = null): void
+    public function deactivateExpiredUsers(): void
     {
         /** @var ExpiredUsersCollection $expiredRecords */
         $expiredRecords = $this->userExpirationCollectionFactory->create()->addActiveExpiredUsersFilter();
-        if ($userIds != null) {
-            $expiredRecords->addUserIdsFilter($userIds);
-        }
+        $this->processExpiredUsers($expiredRecords);
+    }
 
+    /**
+     * Deactivate specific expired users.
+     *
+     * @param array $userIds
+     */
+    public function deactivateExpiredUsersById(array $userIds): void
+    {
+        $expiredRecords = $this->userExpirationCollectionFactory->create()
+            ->addActiveExpiredUsersFilter()
+            ->addUserIdsFilter($userIds);
+        $this->processExpiredUsers($expiredRecords);
+    }
+
+    /**
+     * Deactivate expired user accounts and invalidate their sessions.
+     *
+     * @param ExpiredUsersCollection $expiredRecords
+     */
+    private function processExpiredUsers(ExpiredUsersCollection $expiredRecords): void
+    {
         if ($expiredRecords->getSize() > 0) {
             // get all active sessions for the users and set them to logged out
             /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection $currentSessions */

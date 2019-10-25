@@ -65,7 +65,7 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
 
         $this->userExpirationManagerMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpirationManager::class,
-            ['isUserExpired', 'deactivateExpiredUsers']
+            ['isUserExpired', 'deactivateExpiredUsersById']
         );
         $this->userFactoryMock = $this->createPartialMock(\Magento\User\Model\UserFactory::class, ['create']);
         $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['loadByUsername', 'getId']);
@@ -104,7 +104,7 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->userMock->expects(static::exactly(3))->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
-            ->method('deactivateExpiredUsers')
+            ->method('deactivateExpiredUsersById')
             ->with([$adminUserId])
             ->willReturn(null);
         $this->observer->execute($this->eventObserverMock);
