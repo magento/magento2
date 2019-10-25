@@ -99,7 +99,6 @@ class Options implements OptionSourceInterface
                         $groups[$name]['label'] = str_repeat(' ', 4) . $name;
                         $groups[$name]['value'] = array_values($stores);
                         $groups[$name]['__disableTmpl'] = true;
-
                     }
                 }
             }
