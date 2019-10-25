@@ -184,37 +184,27 @@ MUTATION;
      */
     public function testUpdateCustomerAddressHasCustomAttributes()
     {
-        /** @var AddressRepositoryInterface $addressRepositoryInterface */
-        $addressRepositoryInterface = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
-        /** @var \Magento\Customer\Api\Data\AddressInterface $address */
-        $address = $addressRepositoryInterface->getById(1);
-        $address
-            ->setCustomAttribute('custom_attribute1', '')
-            ->setCustomAttribute('custom_attribute2', '');
-        $addressRepositoryInterface->save($address);
-
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 1;
-
+        $attributes = [
+            [
+                'attribute_code' => 'custom_attribute1',
+                'value'=> '[new-value1,new-value2]'
+            ],
+            [
+                'attribute_code' => 'custom_attribute2',
+                'value'=> '"new-value3"'
+            ]
+        ];
+        $attributesFragment = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($attributes));
         $mutation
             = <<<MUTATION
 mutation {
   updateCustomerAddress(
     id: {$addressId}
     input: {
-      firstname: "John"
-      lastname: "Doe"
-      custom_attributes: [
-        {
-          attribute_code: "custom_attribute1"
-          value: "[line1,line2]"
-        }
-         {
-          attribute_code: "custom_attribute2"
-          value: "line3"
-        }
-      ]
+      custom_attributes: {$attributesFragment}
     }
   ) {
     custom_attributes {
@@ -226,11 +216,7 @@ mutation {
 MUTATION;
 
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
-        $actualCustomAttributes = $response['updateCustomerAddress']['custom_attributes'];
-        $this->assertEquals($actualCustomAttributes['0']['attribute_code'], 'custom_attribute1');
-        $this->assertEquals($actualCustomAttributes['0']['value'], '[line1,line2]');
-        $this->assertEquals($actualCustomAttributes['1']['attribute_code'], 'custom_attribute2');
-        $this->assertEquals($actualCustomAttributes['1']['value'], 'line3');
+        $this->assertEquals($attributes, $response['updateCustomerAddress']['custom_attributes']);
     }
 
     /**
