@@ -1193,7 +1193,6 @@
                     <item name="has_options" xsi:type="string">catalog_product</item>
                     <item name="image" xsi:type="string">catalog_product</item>
                     <item name="image_label" xsi:type="string">catalog_product</item>
-                    <item name="is_returnable" xsi:type="string">catalog_product</item>
                     <item name="media_gallery" xsi:type="string">catalog_product</item>
                     <item name="meta_description" xsi:type="string">catalog_product</item>
                     <item name="meta_keyword" xsi:type="string">catalog_product</item>

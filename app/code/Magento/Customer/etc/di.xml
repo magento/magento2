@@ -477,6 +477,7 @@
         <arguments>
             <argument name="attributesForPreload" xsi:type="array">
                 <item name="customer" xsi:type="array">
+                    <item name="confirmation" xsi:type="string">customer</item>
                     <item name="created_at" xsi:type="string">customer</item>
                     <item name="created_in" xsi:type="string">customer</item>
                     <item name="default_billing" xsi:type="string">customer</item>
@@ -494,8 +495,6 @@
                     <item name="middlename" xsi:type="string">customer</item>
                     <item name="password_hash" xsi:type="string">customer</item>
                     <item name="prefix" xsi:type="string">customer</item>
-                    <item name="reward_update_notification" xsi:type="string">customer</item>
-                    <item name="reward_warning_notification" xsi:type="string">customer</item>
                     <item name="rp_token" xsi:type="string">customer</item>
                     <item name="rp_token_created_at" xsi:type="string">customer</item>
                     <item name="store_id" xsi:type="string">customer</item>
