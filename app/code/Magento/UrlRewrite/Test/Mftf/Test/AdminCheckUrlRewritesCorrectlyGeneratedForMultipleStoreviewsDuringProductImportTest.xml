@@ -18,7 +18,17 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
+
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -27,9 +37,6 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
-            <createData entity="ApiCategory" stepKey="createCategory">
-                <field key="name">category-admin</field>
-            </createData>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -44,6 +51,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearStoreFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
