@@ -20,6 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create downloadable product -->
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
@@ -30,6 +31,7 @@
             </createData>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete downloadable product -->
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
         </after>
