@@ -44,7 +44,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -69,7 +69,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,

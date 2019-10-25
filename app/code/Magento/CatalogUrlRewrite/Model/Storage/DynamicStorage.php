@@ -148,7 +148,7 @@ class DynamicStorage extends BaseDbStorage
             CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
             ScopeInterface::SCOPE_STORE,
             $storeId
-        );
+        ) ?? '';
     }
 
     /**
