@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\Framework\Data\Tree\Dbp;
@@ -483,6 +485,11 @@ class Tree extends Dbp
 
         foreach ($this->_conn->fetchAll($select) as $item) {
             $pathIds = explode('/', $item['path']);
+
+            array_walk($pathIds, function (&$pathId) {
+                $pathId = (int)$pathId;
+            });
+
             $level = (int)$item['level'];
             while ($level > 0) {
                 $pathIds[count($pathIds) - 1] = '%';
