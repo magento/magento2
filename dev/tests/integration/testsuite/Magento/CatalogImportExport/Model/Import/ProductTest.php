@@ -2628,12 +2628,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $actualAllProductImages = [];
         $product = $this->getProductBySku('simple');
 
-        // Check that new images are imported and existing image is disabled after import
+        // Check that new images were imported and existing image is disabled after import
         $productMediaData = $product->getData('media_gallery');
 
         $this->assertNotEmpty($productMediaData['images']);
         $allProductImages = $productMediaData['images'];
-        $this->assertCount(3, $allProductImages, 'Images are imported incorrect');
+        $this->assertCount(3, $allProductImages, 'Images were imported incorrectly');
 
         foreach ($allProductImages as $image) {
             $actualAllProductImages[] = [
