@@ -8,14 +8,17 @@ namespace Magento\Eav\Model;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
+ * EAV config model.
+ *
  * @api
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -552,50 +555,9 @@ class Config
         }
 
         if ($this->scopeConfig->getValue(self::XML_PATH_CACHE_USER_DEFINED_ATTRIBUTES)) {
-            $cacheKey = self::ATTRIBUTES_CACHE_ID . '-attribute-' . $entityTypeCode . '-' . $code;
-            $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
-                ? $this->serializer->unserialize($attribute)
-                : null;
-            if ($attributeData) {
-                if (isset($attributeData['attribute_id'])) {
-                    $attribute = $this->_createAttribute($entityType, $attributeData);
-                } else {
-                    $entityType = $this->getEntityType($entityType);
-                    $attribute = $this->createAttribute($entityType->getAttributeModel());
-                    $attribute->setAttributeCode($code);
-                    $attribute = $this->setAttributeData($attribute, $entityType);
-                }
-            } else {
-                $attribute = $this->createAttributeByAttributeCode($entityType, $code);
-                $this->_addAttributeReference(
-                    $attribute->getAttributeId(),
-                    $attribute->getAttributeCode(),
-                    $entityTypeCode
-                );
-                $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
-                if ($this->isCacheEnabled()) {
-                    $this->_cache->save(
-                        $this->serializer->serialize($attribute->getData()),
-                        $cacheKey,
-                        [
-                            \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                            \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
-                        ]
-                    );
-                }
-            }
+            $attribute = $this->cacheUserDefinedAttribute($entityType, $entityTypeCode, $code);
         } else {
-            $attributes = $this->loadAttributes($entityTypeCode);
-            $attribute = $attributes[$code] ?? null;
-            if (!$attribute) {
-                $attribute = $this->createAttributeByAttributeCode($entityType, $code);
-                $this->_addAttributeReference(
-                    $attribute->getAttributeId(),
-                    $attribute->getAttributeCode(),
-                    $entityTypeCode
-                );
-                $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
-            }
+            $attribute = $this->initUserDefinedAttribute($entityType, $entityTypeCode, $code);
         }
 
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
@@ -666,6 +628,79 @@ class Config
         $this->isSystemAttributesLoaded[$entityTypeCode] = true;
 
         return $this;
+    }
+
+    /**
+     * Initialize user defined attribute from cache or cache it.
+     *
+     * @param string $entityType
+     * @param mixed $entityTypeCode
+     * @param string $code
+     * @return AbstractAttribute
+     * @throws LocalizedException
+     */
+    private function cacheUserDefinedAttribute($entityType, $entityTypeCode, $code): AbstractAttribute
+    {
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-attribute-' . $entityTypeCode . '-' . $code;
+        $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
+            ? $this->serializer->unserialize($attribute)
+            : null;
+        if ($attributeData) {
+            if (isset($attributeData['attribute_id'])) {
+                $attribute = $this->_createAttribute($entityType, $attributeData);
+            } else {
+                $entityType = $this->getEntityType($entityType);
+                $attribute = $this->createAttribute($entityType->getAttributeModel());
+                $attribute->setAttributeCode($code);
+                $attribute = $this->setAttributeData($attribute, $entityType);
+            }
+        } else {
+            $attribute = $this->createAttributeByAttributeCode($entityType, $code);
+            $this->_addAttributeReference(
+                $attribute->getAttributeId(),
+                $attribute->getAttributeCode(),
+                $entityTypeCode
+            );
+            $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
+            if ($this->isCacheEnabled()) {
+                $this->_cache->save(
+                    $this->serializer->serialize($attribute->getData()),
+                    $cacheKey,
+                    [
+                        \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    ]
+                );
+            }
+        }
+
+        return $attribute;
+    }
+
+    /**
+     * Initialize user defined attribute and save it to memory cache.
+     *
+     * @param mixed $entityType
+     * @param string $entityTypeCode
+     * @param string $code
+     * @return AbstractAttribute|null
+     * @throws LocalizedException
+     */
+    private function initUserDefinedAttribute($entityType, $entityTypeCode, $code): ?AbstractAttribute
+    {
+        $attributes = $this->loadAttributes($entityTypeCode);
+        $attribute = $attributes[$code] ?? null;
+        if (!$attribute) {
+            $attribute = $this->createAttributeByAttributeCode($entityType, $code);
+            $this->_addAttributeReference(
+                $attribute->getAttributeId(),
+                $attribute->getAttributeCode(),
+                $entityTypeCode
+            );
+            $this->saveAttribute($attribute, $entityTypeCode, $attribute->getAttributeCode());
+        }
+
+        return $attribute;
     }
 
     /**

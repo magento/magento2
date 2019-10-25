@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
+ * Catalog config model.
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
