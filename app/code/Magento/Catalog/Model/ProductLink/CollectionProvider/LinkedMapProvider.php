@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\ProductLink\CollectionProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductLink\MapProviderInterface;
-use Magento\Catalog\Model\Product\LinkFactory;
 use Magento\Catalog\Model\Product\Link;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as LinkedProductCollection;
@@ -36,9 +35,9 @@ class LinkedMapProvider implements MapProviderInterface
     ];
 
     /**
-     * @var LinkFactory
+     * @var Link
      */
-    private $linkModelFactory;
+    private $linkModel;
 
     /**
      * @var MetadataPool
@@ -52,16 +51,16 @@ class LinkedMapProvider implements MapProviderInterface
 
     /**
      * LinkedMapProvider constructor.
-     * @param LinkFactory $linkFactory
+     * @param Link $linkModel
      * @param MetadataPool $metadataPool
      * @param LinkedProductCollectionFactory $productCollectionFactory
      */
     public function __construct(
-        LinkFactory $linkFactory,
+        Link $linkModel,
         MetadataPool $metadataPool,
         LinkedProductCollectionFactory $productCollectionFactory
     ) {
-        $this->linkModelFactory = $linkFactory;
+        $this->linkModel = $linkModel;
         $this->metadata = $metadataPool;
         $this->productCollectionFactory = $productCollectionFactory;
     }
@@ -138,8 +137,6 @@ class LinkedMapProvider implements MapProviderInterface
     private function queryLinkedProducts(array $productIds, array $types): array
     {
         $found = [];
-        /** @var \Magento\Catalog\Model\Product\Link $linkModel */
-        $linkModel = $this->linkModelFactory->create();
         foreach ($types as $type => $typeId) {
             if (!array_key_exists($type, $productIds)) {
                 continue;
@@ -147,8 +144,8 @@ class LinkedMapProvider implements MapProviderInterface
 
             /** @var LinkedProductCollection $collection */
             $collection = $this->productCollectionFactory->create(['productIds' => $productIds[$type]]);
-            $linkModel->setLinkTypeId($typeId);
-            $collection->setLinkModel($linkModel);
+            $this->linkModel->setLinkTypeId($typeId);
+            $collection->setLinkModel($this->linkModel);
             $collection->setIsStrongMode();
             $found[$type] = $collection->getItems();
         }
