@@ -12,9 +12,14 @@ declare(strict_types=1);
 namespace Magento\Framework\Module;
 
 /**
- * @inheritdoc
+ * Module status manager
+ *
+ * Usage:
+ * ```php
+ *  $manager->isEnabled('Vendor_Module');
+ * ```
  */
-class Manager implements ModuleManagerInterface
+class Manager
 {
     /**
      * @var Output\ConfigInterface
@@ -49,9 +54,12 @@ class Manager implements ModuleManagerInterface
     }
 
     /**
-     * @inheritdoc
+     * Whether a module is enabled in the configuration or not
+     *
+     * @param string $moduleName Fully-qualified module name
+     * @return boolean
      */
-    public function isEnabled(string $moduleName): bool
+    public function isEnabled($moduleName)
     {
         return $this->moduleList->has($moduleName);
     }

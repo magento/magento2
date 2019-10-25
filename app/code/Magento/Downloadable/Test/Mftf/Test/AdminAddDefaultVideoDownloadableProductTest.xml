@@ -18,7 +18,12 @@
             <testCaseId value="MC-114"/>
             <group value="Downloadable"/>
         </annotations>
-
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="enableAdminAccountSharing"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="setStoreDefaultConfig"/>
+        </after>
         <!-- Create a downloadable product -->
         <!-- Replacing steps in base AdminAddDefaultVideoSimpleProductTest -->
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
