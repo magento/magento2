@@ -167,7 +167,7 @@ class AddToCartTest extends \PHPUnit\Framework\TestCase
             ->with([])
             ->willReturnSelf();
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message)
             ->willReturnSelf();
         $event->expects($this->once())
