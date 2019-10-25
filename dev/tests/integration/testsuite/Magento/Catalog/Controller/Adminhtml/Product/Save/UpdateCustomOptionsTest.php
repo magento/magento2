@@ -47,9 +47,9 @@ class UpdateCustomOptionsTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
-        $this->optionRepository = $this->_objectManager->create(ProductCustomOptionRepositoryInterface::class);
-        $this->optionRepositoryFactory = $this->_objectManager->create(ProductCustomOptionInterfaceFactory::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->optionRepository = $this->_objectManager->get(ProductCustomOptionRepositoryInterface::class);
+        $this->optionRepositoryFactory = $this->_objectManager->get(ProductCustomOptionInterfaceFactory::class);
     }
 
     /**
