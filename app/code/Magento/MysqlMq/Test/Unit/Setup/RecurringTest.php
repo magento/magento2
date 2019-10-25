@@ -47,7 +47,7 @@ class RecurringTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * Test for install method
      */
     public function testInstall()
     {
