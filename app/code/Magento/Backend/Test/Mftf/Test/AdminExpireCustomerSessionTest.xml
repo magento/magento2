@@ -10,12 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminExpireCustomerSessionTest">
         <annotations>
-            <stories value="Admin Session Expire"/>
-            <title value="Check that session expires according with time settings applied in configuration"/>
-            <description value="Check that session expires according with time settings applied in configuration"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-47722"/>
-            <group value="backend"/>
+            <features value="Backend"/>
+            <stories value="Customer Session Expire"/>
+            <title value="Customer Session Expireon"/>
+            <description value="Customer Session Expire"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14110"/>
+            <group value="Backend"/>
             <group value="mtf_migrated"/>
         </annotations>
         <after>
