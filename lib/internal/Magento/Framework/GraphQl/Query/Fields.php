@@ -28,11 +28,9 @@ class Fields
      *
      * @return void
      */
-    // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
     public function setQuery($query, array $variables = null)
     {
         $queryFields = [];
-
         try {
             $queryAst = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
             \GraphQL\Language\Visitor::visit(
@@ -48,6 +46,7 @@ class Fields
             if (isset($variables)) {
                 $queryFields = array_merge($queryFields, $this->extractVariables($variables));
             }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $e) {
             // If a syntax error is encountered do not collect fields
         }
