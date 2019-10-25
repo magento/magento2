@@ -73,7 +73,7 @@
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$0.01" stepKey="seeDiscountTotal"/>
 
-        <!-- Disable initially created rule -->
+        <!-- Delete initially created rule -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList2"/>
         <click selector="{{AdminCartPriceRulesSection.rowContainingText(SimpleSalesRule.name)}}"
                stepKey="goToEditRule"/>

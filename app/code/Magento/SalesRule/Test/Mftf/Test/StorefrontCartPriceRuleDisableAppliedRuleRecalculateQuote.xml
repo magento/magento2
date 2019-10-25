@@ -12,8 +12,8 @@
         <annotations>
             <features value="SalesRule"/>
             <stories value="Create cart price rule"/>
-            <title value="Quote Totals should be invalidated if cart rule was applied to it was disabled." />
-            <description value="Quote Totals should be invalidated if cart rule was applied to it was disabled."/>
+            <title value="Quote Totals should be invalidated if cart rule was applied to it and then was disabled." />
+            <description value="Quote Totals should be invalidated if cart rule was applied to it and then was disabled."/>
             <severity value="AVERAGE"/>
             <testCaseId value=""/>
             <group value="SalesRule"/>
