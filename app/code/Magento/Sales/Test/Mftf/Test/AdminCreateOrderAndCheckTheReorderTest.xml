@@ -14,7 +14,8 @@
             <stories value="MAGETWO-63924: 'Reorder' button is not visible for customer if ordered item is out of stock"/>
             <description value="'Reorder' button is not visible for customer if ordered item is out of stock"/>
             <features value="Sales"/>
-            <severity value="AVERAGE"/>
+            <testCaseId value="MC-22109"/>
+            <severity value="MAJOR"/>
             <group value="Sales"/>
             <group value="mtf_migrated"/>
         </annotations>

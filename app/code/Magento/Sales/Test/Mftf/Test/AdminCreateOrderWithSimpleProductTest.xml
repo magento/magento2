@@ -14,7 +14,8 @@
             <stories value="MAGETWO-12798: Create order with condition available product qty = ordered product qty"/>
             <description value="Create order with simple product and assert if it gets out of stock after ordering it."/>
             <features value="Sales"/>
-            <severity value="AVERAGE"/>
+            <testCaseId value="MC-22110"/>
+            <severity value="MAJOR"/>
             <group value="Sales"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -32,7 +33,7 @@
         </actionGroup>
         <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
-            <argument name="productQty" value="25"/>
+            <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
         </actionGroup>
         <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
