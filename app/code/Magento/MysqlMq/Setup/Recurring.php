@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\MysqlMq\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
@@ -29,7 +30,7 @@ class Recurring implements InstallSchemaInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {

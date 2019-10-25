@@ -14,6 +14,7 @@ use Magento\MysqlMq\Model\QueueManagement;
 
 /**
  * Class Exchange
+ *
  * @package Magento\MysqlMq\Model\Driver
  */
 class Exchange implements ExchangeInterface
