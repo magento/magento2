@@ -11,7 +11,7 @@
     <section name="AdminNewWidgetSection">
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
-        <element name="continue" type="button" selector="#continue_button"/>
+        <element name="continue" type="button" timeout="30" selector="#continue_button"/>
         <element name="widgetTitle" type="input" selector="#title"/>
         <element name="widgetStoreIds" type="select" selector="#store_ids"/>
         <element name="widgetSortOrder" type="input" selector="#sort_order"/>
