@@ -28,10 +28,11 @@ class Fields
      *
      * @return void
      */
+    // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
     public function setQuery($query, array $variables = null)
     {
         $queryFields = [];
-        // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
+
         try {
             $queryAst = \GraphQL\Language\Parser::parse(new \GraphQL\Language\Source($query ?: '', 'GraphQL'));
             \GraphQL\Language\Visitor::visit(
@@ -76,7 +77,6 @@ class Fields
      * @param array $variables
      *
      * @return string[]
-     *
      */
     private function extractVariables(array $variables): array
     {
