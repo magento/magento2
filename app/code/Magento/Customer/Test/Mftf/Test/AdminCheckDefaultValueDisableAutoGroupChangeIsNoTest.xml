@@ -27,7 +27,9 @@
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="AdminCheckDefaultValueDisableAutoGroupInCustomerFormActionGroup" stepKey="seeDefaultValueInForm">
+        <actionGroup ref="NavigateNewCustomerActionGroup" stepKey="navigateToNewCustomer"/>
+
+        <actionGroup ref="AdminAssertDefaultValueDisableAutoGroupInCustomerFormActionGroup" stepKey="seeDefaultValueInForm">
             <argument name="isChecked" value="0"/>
         </actionGroup>
     </test>
