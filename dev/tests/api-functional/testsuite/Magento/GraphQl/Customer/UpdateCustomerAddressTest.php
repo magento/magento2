@@ -182,7 +182,7 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_address_custom_attribute.php
      */
-    public function testUpdateCustomerAddressHasCustomAndExtensionAttributes()
+    public function testUpdateCustomerAddressHasCustomAttributes()
     {
         /** @var AddressRepositoryInterface $addressRepositoryInterface */
         $addressRepositoryInterface = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
