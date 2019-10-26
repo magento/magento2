@@ -114,9 +114,7 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
             ->create(LoginCustomerOnFrontendStep::class, ['customer' => $customer])
             ->run();
         $this->browser = $browser;
-
         $this->config = $config;
-        $this->config->setConfig('reports/options/enabled', 1);
 
         return ['customer' => $customer];
     }
@@ -146,6 +144,12 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $this->customerIndex = $customerIndex;
         $this->customerIndexEdit = $customerIndexEdit;
         $this->catalogProductCompare = $catalogProductCompare;
+    }
+
+    public function setUp()
+    {
+        $this->config->setConfig('reports/options/enabled', 1);
+        parent::setUp();
     }
 
     /**
