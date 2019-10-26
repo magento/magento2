@@ -419,6 +419,13 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .minicart-wrapper {
         margin-top: @indent__s;
+        
+        .product {
+            .actions {
+                float: none;
+                margin-top: @indent__s;
+            }
+        }
     }
 }
 
