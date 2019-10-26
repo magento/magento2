@@ -141,6 +141,14 @@
 //  Desktop
 //  _____________________________________________
 
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .sorter {
+        .sorter-label {
+            display: none;
+        }
+    }
+}
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .toolbar-products {
         margin-bottom: 0;
