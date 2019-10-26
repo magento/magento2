@@ -29,14 +29,16 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource = null
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
-        $this->productResource = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $this->productResource = $productResource ?? \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\ResourceModel\Product::class);
     }
 
     /**
