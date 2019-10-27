@@ -844,7 +844,6 @@ class EavSetup
                 $select = $select->where(
                     'attribute_set_name = :attribute_set_name'
                 );
-
                 $select_args['attribute_set_name'] = $attr['attribute_set'];
             }
 
