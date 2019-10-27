@@ -47,7 +47,10 @@ class IndexPlugin
         /** @var string $RequestString */
         $requestString = $request->getRequestString();
 
-        if ((bool) preg_match('/.+[index]/', $requestString) === true) {
+        /** @var string $pattern removing prefix */
+        $pattern = str_replace('/contact/', '', $requestString);
+
+        if (strlen($pattern) !== 0) {
             $this->redirect->redirect($subject->getResponse(), 'contact');
         }
         return null;
