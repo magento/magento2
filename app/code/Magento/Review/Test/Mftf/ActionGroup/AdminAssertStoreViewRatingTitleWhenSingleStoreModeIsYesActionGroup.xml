@@ -9,9 +9,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertStoreViewRatingTitleWhenSingleStoreModeIsYesActionGroup">
         <annotations>
-            <description>If Single Store Mode is enabled, default store view title label should be displayed.</description>
+            <description>If Single Store Mode is enabled, default store view title label should not be displayed.</description>
         </annotations>
-        <dontSeeElement selector="{{AdminEditAndNewRatingSection.defaultStoreViewTitleLabel}}" stepKey="seeLabel"/>
-        <dontSeeElement selector="{{AdminEditAndNewRatingSection.defaultStoreViewTitleInput}}" stepKey="seeInput"/>
+        <dontSeeElement selector="{{AdminEditAndNewRatingSection.defaultStoreViewTitleLabel}}" stepKey="dontSeeLabel"/>
+        <dontSeeElement selector="{{AdminEditAndNewRatingSection.defaultStoreViewTitleInput}}" stepKey="dontSeeInput"/>
     </actionGroup>
 </actionGroups>

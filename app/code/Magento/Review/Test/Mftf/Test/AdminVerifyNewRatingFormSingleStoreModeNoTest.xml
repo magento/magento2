@@ -13,7 +13,7 @@
             <features value="Review"/>
             <stories value="Rating Form"/>
             <title value="Verify New Rating Form if single store mode is No"/>
-            <description value="New Rating Form should not have Default store view field if single store mode is No"/>
+            <description value="New Rating Form should have Default store view field if single store mode is No"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-21818"/>
             <group value="review"/>
