@@ -78,7 +78,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
         $newUrl = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'new_products']);
-        $title = __('New Products from %1', $storeModel->getFrontendName());
+        $title = __('New Products from %1', $storeModel->getFrontendName())->render();
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
