@@ -54,7 +54,8 @@ class CleanupFiles
     {
         return array_merge(
             $this->emptyDir(DirectoryList::GENERATED_CODE),
-            $this->emptyDir(DirectoryList::GENERATED_METADATA)
+            $this->emptyDir(DirectoryList::GENERATED_METADATA),
+            $this->emptyDir(DirectoryList::STATIC_CACHE)
         );
     }
 

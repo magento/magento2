@@ -17,6 +17,7 @@ use Magento\Framework\Filesystem\Glob;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class Application
 {
@@ -251,6 +252,7 @@ class Application
     protected function getInstallConfig()
     {
         if (null === $this->installConfig) {
+            // phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
             $this->installConfig = include $this->installConfigFile;
         }
         return $this->installConfig;
@@ -708,6 +710,7 @@ class Application
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::TMP_MATERIALIZATION_DIR => [$path => "{$var}/view_preprocessed/pub/static"],
             DirectoryList::GENERATED_CODE => [$path => "{$generated}/code"],
+            DirectoryList::STATIC_CACHE => [$path => "{$generated}/static_cache"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
             DirectoryList::SESSION => [$path => "{$var}/session"],

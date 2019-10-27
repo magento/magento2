@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,34 +14,26 @@ use Magento\Framework\Config\CacheInterface;
  */
 class FileCache implements CacheInterface
 {
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
 
+    /**
+     * @var string|null
+     */
     private $cachePath;
 
     /**
-     * FileCache constructor.
-     * @param string|null $cachePath
+     * @param DirectoryList $directoryList
+     * @param ?string $cachePath
      */
-    public function __construct($cachePath = null)
-    {
-        if ($cachePath === null) {
-            $this->cachePath = BP . DIRECTORY_SEPARATOR .
-                DirectoryList::GENERATED . DIRECTORY_SEPARATOR .
-                'staticcache';
-        } else {
-            $this->cachePath = $cachePath;
-        }
-    }
-
-    /**
-     * Get cache path
-     *
-     * @param string $identifier
-     * @return string
-     */
-    private function getCachePath($identifier)
-    {
-        $identifier = str_replace('|', '_', $identifier);
-        return $this->cachePath . DIRECTORY_SEPARATOR . $identifier . '.php';
+    public function __construct(
+        DirectoryList $directoryList,
+        $cachePath = null
+    ) {
+        $this->directoryList = $directoryList;
+        $this->cachePath = $cachePath;
     }
 
     /**
@@ -52,7 +45,7 @@ class FileCache implements CacheInterface
      */
     public function test($identifier)
     {
-        return file_exists($this->getCachePath($identifier));
+        return file_exists($this->getCacheFilePath($identifier));
     }
 
     /**
@@ -65,7 +58,7 @@ class FileCache implements CacheInterface
     public function load($identifier)
     {
         // @codingStandardsIgnoreLine
-        return $this->cachePath ? @include $this->getCachePath($identifier) : false;
+        return $this->getCachePath() ? @include $this->getCacheFilePath($identifier) : false;
     }
 
     /**
@@ -80,8 +73,8 @@ class FileCache implements CacheInterface
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
-        if ($this->cachePath) {
-            $path = $this->getCachePath($identifier);
+        if ($this->getCachePath()) {
+            $path = $this->getCacheFilePath($identifier);
             if (!is_dir(dirname($path))) {
                 mkdir(dirname($path), 0777, true);
             }
@@ -115,8 +108,8 @@ class FileCache implements CacheInterface
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        if ($this->cachePath) {
-            foreach (glob($this->cachePath . '/*') as $file) {
+        if ($this->getCachePath()) {
+            foreach (glob($this->getCachePath() . '/*') as $file) {
                 if (is_file($file)) {
                     unlink($file);
                 }
@@ -144,5 +137,31 @@ class FileCache implements CacheInterface
     public function getLowLevelFrontend()
     {
         return null;
+    }
+
+    /**
+     * Get file cache path.
+     *
+     * @param string $identifier
+     * @return string
+     */
+    private function getCacheFilePath($identifier): string
+    {
+        $identifier = str_replace('|', '_', $identifier);
+        return $this->getCachePath() . DIRECTORY_SEPARATOR . $identifier . '.php';
+    }
+
+    /**
+     * Get cache path.
+     *
+     * @return string
+     */
+    private function getCachePath(): string
+    {
+        if (!$this->cachePath) {
+            $this->cachePath = $this->directoryList->getPath(DirectoryList::STATIC_CACHE);
+        }
+
+        return $this->cachePath;
     }
 }

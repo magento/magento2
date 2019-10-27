@@ -13,6 +13,11 @@ use Magento\Framework\Code\Generator\Io;
 class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 {
     /**
+     * Path for compiled interceptors static cache directory.
+     */
+    public const STATIC_CACHE = 'static_cache';
+
+    /**
      * Code base root
      */
     const ROOT = 'base';
@@ -136,7 +141,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const GENERATED_METADATA = 'metadata';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDefaultConfig()
     {
@@ -164,12 +169,13 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::GENERATED => [parent::PATH => 'generated'],
             self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
+            self::STATIC_CACHE => [parent::PATH => 'generated/static_cache'],
         ];
         return parent::getDefaultConfig() + $result;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct($root, array $config = [])
     {
