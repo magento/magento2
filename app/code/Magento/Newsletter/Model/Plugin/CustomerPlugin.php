@@ -6,13 +6,14 @@
 namespace Magento\Newsletter\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SearchResults;
-use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Framework\Api\ExtensionAttributesFactory;
-use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Customer\Api\Data\CustomerExtensionInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResults;
+use Magento\Newsletter\Model\ResourceModel\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 class CustomerPlugin
 {
@@ -176,8 +177,11 @@ class CustomerPlugin
      * @return SearchResults
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetList(CustomerRepository $subject, SearchResults $searchResults, SearchCriteria $searchCriteria)
-    {
+    public function afterGetList(
+        CustomerRepository $subject,
+        SearchResults $searchResults,
+        SearchCriteriaInterface $searchCriteria
+    ) {
 
         foreach ($searchResults->getItems() as $customer) {
             $extensionAttributes = $customer->getExtensionAttributes();
