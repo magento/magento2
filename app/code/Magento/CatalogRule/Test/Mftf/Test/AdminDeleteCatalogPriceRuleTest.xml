@@ -71,8 +71,7 @@
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>
 
-        <!-- Apply and flush the cache -->
-        <click selector="{{AdminCatalogPriceRuleGrid.applyRules}}" stepKey="clickApplyRules"/>
+        <!-- Flush the cache -->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
