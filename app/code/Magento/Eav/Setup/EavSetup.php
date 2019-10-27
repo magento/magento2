@@ -845,8 +845,8 @@ class EavSetup
     /**
      * Assign attribute to a group and attribute set
      *
-     * @param $entityTypeId
-     * @param $code
+     * @param string|integer $entityTypeId
+     * @param string $code
      * @param array $attr
      * @throws LocalizedException
      */
