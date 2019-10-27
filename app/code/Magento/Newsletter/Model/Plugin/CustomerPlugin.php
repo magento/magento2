@@ -7,6 +7,8 @@ namespace Magento\Newsletter\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchResults;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
@@ -163,6 +165,34 @@ class CustomerPlugin
         }
 
         return $customer;
+    }
+
+    /**
+     * Plugin after getById customer that obtains newsletter subscription status for given customer.
+     *
+     * @param CustomerRepository $subject
+     * @param SearchResults $searchResults
+     * @param SearchCriteria $searchCriteria
+     * @return SearchResults
+     */
+    public function afterGetList(CustomerRepository $subject, SearchResults $searchResults, SearchCriteria $searchCriteria)
+    {
+
+        foreach ($searchResults->getItems() as $customer) {
+            $extensionAttributes = $customer->getExtensionAttributes();
+
+            if ($extensionAttributes === null) {
+                /** @var CustomerExtensionInterface $extensionAttributes */
+                $extensionAttributes = $this->extensionFactory->create(CustomerInterface::class);
+                $customer->setExtensionAttributes($extensionAttributes);
+            }
+            if ($extensionAttributes->getIsSubscribed() === null) {
+                $isSubscribed = $this->isSubscribed($customer);
+                $extensionAttributes->setIsSubscribed($isSubscribed);
+            }
+        }
+
+        return $searchResults;
     }
 
     /**
