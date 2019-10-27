@@ -33,7 +33,7 @@ class IndexPlugin
     }
 
     /**
-     * Contact Index Controller before Plugin
+     * Contact Redirect Index Controller before Plugin
      *
      * @param Index $subject
      *
@@ -47,7 +47,7 @@ class IndexPlugin
         /** @var string $RequestString */
         $requestString = $request->getRequestString();
 
-        if ($requestString !== '/contact/') {
+        if ((bool) preg_match('/.+[index]/', $requestString) === true) {
             $this->redirect->redirect($subject->getResponse(), 'contact');
         }
         return null;
