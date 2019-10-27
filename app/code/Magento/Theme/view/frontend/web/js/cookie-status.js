@@ -13,8 +13,6 @@ define([
         _init: function () {
 
             if(!navigator.cookieEnabled) {
-                console.log('popup');
-
                 const options = {
                     type: 'popup',
                     responsive: true,
