@@ -847,7 +847,7 @@ class EavSetup
                 $selectArgs['attribute_set_name'] = $attr['attribute_set'];
             }
 
-            $sets = $this->setup->getConnection()->fetchAll($select, $select_args);
+            $sets = $this->setup->getConnection()->fetchAll($select, $selectArgs);
             foreach ($sets as $set) {
                 if (!empty($attr['group'])) {
                     $this->addAttributeGroup($entityTypeId, $set['attribute_set_id'], $attr['group']);
