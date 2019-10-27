@@ -146,6 +146,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $quoteFactoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
+
+    /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestMock;
@@ -236,6 +241,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->addressRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
             ->getMockForAbstractClass();
 
+        $this->checkoutHelperMock = $this->createMock(\Magento\Checkout\Helper\Data::class);
+
         $this->model = $objectManager->getObject(
             \Magento\Quote\Model\QuoteManagement::class,
             [
@@ -259,6 +266,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
+                'checkoutHelper' => $this->checkoutHelperMock,
                 'addressRepository' => $this->addressRepositoryMock
             ]
         );
@@ -753,6 +761,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCheckoutMethod')
             ->willReturn(\Magento\Checkout\Model\Type\Onepage::METHOD_GUEST);
+
+        $this->checkoutHelperMock->expects($this->once())
+            ->method('isAllowedGuestCheckout')
+            ->will($this->returnValue(true));
+
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
 
@@ -790,6 +803,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'customerSession' => $this->customerSessionMock,
                     'accountManagement' => $this->accountManagementMock,
                     'quoteFactory' => $this->quoteFactoryMock,
+                    'checkoutHelper' => $this->checkoutHelperMock,
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
@@ -854,6 +868,7 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'customerSession' => $this->customerSessionMock,
                     'accountManagement' => $this->accountManagementMock,
                     'quoteFactory' => $this->quoteFactoryMock,
+                    'checkoutHelper' => $this->checkoutHelperMock,
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
