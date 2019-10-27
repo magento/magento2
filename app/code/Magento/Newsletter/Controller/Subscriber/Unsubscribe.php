@@ -25,7 +25,7 @@ class Unsubscribe extends \Magento\Newsletter\Controller\Subscriber implements H
 
         if ($id && $code) {
             try {
-                $this->subscriberFactory->create()->load($id)->setCheckCode($code)->unsubscribe();
+                $this->_subscriberFactory->create()->load($id)->setCheckCode($code)->unsubscribe();
                 $this->messageManager->addSuccessMessage(__('You unsubscribed.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e, $e->getMessage());
