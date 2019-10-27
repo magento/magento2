@@ -838,7 +838,7 @@ class EavSetup
                 'entity_type_id = :entity_type_id'
             );
 
-            $select_args = ['entity_type_id' => $entityTypeId];
+            $selectArgs = ['entity_type_id' => $entityTypeId];
 
             if (!empty($attr['attribute_set'])) {
                 $select = $select->where(
