@@ -111,7 +111,7 @@ class CreateCustomerAddress
         $errorInput = [];
 
         //Add error for empty postcode with country with no optional ZIP
-        if (!in_array($addressData['country_id'], $this->directoryData->getCountriesWithOptionalZip())
+        if (!$this->directoryData->isZipCodeOptional($addressData['country_id'])
             && (!isset($addressData['postcode']) || empty($addressData['postcode']))
         ) {
             $errorInput[] = 'postcode';
