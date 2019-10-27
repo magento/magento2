@@ -13,4 +13,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Contact\Controller\Index\Index">
+        <plugin name="contact_url_redirect" type="Magento\Contact\Plugin\Controller\IndexPlugin" sortOrder="0" />
+    </type>
 </config>
