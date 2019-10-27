@@ -174,6 +174,7 @@ class CustomerPlugin
      * @param SearchResults $searchResults
      * @param SearchCriteria $searchCriteria
      * @return SearchResults
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetList(CustomerRepository $subject, SearchResults $searchResults, SearchCriteria $searchCriteria)
     {
