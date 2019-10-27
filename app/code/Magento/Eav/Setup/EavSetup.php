@@ -837,7 +837,18 @@ class EavSetup
             )->where(
                 'entity_type_id = :entity_type_id'
             );
-            $sets = $this->setup->getConnection()->fetchAll($select, ['entity_type_id' => $entityTypeId]);
+
+            $select_args = ['entity_type_id' => $entityTypeId];
+
+            if (!empty($attr['attribute_set'])) {
+                $select = $select->where(
+                    'attribute_set_name = :attribute_set_name'
+                );
+
+                $select_args['attribute_set_name'] = $attr['attribute_set'];
+            }
+
+            $sets = $this->setup->getConnection()->fetchAll($select, $select_args);
             foreach ($sets as $set) {
                 if (!empty($attr['group'])) {
                     $this->addAttributeGroup($entityTypeId, $set['attribute_set_id'], $attr['group']);
