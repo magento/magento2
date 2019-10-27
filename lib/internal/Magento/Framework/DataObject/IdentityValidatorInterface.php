@@ -15,7 +15,7 @@ interface IdentityValidatorInterface
      *
      * @param string $value
      *
-     * @return string
+     * @return bool
      */
-    public function isValid($value);
+    public function isValid(string $value): bool;
 }
