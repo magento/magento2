@@ -235,7 +235,10 @@ define([
         * @returns {Multiselect} Chainable.
         */
         togglePage: function () {
-            if (this.isPageSelected() && this.selected().length != this.totalRecords()) {
+            var total = this.totalRecords(),
+                selected = this.selected().length;
+
+            if (this.isPageSelected() && selected !== total) {
                 return this.selectPage();
             }
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
@@ -314,6 +317,7 @@ define([
             var total = this.totalRecords(),
                 excluded = this.excluded().length,
                 selected = this.selected().length;
+                
             if (total < selected && total > -1) {
                 total =  selected;
             }
