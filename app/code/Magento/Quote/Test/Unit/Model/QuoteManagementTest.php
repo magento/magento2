@@ -762,9 +762,12 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getCheckoutMethod')
             ->willReturn(\Magento\Checkout\Model\Type\Onepage::METHOD_GUEST);
 
+        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue(1));
         $this->checkoutHelperMock->expects($this->once())
             ->method('isAllowedGuestCheckout')
-            ->will($this->returnValue(true));
+            ->with($quoteMock)
+            ->willReturn(true);
 
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
