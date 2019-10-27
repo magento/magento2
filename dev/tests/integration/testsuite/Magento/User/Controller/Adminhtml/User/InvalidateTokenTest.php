@@ -6,6 +6,7 @@
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -96,8 +97,12 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
     public function testInvalidateTokenNoUser()
     {
         $this->dispatch('backend/admin/user/invalidateToken');
+
+        /** @var Escaper $escaper */
+        $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
+
         $this->assertSessionMessages(
-            $this->equalTo(['We can\'t find a user to revoke.']),
+            $this->equalTo([$escaper->escapeHtml('We can\'t find a user to revoke.')]),
             MessageInterface::TYPE_ERROR
         );
     }
