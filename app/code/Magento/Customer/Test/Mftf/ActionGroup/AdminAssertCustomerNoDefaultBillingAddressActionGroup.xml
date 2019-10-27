@@ -5,10 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert Customer Have No Default Billing Address -->
-    <actionGroup name="AdminAssertCustomerNoDefaultBillingAddress" >
+    <actionGroup name="AdminAssertCustomerNoDefaultBillingAddress">
+        <annotations>
+            <description>Validates that a Customer does NOT have a Default Billing Address assigned. PLEASE NOTE: The error message is hardcoded.</description>
+        </annotations>
+
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
         <see userInput="The customer does not have default billing address" selector="{{AdminCustomerAddressesDefaultBillingSection.address}}" stepKey="see"/>
     </actionGroup>

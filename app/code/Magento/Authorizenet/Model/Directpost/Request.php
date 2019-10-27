@@ -194,7 +194,7 @@ class Request extends AuthorizenetRequest
     /**
      * Set sign hash into the request object.
      *
-     * All needed fields should be placed in the object fist.
+     * All needed fields should be placed in the object first.
      *
      * @return $this
      */

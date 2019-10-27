@@ -56,7 +56,7 @@ class ContextPlugin
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Tax\Model\Calculation\Proxy $calculation,
+        \Magento\Tax\Model\Calculation\Proxy $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\PageCache\Model\Config $cacheConfig
@@ -70,6 +70,8 @@ class ContextPlugin
     }
 
     /**
+     * Before dispatch.
+     *
      * @param \Magento\Framework\App\ActionInterface $subject
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed

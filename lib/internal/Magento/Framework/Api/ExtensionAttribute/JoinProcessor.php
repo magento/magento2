@@ -7,7 +7,7 @@
 namespace Magento\Framework\Api\ExtensionAttribute;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
-use Magento\Framework\Api\ExtensionAttribute\Config\Converter as Converter;
+use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -61,7 +61,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process(DbCollection $collection, $extensibleEntityClass = null)
     {
@@ -95,7 +95,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractExtensionAttributes($extensibleEntityClass, array $data)
     {
@@ -127,10 +127,9 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * @param string $attributeCode
      * @param array $directive
-     * @param array &$data
-     * @param array &$extensionData
+     * @param array $data
+     * @param array $extensionData
      * @param string $extensibleEntityClass
-     * @return void
      */
     private function populateAttributeCodeWithDirective(
         $attributeCode,

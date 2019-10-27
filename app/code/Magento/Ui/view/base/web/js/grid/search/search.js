@@ -11,8 +11,9 @@ define([
     'uiLayout',
     'mage/translate',
     'mageUtils',
-    'uiElement'
-], function (_, layout, $t, utils, Element) {
+    'uiElement',
+    'jquery'
+], function (_, layout, $t, utils, Element, $) {
     'use strict';
 
     return Element.extend({
@@ -29,11 +30,13 @@ define([
             tracks: {
                 value: true,
                 previews: true,
-                inputValue: true
+                inputValue: true,
+                focused: true
             },
             imports: {
                 inputValue: 'value',
-                updatePreview: 'value'
+                updatePreview: 'value',
+                focused: false
             },
             exports: {
                 value: '${ $.provider }:params.search'
@@ -86,6 +89,18 @@ define([
             this.value = '';
 
             return this;
+        },
+
+        /**
+         * Click To ScrollTop.
+         */
+        scrollTo: function ($data) {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'slow', function () {
+                $data.focused = false;
+                $data.focused = true;
+            });
         },
 
         /**

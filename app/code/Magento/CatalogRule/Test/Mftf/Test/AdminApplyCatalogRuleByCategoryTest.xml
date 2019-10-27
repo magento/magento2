@@ -16,9 +16,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-74"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategoryOne"/>
@@ -55,6 +52,7 @@
         <waitForPageLoad stepKey="waitForIndividualRulePage"/>
         <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{_defaultCatalogRule.name}}" stepKey="fillName"/>
         <fillField selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{_defaultCatalogRule.description}}" stepKey="fillDescription"/>
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
         <selectOption selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{_defaultCatalogRule.website_ids[0]}}" stepKey="selectSite"/>
         <click selector="{{AdminNewCatalogPriceRule.fromDateButton}}" stepKey="clickFromCalender"/>
         <click selector="{{AdminNewCatalogPriceRule.todayDate}}" stepKey="clickFromToday"/>

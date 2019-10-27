@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
 /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
 ?>
@@ -30,8 +30,8 @@ function registerTaxRecalcs() {
     Event.observe($('tax_class_id'), 'change', recalculateTax);
 }
 
-var priceFormat = <?= /* @escapeNotVerified */ $this->helper('Magento\Tax\Helper\Data')->getPriceFormat($block->getStore()) ?>;
-var taxRates = <?= /* @escapeNotVerified */ $block->getAllRatesByProductClassJson() ?>;
+var priceFormat = <?= /* @noEscape */ $this->helper(Magento\Tax\Helper\Data::class)->getPriceFormat($block->getStore()) ?>;
+var taxRates = <?= /* @noEscape */ $block->getAllRatesByProductClassJson() ?>;
 
 function recalculateTax() {
     if (typeof dynamicTaxes == 'undefined') {
@@ -75,10 +75,10 @@ function bindActiveProductTab(event, ui) {
 jQuery(document).on('tabsactivate', bindActiveProductTab);
 
 // bind active tab
-<?php if ($tabsBlock = $block->getLayout()->getBlock('product_tabs')): ?>
+<?php if ($tabsBlock = $block->getLayout()->getBlock('product_tabs')) :?>
 jQuery(function () {
-    if (jQuery('#<?= /* @escapeNotVerified */ $tabsBlock->getId() ?>').length && jQuery('#<?= /* @escapeNotVerified */ $tabsBlock->getId() ?>').is(':mage-tabs')) {
-        var activeAnchor = jQuery('#<?= /* @escapeNotVerified */ $tabsBlock->getId() ?>').tabs('activeAnchor');
+    if (jQuery('#<?= $block->escapeJs($tabsBlock->getId()) ?>').length && jQuery('#<?= $block->escapeJs($tabsBlock->getId()) ?>').is(':mage-tabs')) {
+        var activeAnchor = jQuery('#<?= $block->escapeJs($tabsBlock->getId()) ?>').tabs('activeAnchor');
         if (activeAnchor && $('store_switcher')) {
             $('store_switcher').switchParams = 'active_tab/' + activeAnchor.prop('name') + '/';
         }

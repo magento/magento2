@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-94229"/>
             <group value="Cms"/>
-            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>

@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-65"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <!-- Create the simple product and category that it will be in -->
@@ -27,6 +24,10 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
             <!-- log in and create the price rule -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -77,9 +78,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-93"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
@@ -103,9 +101,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-69"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
@@ -129,9 +124,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-60"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI">
@@ -155,9 +147,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-71"/>
             <group value="CatalogRule"/>
-            <skip>
-                <issueId value="MC-5777"/>
-            </skip>
         </annotations>
         <before>
             <!-- Create a simple product and a category-->
@@ -165,6 +154,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -186,6 +176,10 @@
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- As a NOT LOGGED IN user, go to the storefront category page and should see the discount -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategory1"/>

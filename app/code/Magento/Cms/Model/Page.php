@@ -16,8 +16,8 @@ use Magento\Framework\Model\AbstractModel;
  * Cms Page Model
  *
  * @api
- * @method Page setStoreId(array $storeId)
- * @method array getStoreId()
+ * @method Page setStoreId(int $storeId)
+ * @method int getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
@@ -103,8 +103,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * Check if page identifier exist for specific store
-     * return page id if page exists
+     * Check if page identifier exist for specific store return page id if page exists
      *
      * @param string $identifier
      * @param int $storeId
@@ -116,8 +115,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * Prepare page's statuses.
-     * Available event cms_page_get_available_statuses to customize statuses.
+     * Prepare page's statuses, available event cms_page_get_available_statuses to customize statuses.
      *
      * @return array
      */
@@ -538,7 +536,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 101.0.0
      */
     public function beforeSave()
@@ -571,6 +569,8 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
+     * Returns scope config.
+     *
      * @return ScopeConfigInterface
      */
     private function getScopeConfig()

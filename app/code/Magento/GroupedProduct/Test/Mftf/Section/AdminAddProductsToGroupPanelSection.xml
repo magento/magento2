@@ -15,6 +15,7 @@
         <element name="nameFilter" type="input" selector=".product_form_product_form_grouped_grouped_products_modal [name='name']"/>
         <element name="firstCheckbox" type="input" selector="tr[data-repeat-index='0'] .admin__control-checkbox"/>
         <element name="nThCheckbox" type="input" selector="tr[data-repeat-index='{{n}}'] .admin__control-checkbox" parameterized="true"/>
+        <element name="clearFilters" type="button" selector=".product_form_product_form_grouped_grouped_products_modal [data-action='grid-filter-reset']" timeout="30"/>
     </section>
 
     <section name="AdminAddedProductsToGroupGrid">

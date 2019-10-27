@@ -573,11 +573,10 @@ class DataProvider
             foreach ($attributeData as $attributeId => $attributeValues) {
                 $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
                 if (!empty($value)) {
-                    if (isset($index[$attributeId])) {
-                        $index[$attributeId][$entityId] = $value;
-                    } else {
-                        $index[$attributeId] = [$entityId => $value];
+                    if (!isset($index[$attributeId])) {
+                        $index[$attributeId] = [];
                     }
+                        $index[$attributeId][$entityId] = $value;
                 }
             }
         }
@@ -645,9 +644,12 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
-                $this->attributeOptions[$optionKey] = array_map(function ($value) {
-                    return $this->filterAttributeValue($value);
-                }, $this->attributeOptions[$optionKey]);
+                $this->attributeOptions[$optionKey] = array_map(
+                    function ($value) {
+                        return $this->filterAttributeValue($value);
+                    },
+                    $this->attributeOptions[$optionKey]
+                );
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }

@@ -36,16 +36,16 @@
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults" />
+    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Catalog\Model\ProductSearchResults" />
     <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
     <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
     <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList" />
-    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Catalog\Model\CategorySearchResults" />
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
     <preference for="Magento\Catalog\Api\ProductRenderListInterface" type="Magento\Catalog\Model\ProductRenderList"/>
@@ -72,8 +72,12 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
+    </type>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
     </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu" />
@@ -376,11 +380,11 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+    <type name="Magento\Catalog\Pricing\Price\Collection">
         <arguments>
             <argument name="pool" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\Pricing\PriceInfo\Factory">
         <arguments>
             <argument name="types" xsi:type="array">
@@ -404,6 +408,28 @@
         <arguments>
             <argument name="converters" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Model\ProductLink\Converter\DefaultConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <arguments>
+            <argument name="optionGroups" xsi:type="array">
+                <item name="date" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Date</item>
+                <item name="file" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\File</item>
+                <item name="select" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Select</item>
+                <item name="text" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Text</item>
+            </argument>
+            <argument name="optionTypesToGroups" xsi:type="array">
+                <item name="field" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="area" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="file" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_FILE</item>
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="checkbox" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="multiple" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="date" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="date_time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
             </argument>
         </arguments>
     </type>
@@ -863,7 +889,7 @@
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
                 <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Catalog\Model\Product\Hydrator</item>
             </argument>
         </arguments>
     </type>
@@ -1161,6 +1187,14 @@
         <arguments>
             <argument name="indexers" xsi:type="array">
                 <item name="catalog_product_price" xsi:type="string">catalog_product_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\Select">
+        <arguments>
+            <argument name="singleSelectionTypes" xsi:type="array">
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO</item>
             </argument>
         </arguments>
     </type>

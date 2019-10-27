@@ -170,9 +170,6 @@ define([
 
             if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
                 availableRate = window.checkoutConfig.selectedShippingMethod;
-                selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
-
-                return;
             }
 
             //Unset selected shipping method if not available
@@ -216,11 +213,11 @@ define([
             newCustomerBillingAddressData = checkoutData.getNewCustomerBillingAddress();
 
             if (selectedBillingAddress) {
-                if (selectedBillingAddress == 'new-customer-address' && newCustomerBillingAddressData) { //eslint-disable-line
+                if (selectedBillingAddress === 'new-customer-billing-address' && newCustomerBillingAddressData) {
                     selectBillingAddress(createBillingAddress(newCustomerBillingAddressData));
                 } else {
                     addressList.some(function (address) {
-                        if (selectedBillingAddress == address.getKey()) { //eslint-disable-line eqeqeq
+                        if (selectedBillingAddress === address.getKey()) {
                             selectBillingAddress(address);
                         }
                     });
@@ -243,7 +240,7 @@ define([
                 return;
             }
 
-            if (quote.isVirtual()) {
+            if (quote.isVirtual() || !quote.billingAddress()) {
                 isBillingAddressInitialized = addressList.some(function (addrs) {
                     if (addrs.isDefaultBilling()) {
                         selectBillingAddress(addrs);

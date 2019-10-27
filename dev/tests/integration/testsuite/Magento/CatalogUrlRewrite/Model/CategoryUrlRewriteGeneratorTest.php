@@ -6,32 +6,46 @@
 
 namespace Magento\CatalogUrlRewrite\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
+class CategoryUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /** @var ObjectManagerInterface */
     protected $objectManager;
 
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testGenerateUrlRewritesWithoutSaveHistory()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
+        /** @var Category $category */
+        $category = $this->objectManager->create(Category::class);
         $category->load(3);
         $category->setData('save_rewrites_history', false);
         $category->setUrlKey('new-url');
@@ -50,8 +64,8 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertResults($categoryExpectedResult, $actualResults);
 
-        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepository::class);
         $product = $productRepository->get('12345');
         $productForTest = $product->getId();
 
@@ -98,13 +112,14 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoAppIsolation enabled
      */
     public function testGenerateUrlRewritesWithSaveHistory()
     {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->objectManager->create(\Magento\Catalog\Model\Category::class);
+        /** @var Category $category */
+        $category = $this->objectManager->create(Category::class);
         $category->load(3);
         $category->setData('save_rewrites_history', true);
         $category->setUrlKey('new-url');
@@ -131,8 +146,8 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertResults($categoryExpectedResult, $actualResults);
 
-        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepository::class);
         $product = $productRepository->get('12345');
         $productForTest = $product->getId();
 
@@ -200,14 +215,17 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @param string $urlKey
+     * @throws CouldNotSaveException
+     * @throws NoSuchEntityException
+     * @throws Exception
      * @dataProvider incorrectUrlRewritesDataProvider
      */
     public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Invalid URL key');
-        /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $repository */
-        $repository = $this->objectManager->get(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
+        /** @var CategoryRepositoryInterface $repository */
+        $repository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $category = $repository->get(3);
         $category->setUrlKey($urlKey);
         $repository->save($category);
@@ -230,8 +248,8 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected function getActualResults(array $filter)
     {
-        /** @var \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder */
-        $urlFinder = $this->objectManager->get(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        /** @var UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
         $actualResults = [];
         foreach ($urlFinder->findAllByData($filter) as $url) {
             $actualResults[] = [
@@ -245,8 +263,114 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 0
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testGenerateUrlRewritesWithoutGenerateCategoryRewrites()
+    {
+        /** @var Category $category */
+        $category = $this->objectManager->create(Category::class);
+        $category->load(3);
+        $category->setData('save_rewrites_history', false);
+        $category->setUrlKey('new-url');
+        $category->save();
+
+        $categoryFilter = [
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [3, 4, 5]
+        ];
+        $actualResults = $this->getActualResults($categoryFilter);
+        $categoryExpectedResult = [
+            ['new-url.html', 'catalog/category/view/id/3', 1, 0],
+            ['new-url/category-1-1.html', 'catalog/category/view/id/4', 1, 0],
+            ['new-url/category-1-1/category-1-1-1.html', 'catalog/category/view/id/5', 1, 0],
+        ];
+
+        $this->assertResults($categoryExpectedResult, $actualResults);
+    }
+
+    /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 0
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGenerateUrlRewritesWithoutGenerateProductRewrites()
+    {
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productForTest = $product->getId();
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::ENTITY_ID => [$productForTest]
+        ];
+        $actualResults = $this->getActualResults($productFilter);
+        $productExpectedResult = [
+            [
+                'simple-product-two.html',
+                'catalog/product/view/id/' . $productForTest,
+                1,
+                0
+            ]
+        ];
+
+        $this->assertResults($productExpectedResult, $actualResults);
+    }
+
+    /**
+     * Check number of records after removing product
+     *
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @return void
+     */
+    public function testRemoveCatalogUrlRewrites()
+    {
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = $this->objectManager->create(CategoryRepository::class);
+        $category = $categoryRepository->get(5);
+        $categoryId = $category->getId();
+
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepository::class);
+        $product = $productRepository->get('12345');
+        $productId = $product->getId();
+
+        $countBeforeRemoving = $this->getCountOfRewrites($productId, $categoryId);
+        $productRepository->delete($product);
+        $countAfterRemoving = $this->getCountOfRewrites($productId, $categoryId);
+        $this->assertEquals($countBeforeRemoving - 1, $countAfterRemoving);
+    }
+
+    /**
+     * Get count of records in table
+     *
+     * @param $productId
+     * @param $categoryId
+     * @return string
+     */
+    private function getCountOfRewrites($productId, $categoryId): string
+    {
+        /** @var Product $model */
+        $model = $this->objectManager->get(Product::class);
+        $connection = $model->getConnection();
+        $select = $connection->select();
+        $select->from(Product::TABLE_NAME, 'COUNT(*)');
+        $select->where('category_id = ?', $categoryId);
+        $select->where('product_id = ?', $productId);
+        return $connection->fetchOne($select);
+    }
+
+    /**
      * @param array $expected
      * @param array $actual
+     * @throws Exception
      */
     protected function assertResults($expected, $actual)
     {

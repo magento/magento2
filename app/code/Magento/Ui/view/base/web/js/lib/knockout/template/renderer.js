@@ -519,7 +519,7 @@ define([
         },
 
         /**
-         * Custom 'render' attrobute handler function. Wraps child elements
+         * Custom 'render' attribute handler function. Wraps child elements
          * of a node with knockout's 'ko template:' comment tag.
          *
          * @param {HTMLElement} node - Element to be processed.

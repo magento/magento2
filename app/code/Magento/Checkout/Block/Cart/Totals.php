@@ -8,6 +8,7 @@ namespace Magento\Checkout\Block\Cart;
 
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Sales\Model\ConfigInterface;
 
 /**
  * Totals cart block.
@@ -45,7 +46,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param ConfigInterface $salesConfig
      * @param array $layoutProcessors
      * @param array $data
      * @codeCoverageIgnore
@@ -54,7 +55,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\Config $salesConfig,
+        ConfigInterface $salesConfig,
         array $layoutProcessors = [],
         array $data = []
     ) {

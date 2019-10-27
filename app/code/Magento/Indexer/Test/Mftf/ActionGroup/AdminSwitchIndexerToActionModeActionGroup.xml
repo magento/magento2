@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchIndexerToActionModeActionGroup">
+        <arguments>
+            <argument name="indexerValue" type="string"/>
+            <argument name="action" type="string" defaultValue="Update by Schedule"/>
+        </arguments>
+        <checkOption selector="{{AdminIndexManagementSection.indexerCheckbox(indexerValue)}}" stepKey="checkIndexer"/>
+        <selectOption userInput="{{action}}" selector="{{AdminIndexManagementSection.massActionSelect}}" stepKey="selectAction"/>
+        <click selector="{{AdminIndexManagementSection.massActionSubmit}}" stepKey="clickSubmit"/>
+        <waitForPageLoad stepKey="waitForSubmit"/>
+        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="1 indexer(s) are in &quot;{{action}}&quot; mode." stepKey="seeMessage"/>
+    </actionGroup>
+</actionGroups>
