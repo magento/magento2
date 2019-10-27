@@ -17,7 +17,7 @@
 
 @menu-logo__padding-bottom: 1.7rem;
 @menu-logo__outer-size: @menu-logo__padding-top + @menu-logo-img__height + @menu-logo__padding-bottom;
-@menu-logo__padding-top: 1.7rem; 
+@menu-logo__padding-top: 1.7rem;
 @menu-logo-img__height: 4.1rem;
 @menu-logo-img__width: 3.5rem;
 
@@ -265,6 +265,22 @@
 
             .ie11 & {
                 height: 100%;
+            }
+           & > ul[role="menu"] {
+                max-width:  ~'calc(@{menu__width} - 100vw)';
+                width: 100vw;
+                display: -webkit-inline-flex;
+                display: -ms-inline-flexbox;
+                display: inline-flex;
+                -webkit-flex-wrap: wrap;
+                -moz-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                -o-flex-wrap: wrap;
+                flex-wrap: wrap;
+                min-width: 600px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                max-height:  ~'calc(100vh - 70px)';
             }
         }
 
