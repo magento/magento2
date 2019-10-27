@@ -831,7 +831,30 @@ class EavSetup
             $this->_insertAttribute($data);
         }
 
+        $this->_assignGroup($entityTypeId, $code, $attr);
+
+        if (isset($attr['option']) && is_array($attr['option'])) {
+            $option = $attr['option'];
+            $option['attribute_id'] = $this->getAttributeId($entityTypeId, $code);
+            $this->addAttributeOption($option);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Assign attribute to a group and attribute set
+     *
+     * @param $entityTypeId
+     * @param $code
+     * @param array $attr
+     * @throws LocalizedException
+     */
+    private function _assignGroup($entityTypeId, $code, array $attr)
+    {
         if (!empty($attr['group']) || empty($attr['user_defined'])) {
+            $sortOrder = isset($attr['sort_order']) ? $attr['sort_order'] : null;
+
             $select = $this->setup->getConnection()->select()->from(
                 $this->setup->getTable('eav_attribute_set')
             )->where(
@@ -846,8 +869,19 @@ class EavSetup
                 );
                 $selectArgs['attribute_set_name'] = $attr['attribute_set'];
             }
-
             $sets = $this->setup->getConnection()->fetchAll($select, $selectArgs);
+            if (empty($sets)) {
+                if (!empty($attr['attribute_set'])) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Attribute set %1 doesn\'t exists', $attr['attribute_set'])
+                    );
+                } else {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('No attribute set found')
+                    );
+                }
+            }
+
             foreach ($sets as $set) {
                 if (!empty($attr['group'])) {
                     $this->addAttributeGroup($entityTypeId, $set['attribute_set_id'], $attr['group']);
@@ -869,14 +903,6 @@ class EavSetup
                 }
             }
         }
-
-        if (isset($attr['option']) && is_array($attr['option'])) {
-            $option = $attr['option'];
-            $option['attribute_id'] = $this->getAttributeId($entityTypeId, $code);
-            $this->addAttributeOption($option);
-        }
-
-        return $this;
     }
 
     /**
