@@ -874,7 +874,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $namespace = substr(
             $className,
             0,
-            strpos($className, '\\' . 'Block')
+            strpos($className, '\\' . 'Block' . '\\')
         );
         return str_replace('\\', '_', $namespace);
     }
