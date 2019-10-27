@@ -33,6 +33,8 @@ class IndexPlugin
     }
 
     /**
+     * Contact Index Controller before Plugin
+     *
      * @param Index $subject
      *
      * @return null
