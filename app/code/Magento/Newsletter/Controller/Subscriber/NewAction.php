@@ -22,7 +22,6 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
-use Magento\Framework\UrlInterface;
 
 /**
  * New newsletter subscription action
@@ -34,7 +33,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     /**
      * @var CustomerAccountManagement
      */
-    private $customerAccountManagement;
+    protected $customerAccountManagement;
 
     /**
      * @var EmailValidator
@@ -49,8 +48,6 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param Session $customerSession
      * @param StoreManagerInterface $storeManager
      * @param CustomerUrl $customerUrl
-     * @param ScopeConfigInterface $scopeConfig
-     * @param UrlInterface $url
      * @param CustomerAccountManagement $customerAccountManagement
      * @param EmailValidator $emailValidator
      */
@@ -60,8 +57,6 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         Session $customerSession,
         StoreManagerInterface $storeManager,
         CustomerUrl $customerUrl,
-        ScopeConfigInterface $scopeConfig,
-        UrlInterface $url,
         CustomerAccountManagement $customerAccountManagement,
         EmailValidator $emailValidator = null
     ) {
@@ -72,9 +67,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
             $subscriberFactory,
             $customerSession,
             $storeManager,
-            $customerUrl,
-            $scopeConfig,
-            $url
+            $customerUrl
         );
     }
 
@@ -87,9 +80,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      */
     protected function validateEmailAvailable($email)
     {
-        $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        if ($this->customerSession->isLoggedIn()
-            && ($this->customerSession->getCustomerDataObject()->getEmail() !== $email
+        $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+        if ($this->_customerSession->isLoggedIn()
+            && ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
             && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId))
         ) {
             throw new LocalizedException(
@@ -111,12 +104,12 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                     Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
                     ScopeInterface::SCOPE_STORE
                 ) != 1
-            && !$this->customerSession->isLoggedIn()
+            && !$this->_customerSession->isLoggedIn()
         ) {
             throw new LocalizedException(
                 __(
                     'Sorry, but the administrator denied subscription for guests. Please <a href="%1">register</a>.',
-                    $this->customerUrl->getRegisterUrl()
+                    $this->_customerUrl->getRegisterUrl()
                 )
             );
         }
@@ -151,7 +144,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
-                $subscriber = $this->subscriberFactory->create()->loadByEmail($email);
+                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
                 if ($subscriber->getId()
                     && (int) $subscriber->getSubscriberStatus() === Subscriber::STATUS_SUBSCRIBED
                 ) {
@@ -160,7 +153,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
                     );
                 }
 
-                $status = (int) $this->subscriberFactory->create()->subscribe($email);
+                $status = (int) $this->_subscriberFactory->create()->subscribe($email);
                 $this->messageManager->addSuccessMessage($this->getSuccessMessage($status));
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Newsletter\Controller;
 
 use Magento\Framework\App\Action\Context;
@@ -15,6 +14,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Newsletter subscribe controller
@@ -31,24 +31,24 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
      *
      * @var Session
      */
-    protected $customerSession;
+    protected $_customerSession;
 
     /**
      * Subscriber factory
      *
      * @var SubscriberFactory
      */
-    protected $subscriberFactory;
+    protected $_subscriberFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    protected $_storeManager;
 
     /**
      * @var CustomerUrl
      */
-    protected $customerUrl;
+    protected $_customerUrl;
 
     /**
      * @var ScopeConfigInterface
@@ -75,16 +75,16 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
         Session $customerSession,
         StoreManagerInterface $storeManager,
         CustomerUrl $customerUrl,
-        ScopeConfigInterface $scopeConfig,
-        UrlInterface $url
+        ScopeConfigInterface $scopeConfig = null,
+        UrlInterface $url = null
     ) {
         parent::__construct($context);
-        $this->storeManager = $storeManager;
-        $this->subscriberFactory = $subscriberFactory;
-        $this->customerSession = $customerSession;
-        $this->customerUrl = $customerUrl;
-        $this->scopeConfig = $scopeConfig;
-        $this->url = $url;
+        $this->_storeManager = $storeManager;
+        $this->_subscriberFactory = $subscriberFactory;
+        $this->_customerSession = $customerSession;
+        $this->_customerUrl = $customerUrl;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->url = $url ?: ObjectManager::getInstance()->get(UrlInterface::class);
     }
 
     /**
