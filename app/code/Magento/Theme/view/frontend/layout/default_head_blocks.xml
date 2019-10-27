@@ -23,6 +23,7 @@
         </referenceBlock>
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-"/>
+            <block class="Magento\Framework\View\Element\Template" name="cookie-status-check" as="cookie-status" template="Magento_Theme::js/cookie_status.phtml" />
         </referenceContainer>
     </body>
 </page>
