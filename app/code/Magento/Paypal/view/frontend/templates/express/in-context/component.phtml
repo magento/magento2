@@ -8,24 +8,20 @@ use Magento\Paypal\Block\Express\InContext\Minicart\Button;
 /** @var \Magento\Paypal\Block\Express\InContext\Component $block */
 
 $configuration = [
-    '*' => [
-        'Magento_Paypal/js/in-context/express-checkout' => [
-            'id' => Button::PAYPAL_BUTTON_ID,
-            'path' => $block->getUrl(
-                'paypal/express/gettoken',
-                [
-                    '_secure' => $block->getRequest()->isSecure()
-                ]
-            ),
-            'merchantId' => $block->getMerchantId(),
-            'button' => $block->isButtonContext(),
-            'clientConfig' => [
-                'locale' => $block->getLocale(),
-                'environment' => $block->getEnvironment(),
-                'button' => [
-                    Button::PAYPAL_BUTTON_ID,
-                ],
-            ]
+    'id' => Button::PAYPAL_BUTTON_ID,
+    'path' => $block->getUrl(
+        'paypal/express/gettoken',
+        [
+            '_secure' => $block->getRequest()->isSecure()
+        ]
+    ),
+    'merchantId' => $block->getMerchantId(),
+    'button' => $block->isButtonContext(),
+    'clientConfig' => [
+        'locale' => $block->getLocale(),
+        'environment' => $block->getEnvironment(),
+        'button' => [
+            Button::PAYPAL_BUTTON_ID,
         ]
     ]
 ];
@@ -33,5 +29,9 @@ $configuration = [
 ?>
 <div style="display: none;" id="<?= /* @noEscape */ Button::PAYPAL_BUTTON_ID ?>"></div>
 <script type="text/x-magento-init">
-    <?= /* @noEscape */ json_encode($configuration) ?>
+    {
+        "*": {
+            "Magento_Paypal/js/in-context/express-checkout": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($configuration) ?>
+        }
+    }
 </script>

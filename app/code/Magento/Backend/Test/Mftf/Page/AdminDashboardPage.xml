@@ -10,5 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminDashboardPage" url="admin/dashboard/" area="admin" module="Magento_Backend">
         <section name="AdminMenuSection"/>
+        <section name="AdminDashboardSection"/>
     </page>
 </pages>

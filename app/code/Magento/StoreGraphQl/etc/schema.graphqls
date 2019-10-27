@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Query {
-    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "The store config query")
+    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "The store config query") @cache(cacheable: false)
 }
 
 type Website @doc(description: "The type contains information about a website") {
@@ -30,4 +30,5 @@ type StoreConfig @doc(description: "The type contains information about a store 
     secure_base_link_url : String @doc(description: "Secure base link URL for the store")
     secure_base_static_url : String @doc(description: "Secure base static URL for the store")
     secure_base_media_url : String @doc(description: "Secure base media URL for the store")
+    store_name : String @doc(description: "Name of the store")
 }

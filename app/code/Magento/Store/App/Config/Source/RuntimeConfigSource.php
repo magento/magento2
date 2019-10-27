@@ -44,6 +44,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
 
     /**
      * Return whole scopes config data from db.
+     *
      * Ignore $path argument due to config source must return all config data
      *
      * @param string $path
@@ -64,6 +65,8 @@ class RuntimeConfigSource implements ConfigSourceInterface
     }
 
     /**
+     * Retrieve default connection
+     *
      * @return AdapterInterface
      */
     private function getConnection()
@@ -83,12 +86,17 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     private function getEntities($table, $keyField)
     {
-        $entities = $this->getConnection()->fetchAll(
-            $this->getConnection()->select()->from($this->resourceConnection->getTableName($table))
-        );
         $data = [];
-        foreach ($entities as $entity) {
-            $data[$entity[$keyField]] = $entity;
+        $tableName = $this->resourceConnection->getTableName($table);
+        // Check if db table exists before fetch data
+        if ($this->resourceConnection->getConnection()->isTableExists($tableName)) {
+            $entities = $this->getConnection()->fetchAll(
+                $this->getConnection()->select()->from($tableName)
+            );
+
+            foreach ($entities as $entity) {
+                $data[$entity[$keyField]] = $entity;
+            }
         }
 
         return $data;

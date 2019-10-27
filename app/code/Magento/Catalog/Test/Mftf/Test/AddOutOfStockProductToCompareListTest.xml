@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AddOutOfStockProductToCompareListTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Comparison for products Out of Stock"/>
+            <title value="Add Product that is Out of Stock product to Product Comparison"/>
+            <description value="Customer should be able to add Product that is Out Of Stock to the Product Comparison"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98644"/>
+            <useCaseId value="MAGETWO-98522"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct4" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Open product page-->
+        <comment userInput="Open product page" stepKey="openProdPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="goToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <!--'Add to compare' link is not available-->
+        <comment userInput="'Add to compare' link is not available" stepKey="addToCompareLinkAvailability"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="dontSeeAddToCompareLink"/>
+        <!--Turn on 'out on stock' config-->
+        <comment userInput="Turn on 'out of stock' config" stepKey="onOutOfStockConfig"/>
+        <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
+        <!--Clear cache and reindex-->
+        <comment userInput="Clear cache and reindex" stepKey="cleanCache"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!--Open product page-->
+        <comment userInput="Open product page" stepKey="openProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="goToSimpleProductPage2"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPage2"/>
+        <!--Click on 'Add to Compare' link-->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="seeAddToCompareLink"/>
+        <comment userInput="Click on 'Add to Compare' link" stepKey="clickOnAddToCompareLink"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickOnAddToCompare"/>
+        <waitForPageLoad stepKey="waitForProdAddToCmpList"/>
+        <!--Assert success message-->
+        <comment userInput="Assert success message" stepKey="assertSuccessMsg"/>
+        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage"/>
+        <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage"/>
+        <!--See product in the comparison list-->
+        <comment userInput="See product in the comparison list" stepKey="seeProductInComparisonList"/>
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($product.name$)}}" stepKey="seeProductInCompareList"/>
+        <!--Go to Category page and delete product from comparison list-->
+        <comment userInput="Go to Category page and delete product from comparison list" stepKey="deleteProdFromCmpList"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <click selector="{{StorefrontComparisonSidebarSection.ClearAll}}" stepKey="clickClearAll"/>
+        <waitForPageLoad time="30" stepKey="waitForConfirmPageLoad"/>
+        <click selector="{{AdminDeleteRoleSection.confirm}}" stepKey="confirmProdDelate"/>
+        <waitForPageLoad time="30" stepKey="waitForConfirmLoad"/>
+        <!--Add product to compare list from Category page-->
+        <comment userInput="Add product to compare list fom Category page" stepKey="addToCmpFromCategPage"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickAddToCompare"/>
+        <waitForPageLoad stepKey="waitProdAddingToCmpList"/>
+        <!--Assert success message-->
+        <comment userInput="Assert success message" stepKey="assertSuccessMsg2"/>
+        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage2"/>
+        <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage2"/>
+        <!--Check that product displays on add to compare widget-->
+        <comment userInput="Check that product displays on add to compare widget" stepKey="checkProdNameOnWidget"/>
+        <seeElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$product.name$$)}}" stepKey="seeProdNameOnCmpWidget"/>
+        <!--See product in the compare page-->
+        <comment userInput="See product in the compare page" stepKey="seeProductInComparePage"/>
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage2"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad2"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($product.name$)}}" stepKey="seeProductInCompareList2"/>
+    </test>
+</tests>

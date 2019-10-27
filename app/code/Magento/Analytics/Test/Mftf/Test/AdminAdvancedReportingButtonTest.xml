@@ -13,6 +13,9 @@
             <title value="AdvancedReportingButtonTest"/>
             <description value="Test log in to AdvancedReporting and tests AdvancedReportingButtonTest"/>
             <testCaseId value="MC-14800"/>
+            <skip>
+                <issueId value="MC-14800" />
+            </skip>
             <severity value="CRITICAL"/>
             <group value="analytics"/>
             <group value="mtf_migrated"/>

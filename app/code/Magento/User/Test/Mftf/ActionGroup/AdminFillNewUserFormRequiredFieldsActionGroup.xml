@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillNewUserFormRequiredFieldsActionGroup">
+        <annotations>
+            <description>Fills in the provided User details on the New User creation page.</description>
+        </annotations>
+        <arguments>
+            <argument name="user" type="entity"/>
+        </arguments>
+
+        <fillField selector="{{AdminNewUserFormSection.username}}" userInput="{{user.username}}" stepKey="fillUser"/>
+        <fillField selector="{{AdminNewUserFormSection.firstname}}" userInput="{{user.firstname}}" stepKey="fillFirstName"/>
+        <fillField selector="{{AdminNewUserFormSection.lastname}}" userInput="{{user.lastname}}" stepKey="fillLastName"/>
+        <fillField selector="{{AdminNewUserFormSection.email}}" userInput="{{user.email}}" stepKey="fillEmail"/>
+        <fillField selector="{{AdminNewUserFormSection.password}}" userInput="{{user.password}}" stepKey="fillPassword"/>
+        <fillField selector="{{AdminNewUserFormSection.passwordConfirmation}}" userInput="{{user.password_confirmation}}" stepKey="fillPasswordConfirmation"/>
+        <fillField selector="{{AdminNewUserFormSection.currentPassword}}" userInput="{{user.current_password}}" stepKey="fillCurrentUserPassword"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminNewUserFormSection.userRoleTab}}" stepKey="openUserRoleTab"/>
+        <waitForPageLoad stepKey="waitForUserRoleTabOpened"/>
+        <click selector="{{AdminNewUserFormSection.resetFilter}}" stepKey="resetGridFilter"/>
+        <waitForPageLoad stepKey="waitForFiltersReset"/>
+        <fillField userInput="{{user.role}}" selector="{{AdminNewUserFormSection.roleFilterField}}" stepKey="fillRoleFilterField"/>
+        <click selector="{{AdminNewUserFormSection.search}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForFiltersApplied"/>
+        <checkOption selector="{{AdminNewUserFormSection.roleRadiobutton(user.role)}}" stepKey="assignRole"/>
+    </actionGroup>
+</actionGroups>

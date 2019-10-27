@@ -97,6 +97,10 @@ class ClassAnnotationStructureSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
         $previousCommentClosePtr = $phpcsFile->findPrevious(T_DOC_COMMENT_CLOSE_TAG, $stackPtr - 1, 0);
+        if (!$previousCommentClosePtr) {
+            $phpcsFile->addError('Comment block is missing', $stackPtr -1, 'MethodArguments');
+            return;
+        }
         $this->validateAnnotationBlockExists($phpcsFile, $previousCommentClosePtr, $stackPtr);
         $commentStartPtr = $phpcsFile->findPrevious(T_DOC_COMMENT_OPEN_TAG, $stackPtr - 1, 0);
         $commentCloserPtr = $tokens[$commentStartPtr]['comment_closer'];
