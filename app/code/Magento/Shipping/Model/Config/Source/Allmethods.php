@@ -56,6 +56,11 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
             );
             $methods[$carrierCode] = ['label' => $carrierTitle, 'value' => []];
             foreach ($carrierMethods as $methodCode => $methodTitle) {
+
+                /** Check it $carrierMethods array was well formed */
+                if (!$methodCode) {
+                    continue;
+                }
                 $methods[$carrierCode]['value'][] = [
                     'value' => $carrierCode . '_' . $methodCode,
                     'label' => '[' . $carrierCode . '] ' . $methodTitle,
