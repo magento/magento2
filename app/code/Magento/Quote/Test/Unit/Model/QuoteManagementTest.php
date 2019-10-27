@@ -146,11 +146,6 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $quoteFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $checkoutHelperMock;
-
-    /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestMock;
@@ -164,6 +159,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Quote\Model\QuoteIdMaskFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteIdMaskFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $checkoutHelperMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -266,8 +266,8 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
-                'checkoutHelper' => $this->checkoutHelperMock,
-                'addressRepository' => $this->addressRepositoryMock
+                'addressRepository' => $this->addressRepositoryMock,
+                'checkoutHelper' => $this->checkoutHelperMock
             ]
         );
 
@@ -803,11 +803,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'customerSession' => $this->customerSessionMock,
                     'accountManagement' => $this->accountManagementMock,
                     'quoteFactory' => $this->quoteFactoryMock,
-                    'checkoutHelper' => $this->checkoutHelperMock,
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
+                    'checkoutHelper' => $this->checkoutHelperMock
                 ]
             )
             ->getMock();
@@ -868,11 +868,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
                     'customerSession' => $this->customerSessionMock,
                     'accountManagement' => $this->accountManagementMock,
                     'quoteFactory' => $this->quoteFactoryMock,
-                    'checkoutHelper' => $this->checkoutHelperMock,
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
+                    'checkoutHelper' => $this->checkoutHelperMock
                 ]
             )
             ->getMock();
