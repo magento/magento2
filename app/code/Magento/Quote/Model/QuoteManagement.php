@@ -158,6 +158,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     private $remoteAddress;
 
     /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    private $checkoutHelper;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -182,6 +187,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Api\AddressRepositoryInterface|null $addressRepository
      * @param \Magento\Framework\App\RequestInterface|null $request
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -208,7 +214,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory = null,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository = null,
         \Magento\Framework\App\RequestInterface $request = null,
-        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress = null
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress = null,
+        \Magento\Checkout\Helper\Data $checkoutHelper = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -238,6 +245,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             ->get(\Magento\Framework\App\RequestInterface::class);
         $this->remoteAddress = $remoteAddress ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class);
+        $this->checkoutHelper = $checkoutHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Checkout\Helper\Data::class);
     }
 
     /**
@@ -385,6 +394,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
 
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST) {
+            if (!$this->checkoutHelper->isAllowedGuestCheckout($quote)) {
+                throw new LocalizedException(
+                    __("Guest checkout is disabled.")
+                );
+            }
+
             $quote->setCustomerId(null);
             $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
             if ($quote->getCustomerFirstname() === null && $quote->getCustomerLastname() === null) {
@@ -694,6 +709,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'exception' => $e,
                 ]
             );
+        // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $consecutiveException) {
             $message = sprintf(
                 "An exception occurred on 'sales_model_service_quote_submit_failure' event: %s",
