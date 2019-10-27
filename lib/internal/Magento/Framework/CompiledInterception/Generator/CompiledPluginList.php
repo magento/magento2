@@ -87,4 +87,12 @@ class CompiledPluginList implements PluginListInterface
     {
         return $this->pluginList->getNext($type, $method, $code);
     }
+
+    /**
+     * PluginList instance should not be shared.
+     */
+    public function __clone()
+    {
+        $this->pluginList = clone $this->pluginList;
+    }
 }

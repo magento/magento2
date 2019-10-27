@@ -69,32 +69,19 @@ class AreasPluginList
                         'scope' => $scope,
                     ]
                 );
-                $pluginList = $this->prepareCompiledPluginList($configScope);
                 if ($defaultScopePluginList === null) {
-                    $defaultScopePluginList = $pluginList;
+                    $defaultScopePluginList = $this->compiledPluginListFactory->create();
+                    $defaultScopePluginList->setScope($configScope);
+                    $defaultScopePluginList->getNext('dummy', 'dummy');
                     $defaultScope = $scope;
                 } else {
-                    $this->plugins[$scope] = $pluginList;
+                    $this->plugins[$scope] = clone $defaultScopePluginList;
+                    $this->plugins[$scope]->setScope($configScope);
                 }
             }
             $this->plugins[$defaultScope] = $defaultScopePluginList;
         }
 
         return $this->plugins;
-    }
-
-    /**
-     * Create CompiledPluginList and prepare it for use.
-     *
-     * @param StaticScope $configScope
-     * @return CompiledPluginList
-     */
-    private function prepareCompiledPluginList(StaticScope $configScope): CompiledPluginList
-    {
-        $pluginList = $this->compiledPluginListFactory->create();
-        $pluginList->setScope($configScope);
-        $pluginList->getNext('dummy', 'dummy');
-
-        return $pluginList;
     }
 }
