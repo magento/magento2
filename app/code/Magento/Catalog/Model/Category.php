@@ -1097,9 +1097,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function afterSave()
     {
         $result = parent::afterSave();
-        if ($this->getIsActive()) {
-            $this->_getResource()->addCommitCallback([$this, 'reindex']);
-        }
+        $this->_getResource()->addCommitCallback([$this, 'reindex']);
         return $result;
     }
 
