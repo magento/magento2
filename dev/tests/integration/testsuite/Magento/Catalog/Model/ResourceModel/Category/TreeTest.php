@@ -77,7 +77,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      * @param string $categoryName
      * @return int
      */
-    private function getCategoryIdByName($categoryName): int
+    private function getCategoryIdByName(string $categoryName): int
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter(CategoryInterface::KEY_NAME, $categoryName)

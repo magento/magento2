@@ -1198,7 +1198,7 @@ class Category extends AbstractResource
      * @param DataObject $object
      * @return void
      */
-    private function castPathIdsToInt(\Magento\Framework\DataObject $object): void
+    private function castPathIdsToInt(DataObject $object): void
     {
         if (is_string($object->getPath())) {
             $pathIds = explode('/', $object->getPath());
