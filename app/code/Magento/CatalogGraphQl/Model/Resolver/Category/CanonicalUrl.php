@@ -54,5 +54,6 @@ class CanonicalUrl implements ResolverInterface
             $baseUrl = $category->getUrlInstance()->getBaseUrl();
             return str_replace($baseUrl, '', $category->getUrl());
         }
+        return null;
     }
 }

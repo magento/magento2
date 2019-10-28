@@ -53,5 +53,6 @@ class CanonicalUrl implements ResolverInterface
             $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
             return $product->getRequestPath();
         }
+        return null;
     }
 }
