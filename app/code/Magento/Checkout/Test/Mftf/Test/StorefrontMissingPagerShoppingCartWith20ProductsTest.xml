@@ -15,6 +15,7 @@
             <title value="Test if the cart pager is missing with 20 cart items."/>
             <description value="Test if the cart pager is missing with 20 cart items."/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-14698"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
