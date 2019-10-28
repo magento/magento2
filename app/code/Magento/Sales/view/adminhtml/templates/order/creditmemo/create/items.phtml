@@ -104,7 +104,7 @@ $_items = $block->getCreditmemo()->getAllItems();
                 <span class="title"><?= $block->escapeHtml(__('Refund Totals')) ?></span>
             </div>
             <?= $block->getChildHtml('creditmemo_totals') ?>
-            <div class="totals-actions"><?= $viewModel->getUpdateTotalsButton() ?></div>
+            <div class="totals-actions"><?= /* @noEscape */ $viewModel->getUpdateTotalsButton() ?></div>
             <div class="order-totals-actions">
                 <div class="field choice admin__field admin__field-option field-append-comments">
                     <input id="notify_customer"

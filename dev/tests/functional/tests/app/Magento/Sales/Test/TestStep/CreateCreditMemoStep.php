@@ -100,6 +100,7 @@ class CreateCreditMemoStep implements TestStepInterface
             if ($hasChangeTotals) {
                 $this->orderCreditMemoNew->getTotalsBlock()->clickUpdateTotals();
             }
+            $this->orderCreditMemoNew->getFormBlock()->submit();
         }
 
         return [
