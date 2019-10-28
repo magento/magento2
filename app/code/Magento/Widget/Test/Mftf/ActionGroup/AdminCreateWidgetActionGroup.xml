@@ -47,13 +47,13 @@
         <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
         <waitForElementVisible selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="waitForSelectElement"/>
         <selectOption selector="{{AdminNewWidgetSection.displayOnByIndex(index)}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <waitForPageLoad stepKey="waitForDisplayOnChangesApplied"/>
         <selectOption selector="{{AdminNewWidgetSection.layoutByIndex(index)}}" userInput="{{widget.page}}" stepKey="selectPage"/>
         <selectOption selector="{{AdminNewWidgetSection.templateByIndex(index)}}" userInput="{{widget.template}}" stepKey="selectTemplate"/>
         <scrollTo selector="{{AdminNewWidgetSection.containerByIndex(index)}}" stepKey="scrollToSelectContainerElement"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad1"/>
+        <waitForPageLoad stepKey="waitForScroll"/>
         <selectOption selector="{{AdminNewWidgetSection.containerByIndex(index)}}" userInput="{{widget.container}}" stepKey="setContainer"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <waitForPageLoad stepKey="waitForContainerChangesApplied"/>
     </actionGroup>
    <!--Create Product List Widget-->
    <actionGroup name="AdminCreateProductsListWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
