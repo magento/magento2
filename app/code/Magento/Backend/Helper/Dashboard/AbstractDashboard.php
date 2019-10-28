@@ -58,7 +58,7 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
      */
     public function getCount()
     {
-        return sizeof($this->getItems());
+        return count($this->getItems());
     }
 
     /**

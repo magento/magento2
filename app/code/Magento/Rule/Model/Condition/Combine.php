@@ -134,7 +134,7 @@ class Combine extends AbstractCondition
         $conditions[] = $condition;
 
         if (!$condition->getId()) {
-            $condition->setId($this->getId() . '--' . sizeof($conditions));
+            $condition->setId($this->getId() . '--' . count($conditions));
         }
 
         $this->setData($this->getPrefix(), $conditions);
