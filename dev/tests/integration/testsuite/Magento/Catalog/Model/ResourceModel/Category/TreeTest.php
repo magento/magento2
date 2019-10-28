@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\CategoryList;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Data\Tree\Node;
 
 /**
@@ -22,12 +25,24 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     private $treeModel;
 
     /**
+     * @var CategoryList
+     */
+    private $categoryList;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->treeModel = $objectManager->create(Tree::class);
+        $this->categoryList = $objectManager->get(CategoryList::class);
+        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -36,7 +51,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadByIds(): void
     {
-        $categoryId = 333;
+        $categoryId = $this->getCategoryIdByName('Category 1');
         // Load category nodes by created category
         $this->treeModel->loadByIds([$categoryId]);
         $this->assertCount(3, $this->treeModel->getNodes());
@@ -47,12 +62,30 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_wrong_path.php
      * @return void
      */
-    public function testLoadByIdsWithWrongGategoryPath(): void
+    public function testLoadByIdsWithWrongCategoryPath(): void
     {
-        $categoryId = 127;
+        $categoryId = $this->getCategoryIdByName('Category With Wrong Path');
         // Load category nodes by created category
         $this->treeModel->loadByIds([$categoryId]);
-        $this->assertCount(2, $this->treeModel->getNodes());
+        $this->assertCount(1, $this->treeModel->getNodes());
         $this->assertNull($this->treeModel->getNodeById($categoryId));
+    }
+
+    /**
+     * Return category id by category name.
+     *
+     * @param string $categoryName
+     * @return int
+     */
+    private function getCategoryIdByName($categoryName): int
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(CategoryInterface::KEY_NAME, $categoryName)
+            ->create();
+        $categories = $this->categoryList->getList($searchCriteria)->getItems();
+        $category = reset($categories);
+        $categoryId = $category->getId();
+
+        return (int)$categoryId;
     }
 }

@@ -5,15 +5,23 @@
  */
 declare(strict_types=1);
 
-$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\Catalog\Api\Data\CategoryInterfaceFactory $categoryFactory */
+$categoryFactory = $objectManager->get(\Magento\Catalog\Api\Data\CategoryInterfaceFactory::class);
+
+/** @var \Magento\Catalog\Api\Data\CategoryInterface $category */
+$category = $categoryFactory->create();
+$category->setData(
+    [
+        'name' => 'Category With Wrong Path',
+        'parent_id' => 2,
+        'path' => 'wrong/path',
+        'level' => 2,
+        'available_sort_by' =>['position', 'name'],
+        'default_sort_by' => 'name',
+        'is_active' => true,
+        'position' => 1,
+    ]
+);
 $category->isObjectNew(true);
-$category->setId(127)
-    ->setName('Category With Wrong Path')
-    ->setParentId(2)
-    ->setPath('wrong/path')
-    ->setLevel(2)
-    ->setAvailableSortBy(['position', 'name'])
-    ->setDefaultSortBy('name')
-    ->setIsActive(true)
-    ->setPosition(1)
-    ->save();
+$category->save();
