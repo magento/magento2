@@ -211,8 +211,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
                     $this->cart->removeItem($item->getId());
                 }
             }
-
-            $quote->setCustomerIsGuest(0);
             $this->cart->save();
         }
 
@@ -233,6 +231,10 @@ class Login extends \Magento\Framework\Model\AbstractModel
 
         /* Load Customer Quote */
         $this->_checkoutSession->loadCustomerQuote();
+
+        $quote = $this->_checkoutSession->getQuote();
+        $quote->setCustomerIsGuest(0);
+        $quote->save();
 
         $this->setUsed(1)->save();
 
