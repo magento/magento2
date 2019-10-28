@@ -78,37 +78,6 @@ class General implements ValidatorInterface
     }
 
     /**
-     * @deprecated because function name incorrect spelled
-     * 
-     * Check fields that are generally required.
-     *
-     * @param AbstractAddress $address
-     * @return array
-     * @throws \Zend_Validate_Exception
-     */
-    private function checkRequredFields(AbstractAddress $address)
-    {
-        $errors = [];
-        if (!\Zend_Validate::is($address->getFirstname(), 'NotEmpty')) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'firstname']);
-        }
-
-        if (!\Zend_Validate::is($address->getLastname(), 'NotEmpty')) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'lastname']);
-        }
-
-        if (!\Zend_Validate::is($address->getStreetLine(1), 'NotEmpty')) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']);
-        }
-
-        if (!\Zend_Validate::is($address->getCity(), 'NotEmpty')) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
-        }
-
-        return $errors;
-    }
-
-    /**
      * Check fields that are conditionally required.
      *
      * @param AbstractAddress $address
