@@ -840,7 +840,10 @@ define([
          */
         _Rewind: function (controls) {
             controls.find('div[option-id], option[option-id]').removeClass('disabled').removeAttr('disabled');
-            controls.find('div[option-empty], option[option-empty]').attr('disabled', true).addClass('disabled');
+            controls.find('div[option-empty], option[option-empty]')
+                .attr('disabled', true)
+                .addClass('disabled')
+                .attr('tabindex', '-1');
         },
 
         /**
