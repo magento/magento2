@@ -11,6 +11,7 @@
     <test name="AdminCloneProductWithDuplicateUrlTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Product"/>
             <title value="Cloning a product with duplicate URL key"/>
             <description value="Check product cloning with duplicate URL key"/>
             <severity value="AVERAGE"/>

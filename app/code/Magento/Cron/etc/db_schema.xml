@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="cron_schedule" resource="default" engine="innodb" comment="Cron Schedule">
         <column xsi:type="int" name="schedule_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Schedule Id"/>
+                comment="Schedule ID"/>
         <column xsi:type="varchar" name="job_code" nullable="false" length="255" default="0" comment="Job Code"/>
         <column xsi:type="varchar" name="status" nullable="false" length="7" default="pending" comment="Status"/>
         <column xsi:type="text" name="messages" nullable="true" comment="Messages"/>

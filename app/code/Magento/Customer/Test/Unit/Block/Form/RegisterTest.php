@@ -7,7 +7,6 @@ namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Model\AccountManagement;
-use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
@@ -40,7 +39,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleManagerInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Manager */
     private $_moduleManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
@@ -48,6 +47,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     /** @var Register */
     private $_block;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\Config */
+    private $newsletterConfig;
 
     protected function setUp()
     {
@@ -59,6 +61,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Model\Session::class,
             ['getCustomerFormData']
         );
+        $this->newsletterConfig = $this->createMock(\Magento\Newsletter\Model\Config::class);
         $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -71,7 +74,9 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class),
             $this->_moduleManager,
             $this->_customerSession,
-            $this->_customerUrl
+            $this->_customerUrl,
+            [],
+            $this->newsletterConfig
         );
     }
 
@@ -293,12 +298,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($isNewsletterEnabled)
         );
 
-        $this->_scopeConfig->expects(
+        $this->newsletterConfig->expects(
             $this->any()
         )->method(
-            'getValue'
-        )->with(
-            PredispatchNewsletterObserver::XML_PATH_NEWSLETTER_ACTIVE
+            'isActive'
         )->will(
             $this->returnValue($isNewsletterActive)
         );

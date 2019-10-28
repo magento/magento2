@@ -13,15 +13,19 @@
                 <comment>All the times are in minutes. Use "0" if you want to skip automatic clearance.</comment>
                 <field id="retry_inprogress_after" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Retry Messages In Progress After</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
                 <field id="successful_messages_lifetime" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Successful Messages Lifetime</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
                 <field id="failed_messages_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Failed Messages Lifetime</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
                 <field id="new_messages_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>New Messages Lifetime</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
             </group>
         </section>

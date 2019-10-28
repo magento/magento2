@@ -601,7 +601,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     public function setTelephone($telephone)
     {
-        return $this->setData(OrderAddressInterface::TELEPHONE, $telephone);
+        return $this->setData(OrderAddressInterface::TELEPHONE, trim($telephone));
     }
 
     /**

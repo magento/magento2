@@ -11,6 +11,7 @@
     <test name="AdminRestrictedUserAddCategoryFromProductPageTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Category"/>
             <title value="Adding new category from product page by restricted user"/>
             <description value="Adding new category from product page by restricted user"/>
             <severity value="MAJOR"/>

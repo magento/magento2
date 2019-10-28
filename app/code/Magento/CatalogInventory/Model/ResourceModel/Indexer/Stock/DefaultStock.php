@@ -292,7 +292,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _updateIndex($entityIds)
     {
-        $this->deleteOldRecords($entityIds);
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
@@ -315,6 +314,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             }
         }
 
+        $this->deleteOldRecords($entityIds);
         $this->_updateIndexTable($data);
 
         return $this;

@@ -18,7 +18,7 @@
       data-mage-init='{
           "multiShipping":{},
           "cartUpdate": {
-               "validationURL": "/multishipping/checkout/checkItems",
+               "validationURL": "<?= $block->escapeUrl($block->getUrl('multishipping/checkout/checkItems')) ?>",
                "eventName": "updateMulticartItemQty"
           }}'
       action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"

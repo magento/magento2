@@ -20,6 +20,7 @@
         </annotations>
         
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create Simple Customer -->
             <createData entity="Simple_US_Customer_CA" stepKey="createSimpleCustomer1"/>
 
@@ -37,6 +38,30 @@
             <!-- Create Configurable Product -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct1">
                 <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createSimpleCategory1"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
             </createData>
 
             <!-- Create Virtual Product -->
@@ -77,10 +102,14 @@
                 <requiredEntity createDataKey="createDownloadableProduct1"/>
             </createData>
 
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
             <!-- Login -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Logout -->
             <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
 
@@ -89,6 +118,7 @@
             <deleteData createDataKey="createSimpleCategory1" stepKey="deleteSimpleCategory1"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
             <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
             <deleteData createDataKey="createVirtualProduct1" stepKey="deleteVirtualProduct1"/>
             <deleteData createDataKey="createBundleProduct1" stepKey="deleteBundleProduct1"/>

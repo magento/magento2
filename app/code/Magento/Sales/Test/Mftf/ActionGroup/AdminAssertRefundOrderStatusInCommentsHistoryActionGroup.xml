@@ -9,10 +9,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertRefundOrderStatusCommentsHistoryActionGroup">
+        <annotations>
+            <description>Clicks on the 'Comments History' on Admin View Order page. Validates that the provided Order Status and Refund message are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="orderStatus" type="string"/>
             <argument name="refundMessage" type="string"/>
         </arguments>
+        
         <!-- Assert refund order status in Comments History -->
         <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="clickOnTabCommentsHistory"/>
         <waitForPageLoad stepKey="waitForComments"/>

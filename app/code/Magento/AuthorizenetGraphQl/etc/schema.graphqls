@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
-input PaymentMethodAdditionalDataInput {
+input PaymentMethodInput {
     authorizenet_acceptjs: AuthorizenetInput @doc(description: "Defines the required attributes for Authorize.Net payments")
 }
 

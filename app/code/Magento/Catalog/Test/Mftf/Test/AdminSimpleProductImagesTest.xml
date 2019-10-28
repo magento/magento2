@@ -34,7 +34,7 @@
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
         <!-- Go to the first product edit page -->
@@ -144,6 +144,8 @@
 
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to the admin grid and see the uploaded image -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
@@ -165,4 +167,16 @@
     </test>
 
 
+        <!-- Check category page for placeholder -->
+        <amOnPage url="$$category.name$$.html" stepKey="goToCategoryPage2"/>
+        <waitForPageLoad stepKey="wait7"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="dontSeeThumb"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmall"/>
+
+        <!-- Check product page for placeholder -->
+        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage2"/>
+        <waitForPageLoad stepKey="wait8"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="dontSeeBase"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('placeholder/image')}}" stepKey="seePlaceholderBase"/>
+    </test>
 </tests>

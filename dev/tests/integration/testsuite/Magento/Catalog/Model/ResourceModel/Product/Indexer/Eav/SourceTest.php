@@ -7,12 +7,17 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\_files\MultiselectSourceMock;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class SourceTest
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SourceTest extends \PHPUnit\Framework\TestCase
 {
@@ -157,6 +162,42 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         $result = $connection->fetchAll($select);
         $this->assertCount(3, $result);
+    }
+
+    /**
+     * Test for indexing product attribute without "all store view" value
+     *
+     * @magentoDataFixture Magento/Catalog/_files/products_with_dropdown_attribute_without_all_store_view.php
+     * @magentoDbIsolation disabled
+     */
+    public function testReindexSelectAttributeWithoutDefault()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var StoreInterface $store */
+        $store = $objectManager->get(StoreManagerInterface::class)
+            ->getStore();
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute **/
+        $attribute = $objectManager->get(\Magento\Eav\Model\Config::class)
+            ->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'dropdown_without_default');
+        /** @var AttributeOptionInterface $option */
+        $option = $attribute->getOptions()[1];
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get('test_attribute_dropdown_without_default', false, 1);
+        $expected = [
+            'entity_id' => $product->getId(),
+            'attribute_id' => $attribute->getId(),
+            'store_id'  => $store->getId(),
+            'value' => $option->getValue(),
+            'source_id' => $product->getId(),
+        ];
+        $connection = $this->productResource->getConnection();
+        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
+            ->where('entity_id = ?', $product->getId())
+            ->where('attribute_id = ?', $attribute->getId());
+
+        $result = $connection->fetchRow($select);
+        $this->assertEquals($expected, $result);
     }
 
     /**

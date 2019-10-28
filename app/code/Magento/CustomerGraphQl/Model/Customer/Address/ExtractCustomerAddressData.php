@@ -125,6 +125,12 @@ class ExtractCustomerAddressData
         }
         $addressData = array_merge($addressData, $customAttributes);
 
+        $addressData['customer_id'] = null;
+
+        if (isset($addressData['country_id'])) {
+            $addressData['country_code'] = $addressData['country_id'];
+        }
+
         return $addressData;
     }
 }
