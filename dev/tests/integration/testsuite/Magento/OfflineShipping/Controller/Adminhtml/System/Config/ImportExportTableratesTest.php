@@ -54,7 +54,7 @@ class ImportExportTableratesTest extends \Magento\TestFramework\TestCase\Abstrac
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(Filesystem::class);
-        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->websiteId = $this->storeManager->getWebsite()->getId();
 
         parent::setUp();
