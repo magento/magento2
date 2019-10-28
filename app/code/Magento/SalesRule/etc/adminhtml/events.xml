@@ -12,10 +12,4 @@
     <event name="catalog_entity_attribute_save_after">
         <observer name="salesrule" instance="Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver" />
     </event>
-    <event name="salesrule_rule_save_commit_after">
-        <observer name="salesrule_quote_update" instance="Magento\SalesRule\Observer\UpdateQuoteOnDisableSalesrule" />
-    </event>
-    <event name="salesrule_rule_delete_commit_after">
-        <observer name="salesrule_quote_update" instance="Magento\SalesRule\Observer\UpdateQuoteOnDisableSalesrule" />
-    </event>
 </config>
