@@ -412,7 +412,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param string|int|Element $attribute
      * @return AbstractAttribute|false
-     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAttribute($attribute)

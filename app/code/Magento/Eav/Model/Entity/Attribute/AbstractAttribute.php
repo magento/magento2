@@ -331,7 +331,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Set attribute model class.
      *
-     * @param string $data
+     * @param array $data
      * @return $this
      * @codeCoverageIgnore
      */
