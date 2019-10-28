@@ -15,6 +15,7 @@
             <title value="Test if the cart pager is visible with more than 20 cart items and the pager disappears if an item is removed from cart."/>
             <description value="Test if the cart pager is visible with more than 20 cart items and the pager disappears if an item is removed from cart."/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-14700"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
