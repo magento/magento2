@@ -18,7 +18,16 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -27,9 +36,6 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
-            <createData entity="ApiCategory" stepKey="createCategory">
-                <field key="name">category-admin</field>
-            </createData>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -38,12 +44,13 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="customStore" value="customStoreENNotUnique"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="customStore" value="customStoreNLNotUnique"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearStoreFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
@@ -130,8 +137,16 @@
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
-
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -140,10 +155,6 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
-            <createData entity="ApiCategory" stepKey="createCategory">
-                <field key="name">category-admin</field>
-            </createData>
-
             <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
             <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
@@ -157,11 +168,11 @@
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="customStore" value="customStoreENNotUnique"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="customStore" value="customStoreNLNotUnique"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
