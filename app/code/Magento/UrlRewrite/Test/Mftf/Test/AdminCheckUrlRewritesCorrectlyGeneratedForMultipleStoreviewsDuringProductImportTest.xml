@@ -169,6 +169,7 @@
             <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
                 <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearStoreGridFilters"/>
             <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
