@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch6\Test\Unit\Model\Client;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 
 /**
  * Class ElasticsearchTest
@@ -84,7 +85,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\Elasticsearch6\Model\Client\Elasticsearch::class,
+            Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
                 'elasticsearchClient' => $this->elasticsearchClientMock
@@ -98,7 +99,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testConstructorOptionsException()
     {
         $result = $this->objectManager->getObject(
-            \Magento\Elasticsearch6\Model\Client\Elasticsearch::class,
+            Elasticsearch::class,
             [
                 'options' => []
             ]
