@@ -141,7 +141,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @dataProvider galleryDisabledImagesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @param array $images
      * @param array $expectation
      * @return void
@@ -234,7 +234,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
      * @dataProvider galleryImagesOnStoreViewDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @param array $images
      * @param array $expectation
      * @return void
