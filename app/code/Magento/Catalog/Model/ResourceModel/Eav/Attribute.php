@@ -383,7 +383,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * Retrieve source model
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+     * @return mixed|string|null
      */
     public function getSourceModel()
     {
