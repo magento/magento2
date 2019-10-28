@@ -6,11 +6,17 @@
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Framework\Escaper;
 use Magento\Framework\Mview\View;
 use Magento\Framework\Phrase;
 
 class ScheduleStatus extends AbstractRenderer
 {
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
     /**
      * @var \Magento\Framework\Mview\ViewInterface
      */
@@ -19,14 +25,17 @@ class ScheduleStatus extends AbstractRenderer
      /**
       * @param \Magento\Backend\Block\Context $context
       * @param \Magento\Framework\Mview\ViewInterface $viewModel
+      * @param \Magento\Framework\Escaper $escaper
       * @param array $data
       */
     public function __construct(
         \Magento\Backend\Block\Context $context,
+        Escaper $escaper,
         View $viewModel,
         array $data = []
     ) {
         parent::__construct($context, $data);
+        $this->escaper = $escaper;
         $this->viewModel = $viewModel;
     }
 
@@ -80,7 +89,7 @@ class ScheduleStatus extends AbstractRenderer
             return '<span class="' . $class . '"><span>' . $text . '</span></span>';
         } catch (\Exception $exception) {
             return '<span class="grid-severity-minor"><span>' .
-                htmlspecialchars(
+                $this->escaper->escapeHtml(
                     get_class($exception) . ': ' . $exception->getMessage()
                 ) . '</span></span>';
         }
