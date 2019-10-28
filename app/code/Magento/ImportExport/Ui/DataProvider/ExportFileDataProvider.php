@@ -127,7 +127,7 @@ class ExportFileDataProvider extends DataProvider
             return [];
         }
         foreach ($files as $filePath) {
-            $sortedFiles += [filemtime($filePath) => $filePath];
+            $sortedFiles[filemtime($filePath)] = $filePath;
         }
         //sort array elements using key value
         ksort($sortedFiles);
