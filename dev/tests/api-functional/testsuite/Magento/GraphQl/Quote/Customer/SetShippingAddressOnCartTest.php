@@ -474,11 +474,16 @@ QUERY;
             ],
             'missed_city' => [
                 'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
-                'Field CartAddressInput.city of required type String! was not provided'
+                'Field CartAddressInput.city of required type String! was not provided',
             ],
             'missed_cart_id' => [
                 'shipping_addresses: {}',
-                'Required parameter "cart_id" is missing'
+                'Required parameter "cart_id" is missing',
+            ],
+            'missing_street' => [
+                'cart_id: "cart_id_value" shipping_addresses: ' .
+                '[{address: {country_code: "US" firstname: "J" lastname: "D" telephone: "+" city: "C"}}]',
+                'Required parameter "street" is missing',
             ]
         ];
     }
