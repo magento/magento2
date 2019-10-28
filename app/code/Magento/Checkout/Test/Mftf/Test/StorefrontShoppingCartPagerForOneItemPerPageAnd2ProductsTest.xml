@@ -15,6 +15,7 @@
             <title value="Test if the cart pager is visible with 2 cart items and one item per page."/>
             <description value="Test if the cart pager is visible with 2 cart items and one item per page."/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-14701"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
