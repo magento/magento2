@@ -154,6 +154,8 @@ class UploadTest extends AbstractBackendController
      */
     public function testUploadActionWithErrors(array $file, array $expectation): void
     {
+        $this->markTestSkipped('MC-21994');
+
         if (!empty($file['create_file'])) {
             $this->createFileInSysTmpDir($file['name']);
         } elseif (!empty($file['copy_file'])) {
