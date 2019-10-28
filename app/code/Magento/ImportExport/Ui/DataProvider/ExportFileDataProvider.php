@@ -127,6 +127,7 @@ class ExportFileDataProvider extends DataProvider
             return [];
         }
         foreach ($files as $filePath) {
+            //phpcs:ignore Magento2.Functions.DiscouragedFunction
             $sortedFiles[filemtime($filePath)] = $filePath;
         }
         //sort array elements using key value
