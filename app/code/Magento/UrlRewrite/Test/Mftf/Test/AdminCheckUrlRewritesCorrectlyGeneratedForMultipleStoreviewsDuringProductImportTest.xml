@@ -39,11 +39,6 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
-                <argument name="sku" value="productformagetwo68980"/>
-                <argument name="name" value="productformagetwo68980"/>
-            </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
             </actionGroup>
@@ -51,6 +46,11 @@
                 <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearStoreFilters"/>
+            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
+                <argument name="sku" value="productformagetwo68980"/>
+                <argument name="name" value="productformagetwo68980"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
@@ -163,17 +163,17 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
-                <argument name="sku" value="productformagetwo68980"/>
-                <argument name="name" value="productformagetwo68980"/>
-            </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
                 <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
                 <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
+            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
+                <argument name="sku" value="productformagetwo68980"/>
+                <argument name="name" value="productformagetwo68980"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="logout" stepKey="logout"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
