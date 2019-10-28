@@ -72,11 +72,11 @@
         <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateOption"/>
         <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="import_updated.csv" stepKey="attachFileForImport"/>
         <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
         <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
         <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForProductOnBackend">
             <argument name="productName" value="productformagetwo68980"/>
         </actionGroup>
@@ -194,11 +194,11 @@
         <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateOption"/>
         <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="import_updated.csv" stepKey="attachFileForImport"/>
         <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
         <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
         <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForProductOnBackend">
             <argument name="productName" value="productformagetwo68980"/>
         </actionGroup>
