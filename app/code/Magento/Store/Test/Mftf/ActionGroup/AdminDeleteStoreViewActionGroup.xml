@@ -74,18 +74,27 @@
         <see selector="{{AdminStoresGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertStoreViewNotInGridMessage"/>
     </actionGroup>
 
-    <actionGroup name="AdminDeleteStoreViewIfExistsActionGroup">
+    <actionGroup name="AdminSearchStoreViewByNameActionGroup">
         <annotations>
-            <description>Goes to the Admin Stores grid page. Deletes the provided Store (if exists) without creating a Backup. Validates that the Success Message is present and correct.</description>
+            <description>Goes to the Admin Stores grid page. Clears filters and search by store view name.</description>
         </annotations>
         <arguments>
             <argument name="storeViewName" type="string"/>
         </arguments>
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
         <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{storeViewName}}" stepKey="fillSearchStoreViewField"/>
-        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton"/>
+    </actionGroup>
+
+    <actionGroup name="AdminDeleteStoreViewIfExistsActionGroup" extends="AdminSearchStoreViewByNameActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminSearchStoreViewByNameActionGroup. Goes to the Admin Stores grid page. Deletes the provided Store (if exists) without creating a Backup. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
 
         <executeInSelenium function="function($webdriver) use ($I) {
                 $items = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('.col-store_title>a'));
@@ -103,7 +112,6 @@
                     $I->waitForElementVisible('#messages div.message-success', 10);
                     $I->see('You deleted the store view.', '#messages div.message-success');
                 }
-            }" stepKey="deleteStoreViewIfExists"/>
+            }" after="clickSearchButton" stepKey="deleteStoreViewIfExists"/>
     </actionGroup>
-
 </actionGroups>
