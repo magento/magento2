@@ -56,6 +56,9 @@ class AbstractTest extends TestCase
     /** @var StoreRepositoryInterface */
     private $storeRepository;
 
+    /** @var LayoutInterface */
+    private $layout;
+
     /**
      * @inheritdoc
      */
@@ -71,6 +74,7 @@ class AbstractTest extends TestCase
         $this->categoryLinkManagement = $this->objectManager->create(CategoryLinkManagementInterface::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
+        $this->layout = $this->objectManager->get(LayoutInterface::class);
     }
 
     /**
@@ -121,7 +125,7 @@ class AbstractTest extends TestCase
      * @param array $data
      * @return void
      */
-    public function testCategoryProductVisibilityTest(array $data): void
+    public function testCategoryProductVisibility(array $data): void
     {
         $collection = $this->processCategoryViewTest($data['data']['sku'], $data['data']);
 
@@ -256,7 +260,7 @@ class AbstractTest extends TestCase
         $this->objectManager->removeSharedInstance(Resolver::class);
         $this->objectManager->removeSharedInstance(Layer::class);
         $this->registerCategory($childCategory);
-        $newBlock = $this->objectManager->get(LayoutInterface::class)->createBlock(ListProduct::class);
+        $newBlock = $this->layout->createBlock(ListProduct::class);
         $childCategoryCollection = $newBlock->getLoadedProductCollection();
 
         return [
