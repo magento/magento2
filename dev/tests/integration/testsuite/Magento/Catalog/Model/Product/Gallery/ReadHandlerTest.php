@@ -200,7 +200,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
      * @dataProvider executeOnStoreViewDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @param string $file
      * @param string $field
      * @param string $value
