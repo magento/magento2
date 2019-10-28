@@ -19,7 +19,7 @@ use Magento\Framework\App\ResourceConnection;
 class Logger
 {
     /**
-     * Log table name
+     * Admin Analytics usage version log table name
      */
     const LOG_TABLE_NAME = 'admin_analytics_usage_version_log';
 

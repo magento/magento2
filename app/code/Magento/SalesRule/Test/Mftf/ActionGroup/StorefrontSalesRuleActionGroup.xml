@@ -10,12 +10,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Apply Sales Rule Coupon to the cart -->
     <actionGroup name="StorefrontApplyCouponActionGroup">
+        <annotations>
+            <description>Applies the provided Coupon Code to the Storefront Shopping Cart.</description>
+        </annotations>
         <arguments>
             <argument name="coupon"/>
         </arguments>
-        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeader" />
-        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
-        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
+
+        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeader"/>
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader"/>
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField"/>
         <fillField userInput="{{coupon.code}}" selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="fillCouponField"/>
         <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -23,29 +27,41 @@
 
     <!-- Cancel Sales Rule Coupon applied to the cart -->
     <actionGroup name="StorefrontCancelCouponActionGroup">
-        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeader" />
-        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader" />
-        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
+        <annotations>
+            <description>Cancels the Coupon that is applied to the Storefront Shopping Cart.</description>
+        </annotations>
+
+        <waitForElement selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" time="30" stepKey="waitForCouponHeader"/>
+        <conditionalClick selector="{{StorefrontSalesRuleCartCouponSection.couponHeader}}" dependentSelector="{{StorefrontSalesRuleCartCouponSection.discountBlockActive}}" visible="false" stepKey="clickCouponHeader"/>
+        <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField"/>
         <click selector="{{StorefrontSalesRuleCartCouponSection.cancelButton}}" stepKey="clickCancelButton"/>
     </actionGroup>
 
     <!-- Check applied discount in cart summary -->
     <actionGroup name="StorefrontCheckCouponAppliedActionGroup">
+        <annotations>
+            <description>Validates that the provided Rule and Discount Amount is present and correct on the Storefront Checkout page.</description>
+        </annotations>
         <arguments>
-            <argument name="rule" />
-            <argument name="discount" type="string" />
+            <argument name="rule"/>
+            <argument name="discount" type="string"/>
         </arguments>
+
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="waitForDiscountTotal"/>
         <see userInput="{{rule.store_labels[1][store_label]}}" selector="{{CheckoutCartSummarySection.discountLabel}}" stepKey="assertDiscountLabel"/>
         <see userInput="-${{discount}}" selector="{{CheckoutCartSummarySection.discountTotal}}" stepKey="assertDiscountTotal"/>
     </actionGroup>
 
     <actionGroup name="VerifyDiscountAmount">
+        <annotations>
+            <description>Goes to the provided Storefront Product URL. Fills in provided Quantity. Clicks Add to Cart. Goes to Checkout. Validates that the provided Discount Amount is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="productUrl" type="string"/>
             <argument name="quantity" type="string"/>
             <argument name="expectedDiscount" type="string"/>
         </arguments>
+
         <amOnPage url="{{productUrl}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>

@@ -6,22 +6,29 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- ActionGroup will add a single custom option to a product
+         You must already be on the product creation page -->
     <actionGroup name="AdminCreateCustomDropDownOptionsActionGroup">
-        <!-- ActionGroup will add a single custom option to a product
-             You must already be on the product creation page -->
+        <annotations>
+            <description>Clicks on 'Add Option'. Adds the 2 provided Options under the provided Custom Option Name to a Product on the Admin Product creation/edit page under the 'Customizable Options' section.</description>
+        </annotations>
         <arguments>
             <argument name="customOptionName" type="string"/>
             <argument name="firstOption" type="entity"/>
             <argument name="secondOption" type="entity"/>
         </arguments>
+
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
         <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
+
         <!-- Fill in the option and select the type of drop down -->
         <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
         <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
         <waitForPageLoad stepKey="waitForDropdownOpen"/>
         <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Drop-down')}}"/>
+
         <!-- Add option based on the parameter -->
         <click stepKey="clickAddFirstValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
         <fillField stepKey="fillInFirstOptionValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{firstOption.title}}"/>

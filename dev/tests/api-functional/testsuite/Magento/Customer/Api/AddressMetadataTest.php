@@ -6,8 +6,11 @@
 
 namespace Magento\Customer\Api;
 
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\Customer\Api\Data\AddressInterface as Address;
 use Magento\Customer\Model\Data\AttributeMetadata;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -20,14 +23,39 @@ class AddressMetadataTest extends WebapiAbstract
     const RESOURCE_PATH = "/V1/attributeMetadata/customerAddress";
 
     /**
+     * @var Config $config
+     */
+    private $resourceConfig;
+
+    /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitConfig;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $objectManager = ObjectManager::getInstance();
+        $this->resourceConfig = $objectManager->get(Config::class);
+        $this->reinitConfig = $objectManager->get(ReinitableConfigInterface::class);
+    }
+
+    /**
      * Test retrieval of attribute metadata for the address entity type.
      *
      * @param string $attributeCode The attribute code of the requested metadata.
      * @param array $expectedMetadata Expected entity metadata for the attribute code.
      * @dataProvider getAttributeMetadataDataProvider
+     * @magentoDbIsolation disabled
      */
-    public function testGetAttributeMetadata($attributeCode, $expectedMetadata)
+    public function testGetAttributeMetadata($attributeCode, $configOptions, $expectedMetadata)
     {
+        $this->initConfig($configOptions);
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/attribute/$attributeCode",
@@ -54,12 +82,14 @@ class AddressMetadataTest extends WebapiAbstract
      * Data provider for testGetAttributeMetadata.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getAttributeMetadataDataProvider()
     {
         return [
             Address::POSTCODE => [
                 Address::POSTCODE,
+                [],
                 [
                     AttributeMetadata::FRONTEND_INPUT => 'text',
                     AttributeMetadata::INPUT_FILTER => '',
@@ -83,7 +113,85 @@ class AddressMetadataTest extends WebapiAbstract
                     AttributeMetadata::IS_SEARCHABLE_IN_GRID => true,
                     AttributeMetadata::ATTRIBUTE_CODE => 'postcode',
                 ],
-            ]
+            ],
+            'prefix' => [
+                'prefix',
+                [
+                    ['path' => 'customer/address/prefix_show', 'value' => 'opt'],
+                    ['path' => 'customer/address/prefix_options', 'value' => 'prefA;prefB']
+                ],
+                [
+                    AttributeMetadata::FRONTEND_INPUT => 'text',
+                    AttributeMetadata::INPUT_FILTER => '',
+                    AttributeMetadata::STORE_LABEL => 'Name Prefix',
+                    AttributeMetadata::MULTILINE_COUNT => 0,
+                    AttributeMetadata::VALIDATION_RULES => [],
+                    AttributeMetadata::VISIBLE => false,
+                    AttributeMetadata::REQUIRED => false,
+                    AttributeMetadata::DATA_MODEL => '',
+                    AttributeMetadata::OPTIONS => [
+                        [
+                            'label' => 'prefA',
+                            'value' => 'prefA',
+                        ],
+                        [
+                            'label' => 'prefB',
+                            'value' => 'prefB',
+                        ],
+                    ],
+                    AttributeMetadata::FRONTEND_CLASS => '',
+                    AttributeMetadata::USER_DEFINED => false,
+                    AttributeMetadata::SORT_ORDER => 10,
+                    AttributeMetadata::FRONTEND_LABEL => 'Name Prefix',
+                    AttributeMetadata::NOTE => '',
+                    AttributeMetadata::SYSTEM => false,
+                    AttributeMetadata::BACKEND_TYPE => 'static',
+                    AttributeMetadata::IS_USED_IN_GRID => false,
+                    AttributeMetadata::IS_VISIBLE_IN_GRID => false,
+                    AttributeMetadata::IS_FILTERABLE_IN_GRID => false,
+                    AttributeMetadata::IS_SEARCHABLE_IN_GRID => false,
+                    AttributeMetadata::ATTRIBUTE_CODE => 'prefix',
+                ],
+            ],
+            'suffix' => [
+                'suffix',
+                [
+                    ['path' => 'customer/address/suffix_show', 'value' => 'opt'],
+                    ['path' => 'customer/address/suffix_options', 'value' => 'suffA;suffB']
+                ],
+                [
+                    AttributeMetadata::FRONTEND_INPUT => 'text',
+                    AttributeMetadata::INPUT_FILTER => '',
+                    AttributeMetadata::STORE_LABEL => 'Name Suffix',
+                    AttributeMetadata::MULTILINE_COUNT => 0,
+                    AttributeMetadata::VALIDATION_RULES => [],
+                    AttributeMetadata::VISIBLE => false,
+                    AttributeMetadata::REQUIRED => false,
+                    AttributeMetadata::DATA_MODEL => '',
+                    AttributeMetadata::OPTIONS => [
+                        [
+                            'label' => 'suffA',
+                            'value' => 'suffA',
+                        ],
+                        [
+                            'label' => 'suffB',
+                            'value' => 'suffB',
+                        ],
+                    ],
+                    AttributeMetadata::FRONTEND_CLASS => '',
+                    AttributeMetadata::USER_DEFINED => false,
+                    AttributeMetadata::SORT_ORDER => 50,
+                    AttributeMetadata::FRONTEND_LABEL => 'Name Suffix',
+                    AttributeMetadata::NOTE => '',
+                    AttributeMetadata::SYSTEM => false,
+                    AttributeMetadata::BACKEND_TYPE => 'static',
+                    AttributeMetadata::IS_USED_IN_GRID => false,
+                    AttributeMetadata::IS_VISIBLE_IN_GRID => false,
+                    AttributeMetadata::IS_FILTERABLE_IN_GRID => false,
+                    AttributeMetadata::IS_SEARCHABLE_IN_GRID => false,
+                    AttributeMetadata::ATTRIBUTE_CODE => 'suffix',
+                ],
+            ],
         ];
     }
 
@@ -106,7 +214,7 @@ class AddressMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
         $this->assertCount(19, $attributeMetadata);
-        $postcode = $this->getAttributeMetadataDataProvider()[Address::POSTCODE][1];
+        $postcode = $this->getAttributeMetadataDataProvider()[Address::POSTCODE][2];
         $validationResult = $this->checkMultipleAttributesValidationRules($postcode, $attributeMetadata);
         list($postcode, $attributeMetadata) = $validationResult;
         $this->assertContains($postcode, $attributeMetadata);
@@ -187,7 +295,7 @@ class AddressMetadataTest extends WebapiAbstract
         return [
             [
                 'customer_address_edit',
-                $attributeMetadata[Address::POSTCODE][1],
+                $attributeMetadata[Address::POSTCODE][2],
             ]
         ];
     }
@@ -200,6 +308,7 @@ class AddressMetadataTest extends WebapiAbstract
      * @param array $actualResult
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function checkValidationRules($expectedResult, $actualResult)
     {
@@ -235,6 +344,7 @@ class AddressMetadataTest extends WebapiAbstract
         }
         return [$expectedResult, $actualResult];
     }
+    //phpcs:enable
 
     /**
      * Check specific attribute validation rules in set of multiple attributes
@@ -276,5 +386,20 @@ class AddressMetadataTest extends WebapiAbstract
             $attribute->loadByCode('customer_address', $attributeCode);
             $attribute->delete();
         }
+    }
+
+    /**
+     * Set core config data.
+     *
+     * @param $configOptions
+     */
+    private function initConfig(array $configOptions): void
+    {
+        if ($configOptions) {
+            foreach ($configOptions as $option) {
+                $this->resourceConfig->saveConfig($option['path'], $option['value']);
+            }
+        }
+        $this->reinitConfig->reinit();
     }
 }

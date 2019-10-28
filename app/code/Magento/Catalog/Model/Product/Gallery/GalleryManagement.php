@@ -71,10 +71,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
         try {
             $product = $this->productRepository->save($product);
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (InputException $inputException) {
             throw $inputException;
-            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             throw new StateException(__("The product can't be saved."));
         }

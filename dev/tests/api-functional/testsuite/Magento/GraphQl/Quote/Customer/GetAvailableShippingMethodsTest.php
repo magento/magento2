@@ -62,10 +62,6 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
-            'base_amount' => [
-                'value' => 10,
-                'currency' => 'USD',
-            ],
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
@@ -173,10 +169,6 @@ query {
     shipping_addresses {
         available_shipping_methods {
           amount {
-            value
-            currency
-          }
-          base_amount {
             value
             currency
           }

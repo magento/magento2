@@ -53,12 +53,6 @@
             }
 
             .block-content {
-                &:extend(.abs-add-clearfix-desktop all);
-
-                .box {
-                    &:extend(.abs-blocks-2columns all);
-                }
-
                 .actions-toolbar {
                     clear: both;
                     .lib-actions-toolbar(
@@ -165,6 +159,18 @@
 
         .block-content {
             &:extend(.abs-add-clearfix-desktop all);
+        }
+    }
+
+    .column {
+        .block-addbysku {
+            .block-content {
+                &:extend(.abs-add-clearfix-desktop all);
+
+                .box {
+                    &:extend(.abs-blocks-2columns all);
+                }
+            }
         }
     }
 }

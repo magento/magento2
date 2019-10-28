@@ -197,6 +197,7 @@ class Matrix extends \Magento\Backend\Block\Template
                 foreach ($attributes as $key => $attribute) {
                     if (isset($configurableData[$key])) {
                         $attributes[$key] = array_replace_recursive($attribute, $configurableData[$key]);
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $attributes[$key]['values'] = array_merge(
                             isset($attribute['values']) ? $attribute['values'] : [],
                             isset($configurableData[$key]['values'])
@@ -413,14 +414,15 @@ class Matrix extends \Magento\Backend\Block\Template
                 'chosen' => [],
                 '__disableTmpl' => true
             ];
-            foreach ($attribute->getOptions() as $option) {
-                if (!empty($option->getValue())) {
+            $options = $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : [];
+            foreach ($options as $option) {
+                if (!empty($option['value'])) {
                     $attributes[$attribute->getAttributeId()]['options'][] = [
                         'attribute_code' => $attribute->getAttributeCode(),
                         'attribute_label' => $attribute->getStoreLabel(0),
-                        'id' => $option->getValue(),
-                        'label' => $option->getLabel(),
-                        'value' => $option->getValue(),
+                        'id' => $option['value'],
+                        'label' => $option['label'],
+                        'value' => $option['value'],
                         '__disableTmpl' => true,
                     ];
                 }

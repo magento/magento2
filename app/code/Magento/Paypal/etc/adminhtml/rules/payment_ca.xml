@@ -193,6 +193,7 @@
                 <argument name="wps_other">wps_other</argument>
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="inContextEnable" event="activate-rule"/>
             <rule type="inContextDisable" event="deactivate-rule"/>
             <rule type="inContextShowMerchantId" event="activate-rule"/>
