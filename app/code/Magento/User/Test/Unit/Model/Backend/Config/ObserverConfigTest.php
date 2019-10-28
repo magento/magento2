@@ -64,6 +64,28 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test when admin password lifetime = 0 days
+     */
+    public function testIsLatestPasswordExpiredWhenNoAdminLifeTime()
+    {
+        $this->backendConfigMock->expects(self::any())->method('getValue')
+            ->with(self::XML_ADMIN_SECURITY_PASSWORD_LIFETIME)
+            ->willReturn('0');
+        $this->assertEquals(false, $this->model->_isLatestPasswordExpired([]));
+    }
+
+    /**
+     * Test when admin password lifetime = 2 days
+     */
+    public function testIsLatestPasswordExpiredWhenHasAdminLifeTime()
+    {
+        $this->backendConfigMock->expects(self::any())->method('getValue')
+            ->with(self::XML_ADMIN_SECURITY_PASSWORD_LIFETIME)
+            ->willReturn('2');
+        $this->assertEquals(true, $this->model->_isLatestPasswordExpired(['last_updated' => 1571428052]));
+    }
+
+    /**
      * Test when security lockout threshold = 100 minutes
      */
     public function testGetAdminLockThreshold()
