@@ -152,7 +152,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     public function testGetJsonConfigWithCatalogRules()
     {
         $this->indexBuilder->reindexFull();
-
+        sleep(1);
         $config = json_decode($this->block->getJsonConfig(), true);
         $configValues = array_values($config);
         $this->assertEquals($this->getExpectedJsonConfigWithCatalogRules(), array_values($configValues[0]));
