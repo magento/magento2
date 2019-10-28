@@ -92,9 +92,6 @@
         <annotations>
             <description>EXTENDS: AdminSearchStoreViewByNameActionGroup. Goes to the Admin Stores grid page. Deletes the provided Store (if exists) without creating a Backup. Validates that the Success Message is present and correct.</description>
         </annotations>
-        <arguments>
-            <argument name="storeViewName" type="string"/>
-        </arguments>
 
         <executeInSelenium function="function($webdriver) use ($I) {
                 $items = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('.col-store_title>a'));
