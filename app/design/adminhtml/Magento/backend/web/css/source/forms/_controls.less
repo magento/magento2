@@ -59,15 +59,15 @@
 .admin__control-select {
     &:extend(.abs-form-control-pattern all);
     .lib-css(appearance, none, 1);
-    background-image+: url('../images/arrows-bg.svg');
+    background-image+: url('../images/arrows-bg.svg') !important;
     background-position+: ~'calc(100% - 12px)' -34px;
     background-size+: auto;
 
-    background-image+: linear-gradient(@color-gray89, @color-gray89);
+    background-image+: linear-gradient(@color-gray89, @color-gray89) !important;
     background-position+: 100%;
     background-size+: @field-control__height 100%;
 
-    background-image+: linear-gradient(@field-control__border-color,@field-control__border-color);
+    background-image+: linear-gradient(@field-control__border-color,@field-control__border-color) !important;
     background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
 
@@ -86,13 +86,13 @@
     }
 
     &:active {
-        background-image+: url('../images/arrows-bg.svg');
+        background-image+: url('../images/arrows-bg.svg') !important;
         background-position+: ~'calc(100% - 12px)' 13px;
 
-        background-image+: linear-gradient(@color-gray89, @color-gray89);
+        background-image+: linear-gradient(@color-gray89, @color-gray89) !important;
         background-position+: 100%;
 
-        background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
+        background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color) !important;
         background-position+: ~'calc(100% - @{field-control__height})' 0;
         border-color: @field-control__focus__border-color;
     }
@@ -175,6 +175,7 @@ option:empty {
     line-height: @field-control__line-height;
     padding-bottom: @field-control__padding-bottom;
     padding-top: @field-control__padding-top;
+    margin-left: @action__outer-indent;
 
     + [class*='admin__control-'] {
         margin-left: @action__outer-indent;

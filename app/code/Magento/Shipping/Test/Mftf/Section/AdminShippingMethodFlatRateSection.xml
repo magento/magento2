@@ -11,5 +11,11 @@
     <section name="AdminShippingMethodFlatRateSection">
         <element name="carriersFlatRateTab" type="button" selector="#carriers_flatrate-head"/>
         <element name="carriersFlatRateActive" type="select" selector="#carriers_flatrate_active"/>
+        <element name="carriersEnableFlatRateActive" type="input" selector="#carriers_flatrate_active_inherit"/>
+        <element name="carriersFlatRateTitle" type="input" selector="#carriers_flatrate_title_inherit"/>
+        <element name="carriersFlatRateName" type="input" selector="#carriers_flatrate_name_inherit"/>
+        <element name="carriersFlatRateSpecificErrMsg" type="input" selector="#carriers_flatrate_specificerrmsg_inherit"/>
+        <element name="carriersFlatRateAllowSpecific" type="input" selector="#carriers_flatrate_sallowspecific_inherit"/>
+        <element name="carriersFlatRateSpecificCountry" type="input" selector="#carriers_flatrate_specificcountry"/>
     </section>
 </sections>

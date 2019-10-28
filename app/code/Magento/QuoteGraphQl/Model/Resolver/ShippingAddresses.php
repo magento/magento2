@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\ExtractQuoteAddressData;
+use Magento\QuoteGraphQl\Model\Cart\ValidateAddressFromSchema;
 
 /**
  * @inheritdoc
@@ -25,11 +26,20 @@ class ShippingAddresses implements ResolverInterface
     private $extractQuoteAddressData;
 
     /**
-     * @param ExtractQuoteAddressData $extractQuoteAddressData
+     * @var ValidateAddressFromSchema
      */
-    public function __construct(ExtractQuoteAddressData $extractQuoteAddressData)
-    {
+    private $validateAddressFromSchema;
+
+    /**
+     * @param ExtractQuoteAddressData $extractQuoteAddressData
+     * @param ValidateAddressFromSchema $validateAddressFromSchema
+     */
+    public function __construct(
+        ExtractQuoteAddressData $extractQuoteAddressData,
+        ValidateAddressFromSchema $validateAddressFromSchema
+    ) {
         $this->extractQuoteAddressData = $extractQuoteAddressData;
+        $this->validateAddressFromSchema = $validateAddressFromSchema;
     }
 
     /**
@@ -48,7 +58,11 @@ class ShippingAddresses implements ResolverInterface
 
         if (count($shippingAddresses)) {
             foreach ($shippingAddresses as $shippingAddress) {
-                $addressesData[] = $this->extractQuoteAddressData->execute($shippingAddress);
+                $address = $this->extractQuoteAddressData->execute($shippingAddress);
+
+                if ($this->validateAddressFromSchema->execute($address)) {
+                    $addressesData[] = $address;
+                }
             }
         }
         return $addressesData;

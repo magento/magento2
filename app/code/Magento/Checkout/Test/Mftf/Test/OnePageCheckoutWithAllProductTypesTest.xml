@@ -20,6 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -90,6 +91,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 

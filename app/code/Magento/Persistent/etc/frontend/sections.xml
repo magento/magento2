@@ -10,4 +10,7 @@
     <action name="persistent/index/unsetCookie">
         <section name="persistent"/>
     </action>
+    <action name="customer/account/logout">
+        <section name="persistent"/>
+    </action>
 </config>

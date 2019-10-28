@@ -28,9 +28,14 @@
             <!-- Delete all search terms -->
             <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
             <actionGroup ref="DeleteAllSearchTerms" stepKey="deleteAllSearchTerms"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
             <!-- Create product with description -->
             <comment userInput="Create product with description" stepKey="createProductWithDescriptionComment"/>
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete created product -->

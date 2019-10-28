@@ -1458,6 +1458,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             ) {
                 if ($this->_isPriceGlobal) {
                     $prices[$nextOptionId][Store::DEFAULT_STORE_ID] = $priceData;
+                } else {
+                    $prices[$nextOptionId][$this->_rowStoreId] = $priceData;
                 }
             }
 
@@ -1693,7 +1695,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_rowIsMain = false;
         }
 
-        return [$this->_rowProductId, $this->_rowStoreId, $this->_rowType, $this->_rowIsMain];
+        return true;
     }
 
     /**

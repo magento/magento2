@@ -55,7 +55,6 @@ class CartItemPrices implements ResolverInterface
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
-
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
         return [
@@ -71,6 +70,40 @@ class CartItemPrices implements ResolverInterface
                 'currency' => $currencyCode,
                 'value' => $cartItem->getRowTotalInclTax(),
             ],
+            'total_item_discount' => [
+                'currency' => $currencyCode,
+                'value' => $cartItem->getDiscountAmount(),
+            ],
+            'discounts' => $this->getDiscountValues($cartItem, $currencyCode)
         ];
+    }
+
+    /**
+     * Get Discount Values
+     *
+     * @param Item $cartItem
+     * @param string $currencyCode
+     * @return array
+     */
+    private function getDiscountValues($cartItem, $currencyCode)
+    {
+        $itemDiscounts = $cartItem->getExtensionAttributes()->getDiscounts();
+        if ($itemDiscounts) {
+            $discountValues=[];
+            foreach ($itemDiscounts as $value) {
+                $discount = [];
+                $amount = [];
+                /* @var \Magento\SalesRule\Api\Data\DiscountDataInterface $discountData */
+                $discountData = $value->getDiscountData();
+                $discountAmount = $discountData->getAmount();
+                $discount['label'] = $value->getRuleLabel() ?: __('Discount');
+                $amount['value'] = $discountAmount;
+                $amount['currency'] = $currencyCode;
+                $discount['amount'] = $amount;
+                $discountValues[] = $discount;
+            }
+            return $discountValues;
+        }
+        return null;
     }
 }

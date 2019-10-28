@@ -195,15 +195,11 @@ class Elasticsearch
     {
         $this->checkIndex($storeId, $mappedIndexerId, true);
         $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
-        if ($this->client->isEmptyIndex($indexName)) {
-            // use existing index if empty
-            return $this;
-        }
 
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
         $version = (int)(str_replace($indexPattern, '', $indexName));
-        $newIndexName = $indexPattern . ++$version;
+        $newIndexName = $indexPattern . (++$version);
 
         // remove index if already exists
         if ($this->client->indexExists($newIndexName)) {
@@ -354,12 +350,14 @@ class Elasticsearch
     {
         $this->indexBuilder->setStoreId($storeId);
         $settings = $this->indexBuilder->build();
-        $allAttributeTypes = $this->fieldMapper->getAllAttributesTypes([
-            'entityType' => $mappedIndexerId,
-            // Use store id instead of website id from context for save existing fields mapping.
-            // In future websiteId will be eliminated due to index stored per store
-            'websiteId' => $storeId
-        ]);
+        $allAttributeTypes = $this->fieldMapper->getAllAttributesTypes(
+            [
+                'entityType' => $mappedIndexerId,
+                // Use store id instead of website id from context for save existing fields mapping.
+                // In future websiteId will be eliminated due to index stored per store
+                'websiteId' => $storeId
+            ]
+        );
         $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);
         $this->client->createIndex($indexName, ['settings' => $settings]);
         $this->client->addFieldsMapping(

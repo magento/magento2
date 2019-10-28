@@ -65,6 +65,18 @@ class CustomerDownloadableProductTest extends GraphQlAbstract
     }
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_download_limit.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/customer_order_with_downloadable_product.php
+     */
+    public function testRemainingDownloads()
+    {
+        $query = $this->getQuery();
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        self::assertArrayHasKey('remaining_downloads', $response['customerDownloadableProducts']['items'][0]);
+        self::assertEquals(100, $response['customerDownloadableProducts']['items'][0]['remaining_downloads']);
+    }
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testCustomerHasNoOrders()
     {
