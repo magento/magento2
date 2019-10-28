@@ -41,7 +41,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManager;
 
@@ -221,7 +221,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
         $this->moduleManager = $this->createPartialMock(
-            \Magento\Framework\Module\ModuleManagerInterface::class,
+            \Magento\Framework\Module\Manager::class,
             ['isEnabled']
         );
         $this->extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
@@ -486,6 +486,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($websiteIDs, $this->model->getStoreIds());
     }
 
+    /**
+     * @return array
+     */
     public function getSingleStoreIds()
     {
         return [

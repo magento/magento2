@@ -840,7 +840,10 @@ define([
          */
         _Rewind: function (controls) {
             controls.find('div[option-id], option[option-id]').removeClass('disabled').removeAttr('disabled');
-            controls.find('div[option-empty], option[option-empty]').attr('disabled', true).addClass('disabled');
+            controls.find('div[option-empty], option[option-empty]')
+                .attr('disabled', true)
+                .addClass('disabled')
+                .attr('tabindex', '-1');
         },
 
         /**
@@ -1265,7 +1268,10 @@ define([
                         dataMergeStrategy: this.options.gallerySwitchStrategy
                     });
                 }
-                gallery.first();
+
+                if (gallery) {
+                    gallery.first();
+                }
             } else if (justAnImage && justAnImage.img) {
                 context.find('.product-image-photo').attr('src', justAnImage.img);
             }

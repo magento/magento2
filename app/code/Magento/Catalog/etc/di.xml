@@ -36,16 +36,16 @@
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults" />
+    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Catalog\Model\ProductSearchResults" />
     <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
     <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
     <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList" />
-    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Catalog\Model\CategorySearchResults" />
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
     <preference for="Magento\Catalog\Api\ProductRenderListInterface" type="Magento\Catalog\Model\ProductRenderList"/>
@@ -408,6 +408,28 @@
         <arguments>
             <argument name="converters" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Model\ProductLink\Converter\DefaultConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <arguments>
+            <argument name="optionGroups" xsi:type="array">
+                <item name="date" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Date</item>
+                <item name="file" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\File</item>
+                <item name="select" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Select</item>
+                <item name="text" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Text</item>
+            </argument>
+            <argument name="optionTypesToGroups" xsi:type="array">
+                <item name="field" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="area" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="file" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_FILE</item>
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="checkbox" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="multiple" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="date" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="date_time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
             </argument>
         </arguments>
     </type>
@@ -867,7 +889,7 @@
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
                 <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Catalog\Model\Product\Hydrator</item>
             </argument>
         </arguments>
     </type>

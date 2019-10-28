@@ -141,19 +141,14 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage You need to choose options for your item.
+     * @expectedExceptionMessage Could not find specified product.
      */
     public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
     {
-        $this->markTestSkipped(
-            'Magento automatically selects the correct child product according to the super attribute
-             https://github.com/magento/graphql-ce/issues/940'
-        );
-
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
         $product = current($searchResponse['products']['items']);
 
@@ -178,7 +173,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage You need to choose options for your item.
+     * @expectedExceptionMessage Could not find specified product.
      */
     public function testAddVariationFromAnotherConfigurableProductWithDifferentSuperAttributeToCart()
     {
@@ -270,7 +265,8 @@ QUERY;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
+            'doesn\'t exist. Verify the product and try again.'
         );
 
         $this->graphQlMutation($query);
