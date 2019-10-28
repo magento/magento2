@@ -16,6 +16,11 @@ class ScheduleStatus extends AbstractRenderer
      */
     protected $viewModel;
 
+     /**
+      * @param \Magento\Backend\Block\Context $context
+      * @param \Magento\Framework\Mview\ViewInterface $viewModel
+      * @param array $data
+      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         View $viewModel,
