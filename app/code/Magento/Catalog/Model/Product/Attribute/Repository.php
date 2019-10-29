@@ -113,8 +113,9 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
                 ->getId()
         );
-        if ($attribute->getAttributeCode()) {
-            $existingModel = $this->get($attribute->getAttributeCode());
+        $attributeCode = $attribute->getAttributeCode();
+        if ($attributeCode) {
+            $existingModel = $this->get($attributeCode);
 
             if (!$existingModel->getAttributeId()) {
                 throw NoSuchEntityException::singleField('attribute_code', $existingModel->getAttributeCode());
