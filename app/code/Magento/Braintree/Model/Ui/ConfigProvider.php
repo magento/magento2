@@ -3,116 +3,215 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Braintree\Model\Ui;
+declare(strict_types=1);
+
+namespace Magento\Braintree\Test\Unit\Model\Ui;
 
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
-use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Customer\Model\Session;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class ConfigProvider
+ * Class ConfigProviderTest
  *
- * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * Test for class \Magento\Braintree\Model\Ui\ConfigProvider
  */
-class ConfigProvider implements ConfigProviderInterface
+class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
-    const CODE = 'braintree';
-
-    const CC_VAULT_CODE = 'braintree_cc_vault';
+    const SDK_URL = 'https://js.braintreegateway.com/v2/braintree.js';
+    const CLIENT_TOKEN = 'token';
+    const MERCHANT_ACCOUNT_ID = '245345';
 
     /**
-     * @var Config
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var BraintreeAdapterFactory
+     * @var BraintreeAdapter|MockObject
      */
-    private $adapterFactory;
+    private $braintreeAdapter;
 
     /**
-     * @var string
-     */
-    private $clientToken = '';
-
-    /**
-     * @var SessionManagerInterface
+     * @var Session|MockObject
      */
     private $session;
 
     /**
-     * Constructor
-     *
-     * @param Config $config
-     * @param BraintreeAdapterFactory $adapterFactory
-     * @param SessionManagerInterface $session
+     * @var ConfigProvider
      */
-    public function __construct(
-        Config $config,
-        BraintreeAdapterFactory $adapterFactory,
-        SessionManagerInterface $session
-    ) {
-        $this->config = $config;
-        $this->adapterFactory = $adapterFactory;
-        $this->session = $session;
+    private $configProvider;
+
+    protected function setUp()
+    {
+        $this->config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactoryMock->method('create')
+            ->willReturn($this->braintreeAdapter);
+
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreId'])
+            ->getMock();
+        $this->session->method('getStoreId')
+            ->willReturn(null);
+
+        $this->configProvider = new ConfigProvider(
+            $this->config,
+            $adapterFactoryMock,
+            $this->session
+        );
     }
 
     /**
-     * Retrieve assoc array of checkout configuration
+     * Ensure that get config returns correct data if payment is active or not
      *
+     * @param array $config
+     * @param array $expected
+     * @dataProvider getConfigDataProvider
+     */
+    public function testGetConfig($config, $expected)
+    {
+        if ($config['isActive']) {
+            $this->braintreeAdapter->expects($this->once())
+                ->method('generate')
+                ->willReturn(self::CLIENT_TOKEN);
+        } else {
+            $config = array_replace_recursive(
+                $this->getConfigDataProvider()[0]['config'],
+                $config
+            );
+            $expected = array_replace_recursive(
+                $this->getConfigDataProvider()[0]['expected'],
+                $expected
+            );
+            $this->braintreeAdapter->expects($this->never())
+                ->method('generate');
+        }
+
+        foreach ($config as $method => $value) {
+            $this->config->expects($this->once())
+                ->method($method)
+                ->willReturn($value);
+        }
+
+        $this->assertEquals($expected, $this->configProvider->getConfig());
+    }
+
+    /**
+     * @covers       \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
+     * @dataProvider getClientTokenDataProvider
+     * @param $merchantAccountId
+     * @param $params
+     */
+    public function testGetClientToken($merchantAccountId, $params)
+    {
+        $this->config->expects(static::once())
+            ->method('getMerchantAccountId')
+            ->willReturn($merchantAccountId);
+
+        $this->braintreeAdapter->expects(static::once())
+            ->method('generate')
+            ->with($params)
+            ->willReturn(self::CLIENT_TOKEN);
+
+        static::assertEquals(self::CLIENT_TOKEN, $this->configProvider->getClientToken());
+    }
+
+    /**
      * @return array
      */
-    public function getConfig()
+    public function getConfigDataProvider()
     {
-        $storeId = $this->session->getStoreId();
-        $isActive = $this->config->isActive($storeId);
         return [
-            'payment' => [
-                self::CODE => [
-                    'isActive' => $isActive,
-                    'clientToken' => $isActive ? $this->getClientToken() : null,
-                    'ccTypesMapper' => $this->config->getCcTypesMapper(),
-                    'sdkUrl' => $this->config->getSdkUrl(),
-                    'hostedFieldsSdkUrl' => $this->config->getHostedFieldsSdkUrl(),
-                    'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig($storeId),
-                    'availableCardTypes' => $this->config->getAvailableCardTypes($storeId),
-                    'useCvv' => $this->config->isCvvEnabled($storeId),
-                    'environment' => $this->config->getEnvironment($storeId),
-                    'hasFraudProtection' => $this->config->hasFraudProtection($storeId),
-                    'merchantId' => $this->config->getMerchantId($storeId),
-                    'ccVaultCode' => self::CC_VAULT_CODE,
+            [
+                'config' => [
+                    'isActive' => true,
+                    'getCcTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
+                    'getSdkUrl' => self::SDK_URL,
+                    'getHostedFieldsSdkUrl' => 'https://sdk.com/test.js',
+                    'getCountrySpecificCardTypeConfig' => [
+                        'GB' => ['VI', 'AE'],
+                        'US' => ['DI', 'JCB']
+                    ],
+                    'getAvailableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
+                    'isCvvEnabled' => true,
+                    'isVerify3DSecure' => true,
+                    'getThresholdAmount' => 20,
+                    'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
+                    'getEnvironment' => 'test-environment',
+                    'getMerchantId' => 'test-merchant-id',
+                    'hasFraudProtection' => true,
                 ],
-                Config::CODE_3DSECURE => [
-                    'enabled' => $this->config->isVerify3DSecure($storeId),
-                    'thresholdAmount' => $this->config->getThresholdAmount($storeId),
-                    'specificCountries' => $this->config->get3DSecureSpecificCountries($storeId),
-                ],
+                'expected' => [
+                    'payment' => [
+                        ConfigProvider::CODE => [
+                            'isActive' => true,
+                            'clientToken' => self::CLIENT_TOKEN,
+                            'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
+                            'sdkUrl' => self::SDK_URL,
+                            'hostedFieldsSdkUrl' => 'https://sdk.com/test.js',
+                            'countrySpecificCardTypes' => [
+                                'GB' => ['VI', 'AE'],
+                                'US' => ['DI', 'JCB']
+                            ],
+                            'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
+                            'useCvv' => true,
+                            'environment' => 'test-environment',
+                            'merchantId' => 'test-merchant-id',
+                            'hasFraudProtection' => true,
+                            'ccVaultCode' => ConfigProvider::CC_VAULT_CODE
+                        ],
+                        Config::CODE_3DSECURE => [
+                            'enabled' => true,
+                            'thresholdAmount' => 20,
+                            'specificCountries' => ['GB', 'US', 'CA']
+                        ]
+                    ]
+                ]
             ],
+            [
+                'config' => [
+                    'isActive' => false,
+                ],
+                'expected' => [
+                    'payment' => [
+                        ConfigProvider::CODE => [
+                            'isActive' => false,
+                            'clientToken' => null,
+                        ]
+                    ]
+                ]
+            ]
         ];
     }
 
     /**
-     * Generate a new client token if necessary
-     *
-     * @return string
+     * @return array
      */
-    public function getClientToken()
+    public function getClientTokenDataProvider()
     {
-        if (empty($this->clientToken)) {
-            $params = [];
-
-            $storeId = $this->session->getStoreId();
-            $merchantAccountId = $this->config->getMerchantAccountId($storeId);
-            if (!empty($merchantAccountId)) {
-                $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
-            }
-
-            $this->clientToken = $this->adapterFactory->create($storeId)
-                ->generate($params);
-        }
-
-        return $this->clientToken;
+        return [
+            [
+                'merchantAccountId' => '',
+                'params' => []
+            ],
+            [
+                'merchantAccountId' => self::MERCHANT_ACCOUNT_ID,
+                'params' => ['merchantAccountId' => self::MERCHANT_ACCOUNT_ID]
+            ]
+        ];
     }
 }
