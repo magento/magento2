@@ -60,6 +60,52 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         }
 
         $definitionProcessor = $this->definitionProcessors[$type];
+        if (isset($data['default'])) {
+            $data['default'] = $this->processDefaultValue($data['default']);
+        }
+
         return $definitionProcessor->fromDefinition($data);
+    }
+
+    /**
+     * Processes `$value` to be compatible with MySQL.
+     *
+     * @param string|null|bool $value
+     * @return string|null|bool
+     */
+    protected function processDefaultValue($value)
+    {
+        //bail out if no default is set
+        if ($value === null || $value === false) {
+            return $value;
+        }
+        /*
+         * MariaDB replaces some defaults by their respective functions, e.g. `DEFAULT CURRENT_TIMESTAMP` ends up being
+         * `current_timestamp()`  in the information schema.
+         */
+        $value = strtr(
+            $value,
+            [
+                'current_timestamp()' => 'CURRENT_TIMESTAMP',
+                'curdate()' => 'CURRENT_DATE',
+                'curtime()' => 'CURRENT_TIME',
+            ]
+        );
+
+        /*
+         * MariaDB replaces 0 defaults by 0000-00-00 00:00:00
+         */
+        $value = strtr(
+            $value,
+            ['0000-00-00 00:00:00' => '0']
+        );
+        //replace escaped single quotes
+        $value = str_replace("'", "", $value);
+        //unquote NULL literal
+        if ($value === "NULL") {
+            $value = null;
+        }
+
+        return $value;
     }
 }
