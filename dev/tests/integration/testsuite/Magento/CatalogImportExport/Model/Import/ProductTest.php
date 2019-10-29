@@ -2637,7 +2637,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertNotEquals('/no/exists/image/magento_image.jpg', $productAfterImport->getData('image'));
     }
 
-
     /**
      * Set the current admin session user based on a username
      *
