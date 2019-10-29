@@ -3,11 +3,12 @@
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
 <h2>What is Magento 2 ?</h2>
 It's an e-commerce platform build in PHP, to provide online merchants with a flexible shopping cart system, as well as control over the look, functionality and content of the online store .It also offers powerful search engines for marketing and catalog management tools.
-
+<br>
+<br>
 <strong>Welcome</strong> to Magento 2 installation! We're glad you chose to install Magento 2
 
 ## Magento System Requirements
-[Magento System Requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements.html).
+*    [Magento System Requirements](https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements.html).
 
 ## Install Magento
 
@@ -15,7 +16,7 @@ It's an e-commerce platform build in PHP, to provide online merchants with a fle
 
 ## Learn More About GraphQL in Magento 2
 
-* [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.3/graphql/index.html)
+*    [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.3/graphql/index.html)
 
 <h2>Contributing to the Magento 2 Code Base</h2>
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
