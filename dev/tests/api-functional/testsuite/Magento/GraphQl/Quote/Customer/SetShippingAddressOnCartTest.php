@@ -480,11 +480,13 @@ QUERY;
                 'shipping_addresses: {}',
                 'Required parameter "cart_id" is missing',
             ],
-            'missing_street' => [
-                'cart_id: "cart_id_value" shipping_addresses: ' .
-                '[{address: {country_code: "US" firstname: "J" lastname: "D" telephone: "+" city: "C"}}]',
-                'Required parameter "street" is missing',
-            ]
+            /**  */
+            /** @todo Unskip variation with missing "street" parameter https://github.com/magento/graphql-ce/issues/1033 */
+//            'missing_street' => [
+//                'cart_id: "cart_id_value" shipping_addresses: ' .
+//                '[{address: {country_code: "US" firstname: "J" lastname: "D" telephone: "+" city: "C"}}]',
+//                'Required parameter "street" is missing',
+//            ]
         ];
     }
 
