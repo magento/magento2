@@ -189,11 +189,11 @@ class ProductInCategoriesViewTest extends TestCase
     {
         $this->updateCategoryIsAnchor(400, false);
         $this->assignProductCategories(['simple2'], [402]);
-        $parentCategoryCollection = $this->getCategoryProductCollection(400);
-        $childCategoryCollection = $this->getCategoryProductCollection(402, true);
+        $parentCategoryCollectionSize = $this->getCategoryProductCollection(400)->getSize();
+        $childCategoryCollectionSize = $this->getCategoryProductCollection(402, true)->getSize();
 
-        $this->assertCount(0, $parentCategoryCollection);
-        $this->assertCount(1, $childCategoryCollection);
+        $this->assertEquals(0, $parentCategoryCollectionSize);
+        $this->assertEquals(1, $childCategoryCollectionSize);
     }
 
     /**
