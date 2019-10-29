@@ -14,6 +14,8 @@
             <stories value="Lock admin user during login"/>
             <title value="Lock admin  user after entering incorrect password specified number of times"/>
             <description value="Lock admin  user after entering incorrect password specified number of times"/>
+            <testCaseId value="MC-14267"/>
+            <severity value="CRITICAL"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
         </annotations>
