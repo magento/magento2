@@ -119,7 +119,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
                 self::CONFIG_EXCEPTION
             ],
             [
-                'Module_Namer',
+                'Module_Name',
                 Cli::RETURN_FAILURE,
                 new ConfigException(__(self::CONFIG_EXCEPTION)),
                 self::CONFIG_EXCEPTION
@@ -143,6 +143,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      * Execute command test class for symphony
      *
      * @param string $arguments
+     *
      * @return CommandTester
      */
     private function execute(string $arguments)
