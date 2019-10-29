@@ -133,14 +133,10 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
     protected function executeAction($ids)
     {
         $ids = array_unique($ids);
-        $indexer = $this->indexerRegistry->get(static::INDEXER_ID);
 
         /** @var Product\Action\Rows $action */
         $action = $this->rowsActionFactory->create();
-        if ($indexer->isWorking()) {
-            $action->execute($ids, true);
-        }
-        $action->execute($ids);
+        $action->execute($ids, true);
 
         return $this;
     }

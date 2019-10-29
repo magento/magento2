@@ -1201,8 +1201,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 || $this->dataHasChangedFor('is_active')) {
             if (!$productIndexer->isScheduled()) {
                 $productIndexer->reindexList($this->getPathIds());
-            } else {
-                $productIndexer->invalidate();
             }
         }
     }

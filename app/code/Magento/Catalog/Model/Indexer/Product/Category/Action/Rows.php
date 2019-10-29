@@ -15,6 +15,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Category rows indexer.
@@ -81,9 +82,32 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
         $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
 
-        $this->removeEntries();
-
+        if ($useTempTable) {
+            foreach ($this->storeManager->getStores() as $store) {
+                $this->connection->truncateTable($this->getIndexTable($store->getId()));
+            }
+        } else {
+            $this->removeEntries();
+        }
         $this->reindex();
+        if ($useTempTable) {
+            foreach ($this->storeManager->getStores() as $store) {
+                $this->connection->delete(
+                    $this->tableMaintainer->getMainTable($store->getId()),
+                    ['product_id IN (?)' => $this->limitationByProducts]
+                );
+                $select = $this->connection->select()
+                    ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
+                $this->connection->query(
+                    $this->connection->insertFromSelect(
+                        $select,
+                        $this->tableMaintainer->getMainTable($store->getId()),
+                        [],
+                        AdapterInterface::INSERT_ON_DUPLICATE
+                    )
+                );
+            }
+        }
 
         $affectedCategories = array_merge($affectedCategories, $this->getCategoryIdsFromIndex($idsToBeReIndexed));
 
