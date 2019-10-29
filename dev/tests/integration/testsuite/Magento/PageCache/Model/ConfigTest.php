@@ -31,7 +31,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
         );
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator
+         */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTemplate'])
@@ -40,7 +42,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getTemplate')
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $directoryList
+         */
+        $directoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator
+         */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -56,15 +67,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
             ->with($expectedParams)
-            ->will($this->returnValue(new \Magento\PageCache\Model\Varnish\VclGenerator(
-                $vclTemplateLocator,
-                'example.com',
-                '8080',
-                explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
-                1234,
-                'X-Forwarded-Proto',
-                json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true)
-            )));
+            ->will(
+                $this->returnValue(
+                    new \Magento\PageCache\Model\Varnish\VclGenerator(
+                        $vclTemplateLocator,
+                        'example.com',
+                        '8080',
+                        explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
+                        1234,
+                        'X-Forwarded-Proto',
+                        $directoryList,
+                        json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true)
+                    )
+                )
+            );
         $this->config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\PageCache\Model\Config::class,
             [

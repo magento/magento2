@@ -6,6 +6,7 @@
 
 namespace Magento\PageCache\Model\Varnish;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\PageCache\Model\VclGeneratorInterface;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
@@ -50,6 +51,11 @@ class VclGenerator implements VclGeneratorInterface
     private $designExceptions;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * VclGenerator constructor.
      *
      * @param VclTemplateLocatorInterface $vclTemplateLocator
@@ -58,6 +64,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param array $accessList
      * @param int $gracePeriod
      * @param string $sslOffloadedHeader
+     * @param DirectoryList $directoryList
      * @param array $designExceptions
      */
     public function __construct(
@@ -67,6 +74,7 @@ class VclGenerator implements VclGeneratorInterface
         $accessList,
         $gracePeriod,
         $sslOffloadedHeader,
+        DirectoryList $directoryList,
         $designExceptions = []
     ) {
         $this->backendHost = $backendHost;
@@ -76,6 +84,7 @@ class VclGenerator implements VclGeneratorInterface
         $this->vclTemplateLocator = $vclTemplateLocator;
         $this->sslOffloadedHeader = $sslOffloadedHeader;
         $this->designExceptions = $designExceptions;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -101,6 +110,7 @@ class VclGenerator implements VclGeneratorInterface
         return [
             '/* {{ host }} */' => $this->getBackendHost(),
             '/* {{ port }} */' => $this->getBackendPort(),
+            '/* {{ health_check }} */' => $this->getHealthCheck(),
             '/* {{ ips }} */' => $this->getTransformedAccessList(),
             '/* {{ design_exceptions_code }} */' => $this->getRegexForDesignExceptions(),
             // http headers get transformed by php `X-Forwarded-Proto: https`
@@ -227,5 +237,19 @@ class VclGenerator implements VclGeneratorInterface
     private function getDesignExceptions()
     {
         return $this->designExceptions;
+    }
+
+    /**
+     * Check if document root contains pub
+     *
+     * @return string
+     */
+    private function getHealthCheck()
+    {
+        if (strpos($this->directoryList->getRoot(), 'pub') === false) {
+            return '/pub/health_check.php';
+        } else {
+            return '/health_check.php';
+        }
     }
 }

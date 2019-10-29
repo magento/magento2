@@ -9,7 +9,7 @@ backend default {
     .port = "/* {{ port }} */";
     .first_byte_timeout = 600s;
     .probe = {
-        .url = "/pub/health_check.php";
+        .url = "/* {{ health_check }} */";
         .timeout = 2s;
         .interval = 5s;
         .window = 10;
@@ -63,7 +63,7 @@ sub vcl_recv {
     }
 
     # Bypass health check requests
-    if (req.url ~ "/pub/health_check.php") {
+    if (req.url ~ "/* {{ health_check }} */") {
         return (pass);
     }
 

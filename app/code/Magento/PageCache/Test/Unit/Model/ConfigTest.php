@@ -102,6 +102,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         null,
                         'X_Forwarded_Proto: https'
                     ],
+
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_GRACE_PERIOD,
                         \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
@@ -115,7 +116,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->serializerMock = $this->createMock(Json::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator
+         */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTemplate'])
@@ -123,7 +126,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $directoryList
+        */
+        $directoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator
+         */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -139,15 +150,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $vclGeneratorFactory->expects($this->any())
             ->method('create')
             ->with($expectedParams)
-            ->will($this->returnValue(new \Magento\PageCache\Model\Varnish\VclGenerator(
-                $vclTemplateLocator,
-                'example.com',
-                '8080',
-                explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
-                120,
-                'X_Forwarded_Proto: https',
-                [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
-            )));
+            ->will(
+                $this->returnValue(
+                    new \Magento\PageCache\Model\Varnish\VclGenerator(
+                        $vclTemplateLocator,
+                        'example.com',
+                        '8080',
+                        explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
+                        120,
+                        'X_Forwarded_Proto: https',
+                        $directoryList,
+                        [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
+                    )
+                )
+            );
         $this->config = $objectManager->getObject(
             \Magento\PageCache\Model\Config::class,
             [
