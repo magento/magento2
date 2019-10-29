@@ -10,8 +10,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchBackwardCompatability;
+use Magento\Framework\Setup\Patch\PatchInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Setup\Patch\PatchApplier;
@@ -169,8 +172,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
         $patch1 = $this->createMock(\SomeDataPatch::class);
         $patch1->expects($this->once())->method('apply');
+        $patch1->expects($this->once())->method('getAliases')->willReturn([]);
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $patch2->expects($this->once())->method('apply');
+        $patch2->expects($this->once())->method('getAliases')->willReturn([]);
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
@@ -184,6 +189,60 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
                 [get_class($patch1)],
                 [get_class($patch2)],
             ]
+        );
+        $this->patchApllier->applyDataPatch($moduleName);
+    }
+
+    /**
+     * @param $moduleName
+     * @param $dataPatches
+     * @param $moduleVersionInDb
+     *
+     * @dataProvider applyDataPatchDataNewModuleProvider()
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessageRegExp "Unable to apply data patch .+ cannot be applied twice"
+     */
+    public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
+    {
+        $this->dataPatchReaderMock->expects($this->once())
+            ->method('read')
+            ->with($moduleName)
+            ->willReturn($dataPatches);
+
+        $this->moduleResourceMock->expects($this->any())->method('getDataVersion')->willReturnMap(
+            [
+                [$moduleName, $moduleVersionInDb]
+            ]
+        );
+
+        $patch1 = $this->createMock(DataPatchInterface::class);
+        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patchClass = get_class($patch1);
+
+        $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
+        $patchRegistryMock->expects($this->any())
+            ->method('registerPatch');
+
+        $this->patchRegistryFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($patchRegistryMock);
+
+        $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
+            [
+                ['\\' . $patchClass, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+            ]
+        );
+        $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
+        $this->connectionMock->expects($this->never())->method('commit');
+        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->will(
+            $this->returnCallback(
+                function ($param1) {
+                    if ($param1 == 'PatchAlias') {
+                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
+                    }
+                }
+            )
         );
         $this->patchApllier->applyDataPatch($moduleName);
     }
@@ -243,8 +302,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
         $patch1 = $this->createMock(\SomeDataPatch::class);
         $patch1->expects(self::never())->method('apply');
+        $patch1->expects(self::any())->method('getAliases')->willReturn([]);
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $patch2->expects(self::once())->method('apply');
+        $patch2->expects(self::any())->method('getAliases')->willReturn([]);
         $this->objectManagerMock->expects(self::any())->method('create')->willReturnMap(
             [
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
@@ -279,7 +340,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $dataPatches
      * @param $moduleVersionInDb
      *
-     * @expectedException \Magento\Framework\Setup\Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Patch Apply Error
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
@@ -328,7 +389,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Setup\Exception
+     * @expectedException Exception
      * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"
      */
     public function testNonDataPatchApply()
@@ -434,8 +495,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
         $patch1 = $this->createMock(\SomeSchemaPatch::class);
         $patch1->expects($this->never())->method('apply');
+        $patch1->expects($this->any())->method('getAliases')->willReturn([]);
         $patch2 = $this->createMock(\OtherSchemaPatch::class);
         $patch2->expects($this->once())->method('apply');
+        $patch2->expects($this->any())->method('getAliases')->willReturn([]);
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturnMap(
             [
                 [\SomeSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch1],
@@ -445,6 +508,55 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->connectionMock->expects($this->never())->method('beginTransaction');
         $this->connectionMock->expects($this->never())->method('commit');
         $this->patchHistoryMock->expects($this->exactly(2))->method('fixPatch');
+        $this->patchApllier->applySchemaPatch($moduleName);
+    }
+
+    /**
+     * @param $moduleName
+     * @param $schemaPatches
+     * @param $moduleVersionInDb
+     *
+     * @dataProvider schemaPatchDataProvider()
+     *
+     * @expectedException Exception
+     * @expectedExceptionMessageRegExp "Unable to apply patch .+ cannot be applied twice"
+     */
+    public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
+    {
+        $this->schemaPatchReaderMock->expects($this->once())
+            ->method('read')
+            ->with($moduleName)
+            ->willReturn($schemaPatches);
+
+        $this->moduleResourceMock->expects($this->any())->method('getDbVersion')->willReturnMap(
+            [
+                [$moduleName, $moduleVersionInDb]
+            ]
+        );
+
+        $patch1 = $this->createMock(PatchInterface::class);
+        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patchClass = get_class($patch1);
+
+        $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
+        $patchRegistryMock->expects($this->any())
+            ->method('registerPatch');
+
+        $this->patchRegistryFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($patchRegistryMock);
+
+        $this->patchFactoryMock->expects($this->any())->method('create')->willReturn($patch1);
+        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->will(
+            $this->returnCallback(
+                function ($param1) {
+                    if ($param1 == 'PatchAlias') {
+                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
+                    }
+                }
+            )
+        );
+
         $this->patchApllier->applySchemaPatch($moduleName);
     }
 
@@ -534,33 +646,43 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
 
         $someIterator->expects($this->any())
             ->method('rewind')
-            ->willReturnCallback(function () use ($iterator) {
-                $iterator->rewind();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    $iterator->rewind();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('current')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->current();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    return $iterator->current();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('key')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->key();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    return $iterator->key();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('next')
-            ->willReturnCallback(function () use ($iterator) {
-                $iterator->next();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    $iterator->next();
+                }
+            );
 
         $someIterator->expects($this->any())
             ->method('valid')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->valid();
-            });
+            ->willReturnCallback(
+                function () use ($iterator) {
+                    return $iterator->valid();
+                }
+            );
 
         return $mockIteratorAggregate;
     }
