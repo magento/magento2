@@ -52,9 +52,9 @@ define([
                  * Once the modal is opened it hides the X
                  */
                 onOpened: function () {
-                    $('.modal-header button.action-close').attr("disabled", true).hide();
+                    $('.modal-header button.action-close').attr('disabled', true).hide();
 
-                    this.focusableElements = $(this.rootSelector).find("a[href], button:enabled");
+                    this.focusableElements = $(this.rootSelector).find('a[href], button:enabled');
                     this.firstFocusableElement = this.focusableElements[0];
                     this.lastFocusableElement = this.focusableElements[this.focusableElements.length - 1];
                     this.firstFocusableElement.focus();
