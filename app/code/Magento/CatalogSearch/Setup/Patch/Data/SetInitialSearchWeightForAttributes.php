@@ -50,7 +50,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -68,7 +68,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -76,7 +76,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -84,7 +84,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
