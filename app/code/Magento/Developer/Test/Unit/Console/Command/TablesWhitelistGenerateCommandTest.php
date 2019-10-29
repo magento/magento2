@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Developer\Console\Command;
+namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand as GenerateCommand;
 use Magento\Developer\Model\Setup\Declaration\Schema\WhitelistGenerator;
