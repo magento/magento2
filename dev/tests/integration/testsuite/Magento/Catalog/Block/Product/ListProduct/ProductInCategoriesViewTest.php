@@ -169,7 +169,7 @@ class ProductInCategoriesViewTest extends TestCase
     public function testAnchorCategoryProductVisibility(): void
     {
         $this->updateCategoryIsAnchor(400, true);
-        $this->assignProductCategories(['simple2'], [402]);
+        $this->assignProductCategories('simple2', [402]);
         $parentCategoryCollection = $this->getCategoryProductCollection(400);
         $childCategoryCollection = $this->getCategoryProductCollection(402, true);
 
@@ -188,7 +188,7 @@ class ProductInCategoriesViewTest extends TestCase
     public function testNonAnchorCategoryProductVisibility(): void
     {
         $this->updateCategoryIsAnchor(400, false);
-        $this->assignProductCategories(['simple2'], [402]);
+        $this->assignProductCategories('simple2', [402]);
         $parentCategoryCollectionSize = $this->getCategoryProductCollection(400)->getSize();
         $childCategoryCollectionSize = $this->getCategoryProductCollection(402, true)->getSize();
 
@@ -223,12 +223,13 @@ class ProductInCategoriesViewTest extends TestCase
     /**
      * Set categories to the products
      *
-     * @param array $skus
+     * @param string|array $sku
      * @param $categoryIds
      * @return void
      */
-    private function assignProductCategories(array $skus, array $categoryIds): void
+    private function assignProductCategories($sku, array $categoryIds): void
     {
+        $skus = !is_array($sku) ? [$sku] : $sku;
         foreach ($skus as $sku) {
             $product = $this->productRepository->get($sku);
             $product->setCategoryIds($categoryIds);
