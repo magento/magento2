@@ -60,13 +60,20 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
                     'operator' => '==',
                     'value' => '2017-09-15',
                 ],
+                '1--3' => [
+                    'type' => ProductCondition::class,
+                    'attribute' => 'sku',
+                    'operator' => '()',
+                    'value' => ' :(  ,  :) ',
+                ]
             ],
         ];
 
         $rule->loadPost($ruleConditionArray);
         $this->model->attachConditionToCollection($collection, $rule->getConditions());
 
-        $whereString = "/\(category_id IN \('3'\).+\(IFNULL\(`e`\.`entity_id`,.+\) = '2017-09-15'\)/";
-        $this->assertNotFalse(preg_match($whereString, $collection->getSelectSql(true)));
+        $whereString = "/\(category_id IN \('3'\).+\(IFNULL\(`e`\.`entity_id`,.+\) = '2017-09-15'\)"
+            . ".+ORDER BY \(FIELD\(`e`.`sku`, ':\(', ':\)'\)\)/";
+        $this->assertEquals(1, preg_match($whereString, $collection->getSelectSql(true)));
     }
 }
