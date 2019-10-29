@@ -19,6 +19,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -208,6 +209,10 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
                         . 'Please wait and try again later.'
+                    );
+                } catch (InvalidEmailOrPasswordException $e) {
+                    $message = __(
+                        'Invalid login or password.'
                     );
                 } catch (AuthenticationException $e) {
                     $message = __(
