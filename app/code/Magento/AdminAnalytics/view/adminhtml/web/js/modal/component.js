@@ -41,7 +41,7 @@ define([
                 initModalEvents: function () {
                     this._super();
                     //Don't allow ESC key to close modal
-                    this.options.keyEventHandlers.escapeKey = function(e){e.preventDefault()};
+                    this.options.keyEventHandlers.escapeKey = this.handleEscKey.bind(this);
                     //Restrict tab action to the modal
                     this.options.keyEventHandlers.tabKey = this.handleTabKey.bind(this);
 
@@ -116,10 +116,10 @@ define([
                  * Allows admin usage popup to be shown first and then new release notification
                  */
                 openReleasePopup: function () {
-                    var notificationModal = registry.get('release_notification.release_notification.notification_modal_1');
+                    var notificationModalSelector = 'release_notification.release_notification.notification_modal_1';
 
                     if (analyticsPopupConfig.releaseVisible) {
-                        notificationModal.initializeContentAfterAnalytics();
+                        registry.get(notificationModalSelector).initializeContentAfterAnalytics();
                     }
                 },
 
@@ -163,6 +163,15 @@ define([
                         default:
                             break;
                     }
+                },
+
+                /**
+                 * Handle Esc key
+                 *
+                 * Esc key should not close modal
+                 */
+                handleEscKey: function(event){
+                    event.preventDefault();
                 }
             }
         );
