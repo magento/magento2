@@ -113,7 +113,8 @@
             </createData>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1" />
             <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB" />
-
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="adminLogout"/>
