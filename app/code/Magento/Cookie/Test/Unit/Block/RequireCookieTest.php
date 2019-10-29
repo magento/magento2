@@ -76,8 +76,11 @@ class RequireCookieTest extends \PHPUnit\Framework\TestCase
             ->with('test')
             ->willReturn('test');
 
-        $this->assertEquals('{"noCookieUrl":"http:\/\/magento.com\/cookie\/index\/noCookies\/",' .
-            '"triggers":"test","isRedirectCmsPage":true}', $this->block->getScriptOptions());
+        $this->assertEquals(
+            '{"noCookieUrl":"http:\/\/magento.com\/cookie\/index\/noCookies\/",' .
+            '"triggers":"test","isRedirectCmsPage":true}',
+            $this->block->getScriptOptions()
+        );
     }
 
     /**
@@ -101,7 +104,10 @@ class RequireCookieTest extends \PHPUnit\Framework\TestCase
             ->with('test')
             ->willReturn('test');
 
-        $this->assertEquals('{"noCookieUrl":"http:\/\/magento.com\/cookie\/index\/noCookies\/",' .
-            '"triggers":"test","isRedirectCmsPage":false}', $this->block->getScriptOptions());
+        $this->assertEquals(
+            '{"noCookieUrl":"http:\/\/magento.com\/cookie\/index\/noCookies\/",' .
+            '"triggers":"test","isRedirectCmsPage":false}',
+            $this->block->getScriptOptions()
+        );
     }
 }
