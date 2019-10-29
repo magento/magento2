@@ -25,8 +25,6 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="categorySecond"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
