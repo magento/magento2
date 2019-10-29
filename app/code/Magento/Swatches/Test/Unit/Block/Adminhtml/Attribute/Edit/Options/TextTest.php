@@ -58,7 +58,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetJsonConfigDataSet2()
     {
-        $testCase1 = [
+        $testCase2 = [
             'dataSet' => [
                 'read_only' => false,
                 'can_manage_option_default_only' => false,
@@ -72,7 +72,7 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
         ];
 
-        $this->executeTest($testCase1);
+        $this->executeTest($testCase2);
     }
 
     /**
