@@ -187,7 +187,7 @@ class OperationProcessor
             'output_data' => null
         ];
         try {
-            $result['output_data'] = $callback(...$entityParams);
+            $result['output_data'] = call_user_func_array($callback, $entityParams);
             $result['messages'][] = sprintf('Service execution success %s::%s', get_class($callback[0]), $callback[1]);
         } catch (\Zend_Db_Adapter_Exception  $e) {
             $this->logger->critical($e->getMessage());
