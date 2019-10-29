@@ -74,6 +74,8 @@
 
         <!-- Save product -->
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Find downloadable product in grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
