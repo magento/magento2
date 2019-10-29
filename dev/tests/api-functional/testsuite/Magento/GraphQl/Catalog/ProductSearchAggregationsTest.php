@@ -76,6 +76,6 @@ QUERY;
     {
         $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
         // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento indexer:reindex", $out);
+        exec("php -f {$appDir}/bin/magento indexer:reindex");
     }
 }
