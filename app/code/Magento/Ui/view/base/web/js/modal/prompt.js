@@ -11,10 +11,11 @@ define([
     'underscore',
     'mage/template',
     'text!ui/template/modal/modal-prompt-content.html',
+    'Magento_Ui/js/lib/key-codes',
     'jquery-ui-modules/widget',
     'Magento_Ui/js/modal/modal',
     'mage/translate'
-], function ($, _, template, promptContentTmpl) {
+], function ($, _, template, promptContentTmpl, keyCodes) {
     'use strict';
 
     $.widget('mage.prompt', $.mage.modal, {
@@ -64,13 +65,31 @@ define([
                 click: function () {
                     this.closeModal(true);
                 }
-            }]
+            }],
+            keyEventHandlers: {
+
+                /**
+                 * Escape key press handler,
+                 * close modal window
+                 * @param {Object} event - event
+                 */
+                escapeKey: function (event) {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this._close();
+                    }
+                }
+            }
         },
 
         /**
          * Create widget.
          */
         _create: function () {
+            _.bindAll(
+                this,
+                'keyEventSwitcher'
+            );
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
@@ -116,6 +135,18 @@ define([
             }));
 
             return formTemplate;
+        },
+
+        /**
+         * Listener key events.
+         * Call handler function if it exists
+         */
+        keyEventSwitcher: function (event) {
+            var key = keyCodes[event.keyCode];
+
+            if (this.options.keyEventHandlers.hasOwnProperty(key)) {
+                this.options.keyEventHandlers[key].apply(this, arguments);
+            }
         },
 
         /**
@@ -177,3 +208,4 @@ define([
         return $('<div class="prompt-message"></div>').html(config.content).prompt(config);
     };
 });
+
