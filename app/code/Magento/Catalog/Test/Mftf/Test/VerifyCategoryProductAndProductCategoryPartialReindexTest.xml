@@ -115,7 +115,7 @@
 
         <!-- "One or more indexers are invalid. Make sure your Magento cron job is running." global warning message appears -->
         <click selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" stepKey="openMessageSection"/>
-        <see userInput="One or more indexers are invalid. Make sure your Magento cron job is running." selector="{{AdminMessagesSection.warningMessage}}" stepKey="seeWarningMessage"/>
+        <see userInput="One or more indexers are invalid. Make sure your Magento cron job is running." selector="{{AdminSystemMessagesSection.warning}}" stepKey="seeWarningMessage"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are not applied yet -->
         <!-- Category K contains only Products B & C -->
