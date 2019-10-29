@@ -131,7 +131,6 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $quote->setCouponCode('CART_FIXED_DISCOUNT_15');
         $quote->collectTotals();
         $this->quoteRepository->save($quote);
-
         $this->assertEquals($expectedGrandTotal, $quote->getGrandTotal());
 
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
@@ -142,6 +141,47 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
         $cartManagement->placeOrder($quoteIdMask->getMaskedId());
         $order = $this->getOrder('test01');
         $this->assertEquals($expectedGrandTotal, $order->getGrandTotal());
+    }
+
+    /**
+     * Applies fixed discount amount on whole cart and quote and checks the quote model for item discounts
+     *
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_subtotal_with_discount.php
+     */
+    public function testDiscountsOnQuoteWithFixedDiscount(): void
+    {
+        $quote = $this->getQuote();
+        $quote->getShippingAddress()
+            ->setShippingMethod('freeshipping_freeshipping')
+            ->setCollectShippingRates(true);
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_15');
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+        /** @var CartItemInterface $item */
+        $item = $quote->getItems()[0];
+        $quoteItemDiscounts = $item->getExtensionAttributes()->getDiscounts();
+        $this->assertArrayHasKey('0', $quoteItemDiscounts);
+        $discountData = $quoteItemDiscounts[0]->getDiscountData();
+        $ruleLabel = $quoteItemDiscounts[0]->getRuleLabel();
+        $this->assertEquals(5, $discountData->getAmount());
+        $this->assertEquals(5, $discountData->getBaseAmount());
+        $this->assertEquals(5, $discountData->getOriginalAmount());
+        $this->assertEquals(10, $discountData->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Coupon', $ruleLabel);
+
+        $quoteAddressItemDiscount = $quote->getShippingAddressesItems()[0]->getExtensionAttributes()->getDiscounts();
+        $this->assertArrayHasKey('0', $quoteAddressItemDiscount);
+        $discountData = $quoteAddressItemDiscount[0]->getDiscountData();
+        $ruleLabel = $quoteAddressItemDiscount[0]->getRuleLabel();
+        $this->assertEquals(5, $discountData->getAmount());
+        $this->assertEquals(5, $discountData->getBaseAmount());
+        $this->assertEquals(5, $discountData->getOriginalAmount());
+        $this->assertEquals(10, $discountData->getBaseOriginalAmount());
+        $this->assertEquals('TestRule_Coupon', $ruleLabel);
     }
 
     /**
