@@ -17,14 +17,12 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-17906"/>
             <useCaseId value="MC-15759"/>
-            <group value="search"/>
+            <group value="elasticsearch"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
-            <!--Enable Elasticsearch-->
-            <magentoCLI command="config:set {{EnableElasticSearch6Config.path}} {{EnableElasticSearch6Config.value}}" stepKey="enableElasticsearch6"/>
             <!--Set Minimal Query Length-->
             <magentoCLI command="config:set {{SetMinQueryLength2Config.path}} {{SetMinQueryLength2Config.value}}" stepKey="setMinQueryLength"/>
             <!--Reindex indexes and clear cache-->
@@ -34,7 +32,6 @@
         <after>
             <!--Set configs to default-->
             <magentoCLI command="config:set {{SetMinQueryLength3Config.path}} {{SetMinQueryLength3Config.value}}" stepKey="setMinQueryLengthPreviousState"/>
-            <magentoCLI command="config:set {{SetDefaultSearchEngineConfig.path}} {{SetDefaultSearchEngineConfig.value}}" stepKey="resetSearchEnginePreviousState"/>
             <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
@@ -78,6 +75,9 @@
         </actionGroup>
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(textProductAttribute.attribute_code)}}" userInput="searchable" stepKey="fillTheAttributeRequiredInputField"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <!-- TODO: REMOVE AFTER FIX MC-21717 -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
         <!--Assert search results on storefront-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
