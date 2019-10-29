@@ -11,8 +11,8 @@ use Magento\Developer\Console\Command\TablesWhitelistGenerateCommand as Generate
 use Magento\Developer\Model\Setup\Declaration\Schema\WhitelistGenerator;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ConfigurationMismatchException as ConfigException;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -29,7 +29,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
     /** @var WhitelistGenerator|MockObject $whitelistGenerator */
     private $whitelistGenerator;
 
-    /** @var TablesWhitelistGenerateCommand $instance */
+    /** @var GenerateCommand $instance */
     private $instance;
 
     protected function setUp()
