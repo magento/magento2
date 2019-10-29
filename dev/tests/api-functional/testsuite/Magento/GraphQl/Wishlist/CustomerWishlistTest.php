@@ -44,20 +44,19 @@ class CustomerWishlistTest extends GraphQlAbstract
         $query =
             <<<QUERY
 {
-  customer
- {
-  wishlist {
-   id
-   items_count
-   sharing_code
-   updated_at
-   items {
-    product {
-      sku 
+  customer {
+    wishlist {
+      id
+      items_count
+      sharing_code
+      updated_at
+      items {
+        product {
+          sku
+        }
+      }
     }
-   }
   }
- }
 }
 QUERY;
 
@@ -82,12 +81,11 @@ QUERY;
         $query =
             <<<QUERY
 {
-  customer
- {
-  wishlist {
-   id
+  customer {
+    wishlist {
+      id
+    }
   }
- }
 }
 QUERY;
 
@@ -105,18 +103,17 @@ QUERY;
      * @expectedException \Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
-    public function testGetGuestWishlist()
+    public function testGuestCannotGetWishlist()
     {
         $query =
             <<<QUERY
 {
-  customer
- {
-      wishlists {
-       items_count
-       sharing_code
-       updated_at
-      }
+  customer {
+    wishlist {
+      items_count
+      sharing_code
+      updated_at
+    }
   }
 }
 QUERY;

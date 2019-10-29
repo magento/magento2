@@ -14,7 +14,7 @@ use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 
 /**
- * Fetches the Wishlists data according to the GraphQL schema
+ * Fetches customer wishlist data
  */
 class CustomerWishlistResolver implements ResolverInterface
 {
@@ -41,7 +41,6 @@ class CustomerWishlistResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /* Guest checking */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
