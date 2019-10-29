@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\CollectionFactory;
 
-class CustomerWishlistsTest extends GraphQlAbstract
+class CustomerWishlistTest extends GraphQlAbstract
 {
     /**
      * @var CustomerTokenServiceInterface
@@ -23,21 +23,21 @@ class CustomerWishlistsTest extends GraphQlAbstract
     /**
      * @var CollectionFactory
      */
-    private $_wishlistCollectionFactory;
+    private $wishlistCollectionFactory;
 
     protected function setUp()
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->_wishlistCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
+        $this->wishlistCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist.php
      */
-    public function testGetCustomerWishlists(): void
+    public function testCustomerWishlist(): void
     {
         /** @var \Magento\Wishlist\Model\Wishlist $wishlist */
-        $collection = $this->_wishlistCollectionFactory->create()->filterByCustomerId(1);
+        $collection = $this->wishlistCollectionFactory->create()->filterByCustomerId(1);
 
         /** @var Item $wishlistItem */
         $wishlistItem = $collection->getFirstItem();
@@ -46,7 +46,8 @@ class CustomerWishlistsTest extends GraphQlAbstract
 {
   customer
  {
-  wishlists {
+  wishlist {
+   id
    items_count
    sharing_code
    updated_at
@@ -66,32 +67,25 @@ QUERY;
             '',
             $this->getCustomerAuthHeaders('customer@example.com', 'password')
         );
-
-        $this->assertEquals($wishlistItem->getItemsCount(), $response['customer']['wishlists'][0]['items_count']);
-        $this->assertEquals($wishlistItem->getSharingCode(), $response['customer']['wishlists'][0]['sharing_code']);
-        $this->assertEquals($wishlistItem->getUpdatedAt(), $response['customer']['wishlists'][0]['updated_at']);
-        $this->assertEquals('simple', $response['customer']['wishlists'][0]['items'][0]['product']['sku']);
+        $this->assertEquals((string)$wishlistItem->getId(), $response['customer']['wishlist']['id']);
+        $this->assertEquals($wishlistItem->getItemsCount(), $response['customer']['wishlist']['items_count']);
+        $this->assertEquals($wishlistItem->getSharingCode(), $response['customer']['wishlist']['sharing_code']);
+        $this->assertEquals($wishlistItem->getUpdatedAt(), $response['customer']['wishlist']['updated_at']);
+        $this->assertEquals('simple', $response['customer']['wishlist']['items'][0]['product']['sku']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testCustomerWithoutWishlists(): void
+    public function testCustomerAlwaysHasWishlist(): void
     {
         $query =
             <<<QUERY
 {
   customer
  {
-  wishlists {
-   items_count
-   sharing_code
-   updated_at
-   items {
-    product {
-      sku 
-    }
-   }
+  wishlist {
+   id
   }
  }
 }
@@ -104,7 +98,7 @@ QUERY;
             $this->getCustomerAuthHeaders('customer@example.com', 'password')
         );
 
-        $this->assertEquals([], $response['customer']['wishlists']);
+        $this->assertNotEmpty($response['customer']['wishlist']['id']);
     }
 
     /**
