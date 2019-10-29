@@ -45,7 +45,8 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
         <waitForPageLoad stepKey="waitSaveToApply"/>
         <!-- See if warning message displays -->
-        <comment userInput="See if warning message displays" stepKey="checkWarningMessagePresence"/>
-        <see selector="{{AdminMessagesSection.warningMessage}}" userInput="Please go to Cache Management and refresh cache types" stepKey="seeWarningMessage"/>
+        <actionGroup ref="AdminSystemMessagesWarningActionGroup" stepKey="seeWarningMessage">
+            <argument name="message" value="Please go to Cache Management and refresh cache types"/>
+        </actionGroup>
     </test>
 </tests>
