@@ -129,6 +129,15 @@ class SetBillingAddressOnCart
                 (int)$context->getUserId()
             );
         }
+        $errors = $billingAddress->validate();
+
+        if (true !== $errors) {
+            $e = new GraphQlInputException(__('Billing address errors'));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException($error));
+            }
+            throw $e;
+        }
 
         return $billingAddress;
     }

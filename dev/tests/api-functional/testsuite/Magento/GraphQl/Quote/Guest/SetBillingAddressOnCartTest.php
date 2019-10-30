@@ -48,7 +48,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -105,7 +105,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -180,7 +180,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -256,7 +256,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -383,7 +383,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -428,7 +428,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2", "test street 3"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -470,7 +470,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "us"
           telephone: "88776655"
