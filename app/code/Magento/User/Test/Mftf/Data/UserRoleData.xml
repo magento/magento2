@@ -10,11 +10,13 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="adminRole" type="role">
         <data key="name" unique="suffix">adminRole</data>
+        <data key="rolename" unique="suffix">adminRole</data>
         <data key="scope">1</data>
         <data key="access">1</data>
     </entity>
 
     <entity name="roleAdministrator" type="user_role">
+        <data key="name" unique="suffix">Administrator </data>
         <data key="rolename" unique="suffix">Administrator </data>
         <data key="resourceAccess">All</data>
         <data key="all">1</data>
@@ -23,6 +25,7 @@
     </entity>
 
     <entity name="roleSales">
+        <data key="name" unique="suffix">Role Sales </data>
         <data key="rolename" unique="suffix">Role Sales </data>
         <data key="resourceAccess">Custom</data>
         <data key="all">0</data>
@@ -31,12 +34,14 @@
     </entity>
 
     <entity name="limitedRole" type="role">
+        <data key="name" unique="suffix">Limited</data>
         <data key="rolename" unique="suffix">Limited</data>
         <data key="roleScopes">Custom</data>
         <data key="resourceAccess">All</data>
     </entity>
 
     <entity name="restrictedRole" type="role">
+        <data key="name" unique="suffix">Restricted</data>
         <data key="rolename" unique="suffix">Restricted</data>
         <data key="roleScopes">Custom</data>
         <data key="resourceAccess">All</data>
@@ -44,6 +49,7 @@
 
     <!-- This admin created for checking turn off "Bulk Actions" -->
     <entity name="adminWithoutBulkActionRole" type="user_role">
+        <data key="name">restrictedWebsiteRole</data>
         <data key="rolename">restrictedWebsiteRole</data>
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
         <data key="gws_is_all">0</data>
