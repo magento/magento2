@@ -411,6 +411,28 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <arguments>
+            <argument name="optionGroups" xsi:type="array">
+                <item name="date" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Date</item>
+                <item name="file" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\File</item>
+                <item name="select" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Select</item>
+                <item name="text" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Text</item>
+            </argument>
+            <argument name="optionTypesToGroups" xsi:type="array">
+                <item name="field" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="area" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="file" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_FILE</item>
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="checkbox" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="multiple" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="date" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="date_time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\Option\Validator\Pool">
         <arguments>
             <argument name="validators" xsi:type="array">

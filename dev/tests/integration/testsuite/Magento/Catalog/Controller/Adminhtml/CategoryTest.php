@@ -14,7 +14,6 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -92,6 +91,7 @@ class CategoryTest extends AbstractBackendController
      * @param array $defaultAttributes
      * @param array $attributesSaved
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSaveAction(array $inputData, array $defaultAttributes, array $attributesSaved = []): void
     {
@@ -135,8 +135,9 @@ class CategoryTest extends AbstractBackendController
      *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
-     * @throws NoSuchEntityException
      * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDefaultValueForCategoryUrlPath(): void
     {
@@ -155,11 +156,12 @@ class CategoryTest extends AbstractBackendController
         // set default url_path and check it
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $postData = $category->getData();
-        $postData['use_default'] = [
-            'available_sort_by' => 1,
-            'default_sort_by' => 1,
-            'url_key' => 1,
-        ];
+        $postData['use_default'] =
+            [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'url_key' => 1,
+            ];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
@@ -167,7 +169,7 @@ class CategoryTest extends AbstractBackendController
             MessageInterface::TYPE_SUCCESS
         );
         $category = $this->categoryRepository->get($categoryId);
-        $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
+        $this->assertEquals($defaultUrlPath, $category->getData('url_key'));
     }
 
     /**

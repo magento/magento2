@@ -13,11 +13,12 @@
             <description>Goes to the Storefront. Validates that the 2 provided Products appear in the correct order.</description>
         </annotations>
         <arguments>
+            <argument name="page" defaultValue="{{StorefrontHomePage.url}}" type="string"/>
             <argument name="product_1"/>
             <argument name="product_2"/>
         </arguments>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <amOnPage url="{{page}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForPageLoad5" time="60"/>
         <executeJS function="window.localStorage.clear()" stepKey="clearWidgetCache" />
         <reloadPage stepKey="goToHomePageAfterCacheCleared"/>

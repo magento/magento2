@@ -11,6 +11,8 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,16 @@ class CategoryRepositoryTest extends TestCase
     private $repositoryFactory;
 
     /**
+     * @var CollectionFactory
+     */
+    private $productCollectionFactory;
+
+    /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
      * Sets up common objects.
      *
      * @inheritDoc
@@ -38,6 +50,8 @@ class CategoryRepositoryTest extends TestCase
     {
         $this->repositoryFactory = Bootstrap::getObjectManager()->get(CategoryRepositoryInterfaceFactory::class);
         $this->layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
+        $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
+        $this->categoryCollectionFactory = Bootstrap::getObjectManager()->create(CategoryCollectionFactory::class);
     }
 
     /**
@@ -82,5 +96,34 @@ class CategoryRepositoryTest extends TestCase
             $caughtException = true;
         }
         $this->assertTrue($caughtException);
+    }
+
+    /**
+     * Test removal of categories.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppArea adminhtml
+     * @return void
+     */
+    public function testCategoryBehaviourAfterDelete(): void
+    {
+        $productCollection = $this->productCollectionFactory->create();
+        $deletedCategories = ['3', '4', '5', '13'];
+        $categoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
+        $this->createRepo()->deleteByIdentifier(3);
+        $this->assertEquals(
+            0,
+            $productCollection->addCategoriesFilter(['in' => $deletedCategories])->getSize(),
+            'The category-products relations was not deleted after category delete'
+        );
+        $newCategoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
+        $difference = array_diff($categoryCollectionIds, $newCategoryCollectionIds);
+        sort($difference);
+        $this->assertEquals(
+            $deletedCategories,
+            $difference,
+            'Wrong categories was deleted'
+        );
     }
 }
