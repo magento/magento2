@@ -68,6 +68,7 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query);
 
+        $this->assertEquals(null, $response['createCustomer']['customer']['id']);
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
         $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
@@ -113,7 +114,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage "input" value should be specified
+     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
      */
     public function testCreateCustomerIfInputDataIsEmpty()
     {
@@ -139,7 +140,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage The customer email is missing. Enter and try again.
+     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
      */
     public function testCreateCustomerIfEmailMissed()
     {
@@ -239,6 +240,72 @@ mutation {
 }
 QUERY;
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required parameters are missing: First Name
+     */
+    public function testCreateCustomerIfNameEmpty()
+    {
+        $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
+        $newFirstname = '';
+        $newLastname = 'Rowe';
+        $currentPassword = 'test123#';
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            email: "{$newEmail}"
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            password: "{$currentPassword}"
+          	is_subscribed: true
+        }
+    ) {
+        customer {
+            id
+            firstname
+            lastname
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoConfigFixture default_store newsletter/general/active 0
+     */
+    public function testCreateCustomerSubscribed()
+    {
+        $newFirstname = 'Richard';
+        $newLastname = 'Rowe';
+        $newEmail = 'new_customer@example.com';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            email: "{$newEmail}"
+            is_subscribed: true
+        }
+    ) {
+        customer {
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+
+        $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
     }
 
     public function tearDown()

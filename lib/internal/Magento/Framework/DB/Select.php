@@ -42,7 +42,7 @@ class Select extends \Zend_Db_Select
     const STRAIGHT_JOIN = 'straightjoin';
 
     /**
-     * Sql straight join
+     * Straight join SQL directive.
      */
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
@@ -434,7 +434,7 @@ class Select extends \Zend_Db_Select
             }
         }
 
-        return parent::_tableCols($correlationName, $cols, $afterCorrelationName);
+        parent::_tableCols($correlationName, $cols, $afterCorrelationName);
     }
 
     /**
@@ -519,8 +519,6 @@ class Select extends \Zend_Db_Select
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $properties = array_keys(get_object_vars($this));
         $properties = array_diff(
             $properties,
@@ -543,8 +541,6 @@ class Select extends \Zend_Db_Select
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_adapter = $objectManager->get(ResourceConnection::class)->getConnection();
         $this->selectRenderer = $objectManager->get(\Magento\Framework\DB\Select\SelectRenderer::class);

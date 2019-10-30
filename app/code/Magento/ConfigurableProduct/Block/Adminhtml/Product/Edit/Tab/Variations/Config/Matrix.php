@@ -98,6 +98,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return currency symbol.
+     *
      * @return string
      */
     public function getCurrencySymbol()
@@ -195,6 +197,7 @@ class Matrix extends \Magento\Backend\Block\Template
                 foreach ($attributes as $key => $attribute) {
                     if (isset($configurableData[$key])) {
                         $attributes[$key] = array_replace_recursive($attribute, $configurableData[$key]);
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $attributes[$key]['values'] = array_merge(
                             isset($attribute['values']) ? $attribute['values'] : [],
                             isset($configurableData[$key]['values'])
@@ -274,6 +277,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return product qty.
+     *
      * @param Product $product
      * @return float
      */
@@ -283,6 +288,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return variation wizard.
+     *
      * @param array $initData
      * @return string
      */
@@ -298,6 +305,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return product configuration matrix.
+     *
      * @return array|null
      */
     public function getProductMatrix()
@@ -309,6 +318,8 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return product attributes.
+     *
      * @return array|null
      */
     public function getProductAttributes()
@@ -316,10 +327,13 @@ class Matrix extends \Magento\Backend\Block\Template
         if ($this->productAttributes === null) {
             $this->prepareVariations();
         }
+
         return $this->productAttributes;
     }
 
     /**
+     * Prepare product variations.
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return void
      * TODO: move to class
@@ -344,36 +358,13 @@ class Matrix extends \Magento\Backend\Block\Template
                     $price = $product->getPrice();
                     $variationOptions = [];
                     foreach ($usedProductAttributes as $attribute) {
-                        if (!isset($attributes[$attribute->getAttributeId()])) {
-                            $attributes[$attribute->getAttributeId()] = [
-                                'code' => $attribute->getAttributeCode(),
-                                'label' => $attribute->getStoreLabel(),
-                                'id' => $attribute->getAttributeId(),
-                                'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
-                                'chosen' => [],
-                            ];
-                            foreach ($attribute->getOptions() as $option) {
-                                if (!empty($option->getValue())) {
-                                    $attributes[$attribute->getAttributeId()]['options'][] = [
-                                        'attribute_code' => $attribute->getAttributeCode(),
-                                        'attribute_label' => $attribute->getStoreLabel(0),
-                                        'id' => $option->getValue(),
-                                        'label' => $option->getLabel(),
-                                        'value' => $option->getValue(),
-                                    ];
-                                }
-                            }
-                        }
-                        $optionId = $variation[$attribute->getId()]['value'];
-                        $variationOption = [
-                            'attribute_code' => $attribute->getAttributeCode(),
-                            'attribute_label' => $attribute->getStoreLabel(0),
-                            'id' => $optionId,
-                            'label' => $variation[$attribute->getId()]['label'],
-                            'value' => $optionId,
-                        ];
-                        $variationOptions[] = $variationOption;
-                        $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
+                        list($attributes, $variationOptions) = $this->prepareAttributes(
+                            $attributes,
+                            $attribute,
+                            $configurableAttributes,
+                            $variation,
+                            $variationOptions
+                        );
                     }
 
                     $productMatrix[] = [
@@ -387,12 +378,68 @@ class Matrix extends \Magento\Backend\Block\Template
                         'price' => $price,
                         'options' => $variationOptions,
                         'weight' => $product->getWeight(),
-                        'status' => $product->getStatus()
+                        'status' => $product->getStatus(),
+                        '__disableTmpl' => true,
                     ];
                 }
             }
         }
         $this->productMatrix = $productMatrix;
         $this->productAttributes = array_values($attributes);
+    }
+
+    /**
+     * Prepare attributes.
+     *
+     * @param array $attributes
+     * @param object $attribute
+     * @param array $configurableAttributes
+     * @param array $variation
+     * @param array $variationOptions
+     * @return array
+     */
+    private function prepareAttributes(
+        array $attributes,
+        $attribute,
+        array $configurableAttributes,
+        array $variation,
+        array $variationOptions
+    ): array {
+        if (!isset($attributes[$attribute->getAttributeId()])) {
+            $attributes[$attribute->getAttributeId()] = [
+                'code' => $attribute->getAttributeCode(),
+                'label' => $attribute->getStoreLabel(),
+                'id' => $attribute->getAttributeId(),
+                'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
+                'chosen' => [],
+                '__disableTmpl' => true
+            ];
+            $options = $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : [];
+            foreach ($options as $option) {
+                if (!empty($option['value'])) {
+                    $attributes[$attribute->getAttributeId()]['options'][] = [
+                        'attribute_code' => $attribute->getAttributeCode(),
+                        'attribute_label' => $attribute->getStoreLabel(0),
+                        'id' => $option['value'],
+                        'label' => $option['label'],
+                        'value' => $option['value'],
+                        '__disableTmpl' => true,
+                    ];
+                }
+            }
+        }
+        $optionId = $variation[$attribute->getId()]['value'];
+        $variationOption = [
+            'attribute_code' => $attribute->getAttributeCode(),
+            'attribute_label' => $attribute->getStoreLabel(0),
+            'id' => $optionId,
+            'label' => $variation[$attribute->getId()]['label'],
+            'value' => $optionId,
+            '__disableTmpl' => true,
+        ];
+        $variationOptions[] = $variationOption;
+        $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
+
+        return [$attributes, $variationOptions];
     }
 }

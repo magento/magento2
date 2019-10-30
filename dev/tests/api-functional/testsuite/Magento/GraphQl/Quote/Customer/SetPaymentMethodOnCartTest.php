@@ -187,6 +187,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      */
     public function testSetPaymentMethodWithoutRequiredParameters(string $input, string $message)
     {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
         $query = <<<QUERY
 mutation {
   setPaymentMethodOnCart(
@@ -235,11 +238,11 @@ QUERY;
                 'Required parameter "cart_id" is missing.'
             ],
             'missed_payment_method' => [
-                'cart_id: "test"',
+                'cart_id: "cart_id_value"',
                 'Required parameter "code" for "payment_method" is missing.'
             ],
             'missed_payment_method_code' => [
-                'cart_id: "test", payment_method: {code: ""}',
+                'cart_id: "cart_id_value", payment_method: {code: ""}',
                 'Required parameter "code" for "payment_method" is missing.'
             ],
         ];
@@ -248,7 +251,11 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php

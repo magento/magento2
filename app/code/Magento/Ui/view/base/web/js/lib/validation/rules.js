@@ -13,7 +13,6 @@ define([
     'moment',
     'tinycolor',
     'jquery/validate',
-    'jquery/ui',
     'mage/translate'
 ], function ($, _, utils, moment, tinycolor) {
     'use strict';
@@ -652,7 +651,8 @@ define([
         'validate-number': [
             function (value) {
                 return utils.isEmptyNoTrim(value) ||
-                    !isNaN(utils.parseNumber(value)) && /^\s*-?\d*(,\d*)*(\.\d*)?\s*$/.test(value);
+                    !isNaN(utils.parseNumber(value)) &&
+                    /^\s*-?\d*(?:[.,|'|\s]\d+)*(?:[.,|'|\s]\d{2})?-?\s*$/.test(value);
             },
             $.mage.__('Please enter a valid number in this field.')
         ],
@@ -802,6 +802,14 @@ define([
                 return utils.isEmptyNoTrim(value) || test.isValid();
             },
             $.mage.__('Please enter a valid date.')
+        ],
+        'validate-date-range': [
+            function (value, params) {
+                var fromDate = $('input[name*="' + params + '"]').val();
+
+                return moment.utc(value).unix() >= moment.utc(fromDate).unix() || isNaN(moment.utc(value).unix());
+            },
+            $.mage.__('Make sure the To Date is later than or the same as the From Date.')
         ],
         'validate-identifier': [
             function (value) {
@@ -1059,6 +1067,16 @@ define([
                 return new RegExp(param).test(value);
             },
             $.mage.__('This link is not allowed.')
+        ],
+        'validate-dob': [
+            function (value) {
+                if (value === '') {
+                    return true;
+                }
+
+                return moment(value).isBefore(moment());
+            },
+            $.mage.__('The Date of Birth should not be greater than today.')
         ]
     }, function (data) {
         return {

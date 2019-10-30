@@ -15,6 +15,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
+ * Item renderer.
+ *
  * @api
  * @since 100.0.2
  */
@@ -103,7 +105,8 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     }
 
     /**
-     * Get list of all options for product
+     * Get list of all options for product.
+     *
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
      */

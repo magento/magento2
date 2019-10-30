@@ -17,7 +17,8 @@ use Magento\Framework\Math\Random;
 
 /**
  * Creates deployment config data based on user input array
- * this class introduced to break down Magento\Setup\Model\ConfigOptionsList::createConfig
+ *
+ * This class introduced to break down {@see Magento\Setup\Model\ConfigOptionsList::createConfig}
  */
 class ConfigGenerator
 {
@@ -83,6 +84,7 @@ class ConfigGenerator
 
     /**
      * Creates encryption key config data
+     *
      * @param array $data
      * @return ConfigData
      */

@@ -58,7 +58,7 @@ class BundleProductViewTest extends GraphQlAbstract
               sku              
               options {
                 id
-                qty
+                quantity
                 position
                 is_default
                 price
@@ -143,7 +143,7 @@ QUERY;
               sku              
               options {
                 id
-                qty
+                quantity
                 position
                 is_default
                 price
@@ -269,7 +269,7 @@ QUERY;
             $actualResponse['items'][0]['options'][0],
             [
                 'id' => $bundleProductLink->getId(),
-                'qty' => (int)$bundleProductLink->getQty(),
+                'quantity' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
@@ -428,8 +428,9 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('GraphQL response contains errors: Cannot'. ' ' .
-            'query field "qty" on type "ProductInterface".');
+        $this->expectExceptionMessage(
+            'GraphQL response contains errors: Cannot query field "qty" on type "ProductInterface".'
+        );
         $this->graphQlQuery($query);
     }
 }

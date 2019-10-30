@@ -18,7 +18,8 @@
         </annotations>
 
         <before>
-            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateDefaultPriceConfigData.path}} {{EnableFlatRateDefaultPriceConfigData.value}}" stepKey="enableFlatRateDefaultPrice"/>
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
             <!--Create  simple product-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
@@ -83,8 +84,8 @@
         <!--Assert Shopping Cart Summary-->
         <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
             <argument name="subtotal" value="$60.00"/>
-            <argument name="shipping" value="$5.00"/>
-            <argument name="total" value="$65.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="total" value="65.00"/>
         </actionGroup>
 
         <!--Assert Product items in cart -->

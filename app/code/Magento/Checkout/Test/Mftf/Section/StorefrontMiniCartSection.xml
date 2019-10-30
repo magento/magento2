@@ -9,14 +9,17 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontMinicartSection">
+        <element name="blockMiniCart" type="block" selector=".block-minicart" timeout="30"/>
         <element name="productCount" type="text" selector="//header//div[contains(@class, 'minicart-wrapper')]//a[contains(@class, 'showcart')]//span[@class='counter-number']"/>
         <element name="productLinkByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details']//a[contains(text(), '{{var1}}')]"  parameterized="true"/>
         <element name="productPriceByName" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[@class='price']"  parameterized="true"/>
-        <element name="productImageByName" type="text" selector="//header//ol[@id='mini-cart']//span[@class='product-image-container']//img[@alt='{{var1}}']"  parameterized="true"/>
+        <element name="productPriceByItsName" type="text" selector="//a[normalize-space()='{{prodName}}']/../following-sibling::*//*[@class='price']"  parameterized="true"/>
+        <element name="productImageByName" type="text" selector="header ol[id='mini-cart'] span[class='product-image-container'] img[alt='{{prodName}}']"  parameterized="true"/>
+        <element name="productImageByItsName" type="text" selector="img[alt='{{prodName}}']"  parameterized="true"/>
         <element name="productName" type="text" selector=".product-item-name"/>
         <element name="productOptionsDetailsByName" type="button" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//span[.='See Details']"  parameterized="true"/>
         <element name="productOptionByNameAndAttribute" type="text" selector="//header//ol[@id='mini-cart']//div[@class='product-item-details'][.//a[contains(text(), '{{var1}}')]]//dt[@class='label' and .='{{var2}}']/following-sibling::dd[@class='values']//span"  parameterized="true"/>
-        <element name="showCart" type="button" selector="a.showcart"/>
+        <element name="showCart" type="button" selector="a.showcart" timeout="60"/>
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="miniCartOpened" type="button" selector="a.showcart.active"/>
         <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>

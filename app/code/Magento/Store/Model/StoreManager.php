@@ -69,7 +69,7 @@ class StoreManager implements
     /**
      * Default store code
      *
-     * @var string
+     * @var string|int|\Magento\Store\Api\Data\StoreInterface
      */
     protected $currentStoreId = null;
 

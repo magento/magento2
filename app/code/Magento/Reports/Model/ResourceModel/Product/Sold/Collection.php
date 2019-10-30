@@ -14,6 +14,8 @@ namespace Magento\Reports\Model\ResourceModel\Product\Sold;
 use Magento\Framework\DB\Select;
 
 /**
+ * Data collection.
+ *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @api
  * @since 100.0.2
@@ -21,7 +23,7 @@ use Magento\Framework\DB\Select;
 class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
 {
     /**
-     * Set Date range to collection
+     * Set Date range to collection.
      *
      * @param int $from
      * @param int $to
@@ -79,6 +81,10 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
         )->having(
             'order_items.qty_ordered > ?',
             0
+        )->columns(
+            'SUM(order_items.qty_ordered) as ordered_qty'
+        )->group(
+            'order_items.product_id'
         );
         return $this;
     }
@@ -116,6 +122,8 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Order\Collection
     }
 
     /**
+     * @inheritdoc
+     *
      * @return Select
      * @since 100.2.0
      */

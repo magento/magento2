@@ -7,13 +7,15 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCreateExistingCustomerTest">
         <annotations>
             <features value="Customer"/>
+            <stories value="Customer Registration"/>
             <title value="Attempt to register customer on storefront with existing email"/>
             <description value="Attempt to register customer on storefront with existing email"/>
-            <testCaseId value="MC-10907" />
+            <testCaseId value="MC-10907"/>
+            <severity value="MAJOR"/>
             <group value="customers"/>
             <group value="mtf_migrated"/>
         </annotations>

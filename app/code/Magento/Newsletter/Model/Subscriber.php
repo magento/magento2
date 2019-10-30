@@ -7,11 +7,11 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\MailException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Subscriber model
@@ -31,6 +31,7 @@ use Magento\Framework\App\ObjectManager;
  * @method int getSubscriberId()
  * @method Subscriber setSubscriberId(int $value)
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  *
@@ -352,11 +353,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      */
     public function isSubscribed()
     {
-        if ($this->getId() && $this->getStatus() == self::STATUS_SUBSCRIBED) {
-            return true;
-        }
-
-        return false;
+        return $this->getId() && (int)$this->getStatus() === self::STATUS_SUBSCRIBED;
     }
 
     /**
@@ -402,6 +399,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 $this->setSubscriberConfirmCode($this->randomSequence());
                 $this->save();
             }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
         }
         return $this;
@@ -494,6 +492,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             }
             return $this->getStatus();
         } catch (\Exception $e) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($e->getMessage());
         }
     }
@@ -559,7 +558,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @param bool $subscribe indicates whether the customer should be subscribed or unsubscribed
-     * @return  $this
+     * @return $this
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -686,7 +685,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
      * Mark receiving subscriber of queue newsletter
      *
      * @param  \Magento\Newsletter\Model\Queue $queue
-     * @return boolean
+     * @return Subscriber
      */
     public function received(\Magento\Newsletter\Model\Queue $queue)
     {

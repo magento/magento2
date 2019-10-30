@@ -5,10 +5,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Review\Model\ReviewSummaryFactory;
 use Magento\Review\Observer\PredispatchReviewObserver;
 
 /**
@@ -34,16 +37,25 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     protected $_reviewFactory;
 
     /**
+     * @var ReviewSummaryFactory
+     */
+    private $reviewSummaryFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param array $data
+     * @param ReviewSummaryFactory $reviewSummaryFactory
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        array $data = []
+        array $data = [],
+        ReviewSummaryFactory $reviewSummaryFactory = null
     ) {
         $this->_reviewFactory = $reviewFactory;
+        $this->reviewSummaryFactory = $reviewSummaryFactory ??
+            ObjectManager::getInstance()->get(ReviewSummaryFactory::class);
         parent::__construct($context, $data);
     }
 
@@ -52,7 +64,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return string
      */
-    public function isReviewEnabled() : string
+    public function isReviewEnabled(): string
     {
         return $this->_scopeConfig->getValue(
             PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE,
@@ -68,17 +80,22 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      * @param bool $displayIfNoReviews
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getReviewsSummaryHtml(
         \Magento\Catalog\Model\Product $product,
         $templateType = self::DEFAULT_VIEW,
         $displayIfNoReviews = false
     ) {
-        if (!$product->getRatingSummary()) {
-            $this->_reviewFactory->create()->getEntitySummary($product, $this->_storeManager->getStore()->getId());
+        if ($product->getRatingSummary() === null) {
+            $this->reviewSummaryFactory->create()->appendSummaryDataToObject(
+                $product,
+                $this->_storeManager->getStore()->getId()
+            );
         }
 
-        if (!$product->getRatingSummary() && !$displayIfNoReviews) {
+        if (null === $product->getRatingSummary() && !$displayIfNoReviews) {
             return '';
         }
         // pick template among available
@@ -101,7 +118,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getRatingSummary()
     {
-        return $this->getProduct()->getRatingSummary()->getRatingSummary();
+        return $this->getProduct()->getRatingSummary();
     }
 
     /**
@@ -111,7 +128,7 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getReviewsCount()
     {
-        return $this->getProduct()->getRatingSummary()->getReviewsCount();
+        return $this->getProduct()->getReviewsCount();
     }
 
     /**
