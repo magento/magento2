@@ -32,7 +32,7 @@ return [
                 'label' => 'installment',
                 'installmentperiod' => 0
             ],
-            'isVisibleOnProductPage' => 0,
+            'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true
         ]
     ],
@@ -62,7 +62,7 @@ return [
                 'label' => 'installment',
                 'installmentperiod' => 0
             ],
-            'isVisibleOnProductPage' => 0,
+            'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true
         ]
     ],
@@ -91,7 +91,7 @@ return [
                 'shape' => 'rect',
                 'label' => 'paypal'
             ],
-            'isVisibleOnProductPage' => 0,
+            'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true
         ]
     ],
@@ -120,7 +120,7 @@ return [
                 'shape' => 'rect',
                 'label' => 'paypal'
             ],
-            'isVisibleOnProductPage' => 0,
+            'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true
         ]
     ],
@@ -149,7 +149,7 @@ return [
                 'shape' => 'rect',
                 'label' => 'paypal',
             ],
-            'isVisibleOnProductPage' => 0,
+            'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true
         ]
     ]

@@ -229,6 +229,7 @@
         <!-- Run cron twice -->
         <magentoCLI command="cron:run" stepKey="runCron1"/>
         <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to Frontend and open the simple product -->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.sku$$)}}" stepKey="amOnSimpleProductPage"/>
