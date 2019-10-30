@@ -276,7 +276,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             }
         }
         if ($this->recollectQuote && $this->_quote) {
-            $this->_quote->collectTotals();
+            $this->_quote->setTotalsCollectedFlag(false);
         }
         \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
