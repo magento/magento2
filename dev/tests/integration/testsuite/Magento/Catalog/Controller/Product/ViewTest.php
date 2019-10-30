@@ -75,9 +75,7 @@ class ViewTest extends AbstractController
      */
     public function testProductVisibility(int $visibility): void
     {
-        $product = $this->productRepository->get('simple2');
-        $product->setVisibility($visibility);
-        $this->productRepository->save($product);
+        $product = $this->updateProductVisibility('simple2', $visibility);
         $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
 
         $this->assertProductIsVisible($product);
@@ -93,6 +91,17 @@ class ViewTest extends AbstractController
             'search' => [Visibility::VISIBILITY_IN_SEARCH],
             'catalog' => [Visibility::VISIBILITY_IN_CATALOG],
         ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/simple_products_not_visible_individually.php
+     */
+    public function testProductNotVisibleIndividually(): void
+    {
+        $product = $this->updateProductVisibility('simple_not_visible_1', Visibility::VISIBILITY_NOT_VISIBLE);
+        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+
+        $this->assert404NotFound();
     }
 
     /**
@@ -123,5 +132,20 @@ class ViewTest extends AbstractController
             $this->registry->registry('current_product')->getSku(),
             'Wrong product is registered'
         );
+    }
+
+    /**
+     * Update product visibility
+     *
+     * @param string $sku
+     * @param int $visibility
+     * @return ProductInterface
+     */
+    private function updateProductVisibility(string $sku, int $visibility): ProductInterface
+    {
+        $product = $this->productRepository->get($sku);
+        $product->setVisibility($visibility);
+
+        return $this->productRepository->save($product);
     }
 }
