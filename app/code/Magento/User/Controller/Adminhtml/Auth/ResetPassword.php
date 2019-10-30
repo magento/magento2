@@ -1,11 +1,15 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+/**
+ * Class ResetPassword
+ *
+ * @package Magento\User\Controller\Adminhtml\Auth
+ */
 class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**

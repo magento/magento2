@@ -54,6 +54,7 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken $confirmByToken
+     * @param \Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken $getByToken
      */
     public function __construct(
         Context $context,
