@@ -156,10 +156,13 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->getCollection()->addFieldToFilter(
-            $filter->getField(),
-            [$filter->getConditionType() => $filter->getValue()]
-        );
+        $collection = $this->getCollection();
+        if ($collection) {
+            $collection->addFieldToFilter(
+                $filter->getField(),
+                [$filter->getConditionType() => $filter->getValue()]
+            );
+        }
     }
 
     /**
