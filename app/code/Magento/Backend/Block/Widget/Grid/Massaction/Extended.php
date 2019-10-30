@@ -288,8 +288,10 @@ class Extended extends \Magento\Backend\Block\Widget
         }
 
         $idList = $allIdsCollection->getAllIds();
-
-        return implode(',', $idList);
+        if (is_array($idList)) {
+            return implode(',', $idList);
+        }
+        return $idList;
     }
 
     /**
