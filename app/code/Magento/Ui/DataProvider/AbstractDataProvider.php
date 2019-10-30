@@ -9,6 +9,8 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
+ * Abstract class AbstractDataProvider
+ *
  * @api
  * @since 100.0.2
  */
@@ -36,6 +38,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     protected $requestFieldName;
 
     /**
+     * Data Provider meta
+     *
      * @var array
      */
     protected $meta = [];
@@ -48,16 +52,20 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     protected $data = [];
 
     /**
+     * Provider collection
+     *
      * @var AbstractCollection
      */
     protected $collection;
 
     /**
+     * AbstractDataProvider constructor
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param array $meta
-     * @param array $data
+     * @param array  $meta
+     * @param array  $data
      */
     public function __construct(
         $name,
@@ -74,6 +82,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Get collection
+     *
      * @return AbstractCollection
      */
     public function getCollection()
@@ -112,6 +122,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Get meta
+     *
      * @return array
      */
     public function getMeta()
@@ -122,7 +134,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * Get field Set meta info
      *
-     * @param string $fieldSetName
+     * @param  string $fieldSetName
      * @return array
      */
     public function getFieldSetMetaInfo($fieldSetName)
@@ -131,7 +143,9 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * @param string $fieldSetName
+     * Get fields meta info
+     *
+     * @param  string $fieldSetName
      * @return array
      */
     public function getFieldsMetaInfo($fieldSetName)
@@ -140,8 +154,10 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * @param string $fieldSetName
-     * @param string $fieldName
+     * getFieldMetaInfo
+     *
+     * @param  string $fieldSetName
+     * @param  string $fieldName
      * @return array
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
@@ -152,7 +168,10 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * @inheritdoc
+     * Add field filter to collection
+     *
+     * @param  \Magento\Framework\Api\Filter $filter
+     * @return mixed|void
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -190,8 +209,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * Add field to select
      *
-     * @param string|array $field
-     * @param string|null $alias
+     * @param  string|array $field
+     * @param  string|null  $alias
      * @return void
      */
     public function addField($field, $alias = null)
@@ -200,10 +219,10 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * self::setOrder() alias
+     * Add ORDER BY to the end or to the beginning - self::setOrder() alias
      *
-     * @param string $field
-     * @param string $direction
+     * @param  string $field
+     * @param  string $direction
      * @return void
      */
     public function addOrder($field, $direction)
@@ -214,8 +233,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * Set Query limit
      *
-     * @param int $offset
-     * @param int $size
+     * @param  int $offset
+     * @param  int $size
      * @return void
      */
     public function setLimit($offset, $size)
@@ -227,8 +246,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * Removes field from select
      *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
+     * @param  string|null $field
+     * @param  bool        $isAlias Alias identifier
      * @return void
      */
     public function removeField($field, $isAlias = false)
@@ -279,7 +298,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * Set data
      *
-     * @param mixed $config
+     * @param  mixed $config
      * @return void
      */
     public function setConfigData($config)
@@ -291,7 +310,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      * Retrieve all ids from collection
      *
      * @return int[]
-     * @since 100.2.0
+     * @since  100.2.0
      */
     public function getAllIds()
     {
