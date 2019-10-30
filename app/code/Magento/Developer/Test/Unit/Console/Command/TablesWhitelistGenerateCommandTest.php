@@ -23,8 +23,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 class TablesWhitelistGenerateCommandTest extends TestCase
 {
     // Exception Messages!
-    const CONFIG_EXCEPTION = 'Configuration Exception';
-    const EXCEPTION = 'General Exception';
+    const CONFIG_EXCEPTION_MESSAGE = 'Configuration Exception Message';
+    const EXCEPTION_MESSAGE = 'General Exception Message';
 
     /** @var WhitelistGenerator|MockObject $whitelistGenerator */
     private $whitelistGenerator;
@@ -75,9 +75,11 @@ class TablesWhitelistGenerateCommandTest extends TestCase
         $this->whitelistGenerator->expects($this->once())
             ->method('generate')
             ->with($arguments)
-            ->willReturnCallback(function () use ($exception) {
-                throw $exception;
-            });
+            ->willReturnCallback(
+                function () use ($exception) {
+                    throw $exception;
+                }
+            );
 
         $commandTest = $this->execute($arguments);
         $this->assertEquals($expected, $commandTest->getStatusCode());
@@ -115,26 +117,26 @@ class TablesWhitelistGenerateCommandTest extends TestCase
             [
                 'all',
                 Cli::RETURN_FAILURE,
-                new ConfigException(__(self::CONFIG_EXCEPTION)),
-                self::CONFIG_EXCEPTION
+                new ConfigException(__('Configuration Exception Message')),
+                self::CONFIG_EXCEPTION_MESSAGE
             ],
             [
                 'Module_Name',
                 Cli::RETURN_FAILURE,
-                new ConfigException(__(self::CONFIG_EXCEPTION)),
-                self::CONFIG_EXCEPTION
+                new ConfigException(__('Configuration Exception Message')),
+                self::CONFIG_EXCEPTION_MESSAGE
             ],
             [
                 'all',
                 Cli::RETURN_FAILURE,
-                new \Exception(self::EXCEPTION),
-                self::EXCEPTION
+                new \Exception(self::EXCEPTION_MESSAGE),
+                self::EXCEPTION_MESSAGE
             ],
             [
                 'Module_Name',
                 Cli::RETURN_FAILURE,
-                new \Exception(self::EXCEPTION),
-                self::EXCEPTION
+                new \Exception(self::EXCEPTION_MESSAGE),
+                self::EXCEPTION_MESSAGE
             ]
         ];
     }
