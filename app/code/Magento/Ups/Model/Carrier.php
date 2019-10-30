@@ -218,8 +218,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
-        $this->deferredProxyFactory = $proxyDeferredFactory
-            ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
+        $this->deferredProxyFactory = $proxyDeferredFactory ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
     }
 
     /**
