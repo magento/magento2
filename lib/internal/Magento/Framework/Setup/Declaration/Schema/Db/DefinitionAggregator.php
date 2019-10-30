@@ -91,8 +91,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
             [
                 'current_timestamp()' => 'CURRENT_TIMESTAMP',
                 'curdate()' => 'CURRENT_DATE',
-                'curtime()' => 'CURRENT_TIME',
-                '0000-00-00 00:00:00' => '0'
+                'curtime()' => 'CURRENT_TIME'
             ]
         );
         //replace escaped single quotes
