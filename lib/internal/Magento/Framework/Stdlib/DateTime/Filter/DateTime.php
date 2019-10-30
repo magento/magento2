@@ -6,11 +6,6 @@
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 /**
- * @var Resolver
- */
-private $localeResolver;
-
-/**
  * Date/Time filter. Converts datetime from localized to internal format.
  *
  * @api
@@ -18,9 +13,15 @@ private $localeResolver;
 class DateTime extends Date
 {
     /**
+    * @var Resolver
+    */
+    protected $localeResolver;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      *
      */
+
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, Resolver $localeResolver)
     {
         parent::__construct($localeDate);
