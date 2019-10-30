@@ -19,7 +19,7 @@
             <argument name="billingAddress" defaultValue=""/>
             <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
         </arguments>
-        
+
         <see selector="{{AdminCreditMemoOrderInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>
         <see selector="{{AdminCreditMemoOrderInformationSection.customerEmail}}" userInput="{{customer.email}}" stepKey="seeCustomerEmail"/>
         <see selector="{{AdminCreditMemoOrderInformationSection.customerGroup}}" userInput="{{customerGroup.code}}" stepKey="seeCustomerGroup"/>
@@ -42,7 +42,7 @@
         <arguments>
             <argument name="product"/>
         </arguments>
-        
+
         <see selector="{{AdminCreditMemoItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
     </actionGroup>
 
@@ -59,8 +59,8 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitButtonEnabled"/>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForMessageAppears"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}$grabOrderId" stepKey="seeViewOrderPageCreditMemo"/>
     </actionGroup>
     <actionGroup name="UpdateCreditMemoTotalsActionGroup">
