@@ -10,6 +10,9 @@ namespace Magento\PageCache\Controller;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Page cache block controller abstract class
+ */
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -55,13 +58,12 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     protected function _getBlocks()
     {
         $blocks = $this->getRequest()->getParam('blocks', '');
-        $handles = $this->getRequest()->getParam('handles', '');
+        $handles = $this->getHandles();
 
         if (!$handles || !$blocks) {
             return [];
         }
         $blocks = $this->jsonSerializer->unserialize($blocks);
-        $handles = $this->base64jsonSerializer->unserialize($handles);
 
         $this->_view->loadLayout($handles, true, true, false);
         $data = [];
@@ -75,5 +77,23 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
 
         return $data;
+    }
+
+    /**
+     * Get handles
+     *
+     * @return array
+     */
+    private function getHandles(): array
+    {
+        $handles = $this->getRequest()->getParam('handles', '');
+        $handles = !$handles ? [] : $this->base64jsonSerializer->unserialize($handles);
+        $validHandles = [];
+        foreach ($handles as $handle) {
+            if (!preg_match('/[@\'\*\.\\\"]/i', $handle)) {
+                $validHandles[] = $handle;
+            }
+        }
+        return $validHandles;
     }
 }
