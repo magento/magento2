@@ -70,8 +70,7 @@ class CustomerCart implements ResolverInterface
                 );
             }
 
-            if (empty($cart)
-            ) {
+            if (empty($cart)) {
                 $currentUserId = $this->createEmptyCartForCustomer->execute($currentUserId, null);
                 $cart = $this->cartManagement->getCartForCustomer($currentUserId);
             }
