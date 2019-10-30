@@ -130,31 +130,39 @@ define([
                  * so the user must select an option to dismiss the modal
                  */
                 handleTabKey: function (event) {
-                    var modal = this;
-                    var KEY_TAB = 9;
+                    var modal = this,
+                        KEY_TAB = 9;
 
+                    /**
+                     * Handle Shift+Tab to tab backwards
+                     */
                     function handleBackwardTab() {
-                        if ( document.activeElement === modal.firstFocusableElement
-                            || document.activeElement === $(modal.rootSelector)[0]
+                        if (document.activeElement === modal.firstFocusableElement ||
+                            document.activeElement === $(modal.rootSelector)[0]
                         ) {
                             event.preventDefault();
                             modal.lastFocusableElement.focus();
                         }
                     }
+
+                    /**
+                     * Handle Tab forward
+                     */
                     function handleForwardTab() {
-                        if ( document.activeElement === modal.lastFocusableElement) {
+                        if (document.activeElement === modal.lastFocusableElement) {
                             event.preventDefault();
                             modal.firstFocusableElement.focus();
                         }
                     }
 
-                    switch(event.keyCode) {
+                    switch (event.keyCode) {
                         case KEY_TAB:
-                            if ( modal.focusableElements.length === 1 ) {
+                            if (modal.focusableElements.length === 1) {
                                 event.preventDefault();
                                 break;
                             }
-                            if ( event.shiftKey ) {
+
+                            if (event.shiftKey) {
                                 handleBackwardTab();
                                 break;
                             }
