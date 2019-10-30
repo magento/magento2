@@ -41,7 +41,7 @@
         <!-- No re-indexing is done as part of this actionGroup since the test required no re-indexing -->
         <waitForPageLoad stepKey="waitForSave2"/>
     </actionGroup>
-    <actionGroup name="ReindexAndFlushCache">
+    <actionGroup name="AdminReindexAndFlushCache">
         <annotations>
             <description>Run reindex and flush cache.</description>
         </annotations>
