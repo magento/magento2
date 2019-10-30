@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -53,21 +54,16 @@ class CustomerCart implements ResolverInterface
         $isCustomerLoggedIn = $this->isCustomer($currentUserId, $currentUserType);
 
         if ($isCustomerLoggedIn) {
-            $cart = $this->cartManagement->getCartForCustomer($currentUserId);
-
-            if (false === (bool)$cart->getIsActive()) {
-                throw new GraphQlNoSuchEntityException(
-                    __('Current user does not have an active cart.')
-                );
-            }
-
-            if (empty($cart)) {
-                $currentUserId = $this->createEmptyCartForCustomer->execute($currentUserId, null);
+            try {
                 $cart = $this->cartManagement->getCartForCustomer($currentUserId);
+            } catch (NoSuchEntityException $e) {
+                $this->createEmptyCartForCustomer->execute($currentUserId, null);
+                $cart =  $this->cartManagement->getCartForCustomer($currentUserId);
             }
+
         } else {
             throw new LocalizedException(
-                __('User cannot access the cart unless loggedIn with a valid token header')
+                __('User cannot access the cart unless loggedIn and with a valid customer token')
             );
         }
 
