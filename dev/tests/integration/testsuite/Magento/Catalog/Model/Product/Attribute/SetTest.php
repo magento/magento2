@@ -5,10 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Eav\Model\Entity\Attribute;
+namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Attribute\Group;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Api\AttributeGroupRepositoryInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
