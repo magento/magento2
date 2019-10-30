@@ -186,8 +186,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         CustomerExtractor $customerExtractor,
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
-        Validator $formKeyValidator = null,
-        CustomerRepository $customerRepository = null
+        ?Validator $formKeyValidator = null,
+        ?CustomerRepository $customerRepository = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
