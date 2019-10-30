@@ -15,7 +15,7 @@
         <arguments>
             <argument name="websiteName" defaultValue="customWebsite.name"/>
         </arguments>
-        
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnTheStorePage"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
         <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
@@ -26,6 +26,6 @@
         <click selector="{{AdminStoresMainActionsSection.deleteButton}}" stepKey="clickDeleteWebsiteButtonOnEditStorePage"/>
         <selectOption userInput="No" selector="{{AdminStoresDeleteWebsiteSection.createDbBackup}}" stepKey="setCreateDbBackupToNo"/>
         <click selector="{{AdminStoresDeleteWebsiteSection.deleteButton}}" stepKey="clickDeleteButtonOnDeleteWebsitePage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the website." stepKey="checkSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the website." stepKey="checkSuccessMessage"/>
     </actionGroup>
 </actionGroups>
