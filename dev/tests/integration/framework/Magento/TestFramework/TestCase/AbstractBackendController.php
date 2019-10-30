@@ -92,21 +92,6 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     }
 
     /**
-     * Utilize backend session model by default
-     *
-     * @param \PHPUnit\Framework\Constraint\Constraint $constraint
-     * @param string|null $messageType
-     * @param string $messageManagerClass
-     */
-    public function assertSessionMessages(
-        \PHPUnit\Framework\Constraint\Constraint $constraint,
-        $messageType = null,
-        $messageManagerClass = \Magento\Framework\Message\Manager::class
-    ) {
-        parent::assertSessionMessages($constraint, $messageType, $messageManagerClass);
-    }
-
-    /**
      * Test ACL configuration for action working.
      */
     public function testAclHasAccess()
