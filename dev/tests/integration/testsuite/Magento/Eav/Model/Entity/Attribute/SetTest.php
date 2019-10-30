@@ -22,7 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Provides tests for attribute set model saving.
  */
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SetTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ObjectManagerInterface
