@@ -76,7 +76,7 @@ class Io
      */
     public function generateResultFileName($className)
     {
-        return $this->_generationDirectory . ltrim(str_replace(['\\', '_'], '/', $className), '/') . '.php';
+        return $this->_generationDirectory . ltrim(str_replace('\\', '/', $className), '/') . '.php';
     }
 
     /**
