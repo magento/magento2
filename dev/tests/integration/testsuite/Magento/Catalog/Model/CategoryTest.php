@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+
 /**
  * Test class for \Magento\Catalog\Model\Category.
  * - general behaviour is tested
@@ -364,5 +368,36 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $collection->addNameToResult()->load();
         return $collection->getItemByColumnValue('name', $categoryName);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveCategoryWithWrongPath()
+    {
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $categoryFactory = $this->objectManager->get(CategoryInterfaceFactory::class);
+
+        /** @var CategoryInterface $category */
+        $category = $categoryFactory->create(
+            [
+                'data' => [
+                    'name' => 'Category With Wrong Path',
+                    'parent_id' => 2,
+                    'path' => 'wrong/path',
+                    'level' => 2,
+                    'available_sort_by' =>['position', 'name'],
+                    'default_sort_by' => 'name',
+                    'is_active' => true,
+                    'position' => 1,
+                ],
+            ]
+        );
+        $category->isObjectNew(true);
+        $category->save();
+
+        $createdCategory = $categoryRepository->get($category->getId());
+        $this->assertEquals('0/0/'. $createdCategory->getId(), $createdCategory->getPath());
     }
 }
