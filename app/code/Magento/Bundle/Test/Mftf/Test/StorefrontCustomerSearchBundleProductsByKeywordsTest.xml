@@ -39,7 +39,7 @@
                 <requiredEntity createDataKey="fixedBundleOption"/>
                 <requiredEntity createDataKey="createSimpleProductTwo"/>
             </createData>
-            <magentoCLI command="indexer:reindex" arguments="cataloginventory_stock catalogsearch_fulltext" stepKey="reindex"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createDynamicBundle" stepKey="deleteDynamicBundleProduct"/>
