@@ -28,7 +28,7 @@
                 <tr>
                     <td data-th="<?= $block->escapeHtmlAttr(__('Order #')) ?>" class="col id">
                         <a href="<?= $block->escapeUrl($block->getOrderViewUrl($_item->getPurchased()->getOrderId())) ?>"
-                            title="<?= $block->escapeHtml(__('View Order')) ?>">
+                            title="<?= $block->escapeHtmlAttr(__('View Order')) ?>">
                             <?= $block->escapeHtml($_item->getPurchased()->getOrderIncrementId()) ?>
                         </a>
                     </td>

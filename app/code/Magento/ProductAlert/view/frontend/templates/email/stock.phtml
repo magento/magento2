@@ -12,7 +12,7 @@
     <?php foreach ($_products as $_product) : ?>
         <tr>
             <td class="col photo">
-                <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" title="<?= $block->escapeHtml($_product->getName()) ?>" class="product photo">
+                <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" title="<?= $block->escapeHtmlAttr($_product->getName()) ?>" class="product photo">
                     <?= $block->getImage($_product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml() ?>
                 </a>
             </td>

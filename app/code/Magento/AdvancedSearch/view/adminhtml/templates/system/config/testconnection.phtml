@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<button class="scalable" type="button" id="<?= $block->getHtmlId() ?>" data-mage-init='{"testConnection":{
+<button class="scalable" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>" data-mage-init='{"testConnection":{
     "url": "<?= $block->escapeUrl($block->getAjaxUrl()) ?>",
-    "elementId": "<?= $block->getHtmlId() ?>",
+    "elementId": "<?= /* @noEscape */ $block->getHtmlId() ?>",
     "successText": "<?= $block->escapeHtmlAttr(__('Successful! Test again?')) ?>",
     "failedText": "<?= $block->escapeHtmlAttr(__('Connection failed! Test again?')) ?>",
     "fieldMapping": "<?= /* @noEscape */ $block->getFieldMapping() ?>"}, "validation": {}}'>
-    <span id="<?= $block->getHtmlId() ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
+    <span id="<?= /* @noEscape */ $block->getHtmlId() ?>_result"><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
 </button>

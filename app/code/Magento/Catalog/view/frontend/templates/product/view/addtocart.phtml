@@ -22,7 +22,7 @@
                        value="<?= $block->getProductDefaultQty() * 1 ?>"
                        title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
                        class="input-text qty"
-                       data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                       data-validate="<?= $block->escapeHtmlAttr(json_encode($block->getQuantityValidators())) ?>"
                        />
             </div>
         </div>

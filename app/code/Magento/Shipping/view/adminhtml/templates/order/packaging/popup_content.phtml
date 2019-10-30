@@ -57,7 +57,7 @@
                         <td class="col-type">
                             <?php $containers = $block->getContainers(); ?>
                             <select name="package_container"
-                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= $block->escapeJs($girthEnabled) ?>);"
+                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= $block->escapeHtmlAttr($block->escapeJs($girthEnabled)) ?>);"
                                     <?php if (empty($containers)) : ?>
                                         title="<?= $block->escapeHtmlAttr(__('USPS domestic shipments don\'t use package types.')) ?>"
                                         disabled=""
@@ -76,7 +76,7 @@
                         <td>
                             <select name="package_size"
                                     class="admin__control-select"
-                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= $block->escapeJs($girthEnabled) ?>);">
+                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= $block->escapeHtmlAttr($block->escapeJs($girthEnabled)) ?>);">
                                 <?php foreach ($sizeSource as $key => $value) : ?>
                                 <option value="<?= $block->escapeHtmlAttr($sizeSource[$key]['value']) ?>">
                                     <?= $block->escapeHtml($sizeSource[$key]['label']) ?>

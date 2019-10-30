@@ -68,8 +68,8 @@ endif; ?>
             <?php $_id = $block->getForm()->getHtmlIdPrefix() . 'customer_address_id' ?>
             <div class="admin__field-control">
                 <select id="<?= $block->escapeHtmlAttr($_id) ?>"
-                        name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix()) ?>[customer_address_id]"
-                        onchange="order.selectAddress(this, '<?= $block->escapeJs($_fieldsContainerId) ?>')"
+                        name="<?= /* @noEscape */ $block->getForm()->getHtmlNamePrefix() ?>[customer_address_id]"
+                        onchange="order.selectAddress(this, '<?= $block->escapeHtmlAttr($block->escapeJs($_fieldsContainerId)) ?>')"
                         class="admin__control-select">
                     <option value=""><?= $block->escapeHtml(__('Add New Address')) ?></option>
                     <?php foreach ($addressArray as $addressId => $address) : ?>
@@ -87,8 +87,8 @@ endif; ?>
         <?= $block->getForm()->toHtml() ?>
 
         <div class="admin__field admin__field-option order-save-in-address-book">
-            <input name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix()) ?>[save_in_address_book]" type="checkbox" id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book" value="1"<?php if (!$block->getDontSaveInAddressBook()) : ?> checked="checked"<?php endif; ?> class="admin__control-checkbox"/>
-            <label for="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
+            <input name="<?= /* @noEscape */ $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]" type="checkbox" id="<?= /* @noEscape */ $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book" value="1"<?php if (!$block->getDontSaveInAddressBook()) : ?> checked="checked"<?php endif; ?> class="admin__control-checkbox"/>
+            <label for="<?= /* @noEscape */ $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
                    class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>
         </div>
     </div>

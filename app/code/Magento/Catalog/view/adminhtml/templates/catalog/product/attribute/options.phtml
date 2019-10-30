@@ -43,7 +43,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <th colspan="<?= (int) $storetotal ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) :?>
                         <button id="add_new_option_button" data-action="add_new_row"
-                                title="<?= $block->escapeHtml(__('Add Option')) ?>"
+                                title="<?= $block->escapeHtmlAttr(__('Add Option')) ?>"
                                 type="button" class="action- scalable add">
                             <span><?= $block->escapeHtml(__('Add Option')) ?></span>
                         </button>
@@ -59,7 +59,7 @@ $stores = $block->getStoresSortedBySortOrder();
             <td class="col-draggable">
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) :?>
                     <div data-role="draggable-handle" class="draggable-handle"
-                         title="<?= $block->escapeHtml(__('Sort Option')) ?>">
+                         title="<?= $block->escapeHtmlAttr(__('Sort Option')) ?>">
                     </div>
                 <?php endif; ?>
                 <input data-role="order" type="hidden" name="option[order][<%- data.id %>]"  value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) :?> disabled="disabled"<?php endif; ?>/>
@@ -73,7 +73,7 @@ $stores = $block->getStoresSortedBySortOrder();
             <td id="delete_button_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="option[delete][<%- data.id %>]" value="" />
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) :?>
-                    <button id="delete_button_<%- data.id %>" title="<?= $block->escapeHtml(__('Delete')) ?>" type="button"
+                    <button id="delete_button_<%- data.id %>" title="<?= $block->escapeHtmlAttr(__('Delete')) ?>" type="button"
                         class="action- scalable delete delete-option"
                         >
                         <span><?= $block->escapeHtml(__('Delete')) ?></span>

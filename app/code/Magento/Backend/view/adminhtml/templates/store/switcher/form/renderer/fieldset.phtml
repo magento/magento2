@@ -10,7 +10,7 @@
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()) : ?>
-    <fieldset class="admin__fieldset fieldset <?= $block->escapeHtmlAttr($_element->getClass()) ?>" id="<?= $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset <?= $block->escapeHtmlAttr($_element->getClass()) ?>" id="<?= /* @noEscape */ $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()) : ?>

@@ -16,7 +16,7 @@
             'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
             'left=100, top=100, width=550, height=550'
         ); return false;"
-            class="scalable" type="button" id="<?= $block->escapeHtml($block->getHtmlId()) ?>">
+            class="scalable" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>">
         <span><span><span><?= $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
     </button>
 </div>

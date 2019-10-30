@@ -18,10 +18,10 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
 ?>
 <tbody class="cart item">
     <tr class="item-info">
-        <td data-th="<?= $block->escapeHtml(__('Item')) ?>" class="col item">
+        <td data-th="<?= $block->escapeHtmlAttr(__('Item')) ?>" class="col item">
             <?php if ($block->hasProductUrl()) :?>
                 <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"
-                   title="<?= $block->escapeHtml($block->getProductName()) ?>"
+                   title="<?= $block->escapeHtmlAttr($block->getProductName()) ?>"
                    tabindex="-1"
                    class="product-item-photo">
             <?php else :?>
@@ -71,7 +71,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
         </td>
 
         <?php if ($canApplyMsrp) :?>
-            <td class="col msrp" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+            <td class="col msrp" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
                 <span class="pricing msrp">
                     <span class="msrp notice"><?= $block->escapeHtml(__('See price before order confirmation.')) ?></span>
                     <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
@@ -89,11 +89,11 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 </span>
             </td>
         <?php else :?>
-            <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+            <td class="col price" data-th="<?= $block->escapeHtmlAttr(__('Price')) ?>">
                 <?= $block->getUnitPriceHtml($_item) ?>
             </td>
         <?php endif; ?>
-        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
+        <td class="col qty" data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>">
             <div class="field qty">
                 <div class="control qty">
                     <label for="cart-<?= $block->escapeHtmlAttr($_item->getId()) ?>-qty">
@@ -114,7 +114,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             </div>
         </td>
 
-        <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+        <td class="col subtotal" data-th="<?= $block->escapeHtmlAttr(__('Subtotal')) ?>">
             <?php if ($canApplyMsrp) :?>
                 <span class="cart msrp subtotal">--</span>
             <?php else :?>
