@@ -72,9 +72,10 @@ class ExtractDataFromCategoryTree
 
 
     /**
-     * Test that all parents of the current category are active
+     * Test that all parents of the current category are active.
      *
-     * Assumes that $categoriesArray are key-pair values and key is the ID of the category
+     * Assumes that $categoriesArray are key-pair values and key is the ID of the category and
+     * all categories in this list are queried as active.
      *
      * @param CategoryInterface $currentCategory
      * @param CategoryInterface $rootCategory
