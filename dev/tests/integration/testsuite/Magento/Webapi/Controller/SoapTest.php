@@ -51,7 +51,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertWsdlServices(array $decodedWsdl): void
     {
-        $this->assertArrayHasKey("customerAccountManagementV1", $decodedWsdl);
-        $this->assertArrayHasKey("integrationAdminTokenServiceV1", $decodedWsdl);
+        $this->assertArrayHasKey('customerAccountManagementV1', $decodedWsdl);
+        $this->assertArrayHasKey('integrationAdminTokenServiceV1', $decodedWsdl);
     }
 }
