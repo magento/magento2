@@ -52,16 +52,18 @@ class ExtractDataFromCategoryTree
             /** @var CategoryInterface $category */
             $category = $iterator->current();
             $iterator->next();
-            $pathElements = explode("/", $category->getPath());
-            if (empty($tree)) {
-                $this->startCategoryFetchLevel = count($pathElements) - 1;
+            if ($category->getIsActive()) {
+                $pathElements = explode("/", $category->getPath());
+                if (empty($tree)) {
+                    $this->startCategoryFetchLevel = count($pathElements) - 1;
+                }
+                $this->iteratingCategory = $category;
+                $currentLevelTree = $this->explodePathToArray($pathElements, $this->startCategoryFetchLevel);
+                if (empty($tree)) {
+                    $tree = $currentLevelTree;
+                }
+                $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
             }
-            $this->iteratingCategory = $category;
-            $currentLevelTree = $this->explodePathToArray($pathElements, $this->startCategoryFetchLevel);
-            if (empty($tree)) {
-                $tree = $currentLevelTree;
-            }
-            $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
         }
         return $tree;
     }
