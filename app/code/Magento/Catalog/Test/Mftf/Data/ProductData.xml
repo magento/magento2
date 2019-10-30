@@ -1086,8 +1086,8 @@
         <data key="name" unique="suffix">BBB Product</data>
     </entity>
     <entity name="simpleProductWithShortNameAndSku" type="product" extends="defaultSimpleProduct">
-        <data key="name">Simple_Product</data>
-        <data key="sku">testsku</data>
+        <data key="name">Test_Product</data>
+        <data key="sku">test_sku</data>
     </entity>
     <entity name="productWithSpecialCharacters" type="product" extends="_defaultProduct">
         <data key="name" unique="suffix">Product "!@#$%^&amp;*()+:;\|}{][?=~` </data>
