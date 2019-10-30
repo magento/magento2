@@ -129,7 +129,7 @@ define([
                  * Keep the tab actions restricted to the popup modal
                  * so the user must select an option to dismiss the modal
                  */
-                handleTabKey: function(event) {
+                handleTabKey: function (event) {
                     var modal = this;
                     var KEY_TAB = 9;
 
@@ -170,7 +170,7 @@ define([
                  *
                  * Esc key should not close modal
                  */
-                handleEscKey: function(event){
+                handleEscKey: function (event) {
                     event.preventDefault();
                 }
             }
