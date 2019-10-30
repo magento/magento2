@@ -8,6 +8,19 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="downloadableData" type="downloadable_data">
+        <data key="link_title">Downloadable Links</data>
+        <data key="sample_title">Downloadable Samples</data>
+    </entity>
+    <entity name="downloadableLink" type="downloadable_link">
+        <data key="title" unique="suffix">DownloadableLink</data>
+        <data key="price">2.00</data>
+        <data key="file_type">URL</data>
+        <data key="sample_type">Upload File</data>
+        <data key="shareable">No</data>
+        <data key="file">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="sample">magento-logo.png</data>
+    </entity>
     <entity name="ApiDownloadableLink" type="downloadable_link">
         <data key="title" unique="suffix">Api Downloadable Link</data>
         <data key="price">2.00</data>
@@ -16,5 +29,15 @@
         <data key="number_of_downloads">1000</data>
         <data key="sort_order">0</data>
         <data key="link_url">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+    </entity>
+    <entity name="downloadableLinkWithMaxDownloads" type="downloadable_link">
+        <data key="title" unique="suffix">Downloadable</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="sample_type">URL</data>
+        <data key="shareable">Yes</data>
+        <data key="max_downloads">100</data>
+        <data key="file">magento-logo.png</data>
+        <data key="sample">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
     </entity>
 </entities>

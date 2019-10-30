@@ -25,6 +25,8 @@ class MassAction extends AbstractComponent
     private $authorization;
 
     /**
+     * Constructor
+     *
      * @param AuthorizationInterface $authorization
      * @param ContextInterface $context
      * @param UiComponentInterface[] $components
@@ -50,7 +52,7 @@ class MassAction extends AbstractComponent
         foreach ($this->getChildComponents() as $actionComponent) {
             $actionType = $actionComponent->getConfiguration()['type'];
             if ($this->isActionAllowed($actionType)) {
-                $config['actions'][] = $actionComponent->getConfiguration();
+                $config['actions'][] = array_merge($actionComponent->getConfiguration(), ['__disableTmpl' => true]);
             }
         }
         $origConfig = $this->getConfiguration();
@@ -67,7 +69,7 @@ class MassAction extends AbstractComponent
     /**
      * @inheritdoc
      */
-    public function getComponentName(): string
+    public function getComponentName() : string
     {
         return static::NAME;
     }
@@ -78,7 +80,7 @@ class MassAction extends AbstractComponent
      * @param string $actionType
      * @return bool
      */
-    public function isActionAllowed(string $actionType): bool
+    public function isActionAllowed(string $actionType) : bool
     {
         $isAllowed = true;
         switch ($actionType) {

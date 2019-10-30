@@ -142,6 +142,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                     $values[] = [
                         'label' => str_repeat($nonEscapableNbspChar, 4) . $store->getName(),
                         'value' => $store->getId(),
+                        '__disableTmpl' => true,
                     ];
                 }
                 if ($groupShow) {
@@ -152,6 +153,12 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
                 }
             }
         }
+        array_walk(
+            $options,
+            function (&$item) {
+                $item['__disableTmpl'] = true;
+            }
+        );
         return $options;
     }
 

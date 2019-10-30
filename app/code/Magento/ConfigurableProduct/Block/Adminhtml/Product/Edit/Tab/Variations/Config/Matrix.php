@@ -412,6 +412,7 @@ class Matrix extends \Magento\Backend\Block\Template
                 'id' => $attribute->getAttributeId(),
                 'position' => $configurableAttributes[$attribute->getAttributeId()]['position'],
                 'chosen' => [],
+                '__disableTmpl' => true
             ];
             foreach ($attribute->getOptions() as $option) {
                 if (!empty($option->getValue())) {
