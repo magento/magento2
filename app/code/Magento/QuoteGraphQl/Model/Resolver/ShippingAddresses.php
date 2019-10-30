@@ -13,8 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\ExtractQuoteAddressData;
-use Magento\Framework\GraphQl\Schema\Type\TypeRegistry;
-use Magento\Framework\App\ObjectManager;
+use Magento\QuoteGraphQl\Model\Cart\ValidateAddressFromSchema;
 
 /**
  * @inheritdoc
@@ -27,20 +26,20 @@ class ShippingAddresses implements ResolverInterface
     private $extractQuoteAddressData;
 
     /**
-     * @var TypeRegistry
+     * @var ValidateAddressFromSchema
      */
-    private $typeRegistry;
+    private $validateAddressFromSchema;
 
     /**
      * @param ExtractQuoteAddressData $extractQuoteAddressData
-     * @param TypeRegistry|null $typeRegistry
+     * @param ValidateAddressFromSchema $validateAddressFromSchema
      */
     public function __construct(
         ExtractQuoteAddressData $extractQuoteAddressData,
-        TypeRegistry $typeRegistry = null
+        ValidateAddressFromSchema $validateAddressFromSchema
     ) {
         $this->extractQuoteAddressData = $extractQuoteAddressData;
-        $this->typeRegistry = $typeRegistry ?: ObjectManager::getInstance()->get(TypeRegistry::class);
+        $this->validateAddressFromSchema = $validateAddressFromSchema;
     }
 
     /**
@@ -61,36 +60,11 @@ class ShippingAddresses implements ResolverInterface
             foreach ($shippingAddresses as $shippingAddress) {
                 $address = $this->extractQuoteAddressData->execute($shippingAddress);
 
-                if ($this->validateAddressFromSchema($address)) {
+                if ($this->validateAddressFromSchema->execute($address)) {
                     $addressesData[] = $address;
                 }
             }
         }
         return $addressesData;
-    }
-
-    /**
-     * Validate data from address against mandatory fields from graphql schema for address
-     *
-     * @param array $address
-     * @return bool
-     */
-    private function validateAddressFromSchema(array $address) : bool
-    {
-        /** @var \Magento\Framework\GraphQL\Schema\Type\Input\InputObjectType $cartAddressInput */
-        $cartAddressInput = $this->typeRegistry->get('CartAddressInput');
-        $fields = $cartAddressInput->getFields();
-
-        foreach ($fields as $field) {
-            if ($field->getType() instanceof \Magento\Framework\GraphQL\Schema\Type\NonNull) {
-                // an array key has to exist but it's value should not be null
-                if (array_key_exists($field->name, $address)
-                    && !is_array($address[$field->name])
-                    && !isset($address[$field->name])) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }

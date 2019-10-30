@@ -1695,7 +1695,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_rowIsMain = false;
         }
 
-        return [$this->_rowProductId, $this->_rowStoreId, $this->_rowType, $this->_rowIsMain];
+        return true;
     }
 
     /**

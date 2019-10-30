@@ -13,11 +13,12 @@
             <description>Goes to the Storefront. Validates that the 2 provided Products appear in the correct order.</description>
         </annotations>
         <arguments>
+            <argument name="page" defaultValue="{{StorefrontHomePage.url}}" type="string"/>
             <argument name="product_1"/>
             <argument name="product_2"/>
         </arguments>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <amOnPage url="{{page}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" userInput="alt" stepKey="grabFirstProductName1_1"/>
         <assertEquals  expected="{{product_1.name}}" actual="($grabFirstProductName1_1)" message="notExpectedOrder" stepKey="compare1"/>

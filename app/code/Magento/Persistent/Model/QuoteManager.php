@@ -121,7 +121,6 @@ class QuoteManager
                 ->setCustomerEmail(null)
                 ->setCustomerFirstname(null)
                 ->setCustomerLastname(null)
-                ->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID)
                 ->setIsPersistent(false);
             $quote->getAddressesCollection()->walk('setCustomerAddressId', ['customerAddressId' => null]);
             $quote->getAddressesCollection()->walk('setCustomerId', ['customerId' => null]);
