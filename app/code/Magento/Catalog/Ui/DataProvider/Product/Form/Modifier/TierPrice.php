@@ -132,6 +132,7 @@ class TierPrice extends AbstractModifier
                                     'componentType' => Field::NAME,
                                     'formElement' => Select::NAME,
                                     'dataType' => 'text',
+                                    'labelVisible' => false,
                                     'component' => 'Magento_Catalog/js/tier-price/value-type-select',
                                     'prices' => [
                                         ProductPriceOptionsInterface::VALUE_FIXED => '${ $.parentName }.'
