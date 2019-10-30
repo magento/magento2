@@ -207,7 +207,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         $this->dataObjectHelper = $dataObjectHelper;
         $this->accountRedirect = $accountRedirect;
         $this->formKeyValidator = $formKeyValidator ?: ObjectManager::getInstance()->get(Validator::class);
-        $this->customerRepository = $customerRepository ? ObjectManager::getInstance()->get(CustomerRepository::class);
+        $this->customerRepository = $customerRepository ?: ObjectManager::getInstance()->get(CustomerRepository::class);
         parent::__construct($context);
     }
 
