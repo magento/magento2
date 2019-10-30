@@ -78,10 +78,13 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form = $this->_getFormInstance($args);
 
         $expectedStores = [
-            ['label' => 'Main Website', 'value' => []],
+            ['label' => 'Main Website', 'value' => [], '__disableTmpl' => true],
             [
                 'label' => '    Main Website Store',
-                'value' => [['label' => '    Default Store View', 'value' => 1]]
+                'value' => [
+                    ['label' => '    Default Store View', 'value' => 1, '__disableTmpl' => true]
+                ],
+                '__disableTmpl' => true,
             ],
         ];
         $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());
@@ -110,6 +113,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      *
      * @static
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function formPostInitDataProvider()
     {

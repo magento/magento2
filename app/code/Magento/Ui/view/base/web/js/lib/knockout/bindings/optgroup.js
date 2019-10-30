@@ -222,10 +222,14 @@ define([
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
-                    option = utils.template(optgroupTmpl, {
-                        label: arrayEntry[optionsText],
-                        title: arrayEntry[optionsText + 'title']
-                    });
+                    if (arrayEntry.__disableTmpl) {
+                        option = '<optgroup label="' + arrayEntry[optionsText] + '"></optgroup>';
+                    } else {
+                        option = utils.template(optgroupTmpl, {
+                            label: arrayEntry[optionsText],
+                            title: arrayEntry[optionsText + 'title']
+                        });
+                    }
                     option = ko.utils.parseHtmlFragment(option)[0];
 
                 } else {
@@ -305,6 +309,10 @@ define([
 
                     if (disabled) {
                         obj.disabled = disabled;
+                    }
+
+                    if (option.hasOwnProperty('__disableTmpl')) {
+                        obj.__disableTmpl = option.__disableTmpl;
                     }
 
                     label = label.replace(nbspRe, '').trim();

@@ -186,6 +186,11 @@
         <waitForElementVisible selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" stepKey="waitForSectionOpen"/>
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageAllowedValues}}" userInput="12,24,36" stepKey="seeDefaultValueAllowedNumberProductsPerPage"/>
         <seeInField selector="{{AdminCatalogStorefrontConfigSection.productsPerPageDefaultValue}}" userInput="12" stepKey="seeDefaultValueProductPerPage"/>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
         <!-- Open storefront on the category page -->
         <comment userInput="Open storefront on the category page" stepKey="commentOpenStorefront"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToStorefrontCreatedCategoryPage"/>

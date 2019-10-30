@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontImageColorWhenFilterByColorFilterTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Color image when filtering by color filter"/>
+            <title value="Image color when filtering by color filter on the Storefront"/>
+            <description value="Image color when filtering by color filter on the Storefront"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-18821"/>
+            <testCaseId value="MC-11531"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <!--Create category and configurable product with two options-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="visualSwatchAttribute"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <actionGroup ref="adminDataGridSelectPerPage" stepKey="selectNumberOfProductsPerPage">
+                <argument name="perPage" value="100"/>
+            </actionGroup>
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <!--Create visual swatch attribute-->
+        <actionGroup ref="AddVisualSwatchWithProductWithStorefrontPreviewImageConfigActionGroup" stepKey="addSwatchToProduct">
+            <argument name="attribute" value="visualSwatchAttribute"/>
+            <argument name="option1" value="visualSwatchOption1"/>
+            <argument name="option2" value="visualSwatchOption2"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <see userInput="Select Attributes" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeStepTitle"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <!--Add images to product attribute options-->
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="frontend_label" value="{{visualSwatchAttribute.default_label}}"/>
+            <argument name="label" value="{{visualSwatchOption1.default_label}}"/>
+        </actionGroup>
+        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwo">
+            <argument name="image" value="TestImageNew"/>
+            <argument name="frontend_label" value="{{visualSwatchAttribute.default_label}}"/>
+            <argument name="label" value="{{visualSwatchOption2.default_label}}"/>
+        </actionGroup>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}"  stepKey="clickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnGenerateProductsButton"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+
+        <!-- Perform reindex and flush cache -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!--Select any option in the Layered navigation and verify product image-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeOption">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+            <argument name="attributeDefaultLabel" value="{{visualSwatchAttribute.default_label}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption1.default_label)}}" stepKey="waitForOption"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption1.default_label)}}" stepKey="clickFirstOption"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabFirstOptionImg"/>
+        <assertContains expectedType="string" expected="{{MagentoLogo.filename}}" actualType="variable" actual="$grabFirstOptionImg" stepKey="assertProductFirstOptionImage"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeSideBarFilter"/>
+        <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeForSecondOption">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+            <argument name="attributeDefaultLabel" value="{{visualSwatchAttribute.default_label}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="waitForSecondOption"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="clickSecondOption"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabSecondOptionImg"/>
+        <assertContains expectedType="string" expected="{{TestImageNew.filename}}" actualType="variable" actual="$grabSecondOptionImg" stepKey="assertProductSecondOptionImage"/>
+    </test>
+</tests>

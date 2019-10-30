@@ -24,10 +24,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
-use Magento\ImportExport\Model\Import\Source\Csv;
 
 /**
  * Class ProductTest
@@ -98,7 +98,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             try {
                 $product = $productRepository->get($productSku, false, null, true);
                 $productRepository->delete($product);
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (NoSuchEntityException $e) {
                 // nothing to delete
             }
@@ -1744,7 +1744,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\ProductRepository::class)->get('simple');
-
+        $listOfProductUrlKeys = [
+            sprintf('%s.html', $product->getUrlKey()),
+            sprintf('men/tops/%s.html', $product->getUrlKey()),
+            sprintf('men/%s.html', $product->getUrlKey())
+        ];
         $repUrlRewriteCol = $this->objectManager->create(
             UrlRewriteCollection::class
         );
@@ -1754,18 +1758,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->addFieldToFilter('entity_id', ['eq'=> $product->getEntityId()])
             ->addFieldToFilter('entity_type', ['eq'=> 'product'])
             ->load();
+        $listOfUrlRewriteIds = $collUrlRewrite->getAllIds();
+        $this->assertCount(3, $collUrlRewrite);
 
-        $this->assertCount(2, $collUrlRewrite);
-
-        $this->assertEquals(
-            sprintf('%s.html', $product->getUrlKey()),
-            $collUrlRewrite->getFirstItem()->getRequestPath()
-        );
-
-        $this->assertContains(
-            sprintf('men/tops/%s.html', $product->getUrlKey()),
-            $collUrlRewrite->getLastItem()->getRequestPath()
-        );
+        foreach ($listOfUrlRewriteIds as $key => $id) {
+            $this->assertEquals(
+                $listOfProductUrlKeys[$key],
+                $collUrlRewrite->getItemById($id)->getRequestPath()
+            );
+        }
     }
 
     /**
@@ -2498,6 +2499,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
     {
+        $this->loginAdminUserWithUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -2579,5 +2582,23 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
+    }
+
+    /**
+     * Set the current admin session user based on a username
+     *
+     * @param string $username
+     */
+    private function loginAdminUserWithUsername(string $username)
+    {
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername($username);
+
+        /** @var $session \Magento\Backend\Model\Auth\Session */
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Auth\Session::class
+        );
+        $session->setUser($user);
     }
 }
