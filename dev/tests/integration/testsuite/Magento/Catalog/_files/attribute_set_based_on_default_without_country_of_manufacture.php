@@ -41,7 +41,7 @@ foreach ($attributeSet->getGroups() as $group) {
         $groupAttributes,
         function ($attribute) use ($attributeCountryOfManufacture) {
             /** @var ProductAttributeInterface $attribute */
-            return $attribute->getAttributeId() != $attributeCountryOfManufacture->getAttributeId();
+            return (int)$attribute->getAttributeId() !== (int)$attributeCountryOfManufacture->getAttributeId();
         }
     );
     if (count($newAttributes) < count($groupAttributes)) {
