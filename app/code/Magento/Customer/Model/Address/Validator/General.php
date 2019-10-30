@@ -41,7 +41,7 @@ class General implements ValidatorInterface
     public function validate(AbstractAddress $address)
     {
         $errors = array_merge(
-            $this->checkRequredFields($address),
+            $this->checkRequiredFields($address),
             $this->checkOptionalFields($address)
         );
 
@@ -55,7 +55,7 @@ class General implements ValidatorInterface
      * @return array
      * @throws \Zend_Validate_Exception
      */
-    private function checkRequredFields(AbstractAddress $address)
+    private function checkRequiredFields(AbstractAddress $address)
     {
         $errors = [];
         if (!\Zend_Validate::is($address->getFirstname(), 'NotEmpty')) {
