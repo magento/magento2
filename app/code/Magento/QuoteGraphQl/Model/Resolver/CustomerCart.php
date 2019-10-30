@@ -67,7 +67,7 @@ class CustomerCart implements ResolverInterface
             }
         } else {
             throw new LocalizedException(
-                __('User cannot access the cart unless loggedIn and with a valid token header')
+                __('User cannot access the cart unless loggedIn with a valid token header')
             );
         }
 
