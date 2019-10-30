@@ -17,7 +17,7 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
 
 /**
- * @inheritdoc
+ * Get cart id from the cart
  */
 class CartId implements ResolverInterface
 {
@@ -62,8 +62,8 @@ class CartId implements ResolverInterface
         /** @var Quote $cart */
         $cart = $value['model'];
         $cartId = (int) $cart->getId();
-        $maskedId = $this->getQuoteMaskId($cartId);
-        return $maskedId;
+        $maskedCartId = $this->getQuoteMaskId($cartId);
+        return $maskedCartId;
     }
 
     /**

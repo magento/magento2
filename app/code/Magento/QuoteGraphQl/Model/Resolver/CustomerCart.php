@@ -8,18 +8,16 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @inheritdoc
+ * Get cart for the customer
  */
 class CustomerCart implements ResolverInterface
 {
@@ -56,17 +54,10 @@ class CustomerCart implements ResolverInterface
 
         if ($isCustomerLoggedIn) {
             $cart = $this->cartManagement->getCartForCustomer($currentUserId);
-            $cartCustomerId = (int)$cart->getCustomerId();
 
             if (false === (bool)$cart->getIsActive()) {
                 throw new GraphQlNoSuchEntityException(
                     __('Current user does not have an active cart.')
-                );
-            }
-
-            if ($cartCustomerId !== $currentUserId) {
-                throw new GraphQlAuthorizationException(
-                    __('The current user cannot perform operations on cart')
                 );
             }
 
@@ -76,7 +67,7 @@ class CustomerCart implements ResolverInterface
             }
         } else {
             throw new LocalizedException(
-                __('User need to be loggedIn to access the cart')
+                __('User cannot access the cart unless loggedIn and with a valid token header')
             );
         }
 
