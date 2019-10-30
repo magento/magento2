@@ -78,7 +78,8 @@ class ExtractDataFromCategoryTree
      *
      * @param CategoryInterface $currentCategory
      * @param CategoryInterface $rootCategory
-     * @param $categoriesArray
+     * @param array $categoriesArray
+     * @return bool
      */
     private function areParentsActive(
         CategoryInterface $currentCategory,
