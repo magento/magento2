@@ -19,7 +19,7 @@
         <column xsi:type="varchar" name="subscriber_email" nullable="true" length="150" comment="Subscriber Email"/>
         <column xsi:type="int" name="subscriber_status" padding="11" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Subscriber Status"/>
-        <column xsi:type="varchar" name="subscriber_confirm_code" nullable="true" length="32"
+        <column xsi:type="varchar" name="subscriber_confirm_code" nullable="true" length="32" default="NULL"
                 comment="Subscriber Confirm Code"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="subscriber_id"/>

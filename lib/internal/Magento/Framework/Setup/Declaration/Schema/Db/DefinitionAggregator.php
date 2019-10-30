@@ -9,10 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Db;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Holds different definitions and apply them depends on column, constraint, index types.
- * Converts object to definition, and definition to array.
- *
- * @inheritdoc
+ * Holds different definitions and apply them depends on column, constraint, index types. Converts object to definition, and definition to array.
  */
 class DefinitionAggregator implements DbDefinitionProcessorInterface
 {
@@ -61,7 +58,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
 
         $definitionProcessor = $this->definitionProcessors[$type];
         if (isset($data['default'])) {
-            $data['default'] = $this->processDefaultValue($data['default']);
+            $data['default'] = $this->processDefaultValue($data);
         }
 
         return $definitionProcessor->fromDefinition($data);
@@ -70,42 +67,37 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     /**
      * Processes `$value` to be compatible with MySQL.
      *
-     * @param string|null|bool $value
+     * @param array $data
      * @return string|null|bool
      */
-    protected function processDefaultValue($value)
+    protected function processDefaultValue(array $data)
     {
-        //bail out if no default is set
-        if ($value === null || $value === false) {
-            return $value;
+        $defaultValue = $data['default'];
+        if ($defaultValue === null || $data['default'] === false) {
+            return $defaultValue;
+        }
+        if ($defaultValue === "NULL") {
+            return null;
+        }
+        if ($defaultValue === "'NULL'") {
+            return "NULL";
         }
         /*
          * MariaDB replaces some defaults by their respective functions, e.g. `DEFAULT CURRENT_TIMESTAMP` ends up being
          * `current_timestamp()`  in the information schema.
          */
-        $value = strtr(
-            $value,
+        $defaultValue = strtr(
+            $defaultValue,
             [
                 'current_timestamp()' => 'CURRENT_TIMESTAMP',
                 'curdate()' => 'CURRENT_DATE',
                 'curtime()' => 'CURRENT_TIME',
+                '0000-00-00 00:00:00' => '0'
             ]
         );
-
-        /*
-         * MariaDB replaces 0 defaults by 0000-00-00 00:00:00
-         */
-        $value = strtr(
-            $value,
-            ['0000-00-00 00:00:00' => '0']
-        );
         //replace escaped single quotes
-        $value = str_replace("'", "", $value);
-        //unquote NULL literal
-        if ($value === "NULL") {
-            $value = null;
-        }
+        $defaultValue = str_replace("'", "", $defaultValue);
 
-        return $value;
+        return $defaultValue;
     }
 }
