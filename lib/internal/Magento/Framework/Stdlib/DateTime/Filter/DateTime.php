@@ -9,17 +9,17 @@ namespace Magento\Framework\Stdlib\DateTime\Filter;
 use Magento\Framework\Locale\Resolver;
 
 /**
- * @var Resolver
- */
-private $localeResolver;
-
-/**
  * Date/Time filter. Converts datetime from localized to internal format.
  *
  * @api
  */
 class DateTime extends Date
 {
+    /**
+     * @var Resolver
+    */
+    private $localeResolver;
+
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      *
