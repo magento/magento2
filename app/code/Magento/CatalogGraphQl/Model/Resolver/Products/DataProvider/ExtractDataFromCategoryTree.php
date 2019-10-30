@@ -48,16 +48,18 @@ class ExtractDataFromCategoryTree
     public function execute(\Iterator $iterator): array
     {
         $tree = [];
+        /** @var CategoryInterface $rootCategory */
+        $rootCategory = $iterator->current();
         while ($iterator->valid()) {
-            /** @var CategoryInterface $category */
-            $category = $iterator->current();
+            /** @var CategoryInterface $currentCategory */
+            $currentCategory = $iterator->current();
             $iterator->next();
-            if ($category->getIsActive()) {
-                $pathElements = explode("/", $category->getPath());
+            if ($this->areParentsActive($currentCategory, $rootCategory, (array)$iterator)) {
+                $pathElements = explode("/", $currentCategory->getPath());
                 if (empty($tree)) {
                     $this->startCategoryFetchLevel = count($pathElements) - 1;
                 }
-                $this->iteratingCategory = $category;
+                $this->iteratingCategory = $currentCategory;
                 $currentLevelTree = $this->explodePathToArray($pathElements, $this->startCategoryFetchLevel);
                 if (empty($tree)) {
                     $tree = $currentLevelTree;
@@ -66,6 +68,34 @@ class ExtractDataFromCategoryTree
             }
         }
         return $tree;
+    }
+
+
+    /**
+     * Test that all parents of the current category are active
+     *
+     * Assumes that $categoriesArray are key-pair values and key is the ID of the category
+     *
+     * @param CategoryInterface $currentCategory
+     * @param CategoryInterface $rootCategory
+     * @param $categoriesArray
+     */
+    private function areParentsActive(
+        CategoryInterface $currentCategory,
+        CategoryInterface $rootCategory,
+        array $categoriesArray
+    ): bool {
+        if ($currentCategory === $rootCategory) {
+            return true;
+        } elseif (array_key_exists($currentCategory->getParentId(), $categoriesArray)) {
+            return $this->areParentsActive(
+                $categoriesArray[$currentCategory->getParentId()],
+                $rootCategory,
+                $categoriesArray
+            );
+        } else {
+            return false;
+        }
     }
 
     /**

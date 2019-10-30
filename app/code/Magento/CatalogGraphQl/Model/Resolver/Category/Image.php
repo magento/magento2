@@ -41,7 +41,7 @@ class Image implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            return null;
+            throw new LocalizedException(__('"model" value should be specified'));
         }
         /** @var \Magento\Catalog\Model\Category $category */
         $category = $value['model'];
