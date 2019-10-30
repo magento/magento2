@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
-use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
@@ -27,36 +29,20 @@ class CustomerCart implements ResolverInterface
     private $createEmptyCartForCustomer;
 
     /**
-     * @var MaskedQuoteIdToQuoteIdInterface
+     * @var CartManagementInterface
      */
-    private $maskedQuoteIdToQuoteId;
-
-    /**
-     * @var GetCartForUser
-     */
-    private $getCartForUser;
-
-    /**
-     * @var HttpContext
-     */
-    private $httpContext;
+    protected $cartManagement;
 
     /**
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
-     * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-     * @param HttpContext $httpContext
-     * @param GetCartForUser $getCartForUser
+     * @param CartManagementInterface $cartManagement
      */
     public function __construct(
         CreateEmptyCartForCustomer $createEmptyCartForCustomer,
-        HttpContext $httpContext,
-        MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        GetCartForUser $getCartForUser
+        CartManagementInterface $cartManagement
     ) {
         $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
-        $this->httpContext = $httpContext;
-         $this->getCartForUser = $getCartForUser;
+        $this->cartManagement = $cartManagement;
     }
 
     /**
@@ -64,18 +50,51 @@ class CustomerCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $customerId = $context->getUserId();
-        $predefinedMaskedQuoteId = null;
-        $maskedCartId = $this->createEmptyCartForCustomer->execute($customerId, $predefinedMaskedQuoteId);
+        $currentUserId = $context->getUserId();
+        $currentUserType = $context->getUserType();
+        $isCustomerLoggedIn = $this->isCustomer($currentUserId, $currentUserType);
 
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $customerId, $storeId);
+        if ($isCustomerLoggedIn) {
+            $cart = $this->cartManagement->getCartForCustomer($currentUserId);
+            $cartCustomerId = (int)$cart->getCustomerId();
 
-        if (empty($cart)){
-            $maskedCartId = $this->createEmptyCartForCustomer->execute($customerId, $predefinedMaskedQuoteId);
+            if (false === (bool)$cart->getIsActive()) {
+                throw new GraphQlNoSuchEntityException(
+                    __('Current user does not have an active cart.')
+                );
+            }
+
+            if ($cartCustomerId !== $currentUserId) {
+                throw new GraphQlAuthorizationException(
+                    __('The current user cannot perform operations on cart')
+                );
+            }
+
+            if (empty($cart)
+            ) {
+                $currentUserId = $this->createEmptyCartForCustomer->execute($currentUserId, null);
+                $cart = $this->cartManagement->getCartForCustomer($currentUserId);
+            }
+        } else {
+            throw new LocalizedException(
+                __('User need to be loggedIn to access the cart')
+            );
         }
+
         return [
-            'model' => $cart,
+            'model' => $cart
         ];
+    }
+
+    /**
+     * Checking if current user is logged
+     *
+     * @param int|null $customerId
+     * @param int|null $customerType
+     * @return bool
+     */
+    private function isCustomer(int $customerId, int $customerType): bool
+    {
+        return !empty($customerId) && !empty($customerType) && $customerType !== UserContextInterface::USER_TYPE_GUEST;
     }
 }
