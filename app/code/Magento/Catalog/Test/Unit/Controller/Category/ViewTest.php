@@ -25,7 +25,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $response;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Category|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryHelper;
 
@@ -165,13 +165,17 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->page));
 
-        $this->action = (new ObjectManager($this))->getObject(\Magento\Catalog\Controller\Category\View::class, [
-            'context' => $this->context,
-            'catalogDesign' => $this->catalogDesign,
-            'categoryRepository' => $this->categoryRepository,
-            'storeManager' => $this->storeManager,
-            'resultPageFactory' => $resultPageFactory
-        ]);
+        $this->action = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Controller\Category\View::class,
+            [
+                'context' => $this->context,
+                'catalogDesign' => $this->catalogDesign,
+                'categoryRepository' => $this->categoryRepository,
+                'storeManager' => $this->storeManager,
+                'resultPageFactory' => $resultPageFactory,
+                'categoryHelper' => $this->categoryHelper
+            ]
+        );
     }
 
     public function testApplyCustomLayoutUpdate()
@@ -179,19 +183,17 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $categoryId = 123;
         $pageLayout = 'page_layout';
 
-        $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
-            [\Magento\Catalog\Helper\Category::class, $this->categoryHelper],
-        ]));
-
-        $this->request->expects($this->any())->method('getParam')->will($this->returnValueMap([
-            [Action::PARAM_NAME_URL_ENCODED],
-            ['id', false, $categoryId],
-        ]));
+        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+            [
+                [Action::PARAM_NAME_URL_ENCODED],
+                ['id', false, $categoryId]
+            ]
+        );
 
         $this->categoryRepository->expects($this->any())->method('get')->with($categoryId)
             ->will($this->returnValue($this->category));
 
-        $this->categoryHelper->expects($this->any())->method('canShow')->will($this->returnValue(true));
+        $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
 
         $settings = $this->createPartialMock(
             \Magento\Framework\DataObject::class,

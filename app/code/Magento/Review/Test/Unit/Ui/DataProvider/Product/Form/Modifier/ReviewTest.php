@@ -8,7 +8,7 @@ namespace Magento\Review\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Ui\DataProvider\Product\Form\Modifier\Review;
-use \Magento\Framework\Module\Manager as ModuleManager;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
 /**

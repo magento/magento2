@@ -26,12 +26,16 @@
                 <requiredEntity createDataKey="categorySecond"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="categoryFirst" stepKey="deleteCategoryFirst"/>
             <deleteData createDataKey="categorySecond" stepKey="deleteCategorySecond"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
         <!-- Sign in as customer -->
