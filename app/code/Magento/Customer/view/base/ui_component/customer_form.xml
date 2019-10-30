@@ -152,8 +152,6 @@
             <argument name="data" xsi:type="array">
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">Group</item>
-                    <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="validateWholeGroup" xsi:type="boolean">true</item>
                 </item>
@@ -166,6 +164,7 @@
                     </item>
                 </argument>
                 <settings>
+                    <required>true</required>
                     <dataType>number</dataType>
                 </settings>
             </field>
