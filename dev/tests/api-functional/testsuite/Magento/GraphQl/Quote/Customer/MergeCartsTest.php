@@ -157,6 +157,7 @@ class MergeCartsTest extends GraphQlAbstract
      *
      * @param string $maskedId
      * @param array $headerMap
+     * @throws \Exception
      */
     private function addSimpleProductToCart(string $maskedId, array $headerMap): void
     {

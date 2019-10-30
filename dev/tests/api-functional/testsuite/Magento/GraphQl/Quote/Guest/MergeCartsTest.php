@@ -92,26 +92,4 @@ mutation {
 }
 QUERY;
     }
-
-    /**
-     * Get cart query
-     *
-     * @param string $maskedId
-     * @return string
-     */
-    private function getCartQuery(string $maskedId): string
-    {
-        return <<<QUERY
-{
-  cart(cart_id: "{$maskedId}") {
-    items {
-      quantity
-      product {
-        sku
-      }
-    }
-  }
-}
-QUERY;
-    }
 }
