@@ -269,12 +269,13 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithImageToDelete(): void
     {
         $product = $this->getProduct();
+        $image = $product->getImage();
         $this->updateProductGalleryImages($product, ['removed' => '1']);
         $this->updateHandler->execute($product);
         $productImages = $this->galleryResource->loadProductGalleryByAttributeId($product, $this->mediaAttributeId);
         $this->assertCount(0, $productImages);
         $this->assertFileNotExists(
-            $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . '/m/a/magento_image.jpg')
+            $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $image)
         );
         $defaultImages = $this->productResource->getAttributeRawValue(
             $product->getId(),
