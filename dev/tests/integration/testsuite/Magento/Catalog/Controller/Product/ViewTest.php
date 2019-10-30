@@ -41,8 +41,9 @@ class ViewTest extends AbstractController
     /**
      * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
      * @magentoConfigFixture current_store catalog/seo/product_canonical_tag 1
+     * @return void
      */
-    public function testViewActionWithCanonicalTag()
+    public function testViewActionWithCanonicalTag(): void
     {
         $this->markTestSkipped(
             'MAGETWO-40724: Canonical url from tests sometimes does not equal canonical url from action'

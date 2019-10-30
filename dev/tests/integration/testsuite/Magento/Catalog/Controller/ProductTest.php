@@ -34,6 +34,9 @@ class ProductTest extends AbstractController
     /** @var Session */
     private $session;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         if (defined('HHVM_VERSION')) {
@@ -73,6 +76,7 @@ class ProductTest extends AbstractController
     /**
      * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
      * @magentoAppArea frontend
+     * @return void
      */
     public function testViewAction(): void
     {
