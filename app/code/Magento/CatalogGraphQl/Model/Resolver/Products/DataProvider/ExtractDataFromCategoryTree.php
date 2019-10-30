@@ -70,7 +70,6 @@ class ExtractDataFromCategoryTree
         return $tree;
     }
 
-
     /**
      * Test that all parents of the current category are active.
      *
