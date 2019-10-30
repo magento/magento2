@@ -24,8 +24,8 @@ class ScheduleStatus extends AbstractRenderer
 
      /**
       * @param \Magento\Backend\Block\Context $context
-      * @param \Magento\Framework\Mview\ViewInterface $viewModel
       * @param \Magento\Framework\Escaper $escaper
+      * @param \Magento\Framework\Mview\ViewInterface $viewModel
       * @param array $data
       */
     public function __construct(
