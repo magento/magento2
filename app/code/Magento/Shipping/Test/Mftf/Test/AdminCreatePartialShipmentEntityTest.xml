@@ -13,6 +13,8 @@
             <stories value="Create Partial Shipment Entity"/>
             <title value="Create Partial Shipment for Offline Payment Methods"/>
             <description value="Admin Should be Able to Create Partial Shipments"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13331"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>

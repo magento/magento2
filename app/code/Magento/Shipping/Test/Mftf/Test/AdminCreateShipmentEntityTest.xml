@@ -13,6 +13,8 @@
             <stories value="Shipment Entity With Tracking Number"/>
             <title value="Create Shipment for Offline Payment Methods"/>
             <description value="Admin Should be Able to Create Shipments"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14330"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -56,7 +58,6 @@
             <argument name="Qty" value="1"/>
             <argument name="Comment" value="comments for shipment"/>
         </actionGroup>
-
         <!-- Assert There is no "Ship Button" in Order Information -->
         <actionGroup ref="AssertThereIsNoShipButtonActionGroup" stepKey="dontSeeShipButton"/>
         <!-- Assert Created Shipment in Shipments Tab-->
