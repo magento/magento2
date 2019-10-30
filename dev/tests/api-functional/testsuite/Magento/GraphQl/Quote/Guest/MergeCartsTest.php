@@ -42,8 +42,11 @@ class MergeCartsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testMergeGuestCarts()
     {
@@ -61,59 +64,31 @@ class MergeCartsTest extends GraphQlAbstract
         $secondMaskedId = $this->quoteIdToMaskedId->execute((int)$secondQuote->getId());
 
         $query = $this->getCartMergeMutation($firstMaskedId, $secondMaskedId);
-        $mergeResponse = $this->graphQlMutation($query);
-
-        self::assertArrayHasKey('mergeCarts', $mergeResponse);
-        $maskedQuoteId = $mergeResponse['mergeCarts'];
-        self::assertNotEquals($firstMaskedId, $maskedQuoteId);
-        self::assertNotEquals($secondMaskedId, $maskedQuoteId);
-
-        $cartResponse = $this->graphQlMutation($this->getCartQuery($maskedQuoteId));
-
-        self::assertArrayHasKey('cart', $cartResponse);
-        self::assertArrayHasKey('items', $cartResponse['cart']);
-        self::assertCount(2, $cartResponse['cart']['items']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot perform operations on cart
-     */
-    public function testMergeGuestWithCustomerCart()
-    {
-        $firstQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($firstQuote, 'test_order_with_virtual_product_without_address', 'reserved_order_id');
-
-        $secondQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($secondQuote, 'test_quote', 'reserved_order_id');
-
-        $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
-        $secondMaskedId = $this->quoteIdToMaskedId->execute((int)$secondQuote->getId());
-
-        $query = $this->getCartMergeMutation($firstMaskedId, $secondMaskedId);
         $this->graphQlMutation($query);
     }
 
     /**
      * Create the mergeCart mutation
      *
-     * @param string $firstMaskedId
-     * @param string $secondMaskedId
+     * @param string $guestQuoteMaskedId
+     * @param string $customerQuoteMaskedId
      * @return string
      */
-    private function getCartMergeMutation(string $firstMaskedId, string $secondMaskedId): string
+    private function getCartMergeMutation(string $guestQuoteMaskedId, string $customerQuoteMaskedId): string
     {
         return <<<QUERY
 mutation {
-  mergeCarts(input: {
-    first_cart_id: "{$firstMaskedId}"
-    second_cart_id: "{$secondMaskedId}"
-  })
+  mergeCarts(
+    source_cart_id: "{$guestQuoteMaskedId}"
+    destination_cart_id: "{$customerQuoteMaskedId}"
+  ){
+  items {
+      quantity
+      product {
+        sku
+      }
+    }
+  }
 }
 QUERY;
     }

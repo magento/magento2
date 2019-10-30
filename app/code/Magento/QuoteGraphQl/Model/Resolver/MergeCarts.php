@@ -13,6 +13,8 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 
 /**
  * Merge Carts Resolver
@@ -52,6 +54,11 @@ class MergeCarts implements ResolverInterface
 
         if (empty($args['destination_cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "destination_cart_id" is missing'));
+        }
+
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
         $guestMaskedCartId = $args['source_cart_id'];

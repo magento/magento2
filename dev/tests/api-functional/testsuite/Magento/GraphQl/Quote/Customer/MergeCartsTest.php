@@ -64,28 +64,31 @@ class MergeCartsTest extends GraphQlAbstract
      */
     public function testMergeGuestWithCustomerCart()
     {
-        $firstQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
+        $customerQuote = $this->quoteFactory->create();
+        $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
 
-        $secondQuote = $this->quoteFactory->create();
+        $guestQuote = $this->quoteFactory->create();
         $this->quoteResource->load(
-            $secondQuote,
+            $guestQuote,
             'test_order_with_virtual_product_without_address',
             'reserved_order_id'
         );
 
-        $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
-        $secondMaskedId = $this->quoteIdToMaskedId->execute((int)$secondQuote->getId());
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$customerQuote->getId());
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestQuote->getId());
 
-        $query = $this->getCartMergeMutation($firstMaskedId, $secondMaskedId);
+        $query = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
         $mergeResponse = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
         self::assertArrayHasKey('mergeCarts', $mergeResponse);
-        $maskedQuoteId = $mergeResponse['mergeCarts'];
-        self::assertNotEquals($firstMaskedId, $maskedQuoteId);
-        self::assertNotEquals($secondMaskedId, $maskedQuoteId);
-
-        $cartResponse = $this->graphQlMutation($this->getCartQuery($maskedQuoteId), [], '', $this->getHeaderMap());
+        $cartResponse = $mergeResponse['mergeCarts'];
+        self::assertArrayHasKey('items', $cartResponse);
+        self::assertCount(2, $cartResponse['items']);
+        $cartResponse = $this->graphQlMutation(
+            $this->getCartQuery($customerQuoteMaskedId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
 
         self::assertArrayHasKey('cart', $cartResponse);
         self::assertArrayHasKey('items', $cartResponse['cart']);
@@ -98,6 +101,8 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Current user does not have an active cart.
      */
     public function testMergeTwoCustomerCarts()
     {
@@ -116,23 +121,7 @@ class MergeCartsTest extends GraphQlAbstract
         $this->addSimpleProductToCart($secondMaskedId, $this->getHeaderMap());
 
         $query = $this->getCartMergeMutation($firstMaskedId, $secondMaskedId);
-        $mergeResponse = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('mergeCarts', $mergeResponse);
-        $maskedQuoteId = $mergeResponse['mergeCarts'];
-        self::assertNotEquals($firstMaskedId, $maskedQuoteId);
-        self::assertNotEquals($secondMaskedId, $maskedQuoteId);
-
-        $cartResponse = $this->graphQlMutation($this->getCartQuery($maskedQuoteId), [], '', $this->getHeaderMap());
-
-        self::assertArrayHasKey('cart', $cartResponse);
-        self::assertArrayHasKey('items', $cartResponse['cart']);
-        self::assertCount(1, $cartResponse['cart']['items']);
-
-        $item = $cartResponse['cart']['items'][0];
-        self::assertArrayHasKey('quantity', $item);
-        self::assertArrayHasKey('product', $item);
-        self::assertArrayHasKey('sku', $item['product']);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -186,18 +175,25 @@ class MergeCartsTest extends GraphQlAbstract
     /**
      * Create the mergeCart mutation
      *
-     * @param string $firstMaskedId
-     * @param string $secondMaskedId
+     * @param string $guestQuoteMaskedId
+     * @param string $customerQuoteMaskedId
      * @return string
      */
-    private function getCartMergeMutation(string $firstMaskedId, string $secondMaskedId): string
+    private function getCartMergeMutation(string $guestQuoteMaskedId, string $customerQuoteMaskedId): string
     {
         return <<<QUERY
 mutation {
-  mergeCarts(input: {
-    first_cart_id: "{$firstMaskedId}"
-    second_cart_id: "{$secondMaskedId}"
-  })
+  mergeCarts(
+    source_cart_id: "{$guestQuoteMaskedId}"
+    destination_cart_id: "{$customerQuoteMaskedId}"
+  ){
+  items {
+      quantity
+      product {
+        sku
+      }
+    }
+  }
 }
 QUERY;
     }
