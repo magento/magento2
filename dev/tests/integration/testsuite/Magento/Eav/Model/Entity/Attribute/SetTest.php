@@ -21,6 +21,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Provides tests for attribute set model saving.
+ *
+ * @magentoDbIsolation enabled
  */
 class SetTest extends \PHPUnit\Framework\TestCase
 {
@@ -72,10 +74,10 @@ class SetTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->setRepository = $this->objectManager->get(AttributeSetRepositoryInterface::class);
-        $this->groupRepository = Bootstrap::getObjectManager()->create(AttributeGroupRepositoryInterface::class);
+        $this->groupRepository = $this->objectManager->create(AttributeGroupRepositoryInterface::class);
         $this->config = $this->objectManager->get(Config::class);
         $this->defaultSetId = (int)$this->config->getEntityType(Product::ENTITY)->getDefaultAttributeSetId();
-        $this->criteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $this->criteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $this->attributeSetResource = $this->objectManager->get(AttributeSetResource::class);
         $this->attributeCollectionFactory = $this->objectManager->get(CollectionFactory ::class);
     }
@@ -83,7 +85,6 @@ class SetTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Eav/_files/attribute_with_options.php
      * @dataProvider addAttributeToSetDataProvider
-     * @magentoDbIsolation enabled
      * @param string $groupName
      * @param string $attributeCode
      * @return void
@@ -140,7 +141,6 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @return void
      */
     public function testSaveWithChangedGroupSorting(): void
@@ -163,7 +163,6 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @return void
      */
     public function testSaveWithRemovedGroup(): void
@@ -188,7 +187,6 @@ class SetTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @return void
      */
     public function testSaveWithRemovedAttribute(): void
