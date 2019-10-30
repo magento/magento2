@@ -139,7 +139,9 @@ class Attribute implements LayerBuilderInterface
     private function getAttributeOptions(AggregationInterface $aggregation): array
     {
         $attributeOptionIds = [];
+        $attributes = [];
         foreach ($this->getAttributeBuckets($aggregation) as $bucket) {
+            $attributes[] = \preg_replace('~_bucket$~', '', $bucket->getName());
             $attributeOptionIds[] = \array_map(
                 function (AggregationValueInterface $value) {
                     return $value->getValue();
@@ -152,6 +154,6 @@ class Attribute implements LayerBuilderInterface
             return [];
         }
 
-        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds));
+        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds), $attributes);
     }
 }
