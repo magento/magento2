@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
+use Magento\Framework\Locale\Resolver;
 
 /**
  * Date/Time filter. Converts datetime from localized to internal format.
@@ -13,12 +14,18 @@ namespace Magento\Framework\Stdlib\DateTime\Filter;
 class DateTime extends Date
 {
     /**
+     * @var Resolver
+    */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      *
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
+    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, Resolver $localeResolver)
     {
         parent::__construct($localeDate);
+        $this->localeResolver = $localeResolver;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
                 'date_format' => $this->_localeDate->getDateTimeFormat(
@@ -41,7 +48,10 @@ class DateTime extends Date
      */
     public function filter($value)
     {
+        $currentLocaleCode = $this->localeResolver->getLocale();
+
         try {
+            $value = $this->_localeDate->formatDateTime($value, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT, $currentLocaleCode, null, null);
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
