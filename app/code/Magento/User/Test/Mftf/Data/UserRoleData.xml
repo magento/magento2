@@ -52,6 +52,7 @@
         <data key="name">restrictedWebsiteRole</data>
         <data key="rolename">restrictedWebsiteRole</data>
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="all">0</data>
         <data key="gws_is_all">0</data>
         <array key="gws_websites">
             <item>1</item>
@@ -87,5 +88,15 @@
             <item>Magento_Backend::global_search</item>
             <item>Magento_Backend::system</item>
         </array>
+    </entity>
+    <entity name="adminProductInWebsiteRole" type="user_role">
+        <data key="rolename" unique="suffix">restrictedWebsiteRole</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="all">0</data>
+    </entity>
+    <entity name="adminRestrictedProductRole" type="user_role">
+        <data key="rolename" unique="suffix">restrictedCatalogRole</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="all">0</data>
     </entity>
 </entities>
