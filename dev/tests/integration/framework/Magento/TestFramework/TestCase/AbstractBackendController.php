@@ -42,6 +42,13 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     protected $httpMethod;
 
     /**
+     * Expected no access response
+     *
+     * @var int
+     */
+    protected $expectedNoAccessResponse = 403;
+
+    /**
      * @inheritDoc
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
@@ -130,6 +137,6 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
             ->getAcl()
             ->deny(null, $this->resource);
         $this->dispatch($this->uri);
-        $this->assertSame(403, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame($this->expectedNoAccessResponse, $this->getResponse()->getHttpResponseCode());
     }
 }
