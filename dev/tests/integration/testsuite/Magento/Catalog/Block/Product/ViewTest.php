@@ -29,7 +29,7 @@ class ViewTest extends TestCase
     private $objectManager;
 
     /** @var View */
-    private $_block;
+    private $block;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
@@ -49,7 +49,7 @@ class ViewTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->_block = $this->objectManager->create(View::class);
+        $this->block = $this->objectManager->create(View::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->registry = $this->objectManager->get(Registry::class);
@@ -74,13 +74,13 @@ class ViewTest extends TestCase
         $product = $this->productRepository->get('simple');
         $this->registerProduct($product);
 
-        $this->assertNotEmpty($this->_block->getProduct()->getId());
-        $this->assertEquals($product->getId(), $this->_block->getProduct()->getId());
+        $this->assertNotEmpty($this->block->getProduct()->getId());
+        $this->assertEquals($product->getId(), $this->block->getProduct()->getId());
 
         $this->registry->unregister('product');
-        $this->_block->setProductId($product->getId());
+        $this->block->setProductId($product->getId());
 
-        $this->assertEquals($product->getId(), $this->_block->getProduct()->getId());
+        $this->assertEquals($product->getId(), $this->block->getProduct()->getId());
     }
 
     /**
@@ -88,7 +88,7 @@ class ViewTest extends TestCase
      */
     public function testCanEmailToFriend(): void
     {
-        $this->assertFalse($this->_block->canEmailToFriend());
+        $this->assertFalse($this->block->canEmailToFriend());
     }
 
     /**
@@ -97,7 +97,7 @@ class ViewTest extends TestCase
     public function testGetAddToCartUrl(): void
     {
         $product = $this->productRepository->get('simple');
-        $url = $this->_block->getAddToCartUrl($product);
+        $url = $this->block->getAddToCartUrl($product);
 
         $this->assertStringMatchesFormat(
             '%scheckout/cart/add/%sproduct/' . $product->getId() . '/',
@@ -112,7 +112,7 @@ class ViewTest extends TestCase
     {
         $product = $this->productRepository->get('simple');
         $this->registerProduct($product);
-        $config = $this->json->unserialize($this->_block->getJsonConfig());
+        $config = $this->json->unserialize($this->block->getJsonConfig());
 
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
@@ -127,7 +127,7 @@ class ViewTest extends TestCase
         $product = $this->productRepository->get('simple');
         $this->registerProduct($product);
 
-        $this->assertTrue($this->_block->hasOptions());
+        $this->assertTrue($this->block->hasOptions());
     }
 
     /**
@@ -138,7 +138,7 @@ class ViewTest extends TestCase
         $product = $this->productRepository->get('simple');
         $this->registerProduct($product);
 
-        $this->assertTrue($this->_block->hasRequiredOptions());
+        $this->assertTrue($this->block->hasRequiredOptions());
     }
 
     /**
@@ -148,7 +148,7 @@ class ViewTest extends TestCase
     {
         $this->markTestSkipped("Functionality not implemented in Magento 1.x. Implemented in Magento 2");
 
-        $this->assertFalse($this->_block->startBundleCustomization());
+        $this->assertFalse($this->block->startBundleCustomization());
     }
 
     /**
@@ -160,8 +160,8 @@ class ViewTest extends TestCase
     {
         $outOfStockProduct = $this->productRepository->get('simple-out-of-stock');
         $this->registerProduct($outOfStockProduct);
-        $this->_block->setTemplate('Magento_Catalog::product/view/addtocart.phtml');
-        $output = $this->_block->toHtml();
+        $this->block->setTemplate('Magento_Catalog::product/view/addtocart.phtml');
+        $output = $this->block->toHtml();
 
         $this->assertNotContains((string)__('Add to Cart'), $output);
     }
@@ -173,8 +173,8 @@ class ViewTest extends TestCase
     {
         $product = $this->productRepository->get('simple');
         $this->registerProduct($product);
-        $this->_block->setTemplate('Magento_Catalog::product/view/addtocart.phtml');
-        $output = $this->_block->toHtml();
+        $this->block->setTemplate('Magento_Catalog::product/view/addtocart.phtml');
+        $output = $this->block->toHtml();
 
         $this->assertContains((string)__('Add to Cart'), $output);
     }

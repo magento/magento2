@@ -20,7 +20,6 @@ use Magento\TestFramework\TestCase\AbstractController;
  *
  * @see \Magento\Catalog\Controller\Product
  *
- * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  */
 class ProductTest extends AbstractController
