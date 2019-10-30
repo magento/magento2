@@ -11,6 +11,9 @@ use Magento\Cms\Model\GetPageByIdentifier;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Get CMS Page test
+ */
 class CmsPageTest extends GraphQlAbstract
 {
     /**
@@ -51,6 +54,28 @@ QUERY;
     }
 
     /**
+     * Verify the fields of CMS Page selected by page_id
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/pages.php
+     */
+    public function testGetCmsPageByIdentifier()
+    {
+        $cmsPageIdentifier = 'page100';
+
+        $query =
+            <<<QUERY
+{
+  cmsPage(identifier: "$cmsPageIdentifier") {
+    identifier
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals($cmsPageIdentifier, $response['cmsPage']['identifier']);
+    }
+
+    /**
      * Verify the message when page_id is not specified.
      */
     public function testGetCmsPageWithoutId()
@@ -72,7 +97,7 @@ QUERY;
 QUERY;
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Page id should be specified');
+        $this->expectExceptionMessage('Page id/identifier should be specified');
         $this->graphQlQuery($query);
     }
 
@@ -103,6 +128,32 @@ QUERY;
     }
 
     /**
+     * Verify the message when identifier does not exist.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The CMS page with the "" ID doesn't exist.
+     */
+    public function testGetCmsPageByNonExistentIdentifier()
+    {
+        $query =
+            <<<QUERY
+{
+  cmsPage(identifier: "") {
+    url_key
+    title
+    content
+    content_heading
+    page_layout
+    meta_title
+    meta_description
+    meta_keywords
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Verify the message when CMS Page selected by page_id is disabled
      *
      * @magentoApiDataFixture Magento/Cms/_files/noroute.php
@@ -128,6 +179,34 @@ QUERY;
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No such entity.');
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * Verify the message when CMS Page selected by identifier is disabled
+     *
+     * @magentoApiDataFixture Magento/Cms/_files/noroute.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The CMS page with the "no-route" ID doesn't exist.
+     */
+    public function testGetDisabledCmsPageByIdentifier()
+    {
+        $cmsPageIdentifier = 'no-route';
+        $query =
+            <<<QUERY
+{
+  cmsPage(identifier: "$cmsPageIdentifier") {
+    url_key
+    title
+    content
+    content_heading
+    page_layout
+    meta_title
+    meta_description
+    meta_keywords
+  }
+}
+QUERY;
         $this->graphQlQuery($query);
     }
 }

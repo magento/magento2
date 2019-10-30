@@ -200,11 +200,13 @@ class BaseFinalPrice
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
-        $finalPrice = $connection->getLeastSql([
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -221,11 +223,8 @@ class BaseFinalPrice
         $select->where("e.type_id = ?", $productType);
 
         if ($entityIds !== null) {
-            if (count($entityIds) > 1) {
-                $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
-            } else {
-                $select->where('e.entity_id = ?', $entityIds);
-            }
+            $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
+            $select->where('e.entity_id IN(?)', $entityIds);
         }
 
         /**
@@ -265,7 +264,8 @@ class BaseFinalPrice
                 ]
             ),
             'NULL',
-            $this->getConnection()->getLeastSql([
+            $this->getConnection()->getLeastSql(
+                [
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -282,7 +282,8 @@ class BaseFinalPrice
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
-            ])
+                ]
+            )
         );
     }
 

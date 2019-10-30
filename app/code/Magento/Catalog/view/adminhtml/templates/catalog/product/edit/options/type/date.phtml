@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Date */ ?>
 <script id="custom-option-date-type-template" type="text/x-magento-template">
@@ -14,10 +12,10 @@
             <thead>
             <tr class="headings">
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th><?= /* @escapeNotVerified */ __('Price') ?></th>
-                <th><?= /* @escapeNotVerified */ __('Price Type') ?></th>
+                <th><?= $block->escapeHtml(__('Price')) ?></th>
+                <th><?= $block->escapeHtml(__('Price Type')) ?></th>
                 <?php endif; ?>
-                <th><?= /* @escapeNotVerified */ __('SKU') ?></th>
+                <th><?= $block->escapeHtml(__('SKU')) ?></th>
             </tr>
             </thead>
             <tr>

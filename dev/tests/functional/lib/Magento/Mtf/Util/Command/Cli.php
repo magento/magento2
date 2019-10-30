@@ -8,6 +8,7 @@ namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
  * Perform bin/magento commands from command line for functional tests executions.
@@ -17,7 +18,7 @@ class Cli
     /**
      * Url to command.php.
      */
-    const URL = 'dev/tests/functional/utils/command.php';
+    const URL = '/dev/tests/functional/utils/command.php';
 
     /**
      * Curl transport protocol.
@@ -27,11 +28,20 @@ class Cli
     private $transport;
 
     /**
-     * @param CurlTransport $transport
+     * Webapi handler.
+     *
+     * @var WebapiDecorator
      */
-    public function __construct(CurlTransport $transport)
+    private $webapiHandler;
+
+    /**
+     * @param CurlTransport $transport
+     * @param WebapiDecorator $webapiHandler
+     */
+    public function __construct(CurlTransport $transport, WebapiDecorator $webapiHandler)
     {
         $this->transport = $transport;
+        $this->webapiHandler = $webapiHandler;
     }
 
     /**
@@ -43,22 +53,31 @@ class Cli
      */
     public function execute($command, $options = [])
     {
-        $curl = $this->transport;
-        $curl->write($this->prepareUrl($command, $options), [], CurlInterface::GET);
-        $curl->read();
-        $curl->close();
+        $this->transport->write(
+            rtrim(str_replace('index.php', '', $_ENV['app_frontend_url']), '/') . self::URL,
+            $this->prepareParamArray($command, $options),
+            CurlInterface::POST,
+            []
+        );
+        $this->transport->read();
+        $this->transport->close();
     }
 
     /**
-     * Prepare url.
+     * Prepare parameter array.
      *
      * @param string $command
      * @param array $options [optional]
-     * @return string
+     * @return array
      */
-    private function prepareUrl($command, $options = [])
+    private function prepareParamArray($command, $options = [])
     {
-        $command .= ' ' . implode(' ', $options);
-        return $_ENV['app_frontend_url'] . self::URL . '?command=' . urlencode($command);
+        if (!empty($options)) {
+            $command .= ' ' . implode(' ', $options);
+        }
+        return [
+            'token' => urlencode($this->webapiHandler->getWebapiToken()),
+            'command' => urlencode($command)
+        ];
     }
 }

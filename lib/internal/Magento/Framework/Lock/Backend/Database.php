@@ -20,6 +20,14 @@ use Magento\Framework\Phrase;
 class Database implements \Magento\Framework\Lock\LockManagerInterface
 {
     /**
+     * Max time for lock is 1 week
+     *
+     * MariaDB does not support negative timeout value to get infinite timeout,
+     * so we set 1 week for lock timeout
+     */
+    private const MAX_LOCK_TIME = 604800;
+
+    /**
      * @var ResourceConnection
      */
     private $resource;
@@ -68,7 +76,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
-        };
+        }
         $name = $this->addPrefix($name);
 
         /**
@@ -87,7 +95,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
 
         $result = (bool)$this->resource->getConnection()->query(
             "SELECT GET_LOCK(?, ?);",
-            [(string)$name, (int)$timeout]
+            [$name, $timeout < 0 ? self::MAX_LOCK_TIME : $timeout]
         )->fetchColumn();
 
         if ($result === true) {
@@ -109,7 +117,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         if (!$this->deploymentConfig->isDbAvailable()) {
             return true;
-        };
+        }
 
         $name = $this->addPrefix($name);
 
@@ -137,13 +145,13 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
     {
         if (!$this->deploymentConfig->isDbAvailable()) {
             return false;
-        };
+        }
 
         $name = $this->addPrefix($name);
 
         return (bool)$this->resource->getConnection()->query(
             "SELECT IS_USED_LOCK(?);",
-            [(string)$name]
+            [$name]
         )->fetchColumn();
     }
 

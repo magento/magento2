@@ -142,6 +142,12 @@ class Fields implements FormatterInterface
             $fieldConfig['description'] = $field->getDescription();
         }
 
+        if (!empty($field->getDeprecated())) {
+            if (isset($field->getDeprecated()['reason'])) {
+                $fieldConfig['deprecationReason'] = $field->getDeprecated()['reason'];
+            }
+        }
+
         if ($field->getResolver() != null) {
             /** @var ResolverInterface $resolver */
             $resolver = $this->objectManager->get($field->getResolver());

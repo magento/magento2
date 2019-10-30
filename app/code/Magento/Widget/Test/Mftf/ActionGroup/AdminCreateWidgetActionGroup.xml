@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
    <actionGroup name="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>Goes to the Admin Widget creation page. Creates the provided Widget.</description>
+       </annotations>
        <arguments>
            <argument name="widget"/>
        </arguments>
+
        <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="amOnAdminNewWidgetPage"/>
        <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
        <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
@@ -29,6 +33,10 @@
 
    <!--Create Product List Widget-->
    <actionGroup name="AdminCreateProductsListWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget. Validates that the Success Message is present and correct.</description>
+       </annotations>
+
        <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
        <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}" stepKey="selectCondition"/>
        <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
@@ -38,21 +46,29 @@
        <click selector="{{AdminNewWidgetSection.selectAll}}" stepKey="clickSelectAll"/>
        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
-       <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+       <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
    </actionGroup>
 
    <!--Create Dynamic Block Rotate Widget-->
    <actionGroup name="AdminCreateDynamicBlocksRotatorWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Dynamic Block Rotate Widget.</description>
+       </annotations>
+
        <selectOption selector="{{AdminNewWidgetSection.displayMode}}" userInput="{{widget.display_mode}}" stepKey="selectDisplayMode"/>
        <selectOption selector="{{AdminNewWidgetSection.restrictTypes}}" userInput="{{widget.restrict_type}}" stepKey="selectRestrictType"/>
        <click selector="{{AdminNewWidgetSection.saveAndContinue}}" stepKey="clickSaveWidget"/>
-       <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+       <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
    </actionGroup>
 
    <actionGroup name="AdminDeleteWidgetActionGroup">
+       <annotations>
+           <description>Goes to the Admin Widget grid page. Deletes the provided Widget. Validates that the Success Message is present and correct.</description>
+       </annotations>
        <arguments>
            <argument name="widget"/>
        </arguments>
+
        <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin"/>
        <waitForPageLoad stepKey="waitWidgetsLoad"/>
        <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
@@ -63,12 +79,17 @@
        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
        <waitForPageLoad stepKey="waitForDeleteLoad"/>
-       <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been deleted" stepKey="seeSuccess"/>
+       <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been deleted" stepKey="seeSuccess"/>
    </actionGroup>
+
     <actionGroup name="AdminCreateProductLinkWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget using the provided Product. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <selectOption selector="{{AdminNewWidgetSection.selectTemplate}}" userInput="{{widget.template}}" after="waitForPageLoad" stepKey="setTemplate"/>
         <waitForAjaxLoad after="setTemplate" stepKey="waitForPageLoad2"/>
         <click selector="{{AdminNewWidgetSection.selectProduct}}" after="clickWidgetOptions" stepKey="clickSelectProduct"/>
@@ -76,6 +97,6 @@
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" after="fillProductNameInFilter" stepKey="applyFilter"/>
         <click selector="{{AdminNewWidgetSelectProductPopupSection.firstRow}}" after="applyFilter" stepKey="selectProduct"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

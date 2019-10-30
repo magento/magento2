@@ -19,7 +19,6 @@ type Attribute @doc(description: "Attribute contains the attribute_type of the s
 }
 input FilterTypeInput @doc(description:"Comment for FilterTypeInput") {
     eq: String @doc(description:"Equal")
-    finset: [String]
     from: String
     gt: String
     gteq: String

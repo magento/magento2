@@ -20,4 +20,8 @@
         <data key="store_id">0</data>
         <data key="label" unique="suffix">attributeThree</data>
     </entity>
+    <entity name="ProductAttributeFrontendLabelForExportImport" type="FrontendLabel">
+        <data key="store_id">0</data>
+        <data key="label">attributeExportImport</data>
+    </entity>
 </entities>

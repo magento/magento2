@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -42,7 +43,104 @@ class CreateCustomerAddressTest extends GraphQlAbstract
      */
     public function testCreateCustomerAddress()
     {
-        $customerId = 1;
+        $newAddress = [
+            'region' => [
+                'region' => 'Arizona',
+                'region_id' => 4,
+                'region_code' => 'AZ'
+            ],
+            'country_code' => 'US',
+            'street' => ['Line 1 Street', 'Line 2'],
+            'company' => 'Company name',
+            'telephone' => '123456789',
+            'fax' => '123123123',
+            'postcode' => '7777',
+            'city' => 'City Name',
+            'firstname' => 'Adam',
+            'lastname' => 'Phillis',
+            'middlename' => 'A',
+            'prefix' => 'Mr.',
+            'suffix' => 'Jr.',
+            'vat_id' => '1',
+            'default_shipping' => true,
+            'default_billing' => false
+        ];
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress(input: {
+    region: {
+        region: "{$newAddress['region']['region']}"
+        region_id: {$newAddress['region']['region_id']}
+        region_code: "{$newAddress['region']['region_code']}"
+    }
+    country_code: {$newAddress['country_code']}
+    street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
+    company: "{$newAddress['company']}"
+    telephone: "{$newAddress['telephone']}"
+    fax: "{$newAddress['fax']}"
+    postcode: "{$newAddress['postcode']}"
+    city: "{$newAddress['city']}"
+    firstname: "{$newAddress['firstname']}"
+    lastname: "{$newAddress['lastname']}"
+    middlename: "{$newAddress['middlename']}"
+    prefix: "{$newAddress['prefix']}"
+    suffix: "{$newAddress['suffix']}"
+    vat_id: "{$newAddress['vat_id']}"
+    default_shipping: true
+    default_billing: false
+  }) {
+    id
+    customer_id
+    region {
+      region
+      region_id
+      region_code
+    }
+    country_code
+    street
+    company
+    telephone
+    fax
+    postcode
+    city
+    firstname
+    lastname
+    middlename
+    prefix
+    suffix
+    vat_id
+    default_shipping
+    default_billing
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->assertArrayHasKey('createCustomerAddress', $response);
+        $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
+        $this->assertEquals(null, $response['createCustomerAddress']['customer_id']);
+        $this->assertArrayHasKey('id', $response['createCustomerAddress']);
+
+        $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
+        $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
+        $address->setCustomerId(null);
+        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
+        $this->assertCustomerAddressesFields($address, $newAddress);
+    }
+
+    /**
+     * Test case for deprecated `country_id` field.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateCustomerAddressWithCountryId()
+    {
         $newAddress = [
             'region' => [
                 'region' => 'Arizona',
@@ -91,28 +189,7 @@ mutation {
     default_shipping: true
     default_billing: false
   }) {
-    id
-    customer_id
-    region {
-      region
-      region_id
-      region_code
-    }
     country_id
-    street
-    company
-    telephone
-    fax
-    postcode
-    city
-    firstname
-    lastname
-    middlename
-    prefix
-    suffix
-    vat_id
-    default_shipping
-    default_billing
   }
 }
 MUTATION;
@@ -122,18 +199,11 @@ MUTATION;
 
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
-        $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals($customerId, $response['createCustomerAddress']['customer_id']);
-        $this->assertArrayHasKey('id', $response['createCustomerAddress']);
-
-        $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
-        $this->assertEquals($address->getId(), $response['createCustomerAddress']['id']);
-        $this->assertCustomerAddressesFields($address, $response['createCustomerAddress']);
-        $this->assertCustomerAddressesFields($address, $newAddress);
+        $this->assertEquals($newAddress['country_id'], $response['createCustomerAddress']['country_id']);
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCreateCustomerAddressIfUserIsNotAuthorized()
@@ -152,7 +222,7 @@ mutation{
     region: {
         region_id: 1
     }
-    country_id: US
+    country_code: US
     postcode: "9999"
     default_shipping: true
     default_billing: false
@@ -169,7 +239,7 @@ MUTATION;
      * with missing required Firstname attribute
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testCreateCustomerAddressWithMissingAttribute()
@@ -181,7 +251,7 @@ mutation {
     region: {
         region_id: 1
     }
-    country_id: US
+    country_code: US
     street: ["Line 1 Street","Line 2"]
     company: "Company name"
     telephone: "123456789"
@@ -203,6 +273,27 @@ MUTATION;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @expectedException Exception
+     * @expectedExceptionMessage "input" value should be specified
+     */
+    public function testCreateCustomerAddressWithMissingInput()
+    {
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $mutation = <<<MUTATION
+mutation {
+  createCustomerAddress(
+    input: {}
+  ) {
+    city
+  }
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreateCustomerAddressWithRedundantStreetLine()
@@ -213,7 +304,7 @@ MUTATION;
                 'region_id' => 4,
                 'region_code' => 'AZ'
             ],
-            'country_id' => 'US',
+            'country_code' => 'US',
             'street' => ['Line 1 Street', 'Line 2', 'Line 3'],
             'company' => 'Company name',
             'telephone' => '123456789',
@@ -239,7 +330,7 @@ mutation {
         region_id: {$newAddress['region']['region_id']}
         region_code: "{$newAddress['region']['region_code']}"
     }
-    country_id: {$newAddress['country_id']}
+    country_code: {$newAddress['country_code']}
     street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}","{$newAddress['street'][2]}"]
     company: "{$newAddress['company']}"
     telephone: "{$newAddress['telephone']}"
@@ -268,16 +359,59 @@ MUTATION;
     }
 
     /**
+     * Create new address with invalid input
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @dataProvider invalidInputDataProvider
+     * @param string $input
+     * @param $exceptionMessage
+     * @throws Exception
+     */
+    public function testCreateCustomerAddressWithInvalidInput($input, $exceptionMessage)
+    {
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress($input) {
+    id
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        self::expectException(Exception::class);
+        self::expectExceptionMessage($exceptionMessage);
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidInputDataProvider()
+    {
+        return [
+            ['', 'Syntax Error: Expected Name, found )'],
+            ['input: ""', 'requires type CustomerAddressInput!, found "".'],
+            ['input: "foo"', 'requires type CustomerAddressInput!, found "foo".']
+        ];
+    }
+
+    /**
      * Verify the fields for Customer address
      *
      * @param AddressInterface $address
      * @param array $actualResponse
+     * @param string $countryFieldName
      */
-    private function assertCustomerAddressesFields(AddressInterface $address, array $actualResponse): void
-    {
+    private function assertCustomerAddressesFields(
+        AddressInterface $address,
+        array $actualResponse
+    ): void {
         /** @var  $addresses */
         $assertionMap = [
-            ['response_field' => 'country_id', 'expected_value' => $address->getCountryId()],
+            ['response_field' => 'country_code', 'expected_value' => $address->getCountryId()],
             ['response_field' => 'street', 'expected_value' => $address->getStreet()],
             ['response_field' => 'company', 'expected_value' => $address->getCompany()],
             ['response_field' => 'telephone', 'expected_value' => $address->getTelephone()],

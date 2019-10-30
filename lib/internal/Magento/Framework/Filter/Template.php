@@ -9,9 +9,6 @@
  */
 namespace Magento\Framework\Filter;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Framework\Model\AbstractModel;
-
 /**
  * Template filter
  *
@@ -75,7 +72,35 @@ class Template implements \Zend_Filter_Interface
         'load',
         'save',
         'getcollection',
-        'getresource'
+        'getresource',
+        'getconfig',
+        'setvariables',
+        'settemplateprocessor',
+        'gettemplateprocessor',
+        'vardirective',
+        'delete',
+        'getdatausingmethod',
+        '__destruct',
+        '__call',
+        '__callstatic',
+        '__set',
+        '__unset',
+        '__sleep',
+        '__wakeup',
+        '__invoke',
+        '__set_state',
+        '__debuginfo',
+        '___callparent',
+        '___callplugins'
+    ];
+
+    /**
+     * @var array[]
+     */
+    private $restrictedMethodsByInstanceType = [
+        \Magento\Framework\DB\Adapter\AdapterInterface::class => [
+            '*'
+        ]
     ];
 
     /**
@@ -394,36 +419,23 @@ class Template implements \Zend_Filter_Interface
      */
     private function validateVariableMethodCall($object, string $method): void
     {
-        if ($object === $this) {
+        if ($object instanceof self || $object instanceof \Magento\Framework\DataObject) {
             if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
                 throw new \InvalidArgumentException("Method $method cannot be called from template.");
+            }
+        } else {
+            foreach ($this->restrictedMethodsByInstanceType as $instanceType => $restrictedMethods) {
+                if ($object instanceof $instanceType &&
+                    (in_array('*', $restrictedMethods) || in_array(mb_strtolower($method), $restrictedMethods))
+                ) {
+                    throw new \InvalidArgumentException("Method $method cannot be called from template.");
+                }
             }
         }
     }
 
     /**
-     * Check allowed methods for data objects.
-     *
-     * Deny calls for methods that may disrupt template processing.
-     *
-     * @param object $object
-     * @param string $method
-     * @return bool
-     * @throws \InvalidArgumentException
-     */
-    private function isAllowedDataObjectMethod($object, string $method): bool
-    {
-        if ($object instanceof AbstractExtensibleModel || $object instanceof AbstractModel) {
-            if (in_array(mb_strtolower($method), $this->restrictedMethods)) {
-                throw new \InvalidArgumentException("Method $method cannot be called from template.");
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Return variable value for var construction
+     * Return variable value for var construction.
      *
      * @param string $value raw parameters
      * @param string $default default value
@@ -442,45 +454,18 @@ class Template implements \Zend_Filter_Interface
             if ($i == 0 && isset($this->templateVars[$stackVars[$i]['name']])) {
                 // Getting of template value
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
-            } elseif (isset($stackVars[$i - 1]['variable'])
-                    && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
-            ) {
-                // If data object calling methods or getting properties
+            } elseif (isset($stackVars[$i - 1]['variable']) && is_object($stackVars[$i - 1]['variable'])) {
                 if ($stackVars[$i]['type'] == 'property') {
-                    $caller = 'get' . $this->string->upperCaseWords($stackVars[$i]['name'], '_', '');
-                    $stackVars[$i]['variable'] = method_exists(
+                    $stackVars[$i]['variable'] = $this->evaluateObjectPropertyAccess(
                         $stackVars[$i - 1]['variable'],
-                        $caller
-                    ) ? $stackVars[$i - 1]['variable']->{$caller}() : $stackVars[$i - 1]['variable']->getData(
                         $stackVars[$i]['name']
                     );
                 } elseif ($stackVars[$i]['type'] == 'method') {
-                    // Calling of data object method
-                    if (method_exists($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])
-                            || substr($stackVars[$i]['name'], 0, 3) == 'get'
-                    ) {
-                        $stackVars[$i]['args'] = $this->getStackArgs($stackVars[$i]['args']);
-
-                        if ($this->isAllowedDataObjectMethod($stackVars[$i - 1]['variable'], $stackVars[$i]['name'])) {
-                            $stackVars[$i]['variable'] = call_user_func_array(
-                                [$stackVars[$i - 1]['variable'], $stackVars[$i]['name']],
-                                $stackVars[$i]['args']
-                            );
-                        }
-                    }
-                }
-                $last = $i;
-            } elseif (isset($stackVars[$i - 1]['variable'])
-                && is_object($stackVars[$i - 1]['variable'])
-                && $stackVars[$i]['type'] == 'method'
-            ) {
-                // Calling object methods
-                $object = $stackVars[$i - 1]['variable'];
-                $method = $stackVars[$i]['name'];
-                if (method_exists($object, $method)) {
-                    $args = $this->getStackArgs($stackVars[$i]['args']);
-                    $this->validateVariableMethodCall($object, $method);
-                    $stackVars[$i]['variable'] = call_user_func_array([$object, $method], $args);
+                    $stackVars[$i]['variable'] = $this->evaluateObjectMethodCall(
+                        $stackVars[$i - 1]['variable'],
+                        $stackVars[$i]['name'],
+                        $stackVars[$i]['args']
+                    );
                 }
                 $last = $i;
             }
@@ -492,6 +477,45 @@ class Template implements \Zend_Filter_Interface
         }
         \Magento\Framework\Profiler::stop('email_template_processing_variables');
         return $result;
+    }
+
+    /**
+     * Evaluate object property access.
+     *
+     * @param object $object
+     * @param string $property
+     * @return null
+     */
+    private function evaluateObjectPropertyAccess($object, $property)
+    {
+        $method = 'get' . $this->string->upperCaseWords($property, '_', '');
+        $this->validateVariableMethodCall($object, $method);
+        return method_exists($object, $method)
+            ? $object->{$method}()
+            : (($object instanceof \Magento\Framework\DataObject) ? $object->getData($property) : null);
+    }
+
+    /**
+     * Evaluate object method call.
+     *
+     * @param object $object
+     * @param string $method
+     * @param array $arguments
+     * @return mixed|null
+     */
+    private function evaluateObjectMethodCall($object, $method, $arguments)
+    {
+        if (method_exists($object, $method)
+            || ($object instanceof \Magento\Framework\DataObject && substr($method, 0, 3) == 'get')
+        ) {
+            $arguments = $this->getStackArgs($arguments);
+            $this->validateVariableMethodCall($object, $method);
+            return call_user_func_array(
+                [$object, $method],
+                $arguments
+            );
+        }
+        return null;
     }
 
     /**

@@ -7,13 +7,13 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <span class="product-image-container"
-      style="width:<?= /* @escapeNotVerified */ $block->getWidth() ?>px;">
+      style="width:<?= $block->escapeHtmlAttr($block->getWidth()) ?>px;">
     <span class="product-image-wrapper"
-          style="padding-bottom: <?= /* @escapeNotVerified */ ($block->getRatio() * 100) ?>%;">
-        <img class="<?= /* @escapeNotVerified */ $block->getClass() ?>"
-            <?= /* @escapeNotVerified */ $block->getCustomAttributes() ?>
-            src="<?= /* @escapeNotVerified */ $block->getImageUrl() ?>"
-            max-width="<?= /* @escapeNotVerified */ $block->getWidth() ?>"
-            max-height="<?= /* @escapeNotVerified */ $block->getHeight() ?>"
-            alt="<?= /* @escapeNotVerified */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
+          style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
+        <img class="<?= $block->escapeHtmlAttr($block->getClass()) ?>"
+            <?= $block->escapeHtmlAttr($block->getCustomAttributes()) ?>
+            src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
+            max-width="<?= $block->escapeHtmlAttr($block->getWidth()) ?>"
+            max-height="<?= $block->escapeHtmlAttr($block->getHeight()) ?>"
+            alt="<?= /* @noEscape */ $block->stripTags($block->getLabel(), null, true) ?>"/></span>
 </span>
