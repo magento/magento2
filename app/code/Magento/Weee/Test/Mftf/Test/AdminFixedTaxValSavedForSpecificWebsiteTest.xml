@@ -11,6 +11,7 @@
     <test name="AdminFixedTaxValSavedForSpecificWebsiteTest">
         <annotations>
             <features value="Tax"/>
+            <stories value="Website Specific Fixed Product Tax"/>
             <title value="Fixed Product Tax value is saved correctly for Specific Website"/>
             <description value="Fixed Product Tax value is saved correctly for Specific Website"/>
             <severity value="MAJOR"/>
