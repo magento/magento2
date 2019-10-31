@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -19,13 +20,27 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     private $definitionProcessors;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var string
+     */
+    private $dbVersion;
+
+    /**
      * Constructor.
      *
+     * @param ResourceConnection $resourceConnection
      * @param DbDefinitionProcessorInterface[] $definitionProcessors
      */
-    public function __construct(array $definitionProcessors)
-    {
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        array $definitionProcessors
+    ) {
         $this->definitionProcessors = $definitionProcessors;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -65,6 +80,19 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     }
 
     /**
+     * @return string
+     */
+    private function getDatabaseVersion(): string
+    {
+        if (!$this->dbVersion) {
+            $this->dbVersion = $this->resourceConnection->getConnection('default')
+                ->fetchPairs("SHOW variables LIKE 'version'")['version'];
+        }
+
+        return $this->dbVersion;
+    }
+
+    /**
      * Processes `$value` to be compatible with MySQL.
      *
      * @param array $data
@@ -76,11 +104,11 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         if ($defaultValue === null || $data['default'] === false) {
             return $defaultValue;
         }
-        if ($defaultValue === "NULL") {
-            return null;
-        }
         if ($defaultValue === "'NULL'") {
             return "NULL";
+        }
+        if ($defaultValue === "NULL" && (bool) strpos($this->getDatabaseVersion(), 'MariaDB')) {
+            return null;
         }
         /*
          * MariaDB replaces some defaults by their respective functions, e.g. `DEFAULT CURRENT_TIMESTAMP` ends up being
