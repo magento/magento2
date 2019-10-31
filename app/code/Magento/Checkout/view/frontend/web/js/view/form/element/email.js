@@ -152,6 +152,7 @@ define([
 
             if (focused === false && !!this.email()) {
                 valid = !!$(usernameSelector).valid();
+
                 if (valid) {
                     $(usernameSelector).removeAttr('aria-invalid aria-describedby');
                 }
