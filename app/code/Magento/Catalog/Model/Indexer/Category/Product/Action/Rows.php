@@ -15,6 +15,8 @@ use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Category;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 
 /**
  * Action for partial reindex
@@ -39,6 +41,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $eventManager;
 
     /**
+     * @var IndexerRegistry
+     */
+    private  $indexerRegistry;
+
+    /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Config $config
@@ -46,6 +53,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param MetadataPool|null $metadataPool
      * @param CacheContext|null $cacheContext
      * @param EventManagerInterface|null $eventManager
+     * @param IndexerRegistry|null $indexerRegistry
      */
     public function __construct(
         ResourceConnection $resource,
@@ -54,11 +62,13 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         QueryGenerator $queryGenerator = null,
         MetadataPool $metadataPool = null,
         CacheContext $cacheContext = null,
-        EventManagerInterface $eventManager = null
+        EventManagerInterface $eventManager = null,
+        IndexerRegistry $indexerRegistry = null
     ) {
         parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
+        $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
     }
 
     /**
@@ -72,8 +82,10 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $this->limitationByCategories = $entityIds;
         $this->useTempTable = $useTempTable;
+        $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
+        $workingState = $indexer->isWorking();
 
-        if ($useTempTable) {
+        if ($useTempTable && !$workingState) {
             foreach ($this->storeManager->getStores() as $store) {
                 $this->connection->truncateTable($this->getIndexTable($store->getId()));
             }
@@ -83,7 +95,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
         $this->reindex();
 
-        if ($useTempTable) {
+        if ($useTempTable && !$workingState) {
             foreach ($this->storeManager->getStores() as $store) {
                 $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
                 $this->connection->delete(
