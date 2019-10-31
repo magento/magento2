@@ -154,7 +154,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * getFieldMetaInfo
+     * Get field meta info
      *
      * @param  string $fieldSetName
      * @param  string $fieldName
@@ -168,10 +168,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * Add field filter to collection
-     *
-     * @param  \Magento\Framework\Api\Filter $filter
-     * @return mixed|void
+     * @inheritdoc
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
