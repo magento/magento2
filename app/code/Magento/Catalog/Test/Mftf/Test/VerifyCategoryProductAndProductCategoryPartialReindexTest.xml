@@ -56,6 +56,7 @@
             </actionGroup>
 
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
