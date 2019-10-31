@@ -148,7 +148,7 @@
             <argument name="actionsAggregator" type="string" defaultValue="ANY"/>
             <argument name="actionsValue" type="string" defaultValue="FALSE"/>
             <argument name="childAttribute" type="string" defaultValue="Category"/>
-            <argument name="actionValue" type="string"/>
+            <argument name="actionValue" type="string" defaultValue="2"/>
         </arguments>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" after="fillDiscountAmount" stepKey="clickOnActionTab"/>
         <click selector="{{AdminCartPriceRulesFormSection.condition('ALL')}}" after="clickOnActionTab" stepKey="clickToChooseFirstRuleConditionValue"/>

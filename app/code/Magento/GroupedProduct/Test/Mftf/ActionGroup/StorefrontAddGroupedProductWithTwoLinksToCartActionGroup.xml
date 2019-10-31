@@ -13,8 +13,8 @@
             <description>Adding to the Shopping Cart single Grouped product, with 2 associated from the Product page</description>
         </annotations>
         <arguments>
-            <argument name="linkedProduct1Name" type="string"/>
-            <argument name="linkedProduct2Name" type="string"/>
+            <argument name="linkedProduct1Name" type="string" defaultValue="{{_defaultProduct.name}}"/>
+            <argument name="linkedProduct2Name" type="string" defaultValue="{{_defaultProduct.name}}"/>
             <argument name="linkedProduct1Qty" type="string" defaultValue="1"/>
             <argument name="linkedProduct2Qty" type="string" defaultValue="1"/>
         </arguments>
