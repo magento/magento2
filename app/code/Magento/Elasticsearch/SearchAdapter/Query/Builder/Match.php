@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
@@ -65,8 +64,7 @@ class Match implements QueryInterface
         AttributeProvider $attributeProvider = null,
         TypeResolver $fieldTypeResolver = null,
         ValueTransformerPool $valueTransformerPool = null
-    )
-    {
+    ) {
         $this->fieldMapper = $fieldMapper;
         $this->preprocessorContainer = $preprocessorContainer;
         $this->attributeProvider = $attributeProvider ?? ObjectManager::getInstance()
@@ -136,7 +134,7 @@ class Match implements QueryInterface
         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
         $count = 0;
         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
-        $count = count(explode(' ', trim($value)));
+        $count = count(explode(' ',trim($value)));
         $condition = ($count) ? 'match_phrase' : 'match';
 
         $transformedTypes = [];
@@ -177,10 +175,10 @@ class Match implements QueryInterface
     /**
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *
-     * @param string $value
-     * @return string
      * @deprecated
      * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
+     * @param string $value
+     * @return string
      */
     protected function escape($value)
     {
