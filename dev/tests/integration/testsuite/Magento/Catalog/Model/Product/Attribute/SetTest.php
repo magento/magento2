@@ -177,7 +177,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
         $this->attributeSetResource->save($set);
         $this->assertNull(
             $this->getAttributeGroup('Design'),
-            'Group Design wan\'t deleted.'
+            'Group "Design" wan\'t deleted.'
         );
         $unusedSetAttributes = $this->getSetExcludedAttributes((int)$set->getAttributeSetId());
         $designAttributeCodes = ['page_layout', 'options_container', 'custom_layout_update'];
