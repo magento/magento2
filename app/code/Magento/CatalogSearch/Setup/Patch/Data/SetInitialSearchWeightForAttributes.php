@@ -6,21 +6,21 @@
 
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\Framework\Indexer\IndexerInterfaceFactory;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
- * This patch sets up search weight for the product's system attributes.
- * Reindex required after patch applying.
+ * This patch sets up search weight for the product's system attributes, reindex required after patch applying.
  *
  * @deprecated
  * @see \Magento\ElasticSearch
  */
 class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {
+
     /**
      * @var IndexerInterfaceFactory
      */
