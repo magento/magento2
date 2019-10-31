@@ -153,7 +153,7 @@
                 <description>EXTENDS: StorefrontCheckCartActionGroup. Validates that the provided Discount is present in the Storefront Shopping Cart.</description>
         </annotations>
         <arguments>
-            <argument name="discount" type="string"/>
+            <argument name="discount" type="string" defaultValue="0"/>
         </arguments>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscount"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
