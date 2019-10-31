@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\Eav\Api\AttributeGroupRepositoryInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set as AttributeSetResource;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Eav\Model\GetAttributeGroupByName;
 
 /**
  * Provides tests for attribute set model saving.
@@ -36,19 +37,14 @@ class SetTest extends \PHPUnit\Framework\TestCase
     private $setRepository;
 
     /**
-     * @var AttributeGroupRepositoryInterface
+     * @var ProductAttributeRepositoryInterface
      */
-    private $groupRepository;
+    private $attributeRepository;
 
     /**
      * @var Config
      */
     private $config;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
 
     /**
      * @var AttributeSetResource
@@ -66,6 +62,11 @@ class SetTest extends \PHPUnit\Framework\TestCase
     private $defaultSetId;
 
     /**
+     * @var GetAttributeGroupByName
+     */
+    private $attributeGroupByName;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -73,12 +74,12 @@ class SetTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->setRepository = $this->objectManager->get(AttributeSetRepositoryInterface::class);
-        $this->groupRepository = $this->objectManager->create(AttributeGroupRepositoryInterface::class);
+        $this->attributeRepository = $this->objectManager->create(ProductAttributeRepositoryInterface::class);
         $this->config = $this->objectManager->get(Config::class);
         $this->defaultSetId = (int)$this->config->getEntityType(Product::ENTITY)->getDefaultAttributeSetId();
-        $this->criteriaBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
         $this->attributeSetResource = $this->objectManager->get(AttributeSetResource::class);
         $this->attributeCollectionFactory = $this->objectManager->get(CollectionFactory ::class);
+        $this->attributeGroupByName = $this->objectManager->get(GetAttributeGroupByName::class);
     }
 
     /**
@@ -91,10 +92,9 @@ class SetTest extends \PHPUnit\Framework\TestCase
     public function testSaveWithGroupsAndAttributes(string $groupName, string $attributeCode): void
     {
         $set = $this->setRepository->get($this->defaultSetId);
-        $groupId = $this->getAttributeGroup($groupName)
-            ? $this->getAttributeGroup($groupName)->getAttributeGroupId()
-            : 'ynode-1';
-        $attributeId = (int)$this->config->getAttribute(Product::ENTITY, $attributeCode)->getAttributeId();
+        $attributeGroup = $this->getAttributeGroup($groupName);
+        $groupId = $attributeGroup ? $attributeGroup->getAttributeGroupId() : 'ynode-1';
+        $attributeId = (int)$this->attributeRepository->get($attributeCode)->getAttributeId();
         $additional = [
             'attributes' => [
                 [$attributeId, $groupId, 1],
@@ -177,11 +177,11 @@ class SetTest extends \PHPUnit\Framework\TestCase
             $this->getAttributeGroup('Design'),
             'Group Design wan\'t deleted.'
         );
-        $unusedSetAttributes = $this->getUnusedSetAttributes((int)$set->getAttributeSetId());
+        $unusedSetAttributes = $this->getSetExcludedAttributes((int)$set->getAttributeSetId());
         $designAttributeCodes = ['page_layout', 'options_container', 'custom_layout_update'];
         $this->assertNotEmpty(
             array_intersect($designAttributeCodes, $unusedSetAttributes),
-            'Attributes from Design group still assigned to attribute set.'
+            'Attributes from "Design" group still assigned to attribute set.'
         );
     }
 
@@ -191,8 +191,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
     public function testSaveWithRemovedAttribute(): void
     {
         $set = $this->setRepository->get($this->defaultSetId);
-        $attributeId = (int)$this->config->getAttribute(Product::ENTITY, 'meta_description')
-            ->getAttributeId();
+        $attributeId = (int)$this->attributeRepository->get('meta_description')->getAttributeId();
         $additional = [
             'not_attributes' => [$this->getEntityAttributeId($this->defaultSetId, $attributeId)],
         ];
@@ -201,7 +200,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
         $this->config->clear();
         $setInfo = $this->attributeSetResource->getSetInfo([$attributeId], $this->defaultSetId);
         $this->assertEmpty($setInfo[$attributeId]);
-        $unusedSetAttributes = $this->getUnusedSetAttributes((int)$set->getAttributeSetId());
+        $unusedSetAttributes = $this->getSetExcludedAttributes((int)$set->getAttributeSetId());
         $this->assertNotEmpty(
             array_intersect(['meta_description'], $unusedSetAttributes),
             'Attribute still assigned to attribute set.'
@@ -235,12 +234,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
      */
     private function getAttributeGroup(string $groupName): ?AttributeGroupInterface
     {
-        $searchCriteria = $this->criteriaBuilder->addFilter('attribute_group_name', $groupName)
-            ->addFilter('attribute_set_id', $this->defaultSetId)
-            ->create();
-        $result = $this->groupRepository->getList($searchCriteria)->getItems();
-
-        return !empty($result) ? reset($result) : null;
+        return $this->attributeGroupByName->execute($this->defaultSetId, $groupName);
     }
 
     /**
@@ -249,32 +243,26 @@ class SetTest extends \PHPUnit\Framework\TestCase
      * @param int $setId
      * @return array
      */
-    private function getUnusedSetAttributes(int $setId): array
+    private function getSetExcludedAttributes(int $setId): array
     {
-        $result = [];
-        $attributesIds = $this->attributeCollectionFactory->create()
-            ->setAttributeSetFilter($setId)
-            ->getAllIds();
         $collection = $this->attributeCollectionFactory->create()
-            ->setAttributesExcludeFilter($attributesIds)
-            ->addVisibleFilter();
-        /** @var AbstractAttribute $attribute */
-        foreach ($collection as $attribute) {
-            $result[] = $attribute->getAttributeCode();
-        }
+            ->setExcludeSetFilter($setId);
+        $result = $collection->getColumnValues(AttributeInterface::ATTRIBUTE_CODE);
 
         return $result;
     }
 
     /**
-     * @param int|null $setId
+     * Returns entity attribute id.
+     *
+     * @param int $setId
      * @param int $attributeId
      * @return int
      */
-    private function getEntityAttributeId(?int $setId, int $attributeId): int
+    private function getEntityAttributeId(int $setId, int $attributeId): int
     {
         $select = $this->attributeSetResource->getConnection()->select()
-            ->from('eav_entity_attribute', ['entity_attribute_id'])
+            ->from($this->attributeSetResource->getTable('eav_entity_attribute'), ['entity_attribute_id'])
             ->where('attribute_set_id = ?', $setId)
             ->where('attribute_id = ?', $attributeId);
 
