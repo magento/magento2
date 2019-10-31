@@ -22,6 +22,8 @@ use Magento\Framework\Exception\InputException;
  * Search for product links by criteria.
  *
  * Batch contract for getting product links.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductLinkQuery
 {
