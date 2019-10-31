@@ -9,7 +9,9 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
+use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -37,33 +39,54 @@ class QuoteAddressFactory
     private $addressHelper;
 
     /**
+     * @var CountryInformationAcquirerInterface
+     */
+    private $countryInformationAcquirer;
+
+    /**
      * @param BaseQuoteAddressFactory $quoteAddressFactory
      * @param GetCustomerAddress $getCustomerAddress
      * @param AddressHelper $addressHelper
+     * @param CountryInformationAcquirerInterface $countryInformationAcquirer
      */
     public function __construct(
         BaseQuoteAddressFactory $quoteAddressFactory,
         GetCustomerAddress $getCustomerAddress,
-        AddressHelper $addressHelper
+        AddressHelper $addressHelper,
+        CountryInformationAcquirerInterface $countryInformationAcquirer
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->getCustomerAddress = $getCustomerAddress;
         $this->addressHelper = $addressHelper;
+        $this->countryInformationAcquirer = $countryInformationAcquirer;
     }
 
     /**
      * Create QuoteAddress based on input data
      *
      * @param array $addressInput
+     *
      * @return QuoteAddress
      * @throws GraphQlInputException
      */
     public function createBasedOnInputData(array $addressInput): QuoteAddress
     {
         $addressInput['country_id'] = '';
-        if ($addressInput['country_code']) {
+        if (isset($addressInput['country_code']) && $addressInput['country_code']) {
             $addressInput['country_code'] = strtoupper($addressInput['country_code']);
             $addressInput['country_id'] = $addressInput['country_code'];
+        }
+
+        if ($addressInput['country_id'] && isset($addressInput['region'])) {
+            try {
+                $countryInformation = $this->countryInformationAcquirer->getCountryInfo($addressInput['country_id']);
+            } catch (NoSuchEntityException $e) {
+                throw new GraphQlInputException(__('The country isn\'t available.'));
+            }
+            $availableRegions = $countryInformation->getAvailableRegions();
+            if (null !== $availableRegions) {
+                $addressInput['region_code'] = $addressInput['region'];
+            }
         }
 
         $maxAllowedLineCount = $this->addressHelper->getStreetLines();
