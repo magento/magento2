@@ -106,6 +106,7 @@ define([
                 errorOption,
                 allOptions = [];
 
+            newOption.label = $.trim(option.label);
             if (_.isEmpty(newOption.label)) {
                 return false;
             }
