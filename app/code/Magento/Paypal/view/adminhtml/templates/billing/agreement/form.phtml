@@ -18,7 +18,7 @@
                     class="required-entry admin__control-select">
                 <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
                 <?php foreach ($block->getBillingAgreements() as $id => $referenceId) : ?>
-                    <option value="<?= $block->escapeHtml($id) ?>">
+                    <option value="<?= $block->escapeHtmlAttr($id) ?>">
                         <?= $block->escapeHtml($referenceId) ?>
                     </option>
                 <?php endforeach; ?>

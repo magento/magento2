@@ -19,26 +19,41 @@
                         <label>Environment</label>
                         <source_model>Magento\CardinalCommerce\Model\Adminhtml\Source\Environment</source_model>
                         <config_path>three_d_secure/cardinal/environment</config_path>
+                        <depends>
+                            <field id="enabled_authorize">1</field>
+                        </depends>
                     </field>
                     <field id="org_unit_id" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Org Unit Id</label>
                         <config_path>three_d_secure/cardinal/org_unit_id</config_path>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="enabled_authorize">1</field>
+                        </depends>
                     </field>
                     <field id="api_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API Key</label>
                         <config_path>three_d_secure/cardinal/api_key</config_path>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="enabled_authorize">1</field>
+                        </depends>
                     </field>
                     <field id="api_identifier" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API Identifier</label>
                         <config_path>three_d_secure/cardinal/api_identifier</config_path>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="enabled_authorize">1</field>
+                        </depends>
                     </field>
                     <field id="debug" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Debug</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>three_d_secure/cardinal/debug</config_path>
+                        <depends>
+                            <field id="enabled_authorize">1</field>
+                        </depends>
                     </field>
                 </group>
             </group>

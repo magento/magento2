@@ -23,7 +23,7 @@
                    value="<?= $block->escapeHtmlAttr($_code); ?>"
                    type="radio" name="payment[method]"
                    title="<?= $block->escapeHtmlAttr($_method->getTitle()); ?>"
-                   onclick="payment.switchMethod('<?= $block->escapeJs($_code); ?>')"
+                   onclick="payment.switchMethod('<?= $block->escapeHtmlAttr($block->escapeJs($_code)); ?>')"
                     <?php if ($currentSelectedMethod == $_code) : ?>
                     checked="checked"
                     <?php endif; ?>

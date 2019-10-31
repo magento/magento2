@@ -213,7 +213,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $valueExpr
         );
 
-        $collection->getSelect()->order("{$attribute->getAttributeCode()} {$dir}");
+        $collection->getSelect()->order("{$attribute->getAttributeCode()}_value {$dir}");
 
         return $this;
     }

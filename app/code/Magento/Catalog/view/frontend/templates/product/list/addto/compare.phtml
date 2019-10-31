@@ -8,8 +8,8 @@
 ?>
 <a href="#"
    class="action tocompare"
-   title="<?= $block->escapeHtml(__('Add to Compare')) ?>"
-   aria-label="<?= $block->escapeHtml(__('Add to Compare')) ?>"
+   title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>"
+   aria-label="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>"
    data-post='<?= /* @noEscape */ $block->getCompareHelper()->getPostDataParams($block->getProduct()) ?>'
    role="button">
     <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>

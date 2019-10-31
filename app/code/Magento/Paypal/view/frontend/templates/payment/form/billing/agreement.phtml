@@ -18,7 +18,7 @@ $code = $block->escapeHtml($block->getMethodCode());
                 name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]" class="select">
             <option value=""><?= $block->escapeHtml(__('-- Please Select Billing Agreement--')) ?></option>
             <?php foreach ($block->getBillingAgreements() as $id => $referenceId) : ?>
-                <option value="<?= $block->escapeHtml($id) ?>">
+                <option value="<?= $block->escapeHtmlAttr($id) ?>">
                     <?= $block->escapeHtml($referenceId) ?>
                 </option>
             <?php endforeach; ?>

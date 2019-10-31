@@ -21,7 +21,7 @@ $ccType = $block->getInfoData('cc_type');
             <select id="<?= /* @noEscape */ $code ?>_cc_type" name="payment[cc_type]"
                     class="required-entry select admin__control-select validate-cc-type-select">
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
-                    <option value="<?= $block->escapeHtml($typeCode) ?>"
+                    <option value="<?= $block->escapeHtmlAttr($typeCode) ?>"
                         <?php if ($typeCode == $ccType) : ?> selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($typeName) ?>
                     </option>

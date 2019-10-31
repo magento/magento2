@@ -37,5 +37,8 @@
             <column name="store_id"/>
             <column name="entity_id"/>
         </index>
+        <index referenceId="URL_REWRITE_ENTITY_ID" indexType="btree">
+            <column name="entity_id"/>
+        </index>
     </table>
 </schema>
