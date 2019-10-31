@@ -80,6 +80,8 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     }
 
     /**
+     * Get DB version
+     *
      * @return string
      */
     private function getDatabaseVersion(): string
