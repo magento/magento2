@@ -245,6 +245,10 @@ QUERY;
           children{
             name
             image
+            children{
+              name
+              image
+            }
           }
         }
     }
