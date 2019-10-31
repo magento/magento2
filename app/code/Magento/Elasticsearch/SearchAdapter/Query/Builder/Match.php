@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
@@ -64,15 +65,16 @@ class Match implements QueryInterface
         AttributeProvider $attributeProvider = null,
         TypeResolver $fieldTypeResolver = null,
         ValueTransformerPool $valueTransformerPool = null
-    ) {
+    )
+    {
         $this->fieldMapper = $fieldMapper;
         $this->preprocessorContainer = $preprocessorContainer;
         $this->attributeProvider = $attributeProvider ?? ObjectManager::getInstance()
-            ->get(AttributeProvider::class);
+                ->get(AttributeProvider::class);
         $this->fieldTypeResolver = $fieldTypeResolver ?? ObjectManager::getInstance()
-            ->get(TypeResolver::class);
+                ->get(TypeResolver::class);
         $this->valueTransformerPool = $valueTransformerPool ?? ObjectManager::getInstance()
-            ->get(ValueTransformerPool::class);
+                ->get(ValueTransformerPool::class);
     }
 
     /**
@@ -130,12 +132,12 @@ class Match implements QueryInterface
     protected function buildQueries(array $matches, array $queryValue)
     {
         $conditions = [];
- 
-         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
-         $count = 0;
-         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
-         $count = count(explode(' ',trim($value)));
-         $condition = ($count) ? 'match_phrase' : 'match';
+
+        // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
+        $count = 0;
+        $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
+        $count = count(explode(' ', trim($value)));
+        $condition = ($count) ? 'match_phrase' : 'match';
 
         $transformedTypes = [];
         foreach ($matches as $match) {
@@ -175,10 +177,10 @@ class Match implements QueryInterface
     /**
      * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
      *
-     * @deprecated
-     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
      * @param string $value
      * @return string
+     * @deprecated
+     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
      */
     protected function escape($value)
     {
