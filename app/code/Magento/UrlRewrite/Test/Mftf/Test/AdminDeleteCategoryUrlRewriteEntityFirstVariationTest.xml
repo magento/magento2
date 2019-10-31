@@ -7,10 +7,10 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminDeleteCategoryUrlRewriteEntityTest">
+    <test name="AdminDeleteCategoryUrlRewriteEntityFirstVariationTest">
         <annotations>
-            <stories value="Delete category URL rewrite"/>
-            <title value="Delete category URL rewrite"/>
+            <stories value="Delete category URL rewrite first scenario"/>
+            <title value="Delete category URL rewrite first scenario"/>
             <description value="Login as admin and delete category Url Rewrite"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
@@ -46,29 +46,6 @@
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
         <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="checkUrlOnFrontend">
             <argument name="requestPath" value="-"/>
-        </actionGroup>
-
-        <!--Create the Category Url Rewrite-->
-        <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewriteSecondTime">
-            <argument name="category" value="$$category.name$$"/>
-            <argument name="customUrlRewriteValue" value="For Category'"/>
-            <argument name="storeValue" value="Default Store View"/>
-            <argument name="requestPath" value="newrequestpath.html"/>
-            <argument name="redirectTypeValue" value="No"/>
-            <argument name="description" value="End To End Test"/>
-        </actionGroup>
-
-        <!--Delete the Category Url Rewrite-->
-        <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewriteSecondTime">
-            <argument name="requestPath" value="newrequestpath.html"/>
-        </actionGroup>
-        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessageSecondTime">
-            <argument name="message" value="You deleted the URL rewrite."/>
-        </actionGroup>
-
-        <!--Verify AssertPageByUrlRewriteIsNotFound-->
-        <actionGroup ref="AssertPageByUrlRewriteIsNotFound" stepKey="checkUrlOnFrontendSecondTime">
-            <argument name="requestPath" value="newrequestpath.html"/>
         </actionGroup>
 
     </test>
