@@ -212,7 +212,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories_disabled.php
      */
-    public function testQueryChildCategoriesWithProductsDisabled()
+    public function testQueryCategoryWithDisabledChildren()
     {
         $query =  <<<QUERY
 {
