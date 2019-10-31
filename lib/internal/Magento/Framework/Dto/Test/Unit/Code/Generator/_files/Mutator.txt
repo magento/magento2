@@ -1,0 +1,80 @@
+declare(strict_types=1);
+
+namespace Magento\Framework\Dto\Test\Unit\Code\Generator\Mock;
+
+class SampleDtoMutator
+{
+    /**
+     * Dto Processor
+     *
+     * @var \Magento\Framework\Dto\DtoProcessor
+     */
+    private $dtoProcessor = null;
+
+    /**
+     * Mutator data storage
+     *
+     * @var array
+     */
+    private $data = [
+
+    ];
+
+    /**
+     * Mutator constructor
+     *
+     * @param Magento\Framework\Dto\DtoProcessor $dtoProcessor
+     */
+    public function __construct(\Magento\Framework\Dto\DtoProcessor $dtoProcessor)
+    {
+        $this->dtoProcessor = $dtoProcessor;
+    }
+
+    /**
+     * Mutator for param1
+     *
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDtoMutator
+     */
+    public function withParam1(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDtoMutator
+    {
+        $this->data['param1'] = $value;
+        return $this;
+    }
+
+    /**
+     * Mutator for param2
+     *
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDtoMutator
+     */
+    public function withParam2(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDtoMutator
+    {
+        $this->data['param2'] = $value;
+        return $this;
+    }
+
+    /**
+     * Mutator for param3
+     *
+     * @param string $value
+     * @return Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDtoMutator
+     */
+    public function withParam3(string $value) : \Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDtoMutator
+    {
+        $this->data['param3'] = $value;
+        return $this;
+    }
+
+    /**
+     * Mutator constructor
+     *
+     * @sourceObject Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDto
+     */
+    public function mutate(\Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDto $sourceObject) : \Magento\Framework\Dto\Test\Unit\Code\Generator\Mock\SampleDto
+    {
+        $res = $this->dtoProcessor->createUpdatedObjectFromArray($sourceObject, $this->data);
+        $this->data = [];
+        return $res;
+    }
+}

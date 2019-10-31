@@ -369,35 +369,6 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function simpleAndComplexDataProvider(): array
-    {
-        return [
-            ['string', true],
-            ['array', true],
-            ['int', true],
-            ['SomeClass', false],
-            ['\\My\\Namespace\\Model\\Class', false],
-            ['Some\\Other\\Class', false],
-        ];
-    }
-
-    /**
-     * Test simple type detection method
-     *
-     * @dataProvider simpleAndComplexDataProvider
-     * @param string $type
-     * @param bool $expectedValue
-     */
-    public function testIsSimpleType(string $type, bool $expectedValue)
-    {
-        self::assertEquals($expectedValue, $this->typeProcessor->isSimpleType($type));
-    }
-
-    /**
-     * Simple and complex data provider
-     *
-     * @return array
-     */
     public function basicClassNameProvider(): array
     {
         return [

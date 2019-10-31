@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="interface"
+                                type="dtoInterfaceType"
+                                minOccurs="0"
+                                maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>DTO interface schema element</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="class"
+                                type="dtoClassType"
+                                minOccurs="0"
+                                maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>DTO class element</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="projection"
+                                type="dtoProjectionType"
+                                minOccurs="0"
+                                maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>DTO projection mechanism</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="dtoInterfaceType">
+        <xs:sequence>
+            <xs:element name="property" type="dtoObjectPropertyType" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="mutable" type="xs:boolean"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoProjectionType">
+        <xs:sequence>
+            <xs:element name="from" type="dtoProjectionFromType" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="for" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoProjectionFromType">
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="preprocessor" type="dtoProjectionProcessorType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="map" type="dtoProjectionMapType" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="postprocessor" type="dtoProjectionProcessorType" minOccurs="0"
+                            maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoClassType">
+        <xs:attribute name="for" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoObjectPropertyType">
+        <xs:annotation>
+            <xs:documentation>Property declaration</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="optional" type="xs:boolean"/>
+        <xs:attribute name="nullable" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoProjectionMapType">
+        <xs:attribute name="from" type="xs:string" use="required"/>
+        <xs:attribute name="to" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dtoProjectionProcessorType">
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="sortOrder" type="xs:int"/>
+    </xs:complexType>
+</xs:schema>

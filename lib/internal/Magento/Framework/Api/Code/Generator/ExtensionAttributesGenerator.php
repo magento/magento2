@@ -5,27 +5,37 @@
  */
 namespace Magento\Framework\Api\Code\Generator;
 
+use Magento\Framework\Api\AbstractImmutableSimpleObject;
+use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Api\ExtensionAttribute\Config;
+use Magento\Framework\Api\ImmutableExtensibleDataInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
 use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+use Magento\Framework\Reflection\TypeProcessor;
+use ReflectionClass;
+use Zend\Code\Generator\ValueGenerator;
 
 /**
  * Code generator for data object extensions.
  */
-class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\EntityAbstract
+class ExtensionAttributesGenerator extends EntityAbstract
 {
     const ENTITY_TYPE = 'extension';
 
     const EXTENSION_SUFFIX = 'Extension';
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     private $typeProcessor;
 
@@ -37,19 +47,19 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Api\ExtensionAttribute\Config $config
+     * @param Config $config
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
-     * @param \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator
+     * @param CodeGeneratorInterface $classGenerator
      * @param DefinedClasses $definedClasses
      */
     public function __construct(
-        \Magento\Framework\Api\ExtensionAttribute\Config $config,
+        Config $config,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        CodeGeneratorInterface $classGenerator = null,
         DefinedClasses $definedClasses = null
     ) {
         $sourceClassName .= 'Interface';
@@ -66,29 +76,20 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     /**
      * Get type processor
      *
-     * @return \Magento\Framework\Reflection\TypeProcessor
+     * @return TypeProcessor
      * @deprecated 100.1.0
      */
     private function getTypeProcessor()
     {
         if ($this->typeProcessor === null) {
-            $this->typeProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\Reflection\TypeProcessor::class
+            $this->typeProcessor = ObjectManager::getInstance()->get(
+                TypeProcessor::class
             );
         }
         return $this->typeProcessor;
     }
-
     /**
-     * {@inheritdoc}
-     */
-    protected function _getDefaultConstructorDefinition()
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getClassProperties()
     {
@@ -96,9 +97,40 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    protected function _getClassMethods()
+    protected function _getDefaultConstructorDefinition()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    private function getImmutableClassMethods(): array
+    {
+        $methods = [];
+
+        foreach ($this->getCustomAttributes() as $attributeName => $attributeMetadata) {
+            $attributeType = $attributeMetadata[Converter::DATA_TYPE];
+            $propertyName = SimpleDataObjectConverter::snakeCaseToCamelCase($attributeName);
+            $getterName = 'get' . ucfirst($propertyName);
+
+            $methods[] = [
+                'name' => $getterName,
+                'body' => "return \$this->get('{$attributeName}');",
+                'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType . '|null']]],
+                'returnType' => '?' . $attributeType
+            ];
+        }
+
+        return $methods;
+    }
+
+    /**
+     * @return array
+     */
+    private function getMutableClassMethods(): array
     {
         $methods = [];
         foreach ($this->getCustomAttributes() as $attributeName => $attributeMetadata) {
@@ -135,7 +167,23 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
                 ],
             ];
         }
+
         return $methods;
+    }
+
+    private function isImmutable(): bool
+    {
+        $typeName = $this->getSourceClassName();
+        $reflection = new ReflectionClass($typeName);
+        return $reflection->implementsInterface(ImmutableExtensibleDataInterface::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _getClassMethods()
+    {
+        return $this->isImmutable() ? $this->getImmutableClassMethods() : $this->getMutableClassMethods();
     }
 
     /**
@@ -154,6 +202,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     {
         $this->_classGenerator->setImplementedInterfaces([$this->_getResultClassName() . 'Interface']);
         $this->_classGenerator->setExtendedClass($this->getExtendedClass());
+
         return parent::_generateCode();
     }
 
@@ -164,7 +213,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      */
     protected function getExtendedClass()
     {
-        return '\\' . \Magento\Framework\Api\AbstractSimpleObject::class;
+        return '\\' . ($this->isImmutable() ? AbstractImmutableSimpleObject::class : AbstractSimpleObject::class);
     }
 
     /**
@@ -189,9 +238,9 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
                 }
             }
             return $this->allCustomAttributes[$dataInterface];
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**

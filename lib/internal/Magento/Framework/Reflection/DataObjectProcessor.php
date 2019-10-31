@@ -7,6 +7,7 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Phrase;
+use ReflectionException;
 
 /**
  * Data object processor for array serialization using class reflection
@@ -46,11 +47,17 @@ class DataObjectProcessor
     private $processors;
 
     /**
+     * @var TypeProcessor
+     */
+    private $typeProcessor;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param TypeProcessor $typeProcessor
      * @param array $processors
      */
     public function __construct(
@@ -59,6 +66,7 @@ class DataObjectProcessor
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
+        TypeProcessor $typeProcessor,
         array $processors = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
@@ -67,6 +75,7 @@ class DataObjectProcessor
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
+        $this->typeProcessor = $typeProcessor;
     }
 
     /**
@@ -76,6 +85,7 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws ReflectionException
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {

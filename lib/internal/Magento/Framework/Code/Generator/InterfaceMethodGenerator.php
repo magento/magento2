@@ -42,7 +42,13 @@ class InterfaceMethodGenerator extends \Zend\Code\Generator\MethodGenerator
             $output .= implode(', ', $parameterOutput);
         }
 
-        $output .= ');' . self::LINE_FEED;
+        $output .= ')';
+
+        if ($this->getReturnType()) {
+            $output .= ' : ' . $this->getReturnType()->generate();
+        }
+
+        $output .= ';' . self::LINE_FEED;
 
         return $output;
     }
