@@ -22,7 +22,7 @@ if (!function_exists('__')) {
 
         $text = array_shift($argc);
         
-        $argc = (empty($argc) && !is_array($argc[0])) ?: $argc[0];
+        !(!empty($argc) && is_array($argc[0])) ?: $argc = $argc[0];
 
         return new \Magento\Framework\Phrase($text, $argc);
     }
