@@ -34,28 +34,11 @@ class GetCustomerCartTest extends GraphQlAbstract
     /** @var  array */
     private $headers;
 
-    /**
-     * @var CartManagementInterface
-     */
-    private $cartManagement;
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-    /**
-     * @var QuoteIdMaskFactory
-     */
-    private $quoteIdMaskFactory;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->cartManagement = $objectManager->get(CartManagementInterface::class);
-        $this->cartRepository = $objectManager->get(CartRepositoryInterface::class);
-        $this->quoteIdMaskFactory =  $objectManager->get(QuoteIdMaskFactory::class);
     }
 
     /**
