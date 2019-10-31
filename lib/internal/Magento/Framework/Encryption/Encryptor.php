@@ -273,21 +273,26 @@ class Encryptor implements EncryptorInterface
     {
         try {
             $this->explodePasswordHash($hash);
+            $hashedPassword = $password;
+            // hash password with all associated versions
             foreach ($this->getPasswordVersion() as $hashVersion) {
                 if ($hashVersion === self::HASH_VERSION_ARGON2ID13) {
-                    $recreated = $this->getArgonHash($password, $this->getPasswordSalt());
+                    $hashedPassword = $this->getArgonHash($hashedPassword, $this->getPasswordSalt());
                 } else {
-                    $recreated = $this->generateSimpleHash($this->getPasswordSalt() . $password, $hashVersion);
+                    $hashedPassword = $this->generateSimpleHash(
+                        $this->getPasswordSalt() . $hashedPassword,
+                        $hashVersion
+                    );
                 }
                 $hash = $this->getPasswordHash();
             }
         } catch (\RuntimeException $exception) {
             //Hash is not a password hash.
-            $recreated = $this->hash($password);
+            $hashedPassword = $this->hash($password);
         }
 
         return Security::compareStrings(
-            $recreated,
+            $hashedPassword,
             $hash
         );
     }
