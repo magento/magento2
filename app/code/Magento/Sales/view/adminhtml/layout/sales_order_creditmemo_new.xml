@@ -17,7 +17,7 @@
                         <container name="extra_customer_info"/>
                     </block>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="Magento_Sales::order/creditmemo/create/items.phtml" cacheable="false">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="Magento_Sales::order/creditmemo/create/items.phtml">
                         <arguments>
                             <argument name="viewModel" xsi:type="object">Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton</argument>
                         </arguments>
