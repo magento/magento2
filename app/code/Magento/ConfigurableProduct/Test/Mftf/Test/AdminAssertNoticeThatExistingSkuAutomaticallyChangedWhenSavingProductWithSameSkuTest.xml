@@ -69,7 +69,7 @@
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmPopup"/>
 
         <!-- Assert product auto incremented sku notice message; see success message -->
-        <see selector="{{AdminMessagesSection.noticeMessage}}" stepKey="seeNoticeMessage" userInput="SKU for product {{ApiConfigurableProduct.name}} has been changed to {{ApiConfigurableProduct.sku}}-2."/>
-        <see selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessMessage" userInput="You saved the product."/>
+        <see selector="{{AdminMessagesSection.notice}}" stepKey="seeNoticeMessage" userInput="SKU for product {{ApiConfigurableProduct.name}} has been changed to {{ApiConfigurableProduct.sku}}-2."/>
+        <see selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage" userInput="You saved the product."/>
     </test>
 </tests>
