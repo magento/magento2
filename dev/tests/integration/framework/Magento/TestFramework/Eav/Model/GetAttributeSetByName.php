@@ -12,7 +12,7 @@ use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
- * Attribute set additional functions.
+ * Search and return attribute set by name.
  */
 class GetAttributeSetByName
 {
@@ -39,7 +39,7 @@ class GetAttributeSetByName
     }
 
     /**
-     * Search and return attribute set by name.
+     * Find attribute set by name and return it.
      *
      * @param string $attributeSetName
      * @return AttributeSetInterface|null
