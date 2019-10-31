@@ -156,6 +156,7 @@ define([
                 if (valid) {
                     $(usernameSelector).removeAttr('aria-invalid aria-describedby');
                 }
+
                 return valid;
             }
 
