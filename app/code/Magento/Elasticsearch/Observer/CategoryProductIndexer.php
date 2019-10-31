@@ -53,7 +53,6 @@ class CategoryProductIndexer implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        return;
         if (!$this->config->isElasticsearchEnabled()) {
             return;
         }

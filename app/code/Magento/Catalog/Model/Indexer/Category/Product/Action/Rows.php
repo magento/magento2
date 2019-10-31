@@ -16,6 +16,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Category;
 
+/**
+ * Action for partial reindex
+ */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
