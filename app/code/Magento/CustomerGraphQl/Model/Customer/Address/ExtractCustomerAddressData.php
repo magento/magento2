@@ -105,6 +105,7 @@ class ExtractCustomerAddressData
             foreach ($addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $attribute) {
                 $isArray = false;
                 if (is_array($attribute['value'])) {
+                    // @ignoreCoverageStart
                     $isArray = true;
                     foreach ($attribute['value'] as $attributeValue) {
                         if (is_array($attributeValue)) {
@@ -116,6 +117,7 @@ class ExtractCustomerAddressData
                         $customAttributes[$attribute['attribute_code']] = implode(',', $attribute['value']);
                         continue;
                     }
+                    // @ignoreCoverageEnd
                 }
                 if ($isArray) {
                     continue;
