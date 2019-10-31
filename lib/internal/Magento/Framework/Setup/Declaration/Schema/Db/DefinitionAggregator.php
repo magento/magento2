@@ -9,7 +9,7 @@ namespace Magento\Framework\Setup\Declaration\Schema\Db;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 
 /**
- * Holds different definitions and apply them depends on column, constraint, index types. Converts object to definition, and definition to array.
+ * Holds different definitions and apply them depends on column, constraint, index types.
  */
 class DefinitionAggregator implements DbDefinitionProcessorInterface
 {
