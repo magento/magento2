@@ -7,14 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test products query output
+ */
 class ProductViewTest extends GraphQlAbstract
 {
     /**
@@ -277,22 +282,18 @@ QUERY;
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
-        $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
-            $responseObject->getData('products/items/0/categories/1/name')
+            $responseObject->getData('products/items/0/categories/0/name')
         );
         self::assertEquals(
             'Filter category',
-            $responseObject->getData('products/items/0/categories/2/name')
+            $responseObject->getData('products/items/0/categories/1/name')
         );
-        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
-            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
-            $responseObject->getData('products/items/0/canonical_url')
-        );
+        //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
+        self::assertNull($responseObject->getData('products/items/0/canonical_url'));
     }
 
     /**
@@ -587,7 +588,7 @@ QUERY;
         $secondProductSku = 'simple-156';
         $query = <<<QUERY
        {
-           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
                    attribute_set_id
@@ -718,24 +719,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-
-    /**
-     * @param ProductInterface $product
-     * @param $actualResponse
-     */
-    private function assertTierPrices($product, $actualResponse)
-    {
-        $tierPrices = $product->getTierPrices();
-        $this->assertNotEmpty($actualResponse['tier_prices'], "Precondition failed: 'tier_prices' must not be empty");
-        foreach ($actualResponse['tier_prices'] as $tierPriceIndex => $tierPriceArray) {
-            foreach ($tierPriceArray as $key => $value) {
-                /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
-                $tierPrice = $tierPrices[$tierPriceIndex];
-                $this->assertEquals($value, $tierPrice->getData($key));
-            }
-        }
-    }
-
+    
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -790,6 +774,7 @@ QUERY;
                 ];
                 $this->assertResponseFields($value, $assertionMapValues);
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $assertionMap = array_merge(
                     $assertionMap,
                     [
@@ -818,7 +803,7 @@ QUERY;
                     $valueKeyName = 'date_option';
                     $valueAssertionMap = [];
                 }
-
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $valueAssertionMap = array_merge(
                     $valueAssertionMap,
                     [
@@ -966,5 +951,166 @@ QUERY;
                 break;
         }
         return $eavAttributeCode;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testProductInAllAnchoredCategories()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {in: ["12345"]}})
+    {
+        items
+        {
+            sku
+            name
+            categories {
+            id
+            name
+            is_anchor
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        $categoryIds  = [3, 4, 5];
+
+        $productItemsInResponse = $response['products']['items'];
+        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(3, $productItemsInResponse[0]['categories']);
+        $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
+        foreach ($categoriesInResponse as $key => $categoryData) {
+            $this->assertNotEmpty($categoryData);
+            /** @var Category | Category $category */
+            $category = $categoryRepository->get($categoriesInResponse[$key][0]);
+            $this->assertResponseFields(
+                $categoriesInResponse[$key][1],
+                [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'is_anchor' => $category->getIsAnchor()
+                ]
+            );
+        }
+    }
+
+    /**
+     * Set one of the categories directly assigned to the product as non -anchored.
+     * Verify that the non-anchored category still shows in the response
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testProductWithNonAnchoredParentCategory()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {in: ["12345"]}})
+    {
+        items
+        {
+            sku
+            name
+            categories {
+            id
+            name
+            is_anchor
+            }
+        }
+    }
+}
+QUERY;
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        /** @var Category $nonAnchorCategory */
+        $nonAnchorCategory = $categoryRepository->get(4);
+        $nonAnchorCategory->setIsAnchor(false);
+        $categoryRepository->save($nonAnchorCategory);
+        $categoryIds  = [3, 4, 5];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+
+        $productItemsInResponse = $response['products']['items'];
+        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(3, $productItemsInResponse[0]['categories']);
+        $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
+        foreach ($categoriesInResponse as $key => $categoryData) {
+            $this->assertNotEmpty($categoryData);
+            /** @var Category | Category $category */
+            $category = $categoryRepository->get($categoriesInResponse[$key][0]);
+            $this->assertResponseFields(
+                $categoriesInResponse[$key][1],
+                [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'is_anchor' => $category->getIsAnchor()
+                ]
+            );
+        }
+    }
+    /**
+     * Set as non-anchored, one of the categories not directly assigned to the product
+     * Verify that the category doesn't show in the response
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testProductInNonAnchoredSubCategories()
+    {
+        $query = <<<QUERY
+{
+    products(filter: 
+             {
+             sku: {in:["12345"]}
+             }
+          )
+    {
+        items
+        {
+            sku
+            name
+            categories {
+            id
+            name
+            is_anchor
+            }
+        }
+    }
+}
+QUERY;
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
+        /** @var Category $nonAnchorCategory */
+        $nonAnchorCategory = $categoryRepository->get(3);
+        //Set the parent category as non-anchored
+        $nonAnchorCategory->setIsAnchor(false);
+        $categoryRepository->save($nonAnchorCategory);
+        $categoryIds  = [4, 5];
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
+
+        $productItemsInResponse = $response['products']['items'];
+        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(2, $productItemsInResponse[0]['categories']);
+        $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
+        foreach ($categoriesInResponse as $key => $categoryData) {
+            $this->assertNotEmpty($categoryData);
+            /** @var Category | Category $category */
+            $category = $categoryRepository->get($categoriesInResponse[$key][0]);
+            $this->assertResponseFields(
+                $categoriesInResponse[$key][1],
+                [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'is_anchor' => $category->getIsAnchor()
+                ]
+            );
+        }
     }
 }

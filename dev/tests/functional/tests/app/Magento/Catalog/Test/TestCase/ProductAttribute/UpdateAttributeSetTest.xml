@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\UpdateAttributeSetTest" summary="Update Attribute Set" ticketId="MAGETWO-26251">
         <variation name="UpdateAttributeSetTestVariation1">
-            <data name="tag" xsi:type="string">stable:no</data>
             <data name="attributeSet/data/attribute_set_name" xsi:type="string">AttributeSetEdit1%isolation%</data>
             <data name="attributeSet/data/group" xsi:type="string">Custom-group%isolation%</data>
             <data name="attributeSetOriginal/dataset" xsi:type="string">custom_attribute_set</data>

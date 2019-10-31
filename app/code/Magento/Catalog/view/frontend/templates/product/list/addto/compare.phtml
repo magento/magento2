@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /** @var $block Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare */
 ?>
 <a href="#"
    class="action tocompare"
    title="<?= $block->escapeHtml(__('Add to Compare')) ?>"
    aria-label="<?= $block->escapeHtml(__('Add to Compare')) ?>"
-   data-post='<?= /* @escapeNotVerified */ $block->getCompareHelper()->getPostDataParams($block->getProduct()) ?>'
+   data-post='<?= /* @noEscape */ $block->getCompareHelper()->getPostDataParams($block->getProduct()) ?>'
    role="button">
-    <span><?= /* @escapeNotVerified */ __('Add to Compare') ?></span>
+    <span><?= $block->escapeHtml(__('Add to Compare')) ?></span>
 </a>

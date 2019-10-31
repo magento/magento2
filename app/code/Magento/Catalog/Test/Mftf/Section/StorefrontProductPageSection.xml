@@ -23,5 +23,7 @@
         <element name="shipping" type="input" selector="span[data-th='Shipping']"/>
         <element name="orderTotal" type="input" selector=".grand.totals .amount .price"/>
         <element name="customOptionDropDown" type="select" selector="//*[@id='product-options-wrapper']//select[contains(@class, 'product-custom-option admin__control-select')]"/>
+        <element name="qtyInputWithProduct" type="input" selector="//tr//strong[contains(.,'{{productName}}')]/../../td[@class='col qty']//input" parameterized="true"/>
+        <element name="customOptionRadio" type="input" selector="//span[contains(text(),'{{customOption}}')]/../../input" parameterized="true"/>
     </section>
 </sections>

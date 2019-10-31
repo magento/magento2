@@ -12,6 +12,8 @@ namespace Magento\Tax\Block\Sales\Order;
 use Magento\Sales\Model\Order;
 
 /**
+ *  Tax totals modification block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -103,6 +105,10 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected function _addTax($after = 'discount')
     {
         $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+        $totals = $this->getParentBlock()->getTotals();
+        if ($totals['grand_total']) {
+            $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
+        }
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
     }
@@ -118,6 +124,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Initialization grand total.
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -199,11 +207,14 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init shipping.
+     *
      * @return $this
      */
     protected function _initShipping()
     {
         $store = $this->getStore();
+        /** @var \Magento\Sales\Block\Order\Totals $parent */
         $parent = $this->getParentBlock();
         $shipping = $parent->getTotal('shipping');
         if (!$shipping) {
@@ -222,12 +233,14 @@ class Tax extends \Magento\Framework\View\Element\Template
                 $baseShippingIncl = $baseShipping + (double)$this->_source->getBaseShippingTaxAmount();
             }
 
+            $couponDescription = $this->getCouponDescription();
+
             $totalExcl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
                     'value' => $shipping,
                     'base_value' => $baseShipping,
-                    'label' => __('Shipping & Handling (Excl.Tax)'),
+                    'label' => __('Shipping & Handling (Excl.Tax)') . $couponDescription,
                 ]
             );
             $totalIncl = new \Magento\Framework\DataObject(
@@ -235,7 +248,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'code' => 'shipping_incl',
                     'value' => $shippingIncl,
                     'base_value' => $baseShippingIncl,
-                    'label' => __('Shipping & Handling (Incl.Tax)'),
+                    'label' => __('Shipping & Handling (Incl.Tax)') . $couponDescription,
                 ]
             );
             $parent->addTotal($totalExcl, 'shipping');
@@ -260,13 +273,19 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init discount.
+     *
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+     *
      * @return void
      */
     protected function _initDiscount()
     {
     }
-
+    //phpcs:enable
     /**
+     * Init grand total.
+     *
      * @return $this
      */
     protected function _initGrandTotal()
@@ -304,13 +323,15 @@ class Tax extends \Magento\Framework\View\Element\Template
                 ]
             );
             $parent->addTotal($totalExcl, 'grand_total');
-            $this->_addTax('grand_total');
             $parent->addTotal($totalIncl, 'tax');
+            $this->_addTax('grand_total');
         }
         return $this;
     }
 
     /**
+     * Return order.
+     *
      * @return Order
      */
     public function getOrder()
@@ -319,6 +340,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return label properties.
+     *
      * @return array
      */
     public function getLabelProperties()
@@ -327,10 +350,33 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retuen value properties.
+     *
      * @return array
      */
     public function getValueProperties()
     {
         return $this->getParentBlock()->getValueProperties();
+    }
+
+    /**
+     * Returns additional information about coupon code if it is not displayed in totals.
+     *
+     * @return string
+     */
+    private function getCouponDescription(): string
+    {
+        $couponDescription = "";
+
+        /** @var \Magento\Sales\Block\Order\Totals $parent */
+        $parent = $this->getParentBlock();
+        $couponCode = $parent->getSource()
+            ->getCouponCode();
+
+        if ($couponCode && !$parent->getTotal('discount')) {
+            $couponDescription = " ({$couponCode})";
+        }
+
+        return $couponDescription;
     }
 }

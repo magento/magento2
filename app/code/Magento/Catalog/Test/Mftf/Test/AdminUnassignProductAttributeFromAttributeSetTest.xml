@@ -34,6 +34,7 @@
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->

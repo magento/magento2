@@ -24,7 +24,6 @@
     </media>
     <exclude>
         <item type="file">Lib::mage/captcha.js</item>
-        <item type="file">Lib::mage/captcha.min.js</item>
         <item type="file">Lib::mage/common.js</item>
         <item type="file">Lib::mage/cookies.js</item>
         <item type="file">Lib::mage/dataPost.js</item>
@@ -46,7 +45,6 @@
         <item type="file">Lib::mage/translate-inline-vde.js</item>
         <item type="file">Lib::mage/webapi.js</item>
         <item type="file">Lib::mage/zoom.js</item>
-        <item type="file">Lib::mage/validation/dob-rule.js</item>
         <item type="file">Lib::mage/validation/validation.js</item>
         <item type="file">Lib::mage/adminhtml/varienLoader.js</item>
         <item type="file">Lib::mage/adminhtml/tools.js</item>
@@ -57,12 +55,11 @@
         <item type="file">Lib::jquery/jquery.parsequery.js</item>
         <item type="file">Lib::jquery/jquery.mobile.custom.js</item>
         <item type="file">Lib::jquery/jquery-ui.js</item>
-        <item type="file">Lib::jquery/jquery-ui.min.js</item>
         <item type="file">Lib::matchMedia.js</item>
         <item type="file">Lib::requirejs/require.js</item>
         <item type="file">Lib::requirejs/text.js</item>
-        <item type="file">Lib::date-format-normalizer.js</item>
         <item type="file">Lib::varien/js.js</item>
+        <item type="directory">Magento_Tinymce3::tiny_mce</item>
         <item type="directory">Lib::css</item>
         <item type="directory">Lib::lib</item>
         <item type="directory">Lib::prototype</item>
@@ -72,10 +69,5 @@
         <item type="directory">Lib::fotorama</item>
         <item type="directory">Lib::magnifier</item>
         <item type="directory">Lib::tiny_mce</item>
-        <item type="directory">Lib::tiny_mce/classes</item>
-        <item type="directory">Lib::tiny_mce/langs</item>
-        <item type="directory">Lib::tiny_mce/plugins</item>
-        <item type="directory">Lib::tiny_mce/themes</item>
-        <item type="directory">Lib::tiny_mce/utils</item>
     </exclude>
 </view>

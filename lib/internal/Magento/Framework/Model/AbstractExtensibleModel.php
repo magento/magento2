@@ -158,7 +158,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -166,7 +166,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -182,9 +182,11 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} Added custom attributes support.
      *
-     * Added custom attributes support.
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -200,9 +202,10 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc} Unset customAttributesChanged flag
      *
-     * Unset customAttributesChanged flag
+     * @param null|string|array $key
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -359,6 +362,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -367,6 +373,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

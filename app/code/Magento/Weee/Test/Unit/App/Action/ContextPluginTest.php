@@ -85,10 +85,12 @@ class ContextPluginTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getDefaultTaxBillingAddress', 'getDefaultTaxShippingAddress', 'getCustomerTaxClassId',
                 'getWebsiteId', 'isLoggedIn'
-            ])
+                ]
+            )
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)

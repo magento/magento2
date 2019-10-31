@@ -11,6 +11,9 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
+/**
+ * Totals block.
+ */
 class Totals extends \Magento\Backend\Block\Dashboard\Bar
 {
     /**
@@ -40,6 +43,7 @@ class Totals extends \Magento\Backend\Block\Dashboard\Bar
     }
 
     /**
+     * @inheritDoc
      * @return $this|void
      */
     protected function _prepareLayout()

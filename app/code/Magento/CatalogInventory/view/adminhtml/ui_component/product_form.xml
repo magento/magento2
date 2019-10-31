@@ -35,9 +35,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Manage Stock</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                     </item>
                 </argument>
                 <field name="manage_stock" formElement="select">
@@ -74,8 +72,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.manage_stock</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.manage_stock:disabled</link>
                             <link name="checked">${$.parentName}.manage_stock:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -101,6 +103,7 @@
                     <dataScope>quantity_and_stock_status.qty</dataScope>
                     <links>
                         <link name="value">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:value</link>
+                        <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
                     </links>
                     <imports>
                         <link name="handleChanges">${$.provider}:data.product.stock_data.is_qty_decimal</link>
@@ -112,9 +115,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Out-of-Stock Threshold</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -149,8 +150,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.min_qty</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.min_qty:disabled</link>
                             <link name="checked">${$.parentName}.min_qty:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -211,6 +216,13 @@
                             <class name="admin__field-no-label">true</class>
                         </additionalClasses>
                         <dataScope>use_config_min_sale_qty</dataScope>
+                        <exports>
+                            <link name="disabled">${$.parentName}.min_sale_qty:disabled</link>
+                            <link name="checked">${$.parentName}.min_sale_qty:disabled</link>
+                        </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -274,9 +286,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Maximum Qty Allowed in Shopping Cart</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                     </item>
                 </argument>
                 <field name="max_sale_qty" formElement="input">
@@ -288,6 +298,7 @@
                     <settings>
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
+                            <rule name="validate-number" xsi:type="boolean">true</rule>
                             <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Maximum Qty Allowed in Shopping Cart</label>
@@ -308,8 +319,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.max_sale_qty</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.max_sale_qty:disabled</link>
                             <link name="checked">${$.parentName}.max_sale_qty:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -337,6 +352,7 @@
                     <dataScope>stock_data.is_qty_decimal</dataScope>
                     <imports>
                         <link name="visible">${$.provider}:data.product.stock_data.manage_stock</link>
+                        <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
                     </imports>
                 </settings>
                 <formElements>
@@ -359,6 +375,7 @@
                     <dataScope>stock_data.is_decimal_divided</dataScope>
                     <imports>
                         <link name="visible">${$.provider}:data.product.stock_data.manage_stock</link>
+                        <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
                     </imports>
                 </settings>
                 <formElements>
@@ -373,9 +390,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Backorders</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -418,8 +433,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.backorders</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.backorders:disabled</link>
                             <link name="checked">${$.parentName}.backorders:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -438,9 +457,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Notify for Quantity Below</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -475,8 +492,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.notify_stock_qty</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.notify_stock_qty:disabled</link>
                             <link name="checked">${$.parentName}.notify_stock_qty:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -495,9 +516,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                     </item>
                 </argument>
                 <field name="enable_qty_increments" formElement="select">
@@ -534,8 +553,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.enable_qty_increments</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.enable_qty_increments:disabled</link>
                             <link name="checked">${$.parentName}.enable_qty_increments:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -554,9 +577,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Qty Increments</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.enable_qty_increments</item>
                         </item>
@@ -595,8 +616,12 @@
                             <link name="linkedValue">${$.provider}:data.product.stock_data.qty_increments</link>
                         </links>
                         <exports>
+                            <link name="disabled">${$.parentName}.qty_increments:disabled</link>
                             <link name="checked">${$.parentName}.qty_increments:disabled</link>
                         </exports>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
@@ -615,9 +640,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Stock Status</item>
                         <item name="dataScope" xsi:type="string">quantity_and_stock_status</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -633,6 +656,9 @@
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <label translate="true">Stock Status</label>
                         <dataScope>is_in_stock</dataScope>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = qty, group = quantity_and_stock_status_qty:disabled</link>
+                        </imports>
                     </settings>
                     <formElements>
                         <select>

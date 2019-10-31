@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertRefundInRefundsGridActionGroup">
+        <annotations>
+            <description>Goes to the Admin Credit Memo grid page. Filters the grid for the provided Order ID, Memo ID, Refund Status and Refunded Total. Validates that the provided details are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderId" type="string"/>
+            <argument name="memoId" type="string"/>
+            <argument name="refundStatus" type="string"/>
+            <argument name="refundedTotal" type="string"/>
+        </arguments>
+
+        <!--Assert refund in refunds grid-->
+        <amOnPage url="{{AdminCreditMemosGridPage.url}}" stepKey="onCreditMemosGrid"/>
+        <waitForPageLoad stepKey="waitForLoadingPage"/>
+        <conditionalClick selector="{{AdminCreditMemosGridSection.clearFilters}}" dependentSelector="{{AdminCreditMemosGridSection.clearFilters}}" visible="true" stepKey="clearFilter"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFilterLoad"/>
+        <click selector="{{AdminCreditMemosGridSection.buttonFilters}}" stepKey="openFilterSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFilterFields"/>
+        <fillField userInput="{{memoId}}" selector="{{AdminCreditMemosGridSection.fieldCreditMemo}}" stepKey="fillSearchByCreditMemoId"/>
+        <fillField userInput="{{orderId}}" selector="{{AdminCreditMemosGridSection.fieldOrder}}" stepKey="fillSearchByOrderId"/>
+        <fillField userInput="{{refundedTotal}}" selector="{{AdminCreditMemosGridSection.fieldRefundFrom}}" stepKey="fillRefundedFrom"/>
+        <fillField userInput="{{refundedTotal}}" selector="{{AdminCreditMemosGridSection.fieldRefundTo}}" stepKey="fillRefundedTo"/>
+        <click selector="{{AdminCreditMemosGridSection.applyFilter}}" stepKey="clickSearchButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSearchResult"/>
+        <see userInput="{{memoId}}" selector="{{AdminCreditMemosGridSection.rowCreditMemos}}" stepKey="seeMemoID"/>
+        <see userInput="{{orderId}}" selector="{{AdminCreditMemosGridSection.rowCreditMemos}}" stepKey="seeOrderID"/>
+        <see userInput="{{refundStatus}}" selector="{{AdminCreditMemosGridSection.rowCreditMemos}}" stepKey="seeStatus"/>
+        <see userInput="{{refundedTotal}}" selector="{{AdminCreditMemosGridSection.rowCreditMemos}}" stepKey="refundedPrice"/>
+    </actionGroup>
+</actionGroups>

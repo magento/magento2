@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerCreateNewOrderSection">
+        <element name="updateChangesBtn" type="button" selector=".order-sidebar .actions .action-default.scalable" timeout="30"/>
+        <element name="productName" type="text" selector="#order-items_grid  span[id*=order_item]"/>
+        <element name="productPrice" type="text" selector=".even td[class=col-price] span[class=price]"/>
+        <element name="productQty" type="input" selector="td[class=col-qty] .input-text.item-qty.admin__control-text"/>
+        <element name="gridCell" type="text" selector="//div[contains(@id, 'order-items_grid')]//tbody[{{row}}]//td[count(//table[contains(@class, 'order-tables')]//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true" timeout="30"/>
+    </section>
+</sections>

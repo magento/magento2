@@ -4,6 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
@@ -58,13 +61,20 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements
                     __('Directory %1 is not under storage root path.', $path)
                 );
             }
-            $result = $this->getStorage()->uploadFile($path, $this->getRequest()->getParam('type'));
+            $uploaded = $this->getStorage()->uploadFile($path, $this->getRequest()->getParam('type'));
+            $response = [
+                'name' => $uploaded['name'],
+                'type' => $uploaded['type'],
+                'error' => $uploaded['error'],
+                'size' => $uploaded['size'],
+                'file' => $uploaded['file']
+            ];
         } catch (\Exception $e) {
-            $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+            $response = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         
-        return $resultJson->setData($result);
+        return $resultJson->setData($response);
     }
 }

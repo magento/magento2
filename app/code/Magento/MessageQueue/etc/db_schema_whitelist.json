@@ -9,5 +9,10 @@
             "PRIMARY": true,
             "QUEUE_LOCK_MESSAGE_CODE": true
         }
+    },
+    "queue_poison_pill": {
+        "column": {
+            "version": true
+        }
     }
 }

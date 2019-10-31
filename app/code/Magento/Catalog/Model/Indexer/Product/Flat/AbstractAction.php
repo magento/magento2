@@ -169,8 +169,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Retrieve Product Type Instances
-     * as key - type code, value - instance model
+     * Retrieve Product Type Instances as key - type code, value - instance model
      *
      * @return array
      */
@@ -213,17 +212,19 @@ abstract class AbstractAction
             ) {
                 $columns = $this->_productIndexerHelper->getFlatColumns();
                 $fieldList = array_keys($columns);
-                unset($columns['entity_id']);
-                unset($columns['child_id']);
-                unset($columns['is_child']);
+                unset(
+                    $columns['entity_id'],
+                    $columns['child_id'],
+                    $columns['is_child']
+                );
                 /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
-                    [$relation->getChildFieldName(), new \Zend_Db_Expr('1')]
+                    ['entity_table.entity_id', $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
                 )->join(
                     ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
-                    'entity_table.' . $metadata->getLinkField() . 't.' . $relation->getParentFieldName(),
-                    [$relation->getParentFieldName() => 'entity_table.entity_id']
+                    "entity_table.{$metadata->getLinkField()} = t.{$relation->getParentFieldName()}",
+                    []
                 )->join(
                     ['e' => $this->_productIndexerHelper->getFlatTableName($storeId)],
                     "e.entity_id = t.{$relation->getChildFieldName()}",
@@ -232,10 +233,10 @@ abstract class AbstractAction
                 if ($relation->getWhere() !== null) {
                     $select->where($relation->getWhere());
                 }
-                if ($productIds !== null) {
+                if (!empty($productIds)) {
                     $cond = [
                         $this->_connection->quoteInto("{$relation->getChildFieldName()} IN(?)", $productIds),
-                        $this->_connection->quoteInto("entity_table.entity_id IN(?)", $productIds),
+                        $this->_connection->quoteInto('entity_table.entity_id IN(?)', $productIds),
                     ];
 
                     $select->where(implode(' OR ', $cond));
@@ -253,10 +254,12 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _cleanRelationProducts($storeId)
     {
-        if (!$this->_productIndexerHelper->isAddChildData()) {
+        if (!$this->_productIndexerHelper->isAddChildData() || !$this->_isFlatTableExists($storeId)) {
             return $this;
         }
 
@@ -273,15 +276,11 @@ abstract class AbstractAction
                 $select = $this->_connection->select()->distinct(
                     true
                 )->from(
-                    ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
-                    []
-                )->join(
-                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
-                    'entity_table.' . $metadata->getLinkField() . 't.' . $relation->getParentFieldName(),
-                    [$relation->getParentFieldName() => 'entity_table.entity_id']
+                    $this->_productIndexerHelper->getTable($relation->getTable()),
+                    $relation->getParentFieldName()
                 );
                 $joinLeftCond = [
-                    "e.entity_id = entity_table.entity_id",
+                    "e.{$metadata->getLinkField()} = t.{$relation->getParentFieldName()}",
                     "e.child_id = t.{$relation->getChildFieldName()}",
                 ];
                 if ($relation->getWhere() !== null) {
@@ -302,7 +301,7 @@ abstract class AbstractAction
                     'e.is_child = ?',
                     1
                 )->where(
-                    'e.entity_id IN(?)',
+                    "e.{$metadata->getLinkField()} IN(?)",
                     $entitySelect
                 )->where(
                     "t.{$relation->getChildFieldName()} IS NULL"
@@ -335,6 +334,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get Metadata Pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

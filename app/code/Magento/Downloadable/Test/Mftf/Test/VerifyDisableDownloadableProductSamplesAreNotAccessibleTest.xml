@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyDisableDownloadableProductSamplesAreNotAccessibleTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Downloadable product"/>
+            <title value="Samples of Downloadable Products are not accessible, if product is disabled"/>
+            <description value="Samples of Downloadable Products are not accessible, if product is disabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15845"/>
+            <useCaseId value="MC-14824"/>
+            <group value="downloadable"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create downloadable product -->
+            <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Add downloadable link -->
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+
+            <!-- Add downloadable sample -->
+            <createData entity="DownloadableSample" stepKey="addDownloadableSample">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteDownloadableProduct"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Admin logout -->
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Open Downloadable product from precondition on Storefront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Sample url is accessible -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableSample">
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSample.title)}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSample.title)}}" stepKey="clickDownloadableSample"/>
+
+        <!-- Grab Sample id -->
+        <switchToNextTab stepKey="switchToSampleTab"/>
+        <grabFromCurrentUrl regex="~/sample_id/(\d+)/~" stepKey="grabDownloadableSampleId"/>
+        <closeTab stepKey="closeSampleTab"/>
+
+        <!-- Link Sample url is accessible -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableLink">
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLink1.title)}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLink1.title)}}" stepKey="clickDownloadableLinkSample"/>
+
+        <!-- Grab Link Sample id -->
+        <switchToNextTab stepKey="switchToLinkSampleTab"/>
+        <grabFromCurrentUrl regex="~/link_id/(\d+)/~" stepKey="grabDownloadableLinkId"/>
+        <closeTab stepKey="closeLinkSampleTab"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+        <!-- Open Downloadable product from precondition -->
+        <actionGroup ref="goToProductPageViaID" stepKey="openProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+
+        <!-- Change status of product to "Disable" and save it -->
+        <actionGroup ref="AdminSetProductDisabled" stepKey="disableProduct"/>
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+
+        <!-- Assert product is disable on Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+
+        <!-- Navigate to Link Sample url on Storefront -->
+        <actionGroup ref="StorefrontOpenDownloadableLinkActionGroup" stepKey="openDownloadableLinkSample">
+            <argument name="linkId" value="{$grabDownloadableLinkId}"/>
+        </actionGroup>
+
+        <!-- Link Sample url is not accessible. You are redirected to Home Page -->
+        <seeInCurrentUrl url="{{StorefrontHomePage.url}}" stepKey="seeRedirectToHomePage"/>
+
+        <!-- Navigate to Sample url on Storefront -->
+        <actionGroup ref="StorefrontOpenDownloadableSampleActionGroup" stepKey="openDownloadableSample">
+            <argument name="sampleId" value="{$grabDownloadableSampleId}"/>
+        </actionGroup>
+
+        <!-- Sample url is not accessible. You are redirected to Home Page -->
+        <seeInCurrentUrl url="{{StorefrontHomePage.url}}" stepKey="seeHomePage"/>
+    </test>
+</tests>
