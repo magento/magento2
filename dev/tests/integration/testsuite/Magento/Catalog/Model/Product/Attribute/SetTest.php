@@ -105,7 +105,9 @@ class SetTest extends \PHPUnit\Framework\TestCase
         ];
         $set->organizeData($this->getAttributeSetData($additional));
         $this->attributeSetResource->save($set);
-        $groupId = $this->getAttributeGroup($groupName)->getAttributeGroupId();
+        $groupId = $attributeGroup
+            ? $attributeGroup->getAttributeGroupId()
+            : $this->getAttributeGroup($groupName)->getAttributeGroupId();
         $this->config->clear();
         $setInfo = $this->attributeSetResource->getSetInfo([$attributeId], $this->defaultSetId);
         $expectedInfo = [
@@ -230,7 +232,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
      * Returns attribute group by name.
      *
      * @param string $groupName
-     * @return AttributeGroupInterface|Group|null
+     * @return AttributeGroupInterface|null
      */
     private function getAttributeGroup(string $groupName): ?AttributeGroupInterface
     {
