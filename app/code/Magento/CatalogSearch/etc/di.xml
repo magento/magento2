@@ -75,6 +75,9 @@
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
+        <plugin name="catalogsearchFulltextCategoryAssignment" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Category\Action\Rows"/>
+    </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
     </type>
