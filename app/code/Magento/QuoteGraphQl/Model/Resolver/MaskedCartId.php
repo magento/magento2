@@ -14,9 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
-use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
 
 /**
  * Get cart id from the cart
@@ -24,33 +22,16 @@ use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceMo
 class MaskedCartId implements ResolverInterface
 {
     /**
-     * @var QuoteIdMaskFactory
-     *
-     */
-    private $quoteIdMaskFactory;
-
-    /**
-     * @var QuoteIdMaskResourceModel
-     */
-    private $quoteIdMaskResourceModel;
-
-    /**
      * @var QuoteIdToMaskedQuoteIdInterface
      */
     private $quoteIdToMaskedQuoteId;
 
     /**
-     * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
      * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
      */
     public function __construct(
-        QuoteIdMaskFactory $quoteIdMaskFactory,
-        QuoteIdMaskResourceModel $quoteIdMaskResourceModel,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
     ) {
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
