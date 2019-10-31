@@ -21,6 +21,9 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridToDefaultView"/>
+            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
             <createData entity="productDropDownAttribute" stepKey="productAttribute"/>
             <createData entity="productAttributeOption2" stepKey="attributeOptionWithDefaultValue">
                 <requiredEntity createDataKey="productAttribute"/>
