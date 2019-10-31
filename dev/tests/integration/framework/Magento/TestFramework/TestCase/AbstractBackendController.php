@@ -46,7 +46,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
      *
      * @var int
      */
-    protected $expectedNoAccessResponse = 403;
+    protected $expectedNoAccessResponseCode = 403;
 
     /**
      * @inheritDoc
@@ -103,9 +103,8 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
             $this->getRequest()->setMethod($this->httpMethod);
         }
         $this->dispatch($this->uri);
-        $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
         $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
-        $this->assertNotSame($this->expectedNoAccessResponse, $this->getResponse()->getHttpResponseCode());
+        $this->assertNotSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }
 
     /**
@@ -123,6 +122,6 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
             ->getAcl()
             ->deny(null, $this->resource);
         $this->dispatch($this->uri);
-        $this->assertSame($this->expectedNoAccessResponse, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }
 }
