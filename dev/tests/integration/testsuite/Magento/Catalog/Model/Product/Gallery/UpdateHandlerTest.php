@@ -344,7 +344,14 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown()
     {
+        parent::tearDown();
         $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
+        $this->galleryResource->getConnection()
+            ->delete($this->galleryResource->getTable(Gallery::GALLERY_TABLE));
+        $this->galleryResource->getConnection()
+            ->delete($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE));
+        $this->galleryResource->getConnection()
+            ->delete($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE));
     }
 
     /**
