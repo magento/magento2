@@ -47,9 +47,13 @@ class GetAttributeGroupByName
      */
     public function execute(int $setId, string $groupName): ?AttributeGroupInterface
     {
-        $searchCriteria =  $this->searchCriteriaBuilder->addFilter('attribute_group_name', $groupName)
-            ->addFilter('attribute_set_id', $setId)
-            ->create();
+        $searchCriteria =  $this->searchCriteriaBuilder->addFilter(
+            AttributeGroupInterface::GROUP_NAME,
+            $groupName
+        )->addFilter(
+            AttributeGroupInterface::ATTRIBUTE_SET_ID,
+            $setId
+        )->create();
         $result = $this->groupRepository->getList($searchCriteria)->getItems();
 
         return array_shift($result);
