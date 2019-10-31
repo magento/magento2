@@ -62,7 +62,7 @@ class MaskedCartId implements ResolverInterface
         try {
             $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
         } catch (NoSuchEntityException $exception) {
-            throw new GraphQlNoSuchEntityException(__('Cart id is not '));
+            throw new GraphQlNoSuchEntityException(__('Current user does not have an active cart.'));
         }
         return $maskedId;
     }
