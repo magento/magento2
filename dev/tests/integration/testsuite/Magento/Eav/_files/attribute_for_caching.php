@@ -14,11 +14,13 @@ $entityTypeId = $entityType->getId();
 
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
 $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
-$attributeSet->setData([
-    'attribute_set_name' => 'test_attribute_set',
-    'entity_type_id' => $entityTypeId,
-    'sort_order' => 100,
-]);
+$attributeSet->setData(
+    [
+        'attribute_set_name' => 'test_attribute_set',
+        'entity_type_id' => $entityTypeId,
+        'sort_order' => 100
+    ]
+);
 $attributeSet->validate();
 $attributeSet->save();
 
