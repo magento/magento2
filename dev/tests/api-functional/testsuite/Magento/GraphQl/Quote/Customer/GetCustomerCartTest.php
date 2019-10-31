@@ -12,9 +12,6 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Test for getting Customer cart information
@@ -90,7 +87,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Query for customer cart with no customer token passed
      *
      * @expectedException Exception
-     * @expectedExceptionMessage User cannot access the cart unless loggedIn and with a valid customer token
+     * @expectedExceptionMessage The request is allowed for logged in customer
      */
     public function testGetCustomerCartWithNoCustomerToken()
     {
@@ -115,7 +112,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->revokeCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
         $this->expectExceptionMessage(
-            "User cannot access the cart unless loggedIn and with a valid customer token"
+            'The request is allowed for logged in customer'
         );
         $this->graphQlQuery($customerCartQuery, [], '', $this->headers);
     }

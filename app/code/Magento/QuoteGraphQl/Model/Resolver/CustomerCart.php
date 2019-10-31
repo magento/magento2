@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -62,9 +63,7 @@ class CustomerCart implements ResolverInterface
             }
 
         } else {
-            throw new LocalizedException(
-                __('User cannot access the cart unless loggedIn and with a valid customer token')
-            );
+                throw new GraphQlInputException(__('The request is allowed for logged in customer'));
         }
 
         return [

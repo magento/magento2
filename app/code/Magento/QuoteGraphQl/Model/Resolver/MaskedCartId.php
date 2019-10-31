@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
@@ -19,10 +21,11 @@ use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceMo
 /**
  * Get cart id from the cart
  */
-class CartId implements ResolverInterface
+class MaskedCartId implements ResolverInterface
 {
     /**
      * @var QuoteIdMaskFactory
+     *
      */
     private $quoteIdMaskFactory;
 
@@ -71,20 +74,15 @@ class CartId implements ResolverInterface
      *
      * @param int $quoteId
      * @return string
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getQuoteMaskId(int $quoteId): string
     {
-        $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
-        if ($maskedId === '') {
-            $quoteIdMask = $this->quoteIdMaskFactory->create();
-            $quoteIdMask->setQuoteId($quoteId);
-
-            $this->quoteIdMaskResourceModel->save($quoteIdMask);
-            $maskedId = $quoteIdMask->getMaskedId();
+        try {
+            $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
+        } catch (NoSuchEntityException $exception) {
+            throw new GraphQlNoSuchEntityException(__('Cart id is not '));
         }
-
         return $maskedId;
     }
 }
