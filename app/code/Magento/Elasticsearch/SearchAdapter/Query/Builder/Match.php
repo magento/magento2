@@ -134,12 +134,17 @@ class Match implements QueryInterface
         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
         $count = 0;
         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
-        $count = count(explode(' ',trim($value)));
+        $count = count(explode(' ', trim($value)));
         $condition = ($count) ? 'match_phrase' : 'match';
 
         $transformedTypes = [];
         foreach ($matches as $match) {
-            $attributeAdapter = $this->attributeProvider->getByAttributeCode($match['field']);
+            $resolvedField = $this->fieldMapper->getFieldName(
+                $match['field'],
+                ['type' => FieldMapperInterface::TYPE_QUERY]
+            );
+
+            $attributeAdapter = $this->attributeProvider->getByAttributeCode($resolvedField);
             $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
             $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
             $valueTransformerHash = \spl_object_hash($valueTransformer);
@@ -152,10 +157,6 @@ class Match implements QueryInterface
                 continue;
             }
 
-            $resolvedField = $this->fieldMapper->getFieldName(
-                $match['field'],
-                ['type' => FieldMapperInterface::TYPE_QUERY]
-            );
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [
