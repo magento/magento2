@@ -55,6 +55,11 @@ class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
     private $urlReportConfigPath = 'path/url/report';
 
     /**
+     * @var string
+     */
+    private $urlReportDocConfigPath = 'analytics/url/documentation';
+
+    /**
      * @return void
      */
     protected function setUp()
@@ -87,12 +92,24 @@ class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
                 'urlReportConfigPath' => $this->urlReportConfigPath,
             ]
         );
+
+        $this->reportUrlProvider = $this->objectManagerHelper->getObject(
+            ReportUrlProvider::class,
+            [
+                'config' => $this->configMock,
+                'analyticsToken' => $this->analyticsTokenMock,
+                'otpRequest' => $this->otpRequestMock,
+                'flagManager' => $this->flagManagerMock,
+                'urlReportDocConfigPath' => $this->urlReportDocConfigPath,
+            ]
+        );
     }
 
     /**
      * @param bool $isTokenExist
      * @param string|null $otp If null OTP was not received.
      *
+     * @throws SubscriptionUpdateException
      * @dataProvider getUrlDataProvider
      */
     public function testGetUrl($isTokenExist, $otp)
@@ -104,6 +121,11 @@ class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with($this->urlReportConfigPath)
+            ->willReturn($reportUrl);
+        $this->configMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with($this->urlReportDocConfigPath)
             ->willReturn($reportUrl);
         $this->analyticsTokenMock
             ->expects($this->once())
@@ -135,6 +157,7 @@ class ReportUrlProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
+     * @throws SubscriptionUpdateException
      */
     public function testGetUrlWhenSubscriptionUpdateRunning()
     {
