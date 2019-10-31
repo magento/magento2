@@ -219,6 +219,7 @@ QUERY;
     categoryList(filters: {ids: {in: ["3"]}}){
         id
         name
+        image
         url_key
         url_path
         description
@@ -231,6 +232,7 @@ QUERY;
         }
         children{
           name
+          image
           url_key
           description
           products{
@@ -242,6 +244,7 @@ QUERY;
           }
           children{
             name
+            image
           }
         }
     }
