@@ -46,7 +46,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     /**
      * @var IndexerRegistry
      */
-    private  $indexerRegistry;
+    private $indexerRegistry;
 
     /**
      * @param ResourceConnection $resource
