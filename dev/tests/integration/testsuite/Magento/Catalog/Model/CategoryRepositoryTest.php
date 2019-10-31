@@ -11,7 +11,10 @@ use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
@@ -43,6 +46,15 @@ class CategoryRepositoryTest extends TestCase
      */
     private $categoryFactory;
 
+    /** @var CollectionFactory */
+    private $productCollectionFactory;
+
+    /** @var ObjectManagerInterface */
+    private $objectManager;
+
+    /** @var CategoryCollectionFactory */
+    private $categoryCollectionFactory;
+
     /**
      * Sets up common objects.
      *
@@ -50,10 +62,13 @@ class CategoryRepositoryTest extends TestCase
      */
     protected function setUp()
     {
-        $this->repo = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
-        $this->auth = Bootstrap::getObjectManager()->get(Auth::class);
-        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
-        $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryInterfaceFactory::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->repo = $this->objectManager->create(CategoryRepositoryInterface::class);
+        $this->auth = $this->objectManager->get(Auth::class);
+        $this->aclBuilder = $this->objectManager->get(Builder::class);
+        $this->categoryFactory = $this->objectManager->get(CategoryInterfaceFactory::class);
+        $this->productCollectionFactory = $this->objectManager->get(CollectionFactory::class);
+        $this->categoryCollectionFactory = $this->objectManager->create(CategoryCollectionFactory::class);
     }
 
     /**
@@ -74,8 +89,9 @@ class CategoryRepositoryTest extends TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @return void
      */
-    public function testSaveDesign()
+    public function testSaveDesign(): void
     {
         $category = $this->repo->get(333);
         $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
@@ -108,5 +124,32 @@ class CategoryRepositoryTest extends TestCase
         $newCategory = $this->repo->save($newCategory);
         $customDesignAttribute = $newCategory->getCustomAttribute('custom_design');
         $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoAppArea adminhtml
+     * @return void
+     */
+    public function testCategoryBehaviourAfterDelete(): void
+    {
+        $productCollection = $this->productCollectionFactory->create();
+        $deletedCategories = ['3', '4', '5', '13'];
+        $categoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
+        $this->repo->deleteByIdentifier(3);
+        $this->assertEquals(
+            0,
+            $productCollection->addCategoriesFilter(['in' => $deletedCategories])->getSize(),
+            'The category-products relations was not deleted after category delete'
+        );
+        $newCategoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
+        $difference = array_diff($categoryCollectionIds, $newCategoryCollectionIds);
+        sort($difference);
+        $this->assertEquals(
+            $deletedCategories,
+            $difference,
+            'Wrong categories was deleted'
+        );
     }
 }

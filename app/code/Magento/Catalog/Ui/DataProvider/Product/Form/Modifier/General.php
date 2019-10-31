@@ -224,6 +224,7 @@ class General extends AbstractModifier
                         'validate-zero-or-greater' => true
                     ],
                     'additionalClasses' => 'admin__field-small',
+                    'sortOrder' => 0,
                     'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
                     'imports' => $disabled ? [] : [
                         'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
@@ -242,6 +243,8 @@ class General extends AbstractModifier
                 $containerPath . static::META_CONFIG_PATH,
                 $meta,
                 [
+                    'label' => false,
+                    'required' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
                 ]
             );
@@ -269,6 +272,7 @@ class General extends AbstractModifier
                         ],
                     ],
                     'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+                    'sortOrder' => 10,
                     'disabled' => $disabled,
                 ]
             );
@@ -317,7 +321,8 @@ class General extends AbstractModifier
                 $fromContainerPath . self::META_CONFIG_PATH,
                 $meta,
                 [
-                    'label' => __('Set Product as New From'),
+                    'label' => false,
+                    'required' => false,
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
