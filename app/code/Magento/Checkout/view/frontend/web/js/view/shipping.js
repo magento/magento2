@@ -87,7 +87,7 @@ define([
                     '',
                     $t('Shipping'),
                     this.visible, _.bind(this.navigate, this),
-                    10
+                    this.sortOrder
                 );
             }
             checkoutDataResolver.resolveShippingAddress();

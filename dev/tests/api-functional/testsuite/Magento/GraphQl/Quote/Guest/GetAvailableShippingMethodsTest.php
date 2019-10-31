@@ -67,10 +67,17 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
+            'base_amount' => null,
         ];
         self::assertEquals(
             $expectedAddressData,
             $response['cart']['shipping_addresses'][0]['available_shipping_methods'][0]
+        );
+        self::assertCount(1, $response['cart']['shipping_addresses'][0]['cart_items']);
+        self::assertCount(1, $response['cart']['shipping_addresses'][0]['cart_items_v2']);
+        self::assertEquals(
+            'simple_product',
+            $response['cart']['shipping_addresses'][0]['cart_items_v2'][0]['product']['sku']
         );
     }
 
@@ -135,25 +142,53 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
 query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
-        available_shipping_methods {
-          amount {
-            value
-            currency
-          }
-          carrier_code
-          carrier_title
-          error_message
-          method_code
-          method_title
-          price_excl_tax {
-            value
-            currency
-          }
-          price_incl_tax {
-            value
-            currency
-          }
+      cart_items {
+        cart_item_id
+        quantity
+      }
+      cart_items_v2 {
+        id
+        quantity
+        product {
+          sku
         }
+      }
+      available_shipping_methods {
+        amount {
+          value
+          currency
+        }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+        base_amount {
+          value
+          currency
+        }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+      }
     }
   }
 }

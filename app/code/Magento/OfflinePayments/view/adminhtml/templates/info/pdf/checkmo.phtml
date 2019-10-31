@@ -7,8 +7,9 @@
 /**
  * @var $block \Magento\OfflinePayments\Block\Info\Checkmo
  */
+$paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
+<?= $block->escapeHtml($paymentTitle) ?>
     {{pdf_row_separator}}
 <?php if ($block->getInfo()->getAdditionalInformation()) : ?>
     {{pdf_row_separator}}

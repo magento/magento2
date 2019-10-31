@@ -17,7 +17,6 @@
         "ext-intl": "*",
         "ext-mcrypt": "*",
         "ext-simplexml": "*",
-        "ext-spl": "*",
         "lib-libxml": "*",
         "composer/composer": "1.0.0-alpha9",
         "magento/magento-composer-installer": "*",
