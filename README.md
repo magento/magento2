@@ -1,7 +1,24 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=2.3-develop)](https://travis-ci.org/magento/magento2)
-[![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
+<p align="center">
+  <a href="https://magento.com">
+    <img src="https://static.magento.com/sites/all/themes/magento/logo.svg" width="300px" alt="Magento" />
+  </a>
+</p>
+<p align="center">
+    <br /><br />
+    <a href="https://travis-ci.org/magento/magento2">
+        <img src="https://travis-ci.org/magento/magento2.svg?branch=2.3-develop" alt="Build Status" />
+    </a>
+    <a href="https://www.codetriage.com/magento/magento2">
+        <img src="https://www.codetriage.com/magento/magento2/badges/users.svg" alt="Open Source Helpers" />
+    </a>
+    <a href="https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge">
+        <img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter" />
+    </a>
+    <a href="https://crowdin.com/project/magento-2">
+        <img src="https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg" alt="Crowdin" />
+    </a>
+</p>
+
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
