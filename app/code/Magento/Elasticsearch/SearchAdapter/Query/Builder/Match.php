@@ -130,11 +130,12 @@ class Match implements QueryInterface
     protected function buildQueries(array $matches, array $queryValue)
     {
         $conditions = [];
-
-        // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
-        $count = 0;
-        $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
-        $condition = ($count) ? 'match_phrase' : 'match';
+ 
+         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
+         $count = 0;
+         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
+         $count = count(explode(' ',trim($value)));
+         $condition = ($count) ? 'match_phrase' : 'match';
 
         $transformedTypes = [];
         foreach ($matches as $match) {
