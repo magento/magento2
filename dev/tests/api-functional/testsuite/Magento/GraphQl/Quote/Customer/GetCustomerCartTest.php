@@ -53,8 +53,8 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->assertArrayHasKey('items', $response['customerCart']);
         $this->assertNotEmpty($response['customerCart']['items']);
         $this->assertEquals(2, $response['customerCart']['total_quantity']);
-        $this->assertArrayHasKey('cart_id', $response['customerCart']);
-        $this->assertEquals($maskedQuoteId, $response['customerCart']['cart_id']);
+        $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertEquals($maskedQuoteId, $response['customerCart']['id']);
         $this->assertEquals(
             $quantity,
             $response['customerCart']['items'][0]['quantity'],
@@ -74,8 +74,8 @@ class GetCustomerCartTest extends GraphQlAbstract
         $headers = ['Authorization' => 'Bearer ' . $customerToken];
         $response = $this->graphQlQuery($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
-        $this->assertArrayHasKey('cart_id', $response['customerCart']);
-        $this->assertNotNull($response['customerCart']['cart_id']);
+        $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertNotNull($response['customerCart']['id']);
         $this->assertEmpty($response['customerCart']['items']);
         $this->assertEquals(0, $response['customerCart']['total_quantity']);
     }
@@ -104,8 +104,8 @@ class GetCustomerCartTest extends GraphQlAbstract
         $customerCartQuery = $this->getCustomerCartQuery();
         $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
-        $this->assertArrayHasKey('cart_id', $response['customerCart']);
-        $this->assertNotNull($response['customerCart']['cart_id']);
+        $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertNotNull($response['customerCart']['id']);
         $this->revokeCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
         $this->expectExceptionMessage(
@@ -126,12 +126,12 @@ class GetCustomerCartTest extends GraphQlAbstract
         $customerCartQuery = $this->getCustomerCartQuery();
         $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
-        $this->assertArrayHasKey('cart_id', $response['customerCart']);
-        $this->assertNotNull($response['customerCart']['cart_id']);
-        $cartId = $response['customerCart']['cart_id'];
+        $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertNotNull($response['customerCart']['id']);
+        $cartId = $response['customerCart']['id'];
         $customerCartQuery = $this->getCustomerCartQuery();
         $response2 = $this->graphQlQuery($customerCartQuery, [], '', $headers);
-        $this->assertEquals($cartId, $response2['customerCart']['cart_id']);
+        $this->assertEquals($cartId, $response2['customerCart']['id']);
     }
 
     /**
@@ -148,7 +148,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $customerCartQuery = $this->getCustomerCartQuery();
         $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
         $this->assertArrayHasKey('customerCart', $response);
-        $this->assertNotEmpty($response['customerCart']['cart_id']);
+        $this->assertNotEmpty($response['customerCart']['id']);
         $this->assertEmpty($response['customerCart']['items']);
         $this->assertEmpty($response['customerCart']['total_quantity']);
     }
@@ -166,7 +166,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $headerMap = $this->getHeaderMap();
         $headerMap['Store'] = 'fixture_second_store';
         $responseSecondStore = $this->graphQlQuery($customerCartQuery, [], '', $headerMap);
-        $this->assertEquals($maskedQuoteIdSecondStore, $responseSecondStore['customerCart']['cart_id']);
+        $this->assertEquals($maskedQuoteIdSecondStore, $responseSecondStore['customerCart']['id']);
     }
 
     /**
@@ -223,8 +223,8 @@ QUERY;
         return <<<QUERY
 {
   customerCart {
-  total_quantity
-  cart_id
+    total_quantity
+    id
     items {
       id
       quantity

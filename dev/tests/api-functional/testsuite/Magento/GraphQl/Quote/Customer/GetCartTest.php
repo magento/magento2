@@ -65,8 +65,8 @@ class GetCartTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('cart', $response);
-        self::assertArrayHasKey('cart_id', $response['cart']);
-        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
+        self::assertArrayHasKey('id', $response['cart']);
+        self::assertEquals($maskedQuoteId, $response['cart']['id']);
         self::assertArrayHasKey('items', $response['cart']);
         self::assertCount(2, $response['cart']['items']);
 
@@ -190,8 +190,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      *
      * @expectedException Exception
@@ -258,7 +257,7 @@ QUERY;
         return <<<QUERY
 {
   cart(cart_id: "{$maskedQuoteId}") {
-  cart_id
+    id
     items {
       id
       quantity
