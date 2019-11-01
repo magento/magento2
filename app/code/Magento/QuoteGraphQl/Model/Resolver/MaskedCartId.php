@@ -51,11 +51,11 @@ class MaskedCartId implements ResolverInterface
     }
 
     /**
-     * Fetch or create masked id for customer's active quote
+     * Get masked id for cart
      *
      * @param int $quoteId
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws GraphQlNoSuchEntityException
      */
     private function getQuoteMaskId(int $quoteId): string
     {
