@@ -32,6 +32,11 @@
             <!-- Delete the simple product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
+            <!-- Delete a Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
@@ -135,11 +140,7 @@
         <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-
-        <!-- Delete created Website -->
-        <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
-            <argument name="websiteName" value="$createWebsite.website[name]$"/>
-        </actionGroup>
+        
     </test>
 </tests>
 
