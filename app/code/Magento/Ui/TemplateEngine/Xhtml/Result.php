@@ -6,6 +6,7 @@
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Layout\Generator\Structure;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -50,12 +51,18 @@ class Result implements ResultInterface
     private $jsonSerializer;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param Template $template
      * @param CompilerInterface $compiler
      * @param UiComponentInterface $component
      * @param Structure $structure
      * @param LoggerInterface $logger
-     * @param JsonHexTag $jsonSerializer
+     * @param JsonHexTag|null $jsonSerializer
+     * @param State|null $state
      */
     public function __construct(
         Template $template,
@@ -63,7 +70,8 @@ class Result implements ResultInterface
         UiComponentInterface $component,
         Structure $structure,
         LoggerInterface $logger,
-        JsonHexTag $jsonSerializer = null
+        ?JsonHexTag $jsonSerializer = null,
+        ?State $state = null
     ) {
         $this->template = $template;
         $this->compiler = $compiler;
@@ -71,6 +79,7 @@ class Result implements ResultInterface
         $this->structure = $structure;
         $this->logger = $logger;
         $this->jsonSerializer = $jsonSerializer ?? ObjectManager::getInstance()->get(JsonHexTag::class);
+        $this->state = $state ?? ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -116,8 +125,11 @@ class Result implements ResultInterface
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
         } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical($e);
             $result = $e->getMessage();
+            if ($this->state->getMode() === State::MODE_DEVELOPER) {
+                $result .= "<pre><code>{$e->__toString()}</code></pre>";
+            }
         }
         return $result;
     }
