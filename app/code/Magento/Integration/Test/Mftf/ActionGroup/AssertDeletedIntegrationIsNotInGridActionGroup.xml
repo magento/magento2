@@ -12,6 +12,6 @@
         <arguments>
             <argument name="name" type="string"/>
         </arguments>
-        <dontSee userInput="{{name}}" selector="{{IntegrationsGridSection.rowByIndex('1')}}" stepKey="donSeeIntegration"/>
+        <dontSee userInput="{{name}}" selector="{{AdminIntegrationsGridSection.rowByIndex('1')}}" stepKey="donSeeIntegration"/>
     </actionGroup>
 </actionGroups>

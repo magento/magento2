@@ -11,7 +11,7 @@
 
     <actionGroup name="AdminSubmitNewIntegrationFormActionGroup">
         <!--Click the "Save" Button -->
-        <click stepKey="clickSaveButton" selector="{{AddNewIntegrationSection.saveButton}}"/>
+        <click stepKey="clickSaveButton" selector="{{AdminNewIntegrationSection.saveButton}}"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

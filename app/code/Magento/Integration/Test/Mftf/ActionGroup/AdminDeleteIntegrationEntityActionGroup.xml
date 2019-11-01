@@ -9,9 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteIntegrationEntityActionGroup">
-        <click stepKey="clickRemoveButon" selector="{{IntegrationsGridSection.remove}}"/>
-        <waitForElementVisible selector="{{IntegrationsGridSection.submitButton}}" stepKey="waitForConfirmButtonVisible"/>
-        <click stepKey="clickSubmitButton" selector="{{IntegrationsGridSection.submitButton}}"/>
+        <click stepKey="clickRemoveButon" selector="{{AdminIntegrationsGridSection.remove}}"/>
+        <waitForElementVisible selector="{{AdminIntegrationsGridSection.submitButton}}" stepKey="waitForConfirmButtonVisible"/>
+        <click stepKey="clickSubmitButton" selector="{{AdminIntegrationsGridSection.submitButton}}"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
