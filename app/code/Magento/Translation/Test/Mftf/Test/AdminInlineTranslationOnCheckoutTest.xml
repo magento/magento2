@@ -31,6 +31,8 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
+            <comment userInput="Removed 'magentoCLI' action and making comment to preserve Backward Compatibility" stepKey="setDeveloperMode"/>
+            <comment userInput="Removed 'magentoCLI' action and making comment to preserve Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="DisableTranslateInlineForStorefront"/>
