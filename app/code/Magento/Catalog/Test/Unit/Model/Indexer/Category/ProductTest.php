@@ -90,7 +90,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Indexer\Category\Product\Action\Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->at(0))->method('execute')->with($ids, true)->will($this->returnSelf());
+        $rowMock->expects($this->at(0))->method('execute')->with($ids)->will($this->returnSelf());
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
 
@@ -107,7 +107,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Indexer\Category\Product\Action\Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->once())->method('execute')->with($ids, true)->will($this->returnSelf());
+        $rowMock->expects($this->once())->method('execute')->with($ids)->will($this->returnSelf());
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
 
