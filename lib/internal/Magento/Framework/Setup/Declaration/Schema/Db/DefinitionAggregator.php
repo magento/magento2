@@ -109,7 +109,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         if ($defaultValue === "'NULL'") {
             return "NULL";
         }
-        if ($defaultValue === "NULL" && (bool) strpos($this->getDatabaseVersion(), 'MariaDB')) {
+        if ($defaultValue === "NULL" && strpos($this->getDatabaseVersion(), 'MariaDB') !== false) {
             return null;
         }
         /*
