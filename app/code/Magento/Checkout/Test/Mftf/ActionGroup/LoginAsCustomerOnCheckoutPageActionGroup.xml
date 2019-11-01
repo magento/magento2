@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginAsCustomerOnCheckoutPageActionGroup">
+        <annotations>
+            <description>DEPRECATED: Please use StorefrontLoginCustomerOnCheckoutPageActionGroup. Login customer on storefront checkout page during shipping step</description>
+        </annotations>
         <arguments>
             <argument name="customer" type="entity"/>
         </arguments>
@@ -19,7 +22,9 @@
         <fillField selector="{{CheckoutShippingSection.password}}" userInput="{{customer.password}}" stepKey="fillPasswordField"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.loginButton}}" stepKey="waitForLoginButtonVisible"/>
-        <click selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
+        <doubleClick selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear3"/>
+        <waitForPageLoad stepKey="waitToBeLoggedIn"/>
         <waitForElementNotVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForEmailInvisible"/>
     </actionGroup>
 </actionGroups>
