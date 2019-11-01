@@ -1,12 +1,14 @@
 <?php
 /**
- * Order status grid collection
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Status;
 
+/**
+ * Class Collection
+ * Oder statuses grid collection
+ */
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Status\Collection
 {
     /**
