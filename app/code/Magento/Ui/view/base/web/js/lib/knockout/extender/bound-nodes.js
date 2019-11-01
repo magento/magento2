@@ -26,7 +26,7 @@ define([
     }
 
     /**
-     * Removes specified node to models' associations list, if it's
+     * Adds specified node to models' associations list, if it's
      * a root node (node is not a descendant of any previously added nodes).
      * Triggers 'addNode' event.
      *
@@ -34,16 +34,8 @@ define([
      * @param {HTMLElement} node
      */
     function addBounded(model, node) {
-        var nodes = getBounded(model),
+        var nodes = getBounded(model) || [],
             isRoot;
-
-        if (!nodes) {
-            nodesMap.set(model, [node]);
-
-            Events.trigger.call(model, 'addNode', node);
-
-            return;
-        }
 
         isRoot = nodes.every(function (bounded) {
             return !bounded.contains(node);
@@ -51,9 +43,9 @@ define([
 
         if (isRoot) {
             nodes.push(node);
-
-            Events.trigger.call(model, 'addNode', node);
         }
+
+        Events.trigger.call(model, 'addNode', node);
     }
 
     /**
@@ -113,10 +105,37 @@ define([
          * to track nodes associated with model.
          *
          * @param {Function} orig - Original 'applyBindings' method.
-         * @param {Object} ctx
-         * @param {HTMLElement} node - Original 'applyBindings' method.
+         * @param {Object} ctx - Knockout's model or binding context.
+         * @param {HTMLElement} node - Node that gets associated.
          */
         applyBindings: function (orig, ctx, node) {
+            var result = orig(),
+                data = ctx && (ctx.$data || ctx);
+
+            if (node && node.nodeType === 8) {
+                node = getElement(node, data);
+            }
+
+            if (!node || node.nodeType !== 1) {
+                return result;
+            }
+
+            if (data && data.registerNodes) {
+                addBounded(data, node);
+            }
+
+            return result;
+        },
+
+        /**
+         * Extends knockouts' 'applyBindingsToDescendants'
+         * to track nodes associated with model.
+         *
+         * @param {Function} orig - Original 'applyBindingsToDescendants' method.
+         * @param {Object} ctx - Knockout's model or binding context.
+         * @param {HTMLElement} node - Node that gets associated.
+         */
+        applyBindingsToDescendants: function (orig, ctx, node) {
             var result = orig(),
                 data = ctx && (ctx.$data || ctx);
 
