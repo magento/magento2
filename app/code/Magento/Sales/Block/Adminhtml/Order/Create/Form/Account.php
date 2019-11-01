@@ -166,7 +166,7 @@ class Account extends AbstractForm
         try {
             $customer = $this->customerRepository->getById($this->getCustomerId());
         } catch (\Exception $e) {
-           $data = [];    
+            $data = [];
         }
         $data = isset($customer)
             ? $this->_extensibleDataObjectConverter->toFlatArray(
