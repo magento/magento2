@@ -29,4 +29,8 @@
         <data key="name" unique="suffix">Custom Website</data>
         <data key="code" unique="suffix">custom_website</data>
     </entity>
+    <entity name="NewWebSiteData" type="webSite">
+        <data key="name" unique="suffix">WebSite</data>
+        <data key="code" unique="suffix">WebSiteCode</data>
+    </entity>
 </entities>
