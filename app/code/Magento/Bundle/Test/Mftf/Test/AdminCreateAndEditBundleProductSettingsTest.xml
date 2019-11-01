@@ -140,7 +140,6 @@
         <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        
     </test>
 </tests>
 
