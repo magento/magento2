@@ -136,13 +136,12 @@ class MergeCartsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Current user does not have an active cart.
+     * @expectedExceptionMessage The current user cannot perform operations on cart
      */
     public function testMergeTwoCustomerCarts()
     {
@@ -154,39 +153,11 @@ class MergeCartsTest extends GraphQlAbstract
             $this->getCreateEmptyCartMutation(),
             [],
             '',
-            $this->getHeaderMap()
-        );
-        self::assertArrayHasKey('createEmptyCart', $createCartResponse);
-        $secondMaskedId = $createCartResponse['createEmptyCart'];
-        $this->addSimpleProductToCart($secondMaskedId, $this->getHeaderMap());
-
-        $query = $this->getCartMergeMutation($firstMaskedId, $secondMaskedId);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot perform operations on cart
-     */
-    public function testMergeOtherCustomerCart()
-    {
-        $firstQuote = $this->quoteFactory->create();
-        $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
-
-        $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
-        $createCartResponse = $this->graphQlMutation(
-            $this->getCreateEmptyCartMutation(),
-            [],
-            '',
             $this->getHeaderMap('customer_two@example.com')
         );
         self::assertArrayHasKey('createEmptyCart', $createCartResponse);
         $secondMaskedId = $createCartResponse['createEmptyCart'];
-        $this->addSimpleProductToCart($secondMaskedId, $this->getHeaderMap('customer_two@example.com'));
+        $this->addSimpleProductToCart($secondMaskedId, $this->getHeaderMap());
 
         $query = $this->getCartMergeMutation($firstMaskedId, $secondMaskedId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
