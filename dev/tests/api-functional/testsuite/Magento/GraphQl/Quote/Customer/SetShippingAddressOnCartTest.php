@@ -512,6 +512,22 @@ QUERY;
                 '"postcode" is required. Enter and try again.
 "regionId" is required. Enter and try again.'
             ],
+            'wrong_required_region' => [
+                'cart_id: "cart_id_value"
+                 shipping_addresses: [{
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        region: "wrong region"
+                        city: "test city"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }]',
+                'Region is not available for the selected country'
+            ],
         ];
     }
 
@@ -780,8 +796,59 @@ mutation {
   }
 }
 QUERY;
-        $this->expectExceptionMessage('The country isn\'t available.');
+        $this->expectExceptionMessage('Country is not available');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressesWithNotRequiredRegion()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "Vasyl"
+            lastname: "Doe"
+            street: ["1 Svobody"]
+            city: "Lviv"
+            region: "Lviv"
+            postcode: "00000"
+            country_code: "UA"
+            telephone: "555-555-55-55"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        region {
+          label
+        }
+        country {
+          code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertEquals('UA', $cartResponse['shipping_addresses'][0]['country']['code']);
+        self::assertEquals('Lviv', $cartResponse['shipping_addresses'][0]['region']['label']);
     }
 
     /**
