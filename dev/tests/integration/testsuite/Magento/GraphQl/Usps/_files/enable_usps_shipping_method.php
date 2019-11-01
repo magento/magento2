@@ -14,20 +14,8 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var Writer $configWriter */
 $configWriter = $objectManager->get(WriterInterface::class);
 
-/** @var $mutableScopeConfig */
-$mutableScopeConfig = $objectManager->get(
-    \Magento\Framework\App\Config\MutableScopeConfigInterface::class
-);
-
-/**
- * Retrieve data from TESTS_GLOBAL_CONFIG_FILE
- */
-$uspsAccountId = $mutableScopeConfig->getValue('carriers/usps/userid', 'store');
-$uspsAccountPassword = $mutableScopeConfig->getValue('carriers/usps/password', 'store');
-
 $configWriter->save('carriers/usps/active', 1);
-$configWriter->save('carriers/usps/userid', $uspsAccountId);
-$configWriter->save('carriers/usps/password', $uspsAccountPassword);
+$configWriter->save(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP, '90210');
 
 $scopeConfig = $objectManager->get(ScopeConfigInterface::class);
 $scopeConfig->clean();

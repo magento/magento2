@@ -72,6 +72,7 @@
         <click stepKey="s81" selector="{{AdminOrdersGridSection.submitSearch22}}" />
         <waitForPageLoad stepKey="s831"/>
         <click stepKey="s84" selector="{{AdminOrdersGridSection.firstRow}}" />
+        <waitForPageLoad stepKey="waitForOrderToLoad"/>
         <see stepKey="s85" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" />
         <see stepKey="s87" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" />
         <see stepKey="s89" selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$simpleuscustomer.email$$" />
@@ -147,7 +148,7 @@
                 <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="multiple_address_customer" stepKey="deleteCustomer"/>
@@ -220,6 +221,10 @@
             <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"  />
             <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue" />
             <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

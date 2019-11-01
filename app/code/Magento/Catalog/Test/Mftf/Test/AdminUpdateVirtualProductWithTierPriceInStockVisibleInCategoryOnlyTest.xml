@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17181"/>
-            </skip>
         </annotations>
 
         <before>
@@ -31,6 +28,9 @@
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+                <argument name="product" value="updateVirtualProductWithTierPriceInStock"/>
+            </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -65,8 +65,10 @@
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductWithTierPriceInStock.status}}" stepKey="selectStockStatusInStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <waitForPageLoad stepKey="waitForCategory1"/>
         <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductWithTierPriceInStock.visibility}}" stepKey="selectVisibility"/>

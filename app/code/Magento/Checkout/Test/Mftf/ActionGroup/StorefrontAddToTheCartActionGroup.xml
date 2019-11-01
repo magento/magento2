@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAddToTheCartActionGroup">
+        <annotations>
+            <description>Scrolls to the Add To Cart button. Clicks on Add To Cart.</description>
+        </annotations>
+
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontProductActionSection.addToCart}}"  stepKey="scrollToAddToCartButton"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>

@@ -11,6 +11,7 @@ use Braintree\Error\ErrorCollection;
 use Braintree\Error\Validation;
 use Braintree\Result\Error;
 use Braintree\Result\Successful;
+use Braintree\Transaction;
 
 /**
  * Processes errors codes from Braintree response.
@@ -38,12 +39,14 @@ class ErrorCodeProvider
             $result[] = $error->code;
         }
 
-        if (isset($response->transaction) && $response->transaction->status === 'gateway_rejected') {
-            $result[] = $response->transaction->gatewayRejectionReason;
-        }
+        if (isset($response->transaction) && $response->transaction) {
+            if ($response->transaction->status === Transaction::GATEWAY_REJECTED) {
+                $result[] = $response->transaction->gatewayRejectionReason;
+            }
 
-        if (isset($response->transaction) && $response->transaction->status === 'processor_declined') {
-            $result[] = $response->transaction->processorResponseCode;
+            if ($response->transaction->status === Transaction::PROCESSOR_DECLINED) {
+                $result[] = $response->transaction->processorResponseCode;
+            }
         }
 
         return $result;

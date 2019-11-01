@@ -17,7 +17,7 @@
                         <group id="authorizenet_acceptjs_required"/>
                     </requires>
                 </field>
-                <group id="required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
+                <group id="required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="15">
                     <label>Basic Authorize.Net Settings</label>
                     <attribute type="expanded">1</attribute>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -39,25 +39,44 @@
                         <label>API Login ID</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/authorizenet_acceptjs/login</config_path>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/authorizenet_acceptjs/active">1</field>
+                        </depends>
                     </field>
                     <field id="trans_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Transaction Key</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/authorizenet_acceptjs/trans_key</config_path>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/authorizenet_acceptjs/active">1</field>
+                        </depends>
                     </field>
                     <field id="public_client_key" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Public Client Key</label>
                         <config_path>payment/authorizenet_acceptjs/public_client_key</config_path>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/authorizenet_acceptjs/active">1</field>
+                        </depends>
                     </field>
                     <field id="trans_signature_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Signature Key</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/authorizenet_acceptjs/trans_signature_key</config_path>
+                        <validate>required-entry</validate>
+                        <depends>
+                            <field id="*/authorizenet_acceptjs/active">1</field>
+                        </depends>
                     </field>
                     <field id="trans_md5" translate="label" type="obscure" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Merchant MD5 (deprecated)</label>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <config_path>payment/authorizenet_acceptjs/trans_md5</config_path>
+                        <depends>
+                            <field id="*/authorizenet_acceptjs/active">1</field>
+                        </depends>
                     </field>
                 </group>
                 <group id="advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20">
@@ -101,10 +120,12 @@
                     <field id="min_order_total" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Minimum Order Total</label>
                         <config_path>payment/authorizenet_acceptjs/min_order_total</config_path>
+                        <validate>validate-number validate-zero-or-greater</validate>
                     </field>
                     <field id="max_order_total" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Maximum Order Total</label>
                         <config_path>payment/authorizenet_acceptjs/max_order_total</config_path>
+                        <validate>validate-number validate-zero-or-greater</validate>
                     </field>
                     <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>

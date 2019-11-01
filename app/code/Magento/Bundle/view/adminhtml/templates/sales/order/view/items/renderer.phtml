@@ -87,30 +87,30 @@
                 <table class="qty-table">
                     <tr>
                         <th><?= $block->escapeHtml(__('Ordered')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyOrdered()*1) ?></td>
+                        <td><?= (float)$_item->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getQtyInvoiced()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Invoiced')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyInvoiced()*1) ?></td>
+                        <td><?= (float)$_item->getQtyInvoiced() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getQtyShipped() && $block->isShipmentSeparately($_item)) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Shipped')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyShipped()*1) ?></td>
+                        <td><?= (float)$_item->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getQtyRefunded()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Refunded')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyRefunded()*1) ?></td>
+                        <td><?= (float)$_item->getQtyRefunded() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getQtyCanceled()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Canceled')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyCanceled()*1) ?></td>
+                        <td><?= (float)$_item->getQtyCanceled() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
@@ -118,12 +118,12 @@
                 <table class="qty-table">
                     <tr>
                         <th><?= $block->escapeHtml(__('Ordered')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyOrdered()*1) ?></td>
+                        <td><?= (float)$_item->getQtyOrdered() * 1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getQtyShipped()) : ?>
                     <tr>
                         <th><?= $block->escapeHtml(__('Shipped')) ?></th>
-                        <td><?= $block->escapeHtml($_item->getQtyShipped()*1) ?></td>
+                        <td><?= (float)$_item->getQtyShipped() * 1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
@@ -154,7 +154,7 @@
         </td>
         <td class="col-discont">
             <?php if ($block->canShowPriceInfo($_item)) : ?>
-                <?= $block->escapeHtml($block->displayPriceAttribute('discount_amount')) ?>
+                <?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?>
             <?php else : ?>
                 &nbsp;
             <?php endif; ?>

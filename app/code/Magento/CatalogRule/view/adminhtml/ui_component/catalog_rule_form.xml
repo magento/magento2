@@ -95,33 +95,30 @@
                 <dataScope>description</dataScope>
             </settings>
         </field>
-        <field name="is_active" formElement="select">
+        <field name="is_active" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">catalog_rule</item>
+                    <item name="default" xsi:type="number">0</item>
                 </item>
             </argument>
             <settings>
-                <dataType>number</dataType>
-                <label translate="true">Status</label>
-                <visible>true</visible>
-                <dataScope>is_active</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>boolean</dataType>
+                <label translate="true">Active</label>
             </settings>
             <formElements>
-                <select>
+                <checkbox>
                     <settings>
-                        <options>
-                            <option name="0" xsi:type="array">
-                                <item name="value" xsi:type="number">1</item>
-                                <item name="label" xsi:type="string" translate="true">Active</item>
-                            </option>
-                            <option name="1" xsi:type="array">
-                                <item name="value" xsi:type="number">0</item>
-                                <item name="label" xsi:type="string" translate="true">Inactive</item>
-                            </option>
-                        </options>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
                     </settings>
-                </select>
+                </checkbox>
             </formElements>
         </field>
         <field name="website_ids" formElement="multiselect">
@@ -307,6 +304,7 @@
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="validate-number-range" xsi:type="string">0.00-100.00</rule>
                 </validation>
                 <dataType>text</dataType>
                 <label translate="true">Discount Amount</label>

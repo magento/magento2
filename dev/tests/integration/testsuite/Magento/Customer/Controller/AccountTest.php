@@ -769,9 +769,21 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        $this->assertContains('To: ' . $email, $rawMessage);
+        /** @var \Zend\Mime\Part $messageBodyPart */
+        $messageBodyParts = $message->getBody()->getParts();
+        $messageBodyPart = reset($messageBodyParts);
+        $messageEncoding = $messageBodyPart->getCharset();
+        $name = 'John Smith';
 
-        $content = $message->getBody()->getPartContent(0);
+        if (strtoupper($messageEncoding) !== 'ASCII') {
+            $name = \Zend\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
+        }
+
+        $nameEmail = sprintf('%s <%s>', $name, $email);
+
+        $this->assertContains('To: ' . $nameEmail, $rawMessage);
+
+        $content = $messageBodyPart->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
         $this->setRequestInfo($confirmationUrl, 'confirm');
         $this->clearCookieMessagesList();

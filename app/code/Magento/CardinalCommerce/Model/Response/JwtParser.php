@@ -14,9 +14,9 @@ use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Method\Logger as PaymentLogger;
 
 /**
- * Parse content of CardinalCommerce response JWT.
+ * Parses content of CardinalCommerce response JWT.
  */
-class JwtParser
+class JwtParser implements JwtParserInterface
 {
     /**
      * @var JwtManagement

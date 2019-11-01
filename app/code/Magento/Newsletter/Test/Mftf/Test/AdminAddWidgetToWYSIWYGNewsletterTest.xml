@@ -15,10 +15,7 @@
             <title value="Admin should be able to add widget to WYSIWYG Editor of Newsletter"/>
             <description value="Admin should be able to add widget to WYSIWYG Editor Newsletter"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-84682"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
+            <testCaseId value="MC-6070"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="login"/>
@@ -26,13 +23,14 @@
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForTemplateName"/>
         <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
         <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
         <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
         <conditionalClick selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" dependentSelector="{{NewsletterWYSIWYGSection.TinyMCE4}}" visible="false" stepKey="toggleEditorIfHidden"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
+        <waitForElementVisible selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="waitForInsertWidgerIconButton"/>
         <click selector="{{NewsletterWYSIWYGSection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
         <wait time="10" stepKey="waitForPageLoad" />
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
@@ -51,7 +49,7 @@
         <waitForPageLoad stepKey="waitForPageLoad10" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview" />
         <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe" />
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
         <waitForText userInput="Home page" stepKey="waitForPageLoad9"/>
         <see userInput="Home page" stepKey="seeHomePageCMSPage"/>
         <closeTab stepKey="closeTab"/>

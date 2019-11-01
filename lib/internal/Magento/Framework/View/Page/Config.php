@@ -131,10 +131,10 @@ class Config
         'charset' => null,
         'media_type' => null,
         'content_type' => null,
+        'title' => null,
         'description' => null,
         'keywords' => null,
         'robots' => null,
-        'title' => null,
     ];
 
     /**

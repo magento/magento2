@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17181"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -27,6 +24,9 @@
             <createData entity="Simple_US_CA_Customer" stepKey="customer" />
         </before>
         <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteVirtualProduct">
+                <argument name="product" value="virtualProductGeneralGroup"/>
+            </actionGroup>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="categoryEntity"/>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <actionGroup ref="logout" stepKey="logout"/>
