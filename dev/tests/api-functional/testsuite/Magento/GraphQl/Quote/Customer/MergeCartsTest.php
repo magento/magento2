@@ -133,10 +133,6 @@ class MergeCartsTest extends GraphQlAbstract
             '',
             $this->getHeaderMap()
         );
-
-        self::assertArrayHasKey('cart', $cartResponse);
-        self::assertArrayHasKey('items', $cartResponse['cart']);
-        self::assertCount(2, $cartResponse['cart']['items']);
     }
 
     /**
