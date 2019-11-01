@@ -61,8 +61,8 @@
 
         <!-- Input in field email and password for newly created customer; click Login button -->
         <actionGroup ref="StorefrontLoginCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">
-            <argument name="customerEmail" value="CustomerEntityOne.email"/>
-            <argument name="customerPassword" value="CustomerEntityOne.password"/>
+            <argument name="customerEmail" value="{{CustomerEntityOne.email}}"/>
+            <argument name="customerPassword" value="{{CustomerEntityOne.password}}"/>
         </actionGroup>
 
         <!-- Shipping form is pre-filed with first name and last name -->
