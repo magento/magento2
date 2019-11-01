@@ -555,7 +555,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
             ? ($returnType->allowsNull() ? '?' : '') . $returnType->getName()
             : null;
         if ($returnTypeValue === 'self') {
-            $returnTypeValue = $method->getDeclaringClass()->getName();
+            $returnTypeValue = $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName());
         }
         return [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
