@@ -94,7 +94,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
         $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
 
-        if ($useTempTable && !$workingState) {
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
             foreach ($this->storeManager->getStores() as $store) {
                 $this->connection->truncateTable($this->getIndexTable($store->getId()));
             }
@@ -102,7 +102,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->removeEntries();
         }
         $this->reindex();
-        if ($useTempTable && !$workingState) {
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
             foreach ($this->storeManager->getStores() as $store) {
                 $this->connection->delete(
                     $this->tableMaintainer->getMainTable($store->getId()),

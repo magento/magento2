@@ -20,6 +20,8 @@ use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 
 /**
  * Action for partial reindex
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
@@ -85,7 +87,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
         $workingState = $indexer->isWorking();
 
-        if ($useTempTable && !$workingState) {
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
             foreach ($this->storeManager->getStores() as $store) {
                 $this->connection->truncateTable($this->getIndexTable($store->getId()));
             }
@@ -95,7 +97,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
         $this->reindex();
 
-        if ($useTempTable && !$workingState) {
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
             foreach ($this->storeManager->getStores() as $store) {
                 $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
                 $this->connection->delete(

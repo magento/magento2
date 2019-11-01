@@ -1364,6 +1364,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
+     * phpcs:ignore Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
      */
     public function __toArray()
     {
