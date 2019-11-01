@@ -93,6 +93,50 @@ class MergeCartsTest extends GraphQlAbstract
         self::assertArrayHasKey('cart', $cartResponse);
         self::assertArrayHasKey('items', $cartResponse['cart']);
         self::assertCount(2, $cartResponse['cart']['items']);
+        $item1 = $cartResponse['cart']['items'][0];
+        self::assertArrayHasKey('quantity', $item1);
+        self::assertEquals(2, $item1['quantity']);
+        $item2 = $cartResponse['cart']['items'][1];
+        self::assertArrayHasKey('quantity', $item2);
+        self::assertEquals(1, $item2['quantity']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Current user does not have an active cart.
+     */
+    public function testGuestCartExpiryAfterMerge()
+    {
+        $customerQuote = $this->quoteFactory->create();
+        $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
+
+        $guestQuote = $this->quoteFactory->create();
+        $this->quoteResource->load(
+            $guestQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
+
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$customerQuote->getId());
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestQuote->getId());
+
+        $query = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $cartResponse = $this->graphQlMutation(
+            $this->getCartQuery($guestQuoteMaskedId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+
+        self::assertArrayHasKey('cart', $cartResponse);
+        self::assertArrayHasKey('items', $cartResponse['cart']);
+        self::assertCount(2, $cartResponse['cart']['items']);
     }
 
     /**
