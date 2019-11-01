@@ -70,7 +70,7 @@ class CustomerCart implements ResolverInterface
     }
 
     /**
-     * Checking if current user is logged in
+     * Check if current user is logged in
      *
      * @param int|null $customerId
      * @param int|null $customerType
