@@ -90,98 +90,111 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    /***
-     * Test isPersistent() when the session has id and enable persistent
-     */
-    public function testIsPersistentWhenSessionId()
-    {
-        $this->session->expects($this->any())->method('getId')
-            ->willReturn(1);
-        $this->helper->expects($this->any())->method('getSession')
-            ->willReturn($this->session);
-        $this->dataHelper->expects($this->any())->method('isEnabled')
-            ->willReturn(true);
-
-        $this->assertEquals(true, $this->helper->isPersistent());
-    }
-
-    /***
-     * Test isPersistent() when the no session id and enable persistent
-     */
-    public function testIsPersistentWhenNoSessionId()
-    {
-        $this->session->expects($this->any())->method('getId')
-            ->willReturn(null);
-        $this->helper->expects($this->any())->method('getSession')
-            ->willReturn($this->session);
-        $this->dataHelper->expects($this->any())->method('isEnabled')
-            ->willReturn(true);
-
-        $this->assertEquals(false, $this->helper->isPersistent());
-    }
-
     /**
-     * Test isRememberMeChecked() when enable all config
-     */
-    public function testIsRememberMeCheckedWhenEnabledAll()
-    {
-        $testCase = [
-            'dataset' => [
-                'enabled' => true,
-                'remember_me_enabled' => true,
-                'remember_me_checked_default' => true
-            ],
-            'expected' => true
-        ];
-        $this->executeTestIsRememberMeChecked($testCase);
-    }
-
-    /**
-     * Test isRememberMeChecked() when config persistent is disabled
-     */
-    public function testIsRememberMeCheckedWhenAtLeastOnceDisabled()
-    {
-        $testCase = [
-            'dataset' => [
-                'enabled' => false,
-                'remember_me_enabled' => true,
-                'remember_me_checked_default' => true
-            ],
-            'expected' => false
-        ];
-        $this->executeTestIsRememberMeChecked($testCase);
-    }
-
-    /**
-     * Test isRememberMeChecked() when setRememberMeChecked(false)
-     */
-    public function testIsRememberMeCheckedWhenSetValue()
-    {
-        $testCase = [
-            'dataset' => [
-                'enabled' => true,
-                'remember_me_enabled' => true,
-                'remember_me_checked_default' => true
-            ],
-            'expected' => false
-        ];
-        $this->helper->setRememberMeChecked(false);
-        $this->executeTestIsRememberMeChecked($testCase);
-    }
-
-    /**
-     * Execute test isRememberMeChecked() function
+     * Test isPersistent() function
      *
-     * @param array $testCase
+     * @param int|null $id
+     * @param boolean $isEnabled
+     * @param boolean $expected
+     * @dataProvider isPersistentDataProvider
      */
-    public function executeTestIsRememberMeChecked($testCase)
+    public function testIsPersistent($id, $isEnabled, $expected)
     {
+        $this->session->expects($this->any())->method('getId')
+            ->willReturn($id);
+        $this->helper->expects($this->any())->method('getSession')
+            ->willReturn($this->session);
         $this->dataHelper->expects($this->any())->method('isEnabled')
-            ->willReturn($testCase['dataset']['enabled']);
+            ->willReturn($isEnabled);
+
+        $this->assertEquals($expected, $this->helper->isPersistent());
+    }
+
+    /**
+     * Data Provider for test isPersistent()
+     *
+     * @return array
+     */
+    public function isPersistentDataProvider()
+    {
+        return [
+            'session_id_and_enable_persistent' => [
+                1,
+                true,
+                true
+            ],
+            'no_session_id_and_enable_persistent' => [
+                null,
+                true,
+                false
+            ]
+        ];
+    }
+
+    /**
+     * Test isRememberMeChecked() function
+     *
+     * @param boolean|null $checked
+     * @param boolean $isEnabled
+     * @param boolean $isRememberMeEnabled
+     * @param boolean $isRememberMeCheckedDefault
+     * @param boolean $expected
+     * @dataProvider isRememberMeCheckedProvider
+     */
+    public function testIsRememberMeChecked(
+        $checked,
+        $isEnabled,
+        $isRememberMeEnabled,
+        $isRememberMeCheckedDefault,
+        $expected
+    ) {
+        $this->helper->setRememberMeChecked($checked);
+        $this->dataHelper->expects($this->any())->method('isEnabled')
+            ->willReturn($isEnabled);
         $this->dataHelper->expects($this->any())->method('isRememberMeEnabled')
-            ->willReturn($testCase['dataset']['remember_me_enabled']);
+            ->willReturn($isRememberMeEnabled);
         $this->dataHelper->expects($this->any())->method('isRememberMeCheckedDefault')
-            ->willReturn($testCase['dataset']['remember_me_checked_default']);
-        $this->assertEquals($testCase['expected'], $this->helper->isRememberMeChecked());
+            ->willReturn($isRememberMeCheckedDefault);
+
+        $this->assertEquals($expected, $this->helper->isRememberMeChecked());
+    }
+
+    /**
+     * Data Provider for test isRememberMeChecked()
+     *
+     * @return array
+     */
+    public function isRememberMeCheckedProvider()
+    {
+        return [
+            'enable_all_config' => [
+                null,
+                true,
+                true,
+                true,
+                true
+            ],
+            'at_least_once_disabled' => [
+                null,
+                false,
+                true,
+                true,
+                false
+            ],
+            'set_remember_me_checked_false' => [
+                false,
+                true,
+                true,
+                true,
+                false
+            ],
+            'set_remember_me_checked_true' => [
+                true,
+                false,
+                true,
+                true,
+                true
+            ]
+        ];
     }
 }
