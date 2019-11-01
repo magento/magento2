@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Category\Action;
 
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -33,12 +35,11 @@ class Rows
      * @param ActionRows $subject
      * @param ActionRows $result
      * @param array $entityIds
-     * @param boolean $useTempTable
-     * @return Rows
+     * @return ActionRows
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(ActionRows $subject, ActionRows $result, array $entityIds, $useTempTable)
+    public function afterExecute(ActionRows $subject, ActionRows $result, array $entityIds): ActionRows
     {
         if (!empty($entityIds)) {
             $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
