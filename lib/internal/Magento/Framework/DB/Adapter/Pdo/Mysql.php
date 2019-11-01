@@ -22,6 +22,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ExecuteCommitCallbacks;
 use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Stdlib\DateTime;
@@ -224,6 +225,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $schemaListener;
 
     /**
+     * @var ExecuteCommitCallbacks
+     */
+    private $executeCommitCallbacks;
+
+    /**
      * Constructor
      *
      * @param StringUtils $string
@@ -232,6 +238,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param SelectFactory $selectFactory
      * @param array $config
      * @param SerializerInterface|null $serializer
+     * @param ExecuteCommitCallbacks $executeCommitCallbacks
      */
     public function __construct(
         StringUtils $string,
@@ -239,7 +246,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         LoggerInterface $logger,
         SelectFactory $selectFactory,
         array $config = [],
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ExecuteCommitCallbacks $executeCommitCallbacks = null
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
@@ -263,6 +271,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } catch (\Zend_Db_Adapter_Exception $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
+        $this->executeCommitCallbacks = $executeCommitCallbacks
+            ?? ObjectManager::getInstance()->get(ExecuteCommitCallbacks::class);
     }
 
     /**
@@ -306,7 +316,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             throw new \Exception(AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE);
         }
         --$this->_transactionLevel;
-        return $this;
+
+        return $this->executeCommitCallbacks->afterCommit($this);
     }
 
     /**
@@ -329,7 +340,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->_isRolledBack = true;
         }
         --$this->_transactionLevel;
-        return $this;
+
+        return $this->executeCommitCallbacks->afterRollBack($this);
     }
 
     /**

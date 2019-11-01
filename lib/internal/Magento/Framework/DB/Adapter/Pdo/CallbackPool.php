@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-namespace Magento\Framework\Model;
+namespace Magento\Framework\DB\Adapter\Pdo;
 
 /**
  * Class CallbackPool
@@ -19,6 +20,8 @@ class CallbackPool
     private static $commitCallbacks = [];
 
     /**
+     * Add callback by hash key.
+     *
      * @param string $hashKey
      * @param array $callback
      * @return void
@@ -29,6 +32,8 @@ class CallbackPool
     }
 
     /**
+     * Remove callbacks by hash key.
+     *
      * @param string $hashKey
      * @return void
      */
@@ -38,6 +43,8 @@ class CallbackPool
     }
 
     /**
+     * Get callbacks by hash key.
+     *
      * @param string $hashKey
      * @return array
      */
