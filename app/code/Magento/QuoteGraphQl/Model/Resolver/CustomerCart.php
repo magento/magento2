@@ -29,7 +29,7 @@ class CustomerCart implements ResolverInterface
     /**
      * @var CartManagementInterface
      */
-    protected $cartManagement;
+    private $cartManagement;
 
     /**
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
