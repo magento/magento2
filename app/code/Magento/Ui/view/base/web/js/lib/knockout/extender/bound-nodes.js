@@ -74,7 +74,7 @@ define([
         index = nodes.indexOf(node);
 
         if (~index) {
-            nodes.splice(index, 0);
+            nodes.splice(index, 1);
 
             Events.trigger.call(model, 'removeNode', node);
         }
