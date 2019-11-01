@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
@@ -19,6 +20,8 @@ use Magento\TestFramework\ObjectManager;
 
 /**
  * Provide tests for loading gallery images on product load.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -48,6 +51,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     private $productResource;
 
     /**
+     * @var Gallery
+     */
+    private $galleryResource;
+
+    /**
      * @var StoreRepositoryInterface
      */
     private $storeRepository;
@@ -67,6 +75,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productFactory = $this->objectManager->get(ProductInterfaceFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
+        $this->galleryResource = $this->objectManager->create(Gallery::class);
         $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
         $this->productLinkField =  $this->objectManager->get(MetadataPool::class)
             ->getMetadata(ProductInterface::class)
@@ -259,6 +268,20 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->galleryResource->getConnection()
+            ->delete($this->galleryResource->getTable(Gallery::GALLERY_TABLE));
+        $this->galleryResource->getConnection()
+            ->delete($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE));
+        $this->galleryResource->getConnection()
+            ->delete($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE));
     }
 
     /**
