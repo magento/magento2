@@ -1,15 +1,62 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+use Exception;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Email\Controller\Adminhtml\Email\Template;
+use Magento\Email\Model\ResourceModel\Template as TemplateResource;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
-class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
+/**
+ * Save Controller
+ */
+class Save extends Template implements HttpPostActionInterface
 {
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @var TemplateResource
+     */
+    private $templateResource;
+
+    /**
+     * @var Session
+     */
+    private $backendSession;
+
+    /**
+     * Save constructor
+     *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param DateTime $dateTime
+     * @param TemplateResource $templateResource
+     * @param Session $backendSession
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        DateTime $dateTime,
+        TemplateResource $templateResource,
+        Session $backendSession
+    ) {
+        $this->dateTime = $dateTime;
+        $this->templateResource = $templateResource;
+        $this->backendSession = $backendSession;
+        parent::__construct($context, $coreRegistry);
+    }
+
     /**
      * Save transactional email action
      *
@@ -18,10 +65,10 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
     public function execute()
     {
         $request = $this->getRequest();
-        $id = $this->getRequest()->getParam('id');
+        $templateId = $this->getRequest()->getParam('id');
 
         $template = $this->_initTemplate('id');
-        if (!$template->getId() && $id) {
+        if (!$template->getId() && $templateId) {
             $this->messageManager->addErrorMessage(__('This email template no longer exists.'));
             $this->_redirect('adminhtml/*/');
             return;
@@ -37,7 +84,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
             )->setTemplateStyles(
                 $request->getParam('template_styles')
             )->setModifiedAt(
-                $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate()
+                $this->dateTime->gmtDate()
             )->setOrigTemplateCode(
                 $request->getParam('orig_template_code')
             )->setOrigTemplateVariables(
@@ -53,17 +100,13 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
                 $template->setTemplateStyles('');
             }
 
-            $template->save();
-            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setFormData(false);
+            $this->templateResource->save($template);
+
+            $this->backendSession->setFormData(false);
             $this->messageManager->addSuccessMessage(__('You saved the email template.'));
             $this->_redirect('adminhtml/*');
-        } catch (\Exception $e) {
-            $this->_objectManager->get(
-                \Magento\Backend\Model\Session::class
-            )->setData(
-                'email_template_form_data',
-                $request->getParams()
-            );
+        } catch (Exception $e) {
+            $this->backendSession->setData('email_template_form_data', $request->getParams());
             $this->messageManager->addErrorMessage($e->getMessage());
             $this->_forward('new');
         }
