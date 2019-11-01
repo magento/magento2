@@ -5,30 +5,31 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product;
+namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Catalog\Helper\Category as CategoryHelper;
 
 /**
- * Resolve data for product canonical URL
+ * Resolve data for category canonical URL
  */
 class CanonicalUrl implements ResolverInterface
 {
-    /** @var ProductHelper */
-    private $productHelper;
+    /** @var CategoryHelper */
+    private $categoryHelper;
 
     /**
-     * @param Product $productHelper
+     * CanonicalUrl constructor.
+     * @param CategoryHelper $categoryHelper
      */
-    public function __construct(ProductHelper $productHelper)
+    public function __construct(CategoryHelper $categoryHelper)
     {
-        $this->productHelper = $productHelper;
+        $this->categoryHelper = $categoryHelper;
     }
 
     /**
@@ -45,13 +46,13 @@ class CanonicalUrl implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /* @var Product $product */
-        $product = $value['model'];
+        /* @var Category $category */
+        $category = $value['model'];
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-        if ($this->productHelper->canUseCanonicalTag($store)) {
-            $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
-            return $product->getRequestPath();
+        if ($this->categoryHelper->canUseCanonicalTag($store)) {
+            $baseUrl = $category->getUrlInstance()->getBaseUrl();
+            return str_replace($baseUrl, '', $category->getUrl());
         }
         return null;
     }
