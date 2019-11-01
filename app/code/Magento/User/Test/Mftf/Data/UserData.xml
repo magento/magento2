@@ -33,6 +33,12 @@
             <item>1</item>
         </array>
     </entity>
+    <entity name="AdminUserWithUpdatedUserRoleToSales" extends="NewAdminUser">
+        <data key="password">123123qA</data>
+        <data key="password_confirmation">123123qA</data>
+        <data key="role">{{roleSales.rolename}}</data>
+    </entity>
+
     <entity name="EditAdminUser" type="user">
         <data key="username" unique="suffix">admin</data>
         <data key="firstname">John</data>
