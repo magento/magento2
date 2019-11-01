@@ -44,6 +44,8 @@ class GetCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('items', $response['cart']);
+        self::assertArrayHasKey('cart_id', $response['cart']);
+        self::assertEquals($maskedQuoteId, $response['cart']['cart_id']);
         self::assertCount(2, $response['cart']['items']);
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
@@ -184,6 +186,7 @@ QUERY;
         return <<<QUERY
 {
   cart(cart_id: "{$maskedQuoteId}") {
+    cart_id
     items {
       id
       quantity

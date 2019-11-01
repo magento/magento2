@@ -28,9 +28,6 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    /** @var  array */
-    private $headers;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -74,8 +71,8 @@ class GetCustomerCartTest extends GraphQlAbstract
     {
         $customerToken = $this->generateCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
-        $this->headers = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->headers);
+        $headers = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('cart_id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['cart_id']);
@@ -103,9 +100,9 @@ class GetCustomerCartTest extends GraphQlAbstract
     public function testGetCustomerCartAfterTokenRevoked()
     {
         $customerToken = $this->generateCustomerToken();
-        $this->headers = ['Authorization' => 'Bearer ' . $customerToken];
+        $headers = ['Authorization' => 'Bearer ' . $customerToken];
         $customerCartQuery = $this->getCustomerCartQuery();
-        $response = $this->graphQlMutation($customerCartQuery, [], '', $this->headers);
+        $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('cart_id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['cart_id']);
@@ -114,7 +111,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->expectExceptionMessage(
             'The request is allowed for logged in customer'
         );
-        $this->graphQlQuery($customerCartQuery, [], '', $this->headers);
+        $this->graphQlQuery($customerCartQuery, [], '', $headers);
     }
 
     /**
@@ -125,15 +122,15 @@ class GetCustomerCartTest extends GraphQlAbstract
     public function testRequestCustomerCartTwice()
     {
         $customerToken = $this->generateCustomerToken();
-        $this->headers = ['Authorization' => 'Bearer ' . $customerToken];
+        $headers = ['Authorization' => 'Bearer ' . $customerToken];
         $customerCartQuery = $this->getCustomerCartQuery();
-        $response = $this->graphQlMutation($customerCartQuery, [], '', $this->headers);
+        $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('cart_id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['cart_id']);
         $cartId = $response['customerCart']['cart_id'];
         $customerCartQuery = $this->getCustomerCartQuery();
-        $response2 = $this->graphQlQuery($customerCartQuery, [], '', $this->headers);
+        $response2 = $this->graphQlQuery($customerCartQuery, [], '', $headers);
         $this->assertEquals($cartId, $response2['customerCart']['cart_id']);
     }
 
@@ -173,6 +170,8 @@ class GetCustomerCartTest extends GraphQlAbstract
     }
 
     /**
+     * Query to generate customer token
+     *
      * @return string
      */
     private function generateCustomerToken(): string
@@ -195,7 +194,12 @@ QUERY;
         return $response['generateCustomerToken']['token'];
     }
 
-    private function revokeCustomerToken()
+    /**
+     * Query to revoke customer token
+     *
+     * @return void
+     */
+    private function revokeCustomerToken(): void
     {
         $query = <<<QUERY
 mutation{
@@ -210,7 +214,8 @@ QUERY;
     }
 
     /**
-     * @param string $maskedQuoteId
+     * Query customer cart
+     *
      * @return string
      */
     private function getCustomerCartQuery(): string
@@ -233,6 +238,8 @@ QUERY;
     }
 
     /**
+     * Create a header with customer token
+     *
      * @param string $username
      * @param string $password
      * @return array

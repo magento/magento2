@@ -50,6 +50,8 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
         self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
+        self::assertArrayHasKey('cart_id', $response['addSimpleProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addSimpleProductsToCart']['cart']['cart_id']);
 
         self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
         $price = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price'];
@@ -254,6 +256,7 @@ mutation {
     }
   ) {
     cart {
+    cart_id
       items {
         quantity
         product {
