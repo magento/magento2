@@ -38,6 +38,6 @@
         <element name="nameSuffix" type="select" selector="[name='suffix']"/>
         <element name="nameSuffixOption" type="text" selector="select[name='suffix'] option[value='{{optionValue}}']" parameterized="true" timeout="30"/>
         <element name="password" type="input" selector="#customer-password"/>
-        <element name="loginButton" type="button" selector=".action.login"/>
+        <element name="loginButton" type="button" selector=".action.login" timeout="30"/>
     </section>
 </sections>

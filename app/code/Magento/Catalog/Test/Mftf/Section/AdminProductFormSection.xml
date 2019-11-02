@@ -14,6 +14,7 @@
         <element name="attributeSetFilterResult" type="input" selector="div[data-index='attribute_set_id'] .action-menu-item._last" timeout="30"/>
         <element name="productName" type="input" selector=".admin__field[data-index=name] input"/>
         <element name="productNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="productPriceUseDefault" type="checkbox" selector=".admin__field[data-index=price] [name='use_default[price]']"/>
         <element name="productSku" type="input" selector=".admin__field[data-index=sku] input"/>
         <element name="enableProductAttributeLabel" type="text" selector="//span[text()='Enable Product']/parent::label"/>
         <element name="enableProductAttributeLabelWrapper" type="text" selector="//span[text()='Enable Product']/parent::label/parent::div"/>
