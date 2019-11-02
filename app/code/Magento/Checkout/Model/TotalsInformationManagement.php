@@ -47,17 +47,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->cartRepository->get($cartId);
         $this->validateQuote($quote);
-
-        if ($quote->getIsVirtual()) {
-            $quote->setBillingAddress($addressInformation->getAddress());
-        } else {
-            $quote->setShippingAddress($addressInformation->getAddress());
-            $quote->getShippingAddress()->setCollectShippingRates(true)->setShippingMethod(
-                $addressInformation->getShippingCarrierCode() . '_' . $addressInformation->getShippingMethodCode()
-            );
-        }
         $this->cartRepository->save($quote);
-
         return $this->cartTotalRepository->get($cartId);
     }
 
