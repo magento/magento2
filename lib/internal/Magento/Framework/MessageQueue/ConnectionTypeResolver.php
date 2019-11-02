@@ -32,15 +32,18 @@ class ConnectionTypeResolver
     {
         $type = null;
 
+if(is_array($this->resolvers)){
         foreach ($this->resolvers as $resolver) {
             $type = $resolver->getConnectionType($connectionName);
             if ($type != null) {
                 break;
             }
+}
         }
 
+
         if ($type === null) {
-            throw new \LogicException('Unknown connection name ' . $connectionName);
+            throw new \LogicException('Unknown connection name ' . $connectionName . ' check if Magento_Amqp module enabled');
         }
         return $type;
     }
