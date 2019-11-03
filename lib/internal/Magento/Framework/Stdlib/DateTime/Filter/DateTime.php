@@ -27,7 +27,7 @@ class DateTime extends Date
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, Resolver $localeResolver)
     {
-        parent::__construct($localeDate);
+        parent::__construct($localeDate,$localeResolver);
         $this->localeResolver = $localeResolver;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
