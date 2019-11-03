@@ -93,4 +93,20 @@ class Autoloader
             // Do not take an action here, since the original exception might have been caused by logger
         }
     }
+
+    /**
+     * @param Generator $generator
+     */
+    public function setGenerator(Generator $generator): void
+    {
+        $this->_generator = $generator;
+    }
+
+    /**
+     * @return Generator
+     */
+    public function getGenerator(): Generator
+    {
+        return $this->_generator;
+    }
 }

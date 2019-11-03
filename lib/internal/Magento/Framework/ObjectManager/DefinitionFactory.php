@@ -5,9 +5,9 @@
  */
 namespace Magento\Framework\ObjectManager;
 
+use Magento\Framework\Code\Generator\Autoloader;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManager\Definition\Runtime;
-use Magento\Framework\Code\Generator\Autoloader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -52,8 +52,22 @@ class DefinitionFactory
      */
     public function createClassDefinition()
     {
-        $autoloader = new Autoloader($this->getCodeGenerator());
-        spl_autoload_register([$autoloader, 'load']);
+        $autoloaderAbsent = true;
+        $codeGenerator = $this->getCodeGenerator();
+
+        foreach (spl_autoload_functions() as $autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+                $autoloader[0]->setGenerator($codeGenerator);
+                $autoloaderAbsent = false;
+                break;
+            }
+        }
+
+        if ($autoloaderAbsent) {
+            $autoloaderInstance = new Autoloader($codeGenerator);
+            spl_autoload_register([$autoloaderInstance, 'load']);
+        }
+
         return new Runtime();
     }
 

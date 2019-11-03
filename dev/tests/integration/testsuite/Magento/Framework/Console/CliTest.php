@@ -92,6 +92,13 @@ class CliTest extends \PHPUnit\Framework\TestCase
         $cli = new Cli();
         $cliReflection = new \ReflectionClass($cli);
 
+        foreach (spl_autoload_functions() as $autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+                $autoloader[0]->getGenerator()->setObjectManager($this->objectManager);
+                break;
+            }
+        }
+
         $serviceManagerProperty = $cliReflection->getProperty('serviceManager');
         $serviceManagerProperty->setAccessible(true);
         $serviceManager = $serviceManagerProperty->getValue($cli);
