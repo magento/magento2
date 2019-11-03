@@ -194,7 +194,8 @@ QUERY;
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage Wrong store code specified for cart
+     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
+     * Please wait and try again later.
      */
     public function testGetCartWithWrongStore()
     {
