@@ -242,7 +242,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $this->_quoteConfig->getProductAttributes()
         );
         $this->skipStockStatusFilter($productCollection);
-        $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
+        $productCollection->addStoreFilter()->addOptionsToResult()->addUrlRewrite();
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
