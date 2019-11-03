@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Test\Unit\Model\Attribute;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -176,7 +177,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test saving throws exception if cannot save group
      *
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot save attributeGroup
+     * @expectedExceptionMessage The attributeGroup can't be saved.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
@@ -207,7 +208,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test saving throws exception if group does not belong to provided set
      *
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Attribute group does not belong to provided attribute set
+     * @expectedExceptionMessage The attribute group doesn't belong to the provided attribute set.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      * @return void
@@ -266,8 +267,6 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetList()
     {
-        $attributeSetId = 'filter';
-
         $filterInterfaceMock = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -275,24 +274,18 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
                 'getValue',
             ])
             ->getMock();
-        $filterInterfaceMock->expects($this->once())
-            ->method('getField')
-            ->willReturn('attribute_set_id');
-        $filterInterfaceMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($attributeSetId);
 
         $filterGroupMock = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $filterGroupMock->expects($this->once())
+        $filterGroupMock->expects($this->any())
             ->method('getFilters')
             ->willReturn([$filterInterfaceMock]);
 
         $searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $searchCriteriaMock->expects($this->once())
+        $searchCriteriaMock->expects($this->any())
             ->method('getFilterGroups')
             ->willReturn([$filterGroupMock]);
 
@@ -325,52 +318,6 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test get list with invalid input exception
-     *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage attribute_set_id is a required field.
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return void
-     */
-    public function testGetListWithInvalidInputException()
-    {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
-        $this->model->getList($searchCriteriaMock);
-    }
-
-    /**
-     * Test get list with no such entity exception
-     *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with attributeSetId = filter
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return void
-     */
-    public function testGetListWithNoSuchEntityException()
-    {
-        $attributeSetId = 'filter';
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $filterGroupMock = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
-        $filterInterfaceMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
-
-        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterInterfaceMock]);
-        $filterInterfaceMock->expects($this->once())->method('getField')->willReturn('attribute_set_id');
-        $filterInterfaceMock->expects($this->once())->method('getValue')->willReturn($attributeSetId);
-
-        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([]);
-        $this->setRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($attributeSetId)
-            ->willThrowException(new \Exception());
-        $this->model->getList($searchCriteriaMock);
-    }
-
-    /**
      * Test get
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -390,7 +337,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test get throws exception if provided group does not exist
      *
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Group with id "42" does not exist.
+     * @expectedExceptionMessage The group with the "42" ID doesn't exist. Verify the ID and try again.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return void
      */
@@ -421,7 +368,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test deletion throws exception if provided group does not exist
      *
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete attributeGroup with id
+     * @expectedExceptionMessage The attribute group with id "42" can't be deleted.
      * @throws \Magento\Framework\Exception\StateException
      * @return void
      */

@@ -71,18 +71,31 @@ class ShipmentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate($tracks)
     {
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getId', 'getQtyOrdered']);
+        $orderItem = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Item::class,
+            ['getId', 'getQtyOrdered', 'getParentItemId', 'getIsVirtual']
+        );
         $orderItem->expects($this->any())
             ->method('getId')
             ->willReturn(1);
         $orderItem->expects($this->any())
             ->method('getQtyOrdered')
             ->willReturn(5);
+        $orderItem->expects($this->any())->method('getParentItemId')->willReturn(false);
+        $orderItem->expects($this->any())->method('getIsVirtual')->willReturn(false);
 
-        $shipmentItem = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment\Item::class, ['setQty']);
+        $shipmentItem = $this->createPartialMock(
+            \Magento\Sales\Model\Order\Shipment\Item::class,
+            ['setQty', 'getOrderItem', 'getQty']
+        );
         $shipmentItem->expects($this->once())
             ->method('setQty')
             ->with(5);
+        $shipmentItem->expects($this->once())
+            ->method('getQty')
+            ->willReturn(5);
+
+        $shipmentItem->expects($this->atLeastOnce())->method('getOrderItem')->willReturn($orderItem);
 
         $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getAllItems']);
         $order->expects($this->any())

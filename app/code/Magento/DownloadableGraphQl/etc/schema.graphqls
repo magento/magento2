@@ -1,0 +1,65 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    addDownloadableProductsToCart(input: AddDownloadableProductsToCartInput): AddDownloadableProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
+
+input AddDownloadableProductsToCartInput {
+    cart_id: String!
+    cart_items: [DownloadableProductCartItemInput!]!
+}
+
+input DownloadableProductCartItemInput {
+    data: CartItemInput!
+    downloadable_product_links: [DownloadableProductLinksInput!]
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input DownloadableProductLinksInput {
+    link_id: Int!
+}
+
+type AddDownloadableProductsToCartOutput {
+    cart: Cart!
+}
+
+type DownloadableCartItem implements CartItemInterface @doc(description: "Downloadable Cart Item") {
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+    links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Links") @doc(description: "An array containing information about the links for the added to cart downloadable product")
+    samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
+}
+
+type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
+    downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples") @doc(description: "An array containing information about samples of this downloadable product.")
+    downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Links") @doc(description: "An array containing information about the links for this downloadable product")
+    links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately")
+    links_title: String @doc(description: "The heading above the list of downloadable products")
+}
+
+enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample") {
+    FILE @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    URL @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+}
+
+type DownloadableProductLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
+    id: Int @deprecated(reason: "This information should not be exposed on frontend")
+    title: String @doc(description: "The display name of the link")
+    sort_order: Int @doc(description: "A number indicating the sort order")
+    price: Float @doc(description: "The price of the downloadable product")
+    sample_url: String @doc(description: "URL to the downloadable sample")
+    is_shareable: Boolean @deprecated(reason: "This information should not be exposed on frontend")
+    number_of_downloads: Int @deprecated(reason: "This information should not be exposed on frontend")
+    link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+}
+
+type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
+    id: Int @deprecated(reason: "This information should not be exposed on frontend")
+    title: String @doc(description: "The display name of the sample")
+    sort_order: Int @doc(description: "A number indicating the sort order")
+    sample_url: String @doc(description: "URL to the downloadable sample")
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+}

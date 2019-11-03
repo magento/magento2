@@ -23,7 +23,7 @@ class AssertCustomerIsRedirectedToCheckout extends AbstractConstraint
     public function processAssert(CheckoutOnepage $checkoutOnepage)
     {
         $checkoutOnepage->open();
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             !$checkoutOnepage->getMessagesBlock()->isVisible()
             && $checkoutOnepage->getShippingMethodBlock()->isVisible(),
             'Checkout first step is not available.'

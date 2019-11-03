@@ -96,7 +96,9 @@ class EditTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->categoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
+        $this->categoryMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            [
                 'getPath',
                 'addData',
                 'getId',
@@ -104,9 +106,12 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'getResource',
                 'setStoreId',
                 'toArray'
-            ]);
+            ]
+        );
 
-        $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
+        $this->contextMock = $this->createPartialMock(
+            \Magento\Backend\App\Action\Context::class,
+            [
                 'getTitle',
                 'getRequest',
                 'getObjectManager',
@@ -115,7 +120,9 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'getMessageManager',
                 'getResultRedirectFactory',
                 'getSession'
-            ]);
+            ]
+        );
+
         $this->resultRedirectFactoryMock = $this->createPartialMock(
             \Magento\Backend\Model\View\Result\RedirectFactory::class,
             ['create']
@@ -258,23 +265,6 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->will($this->returnValue($categoryId));
 
-        /**
-         * @var \Magento\Framework\View\Element\Template
-         * |\PHPUnit_Framework_MockObject_MockObject $blockMock
-         */
-        $blockMock = $this->createPartialMock(\Magento\Framework\View\Element\Template::class, ['setStoreId']);
-        $blockMock->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId);
-
-        $this->resultPageMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnSelf());
-
-        $this->resultPageMock->expects($this->once())
-            ->method('getBlock')
-            ->willReturn($blockMock);
-
         $this->edit->execute();
     }
 
@@ -302,44 +292,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     private function mockInitCategoryCall()
     {
-        /**
-         * @var \Magento\Framework\Registry
-         * |\PHPUnit_Framework_MockObject_MockObject $registryMock
-         */
-        $registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['register']);
-        /**
-         * @var \Magento\Cms\Model\Wysiwyg\Config
-         * |\PHPUnit_Framework_MockObject_MockObject $wysiwygConfigMock
-         */
-        $wysiwygConfigMock = $this->createPartialMock(\Magento\Cms\Model\Wysiwyg\Config::class, ['setStoreId']);
-        /**
-         * @var \Magento\Store\Model\StoreManagerInterface
-         * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
-         */
-        $storeManagerMock = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getStore', 'getRootCategoryId']
-        );
-
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
             ->will($this->returnValue($this->categoryMock));
-
-        $this->objectManagerMock->expects($this->atLeastOnce())
-            ->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [\Magento\Framework\Registry::class, $registryMock],
-                        [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwygConfigMock],
-                        [\Magento\Store\Model\StoreManagerInterface::class, $storeManagerMock],
-                    ]
-                )
-            );
     }
 }

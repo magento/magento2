@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -53,21 +54,34 @@ class StockItemValidator
         $stockId = $stockItem->getStockId();
         if ($stockId !== null && $stockId != $defaultStockId) {
             throw new LocalizedException(
-                __('Invalid stock id: %1. Only default stock with id %2 allowed', $stockId, $defaultStockId)
+                __(
+                    'The "%1" value is invalid for stock ID. Enter stock with a default value of %2 to try again.',
+                    $stockId,
+                    $defaultStockId
+                )
             );
         }
 
         $stockItemId = $stockItem->getItemId();
         if ($stockItemId !== null && (!is_numeric($stockItemId) || $stockItemId <= 0)) {
             throw new LocalizedException(
-                __('Invalid stock item id: %1. Should be null or numeric value greater than 0', $stockItemId)
+                __(
+                    'The "%1" value is invalid for stock item ID. '
+                    . 'Enter either zero or a number than zero to try again.',
+                    $stockItemId
+                )
             );
         }
 
         $defaultStockItemId = $this->stockRegistry->getStockItem($product->getId())->getItemId();
         if ($defaultStockItemId && $stockItemId !== null && $defaultStockItemId != $stockItemId) {
             throw new LocalizedException(
-                __('Invalid stock item id: %1. Assigned stock item id is %2', $stockItemId, $defaultStockItemId)
+                __(
+                    'The "%1" value is invalid for stock item ID. '
+                    . 'Use the stock item ID\'s assigned "%2" value and try again.',
+                    $stockItemId,
+                    $defaultStockItemId
+                )
             );
         }
     }

@@ -54,7 +54,7 @@ class AssertCmsBlockNotOnCategoryPage extends AbstractConstraint
         $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
         $categoryViewContent = $catalogCategoryView->getViewBlock()->getContent();
 
-        \PHPUnit_Framework_Assert::assertNotEquals(
+        \PHPUnit\Framework\Assert::assertNotEquals(
             $cmsBlock->getContent(),
             $categoryViewContent,
             'Wrong block content on category is displayed.'

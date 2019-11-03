@@ -136,6 +136,21 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test method \Magento\Eav\Model\Entity\Collection\AbstractCollection::load
+     */
+    public function testLoad()
+    {
+        $this->fetchStrategyMock
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->will($this->returnValue([['id' => 1, 'data_changes' => true], ['id' => 2]]));
+
+        foreach ($this->model->getItems() as $item) {
+            $this->assertFalse($item->getDataChanges());
+        }
+    }
+
+    /**
      * @dataProvider getItemsDataProvider
      */
     public function testClear($values, $count)
@@ -178,6 +193,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->getItemById($testId));
     }
 
+    /**
+     * @return array
+     */
     public function getItemsDataProvider()
     {
         return [
@@ -187,6 +205,9 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return \Magento\Framework\DataObject
+     */
     public function getMagentoObject()
     {
         return new \Magento\Framework\DataObject();

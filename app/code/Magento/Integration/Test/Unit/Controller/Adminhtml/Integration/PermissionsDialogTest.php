@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Framework\View\Layout\Element as LayoutElement;
@@ -17,25 +15,15 @@ class PermissionsDialogTest extends \Magento\Integration\Test\Unit\Controller\Ad
     {
         $controller = $this->_createIntegrationController('PermissionsDialog');
 
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-                'getParam'
-            )->with(
-                $this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID)
-            )->will(
-                $this->returnValue(self::INTEGRATION_ID)
-            );
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->with($this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID))
+            ->will($this->returnValue(self::INTEGRATION_ID));
 
-        $this->_integrationSvcMock->expects(
-            $this->any()
-        )->method(
-                'get'
-            )->with(
-                $this->equalTo(self::INTEGRATION_ID)
-            )->will(
-                $this->returnValue($this->_getSampleIntegrationData())
-            );
+        $this->_integrationSvcMock->expects($this->any())
+            ->method('get')
+            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->will($this->returnValue($this->_getSampleIntegrationData()));
 
         // @codingStandardsIgnoreStart
         $handle = <<<HANDLE
@@ -56,21 +44,13 @@ HANDLE;
         $layoutUpdates = new LayoutElement($handle);
         $this->_registryMock->expects($this->any())->method('register');
 
-        $this->_layoutMergeMock->expects(
-            $this->once()
-        )->method(
-                'getFileLayoutUpdatesXml'
-            )->will(
-                $this->returnValue($layoutUpdates)
-            );
+        $this->_layoutMergeMock->expects($this->once())
+            ->method('getFileLayoutUpdatesXml')
+            ->will($this->returnValue($layoutUpdates));
 
-        $this->_viewMock->expects(
-            $this->once()
-        )->method(
-                'loadLayout'
-            )->with(
-                $this->equalTo(['adminhtml_integration_activate_permissions_webapi'])
-            );
+        $this->_viewMock->expects($this->once())
+            ->method('loadLayout')
+            ->with($this->equalTo(['adminhtml_integration_activate_permissions_webapi']));
 
         $controller->execute();
     }

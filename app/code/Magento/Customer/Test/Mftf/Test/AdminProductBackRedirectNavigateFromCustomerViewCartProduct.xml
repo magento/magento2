@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductBackRedirectNavigateFromCustomerViewCartProduct">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Product Back Button"/>
+            <title value="Product back redirect navigate from customer view cart product"/>
+            <description value="Back button on product page is redirecting to customer page if opened form shopping cart"/>
+            <severity value="MINOR"/>
+            <group value="Customer"/>
+        </annotations>
+        <before>
+            <!-- Create new product-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create new customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Login as admin-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Go to storefront as customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Navigate to customer edit page in admin -->
+        <amOnPage url="{{AdminCustomerPage.url}}edit/id/$$createCustomer.id$$/" stepKey="openCustomerEditPage"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPage"/>
+
+        <!-- Open shopping cart -->
+        <click selector="{{AdminCustomerInformationSection.shoppingCart}}" stepKey="clickShoppingCartButton"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+
+        <!-- Open product -->
+        <click selector="{{AdminCustomerCartSection.cartItem('1')}}" stepKey="openProduct"/>
+
+        <!-- Go back to customer page -->
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="goBackToCustomerPage"/>
+
+        <!-- Check current page is customer page -->
+        <seeInCurrentUrl stepKey="onCustomerAccountPage" url="{{AdminCustomerPage.url}}edit/id/$$createCustomer.id$$/"/>
+
+        <after>
+            <!--Delete product-->
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+
+            <!--Delete category-->
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+
+            <!--Delete customer-->
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+
+            <!-- Sign out-->
+            <actionGroup ref="SignOut" stepKey="signOut"/>
+        </after>
+    </test>
+</tests>

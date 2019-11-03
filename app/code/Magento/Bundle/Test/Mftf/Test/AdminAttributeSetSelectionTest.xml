@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAttributeSetSelectionTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Admin should be able to select/edit the “Attributes Set” when creating/editing a bundle product"/>
+            <description value="Admin should be able to select/edit the “Attributes Set” when creating/editing a bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-221"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+        <!-- Create a new attribute set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
+        <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillName"/>
+        <selectOption selector="{{AdminProductAttributeSetSection.basedOn}}" userInput="Default" stepKey="selectDefaultSet"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('meta_keyword')}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassign1"/>
+        <click selector="{{AdminProductAttributeSetSection.addNewGroupBtn}}" stepKey="clickAddNewGroup"/>
+        <fillField selector="{{AdminProductAttributeSetSection.newGroupName}}" userInput="TestGroupName" stepKey="fillNewGroupName"/>
+        <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="clickOkInModal"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" selector2="{{AdminProductAttributeSetSection.attribute('TestGroupName')}}" stepKey="assignManufacturer"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave2"/>
+
+        <!-- Go to new product page and see a default attribute -->
+        <!-- Switch from default attribute set to new attribute set -->
+        <amOnPage url="{{AdminProductCreatePage.url('4', 'bundle')}}" stepKey="goToNewProductPage"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
+
+        <!--save the product/published by default-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!--Testing that price appears correctly in admin catalog-->
+        <!--Set filter to product name-->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeSet"/>
+
+        <!--Editing Attribute set-->
+        <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet2"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{BundleProduct.defaultAttribute}}" stepKey="searchForAttrSet2"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet2"/>
+
+        <!--save the product/published by default-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown2"/>
+
+        <!--Testing that price appears correctly in admin catalog-->
+        <!--Set filter to product name-->
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage2"/>
+        <waitForPageLoad stepKey="WaitForPageToLoad2"/>
+        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName2">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(BundleProduct.defaultAttribute)}}" stepKey="seeAttributeSet2"/>
+    </test>
+</tests>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Payment\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -144,6 +142,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($isActive ? ['active_method' => $adapter] : [], $this->config->getActiveMethods());
     }
 
+    /**
+     * @return array
+     */
     public function getActiveMethodsDataProvider()
     {
         return [[true], [false]];

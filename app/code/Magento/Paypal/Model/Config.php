@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Paypal\Model;
 
 use Magento\Payment\Helper\Formatter;
 
 /**
  * Config model that is aware of all \Magento\Paypal payment methods
+ *
  * Works with PayPal-specific system configuration
 
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -226,6 +225,7 @@ class Config extends AbstractConfig
         'TWD',
         'THB',
         'USD',
+        'INR',
     ];
 
     /**
@@ -633,6 +633,7 @@ class Config extends AbstractConfig
 
     /**
      * Check whether method available for checkout or not
+     *
      * Logic based on merchant country, methods dependence
      *
      * @param string|null $methodCode
@@ -678,7 +679,7 @@ class Config extends AbstractConfig
                 }
                 break;
             case self::METHOD_BILLING_AGREEMENT:
-                $result = $this->isWppApiAvailabe();
+                $result = $this->isWppApiAvailable();
                 break;
         }
         return $result;
@@ -724,6 +725,7 @@ class Config extends AbstractConfig
 
     /**
      * Check whether method supported for specified country or not
+     *
      * Use $_methodCode and merchant country by default
      *
      * @param string|null $method
@@ -866,9 +868,11 @@ class Config extends AbstractConfig
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return sprintf('https://www.%spaypal.com/checkoutnow%s',
+        return sprintf(
+            'https://www.%spaypal.com/checkoutnow%s',
             $this->getValue('sandboxFlag') ? 'sandbox.' : '',
-            '?token=' . urlencode($token));
+            '?token=' . urlencode($token)
+        );
     }
 
     /**
@@ -895,6 +899,7 @@ class Config extends AbstractConfig
 
     /**
      * Get url for additional actions that PayPal may require customer to do after placing the order.
+     *
      * For instance, redirecting customer to bank for payment confirmation.
      *
      * @param string $token
@@ -956,6 +961,7 @@ class Config extends AbstractConfig
 
     /**
      * Express checkout shortcut pic URL getter
+     *
      * PayPal will ignore "pal", if there is no total amount specified
      *
      * @param string $localeCode
@@ -995,6 +1001,7 @@ class Config extends AbstractConfig
 
     /**
      * Get PayPal "mark" image URL
+     *
      * Supposed to be used on payment methods selection
      * $staticSize is applicable for static images only
      *
@@ -1031,6 +1038,7 @@ class Config extends AbstractConfig
 
     /**
      * Get "What Is PayPal" localized URL
+     *
      * Supposed to be used with "mark" as popup window
      *
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -1195,7 +1203,7 @@ class Config extends AbstractConfig
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
             self::PAYMENT_ACTION_SALE => __('Sale'),
         ];
-        if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
+        if ($this->_methodCode !== null && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
         return $paymentActions;
@@ -1261,6 +1269,7 @@ class Config extends AbstractConfig
 
     /**
      * Whether to ask customer to create billing agreements
+     *
      * Unilateral payments are incompatible with the billing agreements
      *
      * @return bool
@@ -1375,6 +1384,7 @@ class Config extends AbstractConfig
 
     /**
      * Dynamic PayPal image URL getter
+     *
      * Also can render dynamic Acceptance Mark
      *
      * @param string $type
@@ -1501,6 +1511,7 @@ class Config extends AbstractConfig
             case 'allow_ba_signup':
             case 'in_context':
             case 'merchant_id':
+            case 'supported_locales':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
                 return $this->_mapMethodFieldset($fieldName);
@@ -1625,6 +1636,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _mapGenericStyleFieldset($fieldName)
     {
@@ -1635,9 +1647,10 @@ class Config extends AbstractConfig
             case 'paypal_hdrbackcolor':
             case 'paypal_hdrbordercolor':
             case 'paypal_payflowcolor':
+            case 'disable_funding_options':
                 return "paypal/style/{$fieldName}";
             default:
-                return null;
+                return $this->mapButtonStyles($fieldName);
         }
     }
 
@@ -1688,6 +1701,36 @@ class Config extends AbstractConfig
     }
 
     /**
+     * Map PayPal button style config fields
+     *
+     * @param string $fieldName
+     * @return null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function mapButtonStyles(string $fieldName)
+    {
+        $page = substr($fieldName, 0, (int)strpos($fieldName, '_page_button_'));
+
+        if (!$page) {
+            return null;
+        }
+
+        switch ($fieldName) {
+            case "{$page}_page_button_customize":
+            case "{$page}_page_button_layout":
+            case "{$page}_page_button_size":
+            case "{$page}_page_button_color":
+            case "{$page}_page_button_shape":
+            case "{$page}_page_button_label":
+            case "{$page}_page_button_mx_installment_period":
+            case "{$page}_page_button_br_installment_period":
+                return "paypal/style/{$fieldName}";
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Payment API authentication methods source getter
      *
      * @return array
@@ -1724,6 +1767,7 @@ class Config extends AbstractConfig
 
     /**
      * Get Display option from stored config
+     *
      * @param string $section
      *
      * @return mixed
@@ -1751,6 +1795,7 @@ class Config extends AbstractConfig
 
     /**
      * Get Position option from stored config
+     *
      * @param string $section
      *
      * @return mixed
@@ -1766,6 +1811,7 @@ class Config extends AbstractConfig
 
     /**
      * Get Size option from stored config
+     *
      * @param string $section
      *
      * @return mixed

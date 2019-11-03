@@ -104,7 +104,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Element with id "1" already exists
+     * @expectedExceptionMessage An element with a "1" ID already exists.
      */
     public function testElementExistsException()
     {

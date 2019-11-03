@@ -32,7 +32,7 @@ class AssertProductCompareSuccessAddMessage extends AbstractConstraint
     {
         $successMessage = sprintf(self::SUCCESS_MESSAGE, $product->getName());
         $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $successMessage,
             $actualMessage,
             'Wrong success message is displayed.'

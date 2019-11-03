@@ -26,7 +26,7 @@
             <data name="creditCard/data/payment_code" xsi:type="string">braintree</data>
             <data name="configData" xsi:type="string">braintree, braintree_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="tag" xsi:type="string">severity:S1</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />

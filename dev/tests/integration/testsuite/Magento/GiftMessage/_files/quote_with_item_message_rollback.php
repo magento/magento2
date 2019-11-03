@@ -20,7 +20,7 @@ foreach ($quote->getAllItems() as $item) {
     if ($product->getId()) {
         $product->delete();
     }
-};
+}
 $quote->delete();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

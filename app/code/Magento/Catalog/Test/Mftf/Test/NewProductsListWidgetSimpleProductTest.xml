@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NewProductsListWidgetSimpleProductTest" extends="NewProductsListWidgetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="New products list widget"/>
+            <title value="Admin should be able to set Simple Product as new so that it shows up in the Catalog New Products List Widget"/>
+            <description value="Admin should be able to set Simple Product as new so that it shows up in the Catalog New Products List Widget"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-104"/>
+            <group value="Catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <!-- A Cms page containing the New Products Widget gets created here via extends -->
+
+        <!-- Create a Simple Product to appear in the widget -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
+        <waitForPageLoad stepKey="waitForProductList"/>
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{_defaultProduct.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQuantity"/>
+        <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
+        <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+
+        <!-- If PageCache is enabled, Cache clearing happens here via merge  -->
+
+        <!-- Check for product on the CMS page with the New Products widget -->
+        <amOnPage url="{{_newDefaultCmsPage.identifier}}" stepKey="amOnCmsPage"/>
+        <waitForPageLoad stepKey="waitForCmsPage"/>
+        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductName"/>
+    </test>
+</tests>

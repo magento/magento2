@@ -70,7 +70,7 @@ $productModel->setTypeId(
 )->setPrice(
     10
 )->addData(
-    ['text_attribute' => '!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/']
+    ['text_attribute' => '!@#$%^&*()_+1234567890-=|\\:;"\'<,>.?/›ƒª']
 )->setTierPrice(
     [0 => ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 3, 'price' => 8]]
 )->setVisibility(
@@ -80,7 +80,7 @@ $productModel->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setStockData(
-    ['qty' => 100, 'is_in_stock' => 1]
+    ['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1]
 )->setCanSaveCustomOptions(
     true
 )->setCategoryIds(

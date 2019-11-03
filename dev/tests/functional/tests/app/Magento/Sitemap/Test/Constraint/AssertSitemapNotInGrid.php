@@ -30,7 +30,7 @@ class AssertSitemapNotInGrid extends AbstractConstraint
             'sitemap_path' => $sitemap->getSitemapPath(),
             'sitemap_id' => $sitemap->getSitemapId(),
         ];
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $sitemapPageGrid->getSitemapGrid()->isRowVisible($filter),
             'Sitemap with filename \'' . $sitemap->getSitemapFilename() . '\' and id \''
             . $sitemap->getSitemapId() . '\' and path \''

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Block\Order\Item\Renderer;
 
 class DefaultRendererTest extends \PHPUnit\Framework\TestCase
@@ -50,8 +48,8 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
             [
                 'context' => $this->objectManager->getObject(
                     \Magento\Backend\Block\Template\Context::class,
-                        ['layout' => $this->layoutMock]
-                    )
+                    ['layout' => $this->layoutMock]
+                )
             ]
         );
 
@@ -142,7 +140,11 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
         $discountAmount = 20;
         $weeeTaxAppliedRowAmount = 10;
 
-        $expectedResult = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount + $weeeTaxAppliedRowAmount;
+        $expectedResult = $rowTotal
+            + $taxAmount
+            + $discountTaxCompensationAmount
+            - $discountAmount
+            + $weeeTaxAppliedRowAmount;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
             ->will($this->returnValue($rowTotal));

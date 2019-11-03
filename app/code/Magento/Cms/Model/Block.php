@@ -6,15 +6,14 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Cms\Model\ResourceModel\Block as ResourceCmsBlock;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 
 /**
  * CMS block model
  *
- * @method Block setStoreId(array $storeId)
- * @method array getStoreId()
+ * @method Block setStoreId(int $storeId)
+ * @method int getStoreId()
  */
 class Block extends AbstractModel implements BlockInterface, IdentityInterface
 {
@@ -42,6 +41,8 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     protected $_eventPrefix = 'cms_block';
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -57,8 +58,12 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
      */
     public function beforeSave()
     {
+        if ($this->hasDataChanges()) {
+            $this->setUpdateTime(null);
+        }
+
         $needle = 'block_id="' . $this->getId() . '"';
-        if (false == strstr($this->getContent(), $needle)) {
+        if (false == strstr($this->getContent(), (string) $needle)) {
             return parent::beforeSave();
         }
         throw new \Magento\Framework\Exception\LocalizedException(

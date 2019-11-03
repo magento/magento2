@@ -56,7 +56,7 @@
                 <fax_show/>
             </address>
             <startup>
-                <redirect_dashboard>1</redirect_dashboard>
+                <redirect_dashboard>0</redirect_dashboard>
             </startup>
             <address_templates>
                 <text>{{depend prefix}}{{var prefix}} {{/depend}}{{var firstname}} {{depend middlename}}{{var middlename}} {{/depend}}{{var lastname}}{{depend suffix}} {{var suffix}}{{/depend}}

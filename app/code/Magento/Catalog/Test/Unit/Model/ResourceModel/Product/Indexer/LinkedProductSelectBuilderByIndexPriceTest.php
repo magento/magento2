@@ -7,6 +7,9 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -56,12 +59,26 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
+
+        $this->indexScopeResolverMock = $this->createMock(
+            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+        );
+        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->method('getId')->willReturn(1);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+
         $this->model = new \Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice(
             $this->storeManagerMock,
             $this->resourceMock,
             $this->customerSessionMock,
             $this->metadataPoolMock,
-            $this->baseSelectProcessorMock
+            $this->baseSelectProcessorMock,
+            $this->indexScopeResolverMock,
+            $this->dimensionFactoryMock
         );
     }
 
@@ -79,12 +96,12 @@ class LinkedProductSelectBuilderByIndexPriceTest extends \PHPUnit\Framework\Test
         $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId');
+        $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId')->willReturn(1);
         $connection->expects($this->any())->method('select')->willReturn($select);
         $select->expects($this->any())->method('from')->willReturnSelf();
         $select->expects($this->any())->method('joinInner')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
-        $select->expects($this->once())->method('order')->willReturnSelf();
+        $select->expects($this->exactly(2))->method('order')->willReturnSelf();
         $select->expects($this->once())->method('limit')->willReturnSelf();
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadata);

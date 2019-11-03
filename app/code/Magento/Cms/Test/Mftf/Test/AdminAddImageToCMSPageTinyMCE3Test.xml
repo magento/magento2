@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddImageToCMSPageTinyMCE3Test">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Admin should be able to upload images with TinyMCE3 WYSIWYG"/>
+            <group value="Cms"/>
+            <title value="Verify that admin is able to upload image to a CMS Page with TinyMCE3 enabled"/>
+            <description value="Verify that admin is able to upload image to CMS Page with TinyMCE3 enabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95725"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <!-- Choose TinyMCE3 as the default WYSIWYG editor-->
+            <magentoCLI command="config:set cms/wysiwyg/editor Magento_Tinymce3/tinymce3Adapter" stepKey="enableTinyMCE3"/>
+        </before>
+        <after>
+            <!-- Switch WYSIWYG editor to TinyMCE4-->
+            <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
+            <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
+        <waitForPageLoad stepKey="wait5"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
+        <seeElement selector="{{TinyMCESection.TinyMCE3}}" stepKey="seeTinyMCE3" />
+        <wait time="3" stepKey="waiting"/>
+        <comment userInput="Click Insert image button" stepKey="clickImageButton"/>
+        <click selector="{{TinyMCESection.InsertImageBtnTinyMCE3}}" stepKey="clickInsertImage" />
+        <waitForPageLoad stepKey="waitForiFrameToLoad" />
+        <!-- Switch to the Edit/Insert Image iFrame -->
+        <comment userInput="Switching to iFrame" stepKey="insertImageiFrame"/>
+        <executeJS function="document.querySelector('.clearlooks2 iframe').setAttribute('name', 'insert-image');" stepKey="makeIFrameInteractable"/>
+        <switchToIFrame selector="insert-image" stepKey="switchToIFrame"/>
+        <click selector="{{MediaGallerySection.browseForImage}}" stepKey="clickBrowse"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+        <waitForPageLoad stepKey="waitForPageToLoad" />
+        <actionGroup ref="CreateImageFolder" stepKey="CreateImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="attachImage" stepKey="attachImage1">
+            <argument name="Image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="saveImage" stepKey="insertImage"/>
+        <!-- Switching back to the Edit/Insert Image iFrame-->
+        <comment userInput="switching back to iFrame" stepKey="switchBackToIFrame"/>
+        <executeJS function="document.querySelector('.clearlooks2 iframe').setAttribute('name', 'insert-image');" stepKey="makeIFrameInteractable2"/>
+        <switchToIFrame selector="insert-image" stepKey="switchToIFrame2"/>
+        <waitForElementVisible selector="{{MediaGallerySection.insertBtn}}" stepKey="waitForInsertBtnOnIFrame" />
+        <fillField selector="{{MediaGallerySection.ImageDescriptionTinyMCE3}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
+        <click selector="{{MediaGallerySection.insertBtn}}" stepKey="clickInsertBtn" />
+        <waitForPageLoad stepKey="wait3"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

@@ -140,6 +140,9 @@ class ReportProductSavedToNewRelicTest extends \PHPUnit\Framework\TestCase
         $this->model->execute($eventObserver);
     }
 
+    /**
+     * @return array
+     */
     public function actionDataProvider()
     {
         return [[true], [false]];

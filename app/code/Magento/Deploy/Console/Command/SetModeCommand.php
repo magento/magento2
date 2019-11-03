@@ -101,8 +101,11 @@ class SetModeCommand extends Command
                         $modeController->enableProductionMode();
                     }
                     break;
+                case State::MODE_DEFAULT:
+                    $modeController->enableDefaultMode();
+                    break;
                 default:
-                    throw new LocalizedException(__('Cannot switch into given mode "%1"', $toMode));
+                    throw new LocalizedException(__('The mode can\'t be switched to "%1".', $toMode));
             }
             $output->writeln('Enabled ' . $toMode . ' mode.');
 

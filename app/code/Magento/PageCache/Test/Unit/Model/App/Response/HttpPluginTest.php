@@ -26,6 +26,9 @@ class HttpPluginTest extends \PHPUnit\Framework\TestCase
         $plugin->beforeSendResponse($responseMock);
     }
 
+    /**
+     * @return array
+     */
     public function beforeSendResponseDataProvider()
     {
         return [

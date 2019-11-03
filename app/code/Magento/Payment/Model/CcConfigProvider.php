@@ -44,7 +44,7 @@ class CcConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -69,7 +69,7 @@ class CcConfigProvider implements ConfigProviderInterface
         }
 
         $types = $this->ccConfig->getCcAvailableTypes();
-        foreach (array_keys($types) as $code) {
+        foreach ($types as $code => $label) {
             if (!array_key_exists($code, $this->icons)) {
                 $asset = $this->ccConfig->createAsset('Magento_Payment::images/cc/' . strtolower($code) . '.png');
                 $placeholder = $this->assetSource->findSource($asset);
@@ -78,7 +78,8 @@ class CcConfigProvider implements ConfigProviderInterface
                     $this->icons[$code] = [
                         'url' => $asset->getUrl(),
                         'width' => $width,
-                        'height' => $height
+                        'height' => $height,
+                        'title' => __($label),
                     ];
                 }
             }

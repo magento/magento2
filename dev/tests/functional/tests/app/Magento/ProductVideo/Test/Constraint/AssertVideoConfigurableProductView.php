@@ -36,22 +36,22 @@ class AssertVideoConfigurableProductView extends AbstractConstraint
         //open product page
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         // assert video and video data of configurable product is presented on page
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getViewBlock()->isVideoVisible(),
             'Product video is not displayed on product view when it should.'
         );
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getViewBlock()->checkVideoDataPresence($youtubeDataCode),
             'Configurable product video data is not displayed on product view when it should.'
         );
        // select configurable product variation
         $catalogProductView->getConfigurableAttributesBlock()->selectConfigurableOption($product, $variation);
         // assert video and video data of simple product option is presented on page
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getViewBlock()->isVideoVisible(),
             'Configurable product variation video is not displayed on product view when it should.'
         );
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getViewBlock()->checkVideoDataPresence($vimeoDataCode),
             'Configurable product variation video data is not displayed on product view when it should.'
         );

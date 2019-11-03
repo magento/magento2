@@ -168,7 +168,7 @@ class Layer extends \Magento\Framework\DataObject
      * Apply layer
      * Method is colling after apply all filters, can be used
      * for prepare some index data before getting information
-     * about existing intexes
+     * about existing indexes
      *
      * @return \Magento\Catalog\Model\Layer
      */

@@ -5,12 +5,12 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\Image\ContextFactory;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -73,10 +73,29 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     private $viewAssetPlaceholderFactory;
 
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $serializer;
+
+    /**
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cacheManager;
+
+    /**
+     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $paramsBuilder;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->context->expects($this->any())->method('getCacheManager')->will($this->returnValue($this->cacheManager));
 
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
@@ -112,25 +131,46 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->serializer = $this->getMockBuilder(
+            \Magento\Framework\Serialize\SerializerInterface::class
+        )->getMockForAbstractClass();
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
+        $this->paramsBuilder = $this->getMockBuilder(ParamsBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->image = $objectManager->getObject(
             \Magento\Catalog\Model\Product\Image::class,
             [
+                'context' => $this->context,
                 'storeManager' => $this->storeManager,
                 'catalogProductMediaConfig' => $this->config,
                 'coreFileStorageDatabase' => $this->coreFileHelper,
                 'filesystem' => $this->filesystem,
                 'imageFactory' => $this->factory,
                 'viewAssetImageFactory' => $this->viewAssetImageFactory,
-                'viewAssetPlaceholderFactory' => $this->viewAssetPlaceholderFactory
+                'viewAssetPlaceholderFactory' => $this->viewAssetPlaceholderFactory,
+                'serializer' => $this->serializer,
+                'paramsBuilder' => $this->paramsBuilder
             ]
         );
 
-        // Settings for backward compatible property
-        $objectManagerHelper = new ObjectManagerHelper($this);
         $this->imageAsset = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->getMockForAbstractClass();
-        $objectManagerHelper->setBackwardCompatibleProperty(
+        $objectManager->setBackwardCompatibleProperty(
             $this->image,
             'imageAsset',
             $this->imageAsset
@@ -182,6 +222,21 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
     public function testSetGetBaseFile()
     {
+        $miscParams = [
+            'image_type' => null,
+            'image_height' => null,
+            'image_width' => null,
+            'keep_aspect_ratio' => 'proportional',
+            'keep_frame' => 'frame',
+            'keep_transparency' => 'transparency',
+            'constrain_only' => 'doconstrainonly',
+            'background' => 'ffffff',
+            'angle' => null,
+            'quality' => 80,
+        ];
+        $this->paramsBuilder->expects(self::once())
+            ->method('build')
+            ->willReturn($miscParams);
         $this->mediaDirectory->expects($this->any())->method('isFile')->will($this->returnValue(true));
         $this->mediaDirectory->expects($this->any())->method('isExist')->will($this->returnValue(true));
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/somefile.png';
@@ -191,18 +246,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->with(
                 [
-                    'miscParams' => [
-                        'image_type' => null,
-                        'image_height' => null,
-                        'image_width' => null,
-                        'keep_aspect_ratio' => 'proportional',
-                        'keep_frame' => 'frame',
-                        'keep_transparency' => 'transparency',
-                        'constrain_only' => 'doconstrainonly',
-                        'background' => 'ffffff',
-                        'angle' => null,
-                        'quality' => 80,
-                    ],
+                    'miscParams' => $miscParams,
                     'filePath' => '/somefile.png',
                 ]
             )
@@ -212,6 +256,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
+        $this->assertEquals(
+            null,
+            $this->image->getNewFile()
+        );
     }
 
     public function testSetBaseNoSelectionFile()
@@ -354,12 +402,16 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->testSetGetBaseFile();
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
         $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
+        $this->cacheManager->expects($this->once())->method('load')->willReturn(
+            json_encode(['size' => ['image data']])
+        );
         $this->assertTrue($this->image->isCached());
     }
 
     public function testClearCache()
     {
         $this->coreFileHelper->expects($this->once())->method('deleteFolder')->will($this->returnValue(true));
+        $this->cacheManager->expects($this->once())->method('clean');
         $this->image->clearCache();
     }
 
@@ -382,5 +434,25 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testIsBaseFilePlaceholder()
     {
         $this->assertFalse($this->image->isBaseFilePlaceholder());
+    }
+
+    public function testGetResizedImageInfoWithCache()
+    {
+        $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
+        $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
+        $this->cacheManager->expects($this->once())->method('load')->willReturn(
+            json_encode(['size' => ['image data']])
+        );
+        $this->cacheManager->expects($this->never())->method('save');
+        $this->assertEquals(['image data'], $this->image->getResizedImageInfo());
+    }
+
+    public function testGetResizedImageInfoEmptyCache()
+    {
+        $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
+        $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
+        $this->cacheManager->expects($this->once())->method('load')->willReturn(false);
+        $this->cacheManager->expects($this->once())->method('save');
+        $this->assertTrue(is_array($this->image->getResizedImageInfo()));
     }
 }

@@ -80,7 +80,7 @@ class DataSourcePool
             return $this->dataSources;
         }
 
-        return isset($this->dataSources[$name]) ? $this->dataSources[$name] : null;
+        return $this->dataSources[$name] ?? null;
     }
 
     /**
@@ -107,6 +107,6 @@ class DataSourcePool
      */
     public function getNamespaceData($namespace)
     {
-        return isset($this->assignments[$namespace]) ? $this->assignments[$namespace] : [];
+        return $this->assignments[$namespace] ?? [];
     }
 }

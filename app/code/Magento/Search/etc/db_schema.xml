@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="search_query" resource="default" engine="innodb" comment="Search query table">
+        <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Query ID"/>
+        <column xsi:type="varchar" name="query_text" nullable="true" length="255" comment="Query text"/>
+        <column xsi:type="int" name="num_results" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Num results"/>
+        <column xsi:type="int" name="popularity" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Popularity"/>
+        <column xsi:type="varchar" name="redirect" nullable="true" length="255" comment="Redirect"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="smallint" name="display_in_terms" padding="6" unsigned="false" nullable="false"
+                identity="false" default="1" comment="Display in terms"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="true" identity="false"
+                default="1" comment="Active status"/>
+        <column xsi:type="smallint" name="is_processed" padding="6" unsigned="false" nullable="true" identity="false"
+                default="0" comment="Processed status"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="query_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SEARCH_QUERY_STORE_ID_STORE_STORE_ID" table="search_query"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID">
+            <column name="query_text"/>
+            <column name="store_id"/>
+        </constraint>
+        <index referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY" indexType="btree">
+            <column name="query_text"/>
+            <column name="store_id"/>
+            <column name="popularity"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
+            <column name="is_processed"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID_POPULARITY" indexType="btree">
+            <column name="store_id"/>
+            <column name="popularity"/>
+        </index>
+    </table>
+    <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">
+        <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true"
+                comment="Synonyms Group ID"/>
+        <column xsi:type="text" name="synonyms" nullable="false" comment="list of synonyms making up this group"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID - identifies the store view these synonyms belong to"/>
+        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Website ID - identifies the website ID these synonyms belong to"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="group_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SEARCH_SYNONYMS_STORE_ID_STORE_STORE_ID" table="search_synonyms"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SEARCH_SYNONYMS_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+                    table="search_synonyms" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+        <index referenceId="SEARCH_SYNONYMS_SYNONYMS" indexType="fulltext">
+            <column name="synonyms"/>
+        </index>
+        <index referenceId="SEARCH_SYNONYMS_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="SEARCH_SYNONYMS_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+    </table>
+</schema>

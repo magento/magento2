@@ -3,7 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Test\Annotation;
+
+use Magento\Framework\App\Area;
 
 class AppAreaTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,12 +16,12 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_applicationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\TestCase|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_testCaseMock;
 
@@ -69,6 +72,22 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         $this->_object->startTest($this->_testCaseMock);
     }
 
+    /**
+     * Check startTest() with different allowed area codes.
+     *
+     * @dataProvider startTestWithDifferentAreaCodes
+     * @param string $areaCode
+     */
+    public function testStartTestWithDifferentAreaCodes(string $areaCode)
+    {
+        $annotations = ['method' => ['magentoAppArea' => [$areaCode]]];
+        $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
+        $this->_applicationMock->expects($this->any())->method('getArea')->willReturn(null);
+        $this->_applicationMock->expects($this->once())->method('reinitialize');
+        $this->_applicationMock->expects($this->once())->method('loadArea')->with($areaCode);
+        $this->_object->startTest($this->_testCaseMock);
+    }
+
     public function testStartTestPreventDoubleAreaLoadingAfterReinitialization()
     {
         $annotations = ['method' => ['magentoAppArea' => ['global']]];
@@ -88,5 +107,37 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         $this->_applicationMock->expects($this->never())->method('reinitialize');
         $this->_applicationMock->expects($this->never())->method('loadArea');
         $this->_object->startTest($this->_testCaseMock);
+    }
+
+    /**
+     *  Provide test data for testStartTestWithDifferentAreaCodes().
+     *
+     * @return array
+     */
+    public function startTestWithDifferentAreaCodes()
+    {
+        return [
+            [
+                'area_code' => Area::AREA_GLOBAL,
+            ],
+            [
+                'area_code' => Area::AREA_ADMINHTML,
+            ],
+            [
+                'area_code' => Area::AREA_FRONTEND,
+            ],
+            [
+                'area_code' => Area::AREA_WEBAPI_REST,
+            ],
+            [
+                'area_code' => Area::AREA_WEBAPI_SOAP,
+            ],
+            [
+                'area_code' => Area::AREA_CRONTAB,
+            ],
+            [
+                'area_code' => Area::AREA_GRAPHQL,
+            ],
+        ];
     }
 }

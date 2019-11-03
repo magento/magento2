@@ -3,13 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if ($block->getCanDisplayTotalRefunded()): ?>
+<?php if ($block->getCanDisplayTotalRefunded()) : ?>
 <tr>
-    <td class="label"><strong><?= /* @escapeNotVerified */ __('Total Refunded') ?></strong></td>
-    <td class="emph"><?= /* @escapeNotVerified */ $block->displayPriceAttribute('total_refunded', true) ?></td>
+    <td class="label"><strong><?= $block->escapeHtml(__('Total Refunded')) ?></strong></td>
+    <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_refunded', true) ?></td>
 </tr>
 <?php endif; ?>

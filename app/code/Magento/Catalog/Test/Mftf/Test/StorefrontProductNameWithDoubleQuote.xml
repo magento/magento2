@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductNameWithDoubleQuote">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create products"/>
+            <title value="Product with double quote in name"/>
+            <description value="Product with a double quote in the name should appear correctly on the storefront"/>
+            <severity value="CRITICAL"/>
+            <group value="product"/>
+            <testCaseId value="MAGETWO-92384"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <!--Create product via admin-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToProductCreatePage">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
+        <actionGroup ref="addProductImage" stepKey="addImageToProduct">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!--Check product in category listing-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc(SimpleProductNameWithDoubleQuote.name, ProductImage.fileName)}}" stepKey="seeCorrectImageCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectNameCategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(SimpleProductNameWithDoubleQuote.name)}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPriceCategoryPage"/>
+        <!--Open product display page-->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" stepKey="clickProductToGoProductPage"/>
+        <waitForPageLoad stepKey="waitForProductDisplayPageLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{SimpleProductNameWithDoubleQuote.sku}}" stepKey="seeCorrectSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ProductImage.fileName)}}" stepKey="seeCorrectImage"/>
+        <see selector="{{StorefrontProductInfoMainSection.stock}}" userInput="In Stock" stepKey="seeInStock"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategory.name$$" stepKey="seeCorrectBreadCrumbCategory"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectBreadCrumbProduct"/>
+
+        <!--Remove product-->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
+        </actionGroup>
+    </test>
+
+    <test name="StorefrontProductNameWithHTMLEntities">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create product"/>
+            <title value=":Proudct with html special characters in name"/>
+            <description value="Product with html entities in the name should appear correctly on the PDP breadcrumbs on storefront"/>
+            <severity value="CRITICAL"/>
+            <group value="product"/>
+            <testCaseId value="MAGETWO-93794"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategoryOne"/>
+            <createData entity="productWithHTMLEntityOne" stepKey="productOne">
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+            <createData entity="productWithHTMLEntityTwo" stepKey="productTwo">
+                <requiredEntity createDataKey="createCategoryOne"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="productOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="productTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategoryOne" stepKey="deleteCategory"/>
+        </after>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!--Check product in category listing-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategoryOne.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitforCategoryPageToLoad"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" userInput="{{productWithHTMLEntityOne.name}}" stepKey="seeCorrectNameProd1CategoryPage"/>
+        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityTwo.name)}}" userInput="{{productWithHTMLEntityTwo.name}}" stepKey="seeCorrectNameProd2CategoryPage"/>
+
+        <!--Open product display page-->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" stepKey="clickProductToGoProductPage"/>
+        <waitForPageLoad stepKey="waitForProductDisplayPageLoad2"/>
+
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productWithHTMLEntityOne.name}}" stepKey="seeCorrectName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{productWithHTMLEntityOne.sku}}" stepKey="seeCorrectSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{productWithHTMLEntityOne.price}}" stepKey="seeCorrectPrice"/>
+
+        <!--Veriy the breadcrumbs on Product Display page-->
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs1"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategoryOne.name$$" stepKey="seeCorrectBreadCrumbCategory"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeCorrectBreadCrumbProduct"/>
+
+        <click selector="{{StorefrontNavigationSection.topCategory($$createCategoryOne.name$$)}}" stepKey="goBackToCategoryPage"/>
+        <waitForPageLoad stepKey="waitforCategoryPageToLoad2"/>
+
+        <!--Open product display page-->
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityTwo.name)}}" stepKey="clickProductToGoSecondProductPage"/>
+        <waitForPageLoad stepKey="waitForProductDisplayPageLoad3"/>
+
+        <!--Verify the breadcrumbs on Product Display page-->
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs2"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategoryOne.name$$" stepKey="seeCorrectBreadCrumbCategory2"/>
+        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productTwo.name$$" stepKey="seeCorrectBreadCrumbProduct2"/>
+
+    </test>
+</tests>

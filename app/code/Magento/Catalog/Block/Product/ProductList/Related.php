@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -18,7 +16,8 @@ use Magento\Framework\View\Element\AbstractBlock;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
-class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
+class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Collection
@@ -78,11 +77,13 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
 
         $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
@@ -104,6 +105,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -113,6 +116,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     }
 
     /**
+     * Get collection items
+     *
      * @return Collection
      */
     public function getItems()
@@ -121,7 +126,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
          * getIdentities() depends on _itemCollection populated, but it can be empty if the block is hidden
          * @see https://github.com/magento/magento2/issues/5897
          */
-        if (is_null($this->_itemCollection)) {
+        if ($this->_itemCollection === null) {
             $this->_prepareData();
         }
         return $this->_itemCollection;
@@ -136,6 +141,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     {
         $identities = [];
         foreach ($this->getItems() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;

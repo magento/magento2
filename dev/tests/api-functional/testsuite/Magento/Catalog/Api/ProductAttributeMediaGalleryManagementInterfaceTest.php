@@ -4,15 +4,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Api;
 
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\TestFramework\ObjectManager;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class ProductAttributeMediaGalleryManagementInterfaceTest
  */
-class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestFramework\TestCase\WebapiAbstract
+class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
 {
     /**
      * Default create service request information (product with SKU 'simple' is used)
@@ -40,12 +48,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
      */
     protected $testImagePath;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/simple/media',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -57,7 +68,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->updateServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/simple/media',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -65,9 +76,10 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
                 'operation' => 'catalogProductAttributeMediaGalleryManagementV1Update',
             ],
         ];
+
         $this->deleteServiceInfo = [
             'rest' => [
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -75,6 +87,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
                 'operation' => 'catalogProductAttributeMediaGalleryManagementV1Remove',
             ],
         ];
+
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
     }
 
@@ -86,7 +99,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     protected function getTargetSimpleProduct()
     {
         $objectManager = Bootstrap::getObjectManager();
-        return $objectManager->get(\Magento\Catalog\Model\ProductFactory::class)->create()->load(1);
+
+        return $objectManager->get(ProductFactory::class)->create()->load(1);
     }
 
     /**
@@ -100,17 +114,20 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $mediaGallery = $this->getTargetSimpleProduct()->getData('media_gallery');
         $image = array_shift($mediaGallery['images']);
+
         return (int)$image['value_id'];
     }
 
     /**
+     * Test create() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testCreate()
     {
         $requestData = [
             'id' => null,
-            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
+            'media_type' => ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -137,13 +154,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create() method without file
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testCreateWithoutFileExtension()
     {
         $requestData = [
             'id' => null,
-            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
+            'media_type' => ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -170,13 +189,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create() method with not default store id
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testCreateWithNotDefaultStoreId()
     {
         $requestData = [
             'id' => null,
-            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
+            'media_type' => ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -214,6 +235,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test update() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      */
     public function testUpdate()
@@ -252,6 +275,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test update() method with not default store id
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      */
     public function testUpdateWithNotDefaultStoreId()
@@ -290,7 +315,9 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     * Test delete() method
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image_without_types.php
      */
     public function testDelete()
     {
@@ -308,6 +335,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create() method if provided content is not base64 encoded
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
      * @expectedExceptionMessage The image content must be valid base64 encoded data.
@@ -333,6 +362,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create() method if provided content is not an image
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
      * @expectedExceptionMessage The image content must be valid base64 encoded data.
@@ -358,6 +389,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create() method if provided image has wrong MIME type
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
      * @expectedExceptionMessage The image MIME type is not valid or not supported.
@@ -383,8 +416,10 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create method if target product does not exist
+     *
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -408,6 +443,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test create() method if provided image name contains forbidden characters
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
      * @expectedExceptionMessage Provided image name contains forbidden characters.
@@ -432,8 +469,10 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test update() method if target product does not exist
+     *
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -455,9 +494,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test update() method if there is no image with given id
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      * @expectedException \Exception
-     * @expectedExceptionMessage There is no image with provided ID.
+     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testUpdateThrowsExceptionIfThereIsNoImageWithGivenId()
     {
@@ -480,8 +521,10 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test delete() method if target product does not exist
+     *
      * @expectedException \Exception
-     * @expectedExceptionMessage Requested product doesn't exist
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
@@ -495,9 +538,11 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test delete() method if there is no image with given id
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      * @expectedException \Exception
-     * @expectedExceptionMessage There is no image with provided ID.
+     * @expectedExceptionMessage No image with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfThereIsNoImageWithGivenId()
     {
@@ -511,15 +556,17 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test get() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      */
     public function testGet()
     {
         $productSku = 'simple';
 
-        $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
-        /** @var \Magento\Catalog\Model\ProductRepository $repository */
-        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $objectManager = ObjectManager::getInstance();
+        /** @var ProductRepository $repository */
+        $repository = $objectManager->create(ProductRepository::class);
         $product = $repository->get($productSku);
         $image = current($product->getMediaGallery('images'));
         $imageId = $image['value_id'];
@@ -536,7 +583,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . $productSku . '/media/' . $imageId,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -559,6 +606,8 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
+     * Test getList() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      */
     public function testGetList()
@@ -567,7 +616,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . urlencode($productSku) . '/media',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -590,13 +639,16 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $this->assertContains('thumbnail', $imageTypes);
     }
 
+    /**
+     * Test getList() method for absent sku
+     */
     public function testGetListForAbsentSku()
     {
         $productSku = 'absent_sku_' . time();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . urlencode($productSku) . '/media',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeMediaGalleryManagementV1',
@@ -609,14 +661,20 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'sku' => $productSku,
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->expectException('SoapFault', 'Requested product doesn\'t exist');
+            $this->expectException('SoapFault');
+            $this->expectExceptionMessage(
+                "The product that was requested doesn't exist. Verify the product and try again."
+            );
         } else {
-            $this->expectException('Exception', '', 404);
+            $this->expectException('Exception');
+            $this->expectExceptionCode(404);
         }
         $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
+     * Test addProductVideo() method
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testAddProductVideo()

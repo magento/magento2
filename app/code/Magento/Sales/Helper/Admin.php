@@ -3,8 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Helper;
 
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Sales admin helper.
+ */
 class Admin extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -28,23 +35,32 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $escaper;
 
     /**
+     * @var \DOMDocumentFactory
+     */
+    private $domDocumentFactory;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Escaper $escaper
+     * @param \DOMDocumentFactory|null $domDocumentFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper,
+        \DOMDocumentFactory $domDocumentFactory = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_salesConfig = $salesConfig;
         $this->escaper = $escaper;
+        $this->domDocumentFactory = $domDocumentFactory
+            ?: ObjectManager::getInstance()->get(\DOMDocumentFactory::class);
         parent::__construct($context);
     }
 
@@ -84,7 +100,6 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function displayPrices($dataObject, $basePrice, $price, $strong = false, $separator = '<br/>')
     {
-        $order = false;
         if ($dataObject instanceof \Magento\Sales\Model\Order) {
             $order = $dataObject;
         } else {
@@ -146,37 +161,67 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     public function escapeHtmlWithLinks($data, $allowedTags = null)
     {
         if (!empty($data) && is_array($allowedTags) && in_array('a', $allowedTags)) {
-            $links = [];
-            $i = 1;
-            $data = str_replace('%', '%%', $data);
-            $regexp = "/<a\s[^>]*href\s*?=\s*?([\"\']??)([^\" >]*?)\\1[^>]*>(.*)<\/a>/siU";
-            while (preg_match($regexp, $data, $matches)) {
-                //Revert the sprintf escaping
-                $url = str_replace('%%', '%', $matches[2]);
-                $text = str_replace('%%', '%', $matches[3]);
-                //Check for an valid url
-                if ($url) {
-                    $urlScheme = strtolower(parse_url($url, PHP_URL_SCHEME));
-                    if ($urlScheme !== 'http' && $urlScheme !== 'https') {
-                        $url = null;
+            $wrapperElementId = uniqid();
+            $domDocument = $this->domDocumentFactory->create();
+
+            $internalErrors = libxml_use_internal_errors(true);
+
+            $data = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+            $domDocument->loadHTML(
+                '<html><body id="' . $wrapperElementId . '">' . $data . '</body></html>'
+            );
+
+            libxml_use_internal_errors($internalErrors);
+
+            $linkTags = $domDocument->getElementsByTagName('a');
+
+            foreach ($linkTags as $linkNode) {
+                $linkAttributes = [];
+                foreach ($linkNode->attributes as $attribute) {
+                    $linkAttributes[$attribute->name] = $attribute->value;
+                }
+
+                foreach ($linkAttributes as $attributeName => $attributeValue) {
+                    if ($attributeName === 'href') {
+                        $url = $this->filterUrl($attributeValue ?? '');
+                        $url = $this->escaper->escapeUrl($url);
+                        $linkNode->setAttribute('href', $url);
+                    } else {
+                        $linkNode->removeAttribute($attributeName);
                     }
                 }
-                //Use hash tag as fallback
-                if (!$url) {
-                    $url = '#';
-                }
-                //Recreate a minimalistic secure a tag
-                $links[] = sprintf(
-                    '<a href="%s">%s</a>',
-                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false),
-                    $this->escaper->escapeHtml($text)
-                );
-                $data = str_replace($matches[0], '%' . $i . '$s', $data);
-                ++$i;
             }
-            $data = $this->escaper->escapeHtml($data, $allowedTags);
-            return vsprintf($data, $links);
+
+            $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+            preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
+            $data = !empty($matches) ? $matches[1] : '';
         }
+
         return $this->escaper->escapeHtml($data, $allowedTags);
+    }
+
+    /**
+     * Filter the URL for allowed protocols.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function filterUrl(string $url): string
+    {
+        if ($url) {
+            //Revert the sprintf escaping
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $urlScheme = parse_url($url, PHP_URL_SCHEME);
+            $urlScheme = $urlScheme ? strtolower($urlScheme) : '';
+            if ($urlScheme !== 'http' && $urlScheme !== 'https') {
+                $url = null;
+            }
+        }
+
+        if (!$url) {
+            $url = '#';
+        }
+
+        return $url;
     }
 }

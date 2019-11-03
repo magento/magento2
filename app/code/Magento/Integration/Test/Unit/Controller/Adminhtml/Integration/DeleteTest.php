@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -158,7 +156,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willReturn(self::INTEGRATION_ID);
         // Use real translate model
         $this->_translateModelMock = null;
-        $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
+        $exceptionMessage = __('The integration with ID "%1" doesn\'t exist.', $intData[Info::DATA_ID]);
         $invalidIdException = new IntegrationException($exceptionMessage);
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
@@ -180,7 +178,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
             ->willReturn(self::INTEGRATION_ID);
         // Use real translate model
         $this->_translateModelMock = null;
-        $exceptionMessage = __("Integration with ID '%1' doesn't exist.", $intData[Info::DATA_ID]);
+        $exceptionMessage = __('The integration with ID "%1" doesn\'t exist.', $intData[Info::DATA_ID]);
         $invalidIdException = new \Exception($exceptionMessage);
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')

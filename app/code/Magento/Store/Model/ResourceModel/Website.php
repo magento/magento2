@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Store\Model\ResourceModel;
 
 /**
@@ -49,12 +47,15 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function readAllWebsites()
     {
         $websites = [];
-        $select = $this->getConnection()
-            ->select()
-            ->from($this->getTable('store_website'));
+        $tableName = $this->getMainTable();
+        if ($this->getConnection()->isTableExists($tableName)) {
+            $select = $this->getConnection()
+                ->select()
+                ->from($tableName);
 
-        foreach($this->getConnection()->fetchAll($select) as $websiteData) {
-            $websites[$websiteData['code']] = $websiteData;
+            foreach ($this->getConnection()->fetchAll($select) as $websiteData) {
+                $websites[$websiteData['code']] = $websiteData;
+            }
         }
 
         return $websites;
@@ -69,7 +70,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $object->getCode())) {
+        if (!preg_match('/^[a-z]+[a-z0-9_]*$/i', $object->getCode())) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'Website code may only contain letters (a-z), numbers (0-9) or underscore (_),'
@@ -117,6 +118,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve default stores select object
+     *
      * Select fields website_id, store_id
      *
      * @param bool $includeDefault include/exclude default admin website

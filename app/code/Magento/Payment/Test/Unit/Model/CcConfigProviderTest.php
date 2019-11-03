@@ -42,12 +42,14 @@ class CcConfigProviderTest extends \PHPUnit\Framework\TestCase
                         'vi' => [
                             'url' => 'http://cc.card/vi.png',
                             'width' => getimagesize($imagesDirectoryPath . 'vi.png')[0],
-                            'height' => getimagesize($imagesDirectoryPath . 'vi.png')[1]
+                            'height' => getimagesize($imagesDirectoryPath . 'vi.png')[1],
+                            'title' => __('Visa'),
                         ],
                         'ae' => [
                             'url' => 'http://cc.card/ae.png',
                             'width' => getimagesize($imagesDirectoryPath . 'ae.png')[0],
-                            'height' => getimagesize($imagesDirectoryPath . 'ae.png')[1]
+                            'height' => getimagesize($imagesDirectoryPath . 'ae.png')[1],
+                            'title' => __('American Express'),
                         ]
                     ]
                 ]
@@ -56,11 +58,13 @@ class CcConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $ccAvailableTypesMock = [
             'vi' => [
+                'title' => 'Visa',
                 'fileId' => 'Magento_Payment::images/cc/vi.png',
                 'path' => $imagesDirectoryPath . 'vi.png',
                 'url' => 'http://cc.card/vi.png'
             ],
             'ae' => [
+                'title' => 'American Express',
                 'fileId' => 'Magento_Payment::images/cc/ae.png',
                 'path' => $imagesDirectoryPath . 'ae.png',
                 'url' => 'http://cc.card/ae.png'
@@ -68,7 +72,11 @@ class CcConfigProviderTest extends \PHPUnit\Framework\TestCase
         ];
         $assetMock = $this->createMock(\Magento\Framework\View\Asset\File::class);
 
-        $this->ccConfigMock->expects($this->once())->method('getCcAvailableTypes')->willReturn($ccAvailableTypesMock);
+        $this->ccConfigMock->expects($this->once())->method('getCcAvailableTypes')
+            ->willReturn(array_combine(
+                array_keys($ccAvailableTypesMock),
+                array_column($ccAvailableTypesMock, 'title')
+            ));
 
         $this->ccConfigMock->expects($this->atLeastOnce())
             ->method('createAsset')

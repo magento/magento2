@@ -32,12 +32,11 @@ if (!$attribute->loadByCode(4, 'dropdown_attribute')->getId()) {
             'is_filterable_in_search'       => 0,
             'is_used_for_promo_rules'       => 0,
             'is_html_allowed_on_front'      => 1,
-            'is_visible_on_front'           => 0,
-            'used_in_product_listing'       => 0,
+            'is_visible_on_front'           => 1,
+            'used_in_product_listing'       => 1,
             'used_for_sort_by'              => 0,
             'frontend_label'                => ['Drop-Down Attribute'],
             'backend_type'                  => 'varchar',
-            'backend_model'                 => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class,
             'option'                        => [
                 'value' => [
                     'option_1' => ['Option 1'],

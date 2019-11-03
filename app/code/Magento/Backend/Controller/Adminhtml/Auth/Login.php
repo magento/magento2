@@ -6,11 +6,14 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGet;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPost;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Login extends \Magento\Backend\Controller\Adminhtml\Auth
+class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGet, HttpPost
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -50,9 +53,8 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
         // redirect according to rewrite rule
         if ($requestUrl != $backendUrl) {
             return $this->getRedirect($backendUrl);
-        } else {
-            return $this->resultPageFactory->create();
         }
+        return $this->resultPageFactory->create();
     }
 
     /**

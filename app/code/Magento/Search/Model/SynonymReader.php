@@ -78,6 +78,7 @@ class SynonymReader extends AbstractModel
      *
      * @param string $phrase
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @since 100.1.0
      */
     public function loadByPhrase($phrase)

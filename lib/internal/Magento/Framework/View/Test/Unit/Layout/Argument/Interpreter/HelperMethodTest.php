@@ -53,6 +53,10 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @param $input
+     * @return string
+     */
     public function help($input)
     {
         $this->assertSame('some text (evaluated)', $input);
@@ -67,11 +71,15 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
      */
     public function testEvaluateException($helperMethod, $expectedExceptionMessage)
     {
-        $this->expectException('\InvalidArgumentException', $expectedExceptionMessage);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
         $input = ['value' => 'some text', 'helper' => $helperMethod];
         $this->_model->evaluate($input);
     }
 
+    /**
+     * @return array
+     */
     public function evaluateExceptionDataProvider()
     {
         $nonExistingHelper = __CLASS__ . '::non_existing';

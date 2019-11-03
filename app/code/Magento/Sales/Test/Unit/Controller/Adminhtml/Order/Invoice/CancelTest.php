@@ -213,7 +213,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->method('save');
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You canceled the invoice.');
 
         $this->invoiceRepository->expects($this->once())
@@ -295,7 +295,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException($e));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message);
 
         $invoiceMock->expects($this->once())
@@ -343,7 +343,7 @@ class CancelTest extends \PHPUnit\Framework\TestCase
             ->will($this->throwException($e));
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with($message);
 
         $invoiceMock->expects($this->once())

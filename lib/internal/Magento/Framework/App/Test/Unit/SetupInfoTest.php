@@ -24,10 +24,14 @@ class SetupInfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorExceptions($server, $expectedError)
     {
-        $this->expectException('\InvalidArgumentException', $expectedError);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($expectedError);
         new SetupInfo($server);
     }
 
+    /**
+     * @return array
+     */
     public function constructorExceptionsDataProvider()
     {
         $docRootErr = 'DOCUMENT_ROOT variable is unavailable.';

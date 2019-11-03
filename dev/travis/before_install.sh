@@ -21,7 +21,7 @@ phpenv rehash;
 test -n "$GITHUB_TOKEN" && composer config github-oauth.github.com "$GITHUB_TOKEN" || true
 
 # Node.js setup via NVM
-if [ test $TEST_SUITE == "js" ]; then
+if [ $TEST_SUITE == "js" ]; then
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
@@ -34,7 +34,7 @@ if [ test $TEST_SUITE == "js" ]; then
     yarn global add grunt-cli
 fi
 
-if [ $TEST_SUITE = "functional" ]; then
+if [ $TEST_SUITE = "functional" ] || [ $TEST_SUITE = "graphql-api-functional" ]; then
     # Install apache
     sudo apt-get update
     sudo apt-get install apache2 libapache2-mod-fastcgi

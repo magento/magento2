@@ -22,7 +22,7 @@ class AssertProductInventoryMaxAllowedQty extends AbstractConstraint
      *
      * @var string
      */
-    private $errorMessage = 'The most you may purchase is %s.';
+    private $errorMessage = 'The maximum you may purchase is %s.';
 
     /**
      * Check if max qty setting is working correctly.
@@ -47,14 +47,14 @@ class AssertProductInventoryMaxAllowedQty extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->waitLoader();
         $catalogProductView->getViewBlock()->setQtyAndClickAddToCart($maxQty * 2);
-        \PHPUnit_Framework_Assert::assertEquals(
-            $catalogProductView->getMessagesBlock()->getErrorMessage(),
+        \PHPUnit\Framework\Assert::assertEquals(
             sprintf($this->errorMessage, $maxQty),
+            $catalogProductView->getViewBlock()->getQtyErrorMessage(),
             'The maximum purchase warning message is not appears.'
         );
 
         $catalogProductView->getViewBlock()->setQtyAndClickAddToCart($maxQty);
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit\Framework\Assert::assertTrue(
             $catalogProductView->getMessagesBlock()->waitSuccessMessage(),
             'Limiting max qty is not working correctly.'
         );

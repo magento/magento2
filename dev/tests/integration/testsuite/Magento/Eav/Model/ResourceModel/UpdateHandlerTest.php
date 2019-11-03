@@ -22,6 +22,7 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
      * @param $snapshotValue
      * @param $newValue
      * @param $expected
+     * @magentoDbIsolation disabled
      */
     public function testExecuteProcessForAllStores($code, $snapshotValue, $newValue, $expected)
     {
@@ -57,6 +58,7 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
      * @param $snapshotValue
      * @param $newValue
      * @param $expected
+     * @magentoDbIsolation disabled
      */
     public function testExecuteProcessForCustomStore($code, $snapshotValue, $newValue, $expected)
     {
@@ -101,6 +103,7 @@ class UpdateHandlerTest extends \Magento\TestFramework\Indexer\TestCase
      * @param $snapshotValue
      * @param $newValue
      * @param $expected
+     * @magentoDbIsolation disabled
      */
     public function testExecuteProcessForCustomAttributeInCustomStore(
         $code,

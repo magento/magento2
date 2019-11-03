@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Checkout select Flat Rate shipping method -->
+    <actionGroup name="CheckoutSelectFlatRateShippingMethodActionGroup">
+        <annotations>
+            <description>Clicks on the 'Flat Rate' Shipping Method on the Storefront Checkout page.</description>
+        </annotations>
+
+        <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForNextButton"/>
+    </actionGroup>
+
+    <!-- Go to checkout from minicart -->
+    <actionGroup name="GoToCheckoutFromMinicartActionGroup">
+        <annotations>
+            <description>Clicks on the Storefront Mini Shopping Cart icon. Clicks on 'Proceed to Checkout'.</description>
+        </annotations>
+
+        <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity"/>
+        <wait time="5" stepKey="waitMinicartRendering"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+    </actionGroup>
+
+    <!-- Go to checkout from cart -->
+    <actionGroup name="GoToCheckoutFromCartActionGroup">
+        <annotations>
+            <description>Clicks on the 'View and Edit Cart' link in the Storefront Mini Shopping Cart. Validates that the Storefront Shopping Cart URL is present and correct. Clicks on 'Proceed to Checkout'.</description>
+        </annotations>
+        
+        <waitForElementNotVisible selector="{{StorefrontMinicartSection.emptyCart}}" stepKey="waitUpdateQuantity"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertCheckoutCartUrl"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+    </actionGroup>
+
+    <!-- Guest checkout filling shipping section -->
+    <actionGroup name="GuestCheckoutFillingShippingSectionActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer/Address (Including Region) details on the Storefront Checkout page under the 'Shipping Address' section. Selects the provided Shipping Method. Clicks on Next. Validates that the URL is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar" defaultValue="CustomerEntityOne"/>
+            <argument name="customerAddressVar" defaultValue="CustomerAddressSimple"/>
+            <!--First available shipping method will be selected if value is not passed for shippingMethod-->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="waitForShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <actionGroup name="GuestCheckoutFillShippingNoWaitForPaymentActionGroup" extends="GuestCheckoutFillingShippingSectionActionGroup">
+        <annotations>
+            <description>EXTENDS: GuestCheckoutFillingShippingSectionActionGroup. Removed 'waitForPaymentSectionLoaded' and 'assertCheckoutPaymentUrl'.</description>
+        </annotations>
+
+        <remove keyForRemoval="waitForPaymentSectionLoaded"/>
+        <remove keyForRemoval="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <!-- Guest checkout filling shipping section without region -->
+    <actionGroup name="GuestCheckoutFillingShippingSectionWithoutRegionActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer/Address (Excluding Region) details on the Storefront Checkout page under the 'Shipping Address' section. Selects the provided Shipping Method. Clicks on Next. Validates that the URL is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{customerAddressVar.country_id}}" stepKey="enterCountry"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <!-- Guest checkout filling shipping section with unavailable payments-->
+    <actionGroup name="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer/Address (Including Region) details on the Storefront Checkout page under the 'Shipping Address' section. Selects the 1st Shipping Method. Clicks on Next. Validates that the Payment Error Message and URL are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.noQuotes}}" stepKey="waitMessage"/>
+        <see userInput="No Payment method available." stepKey="checkMessage"/>
+    </actionGroup>
+
+    <actionGroup name="GuestCheckoutWithSpecificCountryOptionForPaymentMethodActionGroup" extends="GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup">
+        <annotations>
+            <description>EXTENDS: GuestCheckoutFillingShippingSectionUnavailablePaymentActionGroup. Removes 'checkMessage'. Validates that the provided Payment Method Name is NOT present on the Storefront Checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="paymentMethod" type="string"/>
+        </arguments>
+
+        <remove keyForRemoval="checkMessage"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName(paymentMethod)}}" stepKey="paymentMethodDoesNotAvailable"/>
+    </actionGroup>
+
+    <!-- Logged in user checkout filling shipping section -->
+    <actionGroup name="LoggedInUserCheckoutFillingShippingSectionActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer/Address (Including Region) details on the Storefront Checkout page under the 'Shipping Address' section. Selects the 1st Shipping Method. Clicks on Next. Validates that the Payment Error Message and URL are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar" defaultValue="CustomerEntityOne"/>
+            <argument name="customerAddressVar" defaultValue="CustomerAddressSimple"/>
+        </arguments>
+
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{customerAddressVar.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <!-- Submit Shipping Address on Checkout Shipping page -->
+    <actionGroup name="StorefrontCheckoutForwardFromShippingStep">
+        <annotations>
+            <description>Clicks next on Checkout Shipping step</description>
+        </annotations>
+        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+    </actionGroup>
+
+    <!-- Logged in user checkout filling shipping section -->
+    <actionGroup name="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer/Address (Excluding Region) details on the Storefront Checkout page under the 'Shipping Address' section. Selects the 1st Shipping Method. Clicks on Next. Validates that the Payment Error Message and URL are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{customerAddressVar.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{customerAddressVar.city}}" stepKey="enterCity"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddressVar.postcode}}" stepKey="enterPostcode"/>
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{customerAddressVar.country_id}}" stepKey="enterCountry"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddressVar.telephone}}" stepKey="enterTelephone"/>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="clickSaveAddress"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+
+    <!-- Place order with logged the user -->
+    <actionGroup name="PlaceOrderWithLoggedUserActionGroup">
+        <annotations>
+            <description>Clicks on 'Proceed to Checkout' on the Storefront Shopping Cart page. Selects the provided Shipping Method. Clicks on Next. Clicks on Place Order. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <!--First available shipping method will be selected if value is not passed for shippingMethod-->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('shippingMethod')}}" stepKey="selectShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+
+    <!-- Check product in checkout cart items -->
+    <actionGroup name="CheckProductInCheckoutCartItemsActionGroup">
+        <annotations>
+            <description>Validates the provided Product appears in the Storefront Checkout 'Order Summary' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="{{productVar.name}}" stepKey="seeProductInCart"/>
+    </actionGroup>
+
+    <!-- Check order summary in checkout -->
+    <actionGroup name="CheckOrderSummaryInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Subtotal, Shipping Total, Shipping Method and Total are present and correct on the Storefront Checkout page under the 'Order Summary' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="shippingTotal" type="string"/>
+            <argument name="shippingMethod" type="string"/>
+            <argument name="total" type="string"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="{{shippingTotal}}" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="assertShipping"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
+        <see userInput="{{total}}" selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="assertTotal"/>
+   </actionGroup>
+
+    <actionGroup name="CheckTotalsSortOrderInSummarySection">
+        <annotations>
+            <description>Validates that the provided Element Name appears at the provided Position in the Storefront Checkout 'Order Summary' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="elementName" type="string"/>
+            <argument name="positionNumber" type="string"/>
+        </arguments>
+
+        <see userInput="{{elementName}}" selector="{{CheckoutCartSummarySection.elementPosition(positionNumber)}}" stepKey="assertElementPosition"/>
+    </actionGroup>
+
+    <!-- Check ship to information in checkout -->
+    <actionGroup name="CheckShipToInformationInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details are present and correct on the Storefront Checkout page under the 'Ship To' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationFirstName"/>
+        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationTelephone"/>
+    </actionGroup>
+
+    <!-- Check shipping method in checkout -->
+    <actionGroup name="CheckShippingMethodInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Shipping Method Name is present on the Storefront Checkout page under the 'Shipping Method' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingMethod"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{shippingMethod}}" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertshippingMethodInformation"/>
+    </actionGroup>
+
+    <!-- Checkout select Check/Money Order payment -->
+    <actionGroup name="CheckoutSelectCheckMoneyOrderPaymentActionGroup">
+        <annotations>
+            <description>Selects the 'Check / Money Order' Payment Method on the Storefront Checkout page.</description>
+        </annotations>
+
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+    </actionGroup>
+
+    <!-- Check selected shipping address information on shipping information step -->
+    <actionGroup name="CheckSelectedShippingAddressInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details are listed on the Storefront Checkout page under the 'Shipping Address' section when multiple Addresses are present for a Customer.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" time="30" stepKey="waitForShippingSectionLoaded"/>
+        <see stepKey="VerifyFirstNameInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.firstname}}"/>
+        <see stepKey="VerifyLastNameInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerVar.lastname}}"/>
+        <see stepKey="VerifyStreetInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.street[0]}}"/>
+        <see stepKey="VerifyCityInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.city}}"/>
+        <see stepKey="VerifyZipInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.postcode}}"/>
+        <see stepKey="VerifyPhoneInSelectedAddress" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{customerAddressVar.telephone}}"/>
+    </actionGroup>
+
+    <!-- Check billing address in checkout -->
+    <actionGroup name="CheckBillingAddressInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details are present on the Storefront Checkout page under the 'Payment Method' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstName}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressFirstName"/>
+        <see userInput="{{customerVar.lastName}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressTelephone"/>
+    </actionGroup>
+
+    <!-- Check billing address in checkout with billing address on payment page -->
+    <actionGroup name="CheckBillingAddressInCheckoutWithBillingAddressOnPaymentPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details appear on the Storefront Checkout page under the 'Billing Address' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstName}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsFirstName"/>
+        <see userInput="{{customerVar.lastName}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}" stepKey="assertBillingAddressDetailsTelephone"/>
+    </actionGroup>
+
+    <!-- Checkout place order -->
+    <actionGroup name="CheckoutPlaceOrderActionGroup">
+        <annotations>
+            <description>Clicks on 'Place Order'. Validates that the provided Order ID and Email You messages are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderNumberMessage"/>
+            <argument name="emailYouMessage"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{orderNumberMessage}}" stepKey="seeOrderNumber"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="{{emailYouMessage}}" stepKey="seeEmailYou"/>
+    </actionGroup>
+
+    <!--Verify country options in checkout top destination section-->
+    <actionGroup name="VerifyTopDestinationsCountry">
+        <annotations>
+            <description>Validates that the provided Country is listed at the provided Index in 'Country' drop down menu on the Storefront Shopping Cart page under the 'Summary' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="country" type="string"/>
+            <argument name="placeNumber"/>
+        </arguments>
+
+        <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="openShippingDetails"/>
+        <see selector="{{CheckoutCartSummarySection.countryParameterized('placeNumber')}}" userInput="{{country}}" stepKey="seeCountry"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontSignOutActionGroup">
+        <annotations>
+            <description>Clicks on the Customer Account link. Clicks on 'Sign Out'. Validates that the Signed Out message is present and correct.</description>
+        </annotations>
+        
+        <click selector="{{StoreFrontSignOutSection.customerAccount}}" stepKey="clickCustomerButton"/>
+        <click selector="{{StoreFrontSignOutSection.signOut}}" stepKey="clickToSignOut"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="You are signed out" stepKey="signOut"/>
+    </actionGroup>
+
+    <!--Click Place Order button-->
+    <actionGroup name="ClickPlaceOrderActionGroup">
+        <annotations>
+            <description>Clicks on the 'Place Order' button. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+    </actionGroup>
+</actionGroups>

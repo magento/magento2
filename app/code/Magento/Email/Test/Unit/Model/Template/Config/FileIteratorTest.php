@@ -93,10 +93,8 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     {
         $filePath = $this->filePaths[0];
 
-        $this->expectException(
-            'UnexpectedValueException',
-            sprintf("Unable to determine a module, file '%s' belongs to.", $filePath)
-        );
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage(sprintf("Unable to determine a module, file '%s' belongs to.", $filePath));
 
         $this->moduleDirResolverMock->expects($this->at(0))
             ->method('getModuleName')

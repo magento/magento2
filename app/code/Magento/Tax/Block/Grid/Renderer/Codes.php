@@ -20,6 +20,6 @@ class Codes extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     {
         $ratesCodes = $row->getTaxRatesCodes();
 
-        return is_array($ratesCodes) ? implode(', ', $ratesCodes) : '';
+        return $ratesCodes && is_array($ratesCodes) ? $this->escapeHtml(implode(', ', $ratesCodes)) : '';
     }
 }

@@ -27,7 +27,7 @@ define([
         _bind: function () {
             this._labels.on({
                 click: $.proxy(function (e) {
-                    $('[id="' + $(e.currentTarget).attr('for') + '"]').prop('checked', true);
+                    $(e.currentTarget).prev().prop('checked', true);
                     this._updateRating();
                 }, this),
 
@@ -62,6 +62,15 @@ define([
 
             checkedInputs.nextAll('label').addBack().css('color', this.options.colorFilled).data('checked', true);
             checkedInputs.prevAll('label').css('color', this.options.colorUnfilled).data('checked', false);
+        },
+
+        /**
+         * Remove rating when form reset
+         */
+        removeRating: function () {
+            var checkedInputs = this.element.find('input[type="radio"]');
+
+            checkedInputs.nextAll('label').css('color', this.options.colorUnfilled).data('checked', false);
         }
     });
 

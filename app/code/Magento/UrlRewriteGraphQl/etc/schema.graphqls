@@ -1,0 +1,27 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Query {
+    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "The urlResolver query returns the relative URL for a specified product, category or CMS page, using as input a url_key appended by the url_suffix, if one exists") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
+}
+
+type EntityUrl @doc(description: "EntityUrl is an output object containing the `id`, `relative_url`, and `type` attributes") {
+    id: Int @doc(description: "The ID assigned to the object associated with the specified url. This could be a product ID, category ID, or page ID.")
+    canonical_url: String @deprecated(reason: "The canonical_url field is deprecated, use relative_url instead.")
+    relative_url: String @doc(description: "The internal relative URL. If the specified  url is a redirect, the query returns the redirected URL, not the original.")
+    redirectCode: Int @doc(description: "301 or 302 HTTP code for url permanent or temporary redirect or 0 for the 200 no redirect")
+    type: UrlRewriteEntityTypeEnum @doc(description: "One of PRODUCT, CATEGORY, or CMS_PAGE.")
+}
+
+enum UrlRewriteEntityTypeEnum {
+}
+
+type UrlRewrite @doc(description: "The object contains URL rewrite details") {
+    url: String @doc(description: "Request URL")
+    parameters: [HttpQueryParameter] @doc(description: "Request parameters")
+}
+
+type HttpQueryParameter @doc(description: "The object details of target path parameters") {
+    name: String @doc(description: "Parameter name")
+    value: String @doc(description: "Parameter value")
+}

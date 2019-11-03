@@ -19,7 +19,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
     /**
      * @var string
      */
-    protected $_template = 'order/creditmemo.phtml';
+    protected $_template = 'Magento_Sales::order/creditmemo.phtml';
 
     /**
      * @var \Magento\Framework\App\Http\Context

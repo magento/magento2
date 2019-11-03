@@ -9,6 +9,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Theme\Block\Html\Footer;
 
@@ -130,22 +131,22 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                '<b>Email content for frontend/Magento/default theme</b>',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                '<b>Email content for frontend/Magento/default theme</b>',
+                '<strong>Email content for frontend/Magento/default theme</strong>',
             ],
             'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                '<b>Email content for adminhtml/Magento/default theme</b>',
+                '<strong>Email content for adminhtml/Magento/default theme</strong>',
             ],
             'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
-                '<b>Custom Email content for frontend/Magento/default theme</b>',
+                '<strong>Custom Email content for frontend/Magento/default theme</strong>',
             ],
         ];
         return $result;
@@ -267,7 +268,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             'Empty or missing file' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/non-existent-file.css"',
-                '/* Contents of css/non-existent-file.css could not be loaded or is empty */'
+                '/*' . PHP_EOL . ContentProcessorInterface::ERROR_MESSAGE_PREFIX . 'LESS file is empty: ',
             ],
             'File with compilation error results in error message' => [
                 TemplateTypesInterface::TYPE_HTML,
@@ -352,9 +353,9 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 false,
                 true,
             ],
-            'Production mode - File with compilation error results in unmodified markup' => [
+            'Production mode - File with compilation error results in structurally unmodified markup' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                '<html><p></p> </html>',
+                '<p></p>',
                 true,
             ],
             'Developer mode - File with compilation error results in error message' => [
@@ -407,10 +408,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     protected function setUpDesignParams()
     {
         $themeCode = 'Vendor_EmailTest/custom_theme';
-        $this->model->setDesignParams([
-            'area' => Area::AREA_FRONTEND,
-            'theme' => $themeCode,
-            'locale' => Locale::DEFAULT_SYSTEM_LOCALE,
-        ]);
+        $this->model->setDesignParams(
+            [
+                'area' => Area::AREA_FRONTEND,
+                'theme' => $themeCode,
+                'locale' => Locale::DEFAULT_SYSTEM_LOCALE,
+            ]
+        );
     }
 }

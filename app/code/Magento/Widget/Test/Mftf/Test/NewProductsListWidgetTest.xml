@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <!-- This test exists to serve as a base for extension for other tests -->
+    <test name="NewProductsListWidgetTest">
+        <annotations>
+            <group value="WYSIWYGDisabled"/>
+            <features value="Widget"/>
+            <stories value="New products list widget"/>
+            <title value="Admin should be able to set products as new so that they show up in the Catalog New Products List Widget"/>
+            <description value="Admin should be able to set products as new so that they show up in the Catalog New Products List Widget"/>
+            <severity value="MAJOR"/>
+            <group value="Widget"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create a CMS page containing the New Products widget -->
+
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
+        <waitForPageLoad stepKey="waitForCmsList"/>
+        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
+        <waitForPageLoad stepKey="waitForContentSection"/>
+        <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog New Products List" stepKey="selectWidgetType"/>
+        <waitForPageLoad stepKey="waitForWidgetOptions"/>
+        <selectOption selector="{{WidgetSection.DisplayType}}" userInput="New products" stepKey="selectDisplayType"/>
+        <fillField selector="{{WidgetSection.NoOfProductToDisplay}}" userInput="100" stepKey="fillNoOfProductToDisplay"/>
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="expandSeoSection"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_newDefaultCmsPage.identifier}}" stepKey="fillPageUrlKey"/>
+        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSaveCmsPage"/>
+    </test>
+</tests>

@@ -22,7 +22,7 @@ class AssertSaveCreditCardOptionNotPresent extends AbstractConstraint
      */
     public function processAssert(CheckoutOnepage $checkoutOnepage, $payment)
     {
-        \PHPUnit_Framework_Assert::assertFalse(
+        \PHPUnit\Framework\Assert::assertFalse(
             $checkoutOnepage->getVaultPaymentBlock()->isVaultVisible($payment),
             'Save for later use checkbox is present.'
         );

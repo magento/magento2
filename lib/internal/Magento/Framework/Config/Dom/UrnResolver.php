@@ -36,6 +36,7 @@ class UrnResolver
         $matches = [];
         $modulePattern = '/urn:(?<vendor>([a-zA-Z]*)):module:(?<module>([A-Za-z0-9\_]*)):(?<path>(.+))/';
         $frameworkPattern = '/urn:(?<vendor>([a-zA-Z]*)):(?<framework>(framework[A-Za-z\-]*)):(?<path>(.+))/';
+        $setupPattern = '/urn:(?<vendor>([a-zA-Z]*)):(?<setup>(setup[A-Za-z\-]*)):(?<path>(.+))/';
         if (preg_match($modulePattern, $schema, $matches)) {
             //urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd
             $package = $componentRegistrar
@@ -45,6 +46,10 @@ class UrnResolver
             //urn:magento:framework-amqp:Module/etc/module.xsd
             $package = $componentRegistrar
                 ->getPath(ComponentRegistrar::LIBRARY, $matches['vendor'] . '/' . $matches['framework']);
+        } elseif (preg_match($setupPattern, $schema, $matches)) {
+            //urn:magento:setup:
+            $package = $componentRegistrar
+                ->getPath(ComponentRegistrar::SETUP, $matches['vendor'] . '/' . $matches['setup']);
         } else {
             throw new NotFoundException(new Phrase("Unsupported format of schema location: '%1'", [$schema]));
         }

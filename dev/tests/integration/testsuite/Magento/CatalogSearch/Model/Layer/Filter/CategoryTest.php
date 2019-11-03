@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
 /**
@@ -37,9 +35,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->_category->load(5);
         $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(
-                \Magento\Catalog\Model\Layer\Category::class, [
-                'data' => ['current_category' => $this->_category]
-            ]);
+                \Magento\Catalog\Model\Layer\Category::class,
+                ['data' => ['current_category' => $this->_category]]
+            );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CatalogSearch\Model\Layer\Filter\Category::class, ['layer' => $layer]);
         $this->_model->setRequestVar('cat');
@@ -70,9 +68,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get(\Magento\Framework\Registry::class)->registry(
-                 self::CURRENT_CATEGORY_FILTER
-            ));
+        $this->assertNull(
+            $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER)
+        );
     }
 
     public function testApply()
@@ -103,6 +101,9 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Category', $this->_model->getName());
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testGetItems()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

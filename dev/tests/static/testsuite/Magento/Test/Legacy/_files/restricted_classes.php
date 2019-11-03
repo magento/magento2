@@ -180,6 +180,11 @@ return [
             ],
             [
                 'type' => 'module',
+                'name' => 'Magento_Catalog',
+                'path' => 'Test/Unit/Model/ProductTest.php'
+            ],
+            [
+                'type' => 'module',
                 'name' => 'Magento_CatalogSearch',
                 'path' => 'Model/Indexer/Fulltext.php'
             ],

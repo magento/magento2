@@ -9,6 +9,8 @@ use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\Validator\Locale;
 use Symfony\Component\Console\Input\InputInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\RegexFactory;
 
 /**
  * Command input arguments validator class
@@ -56,13 +58,23 @@ class InputValidator
     private $localeValidator;
 
     /**
+     * @var RegexFactory
+     */
+    private $versionValidatorFactory;
+
+    /**
      * InputValidator constructor
      *
      * @param Locale $localeValidator
+     * @param RegexFactory $versionValidatorFactory
      */
-    public function __construct(Locale $localeValidator)
-    {
+    public function __construct(
+        Locale $localeValidator,
+        ?RegexFactory $versionValidatorFactory = null
+    ) {
         $this->localeValidator = $localeValidator;
+        $this->versionValidatorFactory = $versionValidatorFactory ?:
+            ObjectManager::getInstance()->get(RegexFactory::class);
     }
 
     /**
@@ -84,6 +96,9 @@ class InputValidator
         $this->checkLanguagesInput(
             $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'],
             $input->getOption(Options::EXCLUDE_LANGUAGE)
+        );
+        $this->checkVersionInput(
+            $input->getOption(Options::CONTENT_VERSION) ?: ''
         );
     }
 
@@ -143,6 +158,31 @@ class InputValidator
             if ($languagesExclude[0] != 'none') {
                 throw new \InvalidArgumentException(
                     '--language (-l) and --exclude-language cannot be used at the same time'
+                );
+            }
+        }
+    }
+
+    /**
+     * Version input checks
+     *
+     * @param string $contentVersion
+     * @throws \InvalidArgumentException
+     */
+    private function checkVersionInput(string $contentVersion): void
+    {
+        if ($contentVersion) {
+            $versionValidator = $this->versionValidatorFactory->create(
+                [
+                    'pattern' => '/^[A-Za-z0-9_.]+$/'
+                ]
+            );
+
+            if (!$versionValidator->isValid($contentVersion)) {
+                throw new \InvalidArgumentException(
+                    'Argument "' .
+                    Options::CONTENT_VERSION
+                    . '" has invalid value, content version should contain only characters, digits and dots'
                 );
             }
         }

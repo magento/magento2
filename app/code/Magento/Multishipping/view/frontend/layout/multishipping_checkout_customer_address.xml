@@ -9,7 +9,12 @@
     <update handle="customer_form_template_handle"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="Magento_Customer::address/edit.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit" template="Magento_Customer::address/edit.phtml" cacheable="false">
+                <arguments>
+                    <argument name="attribute_data" xsi:type="object">Magento\Customer\Block\DataProviders\AddressAttributeData</argument>
+                    <argument name="post_code_config" xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

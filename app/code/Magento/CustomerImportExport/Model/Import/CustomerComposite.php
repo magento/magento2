@@ -270,6 +270,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected function _importData()
     {
         $result = $this->_customerEntity->importData();
+        $this->countItemsCreated += $this->_customerEntity->getCreatedItemsCount();
+        $this->countItemsUpdated += $this->_customerEntity->getUpdatedItemsCount();
+        $this->countItemsDeleted += $this->_customerEntity->getDeletedItemsCount();
+
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
             return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
         }
@@ -285,6 +289,28 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     public function getEntityTypeCode()
     {
         return 'customer_composite';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateData()
+    {
+        //Preparing both customer and address imports for mass validation.
+        $source = $this->getSource();
+        $this->_customerEntity->prepareCustomerData($source);
+        $source->rewind();
+        $rows = [];
+        foreach ($source as $row) {
+            $rows[] = [
+                Address::COLUMN_EMAIL => $row[Customer::COLUMN_EMAIL] ?? null,
+                Address::COLUMN_WEBSITE => $row[Customer::COLUMN_WEBSITE] ?? null
+            ];
+        }
+        $source->rewind();
+        $this->_addressEntity->prepareCustomerData($rows);
+
+        return parent::validateData();
     }
 
     /**
@@ -308,14 +334,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\DataObject(
+                    $this->_addressEntity->getCustomerStorage()->addCustomerByArray(
                         [
-                            'id' => $this->_nextCustomerId,
+                            'entity_id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
                             'website_id' => $websiteId,
                         ]
                     );
-                    $this->_addressEntity->getCustomerStorage()->addCustomer($customerData);
                     $this->_nextCustomerId++;
                 }
 

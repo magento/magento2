@@ -52,6 +52,11 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected $_errorProcessor;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $_appState;
+
+    /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;

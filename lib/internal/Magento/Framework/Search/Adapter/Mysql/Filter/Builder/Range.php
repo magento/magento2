@@ -9,6 +9,12 @@ use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\Filter\Range as RangeFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
+/**
+ * Range filter builder.
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
+ */
 class Range implements FilterInterface
 {
     const CONDITION_PART_GREATER_THAN = '>=';
@@ -31,7 +37,7 @@ class Range implements FilterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function buildFilter(
         RequestFilterInterface $filter,
@@ -48,6 +54,8 @@ class Range implements FilterInterface
     }
 
     /**
+     * Get left condition filter part.
+     *
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @param bool $isNegation
      * @return string
@@ -62,6 +70,8 @@ class Range implements FilterInterface
     }
 
     /**
+     * Get right condition filter part.
+     *
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @param bool $isNegation
      * @return string
@@ -76,6 +86,8 @@ class Range implements FilterInterface
     }
 
     /**
+     * Get filter part.
+     *
      * @param string $field
      * @param string $operator
      * @param string $value
@@ -89,6 +101,8 @@ class Range implements FilterInterface
     }
 
     /**
+     * Get condition union operator.
+     *
      * @param bool $isNegation
      * @return string
      */

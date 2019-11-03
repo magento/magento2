@@ -63,6 +63,9 @@ class CheckmoConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->getConfig());
     }
 
+    /**
+     * @return array
+     */
     public function dataProviderGetConfig()
     {
         $checkmoCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;

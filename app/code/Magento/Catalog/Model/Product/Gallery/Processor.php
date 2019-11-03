@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog product Media Gallery attribute processor.
@@ -56,27 +58,38 @@ class Processor
     protected $resourceModel;
 
     /**
+     * @var \Magento\Framework\File\Mime
+     */
+    private $mime;
+
+    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
+     * @param \Magento\Framework\File\Mime|null $mime
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
+        \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
+        \Magento\Framework\File\Mime $mime = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->fileStorageDb = $fileStorageDb;
         $this->mediaConfig = $mediaConfig;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->resourceModel = $resourceModel;
+        $this->mime = $mime ?: ObjectManager::getInstance()->get(\Magento\Framework\File\Mime::class);
     }
 
     /**
+     * Return media_gallery attribute
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -108,7 +121,9 @@ class Processor
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new LocalizedException(__('The value of attribute "%1" must be unique.', $label));
+                throw new LocalizedException(
+                    __('The value of the "%1" attribute isn\'t unique. Set a unique value and try again.', $label)
+                );
             }
         }
 
@@ -139,20 +154,23 @@ class Processor
     ) {
         $file = $this->mediaDirectory->getRelativePath($file);
         if (!$this->mediaDirectory->isFile($file)) {
-            throw new LocalizedException(__('The image does not exist.'));
+            throw new LocalizedException(__("The image doesn't exist."));
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $pathinfo = pathinfo($file);
         $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            throw new LocalizedException(__('Please correct the image file type.'));
+            throw new LocalizedException(
+                __('The image type for the file is invalid. Enter the correct image type and try again.')
+            );
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
-        $fileName = $dispretionPath . '/' . $fileName;
+        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
+        $fileName = $dispersionPath . '/' . $fileName;
 
-        $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
+        $fileName = $this->getNotDuplicatedFilename($fileName, $dispersionPath);
 
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
@@ -170,7 +188,7 @@ class Processor
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             }
         } catch (\Exception $e) {
-            throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
+            throw new LocalizedException(__('The "%1" file couldn\'t be moved.', $e->getMessage()));
         }
 
         $fileName = str_replace('\\', '/', $fileName);
@@ -178,6 +196,13 @@ class Processor
         $attrCode = $this->getAttribute()->getAttributeCode();
         $mediaGalleryData = $product->getData($attrCode);
         $position = 0;
+
+        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($destinationFile);
+        $imageMimeType = $this->mime->getMimeType($absoluteFilePath);
+        $imageContent = $this->mediaDirectory->readFile($absoluteFilePath);
+        $imageBase64 = base64_encode($imageContent);
+        $imageName = $pathinfo['filename'];
+
         if (!is_array($mediaGalleryData)) {
             $mediaGalleryData = ['images' => []];
         }
@@ -192,9 +217,17 @@ class Processor
         $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,
-            'media_type' => 'image',
             'label' => '',
             'disabled' => (int)$exclude,
+            'media_type' => 'image',
+            'types' => $mediaAttribute,
+            'content' => [
+                'data' => [
+                    ImageContentInterface::NAME => $imageName,
+                    ImageContentInterface::BASE64_ENCODED_DATA => $imageBase64,
+                    ImageContentInterface::TYPE => $imageMimeType,
+                ]
+            ]
         ];
 
         $product->setData($attrCode, $mediaGalleryData);
@@ -340,9 +373,9 @@ class Processor
         $mediaAttributeCodes = $this->mediaConfig->getMediaAttributeCodes();
 
         if (is_array($mediaAttribute)) {
-            foreach ($mediaAttribute as $atttribute) {
-                if (in_array($atttribute, $mediaAttributeCodes)) {
-                    $product->setData($atttribute, $value);
+            foreach ($mediaAttribute as $attribute) {
+                if (in_array($attribute, $mediaAttributeCodes)) {
+                    $product->setData($attribute, $value);
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
@@ -353,7 +386,8 @@ class Processor
     }
 
     /**
-     * get media attribute codes
+     * Get media attribute codes
+     *
      * @return array
      * @since 101.0.0
      */
@@ -363,6 +397,8 @@ class Processor
     }
 
     /**
+     * Trim .tmp ending from filename
+     *
      * @param string $file
      * @return string
      * @since 101.0.0
@@ -417,6 +453,7 @@ class Processor
             $destinationFile = $forTmp
                 ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/'
                 . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($destinationFile);
         }
@@ -428,27 +465,27 @@ class Processor
      * Get filename which is not duplicated with other files in media temporary and media directories
      *
      * @param string $fileName
-     * @param string $dispretionPath
+     * @param string $dispersionPath
      * @return string
      * @since 101.0.0
      */
-    protected function getNotDuplicatedFilename($fileName, $dispretionPath)
+    protected function getNotDuplicatedFilename($fileName, $dispersionPath)
     {
-        $fileMediaName = $dispretionPath . '/'
+        $fileMediaName = $dispersionPath . '/'
             . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getMediaPath($fileName));
-        $fileTmpMediaName = $dispretionPath . '/'
+        $fileTmpMediaName = $dispersionPath . '/'
             . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getTmpMediaPath($fileName));
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
                 return $this->getNotDuplicatedFilename(
                     $fileMediaName,
-                    $dispretionPath
+                    $dispersionPath
                 );
             } elseif ($fileTmpMediaName != $fileName) {
                 return $this->getNotDuplicatedFilename(
                     $fileTmpMediaName,
-                    $dispretionPath
+                    $dispersionPath
                 );
             }
         }
@@ -459,7 +496,7 @@ class Processor
     /**
      * Retrieve data for update attribute
      *
-     * @param  \Magento\Catalog\Model\Product $object
+     * @param \Magento\Catalog\Model\Product $object
      * @return array
      * @since 101.0.0
      */
@@ -484,7 +521,6 @@ class Processor
     /**
      * Attribute value is not to be saved in a conventional way, separate table is used to store the complex value
      *
-     * {@inheritdoc}
      * @since 101.0.0
      */
     public function isScalar()

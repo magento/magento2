@@ -24,7 +24,7 @@ class AvsEmsCodeMapper implements PaymentVerificationInterface
      *
      * @var string
      */
-    private static $unavailableCode = 'U';
+    private static $unavailableCode = '';
 
     /**
      * List of mapping AVS codes

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Test\Unit\Model\Carrier;
 
 use \Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
@@ -99,7 +100,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
         $this->stockItemData->expects($this->atLeastOnce())->method('getIsDecimalDivided')
             ->will($this->returnValue(true));
 
-        $this->carrier->proccessAdditionalValidation($request);
+        $this->carrier->processAdditionalValidation($request);
     }
 
     public function testParseXml()
@@ -118,7 +119,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Security validation of XML document has been failed.
+     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXXEXml()
     {
@@ -128,12 +129,13 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
 
         $xmlElement = $this->carrier->parseXml($xmlString);
 
+        // @codingStandardsIgnoreLine
         echo $xmlElement->asXML();
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Security validation of XML document has been failed.
+     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXQBXml()
     {

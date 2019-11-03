@@ -31,6 +31,9 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return string
+     */
     protected function getXml()
     {
         return <<<XML

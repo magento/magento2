@@ -20,10 +20,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      * @param array $testArgumentData
      * @param bool $testIsFlag
      * @param bool $isNeedEvaluate
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $addToParentGroupCount
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setTemplateCount
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setTtlCount
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setIsFlag
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $addToParentGroupCount
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setTemplateCount
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setTtlCount
+     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setIsFlag
      * @dataProvider provider
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)

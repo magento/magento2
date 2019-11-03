@@ -24,7 +24,7 @@ class Timezone extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         if (!in_array($this->getValue(), \DateTimeZone::listIdentifiers(\DateTimeZone::ALL))) {
-            throw new LocalizedException(__('Please correct the timezone.'));
+            throw new LocalizedException(__('The time zone is incorrect. Verify the time zone and try again.'));
         }
         return $this;
     }

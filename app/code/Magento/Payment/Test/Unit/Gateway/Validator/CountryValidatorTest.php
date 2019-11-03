@@ -62,12 +62,15 @@ class CountryValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificTrueDataProvider()
     {
         return [
@@ -90,12 +93,15 @@ class CountryValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
-            ->with(['isValid' => $isValid, 'failsDescription' => []])
+            ->with(['isValid' => $isValid, 'failsDescription' => [], 'errorCodes' => []])
             ->willReturn($this->resultMock);
 
         $this->assertSame($this->resultMock, $this->model->validate($validationSubject));
     }
 
+    /**
+     * @return array
+     */
     public function validateAllowspecificFalseDataProvider()
     {
         return [

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -113,7 +114,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for configurable product: configurable
+     * @expectedExceptionMessage This is implemented for the "configurable" configurable product only.
      */
     public function testGetNotConfigurableProduct()
     {
@@ -141,7 +142,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for configurable product: 3
+     * @expectedExceptionMessage This is implemented for the "3" configurable product only.
      */
     public function testGetNotProductById()
     {
@@ -168,7 +169,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete variations from product: 3
+     * @expectedExceptionMessage The variations from the "3" product can't be deleted.
      */
     public function testDeleteCantSaveProducts()
     {
@@ -200,7 +201,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete option with id: 33
+     * @expectedExceptionMessage The option with "33" ID can't be deleted.
      */
     public function testDeleteCantDeleteOption()
     {
@@ -276,7 +277,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested option doesn't exist: 3
+     * @expectedExceptionMessage The "3" entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEmptyExtensionAttribute()
     {
@@ -329,7 +330,7 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Only implemented for configurable product: configurable
+     * @expectedExceptionMessage This is implemented for the "configurable" configurable product only.
      */
     public function testGetListNotConfigurableProduct()
     {
@@ -356,7 +357,8 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateNewOptionData($attributeId, $label, $optionValues, $msg)
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class, $msg);
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage($msg);
         $optionValueMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\Data\OptionValueInterface::class)
             ->setMethods(['getValueIndex', 'getPricingValue', 'getIsPercent'])
             ->getMockForAbstractClass();
@@ -388,6 +390,9 @@ class OptionRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->model->validateNewOptionData($optionMock);
     }
 
+    /**
+     * @return array
+     */
     public function validateOptionDataProvider()
     {
         return [

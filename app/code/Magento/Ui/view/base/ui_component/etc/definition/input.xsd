@@ -15,6 +15,7 @@
             <xs:element name="settings" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="abstractSettings" minOccurs="0"/>
                         <xs:group ref="inputSetting"/>
                     </xs:choice>
                 </xs:complexType>
@@ -23,6 +24,18 @@
         <xs:attributeGroup ref="ui_element_attributes"/>
     </xs:complexType>
 
+    <xs:complexType name="formElementInput">
+        <xs:sequence>
+            <xs:element name="settings" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:group ref="inputSetting"/>
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attributeGroup ref="ui_element_attributes"/>
+    </xs:complexType>
 
     <xs:complexType name="componentRange">
         <xs:complexContent>
@@ -73,7 +86,6 @@
 
     <xs:group name="inputSetting">
         <xs:choice>
-            <xs:group ref="abstractSettings" minOccurs="0"/>
         </xs:choice>
     </xs:group>
 </xs:schema>

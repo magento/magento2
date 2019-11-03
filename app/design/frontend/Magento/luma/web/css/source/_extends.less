@@ -7,6 +7,8 @@
 //  List default styles reset
 //  ---------------------------------------------
 
+@_column-number: 1;
+
 & when (@media-common = true) {
     .abs-reset-list {
         .lib-list-reset-styles();
@@ -275,7 +277,7 @@
 }
 
 //
-//  Marging for blocks & widgets
+//  Margin for blocks & widgets
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -705,7 +707,7 @@
 //  ---------------------------------------------
 
 @abs-form-field-revert-column-1: {
-    .lib-form-field-column-number(@_column-number: 1);
+    .lib-form-field-column-number(@_column-number);
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
@@ -760,7 +762,7 @@
                     white-space: nowrap;
                     width: 33%;
 
-                    &:before {
+                    &[data-th]:before {
                         content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;
@@ -1210,7 +1212,7 @@
 }
 
 //
-//  Forms: margin-bottom for small forms
+//  Ratings: vertical alignment
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -1504,6 +1506,10 @@
             position: relative;
             z-index: 1;
         }
+        .limiter {
+            display: inline-block;
+            float: right;
+        }
 
         .toolbar-amount {
             .lib-css(line-height, @pager__line-height);
@@ -1526,6 +1532,7 @@
     .abs-block-items-counter {
         .lib-css(color, @block-items__counter__color);
         .lib-font-size(12px);
+        vertical-align: middle;
         white-space: nowrap;
 
         &:before {
@@ -1549,6 +1556,7 @@
         strong {
             font-size: @font-size__l;
             font-weight: @font-weight__light;
+            vertical-align: middle;
         }
     }
 }
@@ -1681,7 +1689,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = (@screen__m + 1)) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-checkout-tooltip-content-position-top-mobile {
         @abs-checkout-tooltip-content-position-top();
     }
@@ -1705,7 +1713,7 @@
 }
 
 //
-//  Shopping cart sidebar and checkout sidebar totals
+//  Mini Cart and checkout sidebar totals
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -1857,7 +1865,7 @@
 
             > .title {
                 strong {
-                    color: @color-blue1;
+                    color: @link__color;
                     font-weight: @font-weight__regular;
                 }
             }
@@ -1907,6 +1915,7 @@
             display: table-cell;
         }
     }
+
 }
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {

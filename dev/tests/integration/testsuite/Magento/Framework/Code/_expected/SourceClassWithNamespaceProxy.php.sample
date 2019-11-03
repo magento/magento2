@@ -93,7 +93,7 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         return $this->_getSubject()->publicChildMethod($classGenerator, $param1, $param2, $param3, $array);
     }
@@ -117,7 +117,31 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     /**
      * {@inheritdoc}
      */
-    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = array())
+    public function public71($arg1, string $arg2, ?int $arg3, ?int $arg4 = null) : void
+    {
+        $this->_getSubject()->public71($arg1, $arg2, $arg3, $arg4);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function public71Another(?\DateTime $arg1, $arg2 = false) : ?string
+    {
+        return $this->_getSubject()->public71Another($arg1, $arg2);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicWithSelf($arg = false) : \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
+    {
+        return $this->_getSubject()->publicWithSelf($arg);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         return $this->_getSubject()->publicParentMethod($docBlockGenerator, $param1, $param2, $param3, $array);
     }

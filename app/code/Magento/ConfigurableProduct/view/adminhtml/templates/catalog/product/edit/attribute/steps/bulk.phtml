@@ -3,24 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
 ?>
 
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
     <div class="steps-wizard-info">
-        <?= /* @escapeNotVerified */ __('Based on your selections %1 new products will be created. Use this step to customize images and price for your new products.', '<span class="new-products-count" data-bind="text:countVariations"></span>') ?>
+        <?= /* @noEscape */ __('Based on your selections %1 new products will be created. Use this step to customize images and price for your new products.', '<span class="new-products-count" data-bind="text:countVariations"></span>') ?>
     </div>
 
     <div data-bind="with: sections().images" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-            <span><?= $block->escapeHtml(
-                    __('Images')
-                ); ?></span>
+            <span><?= $block->escapeHtml(__('Images')); ?></span>
             </div>
 
             <ul class="steps-wizard-section-list">
@@ -32,9 +28,7 @@
                                value="single"
                                data-bind="checked:type">
                         <label for="apply-single-set-radio" class="admin__field-label">
-                        <span><?= $block->escapeHtml(
-                                __('Apply single set of images to all SKUs')
-                            ); ?></span>
+                            <span><?= $block->escapeHtml(__('Apply single set of images to all SKUs')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -71,10 +65,7 @@
                 <div data-role="gallery"
                      class="gallery"
                      data-images="[]"
-                     data-types="<?= $block->escapeHtml(
-                         $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
-                     ) ?>"
-                >
+                     data-types="<?= $block->escapeHtml($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())) ?>">
                     <div class="image image-placeholder">
                         <div data-role="uploader" class="uploader">
                             <div class="image-browse">
@@ -92,15 +83,12 @@
                         </div>
                     </div>
 
-                    <?php foreach ($block->getImageTypes() as $typeData):
-                        ?>
+                    <?php foreach ($block->getImageTypes() as $typeData) : ?>
                         <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                                class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                                type="hidden"
                                value="<?= $block->escapeHtml($typeData['value']) ?>"/>
-                        <?php
-                    endforeach;
-                    ?>
+                        <?php endforeach; ?>
 
                     <script data-template="uploader" type="text/x-magento-template">
                         <div id="<%- data.id %>" class="file-row">
@@ -155,19 +143,12 @@
                                 </div>
                             </div>
                             <ul class="item-roles" data-role="roles-labels">
-                                <?php
-                                foreach ($block->getMediaAttributes() as $attribute):
-                                    ?>
-                                    <li data-role-code="<?= $block->escapeHtml(
-                                        $attribute->getAttributeCode()
-                                    ) ?>" class="item-role item-role-<?= $block->escapeHtml(
-                                        $attribute->getAttributeCode()
-                                    ) ?>">
+                                <?php foreach ($block->getMediaAttributes() as $attribute) :?>
+                                    <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                        class="item-role item-role-<?= $block->escapeHtml($attribute->getAttributeCode()) ?>">
                                         <?= /* @noEscape */ $attribute->getFrontendLabel() ?>
                                     </li>
-                                    <?php
-                                endforeach;
-                                ?>
+                                    <?php endforeach; ?>
                             </ul>
                         </div>
                     </script>
@@ -229,9 +210,7 @@
 
                                 <div class="admin__field field-image-role">
                                     <label class="admin__field-label">
-                                    <span><?= $block->escapeHtml(
-                                            __('Role')
-                                        ); ?></span>
+                                    <span><?= $block->escapeHtml(__('Role')); ?></span>
                                     </label>
                                     <div class="admin__field-control">
                                         <ul class="multiselect-alt">
@@ -243,42 +222,28 @@
                                                         <input class="image-type"
                                                                data-role="type-selector"
                                                                type="checkbox"
-                                                               value="<?= $block->escapeHtml(
-                                                                   $attribute->getAttributeCode()
-                                                               ) ?>"
+                                                               value="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                                         />
-                                                        <?= $block->escapeHtml(
-                                                            $attribute->getFrontendLabel()
-                                                        ); ?>
+                                                        <?= $block->escapeHtml($attribute->getFrontendLabel()); ?>
                                                     </label>
                                                 </li>
-                                                <?php
-                                            endforeach;
-                                            ?>
+                                                <?php endforeach; ?>
                                         </ul>
                                     </div>
                                 </div>
 
                                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                     <label class="admin__field-label">
-                                    <span><?= $block->escapeHtml(
-                                            __('Image Size')
-                                        ); ?></span>
+                                    <span><?= $block->escapeHtml(__('Image Size')); ?></span>
                                     </label>
-                                    <div class="admin__field-value" data-message="<?= $block->escapeHtml(
-                                        __('{size}')
-                                    );?>"></div>
+                                    <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{size}'));?>"></div>
                                 </div>
 
                                 <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
                                     <label class="admin__field-label">
-                                    <span><?= $block->escapeHtml(
-                                            __('Image Resolution')
-                                        ); ?></span>
+                                    <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
                                     </label>
-                                    <div class="admin__field-value" data-message="<?= $block->escapeHtml(
-                                        __('{width}^{height} px')
-                                    );?>"></div>
+                                    <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{width}^{height} px'));?>"></div>
                                 </div>
 
                                 <div class="admin__field field-image-hide">
@@ -293,9 +258,7 @@
                                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                             <label for="hide-from-product-page" class="admin__field-label">
-                                                <?= $block->escapeHtml(
-                                                    __('Hide from Product Page')
-                                                ); ?>
+                                                <?= $block->escapeHtml(__('Hide from Product Page')); ?>
                                             </label>
                                         </div>
                                     </div>
@@ -310,9 +273,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label class="admin__field-label" for="apply-images-attributes">
-                        <span><?= $block->escapeHtml(
-                                __('Select attribute')
-                            ); ?></span>
+                        <span><?= $block->escapeHtml(__('Select attribute')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select
@@ -322,9 +283,7 @@
                                 options: $parent.attributes,
                                 optionsText: 'label',
                                 value: attribute,
-                                optionsCaption: '<?= $block->escapeHtml(
-                                    __("Select")
-                                ); ?>'
+                                optionsCaption: '<?= $block->escapeHtml(__("Select")); ?>'
                                 ">
                             </select>
                         </div>
@@ -341,24 +300,17 @@
                         <div data-role="gallery"
                              class="gallery"
                              data-images="[]"
-                             data-types="<?= $block->escapeHtml(
-                                 $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
-                             ) ?>"
-                        >
+                             data-types="<?= $block->escapeHtml($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())) ?>">
                             <div class="image image-placeholder">
                                 <div data-role="uploader" class="uploader">
                                     <div class="image-browse">
-                                    <span><?= $block->escapeHtml(
-                                            __('Browse Files...')
-                                        ); ?></span>
+                                    <span><?= $block->escapeHtml(__('Browse Files...')); ?></span>
                                         <input type="file" name="image" multiple="multiple"
                                                data-url="<?= /* @noEscape */ $block->getUrl('catalog/product_gallery/upload') ?>" />
                                     </div>
                                 </div>
                                 <div class="product-image-wrapper">
-                                    <p class="image-placeholder-text"><?= $block->escapeHtml(
-                                            __('Browse to find or drag image here')
-                                        ); ?></p>
+                                    <p class="image-placeholder-text"><?= $block->escapeHtml(__('Browse to find or drag image here')); ?></p>
                                 </div>
                                 <div class="spinner">
                                     <span></span><span></span><span></span><span></span>
@@ -366,15 +318,12 @@
                                 </div>
                             </div>
 
-                            <?php foreach ($block->getImageTypes() as $typeData):
-                                ?>
+                            <?php foreach ($block->getImageTypes() as $typeData) :?>
                                 <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                                        class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                                        type="hidden"
                                        value="<?= $block->escapeHtml($typeData['value']) ?>"/>
-                                <?php
-                            endforeach;
-                            ?>
+                                <?php endforeach; ?>
 
                             <script data-template="uploader" type="text/x-magento-template">
                                 <div id="<%- data.id %>" class="file-row">
@@ -418,15 +367,11 @@
                                                     class="action-remove"
                                                     data-role="delete-button"
                                                     title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                            <span><?= $block->escapeHtml(
-                                                    __('Remove image')
-                                                ); ?></span>
+                                            <span><?= $block->escapeHtml(__('Remove image')); ?></span>
                                             </button>
                                             <div class="draggable-handle"></div>
                                         </div>
-                                        <div class="image-fade"><span><?= $block->escapeHtml(
-                                                    __('Hidden')
-                                                ); ?></span></div>
+                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')); ?></span></div>
                                     </div>
                                     <div class="item-description">
                                         <div class="item-title" data-role="img-title"><%- data.label %></div>
@@ -435,19 +380,12 @@
                                         </div>
                                     </div>
                                     <ul class="item-roles" data-role="roles-labels">
-                                        <?php
-                                        foreach ($block->getMediaAttributes() as $attribute):
-                                            ?>
-                                            <li data-role-code="<?= $block->escapeHtml(
-                                                $attribute->getAttributeCode()
-                                            ) ?>" class="item-role item-role-<?= $block->escapeHtml(
-                                                $attribute->getAttributeCode()
-                                            ) ?>">
+                                        <?php foreach ($block->getMediaAttributes() as $attribute) :?>
+                                            <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                class="item-role item-role-<?= $block->escapeHtml($attribute->getAttributeCode()) ?>">
                                                 <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                             </li>
-                                            <?php
-                                        endforeach;
-                                        ?>
+                                            <?php endforeach; ?>
                                     </ul>
                                 </div>
                             </script>
@@ -492,9 +430,7 @@
                                     <fieldset class="admin__fieldset fieldset-image-panel">
                                         <div class="admin__field field-image-description">
                                             <label class="admin__field-label" for="image-description">
-                                            <span><?= $block->escapeHtml(
-                                                    __('Alt Text')
-                                                );?></span>
+                                            <span><?= $block->escapeHtml(__('Alt Text'));?></span>
                                             </label>
 
                                             <div class="admin__field-control">
@@ -508,56 +444,38 @@
 
                                         <div class="admin__field field-image-role">
                                             <label class="admin__field-label">
-                                            <span><?= $block->escapeHtml(
-                                                    __('Role')
-                                                );?></span>
+                                            <span><?= $block->escapeHtml(__('Role'));?></span>
                                             </label>
                                             <div class="admin__field-control">
                                                 <ul class="multiselect-alt">
-                                                    <?php
-                                                    foreach ($block->getMediaAttributes() as $attribute) :
-                                                        ?>
+                                                    <?php foreach ($block->getMediaAttributes() as $attribute) :?>
                                                         <li class="item">
                                                             <label>
                                                                 <input class="image-type"
                                                                        data-role="type-selector"
                                                                        type="checkbox"
-                                                                       value="<?= $block->escapeHtml(
-                                                                           $attribute->getAttributeCode()
-                                                                       ) ?>"
+                                                                       value="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                                                 />
-                                                                <?= $block->escapeHtml(
-                                                                    $attribute->getFrontendLabel()
-                                                                ) ?>
+                                                                <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                                             </label>
                                                         </li>
-                                                        <?php
-                                                    endforeach;
-                                                    ?>
+                                                        <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
 
                                         <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                             <label class="admin__field-label">
-                                            <span><?= $block->escapeHtml(
-                                                    __('Image Size')
-                                                ); ?></span>
+                                            <span><?= $block->escapeHtml(__('Image Size')); ?></span>
                                             </label>
-                                            <div class="admin__field-value" data-message="<?= $block->escapeHtml(
-                                                __('{size}')
-                                            ); ?>"></div>
+                                            <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{size}')); ?>"></div>
                                         </div>
 
                                         <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
                                             <label class="admin__field-label">
-                                            <span><?= $block->escapeHtml(
-                                                    __('Image Resolution')
-                                                ); ?></span>
+                                            <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
                                             </label>
-                                            <div class="admin__field-value" data-message="<?= $block->escapeHtml(
-                                                __('{width}^{height} px')
-                                            ); ?>"></div>
+                                            <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{width}^{height} px')); ?>"></div>
                                         </div>
 
                                         <div class="admin__field field-image-hide">
@@ -572,9 +490,7 @@
                                                     <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                                     <label for="hide-from-product-page" class="admin__field-label">
-                                                        <?= $block->escapeHtml(
-                                                            __('Hide from Product Page')
-                                                        ); ?>
+                                                        <?= $block->escapeHtml(__('Hide from Product Page')); ?>
                                                     </label>
                                                 </div>
                                             </div>
@@ -593,9 +509,7 @@
     <div data-bind="with: sections().price" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-                <span><?= $block->escapeHtml(
-                        __('Price')
-                    ); ?></span>
+                <span><?= $block->escapeHtml(__('Price')); ?></span>
             </div>
             <ul class="steps-wizard-section-list">
                 <li>
@@ -607,9 +521,7 @@
                                data-bind="checked:type" />
                         <label for="apply-single-price-radio"
                                class="admin__field-label">
-                            <span><?= $block->escapeHtml(
-                                    __('Apply single price to all SKUs')
-                                ); ?></span>
+                            <span><?= $block->escapeHtml(__('Apply single price to all SKUs')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -622,9 +534,7 @@
                                data-bind="checked:type" />
                         <label for="apply-unique-prices-radio"
                                class="admin__field-label">
-                            <span><?= $block->escapeHtml(
-                                    __('Apply unique prices by attribute to each SKU')
-                                ); ?></span>
+                            <span><?= $block->escapeHtml(__('Apply unique prices by attribute to each SKU')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -637,9 +547,7 @@
                                checked
                                data-bind="checked:type" />
                         <label for="skip-pricing-radio" class="admin__field-label">
-                            <span><?= $block->escapeHtml(
-                                    __('Skip price at this time')
-                                ); ?></span>
+                            <span><?= $block->escapeHtml(__('Skip price at this time')); ?></span>
                         </label>
                     </div>
                 </li>
@@ -648,9 +556,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                     <div class="admin__field _required">
                         <label for="apply-single-price-input" class="admin__field-label">
-                        <span><?= $block->escapeHtml(
-                                __('Price')
-                            ); ?></span>
+                        <span><?= $block->escapeHtml(__('Price')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <div class="currency-addon">
@@ -667,9 +573,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label for="select-each-price" class="admin__field-label">
-                            <span><?= $block->escapeHtml(
-                                    __('Select attribute')
-                                ); ?></span>
+                            <span><?= $block->escapeHtml(__('Select attribute')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select id="select-each-price" class="admin__control-select" data-bind="

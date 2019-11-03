@@ -6,9 +6,11 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 
-class NewAction extends \Magento\Backend\App\Action
+class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -23,14 +25,23 @@ class NewAction extends \Magento\Backend\App\Action
     protected $shipmentLoader;
 
     /**
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface
+     */
+    private $shipmentProvider;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
+        \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider = null
     ) {
         $this->shipmentLoader = $shipmentLoader;
+        $this->shipmentProvider = $shipmentProvider ?: ObjectManager::getInstance()
+            ->get(\Magento\Shipping\Model\ShipmentProviderInterface::class);
         parent::__construct($context);
     }
 
@@ -43,7 +54,7 @@ class NewAction extends \Magento\Backend\App\Action
     {
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
-        $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+        $this->shipmentLoader->setShipment($this->shipmentProvider->getShipmentData());
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {

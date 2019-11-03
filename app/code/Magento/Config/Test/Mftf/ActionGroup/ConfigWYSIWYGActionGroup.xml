@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnabledWYSIWYG">
+        <annotations>
+            <description>Enables the WYSIWYG Editor via the CLI.</description>
+        </annotations>
+
+        <magentoCLI stepKey="enableWYSIWYG" command="config:set cms/wysiwyg/enabled enabled"/>
+    </actionGroup>
+
+    <actionGroup name="SwitchToTinyMCE3">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'WYSIWYG Editor' to 'TinyMCE 3'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <comment userInput="Choose TinyMCE3 as the default editor" stepKey="chooseTinyMCE3AsEditor"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2"/>
+        <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
+        <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown2"/>
+        <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="DisabledWYSIWYG">
+        <annotations>
+            <description>Disables the WYSIWYG Editor via the CLI.</description>
+        </annotations>
+
+        <magentoCLI stepKey="disableWYSIWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+    </actionGroup>
+
+    <actionGroup name="UseStaticURLForMediaContentInWYSIWYG">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'Use Static URLs for Media Content in WYSIWYG' to the provided value. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="value" defaultValue="Yes" type="string"/>
+        </arguments>
+        
+        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitForEnableWYSIWYGDropdown1"/>
+        <selectOption selector="{{ContentManagementSection.StaticURL}}" userInput="{{value}}" stepKey="selectOption1"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+
+    <actionGroup name="EnabledWYSIWYGEditor">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'Enable WYSIWYG Editor' to 'Enabled by Default'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+        
+        <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.EnableWYSIWYG}}" visible="false" stepKey="expandWYSIWYGOptionsTab"/>
+        <waitForElementVisible selector="{{ContentManagementSection.EnableWYSIWYG}}" stepKey="waitTabToExpand"/>
+        <uncheckOption selector="{{ContentManagementSection.EnableSystemValue}}" stepKey="enableEnableSystemValue"/>
+        <selectOption selector="{{ContentManagementSection.EnableWYSIWYG}}" userInput="Enabled by Default" stepKey="enableWYSIWYG"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptionsTab"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
+        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration."/>
+    </actionGroup>
+</actionGroups>

@@ -76,7 +76,7 @@ class AssertProductInCustomStoreView extends AbstractAssertForm
     {
         $this->browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $initialProduct->getName(),
             $this->productViewPage->getViewBlock()->getProductName(),
             'Product ' . $initialProduct->getName() . ' is incorrect.'
@@ -97,7 +97,7 @@ class AssertProductInCustomStoreView extends AbstractAssertForm
 
         $this->browser->open($_ENV['app_frontend_url'] . $updatedProduct->getUrlKey() . '.html');
 
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $updatedProduct->getName(),
                 $this->productViewPage->getViewBlock()->getProductName(),
                 'Product ' . $updatedProduct->getName() . ' is not available on ' . $store->getName() . ' store.'

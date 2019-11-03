@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSortingAssociatedProductsTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="MAGETWO-91633: Grouped Products: Associated Products Can't Be Sorted Between Pages"/>
+            <title value="Grouped Products: Sorting Associated Products Between Pages"/>
+            <description value="Make sure that products in grid were recalculated when sorting associated products between pages"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-95085"/>
+            <group value="GroupedProduct"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <!-- Create 23 products so that grid can have more than one page -->
+            <createData entity="ApiSimpleProduct" stepKey="product1">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product2">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product3">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product4">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product5">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product6">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product7">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product8">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product9">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product10">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product11">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product12">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product13">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product14">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product15">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product16">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product17">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product18">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product19">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product20">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product21">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product22">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product23">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created grouped product-->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="GroupedProduct"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="product4" stepKey="deleteProduct4"/>
+            <deleteData createDataKey="product5" stepKey="deleteProduct5"/>
+            <deleteData createDataKey="product6" stepKey="deleteProduct6"/>
+            <deleteData createDataKey="product7" stepKey="deleteProduct7"/>
+            <deleteData createDataKey="product8" stepKey="deleteProduct8"/>
+            <deleteData createDataKey="product9" stepKey="deleteProduct9"/>
+            <deleteData createDataKey="product10" stepKey="deleteProduct10"/>
+            <deleteData createDataKey="product11" stepKey="deleteProduct11"/>
+            <deleteData createDataKey="product12" stepKey="deleteProduct12"/>
+            <deleteData createDataKey="product13" stepKey="deleteProduct13"/>
+            <deleteData createDataKey="product14" stepKey="deleteProduct14"/>
+            <deleteData createDataKey="product15" stepKey="deleteProduct15"/>
+            <deleteData createDataKey="product16" stepKey="deleteProduct16"/>
+            <deleteData createDataKey="product17" stepKey="deleteProduct17"/>
+            <deleteData createDataKey="product18" stepKey="deleteProduct18"/>
+            <deleteData createDataKey="product19" stepKey="deleteProduct19"/>
+            <deleteData createDataKey="product20" stepKey="deleteProduct20"/>
+            <deleteData createDataKey="product21" stepKey="deleteProduct21"/>
+            <deleteData createDataKey="product22" stepKey="deleteProduct22"/>
+            <deleteData createDataKey="product23" stepKey="deleteProduct23"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create grouped Product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillGroupedProductForm" stepKey="fillProductForm">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProducts">
+            <argument name="sku" value="api-simple-product"/>
+        </actionGroup>
+
+        <!-- Select all, then start the bulk update attributes flow -->
+        <click selector="{{AdminProductGridSection.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
+        <click selector="{{AdminProductGridSection.multicheckOption('Select All')}}" stepKey="selectAllProductInFilteredGrid"/>
+
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+        <waitForPageLoad stepKey="waitForProductsAdded"/>
+
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Open created Product group-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
+        <actionGroup ref="searchProductGridByKeyword" stepKey="searchProductGridForm">
+            <argument name="keyword" value="GroupedProduct.name"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.selectRowBasedOnName(GroupedProduct.name)}}" stepKey="openGroupedProduct"/>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
+
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection2"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection2"/>
+
+        <!--Change position value for the Product Position 0-->
+        <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('1')}}" stepKey="grabNameProductPosition0"/>
+        <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('2')}}" stepKey="grabNameProductPositionFirst"/>
+        <fillField selector="{{AdminProductFormGroupedProductsSection.positionProduct('1')}}" userInput="21" stepKey="fillFieldProductPosition0"/>
+        <doubleClick selector="{{AdminProductFormGroupedProductsSection.nextActionButton}}" stepKey="clickButton"/>
+        <waitForAjaxLoad stepKey="waitForAjax1"/>
+
+        <!--Go to next page and verify that Products in grid were recalculated-->
+        <doubleClick selector="{{AdminProductFormGroupedProductsSection.nextActionButton}}" stepKey="clickNextActionButton"/>
+        <waitForAjaxLoad stepKey="waitForAjax2"/>
+
+        <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('2')}}" stepKey="grabNameProductPosition21"/>
+        <assertEquals stepKey="assertProductsRecalculated">
+            <actualResult type="string">$grabNameProductPosition0</actualResult>
+            <expectedResult type="string">$grabNameProductPosition21</expectedResult>
+        </assertEquals>
+
+        <!--Change position value for the product to 1-->
+        <fillField selector="{{AdminProductFormGroupedProductsSection.positionProduct('2')}}" userInput="1" stepKey="fillFieldProductPosition1"/>
+        <doubleClick selector="{{AdminProductFormGroupedProductsSection.previousActionButton}}" stepKey="clickButton2"/>
+        <waitForAjaxLoad stepKey="waitForAjax3"/>
+
+        <!--Go to previous page and verify that Products in grid were recalculated-->
+        <click selector="{{AdminProductFormGroupedProductsSection.previousActionButton}}" stepKey="clickPreviousActionButton"/>
+        <waitForAjaxLoad stepKey="waitForAjax4"/>
+        <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('2')}}" stepKey="grabNameProductPosition2"/>
+        <grabTextFrom selector="{{AdminProductFormGroupedProductsSection.nameProductFromGrid('1')}}" stepKey="grabNameProductPositionZero"/>
+        <assertEquals stepKey="assertProductsRecalculated2">
+            <actualResult type="string">$grabNameProductPosition2</actualResult>
+            <expectedResult type="string">$grabNameProductPosition0</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertProductsRecalculated3">
+            <actualResult type="string">$grabNameProductPositionFirst</actualResult>
+            <expectedResult type="string">$grabNameProductPositionZero</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

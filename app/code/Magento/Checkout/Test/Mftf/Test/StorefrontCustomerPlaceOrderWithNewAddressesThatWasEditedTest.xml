@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerPlaceOrderWithNewAddressesThatWasEditedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via the Storefront"/>
+            <title value="Customer can place order with new addresses that was edited during checkout with several conditions"/>
+            <description value="Customer can place order with new addresses."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-67837"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!--Go to Storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!-- Add simple product to cart and go to checkout-->
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+
+        <!-- Click "+ New Address" and Fill new address-->
+        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="addAddress"/>
+        <actionGroup ref="LoggedInCheckoutWithOneAddressFieldWithoutStateField" stepKey="changeAddress">
+            <argument name="Address" value="UK_Not_Default_Address"/>
+            <argument name="classPrefix" value="._show"/>
+        </actionGroup>
+
+        <!--Click "Save Addresses" -->
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
+
+        <!--Select Shipping Rate "Flat Rate"-->
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
+
+        <click selector="{{CheckoutShippingSection.editActiveAddress}}" stepKey="editNewAddress"/>
+        <actionGroup ref="clearCheckoutAddressPopupFieldsActionGroup" stepKey="clearRequiredFields">
+            <argument name="classPrefix" value="._show"/>
+        </actionGroup>
+
+        <!--Close Popup and click next-->
+        <click selector="{{StorefrontCheckoutAddressPopupSection.closeAddressModalPopup}}" stepKey="closePopup"/>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+
+        <!--Refresh Page and Place Order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
+
+        <!--Verify New addresses in Customer's Address Book-->
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToCustomerAddressBook"/>
+        <see userInput="{{UK_Not_Default_Address.street[0]}}"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesStreet"/>
+        <see userInput="{{UK_Not_Default_Address.city}}"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesCity"/>
+        <see userInput="{{UK_Not_Default_Address.postcode}}"
+             selector="{{StorefrontCustomerAddressesSection.addressesList}}" stepKey="checkNewAddressesPostcode"/>
+        <!--Order review page has address that was created during checkout-->
+        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="goToOrderReviewPage"/>
+        <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
+             selector="{{StorefrontCustomerOrderViewSection.shippingAddress}}" stepKey="checkShippingAddress"/>
+        <see userInput="{{US_Address_TX_Default_Billing.street[0]}}"
+             selector="{{StorefrontCustomerOrderViewSection.billingAddress}}" stepKey="checkBillingAddress"/>
+    </test>
+</tests>

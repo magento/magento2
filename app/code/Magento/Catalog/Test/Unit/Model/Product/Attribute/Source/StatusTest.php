@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
 use Magento\Eav\Model\Entity\AbstractEntity;
@@ -36,7 +34,9 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->collection = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [
+        $this->collection = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
+            [
                 '__wakeup',
                 'getSelect',
                 'joinLeft',
@@ -44,8 +44,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
                 'getStoreId',
                 'getConnection',
                 'getCheckSql'
-            ]);
-        $this->attributeModel = $this->createPartialMock(\Magento\Catalog\Model\Entity\Attribute::class, [
+            ]
+        );
+        $this->attributeModel = $this->createPartialMock(
+            \Magento\Catalog\Model\Entity\Attribute::class,
+            [
                 '__wakeup',
                 'getAttributeCode',
                 'getBackend',
@@ -53,8 +56,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
                 'isScopeGlobal',
                 'getEntity',
                 'getAttribute'
-            ]);
-        $this->backendAttributeModel = $this->createPartialMock(\Magento\Catalog\Model\Product\Attribute\Backend\Sku::class, ['__wakeup', 'getTable']);
+            ]
+        );
+        $this->backendAttributeModel = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Attribute\Backend\Sku::class,
+            ['__wakeup', 'getTable']
+        );
         $this->status = $this->objectManagerHelper->getObject(
             \Magento\Catalog\Model\Product\Attribute\Source\Status::class
         );

@@ -149,6 +149,10 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->collection, $this->repository->getList($this->searchCriteria));
     }
 
+    /**
+     * @param bool $id
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
     protected function mockPayment($id = false)
     {
         $payment = $this->createMock(\Magento\Sales\Model\Order\Payment::class);

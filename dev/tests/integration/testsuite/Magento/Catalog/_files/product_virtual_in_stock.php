@@ -16,5 +16,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
     ->setTaxClassId(0)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['is_in_stock' => 1, 'qty' => 10])
+    ->setStockData(['is_in_stock' => 1, 'qty' => 10, 'manage_stock' => 1])
     ->save();

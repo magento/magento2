@@ -144,6 +144,9 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
         $this->model->getValue();
     }
 
+    /**
+     * @return array
+     */
     public function trueFalseDataProvider()
     {
         return [[true], [false]];

@@ -22,7 +22,7 @@ interface SidResolverInterface
      * Get SID
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @return string
+     * @return string|null
      */
     public function getSid(\Magento\Framework\Session\SessionManagerInterface $session);
 

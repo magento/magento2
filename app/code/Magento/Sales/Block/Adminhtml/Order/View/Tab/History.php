@@ -18,7 +18,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      *
      * @var string
      */
-    protected $_template = 'order/view/tab/history.phtml';
+    protected $_template = 'Magento_Sales::order/view/tab/history.phtml';
 
     /**
      * Core registry
@@ -61,6 +61,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
     /**
      * Compose and get order full history.
+     *
      * Consists of the status history comments as well as of invoices, shipments and creditmemos creations
      *
      * @TODO This method requires refactoring. Need to create separate model for comment history handling
@@ -218,7 +219,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -226,7 +227,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -264,7 +265,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -272,7 +273,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
@@ -303,11 +304,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
 
-        /** @var $createdAtA \DateTime */
-        if ($createdAtA->getTimestamp() == $createdAtB->getTimestamp()) {
-            return 0;
-        }
-        return $createdAtA->getTimestamp() < $createdAtB->getTimestamp() ? -1 : 1;
+        return $createdAtA->getTimestamp() <=> $createdAtB->getTimestamp();
     }
 
     /**

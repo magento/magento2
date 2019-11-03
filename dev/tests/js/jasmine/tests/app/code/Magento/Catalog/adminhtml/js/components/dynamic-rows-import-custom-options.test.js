@@ -55,7 +55,7 @@ define([
         describe('Check processingInsertData', function () {
             it('Check with empty data.', function () {
                 model.processingInsertData();
-                expect(model.cacheGridData).toEqual([]);
+                expect(JSON.parse(JSON.stringify(model.cacheGridData))).toEqual([]);
                 expect(model.insertData).not.toHaveBeenCalled();
             });
 
@@ -64,21 +64,21 @@ define([
                     'options': []
                 }];
                 model.processingInsertData(data);
-                expect(model.cacheGridData).toEqual([]);
+                expect(JSON.parse(JSON.stringify(model.cacheGridData))).toEqual([]);
                 expect(model.insertData).not.toHaveBeenCalled();
             });
 
             it('Check with fake imported custom options data.', function () {
                 model.processingInsertData(data);
                 expect(model.insertData).toHaveBeenCalled();
-                expect(model.cacheGridData[0]).toEqual({
+                expect(JSON.parse(JSON.stringify(model.cacheGridData[0]))).toEqual({
                     'option_type_id': 1,
                     'position': 1,
                     'values': [{
                         'some_fake_value': 1
                     }]
                 });
-                expect(model.cacheGridData[1]).toEqual({
+                expect(JSON.parse(JSON.stringify(model.cacheGridData[1]))).toEqual({
                     'option_type_id': 2,
                     'position': 2,
                     'values': [{}]

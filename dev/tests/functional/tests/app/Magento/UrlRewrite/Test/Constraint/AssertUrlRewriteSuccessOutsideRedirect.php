@@ -36,7 +36,7 @@ class AssertUrlRewriteSuccessOutsideRedirect extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $urlRequestPath);
         $browserUrl = $browser->getUrl();
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $browserUrl,
             $urlTargetPath,
             'URL rewrite redirect false.'

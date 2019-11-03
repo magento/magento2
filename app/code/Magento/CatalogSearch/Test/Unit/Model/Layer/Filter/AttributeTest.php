@@ -321,10 +321,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('build')
             ->will($this->returnValue($builtData));
 
-        $this->fulltextCollection->expects($this->once())
-            ->method('getSize')
-            ->will($this->returnValue(50));
-
         $expectedFilterItems = [
             $this->createFilterItem(0, $builtData[0]['label'], $builtData[0]['value'], $builtData[0]['count']),
             $this->createFilterItem(1, $builtData[1]['label'], $builtData[1]['value'], $builtData[1]['count']),
@@ -383,9 +379,6 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->fulltextCollection->expects($this->once())
             ->method('getFacetedData')
             ->willReturn($facetedData);
-        $this->fulltextCollection->expects($this->once())
-            ->method('getSize')
-            ->will($this->returnValue(50));
 
         $this->itemDataBuilder->expects($this->once())
             ->method('addItemData')

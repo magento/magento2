@@ -6,6 +6,7 @@
 /**
  * @api
  */
+/* global Base64 */
 define([
     'jquery',
     'underscore',
@@ -13,13 +14,17 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/abstract',
-    'jquery/file-uploader'
-], function ($, _, utils, uiAlert, validator, Element) {
+    'mage/backend/notification',
+    'mage/translate',
+    'jquery/file-uploader',
+    'mage/adminhtml/tools'
+], function ($, _, utils, uiAlert, validator, Element, notification, $t) {
     'use strict';
 
     return Element.extend({
         defaults: {
             value: [],
+            aggregatedErrors: [],
             maxFileSize: false,
             isMultipleFiles: false,
             placeholderType: 'document', // 'image', 'video'
@@ -119,7 +124,7 @@ define([
          * Adds provided file to the files list.
          *
          * @param {Object} file
-         * @returns {FileUploder} Chainable.
+         * @returns {FileUploader} Chainable.
          */
         addFile: function (file) {
             file = this.processFile(file);
@@ -164,6 +169,10 @@ define([
          */
         processFile: function (file) {
             file.previewType = this.getFilePreviewType(file);
+
+            if (!file.id && file.name) {
+                file.id = Base64.mageEncode(file.name);
+            }
 
             this.observe.call(file, true, [
                 'previewWidth',
@@ -278,9 +287,15 @@ define([
          * @returns {FileUploader} Chainable.
          */
         notifyError: function (msg) {
-            uiAlert({
+            var data = {
                 content: msg
-            });
+            };
+
+            if (this.isMultipleFiles) {
+                data.modalClass = '_image-box';
+            }
+
+            uiAlert(data);
 
             return this;
         },
@@ -309,13 +324,19 @@ define([
         },
 
         /**
-         * Abstract handler which is invoked when files are choosed for upload.
-         * May be used for implementation of aditional validation rules,
+         * Handler which is invoked when files are choosed for upload.
+         * May be used for implementation of additional validation rules,
          * e.g. total files and a total size rules.
          *
-         * @abstract
+         * @param {Event} e - Event object.
+         * @param {Object} data - File data that will be uploaded.
          */
-        onFilesChoosed: function () {},
+        onFilesChoosed: function (e, data) {
+            // no option exists in fileuploader for restricting upload chains to single files; this enforces that policy
+            if (!this.isMultipleFiles) {
+                data.files.splice(1);
+            }
+        },
 
         /**
          * Handler which is invoked prior to the start of a file upload.
@@ -328,6 +349,12 @@ define([
                 allowed  = this.isFileAllowed(file),
                 target   = $(e.target);
 
+            if (this.disabled()) {
+                this.notifyError($t('The file upload field is disabled.'));
+
+                return;
+            }
+
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {
                     postData.data.append('param_name', this.paramName);
@@ -337,8 +364,26 @@ define([
                     data.submit();
                 });
             } else {
-                this.notifyError(allowed.message);
+                this.aggregateError(file.name, allowed.message);
+
+                // if all files in upload chain are invalid, stop callback is never called; this resolves promise
+                if (this.aggregatedErrors.length === data.originalFiles.length) {
+                    this.uploaderConfig.stop();
+                }
             }
+        },
+
+        /**
+         * Add error message associated with filename for display when upload chain is complete
+         *
+         * @param {String} filename
+         * @param {String} message
+         */
+        aggregateError: function (filename, message) {
+            this.aggregatedErrors.push({
+                filename: filename,
+                message: message
+            });
         },
 
         /**
@@ -348,11 +393,12 @@ define([
          * @param {Object} data
          */
         onFileUploaded: function (e, data) {
-            var file    = data.result,
+            var uploadedFilename = data.files[0].name,
+                file    = data.result,
                 error   = file.error;
 
             error ?
-                this.notifyError(error) :
+                this.aggregateError(uploadedFilename, error) :
                 this.addFile(file);
         },
 
@@ -367,7 +413,46 @@ define([
          * Load stop event handler.
          */
         onLoadingStop: function () {
+            var aggregatedErrorMessages = [];
+
             this.isLoading = false;
+
+            if (!this.aggregatedErrors.length) {
+                return;
+            }
+
+            if (!this.isMultipleFiles) { // only single file upload occurred; use first file's error message
+                aggregatedErrorMessages.push(this.aggregatedErrors[0].message);
+            } else { // construct message from all aggregatedErrors
+                _.each(this.aggregatedErrors, function (error) {
+                    notification().add({
+                        error: true,
+                        message: '%s' + error.message, // %s to be used as placeholder for html injection
+
+                        /**
+                         * Adds constructed error notification to aggregatedErrorMessages
+                         *
+                         * @param {String} constructedMessage
+                         */
+                        insertMethod: function (constructedMessage) {
+                            var escapedFileName = $('<div>').text(error.filename).html(),
+                                errorMsgBodyHtml = '<strong>%s</strong> %s.<br>'
+                                    .replace('%s', escapedFileName)
+                                    .replace('%s', $t('was not uploaded'));
+
+                            // html is escaped in message body for notification widget; prepend unescaped html here
+                            constructedMessage = constructedMessage.replace('%s', errorMsgBodyHtml);
+
+                            aggregatedErrorMessages.push(constructedMessage);
+                        }
+                    });
+                });
+            }
+
+            this.notifyError(aggregatedErrorMessages.join(''));
+
+            // clear out aggregatedErrors array for this completed upload chain
+            this.aggregatedErrors = [];
         },
 
         /**

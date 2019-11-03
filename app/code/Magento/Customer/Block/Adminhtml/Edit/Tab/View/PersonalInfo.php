@@ -152,13 +152,12 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     /**
      * Set customer registry
      *
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $customerRegistry
      * @return void
      * @deprecated 100.1.0
      */
     public function setCustomerRegistry(\Magento\Customer\Model\CustomerRegistry $customerRegistry)
     {
-
         $this->customerRegistry = $customerRegistry;
     }
 
@@ -461,7 +460,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             'customer/online_customers/online_minutes_interval',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return (int)$configValue > 0 ? (int)$configValue : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
     /**

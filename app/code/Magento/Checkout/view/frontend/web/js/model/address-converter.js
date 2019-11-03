@@ -9,8 +9,9 @@ define([
     'jquery',
     'Magento_Checkout/js/model/new-customer-address',
     'Magento_Customer/js/customer-data',
-    'mage/utils/objects'
-], function ($, address, customerData, mageUtils) {
+    'mage/utils/objects',
+    'underscore'
+], function ($, address, customerData, mageUtils, _) {
     'use strict';
 
     var countryData = customerData.get('directory-data');
@@ -18,6 +19,7 @@ define([
     return {
         /**
          * Convert address form data to Address object
+         *
          * @param {Object} formData
          * @returns {Object}
          */
@@ -58,6 +60,18 @@ define([
             }
             delete addressData['region_id'];
 
+            if (addressData['custom_attributes']) {
+                addressData['custom_attributes'] = _.map(
+                    addressData['custom_attributes'],
+                    function (value, key) {
+                        return {
+                            'attribute_code': key,
+                            'value': value
+                        };
+                    }
+                );
+            }
+
             return address(addressData);
         },
 
@@ -72,19 +86,19 @@ define([
                 output = {},
                 streetObject;
 
-            if ($.isArray(addrs.street)) {
-                streetObject = {};
-                addrs.street.forEach(function (value, index) {
-                    streetObject[index] = value;
-                });
-                addrs.street = streetObject;
-            }
-
             $.each(addrs, function (key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
                     output[self.toUnderscore(key)] = addrs[key];
                 }
             });
+
+            if ($.isArray(addrs.street)) {
+                streetObject = {};
+                addrs.street.forEach(function (value, index) {
+                    streetObject[index] = value;
+                });
+                output.street = streetObject;
+            }
 
             return output;
         },

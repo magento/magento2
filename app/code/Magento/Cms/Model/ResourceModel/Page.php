@@ -6,18 +6,18 @@
 
 namespace Magento\Cms\Model\ResourceModel;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Cms\Api\Data\PageInterface;
 
 /**
  * Cms page mysql resource
@@ -117,13 +117,16 @@ class Page extends AbstractDb
 
         if (!$this->isValidPageIdentifier($object)) {
             throw new LocalizedException(
-                __('The page URL key contains capital letters or disallowed symbols.')
+                __(
+                    "The page URL key can't use capital letters or disallowed symbols. "
+                    . "Remove the letters and symbols and try again."
+                )
             );
         }
 
         if ($this->isNumericPageIdentifier($object)) {
             throw new LocalizedException(
-                __('The page URL key cannot be made of only numbers.')
+                __("The page URL key can't use only numbers. Add letters or words and try again.")
             );
         }
         return parent::_beforeSave($object);

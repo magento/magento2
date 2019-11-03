@@ -49,6 +49,10 @@
             }
         }
 
+        .discount.coupon {
+            display: none;
+        }
+
         .grand.incl {
             & + .grand.excl {
                 .mark,
@@ -114,6 +118,10 @@
 
             .product {
                 position: relative;
+                .item-options {
+                    &:extend(.abs-product-options-list all);
+                    &:extend(.abs-add-clearfix all);
+                }
             }
         }
 

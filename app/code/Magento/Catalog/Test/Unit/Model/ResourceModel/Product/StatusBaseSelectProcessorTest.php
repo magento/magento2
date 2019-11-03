@@ -16,7 +16,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -35,9 +35,9 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     private $metadataPool;
 
     /**
-     * @var StoreResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var Select|\PHPUnit_Framework_MockObject_MockObject
@@ -53,13 +53,13 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
-        $this->storeResolver = $this->getMockBuilder(StoreResolverInterface::class)->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
         $this->select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
 
         $this->statusBaseSelectProcessor =  (new ObjectManager($this))->getObject(StatusBaseSelectProcessor::class, [
             'eavConfig' => $this->eavConfig,
             'metadataPool' => $this->metadataPool,
-            'storeResolver' => $this->storeResolver,
+            'storeManager' => $this->storeManager,
         ]);
     }
 
@@ -94,8 +94,14 @@ class StatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(Product::ENTITY, ProductInterface::STATUS)
             ->willReturn($statusAttribute);
 
-        $this->storeResolver->expects($this->once())
-            ->method('getCurrentStoreId')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)->getMock();
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $storeMock->expects($this->once())
+            ->method('getId')
             ->willReturn($currentStoreId);
 
         $this->select->expects($this->at(0))

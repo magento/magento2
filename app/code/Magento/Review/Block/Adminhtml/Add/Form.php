@@ -142,11 +142,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset->addField('product_id', 'hidden', ['name' => 'product_id']);
 
-        /*$gridFieldset = $form->addFieldset('add_review_grid', array('legend' => __('Please select a product')));
-          $gridFieldset->addField('products_grid', 'note', array(
-          'text' => $this->getLayout()->createBlock(\Magento\Review\Block\Adminhtml\Product\Grid::class)->toHtml(),
-          ));*/
-
         $form->setMethod('post');
         $form->setUseContainer(true);
         $form->setId('edit_form');

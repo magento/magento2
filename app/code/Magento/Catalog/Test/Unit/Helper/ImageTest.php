@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Test\Unit\Helper;
+
+use Magento\Catalog\Helper\Image;
 
 class ImageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var Image
      */
     protected $helper;
 
@@ -26,6 +29,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetRepository;
+
+    /**
+     * @var \Magento\Framework\Config\View|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $configView;
 
     /**
      * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -56,6 +64,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->configView = $this->getMockBuilder(\Magento\Framework\Config\View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->viewConfig = $this->getMockBuilder(\Magento\Framework\View\ConfigInterface::class)
             ->getMockForAbstractClass();
 
@@ -63,7 +75,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helper = new \Magento\Catalog\Helper\Image(
+        $this->helper = new Image(
             $this->context,
             $this->imageFactory,
             $this->assetRepository,
@@ -118,7 +130,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->prepareWatermarkProperties($data);
 
         $this->assertInstanceOf(
-            \Magento\Catalog\Helper\Image::class,
+            Image::class,
             $this->helper->init($productMock, $imageId, $attributes)
         );
     }
@@ -150,22 +162,88 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param array $data - optional 'frame' key
+     * @param bool $whiteBorders view config
+     * @param bool $expectedKeepFrame
+     * @dataProvider initKeepFrameDataProvider
+     */
+    public function testInitKeepFrame($data, $whiteBorders, $expectedKeepFrame)
+    {
+        $imageId = 'test_image_id';
+        $attributes = [];
+
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->prepareAttributes($data, $imageId);
+
+        $this->configView->expects(isset($data['frame']) ? $this->never() : $this->once())
+            ->method('getVarValue')
+            ->with('Magento_Catalog', 'product_image_white_borders')
+            ->willReturn($whiteBorders);
+
+        $this->viewConfig->expects($this->once())
+            ->method('getViewConfig')
+            ->willReturn($this->configView);
+
+        $this->image->expects($this->once())
+            ->method('setKeepFrame')
+            ->with($expectedKeepFrame)
+            ->willReturnSelf();
+
+        $this->helper->init($productMock, $imageId, $attributes);
+    }
+
+    /**
+     * @return array
+     */
+    public function initKeepFrameDataProvider()
+    {
+        return [
+            // when frame defined explicitly, it wins
+            [
+                'mediaImage' => [
+                    'frame' => 1,
+                ],
+                'whiteBorders' => true,
+                'expected' => true,
+            ],
+            [
+                'mediaImage' => [
+                    'frame' => 0,
+                ],
+                'whiteBorders' => true,
+                'expected' => false,
+            ],
+            // when frame is not defined, var is used
+            [
+                'mediaImage' => [],
+                'whiteBorders' => true,
+                'expected' => true,
+            ],
+            [
+                'mediaImage' => [],
+                'whiteBorders' => false,
+                'expected' => false,
+            ],
+        ];
+    }
+
+    /**
      * @param $data
      * @param $imageId
      */
     protected function prepareAttributes($data, $imageId)
     {
-        $configViewMock = $this->getMockBuilder(\Magento\Framework\Config\View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configViewMock->expects($this->once())
+        $this->configView->expects($this->once())
             ->method('getMediaAttributes')
-            ->with('Magento_Catalog', 'images', $imageId)
+            ->with('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE, $imageId)
             ->willReturn($data);
 
         $this->viewConfig->expects($this->once())
             ->method('getViewConfig')
-            ->willReturn($configViewMock);
+            ->willReturn($this->configView);
     }
 
     /**
@@ -218,32 +296,34 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     {
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturnMap([
+            ->willReturnMap(
                 [
-                    'design/watermark/' . $data['type'] . '_image',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_imageOpacity',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_opacity']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_position',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_position']
-                ],
-                [
-                    'design/watermark/' . $data['type'] . '_size',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    null,
-                    $data['watermark_size']
-                ],
-            ]);
+                    [
+                        'design/watermark/' . $data['type'] . '_image',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_imageOpacity',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_opacity']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_position',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_position']
+                    ],
+                    [
+                        'design/watermark/' . $data['type'] . '_size',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        $data['watermark_size']
+                    ],
+                ]
+            );
 
         $this->image->expects($this->any())
             ->method('setWatermarkFile')

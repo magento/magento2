@@ -8,6 +8,7 @@ namespace Magento\Developer\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -21,6 +22,12 @@ class DevTestsRunCommand extends Command
      * input parameter parameter
      */
     const INPUT_ARG_TYPE = 'type';
+
+    /**
+     * PHPUnit arguments parameter
+     */
+    const INPUT_OPT_COMMAND_ARGUMENTS       = 'arguments';
+    const INPUT_OPT_COMMAND_ARGUMENTS_SHORT = 'c';
 
     /**
      * command name
@@ -56,7 +63,13 @@ class DevTestsRunCommand extends Command
             'Type of test to run. Available types: ' . implode(', ', array_keys($this->types)),
             'default'
         );
-
+        $this->addOption(
+            self::INPUT_OPT_COMMAND_ARGUMENTS,
+            self::INPUT_OPT_COMMAND_ARGUMENTS_SHORT,
+            InputOption::VALUE_REQUIRED,
+            'Additional arguments for PHPUnit. Example: "-c\'--filter=MyTest\'" (no spaces)',
+            ''
+        );
         parent::configure();
     }
 
@@ -87,6 +100,9 @@ class DevTestsRunCommand extends Command
             $dirName = realpath(BP . '/dev/tests/' . $dir);
             chdir($dirName);
             $command = PHP_BINARY . ' ' . BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            if ($commandArguments = $input->getOption(self::INPUT_OPT_COMMAND_ARGUMENTS)) {
+                $command .= ' ' . $commandArguments;
+            }
             $message = $dirName . '> ' . $command;
             $output->writeln(['', str_pad("---- {$message} ", 70, '-'), '']);
             passthru($command, $returnVal);

@@ -203,7 +203,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -296,6 +297,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get the closure to return the website IDs.
+     *
      * @return \Closure
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -317,8 +320,10 @@ class ConfigurableProductsFixture extends Fixture
     {
         $attributeSetClosure = function ($index) use ($defaultAttributeSets) {
             $attributeSetAmount = count(array_keys($defaultAttributeSets));
+            // phpcs:ignore
             mt_srand($index);
 
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
                 ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
                 : 'Default';
@@ -399,7 +404,7 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -407,7 +412,7 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -415,7 +420,10 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param OutputInterface $output
+     * @return void
      * @throws ValidatorException
      */
     public function printInfo(OutputInterface $output)
@@ -433,7 +441,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * Gen default attribute sets with attributes
+     * Get default attribute sets with attributes.
+     *
      * @see config/attributeSets.xml
      *
      * @return array
@@ -552,7 +561,7 @@ class ConfigurableProductsFixture extends Fixture
 
         if (count($skuPull) !== count(array_unique($skuPull))) {
             throw new ValidatorException(
-                __('Sku pattern for configurable product must be unique per attribute set')
+                __("The configurable product's SKU pattern must be unique in an attribute set.")
             );
         }
 
@@ -560,8 +569,10 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
-     * Prepare configuration. If amount of configurable products set in profile then return predefined attribute sets
-     * else return configuration from profile
+     * Prepare configuration.
+     *
+     * If amount of configurable products set in profile then return predefined attribute sets
+     * else return configuration from profile.
      *
      * @param array $defaultAttributeSets
      * @return array
@@ -591,13 +602,17 @@ class ConfigurableProductsFixture extends Fixture
                 }
             }
         } else {
-            throw new ValidatorException(__('Configurable product config is invalid'));
+            throw new ValidatorException(
+                __('The configurable product config is invalid. Verify the product and try again.')
+            );
         }
 
         return $configurableConfigs;
     }
 
     /**
+     * Get closure to return configurable category.
+     *
      * @param array $config
      * @return \Closure
      */
@@ -621,6 +636,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get sku pattern.
+     *
      * @param array $config
      * @param string $attributeSetName
      * @return string
@@ -691,6 +708,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get search configuration.
+     *
      * @return array
      */
     private function getSearchConfig()
@@ -702,6 +721,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get value of search configuration property.
+     *
      * @param string $name
      * @return int|mixed
      */
@@ -712,6 +733,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get search terms.
+     *
      * @return array
      */
     private function getSearchTerms()
@@ -720,6 +743,8 @@ class ConfigurableProductsFixture extends Fixture
         if ($searchTerms !== null) {
             $searchTerms = array_key_exists(0, $searchTerms['search_term'])
                 ? $searchTerms['search_term'] : [$searchTerms['search_term']];
+        } else {
+            $searchTerms = [];
         }
         return $searchTerms;
     }
@@ -767,6 +792,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * Generates matrix of all possible variations.
+     *
      * @param int $attributesPerSet
      * @param int $optionsPerAttribute
      * @return array
@@ -782,6 +808,7 @@ class ConfigurableProductsFixture extends Fixture
 
     /**
      * Build all possible variations based on attributes and options count.
+     *
      * @param array|null $variationsMatrix
      * @return array
      */
@@ -814,6 +841,8 @@ class ConfigurableProductsFixture extends Fixture
     }
 
     /**
+     * Get description closure.
+     *
      * @param array|null $searchTerms
      * @param int $simpleProductsCount
      * @param int $configurableProductsCount
@@ -832,7 +861,7 @@ class ConfigurableProductsFixture extends Fixture
     ) {
         if (null === $this->dataGenerator) {
             $fileName = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'dictionary.csv';
-            $this->dataGenerator = new DataGenerator(realpath($fileName));
+            $this->dataGenerator = new DataGenerator($fileName);
         }
 
         return function ($index) use (
@@ -843,21 +872,23 @@ class ConfigurableProductsFixture extends Fixture
             $minAmountOfWordsDescription,
             $descriptionPrefix
         ) {
-            $count = $searchTerms === null
+            $countSearchTerms = is_array($searchTerms) ? count($searchTerms) : 0;
+            $count = !$searchTerms
                 ? 0
                 : round(
-                    $searchTerms[$index % count($searchTerms)]['count'] * (
+                    $searchTerms[$index % $countSearchTerms]['count'] * (
                         $configurableProductsCount / ($simpleProductsCount + $configurableProductsCount)
                     )
                 );
+            // phpcs:ignore
             mt_srand($index);
             return $this->dataGenerator->generate(
                 $minAmountOfWordsDescription,
                 $maxAmountOfWordsDescription,
                 $descriptionPrefix . '-' . $index
             ) .
-            ($index <= ($count * count($searchTerms)) ? ' ' .
-            $searchTerms[$index % count($searchTerms)]['term'] : '');
+            ($index <= ($count * $countSearchTerms) ? ' ' .
+            $searchTerms[$index % $countSearchTerms]['term'] : '');
         };
     }
 

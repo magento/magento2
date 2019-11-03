@@ -124,7 +124,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->once())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('useStraightJoin')->willReturnSelf();
-        $this->selectMock->expects($this->exactly(2))->method('joinInner')->willReturnSelf();
+        $this->selectMock->expects($this->once())->method('joinInner')->willReturnSelf();
+        $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
         $collection->expects($this->once())->method('getOrdersData')->willReturn([]);
         $productAttributeMock->expects($this->once())->method('getBackend')->willReturnSelf();
         $priceAttributeMock->expects($this->once())->method('getBackend')->willReturnSelf();

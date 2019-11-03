@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Api\Data\InvoiceInterface;
@@ -98,9 +96,11 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
             'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
-            'invoiceItemCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
+            'invoiceItemCollectionFactory' =>
+                $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class),
             'invoiceCommentFactory' => $this->createMock(\Magento\Sales\Model\Order\Invoice\CommentFactory::class),
-            'commentCollectionFactory' => $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
+            'commentCollectionFactory' =>
+                $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class),
         ];
         $this->model = $this->helperManager->getObject(\Magento\Sales\Model\Order\Invoice::class, $arguments);
         $this->model->setOrder($this->order);
@@ -137,6 +137,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($canVoid, $this->model->canVoid());
     }
 
+    /**
+     * @return array
+     */
     public function canVoidDataProvider()
     {
         return [[true], [false]];
@@ -202,7 +205,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $store = $this->helperManager->getObject(\Magento\Store\Model\Store::class, []);
         $this->order->expects($this->once())->method('getStore')->willReturn($store);
         $this->assertEquals($store, $this->model->getStore());
-
     }
 
     public function testGetShippingAddress()
@@ -210,7 +212,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $address = $this->helperManager->getObject(\Magento\Sales\Model\Order\Address::class, []);
         $this->order->expects($this->once())->method('getShippingAddress')->willReturn($address);
         $this->assertEquals($address, $this->model->getShippingAddress());
-
     }
 
     /**
@@ -381,6 +382,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($expectedTotal, $this->order->getTotalPaid());
     }
 
+    /**
+     * @return array
+     */
     public function payDataProvider()
     {
         return [

@@ -54,7 +54,6 @@ class AuthTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthenticationException
-     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testLoginFailed()
     {
@@ -64,7 +63,10 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             ->with(\Magento\Backend\Model\Auth\Credential\StorageInterface::class)
             ->will($this->returnValue($this->_credentialStorage));
         $exceptionMock = new \Magento\Framework\Exception\LocalizedException(
-            __('You did not sign in correctly or your account is temporarily disabled.')
+            __(
+                'The account sign-in was incorrect or your account is disabled temporarily. '
+                . 'Please wait and try again later.'
+            )
         );
         $this->_credentialStorage
             ->expects($this->once())
@@ -74,5 +76,10 @@ class AuthTest extends \PHPUnit\Framework\TestCase
         $this->_credentialStorage->expects($this->never())->method('getId');
         $this->_eventManagerMock->expects($this->once())->method('dispatch')->with('backend_auth_user_login_failed');
         $this->_model->login('username', 'password');
+
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. '
+            . 'Please wait and try again later.'
+        );
     }
 }

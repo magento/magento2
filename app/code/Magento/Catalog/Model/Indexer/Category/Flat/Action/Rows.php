@@ -164,16 +164,22 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      */
     private function buildIndexData(Store $store, $categoriesIdsChunk, $attributesData)
     {
+        $linkField = $this->categoryMetadata->getLinkField();
+
         $data = [];
         foreach ($categoriesIdsChunk as $categoryId) {
             try {
+                $category = $this->categoryRepository->get($categoryId);
+                $categoryData = $category->getData();
+                $linkId = $categoryData[$linkField];
+
                 $categoryAttributesData = [];
-                if (isset($attributesData[$categoryId]) && is_array($attributesData[$categoryId])) {
-                    $categoryAttributesData = $attributesData[$categoryId];
+                if (isset($attributesData[$linkId]) && is_array($attributesData[$linkId])) {
+                    $categoryAttributesData = $attributesData[$linkId];
                 }
                 $categoryIndexData = $this->buildCategoryIndexData(
                     $store,
-                    $categoryId,
+                    $categoryData,
                     $categoryAttributesData
                 );
                 $data[] = $categoryIndexData;
@@ -186,18 +192,16 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
     /**
      * @param Store $store
-     * @param int $categoryId
+     * @param array $categoryData
      * @param array $categoryAttributesData
      * @return array
      * @throws NoSuchEntityException
      */
-    private function buildCategoryIndexData(Store $store, $categoryId, array $categoryAttributesData)
+    private function buildCategoryIndexData(Store $store, array $categoryData, array $categoryAttributesData)
     {
-        $category = $this->categoryRepository->get($categoryId);
-        $categoryAttributesData = [];
         $data = $this->prepareValuesToInsert(
             array_merge(
-                $category->getData(),
+                $categoryData,
                 $categoryAttributesData,
                 ['store_id' => $store->getId()]
             )

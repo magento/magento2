@@ -5,33 +5,128 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration;
+use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
+use Magento\Framework\Indexer\Dimension;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+
 class Website
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @var TableMaintainer
      */
-    protected $_processor;
+    private $tableMaintainer;
 
     /**
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
+     * DimensionFactory
+     *
+     * @var DimensionFactory
      */
-    public function __construct(\Magento\Catalog\Model\Indexer\Product\Price\Processor $processor)
-    {
-        $this->_processor = $processor;
+    private $dimensionFactory;
+
+    /**
+     * @var DimensionModeConfiguration
+     */
+    private $dimensionModeConfiguration;
+
+    /**
+     * @var CustomerGroupDimensionProvider
+     */
+    private $customerGroupDimensionProvider;
+
+    /**
+     * @param TableMaintainer $tableMaintainer
+     * @param DimensionFactory $dimensionFactory
+     * @param DimensionModeConfiguration $dimensionModeConfiguration
+     * @param CustomerGroupDimensionProvider $customerGroupDimensionProvider
+     */
+    public function __construct(
+        TableMaintainer $tableMaintainer,
+        DimensionFactory $dimensionFactory,
+        DimensionModeConfiguration $dimensionModeConfiguration,
+        CustomerGroupDimensionProvider $customerGroupDimensionProvider
+    ) {
+        $this->tableMaintainer = $tableMaintainer;
+        $this->dimensionFactory = $dimensionFactory;
+        $this->dimensionModeConfiguration = $dimensionModeConfiguration;
+        $this->customerGroupDimensionProvider = $customerGroupDimensionProvider;
     }
 
     /**
-     * Invalidate price indexer
+     * Update price index after website deleted
      *
-     * @param \Magento\Store\Model\ResourceModel\Website $subject
-     * @param \Magento\Store\Model\ResourceModel\Website $result
-     * @return \Magento\Store\Model\ResourceModel\Website
+     * @param AbstractDb $subject
+     * @param AbstractDb $objectResource
+     * @param AbstractModel $website
      *
+     * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(\Magento\Store\Model\ResourceModel\Website $subject, $result)
+    public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $website)
     {
-        $this->_processor->markIndexerAsInvalid();
-        return $result;
+        foreach ($this->getAffectedDimensions($website->getId()) as $dimensions) {
+            $this->tableMaintainer->dropTablesForDimensions($dimensions);
+        }
+
+        return $objectResource;
+    }
+
+    /**
+     * Update price index after website created
+     *
+     * @param AbstractDb $subject
+     * @param AbstractDb $objectResource
+     * @param AbstractModel $website
+     *
+     * @return AbstractDb
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $website)
+    {
+        if ($website->isObjectNew()) {
+            foreach ($this->getAffectedDimensions($website->getId()) as $dimensions) {
+                $this->tableMaintainer->createTablesForDimensions($dimensions);
+            }
+        }
+
+        return $objectResource;
+    }
+
+    /**
+     * Get affected dimensions
+     *
+     * @param string $websiteId
+     *
+     * @return Dimension[][]
+     */
+    private function getAffectedDimensions(string $websiteId): array
+    {
+        $currentDimensions = $this->dimensionModeConfiguration->getDimensionConfiguration();
+        // do not return dimensions if Website dimension is not present in configuration
+        if (!in_array(WebsiteDimensionProvider::DIMENSION_NAME, $currentDimensions, true)) {
+            return [];
+        }
+        $websiteDimension = $this->dimensionFactory->create(
+            WebsiteDimensionProvider::DIMENSION_NAME,
+            $websiteId
+        );
+
+        $dimensions = [];
+        if (in_array(CustomerGroupDimensionProvider::DIMENSION_NAME, $currentDimensions, true)) {
+            foreach ($this->customerGroupDimensionProvider as $customerGroupDimension) {
+                $dimensions[] = [
+                    $customerGroupDimension,
+                    $websiteDimension
+                ];
+            }
+        } else {
+            $dimensions[] = [$websiteDimension];
+        }
+
+        return $dimensions;
     }
 }

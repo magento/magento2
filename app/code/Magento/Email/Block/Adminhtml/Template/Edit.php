@@ -7,6 +7,7 @@ namespace Magento\Email\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Widget;
 use Magento\Backend\Block\Widget\ContainerInterface;
+use Magento\Email\Model\BackendTemplate;
 
 /**
  * Adminhtml system template edit block
@@ -19,6 +20,7 @@ class Edit extends Widget implements ContainerInterface
 {
     /**
      * @var \Magento\Framework\Registry
+     * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     protected $_registryManager;
 
@@ -42,7 +44,7 @@ class Edit extends Widget implements ContainerInterface
      *
      * @var string
      */
-    protected $_template = 'template/edit.phtml';
+    protected $_template = 'Magento_Email::template/edit.phtml';
 
     /**
      * @var \Magento\Framework\Json\EncoderInterface
@@ -217,7 +219,13 @@ class Edit extends Widget implements ContainerInterface
             null
         );
         $this->toolbar->pushButtons($this, $this->buttonList);
-        $this->addChild('form', \Magento\Email\Block\Adminhtml\Template\Edit\Form::class);
+        $this->addChild(
+            'form',
+            \Magento\Email\Block\Adminhtml\Template\Edit\Form::class,
+            [
+                'email_template' => $this->getEmailTemplate()
+            ]
+        );
         return parent::_prepareLayout();
     }
 
@@ -367,7 +375,7 @@ class Edit extends Widget implements ContainerInterface
      */
     public function getEmailTemplate()
     {
-        return $this->_registryManager->registry('current_email_template');
+        return $this->getData('email_template');
     }
 
     /**
@@ -388,7 +396,7 @@ class Edit extends Widget implements ContainerInterface
      */
     public function getCurrentlyUsedForPaths($asJSON = true)
     {
-        /** @var $template \Magento\Email\Model\BackendTemplate */
+        /** @var $template BackendTemplate */
         $template = $this->getEmailTemplate();
         $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);

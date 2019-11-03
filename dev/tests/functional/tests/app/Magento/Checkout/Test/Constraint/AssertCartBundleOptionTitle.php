@@ -26,7 +26,7 @@ class AssertCartBundleOptionTitle extends AbstractConstraint
     public function processAssert(CheckoutCart $checkoutCart, $optionTitle)
     {
         $checkoutCart->open();
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $checkoutCart->getCartItemBlock()->getOptionsName(),
             $optionTitle
         );

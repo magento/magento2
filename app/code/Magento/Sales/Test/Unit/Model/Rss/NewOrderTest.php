@@ -32,7 +32,7 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $urlBuiler;
+    protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -84,7 +84,7 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
-        $this->urlBuiler = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->timezoneInterface = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $this->dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
         $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -98,7 +98,7 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
             \Magento\Sales\Model\Rss\NewOrder::class,
             [
                 'orderFactory' => $this->orderFactory,
-                'urlBuilder' => $this->urlBuiler,
+                'urlBuilder' => $this->urlBuilder,
                 'rssUrlBuilder' => $this->rssUrlBuilderInterface,
                 'localeDate' => $this->timezoneInterface,
                 'dateTime' => $this->dateTime,
@@ -150,7 +150,7 @@ class NewOrderTest extends \PHPUnit\Framework\TestCase
         $block->expects($this->once())->method('toHtml')->will($this->returnValue('Order Description'));
 
         $this->layout->expects($this->once())->method('getBlockSingleton')->will($this->returnValue($block));
-        $this->urlBuiler->expects($this->once())->method('getUrl')
+        $this->urlBuilder->expects($this->once())->method('getUrl')
             ->will($this->returnValue('http://magento.com/sales/order/view/order_id/1'));
         $this->assertEquals($this->feedData, $this->model->getRssData());
     }

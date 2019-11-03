@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\UrlRewrite\Test\Unit\Block\Catalog\Edit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -37,13 +35,17 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->formFactory = $this->createPartialMock(\Magento\Framework\Data\FormFactory::class, ['create']);
-        $this->urlRewriteFactory = $this->createPartialMock(\Magento\UrlRewrite\Model\UrlRewriteFactory::class, ['create']);
+        $this->urlRewriteFactory = $this->createPartialMock(
+            \Magento\UrlRewrite\Model\UrlRewriteFactory::class,
+            ['create']
+        );
         $this->urlRewriteFactory->expects($this->once())->method('create')
             ->willReturn($this->createMock(\Magento\UrlRewrite\Model\UrlRewrite::class));
         $this->categoryFactory = $this->createPartialMock(\Magento\Catalog\Model\CategoryFactory::class, ['create']);
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
 
-        $this->form = (new ObjectManager($this))->getObject(\Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
+        $this->form = (new ObjectManager($this))->getObject(
+            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
             [
                 'layout' => $this->layout,
                 'productFactory' => $this->productFactory,
@@ -58,8 +60,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testAddErrorMessageWhenProductWithoutStores()
     {
         $form = $this->createMock(\Magento\Framework\Data\Form::class);
-        $form->expects($this->any())->method('getElement')->will($this->returnValue(
-            $this->getMockForAbstractClass(\Magento\Framework\Data\Form\Element\AbstractElement::class, [], '', false))
+        $form->expects($this->any())->method('getElement')->will(
+            $this->returnValue(
+                $this->getMockForAbstractClass(
+                    \Magento\Framework\Data\Form\Element\AbstractElement::class,
+                    [],
+                    '',
+                    false
+                )
+            )
         );
         $this->formFactory->expects($this->once())
             ->method('create')
@@ -68,7 +77,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form->expects($this->once())
             ->method('addFieldset')
             ->will($this->returnValue($fieldset));
-        $storeElement = $this->createPartialMock(\Magento\Framework\Data\Form\Element\AbstractElement::class, ['setAfterElementHtml', 'setValues']);
+        $storeElement = $this->createPartialMock(
+            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            ['setAfterElementHtml', 'setValues']
+        );
         $fieldset->expects($this->at(2))
             ->method('addField')
             ->with(

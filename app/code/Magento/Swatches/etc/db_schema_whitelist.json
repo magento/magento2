@@ -1,0 +1,25 @@
+{
+    "catalog_eav_attribute": {
+        "column": {
+            "additional_data": true
+        }
+    },
+    "eav_attribute_option_swatch": {
+        "column": {
+            "swatch_id": true,
+            "option_id": true,
+            "store_id": true,
+            "type": true,
+            "value": true
+        },
+        "index": {
+            "EAV_ATTRIBUTE_OPTION_SWATCH_SWATCH_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "EAV_ATTRIBUTE_OPTION_SWATCH_STORE_ID_STORE_STORE_ID": true,
+            "EAV_ATTR_OPT_SWATCH_OPT_ID_EAV_ATTR_OPT_OPT_ID": true,
+            "EAV_ATTRIBUTE_OPTION_SWATCH_STORE_ID_OPTION_ID": true
+        }
+    }
+}

@@ -30,7 +30,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
     /**
      * Set information needed for render "Add To Cart" button on front
      *
-     * @param \Magento\Catalog\Api\Data\ProductRender\ButtonInterface $addToCartData
+     * @param ButtonInterface $cartAddToCartButton
      * @return void
      * @since 101.1.0
      */
@@ -47,7 +47,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
     /**
      * Set information needed for render "Add To Compare" button on front
      *
-     * @param ButtonInterface $compareUrlData
+     * @param ButtonInterface $compareButton
      * @return string
      * @since 101.1.0
      */
@@ -55,6 +55,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
 
     /**
      * Provide information needed for render prices and adjustments for different product types on front
+     *
      * Prices are represented in raw format and in current currency
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface
@@ -73,6 +74,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
 
     /**
      * Provide enough information, that needed to render image on front
+     *
      * Images can be separated by image codes
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\ImageInterface[]
@@ -167,6 +169,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
 
     /**
      * Set information about product saleability (Stock, other conditions)
+     *
      * Is used to provide information to frontend JS renders
      * You can add plugin, in order to hide product on product page or product list on front
      *
@@ -178,6 +181,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
 
     /**
      * Provide information about current store id or requested store id
+     *
      * Product should be assigned to provided store id
      * This setting affect store scope attributes
      *
@@ -197,6 +201,7 @@ interface ProductRenderInterface extends ExtensibleDataInterface
 
     /**
      * Provide current or desired currency code to product
+     *
      * This setting affect formatted prices*
      *
      * @return string

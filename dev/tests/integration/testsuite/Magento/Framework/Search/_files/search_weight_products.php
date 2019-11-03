@@ -7,17 +7,7 @@
  */
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Catalog\Model\Product\Type;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Setup\CategorySetup;
-use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-
-Bootstrap::getInstance()->reinitialize();
 
 $objectManager = Bootstrap::getObjectManager();
 

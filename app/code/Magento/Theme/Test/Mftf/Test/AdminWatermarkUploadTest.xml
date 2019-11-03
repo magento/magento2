@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminWatermarkUploadTest">
+        <annotations>
+            <features value="Watermark"/>
+            <stories value="Watermark"/>
+            <title value="MAGETWO-95934: Can't upload Watermark Image"/>
+            <description value="Watermark images should be able to be uploaded in the admin"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-5796"/>
+            <skip>
+                <issueId value="MC-18496"/>
+            </skip>
+            <group value="Watermark"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
+        <waitForPageLoad stepKey="waitForPageload1"/>
+        <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
+        <waitForPageLoad stepKey="waitForPageload2"/>
+        <scrollTo selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="scrollToWatermarkSection"/>
+        <click selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="openWatermarkSection"/>
+
+        <waitForElement selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Base')}}" stepKey="waitForInputVisible1"/>
+        <attachFile selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Base')}}" userInput="adobe-base.jpg" stepKey="attachFile1"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Base')}}" stepKey="waitForPreviewImage"/>
+
+        <waitForElement selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Thumbnail')}}" stepKey="waitForInputVisible2"/>
+        <attachFile selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Thumbnail')}}" userInput="adobe-thumb.jpg" stepKey="attachFile2"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Thumbnail')}}" stepKey="waitForPreviewImage2"/>
+
+        <waitForElement selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Small')}}" stepKey="waitForInputVisible3"/>
+        <attachFile selector="{{AdminDesignConfigSection.imageUploadInputByFieldsetName('Small')}}" userInput="adobe-small.jpg" stepKey="attachFile3"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageUploadPreviewByFieldsetName('Small')}}" stepKey="waitForPreviewImage3"/>
+    </test>
+</tests>

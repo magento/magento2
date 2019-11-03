@@ -37,8 +37,10 @@ class SourceArgumentsReader
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function getConstructorArgumentTypes(\ReflectionClass $class, $inherited = false)
-    {
+    public function getConstructorArgumentTypes(
+        \ReflectionClass $class,
+        $inherited = false
+    ) {
         $output = [null];
         if (!$class->getFileName() || false == $class->hasMethod(
             '__construct'
@@ -46,49 +48,37 @@ class SourceArgumentsReader
         ) {
             return $output;
         }
-        $reflectionConstructor = $class->getConstructor();
-        $fileContent = file($class->getFileName());
-        $availableNamespaces = $this->namespaceResolver->getImportedNamespaces($fileContent);
-        $availableNamespaces[0] = $class->getNamespaceName();
-        $constructorStartLine = $reflectionConstructor->getStartLine() - 1;
-        $constructorEndLine = $reflectionConstructor->getEndLine();
-        $fileContent = array_slice($fileContent, $constructorStartLine, $constructorEndLine - $constructorStartLine);
-        $source = '<?php ' . trim(implode('', $fileContent));
 
-        // Remove parameter default value.
-        $source = preg_replace("/ = (.*)/", ',)', $source);
-
-        $methodTokenized = token_get_all($source);
-        $argumentsStart = array_search('(', $methodTokenized) + 1;
-        $argumentsEnd = array_search(')', $methodTokenized);
-        $arguments = array_slice($methodTokenized, $argumentsStart, $argumentsEnd - $argumentsStart);
-        foreach ($arguments as &$argument) {
-            is_array($argument) ?: $argument = [1 => $argument];
-        }
-        unset($argument);
-        $arguments = array_filter($arguments, function ($token) {
-            $blacklist = [T_VARIABLE, T_WHITESPACE];
-            if (isset($token[0]) && in_array($token[0], $blacklist)) {
-                return false;
+        //Reading parameters' types.
+        $params = $class->getConstructor()->getParameters();
+        /** @var string[] $types */
+        $types = [];
+        foreach ($params as $param) {
+            //For the sake of backward compatibility.
+            $typeName = '';
+            if ($param->isArray()) {
+                //For the sake of backward compatibility.
+                $typeName = 'array';
+            } else {
+                try {
+                    $paramClass = $param->getClass();
+                    if ($paramClass) {
+                        $typeName = '\\' .$paramClass->getName();
+                    }
+                } catch (\ReflectionException $exception) {
+                    //If there's a problem loading a class then ignore it and
+                    //just return it's name.
+                    $typeName = '\\' .$param->getType()->getName();
+                }
             }
-            return true;
-        });
-        $arguments = array_map(function ($element) {
-            return $element[1];
-        }, $arguments);
-        $arguments = array_values($arguments);
-        $arguments = implode('', $arguments);
-        if (empty($arguments)) {
-            return $output;
+            $types[] = $typeName;
         }
-        $arguments = explode(',', $arguments);
-        foreach ($arguments as $key => &$argument) {
-            $argument = $this->removeToken($argument, '=');
-            $argument = $this->removeToken($argument, '&');
-            $argument = $this->namespaceResolver->resolveNamespace($argument, $availableNamespaces);
+        if (!$types) {
+            //For the sake of backward compatibility.
+            $types = [null];
         }
-        unset($argument);
-        return $arguments;
+
+        return $types;
     }
 
     /**
@@ -98,7 +88,7 @@ class SourceArgumentsReader
      * @param array $availableNamespaces
      * @return string
      * @deprecated 100.2.0
-     * @see \Magento\Framework\Code\Reader\NamespaceResolver::resolveNamespace
+     * @see getConstructorArgumentTypes
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
     {
@@ -111,6 +101,8 @@ class SourceArgumentsReader
      * @param string $argument
      * @param string $token
      * @return string
+     *
+     * @deprecated Not used anymore.
      */
     protected function removeToken($argument, $token)
     {
@@ -127,7 +119,7 @@ class SourceArgumentsReader
      * @param array $file
      * @return array
      * @deprecated 100.2.0
-     * @see \Magento\Framework\Code\Reader\NamespaceResolver::getImportedNamespaces
+     * @see getConstructorArgumentTypes
      */
     protected function getImportedNamespaces(array $file)
     {

@@ -40,6 +40,9 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('some value', $this->_model->create($salesModel));
     }
 
+    /**
+     * @return array
+     */
     public function createDataProvider()
     {
         return [

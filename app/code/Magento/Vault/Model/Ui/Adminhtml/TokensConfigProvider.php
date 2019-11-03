@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Vault\Model\Ui\Adminhtml;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -227,7 +228,7 @@ class TokensConfigProvider
     {
         $paymentToken = $this->getPaymentTokenManagement()->getByPaymentId($this->getOrderPaymentEntityId());
         if ($paymentToken === null) {
-            throw new NoSuchEntityException(__('No available payment tokens for specified order payment.'));
+            throw new NoSuchEntityException(__('No payment tokens are available for the specified order payment.'));
         }
         return $paymentToken->getEntityId();
     }

@@ -30,6 +30,11 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $urnResolver;
 
+    /**
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validationState;
+
     protected function setUp()
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -39,10 +44,17 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $this->urnResolver = $this->getMockBuilder(
             \Magento\Framework\Config\Dom\UrnResolver::class
         )->disableOriginalConstructor()->getMock();
+        $this->validationState = $this->getMockBuilder(
+            \Magento\Framework\Config\ValidationStateInterface::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->model = $this->_objectHelper->getObject(
             \Magento\Framework\View\Model\Layout\Update\Validator::class,
-            ['domConfigFactory' => $this->domConfigFactory, 'urnResolver' => $this->urnResolver]
+            [
+                'domConfigFactory' => $this->domConfigFactory,
+                'urnResolver' => $this->urnResolver,
+                'validationState' => $this->validationState,
+            ]
         );
     }
 
@@ -56,6 +68,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
                 trim($layoutUpdate) . '</layout>',
             'schemaFile' => $this->urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/page_layout.xsd'),
+            'validationState' => $this->validationState,
         ];
 
         $this->domConfigFactory->expects(

@@ -1,0 +1,359 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="salesrule" resource="default" engine="innodb" comment="Salesrule">
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+        <column xsi:type="date" name="from_date" comment="From"/>
+        <column xsi:type="date" name="to_date" comment="To"/>
+        <column xsi:type="int" name="uses_per_customer" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Uses Per Customer"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Is Active"/>
+        <column xsi:type="mediumtext" name="conditions_serialized" nullable="true" comment="Conditions Serialized"/>
+        <column xsi:type="mediumtext" name="actions_serialized" nullable="true" comment="Actions Serialized"/>
+        <column xsi:type="smallint" name="stop_rules_processing" padding="6" unsigned="false" nullable="false"
+                identity="false" default="1" comment="Stop Rules Processing"/>
+        <column xsi:type="smallint" name="is_advanced" padding="5" unsigned="true" nullable="false" identity="false"
+                default="1" comment="Is Advanced"/>
+        <column xsi:type="text" name="product_ids" nullable="true" comment="Product Ids"/>
+        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Sort Order"/>
+        <column xsi:type="varchar" name="simple_action" nullable="true" length="32" comment="Simple Action"/>
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Discount Amount"/>
+        <column xsi:type="decimal" name="discount_qty" scale="4" precision="12" unsigned="false" nullable="true"
+                comment="Discount Qty"/>
+        <column xsi:type="int" name="discount_step" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Discount Step"/>
+        <column xsi:type="smallint" name="apply_to_shipping" padding="5" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Apply To Shipping"/>
+        <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Times Used"/>
+        <column xsi:type="smallint" name="is_rss" padding="6" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Is Rss"/>
+        <column xsi:type="smallint" name="coupon_type" padding="5" unsigned="true" nullable="false" identity="false"
+                default="1" comment="Coupon Type"/>
+        <column xsi:type="smallint" name="use_auto_generation" padding="6" unsigned="false" nullable="false"
+                identity="false" default="0" comment="Use Auto Generation"/>
+        <column xsi:type="int" name="uses_per_coupon" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0" comment="User Per Coupon"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rule_id"/>
+        </constraint>
+        <index referenceId="SALESRULE_IS_ACTIVE_SORT_ORDER_TO_DATE_FROM_DATE" indexType="btree">
+            <column name="is_active"/>
+            <column name="sort_order"/>
+            <column name="to_date"/>
+            <column name="from_date"/>
+        </index>
+    </table>
+    <table name="salesrule_coupon" resource="default" engine="innodb" comment="Salesrule Coupon">
+        <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Coupon ID"/>
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
+        <column xsi:type="varchar" name="code" nullable="true" length="255" comment="Code"/>
+        <column xsi:type="int" name="usage_limit" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Usage Limit"/>
+        <column xsi:type="int" name="usage_per_customer" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Usage Per Customer"/>
+        <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Times Used"/>
+        <column xsi:type="datetime" name="expiration_date" on_update="false" nullable="true"
+                comment="Expiration Date"/>
+        <column xsi:type="smallint" name="is_primary" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Is Primary"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true"
+                comment="Coupon Code Creation Date"/>
+        <column xsi:type="smallint" name="type" padding="6" unsigned="false" nullable="true" identity="false"
+                default="0" comment="Coupon Code Type"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="coupon_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_COUPON_RULE_ID_SALESRULE_RULE_ID" table="salesrule_coupon"
+                    column="rule_id" referenceTable="salesrule" referenceColumn="rule_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SALESRULE_COUPON_CODE">
+            <column name="code"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="SALESRULE_COUPON_RULE_ID_IS_PRIMARY">
+            <column name="rule_id"/>
+            <column name="is_primary"/>
+        </constraint>
+        <index referenceId="SALESRULE_COUPON_RULE_ID" indexType="btree">
+            <column name="rule_id"/>
+        </index>
+    </table>
+    <table name="salesrule_coupon_usage" resource="default" engine="innodb" comment="Salesrule Coupon Usage">
+        <column xsi:type="int" name="coupon_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Coupon ID"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Customer ID"/>
+        <column xsi:type="int" name="times_used" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Times Used"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="coupon_id"/>
+            <column name="customer_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_COUPON_USAGE_COUPON_ID_SALESRULE_COUPON_COUPON_ID"
+                    table="salesrule_coupon_usage" column="coupon_id" referenceTable="salesrule_coupon"
+                    referenceColumn="coupon_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_COUPON_USAGE_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="salesrule_coupon_usage" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="SALESRULE_COUPON_USAGE_CUSTOMER_ID" indexType="btree">
+            <column name="customer_id"/>
+        </index>
+    </table>
+    <table name="salesrule_customer" resource="default" engine="innodb" comment="Salesrule Customer">
+        <column xsi:type="int" name="rule_customer_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Rule Customer ID"/>
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+                comment="Rule ID"/>
+        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Customer ID"/>
+        <column xsi:type="smallint" name="times_used" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Times Used"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rule_customer_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_CUSTOMER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="salesrule_customer" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_CUSTOMER_RULE_ID_SALESRULE_RULE_ID" table="salesrule_customer"
+                    column="rule_id" referenceTable="salesrule" referenceColumn="rule_id" onDelete="CASCADE"/>
+        <index referenceId="SALESRULE_CUSTOMER_RULE_ID_CUSTOMER_ID" indexType="btree">
+            <column name="rule_id"/>
+            <column name="customer_id"/>
+        </index>
+        <index referenceId="SALESRULE_CUSTOMER_CUSTOMER_ID_RULE_ID" indexType="btree">
+            <column name="customer_id"/>
+            <column name="rule_id"/>
+        </index>
+    </table>
+    <table name="salesrule_label" resource="default" engine="innodb" comment="Salesrule Label">
+        <column xsi:type="int" name="label_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Label ID"/>
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="label" nullable="true" length="255" comment="Label"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="label_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_LABEL_RULE_ID_SALESRULE_RULE_ID" table="salesrule_label"
+                    column="rule_id" referenceTable="salesrule" referenceColumn="rule_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_LABEL_STORE_ID_STORE_STORE_ID" table="salesrule_label"
+                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SALESRULE_LABEL_RULE_ID_STORE_ID">
+            <column name="rule_id"/>
+            <column name="store_id"/>
+        </constraint>
+        <index referenceId="SALESRULE_LABEL_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+    <table name="salesrule_product_attribute" resource="default" engine="innodb" comment="Salesrule Product Attribute">
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
+        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Customer Group ID"/>
+        <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Attribute ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rule_id"/>
+            <column name="website_id"/>
+            <column name="customer_group_id"/>
+            <column name="attribute_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_PRD_ATTR_ATTR_ID_EAV_ATTR_ATTR_ID"
+                    table="salesrule_product_attribute" column="attribute_id" referenceTable="eav_attribute"
+                    referenceColumn="attribute_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_PRD_ATTR_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
+                    table="salesrule_product_attribute" column="customer_group_id" referenceTable="customer_group"
+                    referenceColumn="customer_group_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_PRODUCT_ATTRIBUTE_RULE_ID_SALESRULE_RULE_ID"
+                    table="salesrule_product_attribute" column="rule_id" referenceTable="salesrule"
+                    referenceColumn="rule_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_PRODUCT_ATTRIBUTE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+                    table="salesrule_product_attribute" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+        <index referenceId="SALESRULE_PRODUCT_ATTRIBUTE_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+        <index referenceId="SALESRULE_PRODUCT_ATTRIBUTE_CUSTOMER_GROUP_ID" indexType="btree">
+            <column name="customer_group_id"/>
+        </index>
+        <index referenceId="SALESRULE_PRODUCT_ATTRIBUTE_ATTRIBUTE_ID" indexType="btree">
+            <column name="attribute_id"/>
+        </index>
+    </table>
+    <table name="salesrule_coupon_aggregated" resource="sales" engine="innodb" comment="Coupon Aggregated">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="date" name="period" nullable="false" comment="Period"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
+        <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
+        <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Coupon Uses"/>
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Subtotal Amount"/>
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Discount Amount"/>
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Total Amount"/>
+        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="20" unsigned="false"
+                nullable="false" default="0" comment="Subtotal Amount Actual"/>
+        <column xsi:type="decimal" name="discount_amount_actual" scale="4" precision="12" unsigned="false"
+                nullable="false" default="0" comment="Discount Amount Actual"/>
+        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="20" unsigned="false"
+                nullable="false" default="0" comment="Total Amount Actual"/>
+        <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_COUPON_AGGREGATED_STORE_ID_STORE_STORE_ID"
+                    table="salesrule_coupon_aggregated" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="SALESRULE_COUPON_AGGRED_PERIOD_STORE_ID_ORDER_STS_COUPON_CODE">
+            <column name="period"/>
+            <column name="store_id"/>
+            <column name="order_status"/>
+            <column name="coupon_code"/>
+        </constraint>
+        <index referenceId="SALESRULE_COUPON_AGGREGATED_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="SALESRULE_COUPON_AGGREGATED_RULE_NAME" indexType="btree">
+            <column name="rule_name"/>
+        </index>
+    </table>
+    <table name="salesrule_coupon_aggregated_updated" resource="sales" engine="innodb"
+           comment="Salesrule Coupon Aggregated Updated">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="date" name="period" nullable="false" comment="Period"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
+        <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
+        <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Coupon Uses"/>
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Subtotal Amount"/>
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Discount Amount"/>
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Total Amount"/>
+        <column xsi:type="decimal" name="subtotal_amount_actual" scale="4" precision="20" unsigned="false"
+                nullable="false" default="0" comment="Subtotal Amount Actual"/>
+        <column xsi:type="decimal" name="discount_amount_actual" scale="4" precision="12" unsigned="false"
+                nullable="false" default="0" comment="Discount Amount Actual"/>
+        <column xsi:type="decimal" name="total_amount_actual" scale="4" precision="20" unsigned="false"
+                nullable="false" default="0" comment="Total Amount Actual"/>
+        <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_COUPON_AGGREGATED_UPDATED_STORE_ID_STORE_STORE_ID"
+                    table="salesrule_coupon_aggregated_updated" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="UNQ_7196FA120A4F0F84E1B66605E87E213E">
+            <column name="period"/>
+            <column name="store_id"/>
+            <column name="order_status"/>
+            <column name="coupon_code"/>
+        </constraint>
+        <index referenceId="SALESRULE_COUPON_AGGREGATED_UPDATED_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="SALESRULE_COUPON_AGGREGATED_UPDATED_RULE_NAME" indexType="btree">
+            <column name="rule_name"/>
+        </index>
+    </table>
+    <table name="salesrule_coupon_aggregated_order" resource="default" engine="innodb"
+           comment="Coupon Aggregated Order">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="date" name="period" nullable="false" comment="Period"/>
+        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="varchar" name="order_status" nullable="true" length="50" comment="Order Status"/>
+        <column xsi:type="varchar" name="coupon_code" nullable="true" length="50" comment="Coupon Code"/>
+        <column xsi:type="int" name="coupon_uses" padding="11" unsigned="false" nullable="false" identity="false"
+                default="0" comment="Coupon Uses"/>
+        <column xsi:type="decimal" name="subtotal_amount" scale="4" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Subtotal Amount"/>
+        <column xsi:type="decimal" name="discount_amount" scale="4" precision="12" unsigned="false" nullable="false"
+                default="0" comment="Discount Amount"/>
+        <column xsi:type="decimal" name="total_amount" scale="4" precision="20" unsigned="false" nullable="false"
+                default="0" comment="Total Amount"/>
+        <column xsi:type="varchar" name="rule_name" nullable="true" length="255" comment="Rule Name"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_COUPON_AGGREGATED_ORDER_STORE_ID_STORE_STORE_ID"
+                    table="salesrule_coupon_aggregated_order" column="store_id" referenceTable="store"
+                    referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="UNQ_1094D1FBBCBB11704A29DEF3ACC37D2B">
+            <column name="period"/>
+            <column name="store_id"/>
+            <column name="order_status"/>
+            <column name="coupon_code"/>
+        </constraint>
+        <index referenceId="SALESRULE_COUPON_AGGREGATED_ORDER_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <index referenceId="SALESRULE_COUPON_AGGREGATED_ORDER_RULE_NAME" indexType="btree">
+            <column name="rule_name"/>
+        </index>
+    </table>
+    <table name="salesrule_website" resource="default" engine="innodb" comment="Sales Rules To Websites Relations">
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
+        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+                comment="Website ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rule_id"/>
+            <column name="website_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_WEBSITE_RULE_ID_SALESRULE_RULE_ID" table="salesrule_website"
+                    column="rule_id" referenceTable="salesrule" referenceColumn="rule_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
+                    table="salesrule_website" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+        <index referenceId="SALESRULE_WEBSITE_WEBSITE_ID" indexType="btree">
+            <column name="website_id"/>
+        </index>
+    </table>
+    <table name="salesrule_customer_group" resource="default" engine="innodb"
+           comment="Sales Rules To Customer Groups Relations">
+        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Rule ID"/>
+        <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Customer Group ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rule_id"/>
+            <column name="customer_group_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_CUSTOMER_GROUP_RULE_ID_SALESRULE_RULE_ID"
+                    table="salesrule_customer_group" column="rule_id" referenceTable="salesrule"
+                    referenceColumn="rule_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="SALESRULE_CSTR_GROUP_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID"
+                    table="salesrule_customer_group" column="customer_group_id" referenceTable="customer_group"
+                    referenceColumn="customer_group_id" onDelete="CASCADE"/>
+        <index referenceId="SALESRULE_CUSTOMER_GROUP_CUSTOMER_GROUP_ID" indexType="btree">
+            <column name="customer_group_id"/>
+        </index>
+    </table>
+</schema>

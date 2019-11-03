@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="release_notification_viewer_log" resource="default" engine="innodb"
+           comment="Release Notification Viewer Log Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Log ID"/>
+        <column xsi:type="int" name="viewer_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="Viewer admin user ID"/>
+        <column xsi:type="varchar" name="last_view_version" nullable="false" length="16"
+                comment="Viewer last view on product version"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="RELEASE_NOTIFICATION_VIEWER_LOG_VIEWER_ID_ADMIN_USER_USER_ID"
+                    table="release_notification_viewer_log" column="viewer_id" referenceTable="admin_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="RELEASE_NOTIFICATION_VIEWER_LOG_VIEWER_ID">
+            <column name="viewer_id"/>
+        </constraint>
+    </table>
+</schema>

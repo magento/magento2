@@ -6,7 +6,6 @@
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
 use Cm\RedisSession\Handler\LoggerInterface;
-use Magento\Framework\Session\SaveHandler\Redis\Logger;
 
 class LoggerTest extends \PHPUnit\Framework\TestCase
 {
@@ -70,6 +69,9 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $this->logger->log($message, $logLevel);
     }
 
+    /**
+     * @return array
+     */
     public function logDataProvider()
     {
         return [

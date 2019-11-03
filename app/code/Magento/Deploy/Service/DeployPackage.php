@@ -28,7 +28,7 @@ class DeployPackage
     private $appState;
 
     /**
-     * Locale resolver inetrface
+     * Locale resolver interface
      *
      * Check if given locale code is a valid one
      *
@@ -95,11 +95,10 @@ class DeployPackage
     public function deploy(Package $package, array $options, $skipLogging = false)
     {
         $result = $this->appState->emulateAreaCode(
-            $package->getArea() == Package::BASE_AREA ? 'global' : $package->getArea(),
+            $package->getArea() === Package::BASE_AREA ? 'global' : $package->getArea(),
             function () use ($package, $options, $skipLogging) {
                 // emulate application locale needed for correct file path resolving
                 $this->localeResolver->setLocale($package->getLocale());
-
                 $this->deployEmulated($package, $options, $skipLogging);
             }
         );
@@ -108,10 +107,12 @@ class DeployPackage
     }
 
     /**
+     * Execute package deploy procedure when area already emulated
+     *
      * @param Package $package
      * @param array $options
      * @param bool $skipLogging
-     * @return int
+     * @return bool
      */
     public function deployEmulated(Package $package, array $options, $skipLogging = false)
     {
@@ -133,11 +134,14 @@ class DeployPackage
             } catch (ContentProcessorException $exception) {
                 $errorMessage = __('Compilation from source: ')
                     . $file->getSourcePath()
-                    . PHP_EOL . $exception->getMessage();
+                    . PHP_EOL . $exception->getMessage() . PHP_EOL;
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
+                $package->deleteFile($file->getFileId());
             } catch (\Exception $exception) {
-                $this->logger->critical($exception->getTraceAsString());
+                $this->logger->critical(
+                    'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
+                );
                 $this->errorsCount++;
             }
         }
@@ -206,7 +210,7 @@ class DeployPackage
             || $file->getTheme() !== $package->getTheme()
             || $file->getLocale() !== $package->getLocale()
         )
-        && $file->getOrigPackage() == $parentPackage
+        && $file->getOrigPackage() === $parentPackage
         && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
     }
 
@@ -219,10 +223,12 @@ class DeployPackage
      */
     private function checkFileSkip($filePath, array $options)
     {
-        if ($filePath != '.') {
+        if ($filePath !== '.') {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $basename = pathinfo($filePath, PATHINFO_BASENAME);
-            if ($ext == 'less' && strpos($basename, '_') === 0) {
+            if ($ext === 'less' && strpos($basename, '_') === 0) {
                 return true;
             }
             $option = isset(InputValidator::$fileExtensionOptionMap[$ext])
@@ -243,23 +249,6 @@ class DeployPackage
      */
     private function register(Package $package, PackageFile $file = null, $skipLogging = false)
     {
-        $logMessage = '.';
-        if ($file) {
-            $logMessage = "Processing file '{$file->getSourcePath()}'";
-            if ($file->getArea()) {
-                $logMessage .= "  for area '{$file->getArea()}'";
-            }
-            if ($file->getTheme()) {
-                $logMessage .= ", theme '{$file->getTheme()}'";
-            }
-            if ($file->getLocale()) {
-                $logMessage .= ", locale '{$file->getLocale()}'";
-            }
-            if ($file->getModule()) {
-                $logMessage .= "module '{$file->getModule()}'";
-            }
-        }
-
         $info = [
             'count' => $this->count,
             'last' => $file ? $file->getSourcePath() : ''
@@ -267,7 +256,24 @@ class DeployPackage
         $this->deployStaticFile->writeTmpFile('info.json', $package->getPath(), json_encode($info));
 
         if (!$skipLogging) {
-            $this->logger->notice($logMessage);
+            $logMessage = '.';
+            if ($file) {
+                $logMessage = "Processing file '{$file->getSourcePath()}'";
+                if ($file->getArea()) {
+                    $logMessage .= "  for area '{$file->getArea()}'";
+                }
+                if ($file->getTheme()) {
+                    $logMessage .= ", theme '{$file->getTheme()}'";
+                }
+                if ($file->getLocale()) {
+                    $logMessage .= ", locale '{$file->getLocale()}'";
+                }
+                if ($file->getModule()) {
+                    $logMessage .= "module '{$file->getModule()}'";
+                }
+            }
+
+            $this->logger->info($logMessage);
         }
     }
 }

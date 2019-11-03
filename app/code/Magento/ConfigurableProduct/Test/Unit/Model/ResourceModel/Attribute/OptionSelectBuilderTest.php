@@ -66,7 +66,7 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns'])
+            ->setMethods(['from', 'joinInner', 'joinLeft', 'where', 'columns', 'order'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connectionMock->expects($this->atLeastOnce())
@@ -113,8 +113,26 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
         $this->select->expects($this->exactly(1))->method('columns')->willReturnSelf();
         $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->exactly(3))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(4))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('order')->willReturnSelf();
         $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
+
+        $this->attributeResourceMock->expects($this->exactly(9))
+            ->method('getTable')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_link', 'catalog_product_super_link value'],
+                        ['eav_attribute', 'eav_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
+                        ['eav_attribute_option', 'eav_attribute_option value'],
+                        ['eav_attribute_option_value', 'eav_attribute_option_value value']
+                    ]
+                )
+            );
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())
             ->method('getAttributeId')
@@ -139,8 +157,25 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->select->expects($this->exactly(1))->method('from')->willReturnSelf();
         $this->select->expects($this->exactly(0))->method('columns')->willReturnSelf();
         $this->select->expects($this->exactly(5))->method('joinInner')->willReturnSelf();
-        $this->select->expects($this->exactly(1))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(2))->method('joinLeft')->willReturnSelf();
+        $this->select->expects($this->exactly(1))->method('order')->willReturnSelf();
         $this->select->expects($this->exactly(2))->method('where')->willReturnSelf();
+
+        $this->attributeResourceMock->expects($this->exactly(7))
+            ->method('getTable')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_link', 'catalog_product_super_link value'],
+                        ['eav_attribute', 'eav_attribute value'],
+                        ['catalog_product_entity', 'catalog_product_entity value'],
+                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
+                        ['eav_attribute_option', 'eav_attribute_option value']
+                    ]
+                )
+            );
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())
             ->method('getAttributeId')

@@ -7,21 +7,60 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/ui-select',
+    'squire',
     'ko'
-], function (_, registry, Constr, ko) {
+], function (_, registry, Squire, ko) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
+        var obj, jq, originaljQueryAjax,
+            injector = new Squire(),
+            mocks = {
+                'Magento_Ui/js/lib/registry/registry': {
+                    /** Method stub. */
+                    get: function () {
+                        return {
+                            get: jasmine.createSpy(),
+                            set: jasmine.createSpy()
+                        };
+                    },
+                    create: jasmine.createSpy(),
+                    set: jasmine.createSpy(),
+                    async: jasmine.createSpy()
+                },
+                '/mage/utils/wrapper': jasmine.createSpy()
+            },
+            dataScope = 'abstract';
 
-        var obj = new Constr({
-            name: 'uiSelect',
-            dataScope: '',
-            provider: 'provider'
+        beforeEach(function (done) {
+            injector.mock(mocks);
+            injector.require([
+                'Magento_Ui/js/form/element/ui-select',
+                'jquery',
+                'knockoutjs/knockout-es5'
+            ], function (Constr, $) {
+                obj = new Constr({
+                    provider: 'provName',
+                    name: '',
+                    index: '',
+                    dataScope: dataScope,
+                    options: {
+                        showsTime: true
+                    }
+                });
+
+                obj.value = ko.observableArray([]);
+                obj.cacheOptions.plain = [];
+                originaljQueryAjax = $.ajax;
+                jq = $;
+                done();
+            });
         });
 
-        obj.value = ko.observableArray([]);
-        obj.cacheOptions.plain = [];
+        afterEach(function () {
+            jq.ajax = originaljQueryAjax;
+            injector.clean();
+        });
 
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
@@ -407,8 +446,52 @@ define([
 
                 expect(type).toEqual('string');
             });
-            it('Check returned value if selected array length more then 1', function () {
+            it('Should return label of selected option when not using multiple options and option exists', function () {
+                obj.multiple = false;
+                obj.cacheOptions.plain.push({
+                    label: 'one',
+                    value: 1
+                });
+                obj.value('1');
+
+                expect(obj.setCaption()).toEqual('one');
+            });
+            it(
+                'Should return select placeholder when isDisplayMissingValuePlaceholder is false ' +
+                ' and option does not exist',
+                function () {
+                    obj.isDisplayMissingValuePlaceholder = false;
+                    obj.value('1');
+
+                    obj.multiple = false;
+                    expect(obj.setCaption()).toEqual('Select...');
+                }
+            );
+            it(
+                'Should return missing value template when isDisplayMissingValuePlaceholder is true ' +
+                ' and option does not exist',
+                function () {
+                    obj.isDisplayMissingValuePlaceholder = true;
+                    obj.value('1');
+
+                    expect(obj.setCaption()).toEqual('Entity with ID: 1 doesn\'t exist');
+                }
+            );
+            it('Check returned value if selected array length more than 1 and options exist', function () {
                 obj.value(['one', 'two']);
+                obj.multiple = true;
+                obj.isDisplayMissingValuePlaceholder = false;
+
+                obj.cacheOptions.plain = [
+                    {
+                        label: 'one',
+                        value: 'one'
+                    },
+                    {
+                        label: 'two',
+                        value: 'one'
+                    }
+                ];
 
                 expect(obj.setCaption()).toEqual('2 ' + obj.selectedPlaceholders.lotPlaceholders);
             });
@@ -490,6 +573,127 @@ define([
                 var type = typeof obj.getPreview();
 
                 expect(type).toEqual('string');
+            });
+        });
+        describe('"filterOptionsList" method', function () {
+            it('Should be defined on instance', function () {
+                expect(obj.hasOwnProperty('filterOptionsList')).toBeDefined();
+            });
+
+            it('Should call loadOptions with value when searchOptions is true', function (done) {
+                spyOn(obj, 'filterInputValue').and.returnValue(' heLlO ');
+
+                spyOn(obj, 'loadOptions');
+
+                obj.searchOptions = true;
+
+                obj.filterOptionsList();
+
+                setTimeout(function () {
+                    expect(obj.loadOptions).toHaveBeenCalledWith('hello');
+                    done();
+                }, obj.debounce);
+            });
+        });
+        describe('"isSelectedValue" method', function () {
+            it('Should return false if option is undefined', function () {
+                expect(obj.isSelectedValue()).toBe(false);
+            });
+
+            it('Should call isSelected with value of option', function () {
+                spyOn(obj, 'isSelected');
+
+                obj.isSelectedValue({
+                    value: 'hello'
+                });
+
+                expect(obj.isSelected).toHaveBeenCalledWith('hello');
+            });
+        });
+        describe('"loadOptions" method', function () {
+            it('Should call processRequest if search key is not cached', function () {
+                var searchKey = 'cake';
+
+                spyOn(obj, 'processRequest');
+                spyOn(obj, 'isSearchKeyCached').and.returnValue(false);
+                spyOn(obj, 'options');
+
+                obj.loadOptions(searchKey);
+
+                // assert options are set to empty array
+                expect(obj.options).toHaveBeenCalledWith([]);
+                expect(obj.processRequest).toHaveBeenCalledWith(searchKey, 1);
+            });
+        });
+        describe('"isSearchKeyCached" method', function () {
+            it('Should return false if searchKey has already been cached and total covers > 1 page', function () {
+                obj.deviation = 30;
+                obj.cachedSearchResults = {
+                    cake: {
+                        options: [/** 50 options **/],
+                        lastPage: 1,
+                        total: 50
+                    }
+                };
+
+                expect(obj.isSearchKeyCached('cake')).toBe(false);
+            });
+
+            it('Should return true if searchKey has already been cached and total only covers 1 page', function () {
+                obj.deviation = 30;
+                obj.cachedSearchResults = {
+                    cake: {
+                        options: [/** 29 options **/],
+                        lastPage: 1,
+                        total: 29
+                    }
+                };
+
+                expect(obj.isSearchKeyCached('cake')).toBe(true);
+            });
+
+            it('Should return false if searchKey is not cached', function () {
+                expect(obj.isSearchKeyCached('cake', 2)).toBe(false);
+            });
+        });
+        describe('Cached search results getting/setting', function () {
+            it('Should set cached search results and be able to be the same value when fetched', function () {
+                var options = [{
+                    value: 'delicious'
+                }];
+
+                obj.setCachedSearchResults('cake', options, 1, 1);
+
+                expect(obj.getCachedSearchResults('cake')).toEqual({
+                    options: options,
+                    lastPage: 1,
+                    total: 1
+                });
+            });
+        });
+        describe('"processRequest" method', function () {
+            it('Should store options successfully fetched from ajax request', function () {
+                var ajaxRequest,
+                    successfulAjaxResponse = {
+                    options: {
+                        '2053': {
+                            value: '2053',
+                            label: 'testProductName5a8ddfd933b5c',
+                            'is_active': 1,
+                            path: 'testSku5a8ddfd933b5c',
+                            optgroup: false
+                        }
+                    }
+                };
+
+                $.ajax = jasmine.createSpy().and.callFake(function (request) {
+                    ajaxRequest = request.success.bind(obj);
+                });
+
+                expect(obj.processRequest()).toBeUndefined();
+
+                ajaxRequest(successfulAjaxResponse);
+                expect(JSON.stringify(obj.options())).toEqual(JSON.stringify([successfulAjaxResponse.options['2053']]));
             });
         });
     });

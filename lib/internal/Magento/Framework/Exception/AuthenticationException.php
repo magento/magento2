@@ -15,5 +15,5 @@ class AuthenticationException extends LocalizedException
     /**
      * @deprecated
      */
-    const AUTHENTICATION_ERROR = 'An authentication error occurred.';
+    const AUTHENTICATION_ERROR = 'An authentication error occurred. Verify and try again.';
 }

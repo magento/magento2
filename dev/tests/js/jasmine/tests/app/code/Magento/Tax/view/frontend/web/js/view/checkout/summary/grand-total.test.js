@@ -35,6 +35,13 @@ define(['squire', 'ko'], function (Squire, ko) {
         });
     });
 
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {}
+    });
+
     describe('Magento_Tax/js/view/checkout/summary/grand-total', function () {
         describe('"getGrandTotalExclTax" method', function () {
             it('Check if totals object empty.', function () {

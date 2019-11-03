@@ -1,2 +1,2 @@
 sku,product_type,store_view_code,name,price,attribute_set_code,categories,product_websites,url_key
-simple1,simple,,"simple 1",25,Default,"Default Category/Category 1,Default Category/Category 2",base,simple1-ds
+simple1,simple,,"simple 1",25,Default,"Default Category/Category 1,Default Category/Category\/ 2",base,simple1-ds

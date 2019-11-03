@@ -6,8 +6,9 @@
 define([
     'jquery',
     'Magento_Checkout/js/view/summary/abstract-total',
-    'Magento_Checkout/js/model/quote'
-], function ($, Component, quote) {
+    'Magento_Checkout/js/model/quote',
+    'Magento_SalesRule/js/view/summary/discount'
+], function ($, Component, quote, discountView) {
     'use strict';
 
     return Component.extend({
@@ -21,14 +22,21 @@ define([
          * @return {*}
          */
         getShippingMethodTitle: function () {
-            var shippingMethod;
+            var shippingMethod = '',
+                shippingMethodTitle = '';
 
             if (!this.isCalculated()) {
                 return '';
             }
             shippingMethod = quote.shippingMethod();
 
-            return shippingMethod ? shippingMethod['carrier_title'] + ' - ' + shippingMethod['method_title'] : '';
+            if (typeof shippingMethod['method_title'] !== 'undefined') {
+                shippingMethodTitle = ' - ' + shippingMethod['method_title'];
+            }
+
+            return shippingMethod ?
+                shippingMethod['carrier_title'] + shippingMethodTitle :
+                shippingMethod['carrier_title'];
         },
 
         /**
@@ -50,6 +58,34 @@ define([
             price =  this.totals()['shipping_amount'];
 
             return this.getFormattedPrice(price);
+        },
+
+        /**
+         * If is set coupon code, but there wasn't displayed discount view.
+         *
+         * @return {Boolean}
+         */
+        haveToShowCoupon: function () {
+            var couponCode = this.totals()['coupon_code'];
+
+            if (typeof couponCode === 'undefined') {
+                couponCode = false;
+            }
+
+            return couponCode && !discountView().isDisplayed();
+        },
+
+        /**
+         * Returns coupon code description.
+         *
+         * @return {String}
+         */
+        getCouponDescription: function () {
+            if (!this.haveToShowCoupon()) {
+                return '';
+            }
+
+            return '(' + this.totals()['coupon_code'] + ')';
         }
     });
 });

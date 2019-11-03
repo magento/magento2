@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 class RequestValidatorTest extends \PHPUnit\Framework\TestCase
@@ -131,7 +132,7 @@ class RequestValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\AuthorizationException
-     * @expectedExceptionMessage Consumer is not authorized to access 5, 6
+     * @expectedExceptionMessage The consumer isn't authorized to access 5, 6.
      */
     public function testAuthorizationFailed()
     {

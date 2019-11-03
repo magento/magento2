@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="adminRole" type="role">
+        <data key="name" unique="suffix">adminRole</data>
+        <data key="rolename" unique="suffix">adminRole</data>
+        <data key="scope">1</data>
+        <data key="access">1</data>
+    </entity>
+
+    <entity name="roleAdministrator" type="user_role">
+        <data key="name" unique="suffix">Administrator </data>
+        <data key="rolename" unique="suffix">Administrator </data>
+        <data key="resourceAccess">All</data>
+        <data key="all">1</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="resource">[]</data>
+    </entity>
+
+    <entity name="roleSales">
+        <data key="name" unique="suffix">Role Sales </data>
+        <data key="rolename" unique="suffix">Role Sales </data>
+        <data key="resourceAccess">Custom</data>
+        <data key="all">0</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="resource">['Magento_Sales::sales','Magento_Sales::sales_operation','Magento_Sales::actions','Magento_Sales::sales_order','Magento_Sales::create','Magento_Sales::actions_view','Magento_Sales::email','Magento_Sales::reorder','Magento_Sales::actions_edit','Magento_Sales::cancel','Magento_Sales::review_payment','Magento_Sales::capture','Magento_Sales::invoice','Magento_Sales::creditmemo','Magento_Sales::hold','Magento_Sales::unhold','Magento_Sales::ship','Magento_Sales::comment','Magento_Sales::emails','Magento_Backend::system_other_settings','Magento_AdminNotification::adminnotification','Magento_AdminNotification::show_list']</data>
+    </entity>
+
+    <entity name="limitedRole" type="role">
+        <data key="name" unique="suffix">Limited</data>
+        <data key="rolename" unique="suffix">Limited</data>
+        <data key="roleScopes">Custom</data>
+        <data key="resourceAccess">All</data>
+    </entity>
+
+    <entity name="restrictedRole" type="role">
+        <data key="name" unique="suffix">Restricted</data>
+        <data key="rolename" unique="suffix">Restricted</data>
+        <data key="roleScopes">Custom</data>
+        <data key="resourceAccess">All</data>
+    </entity>
+
+    <!-- This admin created for checking turn off "Bulk Actions" -->
+    <entity name="adminWithoutBulkActionRole" type="user_role">
+        <data key="name">restrictedWebsiteRole</data>
+        <data key="rolename">restrictedWebsiteRole</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="all">0</data>
+        <data key="gws_is_all">0</data>
+        <array key="gws_websites">
+            <item>1</item>
+        </array>
+        <array key="resource">
+            <item>Magento_Backend::dashboard</item>
+            <item>Magento_Analytics::analytics</item>
+            <item>Magento_Analytics::analytics_api</item>
+            <item>Magento_Sales::sales</item>
+            <item>Magento_Sales::sales_operation</item>
+            <item>Magento_Catalog::catalog</item>
+            <item>Magento_Customer::customer</item>
+            <item>Magento_Cart::cart</item>
+            <item>Magento_Backend::myaccount</item>
+            <item>Magento_Backend::marketing</item>
+            <item>Magento_Backend::content</item>
+            <item>Magento_Reports::report</item>
+            <item>Magento_Backend::stores</item>
+            <item>Magento_Backend::convert</item>
+            <item>Magento_Backend::extensions</item>
+            <item>Magento_Integration::extensions</item>
+            <item>Magento_Backend::tools</item>
+            <item>Magento_Backend::cache</item>
+            <item>Magento_Backend::main_actions</item>
+            <item>Magento_Backend::mass_actions</item>
+            <item>Magento_Backend::additional_cache_management</item>
+            <item>Magento_Backend::setup_wizard</item>
+            <item>Magento_Backup::backup</item>
+            <item>Magento_Indexer::index</item>
+            <item>Magento_Indexer::changeMode</item>
+            <item>Magento_User::acl</item>
+            <item>Magento_Backend::system_other_settings</item>
+            <item>Magento_Backend::global_search</item>
+            <item>Magento_Backend::system</item>
+        </array>
+    </entity>
+    <entity name="adminProductInWebsiteRole" type="user_role">
+        <data key="rolename" unique="suffix">restrictedWebsiteRole</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="all">0</data>
+    </entity>
+    <entity name="adminRestrictedProductRole" type="user_role">
+        <data key="rolename" unique="suffix">restrictedCatalogRole</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="all">0</data>
+    </entity>
+</entities>

@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Ui;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Customer\Model\Session;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -32,6 +36,11 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     private $braintreeAdapter;
 
     /**
+     * @var Session|MockObject
+     */
+    private $session;
+
+    /**
      * @var ConfigProvider
      */
     private $configProvider;
@@ -45,15 +54,29 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var BraintreeAdapterFactory|MockObject $adapterFactoryMock */
+        $adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $adapterFactoryMock->method('create')
+            ->willReturn($this->braintreeAdapter);
+
+        $this->session = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStoreId'])
+            ->getMock();
+        $this->session->method('getStoreId')
+            ->willReturn(null);
 
         $this->configProvider = new ConfigProvider(
             $this->config,
-            $this->braintreeAdapter
+            $adapterFactoryMock,
+            $this->session
         );
     }
 
     /**
-     * Run test getConfig method
+     * Ensure that get config returns correct data if payment is active or not
      *
      * @param array $config
      * @param array $expected
@@ -61,22 +84,37 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConfig($config, $expected)
     {
-        $this->braintreeAdapter->expects(static::once())
-            ->method('generate')
-            ->willReturn(self::CLIENT_TOKEN);
+        if ($config['isActive']) {
+            $this->braintreeAdapter->expects($this->once())
+                ->method('generate')
+                ->willReturn(self::CLIENT_TOKEN);
+        } else {
+            $config = array_replace_recursive(
+                $this->getConfigDataProvider()[0]['config'],
+                $config
+            );
+            $expected = array_replace_recursive(
+                $this->getConfigDataProvider()[0]['expected'],
+                $expected
+            );
+            $this->braintreeAdapter->expects($this->never())
+                ->method('generate');
+        }
 
         foreach ($config as $method => $value) {
-            $this->config->expects(static::once())
+            $this->config->expects($this->once())
                 ->method($method)
                 ->willReturn($value);
         }
 
-        static::assertEquals($expected, $this->configProvider->getConfig());
+        $this->assertEquals($expected, $this->configProvider->getConfig());
     }
 
     /**
-     * @covers \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
+     * @covers       \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
      * @dataProvider getClientTokenDataProvider
+     * @param $merchantAccountId
+     * @param $params
      */
     public function testGetClientToken($merchantAccountId, $params)
     {
@@ -101,8 +139,9 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             [
                 'config' => [
                     'isActive' => true,
-                    'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
+                    'getCcTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                     'getSdkUrl' => self::SDK_URL,
+                    'getHostedFieldsSdkUrl' => 'https://sdk.com/test.js',
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
@@ -113,7 +152,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                     'getThresholdAmount' => 20,
                     'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
                     'getEnvironment' => 'test-environment',
-                    'getKountMerchantId' => 'test-kount-merchant-id',
                     'getMerchantId' => 'test-merchant-id',
                     'hasFraudProtection' => true,
                 ],
@@ -124,14 +162,14 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
-                            'countrySpecificCardTypes' =>[
+                            'hostedFieldsSdkUrl' => 'https://sdk.com/test.js',
+                            'countrySpecificCardTypes' => [
                                 'GB' => ['VI', 'AE'],
                                 'US' => ['DI', 'JCB']
                             ],
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                             'useCvv' => true,
                             'environment' => 'test-environment',
-                            'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
                             'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE
@@ -140,6 +178,19 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'enabled' => true,
                             'thresholdAmount' => 20,
                             'specificCountries' => ['GB', 'US', 'CA']
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'config' => [
+                    'isActive' => false,
+                ],
+                'expected' => [
+                    'payment' => [
+                        ConfigProvider::CODE => [
+                            'isActive' => false,
+                            'clientToken' => null,
                         ]
                     ]
                 ]

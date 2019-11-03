@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ApiSalesRule" type="SalesRule">
+        <data key="name" unique="suffix">salesRule</data>
+        <data key="description">Sales Rule Descritpion</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>3</item>
+        </array>
+        <data key="uses_per_customer">2</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">true</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">2</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+        <data key="discount_qty">2</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">1</data>
+        <data key="is_rss">true</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">0</data>
+        <data key="simple_free_shipping">0</data>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
+    </entity>
+
+    <entity name="ApiCartRule" type="SalesRule">
+        <data key="name" unique="suffix">salesRule</data>
+        <data key="description">Sales Rule Descritpion</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>3</item>
+        </array>
+        <data key="uses_per_customer">0</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">true</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">0</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">50</data>
+        <data key="discount_qty">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">0</data>
+        <data key="is_rss">true</data>
+        <data key="coupon_type">NO_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">0</data>
+        <data key="simple_free_shipping">0</data>
+    </entity>
+
+    <entity name="SimpleSalesRule" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="is_active">true</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="uses_per_coupon">10</data>
+        <data key="uses_per_customer">10</data>
+        <data key="simple_action">by_percent</data>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+    </entity>
+    <entity name="TestSalesRule" type="SalesRule">
+        <data key="name" unique="suffix">TestSalesRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
+    <entity name="CatPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">CartPriceRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="coupon_type">Specific Coupon</data>
+        <data key="coupon_code" unique="suffix">CouponCode</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">10</data>
+    </entity>
+
+    <entity name="SalesRuleSpecificCoupon" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>3</item>
+        </array>
+        <data key="uses_per_customer">1</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">false</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">2</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+        <data key="discount_qty">1</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">1</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">true</data>
+        <data key="uses_per_coupon">2</data>
+        <data key="simple_free_shipping">1</data>
+    </entity>
+
+    <entity name="SalesRuleSpecificCouponWithFixedDiscount" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>1</item>
+        </array>
+        <data key="uses_per_customer">10</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">false</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">1</data>
+        <data key="simple_action">cart_fixed</data>
+        <data key="discount_amount">10</data>
+        <data key="discount_qty">10</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">0</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">10</data>
+        <data key="simple_free_shipping">1</data>
+    </entity>
+
+    <entity name="PriceRuleWithCondition" type="SalesRule">
+        <data key="name" unique="suffix">SalesRule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="apply">Fixed amount discount for whole cart</data>
+        <data key="discountAmount">50</data>
+    </entity>
+
+    <entity name="SalesRuleSpecificCouponWithPercentDiscount" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>1</item>
+        </array>
+        <data key="uses_per_customer">10</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">false</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">1</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">10</data>
+        <data key="discount_qty">10</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">0</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">10</data>
+        <data key="simple_free_shipping">1</data>
+    </entity>
+
+    <entity name="ActiveSalesRuleForNotLoggedIn" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+        </array>
+        <data key="uses_per_customer">0</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">true</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">0</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">50</data>
+        <data key="discount_qty">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">0</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">0</data>
+        <data key="simple_free_shipping">0</data>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
+    </entity>
+
+    <entity name="ActiveSalesRuleForAllGroups" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </array>
+        <data key="uses_per_customer">0</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">true</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">0</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">50</data>
+        <data key="discount_qty">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">0</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">0</data>
+        <data key="simple_free_shipping">0</data>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
+    </entity>
+
+    <entity name="SalesRuleNoCouponWithFixedDiscount" extends="ApiCartRule">
+        <data key="simple_action">by_fixed</data>
+    </entity>
+    <entity name="ActiveSalesRuleWithPercentPriceDiscountCoupon">
+        <data key="name" unique="suffix">Cart Price Rule with Specific Coupon</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN'</data>
+        <data key="coupon_type">Specific Coupon</data>
+        <data key="coupon_code" unique="suffix">123-abc-ABC-987</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+        <data key="defaultRuleLabelAllStoreViews">Cart Price Rule with Specific Coupon</data>
+        <data key="defaultStoreView">Cart Price Rule with Specific Coupon</data>
+    </entity>
+    <entity name="ActiveSalesRuleWithComplexConditions">
+        <data key="name" unique="suffix">Cart Price Rule with complex conditions</data>
+        <data key="description">Cart Price Rule with complex conditions</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="coupon_type">Specific Coupon</data>
+        <data key="coupon_code" unique="suffix">123-abc-ABC-987</data>
+        <data key="uses_per_coupon">13</data>
+        <data key="uses_per_customer">63</data>
+        <data key="sort_order">1</data>
+        <data key="is_rss">Yes</data>
+        <data key="subtotal">300</data>
+        <data key="shippingCountry">US</data>
+        <data key="shippingPostcode">123456789a</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">Yes</data>
+        <data key="stop_rules_processing">Yes</data>
+        <data key="simple_free_shipping">For matching items only</data>
+        <data key="defaultRuleLabelAllStoreViews">Cart Price Rule with complex conditions</data>
+        <data key="defaultStoreView">Cart Price Rule with complex conditions</data>
+    </entity>
+    <entity name="InactiveSalesRule">
+        <data key="name" unique="suffix">Inactive Cart Price Rule</data>
+        <data key="description">Inactive Cart Price Rule</data>
+        <data key="is_active">0</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN'</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
+    <entity name="SalesRuleSpecificCouponAndByPercent" type="SalesRule">
+        <data key="name" unique="suffix">SalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </array>
+        <data key="uses_per_customer">1</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">false</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">2</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">50</data>
+        <data key="discount_qty">1</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">1</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">2</data>
+        <data key="simple_free_shipping">1</data>
+    </entity>
+    <entity name="CartPriceRuleConditionAndFreeShippingApplied">
+        <data key="name" unique="suffix">Cart Price Rule For RuleCondition And FreeShipping</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">NOT LOGGED IN</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">0</data>
+        <data key="simple_free_shipping">For matching items only</data>
+        <data key="defaultRuleLabelAllStoreViews">Free Shipping in conditions</data>
+        <data key="defaultStoreView">Free Shipping in conditions</data>
+    </entity>
+    <entity name="CartPriceRuleConditionAppliedForSubtotal">
+        <data key="name" unique="suffix">Cart Price Rule For Rule Condition</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">NOT LOGGED IN</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="subtotal">560</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">0</data>
+        <data key="simple_free_shipping">No</data>
+        <data key="defaultRuleLabelAllStoreViews">Free Shipping in Rule conditions</data>
+        <data key="defaultStoreView">Free Shipping in Rule conditions</data>
+    </entity>
+    <entity name="CartPriceRuleConditionNotApplied">
+        <data key="name" unique="suffix">Cart Price Rule Condition Not Applied</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">NOT LOGGED IN</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="totalItemQuantity">3</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">0</data>
+        <data key="simple_free_shipping">No</data>
+        <data key="defaultRuleLabelAllStoreViews">Total Items Quantity-Not Applied test</data>
+        <data key="defaultStoreView">Total Items Quantity-Not Applied test</data>
+    </entity>
+    <entity name="CartPriceRuleConditionAppliedForWeight">
+        <data key="name" unique="suffix">Cart Price Rule With Weight Condition Applied</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">NOT LOGGED IN</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="totalWeight">200</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">0</data>
+        <data key="simple_free_shipping">No</data>
+        <data key="defaultRuleLabelAllStoreViews">Total Weight is 200</data>
+        <data key="defaultStoreView">Total Weight is 200</data>
+    </entity>
+    <entity name="CartPriceRuleConditionAppliedForCategory">
+        <data key="name" unique="suffix">Cart Price Rule With Category Condition Applied</data>
+        <data key="description">Description for Cart Price Rule</data>
+        <data key="is_active">Yes</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">NOT LOGGED IN</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="simple_action">Percent of product price discount</data>
+        <data key="discount_amount">50</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">0</data>
+        <data key="simple_free_shipping">No</data>
+        <data key="defaultRuleLabelAllStoreViews">Product attribute combination - Category</data>
+        <data key="defaultStoreView">Product attribute combination - Category</data>
+    </entity>
+    <entity name="RetailerCartPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">Cart Price Rule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'Retailer'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
+    <entity name="SegmentCartPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">Cart Price Rule</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'General'</data>
+        <data key="apply">Percent of product price discount</data>
+        <data key="discountAmount">50</data>
+    </entity>
+    <entity name="ActiveSalesRuleCoupon50" type="SalesRule">
+        <data key="name" unique="suffix">SimpleSalesRule</data>
+        <data key="description">Sales Rule Description</data>
+        <array key="website_ids">
+            <item>1</item>
+        </array>
+        <array key="customer_group_ids">
+            <item>0</item>
+            <item>1</item>
+        </array>
+        <data key="uses_per_customer">10</data>
+        <data key="is_active">true</data>
+        <data key="stop_rules_processing">true</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">0</data>
+        <data key="simple_action">by_fixed</data>
+        <data key="discount_amount">50</data>
+        <data key="discount_qty">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">false</data>
+        <data key="times_used">0</data>
+        <data key="is_rss">false</data>
+        <data key="coupon_type">SPECIFIC_COUPON</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">0</data>
+        <data key="simple_free_shipping">0</data>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
+        <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
+    </entity>
+</entities>

@@ -99,28 +99,11 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
     }
 
-    public function testBeforeDispatchOutOfDateWithErrors()
+    /**
+     * @dataProvider beforeDispatchOutOfDateWithErrorsDataProvider
+     */
+    public function testBeforeDispatchOutOfDateWithErrors(array $errors, string $expectedMessage)
     {
-        $errors = [
-            [
-                DbVersionInfo::KEY_MODULE => 'Magento_Module1',
-                DbVersionInfo::KEY_TYPE => 'schema',
-                DbVersionInfo::KEY_CURRENT => '3.3.3',
-                DbVersionInfo::KEY_REQUIRED => '4.4.4'
-            ],
-            [
-                DbVersionInfo::KEY_MODULE => 'Magento_Module2',
-                DbVersionInfo::KEY_TYPE => 'data',
-                DbVersionInfo::KEY_CURRENT => '2.8.7',
-                DbVersionInfo::KEY_REQUIRED => '5.1.6'
-            ]
-        ];
-        $message = 'Please upgrade your database: '
-            . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
-            . "The following modules are outdated:\n"
-            . "Magento_Module1 schema: current version - 3.3.3, required version - 4.4.4\n"
-            . "Magento_Module2 data: current version - 2.8.7, required version - 5.1.6";
-
         $this->cacheMock->expects(static::any())
             ->method('load')
             ->with('db_is_up_to_date')
@@ -131,7 +114,79 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->cacheMock->expects(static::never())
             ->method('save');
 
-        $this->expectException(LocalizedException::class, $message);
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage($expectedMessage);
         $this->plugin->beforeDispatch($this->frontControllerMock, $this->requestMock);
+    }
+
+    /**
+     * @return array
+     */
+    public static function beforeDispatchOutOfDateWithErrorsDataProvider()
+    {
+        return [
+            'module versions too low' => [
+                'errors' => [
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module1',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '4.4.4'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module2',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => '2.8.7',
+                        DbVersionInfo::KEY_REQUIRED => '5.1.6'
+                    ],
+                ],
+                'expectedMessage' => 'Please upgrade your database: '
+                    . "Run \"bin/magento setup:upgrade\" from the Magento root directory.\n"
+                    . "The following modules are outdated:\n"
+                    . "Magento_Module1 schema: current version - none, required version - 4.4.4\n"
+                    . "Magento_Module2 data: current version - 2.8.7, required version - 5.1.6"
+            ],
+            'module versions too high' => [
+                'errors' => [
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module3',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => '2.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '1.0.0'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module4',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => '1.0.10',
+                        DbVersionInfo::KEY_REQUIRED => '1.0.9'
+                    ],
+                ],
+                'expectedMessage' => "Please update your modules: "
+                    . "Run \"composer install\" from the Magento root directory.\n"
+                    . "The following modules are outdated:\n"
+                    . "Magento_Module3 schema: code version - 1.0.0, database version - 2.0.0\n"
+                    . "Magento_Module4 data: code version - 1.0.9, database version - 1.0.10",
+            ],
+            'some versions too high, some too low' => [
+                'errors' => [
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module2',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => '1.9.0',
+                        DbVersionInfo::KEY_REQUIRED => '1.12.0'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Magento_Module1',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => '2.0.0',
+                        DbVersionInfo::KEY_REQUIRED => '1.0.0'
+                    ],
+                ],
+                'expectedMessage' => "Please update your modules: "
+                    . "Run \"composer install\" from the Magento root directory.\n"
+                    . "The following modules are outdated:\n"
+                    . "Magento_Module1 schema: code version - 1.0.0, database version - 2.0.0"
+            ]
+        ];
     }
 }

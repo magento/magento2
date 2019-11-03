@@ -123,6 +123,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->model->getValue());
     }
 
+    /**
+     * @return array
+     */
     public function getValueDataProvider()
     {
         return [
@@ -131,6 +134,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function afterSaveDataProvider()
     {
         return [

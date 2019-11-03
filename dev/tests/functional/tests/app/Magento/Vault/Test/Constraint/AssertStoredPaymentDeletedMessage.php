@@ -25,7 +25,7 @@ class AssertStoredPaymentDeletedMessage extends AbstractConstraint
      */
     public function processAssert(StoredPaymentMethods $storedPaymentMethods)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $storedPaymentMethods->getMessagesBlock()->getSuccessMessage(),
             'Message of success deletion of stored payment method is not present or wrong.'

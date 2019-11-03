@@ -41,7 +41,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
     public function _construct()
     {
         parent::_construct();
-        $this->setTemplate('catalog/product/edit/serializer.phtml');
+        $this->setTemplate('Magento_Catalog::catalog/product/edit/serializer.phtml');
         return $this;
     }
 

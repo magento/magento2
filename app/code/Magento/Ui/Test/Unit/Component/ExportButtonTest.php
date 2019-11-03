@@ -62,14 +62,37 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
+        $this->context->expects($this->any())
+            ->method('getRequestParam')
+            ->with('test_asterisk')
+            ->willReturn('test_asterisk_value');
         $option = ['label' => 'test label', 'value' => 'test value', 'url' => 'test_url'];
-        $data = ['config' => ['options' => [$option]]];
+        $data = [
+            'config' => [
+                'options' => [
+                    $option
+                ],
+                'additionalParams' => [
+                    'test_key' => 'test_value',
+                    'test_asterisk' => '*'
+                ]
+            ],
+        ];
+        $expected = $data;
+        $expected['config']['options'][0]['url'] = [
+            'test_key' => 'test_value',
+            'test_asterisk' => 'test_asterisk_value',
+        ];
         $this->model->setData($data);
-
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with('test_url')
-            ->willReturnArgument(0);
-        $this->assertNull($this->model->prepare());
+            ->willReturnArgument(1);
+
+        self::assertNull($this->model->prepare());
+        self::assertEquals(
+            $expected,
+            $this->model->getData()
+        );
     }
 }

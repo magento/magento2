@@ -11,6 +11,9 @@
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
+/**
+ * Class for tax report resource model with aggregation by created at
+ */
 class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
 {
     /**
@@ -84,7 +87,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
                 'order_status' => 'e.status',
                 'percent' => 'MAX(tax.' . $connection->quoteIdentifier('percent') . ')',
                 'orders_count' => 'COUNT(DISTINCT e.entity_id)',
-                'tax_base_amount_sum' => 'SUM(tax.base_amount * e.base_to_global_rate)',
+                'tax_base_amount_sum' => 'SUM(tax.base_real_amount * e.base_to_global_rate)',
             ];
 
             $select = $connection->select()->from(

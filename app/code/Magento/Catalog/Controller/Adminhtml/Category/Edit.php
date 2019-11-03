@@ -1,12 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
+
+/**
+ * Class Edit
+ */
+class Edit extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -25,18 +30,23 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * Edit constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 
     /**
@@ -49,20 +59,20 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     public function execute()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
-        $store = $this->getStoreManager()->getStore($storeId);
-        $this->getStoreManager()->setCurrentStore($store->getCode());
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
 
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if (!$categoryId) {
             if ($storeId) {
-                $categoryId = (int)$this->getStoreManager()->getStore($storeId)->getRootCategoryId();
+                $categoryId = (int)$this->storeManager->getStore($storeId)->getRootCategoryId();
             } else {
-                $defaultStoreView = $this->getStoreManager()->getDefaultStoreView();
+                $defaultStoreView = $this->storeManager->getDefaultStoreView();
                 if ($defaultStoreView) {
                     $categoryId = (int)$defaultStoreView->getRootCategoryId();
                 } else {
-                    $stores = $this->getStoreManager()->getStores();
+                    $stores = $this->storeManager->getStores();
                     if (count($stores)) {
                         $store = reset($stores);
                         $categoryId = (int)$store->getRootCategoryId();
@@ -105,23 +115,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultPage->getConfig()->getTitle()->prepend($resultPageTitle);
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId($storeId);
-        }
-
         return $resultPage;
-    }
-
-    /**
-     * @return \Magento\Store\Model\StoreManagerInterface
-     */
-    private function getStoreManager()
-    {
-        if (null === $this->storeManager) {
-            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Store\Model\StoreManagerInterface::class);
-        }
-        return $this->storeManager;
     }
 }

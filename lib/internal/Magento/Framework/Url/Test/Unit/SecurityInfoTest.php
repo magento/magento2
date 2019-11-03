@@ -32,6 +32,9 @@ class SecurityInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->_model->isSecure($url));
     }
 
+    /**
+     * @return array
+     */
     public function secureUrlDataProvider()
     {
         return [

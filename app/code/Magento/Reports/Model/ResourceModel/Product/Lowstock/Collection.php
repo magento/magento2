@@ -14,7 +14,10 @@ namespace Magento\Reports\Model\ResourceModel\Product\Lowstock;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Product Low Stock Report Collection.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -50,7 +53,6 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
     protected $_itemResource;
 
     /**
-     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy

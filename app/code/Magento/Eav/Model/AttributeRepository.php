@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
@@ -87,7 +88,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->save($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__('Cannot save attribute'));
+            throw new StateException(__("The attribute can't be saved."));
         }
         return $attribute;
     }
@@ -141,7 +142,16 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($attributes);
-        $searchResults->setTotalCount($attributeCollection->getSize());
+
+        // if $searchCriteria has no page size - we can use count() on $attributeCollection
+        // otherwise - we have to use getSize() on $attributeCollection
+        // with this approach we can eliminate excessive COUNT requests in case page size is empty
+        if ($searchCriteria->getPageSize()) {
+            $searchResults->setTotalCount($attributeCollection->getSize());
+        } else {
+            $searchResults->setTotalCount(count($attributeCollection));
+        }
+
         return $searchResults;
     }
 
@@ -154,7 +164,10 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $attribute = $this->eavConfig->getAttribute($entityTypeCode, $attributeCode);
         if (!$attribute || !$attribute->getAttributeId()) {
             throw new NoSuchEntityException(
-                __('Attribute with attributeCode "%1" does not exist.', $attributeCode)
+                __(
+                    'The attribute with a "%1" attributeCode doesn\'t exist. Verify the attribute and try again.',
+                    $attributeCode
+                )
             );
         }
         return $attribute;
@@ -168,7 +181,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         try {
             $this->eavResource->delete($attribute);
         } catch (\Exception $e) {
-            throw new StateException(__('Cannot delete attribute.'));
+            throw new StateException(__("The attribute can't be deleted."));
         }
         return true;
     }
@@ -183,7 +196,9 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         $this->eavResource->load($attribute, $attributeId);
 
         if (!$attribute->getAttributeId()) {
-            throw new NoSuchEntityException(__('Attribute with id "%1" does not exist.', $attributeId));
+            throw new NoSuchEntityException(
+                __('The attribute with a "%1" ID doesn\'t exist. Verify the attribute and try again.', $attributeId)
+            );
         }
 
         $this->delete($attribute);

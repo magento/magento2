@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteTextFieldProductAttributeFromAttributeSetTest">
+        <annotations>
+            <stories value="Delete product attributes"/>
+            <title value="Delete Product Attribute, Text Field, from Attribute Set"/>
+            <description value="Login as admin and delete Text Field type product attribute from attribute set"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-10886"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <!-- Create Product Attribute and assign to Default Product Attribute Set -->
+            <createData entity="newProductAttribute" stepKey="attribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <!--Delete cteated Data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimplaeProduct"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!-- Open Product Attribute Set Page -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+        <waitForPageLoad stepKey="waitForProductAttributeSetPageToLoad"/>
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <!--Select Default Product Attribute Set -->
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="Default" stepKey="fillAttributeSetName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad"/>
+        <see selector="{{AdminProductAttributeSetEditSection.groupTree}}" userInput="$$attribute.attribute_code$$" stepKey="seeAttributeInAttributeGroupTree"/>
+        <!--Open Product Index Page and filter the product-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+            <argument name="product" value="SimpleProduct2"/>
+        </actionGroup>
+        <!--Verify Created Product Attribute displayed in Product page -->
+        <click stepKey="openSelectedProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <seeElement selector="{{AdminProductFormSection.newAddedAttribute($$attribute.attribute_code$$)}}" stepKey="seeProductAttributeIsAdded"/>
+        <!--Delete product attribute from product attribute grid -->
+        <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
+            <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <!-- Confirm attribute is not present in product attribute grid -->
+        <actionGroup ref="filterProductAttributeByAttributeCode" stepKey="filterAttribute">
+            <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <see stepKey="seeEmptyRow" selector="{{AdminProductAttributeGridSection.FirstRow}}" userInput="We couldn't find any records."/>
+        <!-- Verify Attribute is not present in Product Attribute Set Page -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets1"/>
+        <waitForPageLoad stepKey="waitForProductAttributeSetPageToLoad1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickOnResetFilter1"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="Default" stepKey="fillAttributeSetName1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
+        <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad1"/>
+        <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="dontSeeAttributeInAttributeGroupTree"/>
+        <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="dontSeeAttributeInUnassignedAttributeTree"/>
+        <!--Verify Product Attribute is not present in Product Index Page -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductIndexPage"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad1"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct1">
+            <argument name="product" value="SimpleProduct2"/>
+        </actionGroup>
+        <!--Verify Product Attribute is not present in Product page -->
+        <click  selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}" stepKey="openSelectedProduct1"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <dontSeeElement selector="{{AdminProductFormSection.newAddedAttribute($$attribute.attribute_code$$)}}" stepKey="dontSeeProductAttribute"/>
+    </test>
+</tests>

@@ -34,6 +34,12 @@ class BatchRangeIterator implements BatchIteratorInterface
     private $rangeField;
 
     /**
+     * @var string
+     * @deprecated unused class property
+     */
+    private $rangeFieldAlias;
+
+    /**
      * @var int
      */
     private $batchSize;
@@ -80,7 +86,7 @@ class BatchRangeIterator implements BatchIteratorInterface
      * @param int $batchSize
      * @param string $correlationName
      * @param string|array $rangeField
-     * @param string $rangeFieldAlias
+     * @param string $rangeFieldAlias @deprecated
      */
     public function __construct(
         Select $select,
@@ -107,7 +113,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     public function current()
     {
         if (null === $this->currentSelect) {
-            $this->isValid = ($this->currentOffset + $this->batchSize) <= $this->totalItemCount;
+            $this->isValid = $this->currentOffset < $this->totalItemCount;
             $this->currentSelect = $this->initSelectObject();
         }
         return $this->currentSelect;
@@ -116,7 +122,7 @@ class BatchRangeIterator implements BatchIteratorInterface
     /**
      * Return the key of the current element
      *
-     * Сan return the number of the current sub-select in the iteration.
+     * Can return the number of the current sub-select in the iteration.
      *
      * @return int
      */
@@ -138,7 +144,7 @@ class BatchRangeIterator implements BatchIteratorInterface
         if (null === $this->currentSelect) {
             $this->current();
         }
-        $this->isValid = ($this->batchSize + $this->currentOffset) <= $this->totalItemCount;
+        $this->isValid = $this->currentOffset < $this->totalItemCount;
         $select = $this->initSelectObject();
         if ($this->isValid) {
             $this->iteration++;
@@ -195,7 +201,7 @@ class BatchRangeIterator implements BatchIteratorInterface
             );
             $row = $this->connection->fetchRow($wrapperSelect);
 
-            $this->totalItemCount = intval($row['cnt']);
+            $this->totalItemCount = (int)$row['cnt'];
         }
 
         $rangeField = is_array($this->rangeField) ? $this->rangeField : [$this->rangeField];

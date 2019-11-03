@@ -8,6 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CmsBlockEdit" area="Adminhtml" mca="cms/block/edit" module="Magento_Cms">
         <block name="blockForm" class="Magento\Cms\Test\Block\Adminhtml\Block\Edit\BlockForm" locator="[id='page:main-container']" strategy="css selector" />
-        <block name="pageMainActions" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector" />
+        <block name="pageMainActions" class="Magento\Cms\Test\Block\Adminhtml\Block\Edit\FormPageActions" locator=".page-main-actions" strategy="css selector" />
     </page>
 </config>

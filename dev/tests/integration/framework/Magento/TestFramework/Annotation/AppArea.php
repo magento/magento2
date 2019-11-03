@@ -15,17 +15,18 @@ class AppArea
     private $_application;
 
     /**
-     * List of allowed areas
+     * List of allowed areas.
      *
      * @var array
      */
     private $_allowedAreas = [
         \Magento\Framework\App\Area::AREA_GLOBAL,
-        \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+        \Magento\Framework\App\Area::AREA_ADMINHTML,
         \Magento\Framework\App\Area::AREA_FRONTEND,
-        'webapi_rest',
-        'webapi_soap',
-        'cron',
+        \Magento\Framework\App\Area::AREA_WEBAPI_REST,
+        \Magento\Framework\App\Area::AREA_WEBAPI_SOAP,
+        \Magento\Framework\App\Area::AREA_CRONTAB,
+        \Magento\Framework\App\Area::AREA_GRAPHQL
     ];
 
     /**

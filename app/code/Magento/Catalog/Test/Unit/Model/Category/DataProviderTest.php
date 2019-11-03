@@ -16,6 +16,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
+use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -72,6 +74,19 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $fileInfo;
 
+    /**
+     * @var PoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $modifierPool;
+
+    /**
+     * @var ArrayUtils|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $arrayUtils;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp()
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
@@ -120,6 +135,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         $this->fileInfo = $this->getMockBuilder(FileInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)->getMockForAbstractClass();
+
+        $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
+            ->setMethods(['flatten'])
+            ->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -137,6 +158,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->eavEntityMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        /** @var DataProvider $model */
         $model = $objectManager->getObject(
             DataProvider::class,
             [
@@ -147,6 +170,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'eavConfig' => $this->eavConfig,
                 'request' => $this->request,
                 'categoryFactory' => $this->categoryFactory,
+                'pool' => $this->modifierPool,
+                'arrayUtils' => $this->arrayUtils
             ]
         );
 
@@ -195,10 +220,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
-            ->willReturnMap([
-                ['', null, $categoryData],
-                ['image', null, $categoryData['image']],
-            ]);
+            ->willReturnMap(
+                [
+                    ['', null, $categoryData],
+                    ['image', null, $categoryData['image']],
+                ]
+            );
         $categoryMock->expects($this->any())
             ->method('getExistsStoreValueFlag')
             ->with('url_key')
@@ -269,10 +296,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $categoryMock->expects($this->exactly(2))
             ->method('getData')
-            ->willReturnMap([
-                ['', null, $categoryData],
-                ['image', null, $categoryData['image']],
-            ]);
+            ->willReturnMap(
+                [
+                    ['', null, $categoryData],
+                    ['image', null, $categoryData['image']],
+                ]
+            );
         $categoryMock->expects($this->any())
             ->method('getExistsStoreValueFlag')
             ->with('url_key')
@@ -320,10 +349,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMetaWithoutParentInheritanceResolving()
     {
+        $this->arrayUtils->expects($this->atLeastOnce())->method('flatten')->willReturn([1,3,3]);
+
         $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry->expects($this->once())
+        $this->registry->expects($this->atLeastOnce())
             ->method('registry')
             ->with('category')
             ->willReturn($categoryMock);
@@ -335,6 +366,10 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(['image' => $attributeMock]);
         $categoryMock->expects($this->never())
             ->method('getParentId');
+
+        $this->modifierPool->expects($this->once())
+            ->method('getModifiersInstances')
+            ->willReturn([]);
 
         $this->getModel()->getMeta();
     }

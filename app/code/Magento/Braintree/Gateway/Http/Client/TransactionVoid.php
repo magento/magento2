@@ -14,6 +14,8 @@ class TransactionVoid extends AbstractTransaction
      */
     protected function process(array $data)
     {
-        return $this->adapter->void($data['transaction_id']);
+        $storeId = $data['store_id'] ?? null;
+
+        return $this->adapterFactory->create($storeId)->void($data['transaction_id']);
     }
 }

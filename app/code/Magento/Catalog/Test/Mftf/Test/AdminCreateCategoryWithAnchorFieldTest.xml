@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryWithAnchorFieldTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <title value="Create anchor subcategory with all fields"/>
+            <description value="Login as admin and create anchor subcategory with all fields"/>
+            <testCaseId value="MC-5267"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultBlock" stepKey="createDefaultCMSBlock"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
+        </before>
+        <after>
+            <actionGroup ref="DeleteCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="createDefaultCMSBlock" stepKey="deleteDefaultCMSBlock"/>
+            <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
+        </after>
+        <!--Create  SubCategory-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
+        <!--Select Content and fill the options-->
+        <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
+        <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
+        <scrollTo selector="{{AdminCategoryContentSection.AddCMSBlock}}" x="0" y="-80" stepKey="scrollToAddCMSBlock"/>
+        <selectOption selector="{{AdminCategoryContentSection.AddCMSBlock}}" userInput="$$createDefaultCMSBlock.title$$" stepKey="selectCMSBlock"/>
+        <!--Select Display Setting and fill the options-->
+        <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
+        <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.displayMode}}" userInput="PRODUCTS_AND_PAGE" stepKey="selectdisplayMode"/>
+        <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor"/>
+        <click selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="enableTheAvailableProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.productList}}" parameterArray="['Position', 'Product Name', 'Price']" stepKey="selectPrice"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" x="0" y="-80" stepKey="scrollToDefaultProductList"/>
+        <click selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="enableTheDefaultProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.defaultProductList}}" userInput="name" stepKey="selectProductName"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" x="0" y="-80" stepKey="scrollToLayeredNavPrice"/>
+        <click selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" stepKey="enableLayeredNavigationPrice"/>
+        <fillField selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" userInput="5.5" stepKey="fillThePrice"/>
+        <!--Search the products and select the category products-->
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
+        <!--Verify the Category Title-->
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <!--Clear cache and reindex-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!--Verify Product in store front page-->
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name_lwr)}}"  stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.urlKey$$)}}" stepKey="seeProductInCategory"/>
+    </test>
+</tests>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -143,11 +141,12 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager = $this->getMockBuilder(
             \Magento\Framework\Message\Manager::class
         )->disableOriginalConstructor()->setMethods(
-            ['addSuccess', 'addMessage', 'addException', 'addErrorMessage']
+            ['addSuccessMessage', 'addMessage', 'addExceptionMessage', 'addErrorMessage']
         )->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class)
+            \Magento\Backend\Model\View\Result\RedirectFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -235,7 +234,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -289,7 +288,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($redirectLink));
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }
@@ -443,7 +442,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(
             $this->once()
         )->method(
-            'addException'
+            'addExceptionMessage'
         )->with(
             $this->equalTo($exception),
             $this->equalTo('Something went wrong while resetting customer password.')
@@ -503,7 +502,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         $this->messageManager->expects(
             $this->once()
         )->method(
-            'addSuccess'
+            'addSuccessMessage'
         )->with(
             $this->equalTo('The customer will receive an email with a link to reset password.')
         );
@@ -528,7 +527,7 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->assertInstanceOf(
-             \Magento\Backend\Model\View\Result\Redirect::class,
+            \Magento\Backend\Model\View\Result\Redirect::class,
             $this->_testedObject->execute()
         );
     }

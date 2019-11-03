@@ -10,8 +10,10 @@ use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectFullT
 use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectAttributesSearchStrategy;
 
 /**
- * Class StrategyMapper
  * This class is responsible for deciding which BaseSelectStrategyInterface should be used for passed SelectContainer
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class StrategyMapper
 {

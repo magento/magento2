@@ -76,15 +76,25 @@ class SortingProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getDirection')
             ->willReturn($orderThreeDirection);
 
+        /** @var SortOrder|\PHPUnit_Framework_MockObject_MockObject $sortOrderThreeMock */
+        $sortOrderFourMock = $this->getMockBuilder(SortOrder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sortOrderFourMock->expects($this->once())
+            ->method('getField')
+            ->willReturn(null);
+        $sortOrderFourMock->expects($this->never())
+            ->method('getDirection');
+
         /** @var SearchCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
         $searchCriteriaMock->expects($this->exactly(2))
             ->method('getSortOrders')
-            ->willReturn([$sortOrderOneMock, $sortOrderTwoMock, $sortOrderThreeMock]);
+            ->willReturn([$sortOrderOneMock, $sortOrderTwoMock, $sortOrderThreeMock, $sortOrderFourMock]);
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $searchCriteriarMock */
+        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -130,7 +140,7 @@ class SortingProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getSortOrders')
             ->willReturn([]);
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $searchCriteriarMock */
+        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();

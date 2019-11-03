@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderDetailsInformationSection">
+        <element name="orderDate" type="text" selector=".order-information table.order-information-table tr:first-of-type > td"/>
+        <element name="orderStatus" type="text" selector=".order-information table.order-information-table #order_status"/>
+        <element name="purchasedFrom" type="text" selector=".order-information table.order-information-table tr:last-of-type > td"/>
+        <element name="accountInformation" type="text" selector=".order-account-information-table"/>
+        <element name="orderInformationTable" type="block" selector=".order-information-table"/>
+        <element name="rate" type="text" selector="//table[contains(@class, 'order-information-table')]//th[contains(text(), 'rate:')]"/>
+        <element name="customerName" type="text" selector=".order-account-information table tr:first-of-type > td span"/>
+        <element name="customerEmail" type="text" selector=".order-account-information table tr:nth-of-type(2) > td a"/>
+        <element name="customerGroup" type="text" selector=".order-account-information table tr:nth-of-type(3) > td"/>
+        <element name="billingAddress" type="text" selector=".order-billing-address"/>
+        <element name="shippingAddress" type="text" selector=".order-shipping-address"/>
+        <element name="itemsOrdered" type="text" selector=".edit-order-table"/>
+        <element name="attributeLabel" type="text" selector="//label[contains(.,'{{attributeLabel}}')]" parameterized="true"/>
+        <element name="paymentInformation" type="text" selector="//div[@class='order-payment-method-title']"/>
+        <element name="orderId" type="text" selector="|Order # (\d+)|"/>
+    </section>
+</sections>

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\File\Uploader;
+
 /**
  * Catalog image uploader
  */
@@ -65,6 +67,13 @@ class ImageUploader
     protected $allowedExtensions;
 
     /**
+     * List of allowed image mime types
+     *
+     * @var string[]
+     */
+    private $allowedMimeTypes;
+
+    /**
      * ImageUploader constructor
      *
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -75,6 +84,7 @@ class ImageUploader
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string[] $allowedExtensions
+     * @param string[] $allowedMimeTypes
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
@@ -84,7 +94,8 @@ class ImageUploader
         \Psr\Log\LoggerInterface $logger,
         $baseTmpPath,
         $basePath,
-        $allowedExtensions
+        $allowedExtensions,
+        $allowedMimeTypes = []
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
@@ -94,6 +105,7 @@ class ImageUploader
         $this->baseTmpPath = $baseTmpPath;
         $this->basePath = $basePath;
         $this->allowedExtensions = $allowedExtensions;
+        $this->allowedMimeTypes = $allowedMimeTypes;
     }
 
     /**
@@ -153,7 +165,7 @@ class ImageUploader
     }
 
     /**
-     * Retrieve base path
+     * Retrieve allowed extensions
      *
      * @return string[]
      */
@@ -189,7 +201,14 @@ class ImageUploader
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
 
-        $baseImagePath = $this->getFilePath($basePath, $imageName);
+        $baseImagePath = $this->getFilePath(
+            $basePath,
+            Uploader::getNewFileName(
+                $this->mediaDirectory->getAbsolutePath(
+                    $this->getFilePath($basePath, $imageName)
+                )
+            )
+        );
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
 
         try {
@@ -227,7 +246,9 @@ class ImageUploader
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
         $uploader->setAllowedExtensions($this->getAllowedExtensions());
         $uploader->setAllowRenameFiles(true);
-
+        if (!$uploader->checkMimeType($this->allowedMimeTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('File validation failed.'));
+        }
         $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));
         unset($result['path']);
 

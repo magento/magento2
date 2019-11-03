@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
-class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory

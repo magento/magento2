@@ -6,29 +6,41 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Catalog\Controller\Adminhtml\Category;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
 /**
  * Class Add Category
  *
  * @package Magento\Catalog\Controller\Adminhtml\Category
  */
-class Add extends \Magento\Catalog\Controller\Adminhtml\Category
+class Add extends Category implements HttpGetActionInterface
 {
     /**
      * Forward factory for result
      *
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @deprecated Unused Class: ForwardFactory
+     * @see $this->resultFactory->create()
+     * @var ForwardFactory
+     *
      */
     protected $resultForwardFactory;
 
     /**
      * Add category constructor
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param Context $context
+     * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        Context $context,
+        ForwardFactory $resultForwardFactory
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
@@ -37,7 +49,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Add new category form
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return ResultInterface
      */
     public function execute()
     {
@@ -45,7 +57,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $category = $this->_initCategory(true);
         if (!$category || !$parentId || $category->getId()) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            /** @var Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
@@ -59,9 +71,8 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
             $category->addData($categoryData);
         }
 
-        $resultPageFactory = $this->_objectManager->get(\Magento\Framework\View\Result\PageFactory::class);
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $resultPageFactory->create();
+        /** @var Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
         if ($this->getRequest()->getQuery('isAjax')) {
             return $this->ajaxRequestResponse($category, $resultPage);
@@ -70,11 +81,6 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
         $resultPage->getConfig()->getTitle()->prepend(__('New Category'));
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
-
-        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
-        if ($block) {
-            $block->setStoreId(0);
-        }
 
         return $resultPage;
     }

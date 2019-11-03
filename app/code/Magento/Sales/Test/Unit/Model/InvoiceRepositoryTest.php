@@ -80,7 +80,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage ID required
+     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
      */
     public function testGetNoId()
     {
@@ -89,7 +89,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Requested entity doesn't exist
+     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
      */
     public function testGetEntityNoId()
     {

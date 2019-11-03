@@ -10,8 +10,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\TestFramework\Annotation;
 
 class ApiDataFixture
@@ -102,6 +100,7 @@ class ApiDataFixture
      * Execute single fixture script
      *
      * @param string|array $fixture
+     * @throws \Throwable
      */
     protected function _applyOneFixture($fixture)
     {
@@ -112,9 +111,13 @@ class ApiDataFixture
                 require $fixture;
             }
         } catch (\Exception $e) {
-            echo 'Exception occurred when running the '
-            . (is_array($fixture) || is_scalar($fixture) ? json_encode($fixture) : 'callback')
-            . ' fixture: ', PHP_EOL, $e;
+            throw new \Exception(
+                sprintf(
+                    "Exception occurred when running the %s fixture: \n%s",
+                    (\is_array($fixture) || is_scalar($fixture) ? json_encode($fixture) : 'callback'),
+                    $e->getMessage()
+                )
+            );
         }
         $this->_appliedFixtures[] = $fixture;
     }
@@ -141,7 +144,8 @@ class ApiDataFixture
      */
     protected function _revertFixtures()
     {
-        foreach ($this->_appliedFixtures as $fixture) {
+        $appliedFixtures = array_reverse($this->_appliedFixtures);
+        foreach ($appliedFixtures as $fixture) {
             if (is_callable($fixture)) {
                 $fixture[1] .= 'Rollback';
                 if (is_callable($fixture)) {

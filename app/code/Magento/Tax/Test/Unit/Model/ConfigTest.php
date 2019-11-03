@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Test class for \Magento\Tax\Model\Config
  */
@@ -62,10 +60,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue)
     {
         $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $scopeConfigMock->expects(
-            $this->at(0))->method('getValue')->will($this->returnValue($applyTaxAfterDiscount));
-        $scopeConfigMock->expects(
-            $this->at(1))->method('getValue')->will($this->returnValue($discountTaxIncl));
+        $scopeConfigMock->expects($this->at(0))
+            ->method('getValue')
+            ->will($this->returnValue($applyTaxAfterDiscount));
+        $scopeConfigMock->expects($this->at(1))
+            ->method('getValue')
+            ->will($this->returnValue($discountTaxIncl));
 
         /** @var \Magento\Tax\Model\Config */
         $model = new Config($scopeConfigMock);

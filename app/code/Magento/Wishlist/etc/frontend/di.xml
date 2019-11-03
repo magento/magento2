@@ -44,7 +44,16 @@
                         <item name="template" xsi:type="string">Magento_Wishlist::messages/addProductSuccessMessage.phtml</item>
                     </item>
                 </item>
+                <item name="removeWishlistItemSuccessMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Wishlist::messages/removeWishlistItemSuccessMessage.phtml</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product\View">
+        <plugin name="pre_render_product_options_from_wishlist" type="Magento\Wishlist\Plugin\Helper\Product\View" />
     </type>
 </config>

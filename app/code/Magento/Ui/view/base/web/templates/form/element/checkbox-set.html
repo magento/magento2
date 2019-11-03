@@ -16,14 +16,14 @@
     <div class="admin__field-control"
          css="'_with-tooltip': $data.tooltip">
         <div class="admin__field admin__field-option" outereach="options">
-            <input 
+            <input
                 ko-checked="$parent.value"
                 ko-disabled="$parent.disabled"
                 css="
                     'admin__control-radio': !$parent.multiple,
                     'admin__control-checkbox': $parent.multiple"
                 attr="
-                    id: ++ko.uid, 
+                    id: ++ko.uid,
                     value: value,
                     type: $parent.multiple ? 'checkbox' : 'radio'"/>
 

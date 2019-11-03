@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminOrderItemsOrderedSection">
+        <element name="itemProductName" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-title" parameterized="true"/>
+        <element name="itemProductSku" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-sku-block" parameterized="true"/>
+        <element name="itemStatus" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-status" parameterized="true"/>
+        <element name="itemOriginalPrice" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-original-price .price" parameterized="true"/>
+        <element name="itemPrice" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-price .price" parameterized="true"/>
+        <element name="itemQty" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-ordered-qty .qty-table" parameterized="true"/>
+        <element name="itemSubtotal" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-subtotal .price" parameterized="true"/>
+        <element name="itemTaxAmount" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-tax-amount .price" parameterized="true"/>
+        <element name="itemTaxPercent" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-tax-percent" parameterized="true"/>
+        <element name="itemDiscountAmount" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-discont .price" parameterized="true"/>
+        <element name="itemTotal" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-total .price" parameterized="true"/>
+
+        <element name="productNameColumn" type="text" selector=".edit-order-table .col-product .product-title"/>
+        <element name="productNameOptions" type="text" selector=".edit-order-table .col-product .item-options"/>
+        <element name="productName" type="text" selector="#order-items_grid  span[id*=order_item]"/>
+        <element name="productPrice" type="text" selector=".order-tables  tbody td:nth-child({{row}}) .price" parameterized="true"/>
+        <element name="productNameOptionsLink" type="text" selector="//table[contains(@class, 'edit-order-table')]//td[contains(@class, 'col-product')]//a[text() = '{{var1}}']" parameterized="true"/>
+        <element name="productSkuColumn" type="text" selector=".edit-order-table .col-product .product-sku-block"/>
+        <element name="productTotal" type="text" selector="#order-items_grid .col-total"/>
+        <element name="statusColumn" type="text" selector=".edit-order-table .col-status"/>
+        <element name="originalPriceColumn" type="text" selector=".edit-order-table .col-original-price .price"/>
+        <element name="priceColumn" type="text" selector=".edit-order-table .col-price .price"/>
+        <element name="qtyColumn" type="text" selector=".edit-order-table .col-ordered-qty .qty-table"/>
+        <element name="subtotalColumn" type="text" selector=".edit-order-table .col-subtotal .price"/>
+        <element name="taxAmountColumn" type="text" selector=".edit-order-table .col-tax-amount .price"/>
+        <element name="taxPercentColumn" type="text" selector=".edit-order-table .col-tax-percent"/>
+        <element name="discountAmountColumn" type="text" selector=".edit-order-table .col-discont .price"/>
+        <element name="totalColumn" type="text" selector=".edit-order-table .col-total .price"/>
+    </section>
+</sections>

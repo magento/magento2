@@ -7,4 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Shipping\Model\Shipping" type="Magento\Shipping\Model\Shipping\Labels" />
+    <preference for="Magento\Shipping\Model\ShipmentProviderInterface" type="Magento\Shipping\Model\ShipmentProvider" />
+
+    <type name="Magento\Shipping\Helper\Data">
+        <arguments>
+            <!-- Use frontend URL model-->
+            <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
 </config>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add Product to Cart from the category page and check message and product count in Minicart -->
+    <actionGroup name="StorefrontAddCategoryProductToCartActionGroup">
+        <annotations>
+            <description>Adds the provided Product to the Cart from a Storefront Category page. Validates that the Success Message is present and correct. Validates that the Mini Shopping Cart contains the provided Product Count.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="productCount"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+        <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart"/>
+        <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+    </actionGroup>
+
+    <!-- Add Product to Cart from the category page with specified quantity and check message and product count in Minicart -->
+    <actionGroup name="StorefrontAddCategoryProductToCartWithQuantityActionGroup">
+        <annotations>
+            <description>Adds the provided Product to the Cart from a Storefront Category page. Validates that the Success Message is present and correct. Updates the Product Quantity using the provided Product Quantity. Validates that the provided Quantity is present and correct in the Mini Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+            <argument name="checkQuantity" defaultValue="1" type="string"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+        <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart"/>
+        <waitForText userInput="{{checkQuantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForViewAndEditCartVisible"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" userInput="{{quantity}}" stepKey="setProductQtyToFiftyInMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" stepKey="updateQtyInMiniCart"/>
+    </actionGroup>
+
+    <!-- Add Product to Cart from the product page and check message and product count in Minicart -->
+    <actionGroup name="StorefrontAddProductToCartActionGroup">
+        <annotations>
+            <description>Clicks on Add to Cart on a Storefront Product page. Validates that the Success Message is present and correct. Validates that the provided Product Count is present and correct in the Mini Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="productCount" type="string"/>
+        </arguments>
+
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
+        <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart"/>
+        <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+    </actionGroup>
+
+    <!-- Open the Minicart and check Simple Product -->
+    <actionGroup name="StorefrontOpenMinicartAndCheckSimpleProductActionGroup">
+        <annotations>
+            <description>Clicks on the Storefront Mini Shopping Cart icon. Validates that the provided Product is present and correct in the Mini Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <waitForElement selector="{{StorefrontMinicartSection.productLinkByName(product.name)}}" stepKey="waitForMinicartProduct"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart"/>
+        <see userInput="${{product.price}}.00" selector="{{StorefrontMinicartSection.productPriceByName(product.name)}}" stepKey="assertProductPrice"/>
+    </actionGroup>
+
+    <!-- Check Simple Product in the Cart -->
+    <actionGroup name="StorefrontCheckCartSimpleProductActionGroup">
+        <annotations>
+            <description>Validates that the provided Product details (Name and Price) are present and correct in the Mini Shopping Cart. Validates that the provided Product Quantity is present and correct in the Mini Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="productQuantity"/>
+        </arguments>
+
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
+        <see userInput="${{product.price}}.00" selector="{{CheckoutCartProductSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
+        <seeInField userInput="{{productQuantity}}" selector="{{CheckoutCartProductSection.ProductQuantityByName(product.name)}}" stepKey="assertProductQuantity"/>
+    </actionGroup>
+
+    <!-- Check the Cart -->
+    <actionGroup name="StorefrontCheckCartActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Shopping Cart page. Validates that the provided Subtotal, Shipping, Shipping Method and Total are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="shipping" type="string"/>
+            <argument name="shippingMethod" type="string" defaultValue="Flat Rate - Fixed"/>
+            <argument name="total" type="string"/>
+        </arguments>
+
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.shippingMethodForm}}" visible="false" stepKey="openEstimateShippingSection"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="waitForShippingSection"/>
+        <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectShippingMethod"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="scrollToSummary"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
+        <reloadPage stepKey="reloadPage" after="assertShippingMethod" />
+        <waitForPageLoad stepKey="WaitForPageLoaded" after="reloadPage" />
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping" after="WaitForPageLoaded"/>
+        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal" after="assertShipping"/>
+    </actionGroup>
+
+    <!-- Open the Cart from Minicart-->
+    <actionGroup name="StorefrontOpenCartFromMinicartActionGroup">
+        <annotations>
+            <description>Clicks on the Storefront Mini Shopping Cart icon. Click on 'View and Edit Cart'.</description>
+        </annotations>
+
+        <waitForElement selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowMinicart"/>
+        <waitForElement selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="waitForCartLink"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart"/>
+        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickCart"/>
+    </actionGroup>
+
+    <actionGroup name="changeSummaryQuoteAddress">
+        <annotations>
+            <description>Fills in the provided Address details (Country, State and Zip Code) under the 'Summary' section on the Storefront Shopping Cart page.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxCode"/>
+        </arguments>
+
+        <conditionalClick stepKey="openShippingDetails" selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false"/>
+        <selectOption stepKey="selectCountry" selector="{{CheckoutCartSummarySection.country}}" userInput="{{taxCode.country}}"/>
+        <selectOption stepKey="selectStateProvince" selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{taxCode.state}}"/>
+        <fillField stepKey="fillZip" selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{taxCode.zip}}"/>
+        <waitForPageLoad stepKey="waitForFormUpdate"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" extends="StorefrontCheckCartActionGroup">
+        <annotations>
+                <description>EXTENDS: StorefrontCheckCartActionGroup. Validates that the provided Discount is present in the Storefront Shopping Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="discount" type="string" defaultValue="0"/>
+        </arguments>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscount"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-${{discount}}" stepKey="assertDiscount"/>
+    </actionGroup>
+</actionGroups>

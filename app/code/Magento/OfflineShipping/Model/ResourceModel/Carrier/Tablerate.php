@@ -12,7 +12,6 @@
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
 
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DirectoryList;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQuery;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFactory;
@@ -232,10 +231,10 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->_importedRows += count($values);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__('Unable to import data'), $e);
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong while importing table rates.')
@@ -321,9 +320,13 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function getCsvFile($filePath)
     {
-        $tmpDirectory = $this->filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-        $path = $tmpDirectory->getRelativePath($filePath);
-        return $tmpDirectory->openFile($path);
+        $pathInfo = pathinfo($filePath);
+        $dirName = isset($pathInfo['dirname']) ? $pathInfo['dirname'] : '';
+        $fileName = isset($pathInfo['basename']) ? $pathInfo['basename'] : '';
+
+        $directoryRead = $this->filesystem->getDirectoryReadByPath($dirName);
+
+        return $directoryRead->openFile($fileName);
     }
 
     /**

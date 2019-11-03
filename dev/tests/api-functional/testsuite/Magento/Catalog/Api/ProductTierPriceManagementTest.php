@@ -5,12 +5,15 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Class ProductTierPriceManagementTest
+ *
+ * @package Magento\Catalog\Api
+ */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductTierPriceManagementV1';
@@ -36,22 +39,22 @@ class ProductTierPriceManagementTest extends WebapiAbstract
             ],
         ];
 
-        $tearPriceList = $this->_webApiCall(
+        $tierPriceList = $this->_webApiCall(
             $serviceInfo,
             ['sku' => $productSku, 'customerGroupId' => $customerGroupId]
         );
 
-        $this->assertCount($count, $tearPriceList);
+        $this->assertCount($count, $tierPriceList);
         if ($count) {
-            $this->assertEquals($value, $tearPriceList[0]['value']);
-            $this->assertEquals($qty, $tearPriceList[0]['qty']);
+            $this->assertEquals($value, $tierPriceList[0]['value']);
+            $this->assertEquals($qty, $tierPriceList[0]['qty']);
         }
     }
 
     public function getListDataProvider()
     {
         return [
-            [0, 2, 5, 3],
+            [0, 3, 5, 3],
             [1, 0, null, null],
             ['all', 2, 8, 2],
         ];

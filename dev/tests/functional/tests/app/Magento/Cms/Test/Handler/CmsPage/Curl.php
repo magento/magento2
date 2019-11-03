@@ -80,7 +80,7 @@ class Curl extends Conditions implements CmsPageInterface
         $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+        if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             throw new \Exception("Cms page entity creating by curl handler was not successful! Response: $response");
         }
         preg_match("~page_id\/(\d*?)\/~", $response, $matches);

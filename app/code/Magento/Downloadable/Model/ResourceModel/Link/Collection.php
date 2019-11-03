@@ -87,7 +87,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Retrieve title for for current store
+     * Retrieve title for current store
      *
      * @param int $storeId
      * @return $this
@@ -113,7 +113,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Retrieve price for for current website
+     * Retrieve price for current website
      *
      * @param int $websiteId
      * @return $this

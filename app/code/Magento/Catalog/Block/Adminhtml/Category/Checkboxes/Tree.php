@@ -30,7 +30,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      */
     protected function _prepareLayout()
     {
-        $this->setTemplate('catalog/category/checkboxes/tree.phtml');
+        $this->setTemplate('Magento_Catalog::catalog/category/checkboxes/tree.phtml');
     }
 
     /**

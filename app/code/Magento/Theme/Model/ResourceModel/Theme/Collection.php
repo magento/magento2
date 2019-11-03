@@ -18,6 +18,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     const DEFAULT_PAGE_SIZE = 6;
 
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'theme_id';
+
+    /**
      * Collection initialization
      *
      * @return void

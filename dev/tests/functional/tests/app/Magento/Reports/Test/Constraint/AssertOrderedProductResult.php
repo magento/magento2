@@ -37,7 +37,7 @@ class AssertOrderedProductResult extends AbstractConstraint
             $product = $products[$key];
             $productQty[$key] = $product->getCheckoutData()['qty'];
         }
-        \PHPUnit_Framework_Assert::assertEquals($totalQuantity, $productQty);
+        \PHPUnit\Framework\Assert::assertEquals($totalQuantity, $productQty);
     }
 
     /**

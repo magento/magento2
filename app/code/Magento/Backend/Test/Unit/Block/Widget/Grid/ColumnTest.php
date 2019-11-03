@@ -86,6 +86,9 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_block->getSortable());
     }
 
+    /**
+     * @return array
+     */
     public function getSortableDataProvider()
     {
         return ['zero' => ['0'], 'false' => [false], 'null' => [null]];
@@ -351,7 +354,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
 
         $this->_block->setFilter('StdClass');
 
-        $grid = new \StdClass();
+        $grid = new \stdClass();
         $this->_block->setGrid($grid);
         $this->assertEquals($grid, $this->_block->getGrid());
     }
@@ -374,6 +377,9 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $block->isGrouped());
     }
 
+    /**
+     * @return array
+     */
     public function columnGroupedDataProvider()
     {
         return [[[], false], [['grouped' => 0], false], [['grouped' => 1], true]];

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="admin_user" resource="default" engine="innodb" comment="Admin User Table">
+        <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="User ID"/>
+        <column xsi:type="varchar" name="firstname" nullable="true" length="32" comment="User First Name"/>
+        <column xsi:type="varchar" name="lastname" nullable="true" length="32" comment="User Last Name"/>
+        <column xsi:type="varchar" name="email" nullable="true" length="128" comment="User Email"/>
+        <column xsi:type="varchar" name="username" nullable="true" length="40" comment="User Login"/>
+        <column xsi:type="varchar" name="password" nullable="false" length="255" comment="User Password"/>
+        <column xsi:type="timestamp" name="created" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="User Created Time"/>
+        <column xsi:type="timestamp" name="modified" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="User Modified Time"/>
+        <column xsi:type="timestamp" name="logdate" on_update="false" nullable="true" comment="User Last Login Time"/>
+        <column xsi:type="smallint" name="lognum" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="User Login Number"/>
+        <column xsi:type="smallint" name="reload_acl_flag" padding="6" unsigned="false" nullable="false"
+                identity="false" default="0" comment="Reload ACL"/>
+        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+                default="1" comment="User Is Active"/>
+        <column xsi:type="text" name="extra" nullable="true" comment="User Extra Data"/>
+        <column xsi:type="text" name="rp_token" nullable="true" comment="Reset Password Link Token"/>
+        <column xsi:type="timestamp" name="rp_token_created_at" on_update="false" nullable="true"
+                comment="Reset Password Link Token Creation Date"/>
+        <column xsi:type="varchar" name="interface_locale" nullable="false" length="16" default="en_US"
+                comment="Backend interface locale"/>
+        <column xsi:type="smallint" name="failures_num" padding="6" unsigned="false" nullable="true" identity="false"
+                default="0" comment="Failure Number"/>
+        <column xsi:type="timestamp" name="first_failure" on_update="false" nullable="true" comment="First Failure"/>
+        <column xsi:type="timestamp" name="lock_expires" on_update="false" nullable="true"
+                comment="Expiration Lock Dates"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="user_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="ADMIN_USER_USERNAME">
+            <column name="username"/>
+        </constraint>
+    </table>
+    <table name="admin_passwords" resource="default" engine="innodb" comment="Admin Passwords">
+        <column xsi:type="int" name="password_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Password ID"/>
+        <column xsi:type="int" name="user_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+                comment="User ID"/>
+        <column xsi:type="varchar" name="password_hash" nullable="true" length="100" comment="Password Hash"/>
+        <column xsi:type="int" name="expires" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+                comment="Deprecated"/>
+        <column xsi:type="int" name="last_updated" padding="10" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Last Updated"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="password_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="ADMIN_PASSWORDS_USER_ID_ADMIN_USER_USER_ID" table="admin_passwords"
+                    column="user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <index referenceId="ADMIN_PASSWORDS_USER_ID" indexType="btree">
+            <column name="user_id"/>
+        </index>
+    </table>
+</schema>

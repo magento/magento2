@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -159,6 +157,9 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_block->{$method}());
     }
 
+    /**
+     * @return array
+     */
     public function methodDataProvider()
     {
         return [
@@ -211,8 +212,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getPrefix')->willReturn('  <' . self::PREFIX . '>  ');
 
         $this->_block->setObject($customer);
@@ -238,8 +239,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function testGetPrefixOptionsEmpty()
     {
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
         $this->_options->expects(
@@ -260,8 +261,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
          * a properly htmlspecialchars translated value is returned.
          */
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $customer->expects($this->once())->method('getSuffix')->willReturn('  <' . self::SUFFIX . '>  ');
         $this->_block->setObject($customer);
 
@@ -286,8 +287,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function testGetSuffixOptionsEmpty()
     {
         $customer = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class)->getMockForAbstractClass(
-            );
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        )->getMockForAbstractClass();
         $this->_block->setObject($customer);
 
         $this->_options->expects(

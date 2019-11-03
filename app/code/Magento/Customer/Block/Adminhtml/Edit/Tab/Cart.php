@@ -75,14 +75,14 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
         parent::_construct();
         $this->setUseAjax(true);
         $this->_parentTemplate = $this->getTemplate();
-        $this->setTemplate('tab/cart.phtml');
+        $this->setTemplate('Magento_Customer::tab/cart.phtml');
     }
 
     /**
@@ -119,7 +119,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -201,7 +201,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGridUrl()
     {
@@ -220,11 +220,17 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product/edit', ['id' => $row->getProductId()]);
+        return $this->getUrl(
+            'catalog/product/edit',
+            [
+                'id' => $row->getProductId(),
+                'customerId' => $this->getCustomerId()
+            ]
+        );
     }
 
     /**

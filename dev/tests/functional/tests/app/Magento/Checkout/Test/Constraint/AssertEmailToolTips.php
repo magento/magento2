@@ -33,13 +33,13 @@ class AssertEmailToolTips extends AbstractConstraint
     public function processAssert(
         CheckoutOnepage $checkoutOnepage
     ) {
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::EMAIL_TOOLTIP,
             $checkoutOnepage->getShippingBlock()->getEmailTooltip(),
             'Email tooltip is not correct.'
         );
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             self::EMAIL_INSTRUCTIONS,
             $checkoutOnepage->getShippingBlock()->getEmailInstructions(),
             'Email instructions are not correct.'

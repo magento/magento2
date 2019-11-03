@@ -52,21 +52,23 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
             ->setMethods(['_getMail'])
-            ->setConstructorArgs([
-                $this->objectManager->get(\Magento\Framework\Model\Context::class),
-                $this->objectManager->get(\Magento\Framework\View\DesignInterface::class),
-                $this->objectManager->get(\Magento\Framework\Registry::class),
-                $this->objectManager->get(\Magento\Store\Model\App\Emulation::class),
-                $this->objectManager->get(\Magento\Store\Model\StoreManager::class),
-                $this->objectManager->create(\Magento\Framework\View\Asset\Repository::class),
-                $filesystem,
-                $this->objectManager->create(\Magento\Framework\App\Config\ScopeConfigInterface::class),
-                $this->objectManager->get(\Magento\Email\Model\Template\Config::class),
-                $this->objectManager->get(\Magento\Email\Model\TemplateFactory::class),
-                $this->objectManager->get(\Magento\Framework\Filter\FilterManager::class),
-                $this->objectManager->get(\Magento\Framework\UrlInterface::class),
-                $this->objectManager->get(\Magento\Email\Model\Template\FilterFactory::class),
-            ])
+            ->setConstructorArgs(
+                [
+                    $this->objectManager->get(\Magento\Framework\Model\Context::class),
+                    $this->objectManager->get(\Magento\Framework\View\DesignInterface::class),
+                    $this->objectManager->get(\Magento\Framework\Registry::class),
+                    $this->objectManager->get(\Magento\Store\Model\App\Emulation::class),
+                    $this->objectManager->get(\Magento\Store\Model\StoreManager::class),
+                    $this->objectManager->create(\Magento\Framework\View\Asset\Repository::class),
+                    $filesystem,
+                    $this->objectManager->create(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                    $this->objectManager->get(\Magento\Email\Model\Template\Config::class),
+                    $this->objectManager->get(\Magento\Email\Model\TemplateFactory::class),
+                    $this->objectManager->get(\Magento\Framework\Filter\FilterManager::class),
+                    $this->objectManager->get(\Magento\Framework\UrlInterface::class),
+                    $this->objectManager->get(\Magento\Email\Model\Template\FilterFactory::class),
+                ]
+            )
             ->getMock();
 
         $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
@@ -122,12 +124,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->load();
 
         $expectedViewUrl = '/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
-        $this->model->setDesignConfig([
-            'area' => 'frontend',
-            'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
-                ->getStore('fixturestore')
-                ->getId(),
-        ]);
+        $this->model->setDesignConfig(
+            [
+                'area' => 'frontend',
+                'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
+                    ->getStore('fixturestore')
+                    ->getId(),
+            ]
+        );
         $this->model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
 
         $this->setNotDefaultThemeForFixtureStore();
@@ -315,25 +319,25 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_template"}}',
-                '<b>customer_create_account_email_template template from Vendor/custom_theme</b>',
+                '<strong>customer_create_account_email_template template from Vendor/custom_theme</strong>',
             ],
             'Template from parent theme - frontend' => [
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmation_template"}}',
-                '<b>customer_create_account_email_confirmation_template template from Vendor/default</b>',
+                '<strong>customer_create_account_email_confirmation_template template from Vendor/default</strong',
             ],
             'Template from grandparent theme - frontend' => [
                 Area::AREA_FRONTEND,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="customer/create_account/email_confirmed_template"}}',
-                '<b>customer_create_account_email_confirmed_template template from Magento/default</b>',
+                '<strong>customer_create_account_email_confirmed_template template from Magento/default</strong',
             ],
             'Template from grandparent theme - adminhtml' => [
                 BackendFrontNameResolver::AREA_CODE,
                 TemplateTypesInterface::TYPE_HTML,
                 '{{template config_path="catalog/productalert_cron/error_email_template"}}',
-                '<b>catalog_productalert_cron_error_email_template template from Magento/default</b>',
+                '<strong>catalog_productalert_cron_error_email_template template from Magento/default</strong',
                 null,
                 null,
                 true,
@@ -373,9 +377,11 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             // @styles comments by default, it is necessary to mock an object to return testable contents
             $themeDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods([
-                    'readFile',
-                ])
+                ->setMethods(
+                    [
+                        'readFile',
+                    ]
+                )
                 ->getMockForAbstractClass();
 
             $themeDirectory->expects($this->once())
@@ -478,10 +484,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $adminStore = $this->objectManager->create(\Magento\Store\Model\Store::class)
             ->load(Store::ADMIN_CODE);
 
-        $this->model->setDesignConfig([
-            'area' => 'adminhtml',
-            'store' => $adminStore->getId(),
-        ]);
+        $this->model->setDesignConfig(
+            [
+                'area' => 'adminhtml',
+                'store' => $adminStore->getId(),
+            ]
+        );
     }
 
     /**
@@ -516,12 +524,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                 'fixturestore'
             );
 
-        $this->model->setDesignConfig([
-            'area' => 'frontend',
-            'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
-                ->getStore('fixturestore')
-                ->getId(),
-        ]);
+        $this->model->setDesignConfig(
+            [
+                'area' => 'frontend',
+                'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
+                    ->getStore('fixturestore')
+                    ->getId(),
+            ]
+        );
     }
 
     /**
@@ -578,12 +588,14 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->load();
 
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
-        $this->model->setDesignConfig([
-            'area' => 'frontend',
-            'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
-                ->getStore('fixturestore')
-                ->getId(),
-        ]);
+        $this->model->setDesignConfig(
+            [
+                'area' => 'frontend',
+                'store' => $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
+                    ->getStore('fixturestore')
+                    ->getId(),
+            ]
+        );
 
         $this->setNotDefaultThemeForFixtureStore();
         $this->assertStringMatchesFormat(

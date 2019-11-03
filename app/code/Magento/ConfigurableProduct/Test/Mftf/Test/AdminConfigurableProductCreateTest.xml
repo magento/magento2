@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductCreateTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to create a configurable product with attributes"/>
+            <description value="admin should be able to create a configurable product with attributes"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-84"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!-- assert color configurations on the admin create product page -->
+        <dontSee selector="{{AdminProductFormConfigurationsSection.variationLabel}}" stepKey="seeLabelNotVisible"/>
+        <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="3" stepKey="seeNumberOfRows"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeName1InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeName2InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeAttributeName3InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeAttributeSku1InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeAttributeSku2InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeAttributeSku3InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{colorProductAttribute1.price}}" stepKey="seeUniquePrice1InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{colorProductAttribute2.price}}" stepKey="seeUniquePrice2InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{colorProductAttribute3.price}}" stepKey="seeUniquePrice3InField"/>
+        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsQuantityCells}}" userInput="{{colorProductAttribute.attribute_quantity}}" stepKey="seeQuantityInField"/>
+
+        <!-- assert storefront category list page -->
+        <amOnPage url="/" stepKey="amOnStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <see userInput="{{_defaultProduct.name}}" stepKey="assertProductPresent"/>
+        <see userInput="{{colorProductAttribute1.price}}" stepKey="assertProductPricePresent"/>
+
+        <!-- assert storefront product details page -->
+        <click userInput="{{_defaultProduct.name}}" stepKey="clickOnProductName"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{colorProductAttribute1.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="{{colorProductAttribute.default_label}}" stepKey="seeColorAttributeName1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeInDropDown3"/>
+    </test>
+
+    <test name="AdminCreateConfigurableProductAfterGettingIncorrectSKUMessageTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create, Read, Update, Delete"/>
+            <title value="admin should be able to create a configurable product after incorrect sku"/>
+            <description value="admin should be able to create a configurable product after incorrect sku"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96365"/>
+            <useCaseId value="MAGETWO-94556"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="goToEditPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPane"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="color" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute2.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{ConfigurableProductSection.generateConfigure}}" stepKey="generateConfigure"/>
+        <waitForPageLoad stepKey="waitForGenerateConfigure"/>
+        <grabValueFrom selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}"  stepKey="grabTextFromContent"/>
+        <fillField stepKey="fillMoreThan64Symbols" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="01234567890123456789012345678901234567890123456789012345678901234"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct1"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" visible="true" stepKey="clickOnCloseInPopup"/>
+        <see stepKey="seeErrorMessage" userInput="Please enter less or equal than 64 symbols."/>
+        <fillField stepKey="fillCorrectSKU" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="$grabTextFromContent"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <waitForPageLoad stepKey="waitForProductAttributes"/>
+        <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid1"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('color')}}" stepKey="clickRowToEdit"/>
+        <click selector="{{DropdownAttributeOptionsSection.deleteButton(1)}}" stepKey="deleteOption"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid2"/>
+        <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <argument name="sku" value="$grabTextFromContent"/>
+        </actionGroup>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+    </test>
+</tests>

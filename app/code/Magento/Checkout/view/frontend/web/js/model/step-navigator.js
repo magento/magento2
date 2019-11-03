@@ -45,7 +45,7 @@ define([
                 return false;
             }
 
-            steps.sort(this.sortItems).forEach(function (element) {
+            steps().sort(this.sortItems).forEach(function (element) {
                 if (element.code == hashString || element.alias == hashString) { //eslint-disable-line eqeqeq
                     element.navigate(element);
                 } else {
@@ -66,7 +66,7 @@ define([
          * @param {*} sortOrder
          */
         registerStep: function (code, alias, title, isVisible, navigate, sortOrder) {
-            var hash;
+            var hash, active;
 
             if ($.inArray(code, this.validCodes) !== -1) {
                 throw new DOMException('Step code [' + code + '] already registered in step navigator');
@@ -86,6 +86,12 @@ define([
                 isVisible: isVisible,
                 navigate: navigate,
                 sortOrder: sortOrder
+            });
+            active = this.getActiveItemIndex();
+            steps.each(function (elem, index) {
+                if (active !== index) {
+                    elem.isVisible(false);
+                }
             });
             this.stepCodes.push(code);
             hash = window.location.hash.replace('#', '');
@@ -111,10 +117,14 @@ define([
         getActiveItemIndex: function () {
             var activeIndex = 0;
 
-            steps.sort(this.sortItems).forEach(function (element, index) {
+            steps().sort(this.sortItems).some(function (element, index) {
                 if (element.isVisible()) {
                     activeIndex = index;
+
+                    return true;
                 }
+
+                return false;
             });
 
             return activeIndex;
@@ -126,7 +136,7 @@ define([
          */
         isProcessed: function (code) {
             var activeItemIndex = this.getActiveItemIndex(),
-                sortedItems = steps.sort(this.sortItems),
+                sortedItems = steps().sort(this.sortItems),
                 requestedItemIndex = -1;
 
             sortedItems.forEach(function (element, index) {
@@ -143,8 +153,8 @@ define([
          * @param {*} scrollToElementId
          */
         navigateTo: function (code, scrollToElementId) {
-            var sortedItems = steps.sort(this.sortItems),
-                bodyElem = $.browser.safari || $.browser.chrome ? $('body') : $('html');
+            var sortedItems = steps().sort(this.sortItems),
+                bodyElem = $('body');
 
             scrollToElementId = scrollToElementId || null;
 
@@ -173,13 +183,22 @@ define([
         },
 
         /**
+         * Sets window location hash.
+         *
+         * @param {String} hash
+         */
+        setHash: function (hash) {
+            window.location.hash = hash;
+        },
+
+        /**
          * Next step.
          */
         next: function () {
             var activeIndex = 0,
                 code;
 
-            steps.sort(this.sortItems).forEach(function (element, index) {
+            steps().sort(this.sortItems).forEach(function (element, index) {
                 if (element.isVisible()) {
                     element.isVisible(false);
                     activeIndex = index;
@@ -189,7 +208,7 @@ define([
             if (steps().length > activeIndex + 1) {
                 code = steps()[activeIndex + 1].code;
                 steps()[activeIndex + 1].isVisible(true);
-                window.location = window.checkoutConfig.checkoutUrl + '#' + code;
+                this.setHash(code);
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             }
         }

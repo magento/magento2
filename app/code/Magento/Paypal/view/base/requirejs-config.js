@@ -6,7 +6,8 @@
 var config = {
     map: {
         '*': {
-            transparent: 'Magento_Payment/transparent'
+            transparent: 'Magento_Payment/js/transparent',
+            'Magento_Payment/transparent': 'Magento_Payment/js/transparent'
         }
     }
 };

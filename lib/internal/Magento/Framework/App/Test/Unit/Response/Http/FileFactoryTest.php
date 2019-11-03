@@ -67,7 +67,7 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Exception
-     * @exceptedExceptionMessage File not found
+     * @expectedExceptionMessage File not found
      */
     public function testCreateIfFileNotExist()
     {

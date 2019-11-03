@@ -28,7 +28,10 @@
 .paypal-recommended-header > .admin__collapsible-block > a::before {content: "" !important;}
 .paypal-other-header > .admin__collapsible-block > a::before {content: '' !important; width: 0; height: 0; border-color: transparent; border-top-color: #000; border-style: solid; border-width: .8rem .5rem 0 .5rem; margin-top:1px; transition: all .2s linear;}
 .paypal-other-header > .admin__collapsible-block > a.open::before {border-color: transparent; border-bottom-color: #000; border-width: 0 .5rem .8rem .5rem;}
-.paypal-other-header > .admin__collapsible-block > a {color: #007bdb !important; text-align: right;}
-.payments-other-header > .admin__collapsible-block > a {display: inline-block;}
-.payments-other-header > .admin__collapsible-block > a::before {content: '' !important; width: 0; height: 0; border-color: transparent; border-top-color: #000; border-style: solid; border-width: .8rem .5rem 0 .5rem; margin-top:1px; transition: all .2s linear;}
-.payments-other-header > .admin__collapsible-block > a.open::before {border-color: transparent; border-bottom-color: #000; border-width: 0 .5rem .8rem .5rem;}
+.payments-other-header > .admin__collapsible-block > a,
+.paypal-recommended-header > .admin__collapsible-block > a,
+.paypal-other-header > .admin__collapsible-block > a {display: inline-block;}
+.payments-other-header > .admin__collapsible-block > a::before,
+.paypal-recommended-header > .admin__collapsible-block > a::before {content: '' !important; width: 0; height: 0; border-color: transparent; border-top-color: #000; border-style: solid; border-width: .8rem .5rem 0 .5rem; margin-top:1px; transition: all .2s linear;}
+.payments-other-header > .admin__collapsible-block > a.open::before,
+.paypal-recommended-header > .admin__collapsible-block > a.open::before {border-color: transparent; border-bottom-color: #000; border-width: 0 .5rem .8rem .5rem;}

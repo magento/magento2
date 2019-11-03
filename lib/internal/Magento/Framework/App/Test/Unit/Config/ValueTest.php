@@ -184,6 +184,9 @@ class ValueTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
     }
 
+    /**
+     * @return array
+     */
     public function afterSaveDataProvider()
     {
         return [

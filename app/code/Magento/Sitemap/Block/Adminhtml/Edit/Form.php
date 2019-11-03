@@ -48,6 +48,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Configure form for sitemap.
+     *
      * @return $this
      */
     protected function _prepareForm()
@@ -73,7 +75,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'sitemap_filename',
                 'required' => true,
                 'note' => __('example: sitemap.xml'),
-                'value' => $model->getSitemapFilename()
+                'value' => $model->getSitemapFilename(),
+                'class' => 'validate-length maximum-length-32'
             ]
         );
 

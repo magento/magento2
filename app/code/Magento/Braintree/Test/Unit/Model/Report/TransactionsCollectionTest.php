@@ -6,10 +6,12 @@
 namespace Magento\Braintree\Test\Unit\Model\Report;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Report\FilterMapper;
 use Magento\Braintree\Model\Report\TransactionsCollection;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class TransactionsCollectionTest
@@ -19,22 +21,27 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeAdapter|MockObject
      */
     private $braintreeAdapterMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeAdapterFactory|MockObject
+     */
+    private $adapterFactoryMock;
+
+    /**
+     * @var EntityFactoryInterface|MockObject
      */
     private $entityFactoryMock;
 
     /**
-     * @var FilterMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterMapper|MockObject
      */
     private $filterMapperMock;
 
     /**
-     * @var DocumentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DocumentInterface|MockObject
      */
     private $transactionMapMock;
 
@@ -61,6 +68,11 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['search'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->adapterFactoryMock = $this->getMockBuilder(BraintreeAdapterFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->adapterFactoryMock->method('create')
+            ->willReturn($this->braintreeAdapterMock);
     }
 
     /**
@@ -82,7 +94,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection = new TransactionsCollection(
             $this->entityFactoryMock,
-            $this->braintreeAdapterMock,
+            $this->adapterFactoryMock,
             $this->filterMapperMock
         );
 
@@ -111,7 +123,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection = new TransactionsCollection(
             $this->entityFactoryMock,
-            $this->braintreeAdapterMock,
+            $this->adapterFactoryMock,
             $this->filterMapperMock
         );
 
@@ -125,7 +137,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapperMock->expects($this->once())
             ->method('getFilter')
@@ -133,7 +145,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
-            ->willReturn($transations);
+            ->willReturn($transactions);
 
         $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
@@ -141,7 +153,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection = new TransactionsCollection(
             $this->entityFactoryMock,
-            $this->braintreeAdapterMock,
+            $this->adapterFactoryMock,
             $this->filterMapperMock
         );
         $collection->setPageSize(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT);
@@ -157,7 +169,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsWithNullLimit()
     {
-        $transations = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
+        $transactions = range(1, TransactionsCollection::TRANSACTION_MAXIMUM_COUNT + 10);
 
         $this->filterMapperMock->expects($this->once())
             ->method('getFilter')
@@ -165,7 +177,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->braintreeAdapterMock->expects($this->once())
             ->method('search')
-            ->willReturn($transations);
+            ->willReturn($transactions);
 
         $this->entityFactoryMock->expects($this->exactly(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT))
             ->method('create')
@@ -173,7 +185,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection = new TransactionsCollection(
             $this->entityFactoryMock,
-            $this->braintreeAdapterMock,
+            $this->adapterFactoryMock,
             $this->filterMapperMock
         );
         $collection->setPageSize(null);
@@ -198,7 +210,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection = new TransactionsCollection(
             $this->entityFactoryMock,
-            $this->braintreeAdapterMock,
+            $this->adapterFactoryMock,
             $this->filterMapperMock
         );
 

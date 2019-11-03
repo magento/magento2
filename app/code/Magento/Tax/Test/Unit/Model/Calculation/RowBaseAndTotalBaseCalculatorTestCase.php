@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Tax\Model\Calculation\RowbaseCalculator;
+use Magento\Tax\Model\Calculation\RowBaseCalculator;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
+use Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,6 +68,11 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
     protected $taxDetailsItem;
 
     /**
+     * @var \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $quoteDetailsItemExtension;
+
+    /**
      * initialize all mocks
      *
      * @param bool $isTaxIncluded
@@ -84,7 +88,10 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class, ['create']);
+        $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\TaxDetailsItemInterfaceFactory::class,
+            ['create']
+        );
         $this->taxDetailsItem = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\ItemDetails::class);
         $this->taxItemDetailsDataObjectFactory->expects($this->any())
             ->method('create')
@@ -100,11 +107,24 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mockItem = $this->getMockBuilder(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class)->getMock();
+        $this->mockItem = $this->getMockBuilder(\Magento\Tax\Api\Data\QuoteDetailsItemInterface::class)
+            ->disableOriginalConstructor()->setMethods(['getExtensionAttributes', 'getUnitPrice'])
+            ->getMockForAbstractClass();
+        $this->quoteDetailsItemExtension = $this->getMockBuilder(QuoteDetailsItemExtensionInterface::class)
+            ->disableOriginalConstructor()->setMethods(['getPriceForTaxCalculation'])
+            ->getMockForAbstractClass();
+        $this->mockItem->expects($this->any())->method('getExtensionAttributes')
+            ->willReturn($this->quoteDetailsItemExtension);
 
-        $this->appliedTaxDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class, ['create']);
+        $this->appliedTaxDataObjectFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\AppliedTaxInterfaceFactory::class,
+            ['create']
+        );
 
-        $this->appliedTaxRateDataObjectFactory = $this->createPartialMock(\Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class, ['create']);
+        $this->appliedTaxRateDataObjectFactory = $this->createPartialMock(
+            \Magento\Tax\Api\Data\AppliedTaxRateInterfaceFactory::class,
+            ['create']
+        );
         $this->appliedTaxRate = $this->objectManager->getObject(\Magento\Tax\Model\TaxDetails\AppliedTaxRate::class);
         $this->appliedTaxRateDataObjectFactory->expects($this->any())
             ->method('create')

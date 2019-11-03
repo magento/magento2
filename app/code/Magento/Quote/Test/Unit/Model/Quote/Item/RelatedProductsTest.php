@@ -61,6 +61,9 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
+    /**
+     * @return array
+     */
     public function getRelatedProductIdsDataProvider()
     {
         return [

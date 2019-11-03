@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="clickBrowseBtnOnUploadPopup">
+        <annotations>
+            <description>Clicks on the Browse button in the 'Insert/edit image' model.</description>
+        </annotations>
+        
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+    </actionGroup>
+    
+    <actionGroup name="VerifyMediaGalleryStorageActions">
+        <annotations>
+            <description>Validates that the Media Gallery 'Cancel'/'Create Folder' buttons are present.</description>
+        </annotations>
+
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading2"/>
+        <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn"/>
+        <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn"/>
+    </actionGroup>
+    
+    <actionGroup name="CreateImageFolder">
+        <annotations>
+            <description>Creates a folder in the Media Gallery based on the provided Folder.</description>
+        </annotations>
+        <arguments>
+            <argument name="ImageFolder" defaultValue="ImageFolder"/>
+        </arguments>
+
+        <click selector="{{MediaGallerySection.CreateFolder}}" stepKey="createFolder"/>
+        <waitForElementVisible selector="{{MediaGallerySection.FolderName}}" stepKey="waitForPopUp"/>
+        <fillField selector="{{MediaGallerySection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName"/>
+        <click selector="{{MediaGallerySection.AcceptFolderName}}" stepKey="acceptFolderName"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading3"/>
+        <waitForPageLoad stepKey="waitForLoadingArrowToExpand" time="15"/>
+        <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickArrowIfClosed" visible="true"/>
+        <conditionalClick selector="{{MediaGallerySection.WysiwygArrow}}" dependentSelector="{{MediaGallerySection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
+        <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder"/>
+        <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading5"/>
+    </actionGroup>
+    
+    <actionGroup name="attachImage">
+        <annotations>
+            <description>Uploads the provided Image to Media Gallery.
+                If you use this action group, you MUST add steps to delete the image in the "after" steps.</description>
+        </annotations>
+        <arguments>
+            <argument name="Image"/>
+        </arguments>
+
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{Image.value}}" stepKey="uploadImage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementVisible  selector="{{MediaGallerySection.imageOrImageCopy(Image.fileName, Image.extension)}}" stepKey="waitForUploadImage"/>
+    </actionGroup>
+    
+    <actionGroup name="deleteImage">
+        <annotations>
+            <description>Deletes the selected Image from the Media Gallery.</description>
+        </annotations>
+
+        <see selector="{{MediaGallerySection.DeleteSelectedBtn}}" userInput="Delete Selected" stepKey="seeDeleteBtn"/>
+        <click selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="clickDeleteSelected"/>
+        <waitForText userInput="OK" stepKey="waitForConfirm"/>
+        <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="confirmDelete"/>
+        <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted"/>
+        <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="dontSeeImage"/>
+    </actionGroup>
+    
+    <actionGroup name="saveImage">
+        <annotations>
+            <description>Clicks on Insert File in the Media Gallery.</description>
+        </annotations>
+        
+        <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+    
+    <actionGroup name="fillOutUploadImagePopup">
+        <annotations>
+            <description>Fills in the Image Description and Height fields. PLEASE NOTE: The values are Hardcoded using 'ImageUpload'.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn"/>
+        <fillField selector="{{MediaGallerySection.ImageDescription}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription"/>
+        <fillField selector="{{MediaGallerySection.Height}}" userInput="{{ImageUpload.height}}" stepKey="fillImageHeight"/>
+        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn"/>
+        <waitForPageLoad stepKey="wait3"/>
+    </actionGroup>
+    
+    <actionGroup name="verifyOversizeValidationMsg">
+        <annotations>
+            <description>Validates that the Oversize validation message is present and correct.</description>
+        </annotations>
+
+        <see userInput="this is oversize" stepKey="seeValidationMsg"/>
+        <click selector="#OK" stepKey="clickOKBtn"/>
+    </actionGroup>
+    
+    <actionGroup name="verifyWrongExtensionValidationMsg">
+        <annotations>
+            <description>Validates that the Wrong Extensions validation message is present and correct.</description>
+        </annotations>
+
+        <see userInput="this is wrong extension" stepKey="seeValidationMsg"/>
+        <click selector="#OK" stepKey="clickOKBtn"/>
+    </actionGroup>
+</actionGroups>

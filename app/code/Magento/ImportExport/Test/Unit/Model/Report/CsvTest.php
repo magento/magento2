@@ -45,8 +45,10 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testDelimiter = 'some_delimiter';
 
         $this->reportHelperMock = $this->createMock(\Magento\ImportExport\Helper\Report::class);
+        $this->reportHelperMock->expects($this->any())->method('getDelimiter')->willReturn($testDelimiter);
 
         $this->outputCsvFactoryMock = $this->createPartialMock(
             \Magento\ImportExport\Model\Export\Adapter\CsvFactory::class,
@@ -65,7 +67,17 @@ class CsvTest extends \PHPUnit\Framework\TestCase
             [23 => 'first error'],
             [27 => 'second error']
         );
-        $this->sourceCsvFactoryMock->expects($this->any())->method('create')->willReturn($this->sourceCsvMock);
+        $this->sourceCsvFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->with(
+                [
+                    'file' => 'some_file_name',
+                    'directory' => null,
+                    'delimiter' => $testDelimiter
+                ]
+            )
+            ->willReturn($this->sourceCsvMock);
 
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
 

@@ -25,6 +25,12 @@ class Test
      */
     protected $_newElementFactory;
 
+    /**
+     * Test constructor.
+     * @param \Magento\SomeModule\Module\Factory $factory
+     * @param \Magento\SomeModule\Element\Factory $elementFactory
+     * @param \Magento\SomeModule\ElementFactory $rightElementFactory
+     */
     public function __construct(
         \Magento\SomeModule\Module\Factory $factory,
         \Magento\SomeModule\Element\Factory $elementFactory,

@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\TestModule3\Service\V1;
 
 use Magento\Framework\Exception\AuthorizationException;
@@ -63,7 +64,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
      */
     public function authorizationException()
     {
-        throw new AuthorizationException(__('Consumer is not authorized to access %1', 'resourceN'));
+        throw new AuthorizationException(__("The consumer isn't authorized to access %1.", 'resourceN'));
     }
 
     /**

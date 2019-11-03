@@ -23,7 +23,8 @@ use Magento\User\Test\Page\Adminhtml\UserIndex;
  * 3. Click on Add New User.
  * 4. Fill in all data according to data set (password is incorrect).
  * 5. Perform action 4 specified number of times.
- * 6. "You have entered an invalid password for current user." appears after each attempt.
+ * 6. "The password entered for the current user is invalid. Verify the password and try again." appears after each
+ *    attempt.
  * 7. Perform all assertions.
  *
  * @ZephyrId MAGETWO-49034

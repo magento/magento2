@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="adminnotification_inbox" resource="default" engine="innodb" comment="Adminnotification Inbox">
+        <column xsi:type="int" name="notification_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Notification ID"/>
+        <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Problem type"/>
+        <column xsi:type="timestamp" name="date_added" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Create date"/>
+        <column xsi:type="varchar" name="title" nullable="false" length="255" comment="Title"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
+        <column xsi:type="varchar" name="url" nullable="true" length="255" comment="Url"/>
+        <column xsi:type="smallint" name="is_read" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Flag if notification read"/>
+        <column xsi:type="smallint" name="is_remove" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Flag if notification might be removed"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="notification_id"/>
+        </constraint>
+        <index referenceId="ADMINNOTIFICATION_INBOX_SEVERITY" indexType="btree">
+            <column name="severity"/>
+        </index>
+        <index referenceId="ADMINNOTIFICATION_INBOX_IS_READ" indexType="btree">
+            <column name="is_read"/>
+        </index>
+        <index referenceId="ADMINNOTIFICATION_INBOX_IS_REMOVE" indexType="btree">
+            <column name="is_remove"/>
+        </index>
+    </table>
+    <table name="admin_system_messages" resource="default" engine="innodb" comment="Admin System Messages">
+        <column xsi:type="varchar" name="identity" nullable="false" length="100" comment="Message ID"/>
+        <column xsi:type="smallint" name="severity" padding="5" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Problem type"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Create date"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="identity"/>
+        </constraint>
+    </table>
+</schema>

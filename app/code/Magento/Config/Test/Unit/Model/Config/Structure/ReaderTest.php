@@ -100,4 +100,24 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expectedResult, $this->reader->read());
     }
+
+    /**
+     * Test the execution with the Validation exception of the 'read' method
+     *
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Verify the XML and try again.
+     */
+    public function testReadWithValidationException()
+    {
+        $content = '<config><item name="test1"></item><wrong></config>';
+        $expectedResult = ['result_data'];
+        $fileList = ['file' => $content];
+
+        $this->fileResolverMock->expects($this->once())
+            ->method('get')
+            ->with('system.xml', 'global')
+            ->willReturn($fileList);
+        
+        $this->assertEquals($expectedResult, $this->reader->read());
+    }
 }

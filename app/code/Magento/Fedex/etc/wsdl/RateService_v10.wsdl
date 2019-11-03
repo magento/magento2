@@ -355,7 +355,7 @@
           </xs:element>
           <xs:element name="AppliedOptions" type="ns:ServiceOptionType" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>Shows the specific combination of service options combined with the service type that produced this committment in the set returned to the caller.</xs:documentation>
+              <xs:documentation>Shows the specific combination of service options combined with the service type that produced this commitment in the set returned to the caller.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="AppliedSubOptions" type="ns:ServiceSubOptionDetail" minOccurs="0">
@@ -473,7 +473,7 @@
         <xs:annotation>
           <xs:documentation>
             For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
-            If this shipment cotains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
+            If this shipment contains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
           </xs:documentation>
         </xs:annotation>
         <xs:sequence>
@@ -916,7 +916,7 @@
           </xs:element>
           <xs:element name="SecondaryBarcode" type="ns:SecondaryBarcodeType" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>For customers producing their own Ground labels, this field specifies which secondary barcode will be printed on the label; so that the primary barcode produced by FedEx has the corect SCNC.</xs:documentation>
+              <xs:documentation>For customers producing their own Ground labels, this field specifies which secondary barcode will be printed on the label; so that the primary barcode produced by FedEx has the correct SCNC.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="TermsAndConditionsLocalization" type="ns:Localization" minOccurs="0">
@@ -1006,7 +1006,7 @@
             <xs:annotation>
               <xs:documentation>
                 For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
-                If this shipment cotains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
+                If this shipment contains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
               </xs:documentation>
             </xs:annotation>
           </xs:element>
@@ -1151,7 +1151,7 @@
       </xs:simpleType>
       <xs:complexType name="DestinationControlDetail">
         <xs:annotation>
-          <xs:documentation>Data required to complete the Destionation Control Statement for US exports.</xs:documentation>
+          <xs:documentation>Data required to complete the Destination Control Statement for US exports.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element name="StatementTypes" type="ns:DestinationControlStatementType" minOccurs="0" maxOccurs="unbounded"/>
@@ -2278,7 +2278,7 @@
           </xs:element>
           <xs:element name="LabelStockType" type="ns:LabelStockType" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>For thermal printer lables this indicates the size of the label and the location of the doc tab if present.</xs:documentation>
+              <xs:documentation>For thermal printer labels this indicates the size of the label and the location of the doc tab if present.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="LabelPrintingOrientation" type="ns:LabelPrintingOrientationType" minOccurs="0">
@@ -2780,7 +2780,7 @@
       </xs:simpleType>
       <xs:complexType name="Party">
         <xs:annotation>
-          <xs:documentation>The descriptive data for a person or company entitiy doing business with FedEx.</xs:documentation>
+          <xs:documentation>The descriptive data for a person or company entity doing business with FedEx.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element name="AccountNumber" type="xs:string" minOccurs="0">
@@ -3069,7 +3069,7 @@
           </xs:element>
           <xs:element name="AppliedOptions" type="ns:ServiceOptionType" minOccurs="0" maxOccurs="unbounded">
             <xs:annotation>
-              <xs:documentation>Shows the specific combination of service options combined with the service type that produced this committment in the set returned to the caller.</xs:documentation>
+              <xs:documentation>Shows the specific combination of service options combined with the service type that produced this commitment in the set returned to the caller.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="AppliedSubOptions" type="ns:ServiceSubOptionDetail" minOccurs="0">
@@ -3195,7 +3195,7 @@
       </xs:simpleType>
       <xs:complexType name="RatedPackageDetail">
         <xs:annotation>
-          <xs:documentation>If requesting rates using the PackageDetails element (one package at a time) in the request, the rates for each package will be returned in this element. Currently total piece total weight rates are also retuned in this element.</xs:documentation>
+          <xs:documentation>If requesting rates using the PackageDetails element (one package at a time) in the request, the rates for each package will be returned in this element. Currently total piece total weight rates are also returned in this element.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element name="TrackingIds" type="ns:TrackingId" minOccurs="0" maxOccurs="unbounded">
@@ -3416,7 +3416,7 @@
           </xs:element>
           <xs:element name="TotalWeight" type="ns:Weight" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>Identifies the total weight of the shipment being conveyed to FedEx.This is only applicable to International shipments and should only be used on the first package of a mutiple piece shipment.This value contains 1 explicit decimal position</xs:documentation>
+              <xs:documentation>Identifies the total weight of the shipment being conveyed to FedEx.This is only applicable to International shipments and should only be used on the first package of a multiple piece shipment.This value contains 1 explicit decimal position</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="TotalInsuredValue" type="ns:Money" minOccurs="0">
@@ -3582,7 +3582,7 @@
         <xs:sequence>
           <xs:element name="ReturnType" type="ns:ReturnType" minOccurs="1">
             <xs:annotation>
-              <xs:documentation>The type of return shipment that is being requested. At present the only type of retrun shipment that is supported is PRINT_RETURN_LABEL. With this option you can print a return label to insert into the box of an outbound shipment. This option can not be used to print an outbound label.</xs:documentation>
+              <xs:documentation>The type of return shipment that is being requested. At present the only type of return shipment that is supported is PRINT_RETURN_LABEL. With this option you can print a return label to insert into the box of an outbound shipment. This option can not be used to print an outbound label.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="Rma" type="ns:Rma" minOccurs="0">
@@ -3655,7 +3655,7 @@
       </xs:simpleType>
       <xs:simpleType name="ServiceOptionType">
         <xs:annotation>
-          <xs:documentation>These values control the optional features of service that may be combined in a commitment/rate comparision transaction.</xs:documentation>
+          <xs:documentation>These values control the optional features of service that may be combined in a commitment/rate comparison transaction.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
           <xs:enumeration value="FREIGHT_GUARANTEE"/>
@@ -4731,7 +4731,7 @@
           </xs:element>
           <xs:element name="TotalCustomerCharge" type="ns:Money" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>The calculated varibale handling charge plus the net charge.</xs:documentation>
+              <xs:documentation>The calculated variable handling charge plus the net charge.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>

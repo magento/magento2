@@ -16,10 +16,14 @@
                 <no_route>cms/noroute/index</no_route>
                 <show_cms_breadcrumbs>1</show_cms_breadcrumbs>
             </default>
+            <default_layouts>
+                <default_cms_layout>1column</default_cms_layout>
+            </default_layouts>
         </web>
         <cms>
             <wysiwyg>
                 <enabled>enabled</enabled>
+                <editor>mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</editor>
             </wysiwyg>
         </cms>
         <system>

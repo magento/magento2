@@ -37,7 +37,7 @@ class SampleFactory
      * @param array $data
      * @return \Magento\Framework\ObjectManager\Code\Generator\Sample
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return $this->_objectManager->create($this->_instanceName, $data);
     }

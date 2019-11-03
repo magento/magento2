@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php if ($block->getSearchTermsLog()->isPageCacheable()) : ?>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_CatalogSearch/js/search-terms-log": {
+                "url": "<?= $block->escapeUrl($block->getUrl('catalogsearch/searchTermsLog/save')) ?>"
+            }
+        }
+    }
+</script>
+<?php endif; ?>

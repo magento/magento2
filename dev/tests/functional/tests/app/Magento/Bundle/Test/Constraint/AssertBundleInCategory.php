@@ -39,13 +39,13 @@ class AssertBundleInCategory extends AssertProductInCategory
                 : $priceBlock->getPrice();
         }
 
-        \PHPUnit_Framework_Assert::assertEquals(
+        \PHPUnit\Framework\Assert::assertEquals(
             $priceData['price_from'],
             $priceLow,
             'Bundle price From on category page is not correct.'
         );
         if ($bundle->getPriceView() == 'Price Range') {
-            \PHPUnit_Framework_Assert::assertEquals(
+            \PHPUnit\Framework\Assert::assertEquals(
                 $priceData['price_to'],
                 $priceBlock->getPriceTo(),
                 'Bundle price To on category page is not correct.'

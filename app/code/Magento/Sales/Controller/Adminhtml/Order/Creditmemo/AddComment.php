@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
@@ -78,7 +79,7 @@ class AddComment extends \Magento\Backend\App\Action
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please enter a comment.')
+                    __('The comment is missing. Enter and try again.')
                 );
             }
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));

@@ -9,7 +9,8 @@ namespace Magento\Setup\Module\Di\Compiler\Config;
 
 /**
  * Interface \Magento\Setup\Module\Di\Compiler\Config\WriterInterface
- *
+ * @deprecated Moved to Framework to allow broader reuse
+ * @see \Magento\Framework\App\ObjectManager\ConfigWriterInterface
  */
 interface WriterInterface
 {

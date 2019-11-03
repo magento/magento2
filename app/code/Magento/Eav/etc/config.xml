@@ -12,6 +12,7 @@
                 <input_types>
                     <text>text</text>
                     <textarea>textarea</textarea>
+                    <texteditor>texteditor</texteditor>
                     <date>date</date>
                     <boolean>boolean</boolean>
                     <multiselect>multiselect</multiselect>

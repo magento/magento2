@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Login on the Admin Login page"/>
+            <title value="Admin should be able to log into the Magento Admin backend"/>
+            <description value="Admin should be able to log into the Magento Admin backend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-71572"/>
+            <group value="example"/>
+            <group value="login"/>
+        </annotations>
+
+        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
+        <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>
