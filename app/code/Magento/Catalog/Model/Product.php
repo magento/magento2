@@ -1271,12 +1271,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getRelatedProducts()
     {
         if (!$this->hasRelatedProducts()) {
-            $products = [];
-            $collection = $this->getRelatedProductCollection();
-            foreach ($collection as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasRelatedProducts()) {
+                $this->setRelatedProducts([]);
             }
-            $this->setRelatedProducts($products);
         }
         return $this->getData('related_products');
     }
@@ -1333,12 +1332,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getUpSellProducts()
     {
         if (!$this->hasUpSellProducts()) {
-            $products = [];
-            foreach ($this->getUpSellProductCollection() as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasUpSellProducts()) {
+                $this->setUpSellProducts([]);
             }
-            $this->setUpSellProducts($products);
         }
+
         return $this->getData('up_sell_products');
     }
 
@@ -1394,12 +1394,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getCrossSellProducts()
     {
         if (!$this->hasCrossSellProducts()) {
-            $products = [];
-            foreach ($this->getCrossSellProductCollection() as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasCrossSellProducts()) {
+                $this->setCrossSellProducts([]);
             }
-            $this->setCrossSellProducts($products);
         }
+
         return $this->getData('cross_sell_products');
     }
 
@@ -1455,7 +1456,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getProductLinks()
     {
         if ($this->_links === null) {
-            $this->_links = $this->getLinkRepository()->getList($this);
+            if ($this->getSku() && $this->getId()) {
+                $this->_links = $this->getLinkRepository()->getList($this);
+            } else {
+                $this->_links = [];
+            }
         }
         return $this->_links;
     }
