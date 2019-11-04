@@ -88,7 +88,7 @@
                 </field>
                 <field id="ready_time" translate="label comment" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Ready time</label>
-                    <comment>Package ready time after order submission (in hours)</comment>
+                    <comment>Package ready time after order submission (in hours).</comment>
                 </field>
                 <field id="specificerrmsg" translate="label" type="textarea" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Displayed Error Message</label>
