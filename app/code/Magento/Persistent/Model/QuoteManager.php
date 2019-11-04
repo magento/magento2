@@ -5,10 +5,14 @@
  */
 namespace Magento\Persistent\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Class QuoteManager
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class QuoteManager
 {
@@ -68,6 +72,8 @@ class QuoteManager
      *
      * @param bool $checkQuote Check quote to be persistent (not stolen)
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function setGuest($checkQuote = false)
     {
@@ -80,7 +86,9 @@ class QuoteManager
             }
 
             $quote->getPaymentsCollection()->walk('delete');
+            $quote->getPaymentsCollection()->removeAllItems();
             $quote->getAddressesCollection()->walk('delete');
+            $quote->getAddressesCollection()->removeAllItems();
             $this->_setQuotePersistent = false;
             $quote->setIsActive(true)
                 ->setCustomerId(null)
