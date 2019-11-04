@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontOpenCategoryPageAndAddProductToCartActionGroup" extends="StorefrontAddProductToCartFromCategoryPageActionGroup">
+        <annotations>
+            <description>EXTENDS: StorefrontAddProductToCartFromCategoryPageActionGroup. Opens the Category page. Adds the Product to the shopping cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="categoryUrlKey" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCategoryPage.url(categoryUrlKey)}}" before="scrollToProduct" stepKey="goToCategoryPage"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" after="goToCategoryPage" stepKey="waitForProductVisible"/>
+    </actionGroup>
+</actionGroups>
