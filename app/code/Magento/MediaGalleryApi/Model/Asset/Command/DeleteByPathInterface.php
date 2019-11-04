@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Model\Asset\Command;
 
 /**
- * Interface DeleteByPathInterface
+ * A command represents the media gallery asset delete action. A media gallery asset is filtered by path value.
  */
 interface DeleteByPathInterface
 {

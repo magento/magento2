@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Model\Asset\Command;
 
 /**
- * Interface GetByPathInterface
+ * A command represents the get media gallery asset by using media gallery asset path as a filter parameter.
  */
 interface GetByPathInterface
 {

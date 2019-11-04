@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Model\Keyword\Command;
 
 /**
- * Interface SaveAssetKeywordsInterface
+ * A command represents the media gallery asset keywords save operation.
  */
 interface SaveAssetKeywordsInterface
 {

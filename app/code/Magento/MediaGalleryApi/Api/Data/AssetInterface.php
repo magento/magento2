@@ -11,8 +11,8 @@ namespace Magento\MediaGalleryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Asset Interface
- *
+ * Represents a media gallery asset which contains information about a media asset entity such
+ * as path to the media storage, media asset title and its content type, etc.
  */
 interface AssetInterface extends ExtensibleDataInterface
 {

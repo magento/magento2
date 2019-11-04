@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Model\Keyword\Command;
 
 /**
- * Interface GetAssetKeywordsInterface
+ * A command represents functionality to get a media gallery asset keywords filtered by media gallery asset id.
  */
 interface GetAssetKeywordsInterface
 {

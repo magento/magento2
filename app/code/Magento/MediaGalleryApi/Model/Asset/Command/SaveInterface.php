@@ -11,7 +11,7 @@ namespace Magento\MediaGalleryApi\Model\Asset\Command;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
- * Interface SaveInterface
+ * A command which executes the media gallery asset save operation.
  */
 interface SaveInterface
 {

@@ -11,7 +11,7 @@ namespace Magento\MediaGalleryApi\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Interface KeywordInterface
+ * Represents a media gallery keyword. This object contains information about a media asset keyword entity.
  */
 interface KeywordInterface extends ExtensibleDataInterface
 {
