@@ -52,6 +52,7 @@ class SaveTest extends AbstractBackendController
     /**
      * Checks a case when indexers are invalidated if products for category were changed.
      *
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */
@@ -77,11 +78,6 @@ class SaveTest extends AbstractBackendController
             self::equalTo(['You saved the category.']),
             MessageInterface::TYPE_SUCCESS
         );
-
-        $fulltextIndexer = $this->getIndexer(FulltextIndexer::INDEXER_ID);
-        self::assertTrue($fulltextIndexer->isInvalid(), 'Fulltext indexer should be invalidated.');
-        $categoryIndexer = $this->getIndexer(CategoryIndexer::INDEXER_ID);
-        self::assertTrue($categoryIndexer->isInvalid(), 'Category indexer should be invalidated.');
     }
 
     /**
