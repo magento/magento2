@@ -49,6 +49,7 @@ abstract class Category extends Action
 
     /**
      * Initialize requested category and put it into registry.
+     *
      * Root category can be returned, if inappropriate store/category is specified
      *
      * @param bool $getRootInstead
@@ -80,8 +81,12 @@ abstract class Category extends Action
             }
         }
 
-        $this->_objectManager->get(Registry::class)->register('category', $category);
-        $this->_objectManager->get(Registry::class)->register('current_category', $category);
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->_objectManager->get(\Magento\Framework\Registry::class);
+        $registry->unregister('category');
+        $registry->unregister('current_category');
+        $registry->register('category', $category);
+        $registry->register('current_category', $category);
         $this->_objectManager->get(Config::class)
             ->setStoreId($this->getRequest()->getParam('store'));
         return $category;
@@ -103,6 +108,7 @@ abstract class Category extends Action
      * Resolve store id
      *
      * Tries to take store id from store HTTP parameter
+     *
      * @see Store
      *
      * @return int
@@ -147,13 +153,15 @@ abstract class Category extends Action
             }
         }
 
-        $eventResponse = new DataObject([
-            'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
-                . $resultPage->getLayout()->getBlock('category.tree')
-                    ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
-            'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
-            'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
-        ]);
+        $eventResponse = new DataObject(
+            [
+                'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
+                    . $resultPage->getLayout()->getBlock('category.tree')
+                        ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
+                'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
+                'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
+            ]
+        );
         $this->_eventManager->dispatch(
             'category_prepare_ajax_response',
             ['response' => $eventResponse, 'controller' => $this]

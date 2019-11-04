@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\Page as ResultPage;
 
 /**
@@ -76,6 +77,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param array $messageGroups
      * @param \Magento\Framework\Stdlib\StringUtils|null $string
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -95,8 +97,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->messageGroups = $messageGroups;
         $this->messageManager = $messageManager;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
-        $this->string = $string ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Stdlib\StringUtils::class);
+        $this->string = $string ?: ObjectManager::getInstance()->get(\Magento\Framework\Stdlib\StringUtils::class);
         parent::__construct($context);
     }
 
@@ -199,6 +200,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                     $update->addUpdate($layoutUpdate);
                 }
             }
+        }
+        if ($settings->getPageLayoutHandles()) {
+            $resultPage->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
 
         $currentCategory = $this->_coreRegistry->registry('current_category');

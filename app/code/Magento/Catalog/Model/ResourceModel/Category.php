@@ -631,10 +631,9 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
-        // @codingStandardsIgnoreStart
         $serializeData = $this->serializer->serialize($entityIdsFilter);
+        // phpcs:ignore
         $entityIdsFilterHash = md5($serializeData);
-        // @codingStandardsIgnoreEnd
 
         if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue])) {
             $linkField = $this->getLinkField();
@@ -755,6 +754,8 @@ class Category extends AbstractResource
             'custom_layout_update'
         )->addAttributeToSelect(
             'custom_apply_to_products'
+        )->addAttributeToSelect(
+            'custom_layout_update_file'
         )->addFieldToFilter(
             'entity_id',
             ['in' => $pathIds]

@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Cms\Api\Data\PageSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Cms\Model\PageSearchResults" />
     <preference for="Magento\Cms\Api\Data\BlockSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\Cms\Model\BlockSearchResults" />
     <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
     <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
     <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
@@ -241,4 +241,11 @@
     <type name="Magento\Catalog\Model\Product">
         <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
     </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
+    <type name="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
 </config>

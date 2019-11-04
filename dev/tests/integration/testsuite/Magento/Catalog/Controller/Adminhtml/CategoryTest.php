@@ -9,9 +9,18 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Acl\Builder;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\Catalog\Model\Category as CategoryModel;
+use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 
 /**
+ * Test for admin category functionality.
+ *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -19,6 +28,15 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
      * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $productResource;
+    /**
+     * @var Builder
+     */
+    private $aclBuilder;
+
+    /**
+     * @var CategoryModelFactory
+     */
+    private $categoryFactory;
 
     /**
      * @inheritDoc
@@ -33,6 +51,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->productResource = Bootstrap::getObjectManager()->get(
             Product::class
         );
+        $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
+        $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryModelFactory::class);
     }
 
     /**
@@ -61,7 +81,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         if ($isSuccess) {
             $this->assertSessionMessages(
                 $this->equalTo(['You saved the category.']),
-                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+                MessageInterface::TYPE_SUCCESS
             );
         }
 
@@ -207,7 +227,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                         'custom_design_from' => 1,
                         'custom_design_to' => 1,
                         'page_layout' => 1,
-                        'custom_layout_update' => 1,
+                        'custom_layout_update' => null,
                     ],
                 ],
                 [
@@ -253,7 +273,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'custom_design_from' => '5/21/2015',
                     'custom_design_to' => '5/29/2015',
                     'page_layout' => '',
-                    'custom_layout_update' => '',
                     'use_config' => [
                         'available_sort_by' => 1,
                         'default_sort_by' => 1,
@@ -275,7 +294,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'description' => true,
                     'meta_keywords' => true,
                     'meta_description' => true,
-                    'custom_layout_update' => true,
                     'custom_design_from' => true,
                     'custom_design_to' => true,
                     'filter_price_range' => false
@@ -295,7 +313,6 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'description' => 'Custom Description',
                     'meta_keywords' => 'Custom keywords',
                     'meta_description' => 'Custom meta description',
-                    'custom_layout_update' => null,
                     'custom_design_from' => '2015-05-21 00:00:00',
                     'custom_design_to' => '2015-05-29 00:00:00',
                     'filter_price_range' => null
@@ -552,5 +569,235 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             new \Zend_Db_Expr('COUNT(product_id)')
         );
         return $this->productResource->getConnection()->fetchOne($oldCategoryProducts);
+    }
+
+    /**
+     * Check whether additional authorization is required for the design fields.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveDesign()
+    {
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        $requestData = [
+            'id' => '2',
+            'entity_id' => '2',
+            'path' => '1/2',
+            'name' => 'Custom Name',
+            'is_active' => '0',
+            'description' => 'Custom Description',
+            'meta_title' => 'Custom Title',
+            'meta_keywords' => 'Custom keywords',
+            'meta_description' => 'Custom meta description',
+            'include_in_menu' => '0',
+            'url_key' => 'default-test-category',
+            'display_mode' => 'PRODUCTS',
+            'landing_page' => '1',
+            'is_anchor' => true,
+            'store_id' => $storeId,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'filter_price_range' => 1,
+            ],
+        ];
+        $uri = 'backend/catalog/category/save';
+
+        //Trying to update the category's design settings without proper permissions.
+        //Expected list of sessions messages collected throughout the controller calls.
+        $sessionMessages = ['Not allowed to edit the category\'s design attributes'];
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $requestData['custom_layout_update_file'] = 'test-file';
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+
+        //Trying again with the permissions.
+        $requestData['custom_layout_update_file'] = null;
+        $requestData['page_layout'] = '2columns-left';
+        $this->aclBuilder->getAcl()
+            ->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+        $this->assertEquals('2columns-left', $category->getData('page_layout'));
+        //No new error messages
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+
+        //Trying to save special value without the permissions.
+        $requestData['custom_layout_update_file'] = CategoryModel\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
+        $requestData['description'] = 'test';
+        $this->aclBuilder->getAcl()->deny(null, ['Magento_Catalog::edit_category_design']);
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+        $this->assertEquals('2columns-left', $category->getData('page_layout'));
+        $this->assertEmpty($category->getData('custom_layout_update_file'));
+        $this->assertEquals('test', $category->getData('description'));
+        //No new error messages
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Save design attributes with default values without design permissions.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @return void
+     * @throws \Throwable
+     */
+    public function testSaveDesignWithDefaults()
+    {
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+        $attributes = $category->getAttributes();
+        $attributes['custom_design']->setDefaultValue('1');
+        $attributes['custom_design']->save();
+        $requestData = [
+            'name' => 'Test name',
+            'parent_id' => '2',
+            'is_active' => '0',
+            'description' => 'Custom Description',
+            'meta_title' => 'Custom Title',
+            'meta_keywords' => 'Custom keywords',
+            'meta_description' => 'Custom meta description',
+            'include_in_menu' => '0',
+            'url_key' => 'default-test-category-test',
+            'display_mode' => 'PRODUCTS',
+            'landing_page' => '1',
+            'is_anchor' => true,
+            'store_id' => $storeId,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'filter_price_range' => 1,
+            ],
+            'custom_design' => '1',
+            'custom_apply_to_products' => '0'
+        ];
+        $uri = 'backend/catalog/category/save';
+
+        //Updating the category's design settings without proper permissions.
+        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->dispatch($uri);
+
+        //Verifying that category was saved.
+        /** @var Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(Registry::class);
+        $id = $registry->registry('current_category')->getId();
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load($id);
+        $this->assertNotEmpty($category->getId());
+        $this->assertEquals('1', $category->getData('custom_design'));
+    }
+
+    /**
+     * Test custom update files functionality.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @throws \Throwable
+     * @return void
+     */
+    public function testSaveCustomLayout()
+    {
+        $file = 'test_file';
+        /** @var $store \Magento\Store\Model\Store */
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        /** @var CategoryLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
+        $layoutManager->setCategoryFakeFiles(2, [$file]);
+        $store->load('fixturestore', 'code');
+        $storeId = $store->getId();
+        $requestData = [
+            'id' => '2',
+            'entity_id' => '2',
+            'path' => '1/2',
+            'name' => 'Custom Name',
+            'is_active' => '0',
+            'description' => 'Custom Description',
+            'meta_title' => 'Custom Title',
+            'meta_keywords' => 'Custom keywords',
+            'meta_description' => 'Custom meta description',
+            'include_in_menu' => '0',
+            'url_key' => 'default-test-category',
+            'display_mode' => 'PRODUCTS',
+            'landing_page' => '1',
+            'is_anchor' => true,
+            'store_id' => $storeId,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1,
+                'filter_price_range' => 1,
+            ],
+        ];
+        $uri = 'backend/catalog/category/save';
+
+        //Saving a wrong file
+        $requestData['custom_layout_update_file'] = $file . 'INVALID';
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+
+        //Checking that the value is not saved
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load($requestData['entity_id']);
+        $this->assertEmpty($category->getData('custom_layout_update_file'));
+
+        //Saving the correct file
+        $requestData['custom_layout_update_file'] = $file;
+        $this->getRequest()->setDispatched(false);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->getRequest()->setParam('store', $requestData['store_id']);
+        $this->getRequest()->setParam('id', $requestData['id']);
+        $this->dispatch($uri);
+
+        //Checking that the value is saved
+        /** @var CategoryModel $category */
+        $category = $this->categoryFactory->create();
+        $category->load($requestData['entity_id']);
+        $this->assertEquals($file, $category->getData('custom_layout_update_file'));
     }
 }
