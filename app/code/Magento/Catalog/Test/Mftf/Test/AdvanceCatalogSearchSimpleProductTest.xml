@@ -36,7 +36,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <createData entity="ApiProductWithDescription" stepKey="product"/>
+            <createData entity="ApiProductWithDescriptionAndUnderscoredSku" stepKey="product"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
@@ -87,6 +87,9 @@
             <group value="Catalog"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+
             <createData entity="ApiProductWithDescription" stepKey="product"/>
             <getData entity="GetProduct" stepKey="arg1">
                 <requiredEntity createDataKey="product"/>
@@ -100,6 +103,7 @@
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
     </test>
 </tests>

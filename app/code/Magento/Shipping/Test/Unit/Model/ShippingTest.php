@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\CarrierFactory;
@@ -19,12 +21,14 @@ use Magento\Store\Model\Store;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @see Shipping
+ * Unit tests for \Magento\Shipping\Model\Shipping class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Test identification number of product
+     * Test identification number of product.
      *
      * @var int
      */
@@ -50,22 +54,34 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     private $carrier;
 
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->stockRegistry = $this->createMock(StockRegistry::class);
         $this->stockItemData = $this->createMock(StockItem::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->shipping = (new ObjectManagerHelper($this))->getObject(
             Shipping::class,
             [
                 'stockRegistry' => $this->stockRegistry,
                 'carrierFactory' => $this->getCarrierFactory(),
+                'scopeConfig' => $this->scopeConfig,
             ]
         );
     }
 
     /**
+     * Compose Packages For Carrier.
      *
+     * @return void
      */
     public function testComposePackages()
     {
@@ -125,14 +141,25 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Active flag should be set before collecting carrier rates.
+     *
+     * @return void
      */
     public function testCollectCarrierRatesSetActiveFlag()
     {
+        $carrierCode = 'carrier';
+        $scopeStore = 'store';
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                'carriers/' . $carrierCode . '/active',
+                $scopeStore
+            )
+            ->willReturn(true);
         $this->carrier->expects($this->atLeastOnce())
             ->method('setActiveFlag')
             ->with('active');
 
-        $this->shipping->collectCarrierRates('carrier', new RateRequest());
+        $this->shipping->collectCarrierRates($carrierCode, new RateRequest());
     }
 
     /**

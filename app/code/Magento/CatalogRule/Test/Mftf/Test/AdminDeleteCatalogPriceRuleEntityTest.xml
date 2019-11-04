@@ -18,7 +18,7 @@
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
         </annotations>
-        
+
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer1"/>
             <createData entity="_defaultCategory" stepKey="createCategory1"/>
@@ -59,7 +59,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
 
         <!-- Assert that the Success message is present after the delete -->
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <!-- Reindex -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
@@ -154,6 +154,10 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
 
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
@@ -188,7 +192,7 @@
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
         <!-- Reindex -->
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>

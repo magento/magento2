@@ -1,11 +1,10 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
@@ -178,7 +177,7 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
-     * Prepare Meta
+     * Modify UI Quantity and Stock status attribute meta.
      *
      * @return void
      */
@@ -188,10 +187,6 @@ class AdvancedInventory extends AbstractModifier
         $pathField = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
 
         if ($pathField) {
-            $labelField = $this->arrayManager->get(
-                $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/label',
-                $this->meta
-            );
             $fieldsetPath = $this->arrayManager->slicePath($pathField, 0, -4);
 
             $this->meta = $this->arrayManager->merge(
@@ -219,10 +214,9 @@ class AdvancedInventory extends AbstractModifier
                 'formElement' => 'container',
                 'componentType' => 'container',
                 'component' => "Magento_Ui/js/form/components/group",
-                'label' => $labelField,
+                'label' => false,
                 'breakLine' => false,
                 'dataScope' => $fieldCode,
-                'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',
                 'sortOrder' => (int) $this->arrayManager->get(
                     $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
@@ -238,7 +232,7 @@ class AdvancedInventory extends AbstractModifier
             $this->meta = $this->arrayManager->merge(
                 $fieldsetPath . '/children',
                 $this->meta,
-                ['container_quantity_and_stock_status_qty' => $container]
+                ['quantity_and_stock_status_qty' => $container]
             );
         }
     }

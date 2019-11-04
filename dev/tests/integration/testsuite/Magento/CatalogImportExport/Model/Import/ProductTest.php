@@ -98,7 +98,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             try {
                 $product = $productRepository->get($productSku, false, null, true);
                 $productRepository->delete($product);
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (NoSuchEntityException $e) {
                 // nothing to delete
             }
@@ -917,15 +917,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public static function mediaImportImageFixture()
     {
-        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
-        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
+        $varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
-            DirectoryList::MEDIA
+            DirectoryList::VAR_DIR
         );
 
-        $mediaDirectory->create('import');
-        $dirPath = $mediaDirectory->getAbsolutePath('import');
+        $varDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
+        $dirPath = $varDirectory->getAbsolutePath('import' . DIRECTORY_SEPARATOR . 'images');
 
         $items = [
             [
@@ -968,13 +968,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public static function mediaImportImageFixtureRollback()
     {
-        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
-        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $fileSystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Filesystem::class
-        )->getDirectoryWrite(
-            DirectoryList::MEDIA
         );
-        $mediaDirectory->delete('import');
+        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
+        $mediaDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+
+        /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
+        $varDirectory = $fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $varDirectory->delete('import');
         $mediaDirectory->delete('catalog');
     }
 
@@ -983,13 +985,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public static function mediaImportImageFixtureError()
     {
-        /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
-        $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
+        $varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
-            DirectoryList::MEDIA
+            DirectoryList::VAR_DIR
         );
-        $dirPath = $mediaDirectory->getAbsolutePath('import');
+        $dirPath = $varDirectory->getAbsolutePath('import' . DIRECTORY_SEPARATOR . 'images');
         $items = [
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_error.jpg',
@@ -2133,8 +2135,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $uploader = $this->_model->getUploader();
 
         $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
-        $destDir = $directory->getRelativePath($mediaPath . '/catalog/product');
-        $tmpDir = $directory->getRelativePath($mediaPath . '/import');
+        $varPath = $appParams[DirectoryList::VAR_DIR][DirectoryList::PATH];
+        $destDir = $directory->getRelativePath(
+            $mediaPath . DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product'
+        );
+        $tmpDir = $directory->getRelativePath(
+            $varPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images'
+        );
 
         $directory->create($destDir);
         $this->assertTrue($uploader->setDestDir($destDir));
@@ -2499,6 +2506,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
     {
+        $this->loginAdminUserWithUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -2580,5 +2589,90 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
 
         $this->_model->importData();
+    }
+
+    /**
+     * Hide product images via hide_from_product_page attribute during import CSV.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     *
+     * @return void
+     */
+    public function testImagesAreHiddenAfterImport(): void
+    {
+        $expectedActiveImages = [
+            [
+                'file' => '/m/a/magento_additional_image_one.jpg',
+                'label' => 'Additional Image Label One',
+                'disabled' => '0',
+            ],
+            [
+                'file' => '/m/a/magento_additional_image_two.jpg',
+                'label' => 'Additional Image Label Two',
+                'disabled' => '0',
+            ],
+        ];
+
+        $expectedHiddenImage = [
+            'file' => '/m/a/magento_image.jpg',
+            'label' => 'Image Alt Text',
+            'disabled' => '1',
+        ];
+        $expectedAllProductImages = array_merge(
+            [$expectedHiddenImage],
+            $expectedActiveImages
+        );
+
+        $this->importDataForMediaTest('hide_from_product_page_images.csv');
+        $actualAllProductImages = [];
+        $product = $this->getProductBySku('simple');
+
+        // Check that new images were imported and existing image is disabled after import
+        $productMediaData = $product->getData('media_gallery');
+
+        $this->assertNotEmpty($productMediaData['images']);
+        $allProductImages = $productMediaData['images'];
+        $this->assertCount(3, $allProductImages, 'Images were imported incorrectly');
+
+        foreach ($allProductImages as $image) {
+            $actualAllProductImages[] = [
+                'file' => $image['file'],
+                'label' => $image['label'],
+                'disabled' => $image['disabled'],
+            ];
+        }
+
+        $this->assertEquals(
+            $expectedAllProductImages,
+            $actualAllProductImages,
+            'Images are incorrect after import'
+        );
+
+        // Check that on storefront only enabled images are shown
+        $actualActiveImages = $product->getMediaGalleryImages();
+        $this->assertSame(
+            $expectedActiveImages,
+            $actualActiveImages->toArray(['file', 'label', 'disabled'])['items'],
+            'Hidden image is present on frontend after import'
+        );
+    }
+
+    /**
+     * Set the current admin session user based on a username
+     *
+     * @param string $username
+     */
+    private function loginAdminUserWithUsername(string $username)
+    {
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername($username);
+
+        /** @var $session \Magento\Backend\Model\Auth\Session */
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Auth\Session::class
+        );
+        $session->setUser($user);
     }
 }
