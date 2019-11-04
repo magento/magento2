@@ -447,6 +447,8 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="simple1"/>
             <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
             <createData entity="OneSimpleProductLink" stepKey="addProductOne">
@@ -460,10 +462,11 @@
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
-            <argument name="phrase" value="$createProduct.name$"/>
+            <argument name="phrase" value="&quot;$createProduct.name$&quot;"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
