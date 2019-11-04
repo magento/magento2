@@ -254,7 +254,7 @@ define([
          *
          * @returns {String|null}
          */
-        getErrorMessage: function () {
+        getErrorMessageUnsanitizedHtml: function () {
             return this.errorMessage();
         }
     });

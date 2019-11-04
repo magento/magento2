@@ -8,10 +8,10 @@
     <div class="masonry-image-column" repeat="foreach: rows, item: '$row'">
         <div outerfasteach="data: getVisible(), as: '$col'" template="getBody()"/>
     </div>
-    <div if="!hasData() && !getErrorMessage()" class="no-data-message-container">
+    <div if="!hasData() && !getErrorMessageUnsanitizedHtml()" class="no-data-message-container">
         <span translate="'We couldn\'t find any records.'"/>
     </div>
-    <div if="getErrorMessage()" class="error-message-container">
-        <span data-bind="html: getErrorMessage()"/>
+    <div if="getErrorMessageUnsanitizedHtml()" class="error-message-container">
+        <span data-bind="html: getErrorMessageUnsanitizedHtml()"/>
     </div>
 </div>
