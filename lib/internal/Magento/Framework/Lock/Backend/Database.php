@@ -13,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Phrase;
+use Magento\Framework\DB\ExpressionConverter;
 
 /**
  * Implementation of the lock manager on the basis of MySQL.
@@ -166,7 +167,8 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     private function addPrefix(string $name): string
     {
-        $name = $this->getPrefix() . '|' . $name;
+        $prefix = $this->getPrefix() . '|';
+        $name = ExpressionConverter::shortenEntityName($prefix . $name, $prefix);
 
         if (strlen($name) > 64) {
             throw new InputException(new Phrase('Lock name too long: %1...', [substr($name, 0, 64)]));
