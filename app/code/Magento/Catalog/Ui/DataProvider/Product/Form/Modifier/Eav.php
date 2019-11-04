@@ -685,6 +685,7 @@ class Eav extends AbstractModifier
                 'scopeLabel' => $this->getScopeLabel($attribute),
                 'globalScope' => $this->isScopeGlobal($attribute),
                 'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
+                '__disableTmpl' => ['label' => true, 'code' => true]
             ]
         );
 
@@ -851,6 +852,7 @@ class Eav extends AbstractModifier
                 'breakLine' => false,
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'required' => $attribute->getIsRequired(),
+                '__disableTmpl' => ['label' => true]
             ]
         );
 
@@ -859,7 +861,9 @@ class Eav extends AbstractModifier
                 'arguments/data/config',
                 $containerMeta,
                 [
-                    'component' => 'Magento_Ui/js/form/components/group'
+                    'component' => 'Magento_Ui/js/form/components/group',
+                    'label' => false,
+                    'required' => false,
                 ]
             );
         }
