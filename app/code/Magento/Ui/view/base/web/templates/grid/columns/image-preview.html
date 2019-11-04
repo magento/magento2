@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles($row())">
+    <div class="container">
+        <div class="action-buttons">
+            <button class="action-previous" type="button" data-bind="click: function () { $col.prev($row()); }">
+                <span translate="'Previous'"/>
+            </button>
+            <button class="action-next" type="button" data-bind="click: function () { $col.next($row()); }">
+                <span translate="'Next'"/>
+            </button>
+            <button class="action-close" type="button" data-bind="click: function () { $col.hide(); }">
+                <span translate="'Close'"/>
+            </button>
+        </div>
+        <img class="preview" attr="src: $col.getUrl($row()), alt: $col.getTitle($row())">
+    </div>
+</div>
