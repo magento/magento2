@@ -708,8 +708,8 @@ QUERY;
                         telephone: "88776655"
                         }
                     }',
-        'Region is not available for the selected country'
-    ],
+                'Region is not available for the selected country'
+            ],
         ];
     }
 
