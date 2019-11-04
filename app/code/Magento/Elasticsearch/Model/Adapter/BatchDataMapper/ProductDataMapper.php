@@ -252,9 +252,14 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function prepareMultiselectValues(array $values): array
     {
-        return \array_merge(...\array_map(function (string $value) {
-            return \explode(',', $value);
-        }, $values));
+        return \array_merge(
+            ...\array_map(
+                function (string $value) {
+                    return \explode(',', $value);
+                },
+                $values
+            )
+        );
     }
 
     /**
@@ -285,9 +290,9 @@ class ProductDataMapper implements BatchDataMapperInterface
             return $attributeLabels;
         }
 
-        foreach ($options as $option) {
-            if (\in_array($option->getValue(), $attributeValues)) {
-                $attributeLabels[] = $option->getLabel();
+        foreach ($attributeValues as $attributeValue) {
+            if (isset($options[$attributeValue])) {
+                $attributeLabels[] = $options[$attributeValue]->getLabel();
             }
         }
 
@@ -304,7 +309,11 @@ class ProductDataMapper implements BatchDataMapperInterface
     {
         if (!isset($this->attributeOptionsCache[$attribute->getId()])) {
             $options = $attribute->getOptions() ?? [];
-            $this->attributeOptionsCache[$attribute->getId()] = $options;
+            $optionsByValue = [];
+            foreach ($options as $option) {
+                $optionsByValue[$option->getValue()] = $option;
+            }
+            $this->attributeOptionsCache[$attribute->getId()] = $optionsByValue;
         }
 
         return $this->attributeOptionsCache[$attribute->getId()];
