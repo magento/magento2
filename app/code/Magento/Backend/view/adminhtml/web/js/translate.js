@@ -4,16 +4,10 @@
  */
 
 /* eslint-disable strict */
-(function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define([
-            'jquery',
-            'mage/mage'
-        ], factory);
-    } else {
-        factory(jQuery);
-    }
-}(function ($) {
+define([
+    'jquery',
+    'mage/mage'
+], function ($) {
     $.extend(true, $, {
         mage: {
             translate: (function () {
@@ -51,4 +45,4 @@
     $.mage.__ = $.proxy($.mage.translate.translate, $.mage.translate);
 
     return $.mage.__;
-}));
+});

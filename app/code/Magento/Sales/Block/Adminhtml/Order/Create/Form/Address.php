@@ -271,21 +271,24 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
         $this->_form->setValues($this->getFormValues());
 
-        if ($this->_form->getElement('country_id')->getValue()) {
-            $countryId = $this->_form->getElement('country_id')->getValue();
-            $this->_form->getElement('country_id')->setValue(null);
-            foreach ($this->_form->getElement('country_id')->getValues() as $country) {
+        $countryElement = $this->_form->getElement('country_id');
+
+        $this->processCountryOptions($countryElement);
+
+        if ($countryElement->getValue()) {
+            $countryId = $countryElement->getValue();
+            $countryElement->setValue(null);
+            foreach ($countryElement->getValues() as $country) {
                 if ($country['value'] == $countryId) {
-                    $this->_form->getElement('country_id')->setValue($countryId);
+                    $countryElement->setValue($countryId);
                 }
             }
         }
-        if ($this->_form->getElement('country_id')->getValue() === null) {
-            $this->_form->getElement('country_id')->setValue(
+        if ($countryElement->getValue() === null) {
+            $countryElement->setValue(
                 $this->directoryHelper->getDefaultCountry($this->getStore())
             );
         }
-        $this->processCountryOptions($this->_form->getElement('country_id'));
         // Set custom renderer for VAT field if needed
         $vatIdElement = $this->_form->getElement('vat_id');
         if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
@@ -309,7 +312,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      */
     private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
     {
-        $storeId = $this->getBackendQuoteSession()->getStoreId();
+        $storeId = $this->getAddressStoreId();
         $options = $this->getCountriesCollection()
             ->loadByStore($storeId)
             ->toOptionArray();
@@ -387,5 +390,15 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         }
 
         return $this->escapeHtml($result);
+    }
+
+    /**
+     * Return address store id.
+     *
+     * @return int
+     */
+    protected function getAddressStoreId()
+    {
+        return $this->getBackendQuoteSession()->getStoreId();
     }
 }

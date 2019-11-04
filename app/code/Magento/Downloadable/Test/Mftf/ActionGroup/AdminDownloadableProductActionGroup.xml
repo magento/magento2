@@ -51,18 +51,20 @@
         </annotations>
         <arguments>
             <argument name="link" defaultValue="downloadableLink"/>
+            <argument name="index" type="string" defaultValue="1"/>
         </arguments>
         
         <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('1')}}" stepKey="fillDownloadableLinkTitle"/>
-        <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput('1')}}" stepKey="fillDownloadableLinkPrice"/>
-        <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector('1')}}" stepKey="selectDownloadableLinkFileType"/>
-        <selectOption userInput="{{link.sample_type}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector('1')}}" stepKey="selectDownloadableLinkSampleType"/>
-        <selectOption userInput="{{link.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector('1')}}" stepKey="selectDownloadableLinkShareable"/>
-        <checkOption selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads('1')}}" stepKey="checkDownloadableLinkUnlimited"/>
-        <fillField userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUrlInput('1')}}" stepKey="fillDownloadableLinkFileUrl"/>
-        <attachFile userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUploadFile('1')}}" stepKey="attachDownloadableLinkUploadSample"/>
+        <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput(index)}}" stepKey="fillDownloadableLinkTitle"/>
+        <fillField userInput="{{link.price}}" selector="{{AdminProductDownloadableSection.addLinkPriceInput(index)}}" stepKey="fillDownloadableLinkPrice"/>
+        <selectOption userInput="{{link.file_type}}" selector="{{AdminProductDownloadableSection.addLinkFileTypeSelector(index)}}" stepKey="selectDownloadableLinkFileType"/>
+        <selectOption userInput="{{link.sample_type}}" selector="{{AdminProductDownloadableSection.addLinkSampleTypeSelector(index)}}" stepKey="selectDownloadableLinkSampleType"/>
+        <selectOption userInput="{{link.shareable}}" selector="{{AdminProductDownloadableSection.addLinkShareableSelector(index)}}" stepKey="selectDownloadableLinkShareable"/>
+        <checkOption selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads(index)}}" stepKey="checkDownloadableLinkUnlimited"/>
+        <fillField userInput="{{link.file}}" selector="{{AdminProductDownloadableSection.addLinkFileUrlInput(index)}}" stepKey="fillDownloadableLinkFileUrl"/>
+        <attachFile userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUploadFile(index)}}" stepKey="attachDownloadableLinkUploadSample"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterFillingOutForm" />
     </actionGroup>
 
     <!--Add a downloadable sample file-->
