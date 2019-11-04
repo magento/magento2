@@ -22,16 +22,21 @@
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
+            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup stepKey="deleteProduct" ref="deleteProductBySku">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
