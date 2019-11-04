@@ -50,7 +50,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
 
         if ($quote->getIsVirtual()) {
             $quote->setBillingAddress($addressInformation->getAddress());
-        } else {
+        } elseif (!$quote->isMultipleShippingAddresses()) {
             $quote->setShippingAddress($addressInformation->getAddress());
             $quote->getShippingAddress()->setCollectShippingRates(true)->setShippingMethod(
                 $addressInformation->getShippingCarrierCode() . '_' . $addressInformation->getShippingMethodCode()
