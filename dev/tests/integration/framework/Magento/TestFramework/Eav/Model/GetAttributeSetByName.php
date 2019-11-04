@@ -39,6 +39,8 @@ class GetAttributeSetByName
     }
 
     /**
+     * Find attribute set by name and return it.
+     *
      * @param string $attributeSetName
      * @return AttributeSetInterface|null
      */
