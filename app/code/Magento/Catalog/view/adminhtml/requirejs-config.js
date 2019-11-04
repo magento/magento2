@@ -12,12 +12,7 @@ var config = {
             productGallery:       'Magento_Catalog/js/product-gallery',
             baseImage:            'Magento_Catalog/catalog/base-image-uploader',
             productAttributes:    'Magento_Catalog/catalog/product-attributes',
-            categoryCheckboxTree: 'Magento_Catalog/js/category-checkbox-tree',
-            priceBox:             'Magento_Catalog/js/price-box',
-            priceOptionDate:      'Magento_Catalog/js/price-option-date',
-            priceOptionFile:      'Magento_Catalog/js/price-option-file',
-            priceOptions:         'Magento_Catalog/js/price-options',
-            priceUtils:           'Magento_Catalog/js/price-utils'
+            categoryCheckboxTree: 'Magento_Catalog/js/category-checkbox-tree'
         }
     },
     deps: [
