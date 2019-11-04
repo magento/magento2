@@ -149,7 +149,7 @@
 
     <actionGroup name="deleteBundleOptionByIndex">
         <annotations>
-            <description>Requires Navigation to Product Creation page. Removes any Bundle Option by index specified in arguments. 'var' refers to Bundle option number.</description>
+            <description>Requires Navigation to Product Creation page. Removes any Bundle Option by index specified in arguments. 'deleteIndex' refers to Bundle option number.</description>
         </annotations>
         <arguments>
             <argument name="deleteIndex" type="string"/>
