@@ -446,7 +446,8 @@ TEMPLATE;
             ['getTemplateProcessor'],
             ['varDirective'],
             ['delete'],
-            ['getDataUsingMethod']
+            ['getDataUsingMethod'],
+            ['getTemplateFilter']
         ];
     }
 }
