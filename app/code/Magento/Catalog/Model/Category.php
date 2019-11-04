@@ -1356,9 +1356,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         return $this->getData(self::KEY_CHILDREN_DATA);
     }
 
-    //@codeCoverageIgnoreEnd
-
-    //phpcs:disable Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
     /**
      * Return Data Object data in array format.
      *
@@ -1367,7 +1364,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function __toArray()
     {
-        //phpcs:enable Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
         $data = $this->_data;
         $hasToArray = function ($model) {
             return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);
@@ -1386,6 +1382,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $data;
     }
+
+    //@codeCoverageIgnoreEnd
 
     /**
      * Convert Category model into flat array.
