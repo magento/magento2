@@ -41,7 +41,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * phpcs:disable Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
     \Magento\Framework\DataObject\IdentityInterface,
