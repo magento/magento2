@@ -18,7 +18,7 @@
         </arguments>
 
         <click selector="{{AdminDataGridTableSection.rowTemplate(customerEmail)}}" stepKey="clickCustomersGridRow"/>
-        <waitForElementVisible selector="{{AdminCustomerGridInlineEditorSection.customerGenderEditor}}" stepKey="waitForGenderElementAppeares"/>
+        <waitForElementVisible selector="{{AdminCustomerGridInlineEditorSection.customerGenderEditor}}" stepKey="waitForGenderElementAppears"/>
         <selectOption userInput="{{genderValue}}" selector="{{AdminCustomerGridInlineEditorSection.customerGenderEditor}}" stepKey="selectGenderValue"/>
         <click selector="{{AdminCustomerGridInlineEditorSection.saveInGrid}}" stepKey="saveCustomer"/>
     </actionGroup>
