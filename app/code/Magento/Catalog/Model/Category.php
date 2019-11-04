@@ -1359,15 +1359,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     //@codeCoverageIgnoreEnd
 
+    //phpcs:disable Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
     /**
      * Return Data Object data in array format.
      *
      * @return array
      * @todo refactor with converter for AbstractExtensibleModel
-     * phpcs:ignore Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
      */
     public function __toArray()
     {
+        //phpcs:enable Magento2.FunctionNameRestrictions.MethodDoubleUnderscore
         $data = $this->_data;
         $hasToArray = function ($model) {
             return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);
