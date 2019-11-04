@@ -40,10 +40,9 @@ if(is_array($this->resolvers)){
             }
 }
         }
-
-
+        
         if ($type === null) {
-            throw new \LogicException('Unknown connection name ' . $connectionName . ' check if Magento_Amqp module enabled');
+            throw new \LogicException('Unknown connection name ' . $connectionName);
         }
         return $type;
     }
