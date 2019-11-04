@@ -30,22 +30,21 @@ class SaveAssetLinksTest extends TestCase
     private $connectionMock;
 
     /**
+     * @var ResourceConnection|MockObject
+     */
+    private $resourceConnectionMock;
+
+    /**
      * Prepare test objects.
      */
     public function setUp(): void
     {
+
         $this->connectionMock = $this->createMock(AdapterInterface::class);
-        $resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-        $resourceConnectionMock->expects($this->once())
-            ->method('getTableName')
-            ->with('media_gallery_asset_keyword')
-            ->willReturn('prefix_media_gallery_asset_keyword');
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
         $this->sut = new SaveAssetLinks(
-            $resourceConnectionMock
+            $this->resourceConnectionMock
         );
     }
 
@@ -60,14 +59,25 @@ class SaveAssetLinksTest extends TestCase
      */
     public function testAssetKeywordsSave(int $assetId, array $keywordIds, array $values): void
     {
-        $this->connectionMock->expects($this->once())
-            ->method('insertArray')
-            ->with(
-                'prefix_media_gallery_asset_keyword',
-                ['asset_id', 'keyword_id'],
-                $values,
-                2
-            );
+        $expectedCalls = (int) (count($keywordIds));
+
+        if ($expectedCalls) {
+            $this->resourceConnectionMock->expects($this->once())
+                ->method('getConnection')
+                ->willReturn($this->connectionMock);
+            $this->resourceConnectionMock->expects($this->once())
+                ->method('getTableName')
+                ->with('media_gallery_asset_keyword')
+                ->willReturn('prefix_media_gallery_asset_keyword');
+            $this->connectionMock->expects($this->once())
+                ->method('insertArray')
+                ->with(
+                    'prefix_media_gallery_asset_keyword',
+                    ['asset_id', 'keyword_id'],
+                    $values,
+                    2
+                );
+        }
 
         $this->sut->execute($assetId, $keywordIds);
     }
@@ -79,6 +89,9 @@ class SaveAssetLinksTest extends TestCase
      */
     public function testAssetNotSavingCausedByError(): void
     {
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->once())
             ->method('insertArray')
             ->willThrowException((new \Exception()));
