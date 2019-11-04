@@ -31,8 +31,8 @@ class ReportDisableNotification implements \Magento\Framework\Setup\Patch\DataPa
     public function apply()
     {
         $message = <<<"MESSAGE"
-Statistics collection for Magento Reports is now disabled by default in the interest of improving performance. 
-Please turn Magento Reports back in System Config.
+To improve performance, collecting statistics for the Magento Report module is disabled by default. 
+You can enable it in System Config.
 MESSAGE;
         $this->notifier->addNotice(__('Disable Notice'), __($message));
     }
