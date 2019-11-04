@@ -252,9 +252,14 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function prepareMultiselectValues(array $values): array
     {
-        return \array_merge(...\array_map(function (string $value) {
-            return \explode(',', $value);
-        }, $values));
+        return \array_merge(
+            ...\array_map(
+                function (string $value) {
+                    return \explode(',', $value);
+                },
+                $values
+            )
+        );
     }
 
     /**
