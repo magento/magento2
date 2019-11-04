@@ -5,7 +5,7 @@
 define([
     'underscore',
     'jquery',
-    './column'
+    'Magento_Ui/js/grid/columns/column'
 ], function (_, $, Column) {
     'use strict';
 
