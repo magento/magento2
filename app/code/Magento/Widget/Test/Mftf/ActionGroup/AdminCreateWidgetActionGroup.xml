@@ -56,6 +56,7 @@
             <argument name="widget"/>
         </arguments>
         <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
         <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
         <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>

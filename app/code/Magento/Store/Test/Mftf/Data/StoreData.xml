@@ -134,4 +134,11 @@
         <data key="store_type">store</data>
         <data key="store_action">add</data>
     </entity>
+    <entity name="DefaultAllStoreView" type="store">
+        <data key="name">All Store Views</data>
+    </entity>
+    <entity name="NewStoreViewData" type="store">
+        <data key="name" unique="suffix">StoreView</data>
+        <data key="code" unique="suffix">StoreViewCode</data>
+    </entity>
 </entities>

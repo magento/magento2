@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontLoginCustomerOnCheckoutPageActionGroup">
+        <annotations>
+            <description>Login customer on storefront checkout page during shipping step</description>
+        </annotations>
+        <arguments>
+            <argument name="customerEmail" type="string" defaultValue="{{Simple_US_Customer.email}}"/>
+            <argument name="customerPassword" type="string" defaultValue="Simple_US_Customer.password"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForCheckoutShippingSectionToLoad"/>
+        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerEmail}}" stepKey="fillEmailField"/>
+        <waitForPageLoad stepKey="waitForAllRefreshedAfterEmail"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.password}}" stepKey="waitForPasswordFieldVisible"/>
+        <fillField selector="{{CheckoutShippingSection.password}}" userInput="{{customerPassword}}" stepKey="fillPasswordField"/>
+        <waitForPageLoad stepKey="waitForAllRefreshedAfterPassword"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.loginButton}}" stepKey="waitForLoginButtonVisible"/>
+        <click selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
+        <waitForPageLoad stepKey="waitForAllRefreshedAfterLogin"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForEmailFieldInvisible"/>
+    </actionGroup>
+</actionGroups>

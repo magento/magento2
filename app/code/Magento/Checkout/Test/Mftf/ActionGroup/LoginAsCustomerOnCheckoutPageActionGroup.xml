@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="LoginAsCustomerOnCheckoutPageActionGroup">
+        <annotations>
+            <description>DEPRECATED: Please use StorefrontLoginCustomerOnCheckoutPageActionGroup. Login customer on storefront checkout page during shipping step</description>
+        </annotations>
         <arguments>
             <argument name="customer" type="entity"/>
         </arguments>

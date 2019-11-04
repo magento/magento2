@@ -345,4 +345,13 @@
         <data key="quantity">0</data>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="SimpleProductUpdatePrice11" type="product2">
+        <data key="price">11.00</data>
+    </entity>
+    <entity name="SimpleProductUpdatePrice14" type="product2">
+        <data key="price">14.00</data>
+    </entity>
+    <entity name="SimpleProductUpdatePrice16" type="product2">
+        <data key="price">16.00</data>
+    </entity>
 </entities>
