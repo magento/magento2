@@ -51,6 +51,8 @@ class Processor
      * @param string $file
      *
      * @return ProcessorSubject
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterRemoveImage(
         ProcessorSubject $subject,

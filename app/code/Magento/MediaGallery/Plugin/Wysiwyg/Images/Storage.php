@@ -70,6 +70,8 @@ class Storage
      *
      * @return StorageSubject
      * @throws ValidatorException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDeleteFile(StorageSubject $subject, StorageSubject $result, $target): StorageSubject
     {

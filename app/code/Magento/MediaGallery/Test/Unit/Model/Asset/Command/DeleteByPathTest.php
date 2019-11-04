@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
 use Magento\MediaGallery\Model\Asset\Command\DeleteByPath;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -40,16 +38,6 @@ class DeleteByPathTest extends TestCase
      * @var LoggerInterface|MockObject
      */
     private $logger;
-
-    /**
-     * @var string
-     */
-    private $testFilePath;
-
-    /**
-     * @var string
-     */
-    private $mediaAssetTable;
 
     /**
      * Initialize basic test class mocks
