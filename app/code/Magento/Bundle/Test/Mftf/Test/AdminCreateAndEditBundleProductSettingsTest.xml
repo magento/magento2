@@ -141,7 +141,7 @@
             <argument name="websiteName" value="$createWebsite.website[name]$"/>
         </actionGroup>
     </test>
-    <test name="AdminCreateAndEditBundleProductSettingsNegativeTest">
+    <test name="AdminCreateAndEditBundleProductOptionsNegativeTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Modify bundle product in Admin"/>
