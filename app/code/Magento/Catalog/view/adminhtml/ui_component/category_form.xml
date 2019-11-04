@@ -489,6 +489,15 @@
                 </imports>
             </settings>
         </field>
+        <field name="custom_layout_update_file" component="Magento_Catalog/js/components/use-parent-settings/select" sortOrder="205" formElement="select">
+            <settings>
+                <dataType>string</dataType>
+                <label translate="true">Custom Layout Update</label>
+                <imports>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
+                </imports>
+            </settings>
+        </field>
         <field name="custom_apply_to_products" component="Magento_Catalog/js/components/use-parent-settings/single-checkbox" sortOrder="210" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
