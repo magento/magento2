@@ -349,19 +349,18 @@ class Renderer implements RendererInterface
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
-        switch ($contentType) {
-            case 'js':
-                $attributes = ' type="text/javascript" ' . $attributes;
-                break;
-
-            case 'css':
-                $attributes = ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
-                break;
-
-            case $this->canTypeBeFont($contentType):
-                $attributes = 'rel="preload" as="font" crossorigin="anonymous"';
-                break;
+        if ($contentType === 'js') {
+            return ' type="text/javascript" ' . $attributes;
         }
+
+        if ($contentType === 'css') {
+            return ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
+        }
+
+        if ($this->canTypeBeFont($contentType)) {
+            return 'rel="preload" as="font" crossorigin="anonymous"';
+        }
+
         return $attributes;
     }
 
