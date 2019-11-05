@@ -127,6 +127,12 @@ class MergeCartsTest extends GraphQlAbstract
 
         $query = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getCartQuery($guestQuoteMaskedId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
     }
 
     /**
