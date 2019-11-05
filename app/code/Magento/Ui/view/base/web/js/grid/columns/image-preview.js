@@ -28,6 +28,9 @@ define([
             listens: {
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide'
+            },
+            exports: {
+                height: '${ $.parentName }.thumbnail_url:previewHeight'
             }
         },
 
@@ -43,9 +46,6 @@ define([
                     'displayedRecord',
                     'lastOpenedImage'
                 ]);
-            this.height.subscribe(function () {
-                this.thumbnailComponent().previewHeight(this.height());
-            }, this);
 
             return this;
         },
