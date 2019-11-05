@@ -260,7 +260,7 @@ EXPECTED_RESULT;
             ['varDirective'],
             ['delete'],
             ['getDataUsingMethod'],
-	    ['getTemplateFilter']
+            ['getTemplateFilter']
         ];
     }
 
