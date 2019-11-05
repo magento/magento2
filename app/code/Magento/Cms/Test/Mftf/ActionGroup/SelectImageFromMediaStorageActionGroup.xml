@@ -52,7 +52,8 @@
     
     <actionGroup name="attachImage">
         <annotations>
-            <description>Uploads the provided Image to Media Gallery.</description>
+            <description>Uploads the provided Image to Media Gallery.
+                If you use this action group, you MUST add steps to delete the image in the "after" steps.</description>
         </annotations>
         <arguments>
             <argument name="Image"/>

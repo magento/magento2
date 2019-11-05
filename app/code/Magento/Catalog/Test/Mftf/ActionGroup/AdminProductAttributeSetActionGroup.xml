@@ -64,6 +64,16 @@
         <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{label}}" stepKey="fillName"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave1"/>
     </actionGroup>
+    <actionGroup name="AdminAddUnassignedAttributeToGroup" extends="CreateDefaultAttributeSet">
+        <arguments>
+            <argument name="firstOption" type="string" defaultValue="color"/>
+            <argument name="secondOption" type="string" defaultValue="material"/>
+            <argument name="group" type="string" defaultValue="Product Details"/>
+        </arguments>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute(firstOption)}}" selector2="{{AdminProductAttributeSetSection.attribute(group)}}" stepKey="unassign1"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute(secondOption)}}" selector2="{{AdminProductAttributeSetSection.attribute(group)}}" stepKey="unassign2"/>
+        <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSaveButton"/>
+    </actionGroup>
 
     <actionGroup name="goToAttributeGridPage">
         <annotations>

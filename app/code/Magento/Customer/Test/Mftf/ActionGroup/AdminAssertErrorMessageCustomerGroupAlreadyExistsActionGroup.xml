@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertErrorMessageCustomerGroupAlreadyExists" extends="AdminCreateCustomerGroupActionGroup">
         <remove keyForRemoval="seeCustomerGroupSaveMessage"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.errorMessage}}" stepKey="waitForElementVisible"/>
-        <see selector="{{AdminMessagesSection.errorMessage}}" userInput="Customer Group already exists." stepKey="seeErrorMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.error}}" stepKey="waitForElementVisible"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput="Customer Group already exists." stepKey="seeErrorMessage"/>
     </actionGroup>
 </actionGroups>

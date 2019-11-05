@@ -12,26 +12,26 @@
         <arguments>
             <argument name="shippingMethodType" type="string" defaultValue="Fixed"/>
         </arguments>
-        <waitForPageLoad stepKey="waitForShippingInfoPageLoad"/>
         <selectOption selector="{{ShippingMethodSection.shippingMethodRadioButton}}" userInput="{{shippingMethodType}}" stepKey="selectShippingMethod"/>
         <waitForPageLoad stepKey="waitForRadioOptions"/>
-        <click stepKey="goToBillingInformation" selector="{{ShippingMethodSection.goToBillingInfo}}"/>
+        <click selector="{{ShippingMethodSection.goToBillingInfo}}" stepKey="goToBillingInformation"/>
     </actionGroup>
     <actionGroup name="SelectMultiShippingInfoActionGroup">
         <arguments>
+            <argument name="shippingMethodPosition1" type="string" defaultValue="1"/>
+            <argument name="shippingMethodPosition2" type="string" defaultValue="2"/>
             <argument name="shippingMethodType1" type="string" defaultValue="Fixed"/>
             <argument name="shippingMethodType2" type="string" defaultValue="Free"/>
         </arguments>
-        <waitForPageLoad stepKey="waitForShippingInfoPageLoad"/>
-        <selectOption selector="{{ShippingMethodSection.firstShippingMethodRadioButton}}" userInput="{{shippingMethodType1}}" stepKey="selectShippingMethod1"/>
+        <selectOption selector="{{ShippingMethodSection.selectShippingMethod(shippingMethodPosition1,shippingMethodPosition1)}}" userInput="{{shippingMethodType1}}" stepKey="selectShippingMethod1"/>
         <waitForPageLoad stepKey="waitForSecondShippingMethod"/>
-        <selectOption selector="{{ShippingMethodSection.secondShippingMethodRadioButton}}" userInput="{{shippingMethodType2}}" stepKey="selectShippingMethod2"/>
+        <selectOption selector="{{ShippingMethodSection.selectShippingMethod(shippingMethodPosition2,shippingMethodPosition2)}}" userInput="{{shippingMethodType2}}" stepKey="selectShippingMethod2"/>
         <waitForPageLoad stepKey="waitForRadioOptions"/>
-        <click stepKey="goToBillingInformation" selector="{{ShippingMethodSection.goToBillingInfo}}"/>
+        <click selector="{{ShippingMethodSection.goToBillingInfo}}" stepKey="goToBillingInformation"/>
     </actionGroup>
     <actionGroup name="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup">
         <waitForPageLoad stepKey="waitForShippingInfo"/>
-        <click stepKey="goToBillingInformation" selector="{{ShippingMethodSection.goToBillingInfo}}"/>
+        <click selector="{{ShippingMethodSection.goToBillingInfo}}" stepKey="goToBillingInformation"/>
     </actionGroup>
 </actionGroups>
 
