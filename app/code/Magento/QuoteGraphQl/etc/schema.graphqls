@@ -3,6 +3,7 @@
 
 type Query {
     cart(cart_id: String!): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Returns information about shopping cart") @cache(cacheable: false)
+    customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Returns information about the customer shopping cart") @cache(cacheable: false)
 }
 
 type Mutation {
@@ -19,6 +20,7 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
+    mergeCarts(source_cart_id: String!, destination_cart_id: String!): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
 }
 
@@ -192,6 +194,7 @@ type PlaceOrderOutput {
 }
 
 type Cart {
+    id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The ID of the cart.")
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
     applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
     applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
