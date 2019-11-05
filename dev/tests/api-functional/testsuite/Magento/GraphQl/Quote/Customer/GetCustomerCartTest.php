@@ -54,12 +54,33 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->assertNotEmpty($response['customerCart']['items']);
         $this->assertEquals(2, $response['customerCart']['total_quantity']);
         $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertNotEmpty($response['customerCart']['id']);
         $this->assertEquals($maskedQuoteId, $response['customerCart']['id']);
         $this->assertEquals(
             $quantity,
             $response['customerCart']['items'][0]['quantity'],
             'Incorrect quantity of products in cart'
         );
+    }
+
+    /**
+     * Query for an existing customer cart with no masked quote id
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart_without_maskedQuoteId.php
+     */
+    public function testGetLoggedInCustomerCartWithoutMaskedQuoteId()
+    {
+        $customerCartQuery = $this->getCustomerCartQuery();
+        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
+        $this->assertArrayHasKey('customerCart', $response);
+        $this->assertArrayHasKey('items', $response['customerCart']);
+        $this->assertEmpty($response['customerCart']['items']);
+        $this->assertEquals(0, $response['customerCart']['total_quantity']);
+        $this->assertArrayHasKey('id', $response['customerCart']);
+        $this->assertNotEmpty($response['customerCart']['id']);
+        $this->assertNotNull($response['customerCart']['id']);
     }
 
     /**
@@ -76,6 +97,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['id']);
+        $this->assertNotEmpty($response['customerCart']['id']);
         $this->assertEmpty($response['customerCart']['items']);
         $this->assertEquals(0, $response['customerCart']['total_quantity']);
     }
@@ -106,6 +128,7 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['id']);
+        $this->assertNotEmpty($response['customerCart']['id']);
         $this->revokeCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
         $this->expectExceptionMessage(
