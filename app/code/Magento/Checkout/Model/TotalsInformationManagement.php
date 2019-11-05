@@ -38,7 +38,9 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     }
 
     /**
-     * {@inheritDoc}
+     * Calculate quote totals based on address and shipping method. Save the quote.
+     *
+     * @inheritDoc
      */
     public function calculate(
         $cartId,

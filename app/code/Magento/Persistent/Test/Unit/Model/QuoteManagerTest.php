@@ -157,11 +157,12 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getId')->will($this->returnValue(11));
         $this->persistentDataMock->expects($this->never())->method('isShoppingCartPersist');
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getPaymentsCollection')->will($this->returnValue($this->abstractCollectionMock));
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getAddressesCollection')->will($this->returnValue($this->abstractCollectionMock));
         $this->abstractCollectionMock->expects($this->exactly(2))->method('walk')->with('delete');
+        $this->abstractCollectionMock->expects($this->exactly(2))->method('removeAllItems');
         $this->quoteMock->expects($this->once())
             ->method('setIsActive')->with(true)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
