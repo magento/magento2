@@ -1201,6 +1201,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 || $this->dataHasChangedFor('is_active')) {
             if (!$productIndexer->isScheduled()) {
                 $productIndexer->reindexList($this->getPathIds());
+            } else {
+                $productIndexer->invalidate();
             }
         }
     }
@@ -1356,6 +1358,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         return $this->getData(self::KEY_CHILDREN_DATA);
     }
 
+    //@codeCoverageIgnoreEnd
+
     /**
      * Return Data Object data in array format.
      *
@@ -1383,8 +1387,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $data;
     }
-
-    //@codeCoverageIgnoreEnd
 
     /**
      * Convert Category model into flat array.
