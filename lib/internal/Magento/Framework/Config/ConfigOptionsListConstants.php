@@ -152,6 +152,8 @@ class ConfigOptionsListConstants
 
     /**
      * Size of random string generated for store's encryption key
+     * phpcs:disable
      */
     const STORE_KEY_RANDOM_STRING_SIZE = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES;
+    //phpcs:enable
 }
