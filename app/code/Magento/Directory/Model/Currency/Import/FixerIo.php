@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Model\Currency\Import;
 
 use Magento\Store\Model\ScopeInterface;
@@ -31,6 +33,11 @@ class FixerIo extends AbstractImport
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var string
+     */
+    private $currencyConverterServiceHost = '';
 
     /**
      * Initialize dependencies
@@ -73,6 +80,7 @@ class FixerIo extends AbstractImport
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
+        return 1;
     }
 
     /**
@@ -98,7 +106,7 @@ class FixerIo extends AbstractImport
             [$accessKey, $currencyFrom, $currenciesStr],
             self::CURRENCY_CONVERTER_URL
         );
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         set_time_limit(0);
         try {
             $response = $this->getServiceResponse($url);
@@ -116,7 +124,8 @@ class FixerIo extends AbstractImport
                 $data[$currencyFrom][$currencyTo] = $this->_numberFormat(1);
             } else {
                 if (empty($response['rates'][$currencyTo])) {
-                    $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $currencyTo);
+                    $serviceHost =  $this->getServiceHost($url);
+                    $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $serviceHost, $currencyTo);
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
                     $data[$currencyFrom][$currencyTo] = $this->_numberFormat(
@@ -197,5 +206,22 @@ class FixerIo extends AbstractImport
     private function makeEmptyResponse(array $currenciesTo): array
     {
         return array_fill_keys($currenciesTo, null);
+    }
+
+    /**
+     * Get currency converter service host.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function getServiceHost(string $url): string
+    {
+        if (!$this->currencyConverterServiceHost) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $this->currencyConverterServiceHost = parse_url($url, PHP_URL_SCHEME) . '://'
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                . parse_url($url, PHP_URL_HOST);
+        }
+        return $this->currencyConverterServiceHost;
     }
 }
