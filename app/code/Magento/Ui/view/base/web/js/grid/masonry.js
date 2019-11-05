@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    './listing',
+    'Magento_Ui/js/grid/listing',
     'jquery',
     'ko'
 ], function (Listing, $, ko) {
