@@ -70,6 +70,7 @@ class Template implements \Zend_Filter_Interface
         'vardirective',
         'delete',
         'getdatausingmethod',
+        'gettemplatefilter',
         '__destruct',
         '__call',
         '__callstatic',
