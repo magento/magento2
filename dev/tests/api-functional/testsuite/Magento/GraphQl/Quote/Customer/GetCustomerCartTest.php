@@ -68,7 +68,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart_without_maskedQuoteId.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart_without_masked_quote_id.php
      */
     public function testGetLoggedInCustomerCartWithoutMaskedQuoteId()
     {
