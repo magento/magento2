@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Shipping\Test\TestCase\CreateShipmentEntityTest" summary="Create Shipment for Offline Payment Methods" ticketId="MAGETWO-28708">
         <variation name="CreateShipmentEntityTestVariation1" summary="Shipment with tracking number">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test,mftf_migrated:yes</data>
             <data name="order/dataset" xsi:type="string">default</data>
             <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default</data>
             <data name="order/data/total_qty_ordered/0" xsi:type="string">1</data>
@@ -38,6 +38,7 @@
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentInShipmentsGrid" />
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipmentItems" />
             <constraint name="Magento\Shipping\Test\Constraint\AssertShipTotalQuantity" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>
