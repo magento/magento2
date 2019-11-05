@@ -259,7 +259,8 @@ EXPECTED_RESULT;
             ['getTemplateProcessor'],
             ['varDirective'],
             ['delete'],
-            ['getDataUsingMethod']
+            ['getDataUsingMethod'],
+            ['getTemplateFilter']
         ];
     }
 
