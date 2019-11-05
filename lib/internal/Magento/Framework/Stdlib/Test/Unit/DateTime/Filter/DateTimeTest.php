@@ -8,7 +8,6 @@ namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 use \Magento\Framework\Stdlib\DateTime\Filter\DateTime;
 use \Magento\Framework\Locale\Resolver;
 
-
 class DateTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**

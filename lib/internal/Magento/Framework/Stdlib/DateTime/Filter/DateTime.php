@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
+
 use Magento\Framework\Locale\Resolver;
 
 /**
@@ -14,7 +15,7 @@ use Magento\Framework\Locale\Resolver;
 class DateTime extends Date
 {
     /**
-     * @var Resolver
+      * @var Resolver
     */
     private $localeResolver;
     /**
@@ -22,9 +23,8 @@ class DateTime extends Date
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, 
-                                \Magento\Framework\Locale\Resolver $localeResolver
-    ){
+    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,\Magento\Framework\Locale\Resolver $localeResolver)
+    {
         parent::__construct($localeDate);
         $this->localeResolver = $localeResolver;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
@@ -49,17 +49,17 @@ class DateTime extends Date
      */
     public function filter($value)
     {
-        $currentLocaleCode = $this->localeResolver->getLocale(); //retruning this value zh_Hans_CN, but we need zh_CN for date format
-        if(strlen($currentLocaleCode>5)){
+        $currentLocaleCode = $this->localeResolver->getLocale(); //retruning this value zh_Hans_CN, but we need zh_CN
+        if (strlen($currentLocaleCode>5)){
             $languageCode = explode('_', $currentLocaleCode);
             $useCode = $languageCode[0].'_'.$languageCode[2];
-        }
-        else{
+        } 
+        else {
             $useCode = $currentLocaleCode;
         }
 
         try {
-            $value = $this->_localeDate->formatDateTime($value, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT, $useCode, null, null);
+            $value = $this->_localeDate->formatDateTime($value,\IntlDateFormatter::SHORT,\IntlDateFormatter::SHORT,$useCode,null,null);
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
