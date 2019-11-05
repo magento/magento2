@@ -73,6 +73,7 @@
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
     <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
+    <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -401,6 +402,9 @@
                 <item name="crosssell" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Crosssell</item>
                 <item name="upsell" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Upsell</item>
                 <item name="related" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Related</item>
+            </argument>
+            <argument name="mapProviders" xsi:type="array">
+                <item name="linked" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\LinkedMapProvider</item>
             </argument>
         </arguments>
     </type>
@@ -1196,6 +1200,47 @@
                 <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN</item>
                 <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductLink\Repository">
+        <arguments>
+            <argument name="entityCollectionProvider" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Proxy</argument>
+            <argument name="linkInitializer" xsi:type="object">Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductLink\ProductLinkQuery">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Source\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Source\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
         </arguments>
     </type>
 </config>
