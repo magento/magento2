@@ -9,19 +9,23 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <actionGroup name="CheckingWithSingleAddressActionGroup">
-        <click stepKey="clickOnCheckoutWithMultipleAddresses" selector="{{SingleShippingSection.checkoutWithMultipleAddresses}}"/>
+        <click selector="{{SingleShippingSection.checkoutWithMultipleAddresses}}" stepKey="clickOnCheckoutWithMultipleAddresses"/>
         <waitForPageLoad stepKey="waitForMultipleAddressPageLoad"/>
-        <click stepKey="goToShippingInformation" selector="{{SingleShippingSection.goToShippingInfo}}"/>
+        <click selector="{{SingleShippingSection.goToShippingInfo}}" stepKey="goToShippingInformation"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
     </actionGroup>
     <actionGroup name="CheckingWithMultipleAddressesActionGroup" extends="CheckingWithSingleAddressActionGroup">
-        <grabTextFrom stepKey="firstShippingAddressValue" selector="{{MultishippingSection.firstShippingAddressValue}}" after="waitForMultipleAddressPageLoad" />
-        <selectOption selector="{{MultishippingSection.firstShippingAddressOption}}" userInput="{$firstShippingAddressValue}" stepKey="selectFirstShippingMethod" after="firstShippingAddressValue" />
-        <waitForPageLoad stepKey="waitForSecondShippingAddresses" after="selectFirstShippingMethod" />
-        <grabTextFrom stepKey="secondShippingAddressValue" selector="{{MultishippingSection.secondShippingAddressValue}}" after="waitForSecondShippingAddresses" />
-        <selectOption selector="{{MultishippingSection.secondShippingAddressOption}}" userInput="{$secondShippingAddressValue}" stepKey="selectSecondShippingMethod" after="secondShippingAddressValue" />
-        <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}" after="selectSecondShippingMethod" />
-        <waitForPageLoad stepKey="waitForShippingInformation" after="clickOnUpdateAddress" />
+        <arguments>
+            <argument name="addressOption1" type="string" defaultValue="1"/>
+            <argument name="addressOption2" type="string" defaultValue="2"/>
+        </arguments>
+        <grabTextFrom selector="{{MultishippingSection.shippingAddressOptions(addressOption1,addressOption1)}}" after="waitForMultipleAddressPageLoad" stepKey="firstShippingAddressValue"/>
+        <selectOption selector="{{MultishippingSection.shippingAddressSelector(addressOption1)}}" userInput="{$firstShippingAddressValue}" after="firstShippingAddressValue" stepKey="selectFirstShippingMethod"/>
+        <waitForPageLoad after="selectFirstShippingMethod" stepKey="waitForSecondShippingAddresses"/>
+        <grabTextFrom selector="{{MultishippingSection.shippingAddressOptions(addressOption2,addressOption2)}}" after="waitForSecondShippingAddresses" stepKey="secondShippingAddressValue"/>
+        <selectOption selector="{{MultishippingSection.shippingAddressSelector(addressOption2)}}" userInput="{$secondShippingAddressValue}" after="secondShippingAddressValue" stepKey="selectSecondShippingMethod"/>
+        <click selector="{{SingleShippingSection.updateAddress}}" after="selectSecondShippingMethod" stepKey="clickOnUpdateAddress"/>
+        <waitForPageLoad after="clickOnUpdateAddress" stepKey="waitForShippingInformation"/>
     </actionGroup>
     <actionGroup name="StorefrontCheckoutWithMultipleAddressesActionGroup">
         <click selector="{{SingleShippingSection.checkoutWithMultipleAddresses}}" stepKey="clickOnCheckoutWithMultipleAddresses"/>
@@ -35,9 +39,9 @@
         <selectOption selector="{{MultishippingSection.selectShippingAddress(sequenceNumber)}}" userInput="{{option}}" stepKey="selectShippingAddress"/>
     </actionGroup>
     <actionGroup name="StorefrontSaveAddressActionGroup">
-        <click stepKey="clickOnUpdateAddress" selector="{{SingleShippingSection.updateAddress}}"/>
-        <waitForPageLoad stepKey="waitForShippingInformationAfterUpdated" time="90"/>
-        <click stepKey="goToShippingInformation" selector="{{SingleShippingSection.goToShippingInfo}}"/>
+        <click selector="{{SingleShippingSection.updateAddress}}" stepKey="clickOnUpdateAddress"/>
+        <waitForPageLoad time="90" stepKey="waitForShippingInformationAfterUpdated"/>
+        <click selector="{{SingleShippingSection.goToShippingInfo}}" stepKey="goToShippingInformation"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
     </actionGroup>
 </actionGroups>
