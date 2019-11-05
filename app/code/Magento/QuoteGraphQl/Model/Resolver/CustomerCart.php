@@ -15,6 +15,9 @@ use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
 
 /**
  * Get cart for the customer
@@ -32,15 +35,38 @@ class CustomerCart implements ResolverInterface
     private $cartManagement;
 
     /**
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteIdMaskFactory;
+
+    /**
+     * @var QuoteIdMaskResourceModel
+     */
+    private $quoteIdMaskResourceModel;
+    /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedQuoteId;
+
+    /**
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
      * @param CartManagementInterface $cartManagement
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
+     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
      */
     public function __construct(
         CreateEmptyCartForCustomer $createEmptyCartForCustomer,
-        CartManagementInterface $cartManagement
+        CartManagementInterface $cartManagement,
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        QuoteIdMaskResourceModel $quoteIdMaskResourceModel,
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
     ) {
         $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->cartManagement = $cartManagement;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
+         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
     }
 
     /**
@@ -59,6 +85,13 @@ class CustomerCart implements ResolverInterface
         } catch (NoSuchEntityException $e) {
             $this->createEmptyCartForCustomer->execute($currentUserId, null);
             $cart =  $this->cartManagement->getCartForCustomer($currentUserId);
+        }
+
+        $maskedId = $this->quoteIdToMaskedQuoteId->execute((int) $cart->getId());
+        if (empty($maskedId)) {
+            $quoteIdMask = $this->quoteIdMaskFactory->create();
+            $quoteIdMask->setQuoteId((int) $cart->getId());
+            $this->quoteIdMaskResourceModel->save($quoteIdMask);
         }
 
         return [
