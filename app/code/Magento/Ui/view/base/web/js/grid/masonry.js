@@ -52,8 +52,7 @@ define([
 
             /**
              * The value is minimum image width to height ratio when container width is less than the key
-             *
-             * @param int
+             * @param {Object}
              */
             containerWidthToMinRatio: {
                 640: 3,
@@ -64,7 +63,6 @@ define([
             /**
              * Default minimal image width to height ratio.
              * Applied when container width is greater than max width in the containerWidthToMinRatio matrix.
-             *
              * @param int
              */
             defaultMinRatio: 10
