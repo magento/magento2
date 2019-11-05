@@ -8,6 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
+        <element name="additionalOptions" type="select" selector=".admin__control-multiselect"/>
         <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
         <element name="attributeSet" type="select" selector="div[data-index='attribute_set_id'] .admin__field-control"/>
         <element name="attributeSetFilter" type="input" selector="div[data-index='attribute_set_id'] .admin__field-control input" timeout="30"/>
@@ -157,6 +158,7 @@
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" timeout="30"/>
         <element name="StorageRootArrow" type="button" selector="#root > .jstree-icon" />
+        <element name="FolderContainer" type="button" selector="div[data-role='tree']" />
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]" />
         <element name="WysiwygArrow" type="button" selector="#d3lzaXd5Zw-- > .jstree-icon" />
         <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
