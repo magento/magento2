@@ -89,8 +89,27 @@ class AssertWidgetRecentlyComparedProducts extends AbstractConstraint
         $this->addProducts($products);
         $this->removeCompareProducts();
 
+        $cmsIndex->open();
+        //Widgets data is cache via LocalStorage so it might take couple of refreshes before cache is invalidated.
+        $refreshCount = 3;
+        $refreshNo = 1;
+        $isVisible = false;
+        while (!$isVisible && $refreshNo <= $refreshCount) {
+            $browser->refresh();
+            try {
+                $isVisible = $browser->waitUntil(
+                    function () use ($widget) {
+                        return $this->catalogProductCompare->getWidgetView()
+                            ->isWidgetVisible($widget, 'Recently Compared') ? true : null;
+                    }
+                );
+            } catch (\Throwable $exception) {
+                $isVisible = false;
+            }
+            $refreshNo++;
+        }
         \PHPUnit\Framework\Assert::assertTrue(
-            $this->catalogProductCompare->getWidgetView()->isWidgetVisible($widget, 'Recently Compared'),
+            $isVisible,
             'Widget is absent on Product Compare page.'
         );
     }
