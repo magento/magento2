@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Eav\Controller\Adminhtml\Product\Attribute\Save\InputType;
+namespace Magento\Weee\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType\AbstractSaveAttributeTest;
 
