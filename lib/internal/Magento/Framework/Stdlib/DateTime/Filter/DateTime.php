@@ -15,18 +15,27 @@ use Magento\Framework\Locale\Resolver;
 class DateTime extends Date
 {
     /**
-      * @var Resolver
-    */
-    private $localeResolver;
+     * @var Resolve
+     */
+    protected localeResolver;
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected messageManager;
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,\Magento\Framework\Locale\Resolver $localeResolver)
+    public function __construct(
+    \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, 
+    \Magento\Framework\Locale\Resolver $localeResolver,
+    \Magento\Framework\Message\ManagerInterface $messageManager
+    )
     {
         parent::__construct($localeDate);
         $this->localeResolver = $localeResolver;
+        $this->messageManager = $messageManager;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
                 'date_format' => $this->_localeDate->getDateTimeFormat(
@@ -50,20 +59,26 @@ class DateTime extends Date
     public function filter($value)
     {
         $currentLocaleCode = $this->localeResolver->getLocale(); //retruning this value zh_Hans_CN, but we need zh_CN
-        if (strlen($currentLocaleCode>5)){
+        if (strlen($currentLocaleCode>5)) {
             $languageCode = explode('_', $currentLocaleCode);
             $useCode = $languageCode[0].'_'.$languageCode[2];
-        } 
-        else {
+        } else {
             $useCode = $currentLocaleCode;
         }
 
         try {
-            $value = $this->_localeDate->formatDateTime($value,\IntlDateFormatter::SHORT,\IntlDateFormatter::SHORT,$useCode,null,null);
+            $value = $this->_localeDate->formatDateTime(
+                $value, 
+                \IntlDateFormatter::SHORT, 
+                \IntlDateFormatter::SHORT, 
+                $useCode, 
+                null, 
+                null
+            );
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
+            $this->messageManager->addError(__("Invalid input datetime format of value '$value'", $e->getCode(), $e"));
         }
     }
 }
