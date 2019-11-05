@@ -167,7 +167,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     private function addPrefix(string $name): string
     {
-        $prefix = $this->getPrefix() . '|';
+        $prefix = $this->getPrefix() ? $this->getPrefix() . '|' : '';
         $name = ExpressionConverter::shortenEntityName($prefix . $name, $prefix);
 
         if (strlen($name) > 64) {
