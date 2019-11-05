@@ -985,10 +985,12 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape quotes in java scripts
+     * Escape single quotes/apostrophes ('), or other specified $quote character
+     * in javascript (string or array of strings)
      *
      * @param string|array $data
      * @param string $quote
+     *
      * @return string|array
      * @deprecated 100.2.0
      */
