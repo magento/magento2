@@ -213,6 +213,7 @@
         </arguments>
 
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
@@ -318,6 +319,11 @@
         <selectOption selector="{{AttributePropertiesSection.InputType}}" stepKey="checkInputType" userInput="{{attribute.frontend_input}}"/>
         <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateSearchableProductAttribute" extends="createProductAttribute" insertAfter="checkRequired">
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitTabLoad"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="setSearchable"/>
     </actionGroup>
 
     <!-- Inputs text default value and attribute code-->
