@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddGroupedProductWithTwoLinksToCartActionGroup" extends="AddSimpleProductToCart">
+        <annotations>
+            <description>Adding to the Shopping Cart single Grouped product, with 2 associated from the Product page</description>
+        </annotations>
+        <arguments>
+            <argument name="linkedProduct1Name" type="string" defaultValue="{{_defaultProduct.name}}"/>
+            <argument name="linkedProduct2Name" type="string" defaultValue="{{_defaultProduct.name}}"/>
+            <argument name="linkedProduct1Qty" type="string" defaultValue="1"/>
+            <argument name="linkedProduct2Qty" type="string" defaultValue="1"/>
+        </arguments>
+        <fillField selector="{{StorefrontProductPageSection.qtyInputWithProduct(linkedProduct1Name)}}" userInput="{{linkedProduct1Qty}}" before="addToCart" stepKey="fillQuantityForFirsProduct"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInputWithProduct(linkedProduct2Name)}}" userInput="{{linkedProduct2Qty}}" after="fillQuantityForFirsProduct" stepKey="fillQuantityForSecondProduct"/>
+    </actionGroup>
+</actionGroups>
