@@ -425,7 +425,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             return;
         }
 
-        if ($this->searchRequestName != 'quick_search_container'
+        if ($this->searchRequestName !== 'quick_search_container'
             || strlen(trim($this->queryText))
         ) {
             $this->prepareSearchTermFilter();
