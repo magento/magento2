@@ -17,11 +17,7 @@ class DateTime extends Date
     /**
      * @var Resolve
      */
-    protected localeResolver;
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected messageManager;
+    private $localeResolver;
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Locale\Resolver $localeResolver
@@ -29,13 +25,11 @@ class DateTime extends Date
      */
     public function __construct(
     \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, 
-    \Magento\Framework\Locale\Resolver $localeResolver,
-    \Magento\Framework\Message\ManagerInterface $messageManager
+    \Magento\Framework\Locale\Resolver $localeResolver
     )
     {
         parent::__construct($localeDate);
         $this->localeResolver = $localeResolver;
-        $this->messageManager = $messageManager;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
                 'date_format' => $this->_localeDate->getDateTimeFormat(
@@ -78,7 +72,7 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            $this->messageManager->addError(__("Invalid input datetime format of value '$value'", $e->getCode(), $e"));
+            throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
         }
     }
 }
