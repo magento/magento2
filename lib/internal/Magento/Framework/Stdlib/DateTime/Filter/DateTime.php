@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
-
-
 use Magento\Framework\Locale\Resolver;
 
 /**
@@ -21,7 +19,7 @@ class DateTime extends Date
     private $localeResolver;
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param Resolver $localeResolver
+     * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, 
