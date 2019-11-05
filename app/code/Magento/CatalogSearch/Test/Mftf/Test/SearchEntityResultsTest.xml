@@ -441,8 +441,8 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
-            <deleteData createDataKey="simple1" stepKey="deleteSimpleProduct"/>
+            <deleteData stepKey="deleteGroupedProduct" createDataKey="createProduct"/>
+            <deleteData stepKey="deleteSimpleProduct" createDataKey="simple1"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">

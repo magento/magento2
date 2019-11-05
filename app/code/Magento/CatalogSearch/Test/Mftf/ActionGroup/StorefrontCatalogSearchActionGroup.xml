@@ -67,8 +67,8 @@
             <argument name="productName" type="string"/>
         </arguments>
 
-        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}" stepKey="scrollToProduct"/>
-        <moveMouseOver selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}" stepKey="hoverOverProduct"/>
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
+        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
         <click selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
