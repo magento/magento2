@@ -5,13 +5,19 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <actionGroup name="AdminSalesOrderActionGroup">
-        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
-        <grabTextFrom selector="{{AdminOrderTotalSection.subTotal}}" stepKey="grabValueForSubtotal"/>
-        <grabTextFrom selector="{{AdminOrderTotalSection.shippingAndHandling}}" stepKey="grabValueForShippingHandling"/>
-        <grabTextFrom selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="grabValueForGrandTotal"/>
+    <actionGroup name="AssertStorefrontSalesOrderMatchesGrandTotalActionGroup">
+        <arguments>
+            <argument name="dataHref" type="string"/>
+        </arguments>
+        <!--Click on View Order Link-->
+        <click selector="{{StorefrontSalesOrderSection.viewOrderLink(dataHref)}}" stepKey="viewOrderAction"/>
+        <waitForPageLoad stepKey="waitForViewOrderPageToLoad"/>
+        <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('subtotal')}}" stepKey="grabValueForSubtotal"/>
+        <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('shipping')}}" stepKey="grabValueForShippingHandling"/>
+        <grabTextFrom selector="{{StorefrontSalesOrderSection.salesOrderPrice('grand_total')}}" stepKey="grabValueForGrandTotal"/>
         <executeJS function="
         var grandTotal = '{$grabValueForGrandTotal}'.substr(1);
         return (grandTotal);" stepKey="grandTotalValue"/>
