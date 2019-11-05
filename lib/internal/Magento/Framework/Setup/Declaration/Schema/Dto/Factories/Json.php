@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -12,7 +13,6 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class Json implements FactoryInterface
 {
-
     /**
      * @var ObjectManagerInterface
      */
@@ -27,7 +27,7 @@ class Json implements FactoryInterface
      * Constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param string                 $className
+     * @param string $className
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -38,7 +38,10 @@ class Json implements FactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Create element using definition data array.
+     *
+     * @param array $data
+     * @return \Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface|mixed
      */
     public function create(array $data)
     {

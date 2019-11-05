@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Columns;
 
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
@@ -10,14 +11,14 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementDiffAwareInterface;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 
 /**
+ * Json
+ *
  * Text column.
  * Declared in SQL, like: JSON
  */
-class Json extends Column implements
-    ElementDiffAwareInterface,
-    ColumnNullableAwareInterface
+class Json extends Column implements ElementDiffAwareInterface, ColumnNullableAwareInterface
 {
-    /**Json
+    /**
      * @var bool
      */
     private $nullable;

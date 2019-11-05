@@ -12,8 +12,6 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 
 /**
  * Process json data type.
- *
- * @inheritdoc
  */
 class Json implements DbDefinitionProcessorInterface
 {
@@ -64,7 +62,10 @@ class Json implements DbDefinitionProcessorInterface
     }
 
     /**
-     * @inheritdoc
+     * Returns an array of column definitions
+     *
+     * @param array $data
+     * @return array
      */
     public function fromDefinition(array $data)
     {
