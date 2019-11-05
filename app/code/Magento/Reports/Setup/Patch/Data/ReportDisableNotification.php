@@ -9,6 +9,9 @@ namespace Magento\Reports\Setup\Patch\Data;
 
 use Magento\Framework\Notification\NotifierInterface;
 
+/**
+ * Report Disable Notification
+ */
 class ReportDisableNotification implements \Magento\Framework\Setup\Patch\DataPatchInterface
 {
     /**
