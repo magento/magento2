@@ -172,7 +172,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess'])
+            ->setMethods(['addSuccessMessage'])
             ->getMockForAbstractClass();
 
         $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
@@ -566,7 +566,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->willReturn($productName);
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with('You added '  . $productName . ' to your shopping cart.', null)
             ->willReturnSelf();
 
@@ -581,7 +581,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         $this->helperMock->expects($this->once())
             ->method('calculate')
             ->willReturnSelf();
-        
+
         return $refererUrl;
     }
 

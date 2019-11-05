@@ -51,11 +51,16 @@
         <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
         <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment"/>
         <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLinks}}" stepKey="grabFirstOrderNumber"/>
         <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToSalesOrder"/>
         <actionGroup ref="SalesOrderForMultiShipmentActionGroup" stepKey="salesOrderForMultiShipment"/>
         <waitForPageLoad stepKey="waitForAdminPageToLoad"/>
         <!-- Go to Stores > Configuration > Sales > Orders -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onAdminOrdersPage"/>
+        <!--  Filter by first order id -->
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGrid">
+            <argument name="orderId" value="{$grabFirstOrderNumber}"/>
+        </actionGroup>
         <actionGroup ref="AdminSalesOrderActionGroup" stepKey="ValidateOrderTotals"/>
         <after>
             <deleteData stepKey="deleteCategory" createDataKey="category"/>
