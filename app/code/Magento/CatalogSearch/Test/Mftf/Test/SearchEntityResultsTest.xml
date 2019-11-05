@@ -461,7 +461,8 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <deleteData stepKey="deleteGroupedProduct" createDataKey="createProduct"/>
+            <deleteData stepKey="deleteSimpleProduct" createDataKey="simple1"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
