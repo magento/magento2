@@ -216,6 +216,7 @@ class DeleteCustomOptionsTest extends TestCase
         $createdOption->setProductSku($product->getSku());
         $product->setOptions([$createdOption]);
         $this->productRepository->save($product);
+        $this->assertCount(1, $this->optionRepository->getProductOptions($product));
         $product->setOptions([]);
         $this->productRepository->save($product);
         $this->assertCount(0, $this->optionRepository->getProductOptions($product));

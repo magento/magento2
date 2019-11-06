@@ -11,8 +11,8 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -64,13 +64,17 @@ class DeleteCustomOptionsTest extends AbstractBackendController
     public function testDeleteCustomOptionWithTypeField(array $optionData): void
     {
         $product = $this->productRepository->get('simple');
-        /** @var ProductCustomOptionInterface|Option $option */
+        /** @var ProductCustomOptionInterface $option */
         $option = $this->optionRepositoryFactory->create(['data' => $optionData]);
         $option->setProductSku($product->getSku());
         $product->setOptions([$option]);
         $this->productRepository->save($product);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the product.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
         $this->assertCount(0, $this->optionRepository->getProductOptions($product));
     }
 }
