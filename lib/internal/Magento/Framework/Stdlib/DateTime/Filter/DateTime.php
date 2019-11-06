@@ -18,16 +18,16 @@ class DateTime extends Date
      * @var Resolve
      */
     private $localeResolver;
+    
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
     public function __construct(
-    \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate, 
-    \Magento\Framework\Locale\Resolver $localeResolver
-    )
-    {
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Locale\Resolver $localeResolver
+    ){
         parent::__construct($localeDate);
         $this->localeResolver = $localeResolver;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
@@ -63,16 +63,16 @@ class DateTime extends Date
         try {
             $value = $this->_localeDate->formatDateTime(
                 $value, 
-                \IntlDateFormatter::SHORT, 
-                \IntlDateFormatter::SHORT, 
-                $useCode, 
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                $useCode,
                 null, 
                 null
             );
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
+            $this->_addError('Invalid input datetime format of value  [' . $value . ']. ' . $e->getCode() . $e);
         }
     }
 }
