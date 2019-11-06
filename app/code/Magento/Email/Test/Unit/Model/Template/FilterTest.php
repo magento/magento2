@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template;
 
 use Magento\Email\Model\Template\Css\Processor;
@@ -14,6 +17,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class FilterTest extends \PHPUnit\Framework\TestCase
 {
@@ -92,6 +96,21 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     private $cssInliner;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Email\Model\Template\Css\Processor
+     */
+    private $cssProcessor;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
+     */
+    private $pubDirectory;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
+     */
+    private $pubDirectoryRead;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -147,6 +166,18 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->cssInliner = $this->objectManager->getObject(
             \Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class
         );
+
+        $this->cssProcessor = $this->getMockBuilder(\Magento\Email\Model\Template\Css\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->pubDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->pubDirectoryRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -173,6 +204,8 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                     $this->configVariables,
                     [],
                     $this->cssInliner,
+                    $this->cssProcessor,
+                    $this->pubDirectory
                 ]
             )
             ->setMethods($mockedMethods)
@@ -329,17 +362,16 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->with($file, $designParams)
             ->willReturn($asset);
 
-        $pubDirectory = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
-        $reflectionClass = new \ReflectionClass(Filter::class);
-        $reflectionProperty = $reflectionClass->getProperty('pubDirectory');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($filter, $pubDirectory);
-        $pubDirectory->expects($this->once())
+        $this->pubDirectory
+            ->expects($this->once())
+            ->method('getDirectoryRead')
+            ->willReturn($this->pubDirectoryRead);
+
+        $this->pubDirectoryRead->expects($this->once())
             ->method('isExist')
             ->with($path . DIRECTORY_SEPARATOR . $file)
             ->willReturn(true);
-        $pubDirectory->expects($this->once())
+        $this->pubDirectoryRead->expects($this->once())
             ->method('readFile')
             ->with($path . DIRECTORY_SEPARATOR . $file)
             ->willReturn($css);
