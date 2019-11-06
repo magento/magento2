@@ -10,8 +10,6 @@ namespace Magento\Framework\Filter\SimpleDirective;
 
 /**
  * Container for defined list of simple processors
- *
- * @api
  */
 class ProcessorPool
 {

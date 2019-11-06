@@ -10,8 +10,6 @@ namespace Magento\Framework\Filter;
 
 /**
  * Responsible for converting a directive data structure to relevant template output
- *
- * @api
  */
 interface DirectiveProcessorInterface
 {
