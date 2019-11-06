@@ -18,7 +18,16 @@
             <group value="urlRewrite"/>
         </annotations>
         <before>
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -27,23 +36,21 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
-            <createData entity="ApiCategory" stepKey="createCategory">
-                <field key="name">category-admin</field>
-            </createData>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearStoreFilters"/>
             <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="customStore" value="customStoreENNotUnique"/>
-            </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="customStore" value="customStoreNLNotUnique"/>
-            </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
@@ -72,11 +79,11 @@
         <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateOption"/>
         <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="import_updated.csv" stepKey="attachFileForImport"/>
         <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
         <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
         <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForProductOnBackend">
             <argument name="productName" value="productformagetwo68980"/>
         </actionGroup>
@@ -130,8 +137,16 @@
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
-
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteENStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteNLStoreViewIfExists">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
             <!-- Create Store View EN -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreENNotUnique"/>
@@ -140,10 +155,6 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
-            <createData entity="ApiCategory" stepKey="createCategory">
-                <field key="name">category-admin</field>
-            </createData>
-
             <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
             <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig" />
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
@@ -152,17 +163,18 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="storeViewName" value="{{customStoreENNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewIfExistsActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearStoreGridFilters"/>
             <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersIfSet"/>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
-                <argument name="customStore" value="customStoreENNotUnique"/>
-            </actionGroup>
-            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
-                <argument name="customStore" value="customStoreNLNotUnique"/>
-            </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
@@ -194,11 +206,11 @@
         <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateOption"/>
         <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="import_updated.csv" stepKey="attachFileForImport"/>
         <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
         <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
-        <see selector="{{AdminMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
         <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForProductOnBackend">
             <argument name="productName" value="productformagetwo68980"/>
         </actionGroup>

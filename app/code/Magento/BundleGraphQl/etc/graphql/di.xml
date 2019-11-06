@@ -13,6 +13,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\BundleGraphQl\Model\Cart\BuyRequest\BundleDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">
