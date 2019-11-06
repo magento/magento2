@@ -8,14 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
-
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Xpath;
