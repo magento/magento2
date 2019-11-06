@@ -5,10 +5,15 @@
  */
 declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap as Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Downloadable\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
+use Magento\Downloadable\Api\DomainManagerInterface;
+
+/** @var DomainManagerInterface $domainManager */
+$domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
+$domainManager->addDomains(['example.com']);
 
 /**
  * @var \Magento\Catalog\Model\Product $product

@@ -168,20 +168,20 @@ class Account extends AbstractForm
         } catch (\Exception $e) {
             $data = [];
         }
-        $data = isset($customer)
+     
+	$data = isset($customer)
             ? $this->_extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
                 \Magento\Customer\Api\Data\CustomerInterface::class
             )
             : [];
-
-        foreach ($this->getQuote()->getData() as $key => $value) {
+        
+	foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;
             }
         }
-
         if ($this->getQuote()->getCustomerEmail()) {
             $data['email'] = $this->getQuote()->getCustomerEmail();
         }

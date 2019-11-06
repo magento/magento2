@@ -8,6 +8,8 @@ namespace Magento\Sales\Block\Order;
 use Magento\Sales\Model\Order;
 
 /**
+ * Order totals.
+ *
  * @api
  * @since 100.0.2
  */
@@ -85,6 +87,8 @@ class Totals extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Sets order.
+     *
      * @param Order $order
      * @return $this
      */
@@ -119,20 +123,6 @@ class Totals extends \Magento\Framework\View\Element\Template
         );
 
         /**
-         * Add shipping
-         */
-        if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
-            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
-                [
-                    'code' => 'shipping',
-                    'field' => 'shipping_amount',
-                    'value' => $this->getSource()->getShippingAmount(),
-                    'label' => __('Shipping & Handling'),
-                ]
-            );
-        }
-
-        /**
          * Add discount
          */
         if ((double)$this->getSource()->getDiscountAmount() != 0) {
@@ -147,6 +137,25 @@ class Totals extends \Magento\Framework\View\Element\Template
                     'field' => 'discount_amount',
                     'value' => $source->getDiscountAmount(),
                     'label' => $discountLabel,
+                ]
+            );
+        }
+
+        /**
+         * Add shipping
+         */
+        if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
+            $label = __('Shipping & Handling');
+            if ($this->getSource()->getCouponCode() && !isset($this->_totals['discount'])) {
+                $label = __('Shipping & Handling (%1)', $this->getSource()->getCouponCode());
+            }
+
+            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
+                [
+                    'code' => 'shipping',
+                    'field' => 'shipping_amount',
+                    'value' => $this->getSource()->getShippingAmount(),
+                    'label' => $label,
                 ]
             );
         }
@@ -286,7 +295,6 @@ class Totals extends \Magento\Framework\View\Element\Template
      *  $totalCode => $totalSortOrder
      * )
      *
-     *
      * @param   array $order
      * @return  $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -303,7 +311,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * get totals array for visualization
+     * Get totals array for visualization
      *
      * @param array|null $area
      * @return array
