@@ -10,7 +10,6 @@ namespace Magento\Catalog\Controller\Product;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\AbstractModel;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
@@ -71,7 +70,7 @@ class ProductUrlRewriteTest extends AbstractController
     public function testProductUrlRewrite(): void
     {
         $product = $this->productRepository->get('simple2');
-        $url = $this->prepareUrl($product);
+        $url = $this->prepareUrl($product->getUrlKey());
         $this->dispatch($url);
 
         $this->assertProductIsVisible($product);
@@ -85,7 +84,7 @@ class ProductUrlRewriteTest extends AbstractController
     {
         $category = $this->categoryRepository->get(333);
         $product = $this->productRepository->get('simple333');
-        $url = $this->prepareUrl($category, false) . $this->prepareUrl($product);
+        $url = $this->prepareUrl($category->getUrlKey(), false) . $this->prepareUrl($product->getUrlKey());
         $this->dispatch($url);
 
         $this->assertProductIsVisible($product);
@@ -98,13 +97,13 @@ class ProductUrlRewriteTest extends AbstractController
     public function testProductRedirect(): void
     {
         $product = $this->productRepository->get('simple2');
-        $oldUrl = $this->prepareUrl($product);
+        $oldUrl = $this->prepareUrl($product->getUrlKey());
         $data = [
             'url_key' => 'new-url-key',
             'url_key_create_redirect' => $product->getUrlKey(),
             'save_rewrites_history' => true,
         ];
-        $this->updateProduct($product, $data);
+        $this->saveProductWithAdditionalData($product, $data);
         $this->dispatch($oldUrl);
 
         $this->assertRedirect($this->stringContains('new-url-key' . $this->urlSuffix));
@@ -112,21 +111,22 @@ class ProductUrlRewriteTest extends AbstractController
 
     /**
      * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_with_two_stores.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @return void
      */
     public function testMultistoreProductUrlRewrite(): void
     {
         $currentStore = $this->storeManager->getStore();
         $product = $this->productRepository->get('simple2');
-        $firstStoreUrl = $this->prepareUrl($product);
+        $firstStoreUrl = $this->prepareUrl($product->getUrlKey());
         $secondStoreId = $this->storeManager->getStore('fixturestore')->getId();
         $this->storeManager->setCurrentStore($secondStoreId);
 
         try {
-            $product = $this->updateProduct($product, ['url_key' => 'second-store-url-key']);
+            $product = $this->saveProductWithAdditionalData($product, ['url_key' => 'second-store-url-key']);
             $this->assertEquals('second-store-url-key', $product->getUrlKey());
-            $secondStoreUrl = $this->prepareUrl($product);
+            $secondStoreUrl = $this->prepareUrl($product->getUrlKey());
 
             $this->dispatch($secondStoreUrl);
             $this->assertProductIsVisible($product);
@@ -146,7 +146,7 @@ class ProductUrlRewriteTest extends AbstractController
      * @param array $data
      * @return ProductInterface
      */
-    private function updateProduct(ProductInterface $product, array $data): ProductInterface
+    private function saveProductWithAdditionalData(ProductInterface $product, array $data): ProductInterface
     {
         $product->addData($data);
 
@@ -154,7 +154,7 @@ class ProductUrlRewriteTest extends AbstractController
     }
 
     /**
-     * Clear request object.
+     * Clean up cached objects
      *
      * @return void
      */
@@ -171,13 +171,13 @@ class ProductUrlRewriteTest extends AbstractController
     /**
      * Prepare url to dispatch
      *
-     * @param AbstractModel $object
+     * @param string $urlKey
      * @param bool $addSuffix
      * @return string
      */
-    private function prepareUrl(AbstractModel $object, bool $addSuffix = true): string
+    private function prepareUrl(string $urlKey, bool $addSuffix = true): string
     {
-        $url = $addSuffix ? '/' . $object->getUrlKey() . $this->urlSuffix : '/' . $object->getUrlKey();
+        $url = $addSuffix ? '/' . $urlKey . $this->urlSuffix : '/' . $urlKey;
 
         return $url;
     }
