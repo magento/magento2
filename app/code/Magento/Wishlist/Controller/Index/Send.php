@@ -219,7 +219,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         }
 
         if ($error) {
-            $this->messageManager->addError($error);
+            $this->messageManager->addErrorMessage($error);
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
@@ -285,12 +285,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
             $this->inlineTranslation->resume();
 
             $this->_eventManager->dispatch('wishlist_share', ['wishlist' => $wishlist]);
-            $this->messageManager->addSuccess(__('Your wish list has been shared.'));
+            $this->messageManager->addSuccessMessage(__('Your wish list has been shared.'));
             $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
             return $resultRedirect;
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;

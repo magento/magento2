@@ -45,6 +45,8 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['addVirtualProductsToCart']);
+        self::assertArrayHasKey('id', $response['addVirtualProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addVirtualProductsToCart']['cart']['id']);
         self::assertEquals($quantity, $response['addVirtualProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addVirtualProductsToCart']['cart']['items'][0]['product']['sku']);
     }
@@ -227,6 +229,7 @@ mutation {
     }
   ) {
     cart {
+      id
       items {
         quantity
         product {

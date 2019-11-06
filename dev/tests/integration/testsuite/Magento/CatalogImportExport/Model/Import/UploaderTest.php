@@ -17,6 +17,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
+     * Random string appended to downloaded image name
+     */
+    const RANDOM_STRING = 'BRV8TAuR2AT88OH0';
+    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -30,6 +34,10 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
      * @var \Magento\CatalogImportExport\Model\Import\Uploader
      */
     private $uploader;
+    /**
+     * @var \Magento\Framework\Filesystem\File\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $fileReader;
 
     /**
      * @inheritdoc
@@ -37,7 +45,18 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->uploader = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Uploader::class);
+        $this->fileReader = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
+        $fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
+        $fileReadFactory->method('create')->willReturn($this->fileReader);
+        $random = $this->createMock(\Magento\Framework\Math\Random::class);
+        $random->method('getRandomString')->willReturn(self::RANDOM_STRING);
+        $this->uploader = $this->objectManager->create(
+            \Magento\CatalogImportExport\Model\Import\Uploader::class,
+            [
+                'random' => $random,
+                'readFactory' => $fileReadFactory
+            ]
+        );
 
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
 
@@ -61,15 +80,31 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Tests move with external url
+     *
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testMoveWithExternalURL(): void
+    {
+        $fileName = 'http://magento.com/static/images/random_image.jpg';
+        $this->fileReader->method('readAll')->willReturn(file_get_contents($this->getTestImagePath()));
+        $this->uploader->move($fileName);
+        $destFilePath = $this->uploader->getTmpDir() . '/' . 'random_image_' . self::RANDOM_STRING . '.jpg';
+        $this->assertTrue($this->directory->isExist($destFilePath));
+    }
+
+    /**
      * @magentoAppIsolation enabled
      * @return void
      */
     public function testMoveWithValidFile(): void
     {
-        $fileName = 'magento_additional_image_one.jpg';
+        $testImagePath = $this->getTestImagePath();
+        $fileName = basename($testImagePath);
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
         //phpcs:ignore
-        copy(__DIR__ . '/_files/' . $fileName, $filePath);
+        copy($testImagePath, $filePath);
         $this->uploader->move($fileName);
         $this->assertTrue($this->directory->isExist($this->uploader->getTmpDir() . '/' . $fileName));
     }
@@ -84,15 +119,17 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     public function testMoveWithFileOutsideTemp(): void
     {
         $tmpDir = $this->uploader->getTmpDir();
-        if (!$this->directory->create($newTmpDir = $tmpDir .'/test1')) {
+        $newTmpDir = $tmpDir . '/test1';
+        if (!$this->directory->create($newTmpDir)) {
             throw new \RuntimeException('Failed to create temp dir');
         }
         $this->uploader->setTmpDir($newTmpDir);
-        $fileName = 'magento_additional_image_one.jpg';
+        $testImagePath = $this->getTestImagePath();
+        $fileName = basename($testImagePath);
         $filePath = $this->directory->getAbsolutePath($tmpDir . '/' . $fileName);
         //phpcs:ignore
-        copy(__DIR__ . '/_files/' . $fileName, $filePath);
-        $this->uploader->move('../' .$fileName);
+        copy($testImagePath, $filePath);
+        $this->uploader->move('../' . $fileName);
         $this->assertTrue($this->directory->isExist($tmpDir . '/' . $fileName));
     }
 
@@ -110,5 +147,15 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         copy(__DIR__ . '/_files/' . $fileName, $filePath);
         $this->uploader->move($fileName);
         $this->assertFalse($this->directory->isExist($this->uploader->getTmpDir() . '/' . $fileName));
+    }
+
+    /**
+     * Get the full path to the test image
+     *
+     * @return string
+     */
+    private function getTestImagePath(): string
+    {
+        return __DIR__ . '/_files/magento_additional_image_one.jpg';
     }
 }
