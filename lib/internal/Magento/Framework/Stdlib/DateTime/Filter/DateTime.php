@@ -18,7 +18,7 @@ class DateTime extends Date
      * @var Resolve
      */
     private $localeResolver;
-    
+
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Locale\Resolver $localeResolver
@@ -27,7 +27,7 @@ class DateTime extends Date
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Locale\Resolver $localeResolver
-    ){
+    ) {
         parent::__construct($localeDate);
         $this->localeResolver = $localeResolver;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
@@ -62,11 +62,11 @@ class DateTime extends Date
 
         try {
             $value = $this->_localeDate->formatDateTime(
-                $value, 
+                $value,
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::SHORT,
                 $useCode,
-                null, 
+                null,
                 null
             );
             $dateTime = $this->_localeDate->date($value, null, false);
