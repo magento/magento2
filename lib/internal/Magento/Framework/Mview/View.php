@@ -293,7 +293,7 @@ class View extends DataObject implements ViewInterface
     {
         $versionBatchSize = self::$maxVersionQueryBatch;
         $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
-            ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+            ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
             : self::DEFAULT_BATCH_SIZE;
 
         for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
