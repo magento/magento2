@@ -18,7 +18,7 @@ define([
                 errorMessage: '${ $.provider }:data.errorMessage'
             },
             listens: {
-                'rows': 'initComponent'
+                rows: 'initComponent'
             },
 
             /**
