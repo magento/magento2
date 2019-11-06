@@ -29,7 +29,7 @@ class Address
      * @param string|null $name
      */
     public function __construct(
-        ?string $email,
+        string $email,
         ?string $name
     ) {
         $this->email = $email;
