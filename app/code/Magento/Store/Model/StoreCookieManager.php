@@ -54,7 +54,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
     public function setStoreCookie(StoreInterface $store)
     {
         $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-            ->setHttpOnly(true)
+            ->setHttpOnly(false)
             ->setDurationOneYear()
             ->setPath($store->getStorePath());
 
