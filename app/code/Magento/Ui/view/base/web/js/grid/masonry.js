@@ -4,10 +4,11 @@
  */
 define([
     'Magento_Ui/js/grid/listing',
+    'Magento_Ui/js/lib/view/utils/raf',
     'jquery',
     'ko',
     'underscore'
-], function (Listing, $, ko, _) {
+], function (Listing, raf, $, ko, _) {
     'use strict';
 
     return Listing.extend({
@@ -18,7 +19,7 @@ define([
                 errorMessage: '${ $.provider }:data.errorMessage'
             },
             listens: {
-                'rows': 'initComponent'
+                rows: 'initComponent'
             },
 
             /**
@@ -66,7 +67,12 @@ define([
              * Applied when container width is greater than max width in the containerWidthToMinRatio matrix.
              * @param int
              */
-            defaultMinRatio: 10
+            defaultMinRatio: 10,
+
+            /**
+             * Layout update FPS during window resizing
+             */
+            refreshFPS: 60
         },
 
         /**
@@ -105,29 +111,12 @@ define([
          * Set event listener to track resize event
          */
         setEventListener: function () {
-            var running = false,
-                handler = function () {
+            window.addEventListener('resize', function () {
+                raf(function () {
                     this.containerWidth = window.innerWidth;
                     this.setLayoutStyles();
-                }.bind(this);
-
-            window.addEventListener('resize', function () {
-                if (!running) {
-                    running = true;
-
-                    if (window.requestAnimationFrame) {
-                        window.requestAnimationFrame(function () {
-                            handler();
-                            running = false;
-                        });
-                    } else {
-                        setTimeout(function () {
-                            handler();
-                            running = false;
-                        }, 66);
-                    }
-                }
-            });
+                }.bind(this), this.refreshFPS);
+            }.bind(this));
         },
 
         /**
@@ -249,6 +238,7 @@ define([
         setMinRatio: function () {
             var minRatio = _.find(
                 this.containerWidthToMinRatio,
+
                 /**
                  * Find the minimal ratio for container width in the matrix
                  *
