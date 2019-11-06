@@ -26,24 +26,26 @@ class ConnectionTypeResolver
     }
 
     /**
-     * {@inheritdoc}
+     * @param $connectionName
+     * @return string|null
      */
     public function getConnectionType($connectionName)
     {
         $type = null;
 
-if(is_array($this->resolvers)){
-        foreach ($this->resolvers as $resolver) {
-            $type = $resolver->getConnectionType($connectionName);
-            if ($type != null) {
-                break;
+        if (is_array($this->resolvers)) {
+            foreach ($this->resolvers as $resolver) {
+                $type = $resolver->getConnectionType($connectionName);
+                if ($type != null) {
+                    break;
+                }
             }
-}
         }
-        
+
         if ($type === null) {
             throw new \LogicException('Unknown connection name ' . $connectionName);
         }
+
         return $type;
     }
 }
