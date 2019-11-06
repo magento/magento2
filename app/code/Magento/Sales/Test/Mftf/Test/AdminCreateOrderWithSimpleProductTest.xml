@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithSimpleProductTest">
+        <annotations>
+            <title value="Create Order in Admin with simple product"/>
+            <stories value="MAGETWO-12798: Create order with condition available product qty = ordered product qty"/>
+            <description value="Create order with simple product and assert if it gets out of stock after ordering it."/>
+            <features value="Sales"/>
+            <testCaseId value="MC-22110"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="CashOnDeliveryPaymentMethodDefault" stepKey="cashOnDeliveryPaymentMethod"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <createData entity="SimpleProduct_25" stepKey="simpleProduct">
+                <field key="price">5</field>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="{{SimpleProduct_25.quantity}}"/>
+        </actionGroup>
+        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductStockStatus">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+            <magentoCLI command="config:set payment/cashondelivery/active 0" stepKey="disableCashOnDeliveryMethod"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+    </test>
+</tests>
