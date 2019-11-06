@@ -20,7 +20,6 @@ define([
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
             statefull: {
-                visibleRecord: true,
                 sorting: true,
                 lastOpenedImage: true
             },
