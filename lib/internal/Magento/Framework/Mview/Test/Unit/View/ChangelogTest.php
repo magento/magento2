@@ -30,13 +30,17 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
      */
     protected $resourceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Select
+     */
+    private $selectMock;
+
     protected function setUp()
     {
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->mockGetConnection($this->connectionMock);
-
         $this->model = new \Magento\Framework\Mview\View\Changelog($this->resourceMock);
     }
 
@@ -99,29 +103,26 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
         $this->mockGetTableName();
 
         $this->connectionMock->expects($this->once())
-            ->method('fetchRow')
-            ->will($this->returnValue(['Auto_increment' => 11]));
-
+            ->method('select')
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('from')
+            ->with('viewIdtest_cl', ['version_id'])
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('order')
+            ->with('version_id DESC')
+            ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('limit')
+            ->with(1)
+            ->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->once())
+            ->method('fetchOne')
+            ->with($this->selectMock)
+            ->willReturn(10);
         $this->model->setViewId('viewIdtest');
         $this->assertEquals(10, $this->model->getVersion());
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Table status for viewIdtest_cl is incorrect. Can`t fetch version id.
-     */
-    public function testGetVersionWithExceptionNoAutoincrement()
-    {
-        $changelogTableName = 'viewIdtest_cl';
-        $this->mockIsTableExists($changelogTableName, true);
-        $this->mockGetTableName();
-
-        $this->connectionMock->expects($this->once())
-            ->method('fetchRow')
-            ->will($this->returnValue([]));
-
-        $this->model->setViewId('viewIdtest');
-        $this->model->getVersion();
     }
 
     public function testGetVersionWithExceptionNoTable()

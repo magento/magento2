@@ -7,7 +7,6 @@
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\DB\Adapter\ConnectionException;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
 
 /**
@@ -170,7 +169,6 @@ class Changelog implements ChangelogInterface
      *
      * @return int
      * @throws ChangelogTableNotExistsException
-     * @throws RuntimeException
      */
     public function getVersion()
     {
@@ -178,14 +176,12 @@ class Changelog implements ChangelogInterface
         if (!$this->connection->isTableExists($changelogTableName)) {
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
-        $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
-        if (isset($row['Auto_increment'])) {
-            return (int)$row['Auto_increment'] - 1;
-        } else {
-            throw new RuntimeException(
-                new Phrase("Table status for %1 is incorrect. Can`t fetch version id.", [$changelogTableName])
-            );
-        }
+        return (int)$this->connection->fetchOne(
+            $this->connection->select()
+                ->from($changelogTableName, ['version_id'])
+                ->order('version_id DESC')
+                ->limit(1)
+        );
     }
 
     /**
