@@ -63,6 +63,7 @@ class DependencyDecorator implements IndexerInterface
      * Sleep magic.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.SerializationAware)
      */
     public function __sleep()
     {
