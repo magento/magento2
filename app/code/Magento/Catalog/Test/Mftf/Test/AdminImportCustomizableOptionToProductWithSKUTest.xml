@@ -30,6 +30,11 @@
             <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+
+            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
