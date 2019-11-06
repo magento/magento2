@@ -249,6 +249,7 @@ define([
         setMinRatio: function () {
             var minRatio = _.find(
                 this.containerWidthToMinRatio,
+
                 /**
                  * Find the minimal ratio for container width in the matrix
                  *
