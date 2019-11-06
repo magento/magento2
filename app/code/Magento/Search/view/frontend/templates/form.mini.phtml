@@ -24,7 +24,8 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
                            data-mage-init='{"quickSearch":{
                                 "formSelector":"#search_mini_form",
                                 "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
-                                "destinationSelector":"#search_autocomplete"}
+                                "destinationSelector":"#search_autocomplete",
+                                "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>"}
                            }'
                            type="text"
                            name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
