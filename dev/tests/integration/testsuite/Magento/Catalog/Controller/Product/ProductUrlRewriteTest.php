@@ -10,7 +10,7 @@ namespace Magento\Catalog\Controller\Product;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
@@ -58,7 +58,7 @@ class ProductUrlRewriteTest extends AbstractController
         $this->categoryRepository = $this->_objectManager->create(CategoryRepositoryInterface::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
         $this->urlSuffix = $this->config->getValue(
-            CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
+            ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -103,10 +103,10 @@ class ProductUrlRewriteTest extends AbstractController
             'url_key_create_redirect' => $product->getUrlKey(),
             'save_rewrites_history' => true,
         ];
-        $this->saveProductWithAdditionalData($product, $data);
+        $this->updateProduct($product, $data);
         $this->dispatch($oldUrl);
 
-        $this->assertRedirect($this->stringContains('new-url-key' . $this->urlSuffix));
+        $this->assertRedirect($this->stringContains($this->prepareUrl('new-url-key')));
     }
 
     /**
@@ -124,7 +124,7 @@ class ProductUrlRewriteTest extends AbstractController
         $this->storeManager->setCurrentStore($secondStoreId);
 
         try {
-            $product = $this->saveProductWithAdditionalData($product, ['url_key' => 'second-store-url-key']);
+            $product = $this->updateProduct($product, ['url_key' => 'second-store-url-key']);
             $this->assertEquals('second-store-url-key', $product->getUrlKey());
             $secondStoreUrl = $this->prepareUrl($product->getUrlKey());
 
@@ -146,7 +146,7 @@ class ProductUrlRewriteTest extends AbstractController
      * @param array $data
      * @return ProductInterface
      */
-    private function saveProductWithAdditionalData(ProductInterface $product, array $data): ProductInterface
+    private function updateProduct(ProductInterface $product, array $data): ProductInterface
     {
         $product->addData($data);
 
@@ -195,9 +195,11 @@ class ProductUrlRewriteTest extends AbstractController
             $this->getResponse()->getHttpResponseCode(),
             'Wrong response code is returned'
         );
+        $currentProduct = $this->registry->registry('current_product');
+        $this->assertNotNull($currentProduct);
         $this->assertEquals(
             $product->getSku(),
-            $this->registry->registry('current_product')->getSku(),
+            $currentProduct->getSku(),
             'Wrong product is registered'
         );
     }
