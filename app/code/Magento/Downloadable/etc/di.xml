@@ -174,4 +174,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="links_exist" xsi:type="string">catalog_product</item>
+                    <item name="links_purchased_separately" xsi:type="string">catalog_product</item>
+                    <item name="links_title" xsi:type="string">catalog_product</item>
+                    <item name="samples_title" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
