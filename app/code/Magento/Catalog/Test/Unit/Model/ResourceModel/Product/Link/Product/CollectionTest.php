@@ -7,6 +7,8 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -105,11 +107,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($store) {
                     return is_object($store) ? $store : new \Magento\Framework\DataObject(['id' => 42]);
                 }
-            ));
+            );
         $this->catalogHelperMock = $this->createMock(\Magento\Catalog\Helper\Data::class);
         $this->stateMock = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\State::class);
         $this->scopeConfigInterfaceMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
@@ -124,6 +126,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->createMock(ProductLimitation::class));
+
+        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadataMock->method('getLinkField')->willReturn('entity_id');
+        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
+        $metadataPoolMock->method('getMetadata')->willReturn($metadataMock);
 
         $this->collection = $this->objectManager->getObject(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
@@ -147,6 +154,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'customerSession' => $this->sessionMock,
                 'dateTime' => $this->dateTimeMock,
                 'productLimitationFactory' => $productLimitationFactoryMock,
+                'metadataPool' => $metadataPoolMock
             ]
         );
     }

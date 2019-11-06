@@ -8,6 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Helper\Bootstrap;
+
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Session;
@@ -212,5 +218,36 @@ class ProductTest extends AbstractController
         $this->dispatch('catalog/product/image/');
 
         $this->assert404NotFound();
+    }
+
+    /**
+     * Check that custom layout update files is employed.
+     *
+     * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
+     * @return void
+     */
+    public function testViewWithCustomUpdate(): void
+    {
+        //Setting a fake file for the product.
+        $file = 'test-file';
+        /** @var ProductRepositoryInterface $repository */
+        $repository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $sku = 'simple_product_1';
+        $product = $repository->get($sku);
+        $productId = $product->getId();
+        /** @var ProductLayoutUpdateManager $layoutManager */
+        $layoutManager = Bootstrap::getObjectManager()->get(ProductLayoutUpdateManager::class);
+        $layoutManager->setFakeFiles((int)$productId, [$file]);
+        //Updating the custom attribute.
+        $product->setCustomAttribute('custom_layout_update_file', $file);
+        $repository->save($product);
+
+        //Viewing the product
+        $this->dispatch("catalog/product/view/id/$productId");
+        //Layout handles must contain the file.
+        $handles = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class)
+            ->getUpdate()
+            ->getHandles();
+        $this->assertContains("catalog_product_view_selectable_{$sku}_{$file}", $handles);
     }
 }
