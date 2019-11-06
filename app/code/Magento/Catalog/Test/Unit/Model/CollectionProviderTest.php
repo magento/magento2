@@ -95,11 +95,11 @@ class CollectionProviderTest extends \PHPUnit\Framework\TestCase
             );
 
         $expectedResult = [
-            0 => ['name' => 'Product Four', 'position' => 0],
-            1 => ['name' => 'Product Five', 'position' => 0],
-            2 => ['name' => 'Product Three', 'position' => 2],
-            3 => ['name' => 'Product Two', 'position' => 2],
-            4 => ['name' => 'Product One', 'position' => 10],
+            0 => ['name' => 'Product Four', 'position' => 0, 'link_type' => 'crosssell'],
+            1 => ['name' => 'Product Five', 'position' => 0, 'link_type' => 'crosssell'],
+            2 => ['name' => 'Product Three', 'position' => 2, 'link_type' => 'crosssell'],
+            3 => ['name' => 'Product Two', 'position' => 2, 'link_type' => 'crosssell'],
+            4 => ['name' => 'Product One', 'position' => 10, 'link_type' => 'crosssell'],
         ];
 
         $actualResult = $this->model->getCollection($this->productMock, 'crosssell');

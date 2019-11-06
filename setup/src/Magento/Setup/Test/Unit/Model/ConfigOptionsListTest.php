@@ -37,12 +37,29 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
      */
     private $dbValidator;
 
+    /**
+     * @var \Magento\Framework\Encryption\KeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $encryptionKeyValidator;
+
+    /**
+     * @var ConfigOptionsList\DriverOptions
+     */
+    private $driverOptionsMock;
+
     protected function setUp()
     {
         $this->generator = $this->createMock(\Magento\Setup\Model\ConfigGenerator::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
-        $this->object = new ConfigOptionsList($this->generator, $this->dbValidator);
+        $this->encryptionKeyValidator = $this->createMock(\Magento\Framework\Encryption\KeyValidator::class);
+        $this->driverOptionsMock = $this->createMock(ConfigOptionsList\DriverOptions::class);
+        $this->object = new ConfigOptionsList(
+            $this->generator,
+            $this->dbValidator,
+            $this->encryptionKeyValidator,
+            $this->driverOptionsMock
+        );
     }
 
     public function testGetOptions()
@@ -162,9 +179,12 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
+        $this->dbValidator->expects($this->once())
+            ->method('checkDatabaseConnectionWithDriverOptions')
+            ->willReturn($configDataMock);
         $this->dbValidator
             ->expects($this->once())
-            ->method('checkDatabaseConnection')
+            ->method('checkDatabaseConnectionWithDriverOptions')
             ->willReturn($configDataMock);
     }
 
