@@ -95,6 +95,7 @@
 
        <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin"/>
        <waitForPageLoad stepKey="waitWidgetsLoad"/>
+       <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
        <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
        <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
        <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>
