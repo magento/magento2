@@ -7,13 +7,13 @@
 <div class="masonry-image-preview" if="$col.isVisible($row())" data-image-preview ko-style="$col.getStyles($row())">
     <div class="container">
         <div class="action-buttons">
-            <button class="action-previous" type="button" click="function () { $col.prev($row()); }">
+            <button class="action-previous" type="button" click="$col.prev.bind($col, $row())">
                 <span translate="'Previous'"/>
             </button>
-            <button class="action-next" type="button" click="function () { $col.next($row()); }">
+            <button class="action-next" type="button" click="$col.next.bind($col, $row())">
                 <span translate="'Next'"/>
             </button>
-            <button class="action-close" type="button" click="function () { $col.hide(); }">
+            <button class="action-close" type="button" click="$col.hide.bind($col)">
                 <span translate="'Close'"/>
             </button>
         </div>

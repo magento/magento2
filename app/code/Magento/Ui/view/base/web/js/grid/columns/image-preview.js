@@ -3,16 +3,15 @@
  * See COPYING.txt for license details.
  */
 define([
-    'underscore',
     'jquery',
     'Magento_Ui/js/grid/columns/column'
-], function (_, $, Column) {
+], function ($, Column) {
     'use strict';
 
     return Column.extend({
         defaults: {
             previewImageSelector: '[data-image-preview]',
-            visibile: null,
+            visibleRecord: null,
             height: 0,
             displayedRecord: {},
             lastOpenedImage: null,
@@ -21,7 +20,7 @@ define([
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
             },
             statefull: {
-                visible: true,
+                visibleRecord: true,
                 sorting: true,
                 lastOpenedImage: true
             },
@@ -41,7 +40,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'visibile',
+                    'visibleRecord',
                     'height',
                     'displayedRecord',
                     'lastOpenedImage'
@@ -106,7 +105,7 @@ define([
             this.hide();
             this.displayedRecord(record);
             this._selectRow(record.rowNumber || null);
-            this.visibile(record._rowIndex);
+            this.visibleRecord(record._rowIndex);
 
             img = $(this.previewImageSelector + ' img');
 
@@ -135,7 +134,7 @@ define([
          */
         hide: function () {
             this.lastOpenedImage(null);
-            this.visibile(null);
+            this.visibleRecord(null);
             this.height(0);
             this._selectRow(null);
         },
@@ -148,12 +147,12 @@ define([
          */
         isVisible: function (record) {
             if (this.lastOpenedImage() === record._rowIndex &&
-                this.visibile() === null
+                this.visibleRecord() === null
             ) {
                 this.show(record);
             }
 
-            return this.visibile() === record._rowIndex || false;
+            return this.visibleRecord() === record._rowIndex || false;
         },
 
         /**

@@ -5,8 +5,9 @@
 define([
     'Magento_Ui/js/grid/listing',
     'jquery',
-    'ko'
-], function (Listing, $, ko) {
+    'ko',
+    'underscore'
+], function (Listing, $, ko, _) {
     'use strict';
 
     return Listing.extend({
@@ -88,7 +89,7 @@ define([
          * @return {Object}
          */
         initComponent: function (rows) {
-            if (!rows || !rows.length) {
+            if (!rows.length) {
                 return;
             }
             this.imageMargin = parseInt(this.imageMargin, 10);
@@ -199,7 +200,7 @@ define([
                     this.waitForContainer(callback);
                 }.bind(this), 500);
             } else {
-                callback();
+                setTimeout(callback, 0);
             }
         },
 
@@ -246,15 +247,20 @@ define([
          * Set min ratio for images in layout
          */
         setMinRatio: function () {
-            var minRatio = null;
-
-            for (var width in this.containerWidthToMinRatio) {
-                if (this.containerWidthToMinRatio.hasOwnProperty(width) &&
-                    this.containerWidth <= width
-                ) {
-                    minRatio = this.containerWidthToMinRatio[width]
-                }
-            }
+            var minRatio = _.find(
+                this.containerWidthToMinRatio,
+                /**
+                 * Find the minimal ratio for container width in the matrix
+                 *
+                 * @param {Number} ratio
+                 * @param {Number} width
+                 * @returns {Boolean}
+                 */
+                function (ratio, width) {
+                    return this.containerWidth <= width;
+                },
+                this
+            );
 
             this.minRatio = minRatio ? minRatio : this.defaultMinRatio;
         },
