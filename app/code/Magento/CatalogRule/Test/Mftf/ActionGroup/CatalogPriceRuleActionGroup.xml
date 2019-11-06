@@ -216,7 +216,7 @@
         <arguments>
             <argument name="condition" type="string" defaultValue="{{CatalogRuleProductConditions.categoryIds}}"/>
             <argument name="conditionOperator" type="string" defaultValue="is"/>
-            <argument name="conditionValue" type="string"/>
+            <argument name="conditionValue" type="string" defaultValue="2"/>
         </arguments>
 
         <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTab}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" visible="false" stepKey="openConditionsTab"/>
