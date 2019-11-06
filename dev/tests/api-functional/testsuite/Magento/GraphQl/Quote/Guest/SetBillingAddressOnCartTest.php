@@ -42,7 +42,7 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-        address: {
+         address: {
           firstname: "test firstname"
           lastname: "test lastname"
           company: "test company"
@@ -52,12 +52,27 @@ mutation {
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-        }
+         }
+         same_as_shipping: true
       }
     }
   ) {
     cart {
       billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+      shipping_addresses {
         firstname
         lastname
         company
@@ -82,9 +97,15 @@ QUERY;
         self::assertArrayHasKey('billing_address', $cartResponse);
         $billingAddressResponse = $cartResponse['billing_address'];
         $this->assertNewAddressFields($billingAddressResponse);
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewAddressFields($billingAddressResponse);
+        $this->assertNewAddressFields($shippingAddressResponse, 'ShippingCartAddress');
     }
 
     /**
+     * Test case for deprecated `use_for_shipping` param.
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -342,7 +363,7 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-        use_for_shipping: true
+        same_as_shipping: true
       }
     }
   ) {
@@ -367,7 +388,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_multishipping_with_two_shipping_addresses.php
      */
-    public function testSetNewBillingAddressWithUseForShippingAndMultishipping()
+    public function testSetNewBillingAddressWithSameAsShippingAndMultishipping()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -388,7 +409,7 @@ mutation {
           country_code: "US"
           telephone: "88776655"
         }
-        use_for_shipping: true
+        same_as_shipping: true
       }
     }
   ) {
@@ -402,7 +423,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'Using the "use_for_shipping" option with multishipping is not possible.'
+            'Using the "same_as_shipping" option with multishipping is not possible.'
         );
         $this->graphQlMutation($query);
     }

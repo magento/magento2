@@ -18,6 +18,9 @@
             <group value="Downloadable"/>
         </annotations>
         <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
             <!-- Create category -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
@@ -61,6 +64,9 @@
             <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         </before>
         <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 

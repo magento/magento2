@@ -27,7 +27,8 @@
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
             <argument name="price_to" value="100"/>
         </actionGroup>
-        <see userInput="2 items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <!-- See that some items were found, other products may exist besides our test products -->
+        <see userInput="items" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
         <see userInput="$$createProduct2.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProduct2Name" after="seeProductName"/>
     </test>
 </tests>
