@@ -87,11 +87,7 @@ class Storage
         try {
             $this->deleteMediaAssetByPath->execute($relativePath);
         } catch (\Exception $exception) {
-            $message = __(
-                'An error occurred during media asset delete at wysiwyg: %error',
-                ['error' => $exception->getMessage()]
-            );
-            $this->logger->critical($message->render());
+            $this->logger->critical($exception);
         }
 
         return $result;
