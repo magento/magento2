@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for create customer functionallity
+ * Test for create customer functionality
  */
 class CreateCustomerTest extends GraphQlAbstract
 {
@@ -27,7 +27,7 @@ class CreateCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -308,7 +308,7 @@ QUERY;
         $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $newEmail = 'new_customer@example.com';
         try {

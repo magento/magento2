@@ -29,7 +29,7 @@ class CreateCustomerAddressTest extends GraphQlAbstract
      */
     private $addressRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
