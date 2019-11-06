@@ -214,7 +214,7 @@
             <description>Clicks on the Conditions tab. Fills in the provided condition for Catalog Price Rule.</description>
         </annotations>
         <arguments>
-            <argument name="condition" type="string"/>
+            <argument name="condition" type="string" defaultValue="{{CatalogRuleProductConditions.categoryIds}}"/>
             <argument name="conditionOperator" type="string" defaultValue="is"/>
             <argument name="conditionValue" type="string"/>
         </arguments>
