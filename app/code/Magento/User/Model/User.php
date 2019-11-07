@@ -216,9 +216,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Removing dependencies and leaving only entity's properties.
      *
      * @return string[]
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -247,9 +244,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Restoring required objects after serialization.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
