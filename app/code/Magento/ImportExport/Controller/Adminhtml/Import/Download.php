@@ -101,8 +101,8 @@ class Download extends ImportController
         $resultRaw = $this->resultRawFactory->create();
         $resultRaw->setContents($fileContents);
         $resultRaw->setHeader('Content-Type','text/csv');
-        $resultRaw->setHeader('Content-Disposition','attachment; filename="'.$fileName.'"');
-        $resultRaw->setHeader('Content-Length: '.$fileSize);
+        $resultRaw->setHeader('Content-Disposition', 'attachment; filename="'.$fileName.'"');
+        $resultRaw->setHeader('Content-Length', $fileSize);
         return $resultRaw;
     }
 
