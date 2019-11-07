@@ -25,7 +25,7 @@
             <description>EXTENDS: AdminCreateWidgetActionGroup. Creates Catalog Category Link Widget.</description>
         </annotations>
         <arguments>
-            <argument name="categoryName" type="string"/>
+            <argument name="categoryName" type="string" defaultValue="{{DefaultCategory.name}}"/>
         </arguments>
 
         <waitForElementVisible selector="{{AdminNewWidgetSection.selectCategory}}" after="clickWidgetOptions" stepKey="waitForSelectCategoryButtonVisible"/>
