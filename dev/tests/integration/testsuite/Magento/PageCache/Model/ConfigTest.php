@@ -76,8 +76,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
                         1234,
                         'X-Forwarded-Proto',
-                        $directoryList,
-                        json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true)
+                        json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
+                        $directoryList
                     )
                 )
             );

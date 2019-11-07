@@ -159,8 +159,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                         explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
                         120,
                         'X_Forwarded_Proto: https',
-                        $directoryList,
-                        [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]
+                        [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
+                        $directoryList
                     )
                 )
             );

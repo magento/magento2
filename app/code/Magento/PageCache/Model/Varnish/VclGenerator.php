@@ -64,8 +64,8 @@ class VclGenerator implements VclGeneratorInterface
      * @param array $accessList
      * @param int $gracePeriod
      * @param string $sslOffloadedHeader
-     * @param DirectoryList $directoryList
      * @param array $designExceptions
+     * @param DirectoryList $directoryList
      */
     public function __construct(
         VclTemplateLocatorInterface $vclTemplateLocator,
@@ -74,8 +74,8 @@ class VclGenerator implements VclGeneratorInterface
         $accessList,
         $gracePeriod,
         $sslOffloadedHeader,
-        DirectoryList $directoryList,
-        $designExceptions = []
+        $designExceptions = [],
+        DirectoryList $directoryList
     ) {
         $this->backendHost = $backendHost;
         $this->backendPort = $backendPort;
