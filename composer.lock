@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec6a11c24090ea9f5c1af2341c94b39e",
+    "content-hash": "2e70a2d627872624e03d089cd7e51618",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -7201,16 +7201,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "2.5.2",
+            "version": "2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "e254e738b3a3fa2eceec9be0590c2aad0e689640"
+                "reference": "f627085a469da79e4a628d4bf0452f12aefa4389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e254e738b3a3fa2eceec9be0590c2aad0e689640",
-                "reference": "e254e738b3a3fa2eceec9be0590c2aad0e689640",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/f627085a469da79e4a628d4bf0452f12aefa4389",
+                "reference": "f627085a469da79e4a628d4bf0452f12aefa4389",
                 "shasum": ""
             },
             "require": {
@@ -7275,7 +7275,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2019-10-23T14:50:28+00:00"
+            "time": "2019-10-31T14:52:02+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -7907,20 +7907,20 @@
             "authors": [
                 {
                     "name": "Manuel Pichler",
-                    "role": "Project Founder",
                     "email": "github@manuel-pichler.de",
-                    "homepage": "https://github.com/manuelpichler"
+                    "homepage": "https://github.com/manuelpichler",
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Marc Würth",
-                    "role": "Project Maintainer",
                     "email": "ravage@bluewin.ch",
-                    "homepage": "https://github.com/ravage84"
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
                 },
                 {
                     "name": "Other contributors",
-                    "role": "Contributors",
-                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors"
+                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",

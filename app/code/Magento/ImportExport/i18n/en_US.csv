@@ -121,5 +121,6 @@ Summary,Summary
 "New product data is added to existing product data entries in the database. All fields except SKU can be updated.","New product data is added to existing product data entries in the database. All fields except SKU can be updated."
 "All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>","All existing product data is replaced with the imported new data. <b>Exercise caution when replacing data. All existing product data will be completely cleared and all references in the system will be lost.</b>"
 "Any entities in the import data that match existing entities in the database are deleted from the database.","Any entities in the import data that match existing entities in the database are deleted from the database."
+"Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file","Message is added to queue, wait to get your file soon. Make sure your cron job is running to export the file"
 "Invalid data","Invalid data"
 "Invalid response","Invalid response"

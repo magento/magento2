@@ -100,7 +100,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->assertContains(
             'You have been successfully subscribed to our newsletter.',
-            $transportBuilder->getSentMessage()->getRawMessage()
+            $transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
     }
 }
