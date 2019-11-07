@@ -3,15 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\MysqlMq\Model\Driver;
 
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\ExchangeInterface;
-use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
+use Magento\MysqlMq\Model\ConnectionTypeResolver;
 use Magento\MysqlMq\Model\QueueManagement;
 
+/**
+ * Class Exchange
+ */
 class Exchange implements ExchangeInterface
 {
+    /**
+     * @var ConnectionTypeResolver
+     */
+    private $connectionTypeResolver;
+
     /**
      * @var MessageQueueConfig
      */
@@ -25,13 +35,18 @@ class Exchange implements ExchangeInterface
     /**
      * Initialize dependencies.
      *
+     * @param ConnectionTypeResolver $connectionTypeResolver
      * @param MessageQueueConfig $messageQueueConfig
      * @param QueueManagement $queueManagement
      */
-    public function __construct(MessageQueueConfig $messageQueueConfig, QueueManagement $queueManagement)
-    {
+    public function __construct(
+        ConnectionTypeResolver $connectionTypeResolver,
+        MessageQueueConfig $messageQueueConfig,
+        QueueManagement $queueManagement
+    ) {
         $this->messageQueueConfig = $messageQueueConfig;
         $this->queueManagement = $queueManagement;
+        $this->connectionTypeResolver = $connectionTypeResolver;
     }
 
     /**
@@ -43,7 +58,18 @@ class Exchange implements ExchangeInterface
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {
-        $queueNames = $this->messageQueueConfig->getQueuesByTopic($topic);
+        $queueNames = [];
+        $exchanges = $this->messageQueueConfig->getExchanges();
+        foreach ($exchanges as $exchange) {
+            $connection = $exchange->getConnection();
+            if ($this->connectionTypeResolver->getConnectionType($connection)) {
+                foreach ($exchange->getBindings() as $binding) {
+                    if ($binding->getTopic() == $topic) {
+                        $queueNames[] = $binding->getDestination();
+                    }
+                }
+            }
+        }
         $this->queueManagement->addMessageToQueues($topic, $envelope->getBody(), $queueNames);
         return null;
     }
