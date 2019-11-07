@@ -193,6 +193,9 @@ class Elasticsearch
      */
     public function cleanIndex($storeId, $mappedIndexerId)
     {
+        // needed to fix bug with double indices in alias because of second reindex in same process
+        unset($this->preparedIndex[$storeId]);
+
         $this->checkIndex($storeId, $mappedIndexerId, true);
         $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
 
