@@ -14,7 +14,7 @@ use Magento\Framework\Locale\Resolver;
  * @api
  */
 class Date implements \Zend_Filter_Interface
-{   
+{
     /**
      * @var Resolve
      */
@@ -46,6 +46,7 @@ class Date implements \Zend_Filter_Interface
 
     /**
      * @param TimezoneInterface $localeDate
+     * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
     public function __construct(
@@ -75,7 +76,11 @@ class Date implements \Zend_Filter_Interface
             $value = $this->_localeDate->date($value, null, false, false);
             return $value->format('Y-m-d');
         } catch (\Exception $e) {
-            throw new \Exception("Invalid input date format '$value'");
+            throw new \Magento\Framework\Exception\CouldNotDeleteException(
+                "Invalid input datetime format of value '$value'",
+                $e->getCode(),
+                $e
+            );
         }
     }
 }

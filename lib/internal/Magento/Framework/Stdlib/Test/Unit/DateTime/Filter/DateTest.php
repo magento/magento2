@@ -6,6 +6,7 @@
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
 use \Magento\Framework\Stdlib\DateTime\Filter\Date;
+use \Magento\Framework\Locale\Resolver;
 
 class DateTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,6 +19,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     public function testFilter($inputData, $expectedDate)
     {
         $localeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $localeFilter = $this->createMock(\Magento\Framework\Locale\Resolver::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -27,7 +29,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('MM-dd-yyyy')
         );
-        $model = new Date($localeMock);
+        $model = new Date($localeMock, $localeFilter);
         $localeMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
 
         $this->assertEquals($expectedDate, $model->filter($inputData));
@@ -53,6 +55,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         $this->expectException('\Exception');
 
         $localeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $localeFilter = $this->createMock(\Magento\Framework\Locale\Resolver::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -62,7 +65,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue('MM-dd-yyyy')
         );
-        $model = new Date($localeMock);
+        $model = new Date($localeMock, $localeFilter);
         $localeMock->expects($this->any())->method('date')->willReturn(new \DateTime($inputData));
 
         $model->filter($inputData);
