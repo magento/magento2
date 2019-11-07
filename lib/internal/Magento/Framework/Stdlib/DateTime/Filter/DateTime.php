@@ -15,6 +15,11 @@ use Magento\Framework\Locale\Resolver;
 class DateTime extends Date
 {
     /**
+     * @var Resolve
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
@@ -23,8 +28,8 @@ class DateTime extends Date
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Locale\Resolver $localeResolver
     ) {
-        parent::__construct($localeDate);
         $this->localeResolver = $localeResolver;
+        parent::__construct($localeDate, $localeResolver);
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
                 'date_format' => $this->_localeDate->getDateTimeFormat(
@@ -67,7 +72,7 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new \Magento\Framework\Exception\CouldNotDeleteException(
                 "Invalid input datetime format of value '$value'",
                 $e->getCode(),
                 $e
