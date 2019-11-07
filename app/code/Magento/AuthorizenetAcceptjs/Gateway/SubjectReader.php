@@ -13,6 +13,9 @@ use Magento\Payment\Gateway\Helper;
 
 /**
  * Helper for extracting information from the payment data structure
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class SubjectReader
 {
@@ -42,6 +45,7 @@ class SubjectReader
                 $storeId = (int)$this->readPayment($subject)
                     ->getOrder()
                     ->getStoreId();
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\InvalidArgumentException $e) {
                 // No store id is current set
             }
