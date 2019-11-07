@@ -270,7 +270,6 @@ class Bootstrap
         } catch (\Throwable $e) {
             $this->terminate($e);
         }
-
     } // phpcs:enable
 
     /**
