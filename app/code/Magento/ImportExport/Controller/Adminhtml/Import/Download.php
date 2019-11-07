@@ -97,17 +97,12 @@ class Download extends ImportController
         $fileSize = $this->sampleFileProvider->getSize($entityName);
         $fileName = $entityName . '.csv';
 
-        $this->fileFactory->create(
-            $fileName,
-            null,
-            DirectoryList::VAR_DIR,
-            'application/octet-stream',
-            $fileSize
-        );
-
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         $resultRaw->setContents($fileContents);
+        $resultRaw->setHeader('Content-Type','text/csv');
+        $resultRaw->setHeader('Content-Disposition','attachment; filename="'.$fileName.'"');
+        $resultRaw->setHeader('Content-Length: '.$fileSize);
         return $resultRaw;
     }
 
