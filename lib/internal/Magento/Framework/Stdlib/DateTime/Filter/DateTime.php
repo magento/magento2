@@ -72,7 +72,9 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotDeleteException("Invalid input datetime format of value '$value'", $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\CouldNotDeleteException(
+                "Invalid input datetime format of value '$value'", $e->getCode(), $e
+            );
         }
     }
 }
