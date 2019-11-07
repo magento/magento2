@@ -17,7 +17,7 @@ class DateTime extends Date
     /**
      * @var Resolve
      */
-    private $localeResolver;
+    protected $localeResolver;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -72,7 +72,7 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            $this->_addError('Invalid input datetime format of value  [' . $value . ']. ' . $e->getCode() . $e);
+            throw new \Magento\Framework\Exception\CouldNotDeleteException("Invalid input datetime format of value '$value'", $e->getCode(), $e);
         }
     }
 }
