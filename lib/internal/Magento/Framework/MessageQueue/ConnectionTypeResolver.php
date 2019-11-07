@@ -20,7 +20,7 @@ class ConnectionTypeResolver
      *
      * @param ConnectionTypeResolverInterface[] $resolvers
      */
-    public function __construct($resolvers)
+    public function __construct($resolvers = [])
     {
         $this->resolvers = $resolvers;
     }
