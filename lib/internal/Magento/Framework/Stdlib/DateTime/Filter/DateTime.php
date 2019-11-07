@@ -68,7 +68,9 @@ class DateTime extends Date
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                "Invalid input datetime format of value '$value'", $e->getCode(), $e
+                "Invalid input datetime format of value '$value'",
+                $e->getCode(),
+                $e
             );
         }
     }
