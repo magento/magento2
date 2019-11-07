@@ -52,9 +52,11 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
             $quote->setBillingAddress($addressInformation->getAddress());
         } else {
             $quote->setShippingAddress($addressInformation->getAddress());
-            $quote->getShippingAddress()->setCollectShippingRates(true)->setShippingMethod(
-                $addressInformation->getShippingCarrierCode() . '_' . $addressInformation->getShippingMethodCode()
-            );
+            if ($addressInformation->getShippingCarrierCode() && $addressInformation->getShippingMethodCode()) {
+                $quote->getShippingAddress()->setCollectShippingRates(true)->setShippingMethod(
+                    $addressInformation->getShippingCarrierCode().'_'.$addressInformation->getShippingMethodCode()
+                );
+            }
         }
         $quote->collectTotals();
 
