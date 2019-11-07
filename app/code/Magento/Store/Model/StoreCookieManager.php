@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,10 +10,13 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreCookieManagerInterface;
 
+/**
+ * DTO class to work with cookies.
+ */
 class StoreCookieManager implements StoreCookieManagerInterface
 {
     /**
-     * Cookie name
+     * @var string
      */
     const COOKIE_NAME = 'store';
 
@@ -41,7 +43,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStoreCodeFromCookie()
     {
@@ -49,12 +51,12 @@ class StoreCookieManager implements StoreCookieManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStoreCookie(StoreInterface $store)
     {
         $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-            ->setHttpOnly(true)
+            ->setHttpOnly(false)
             ->setDurationOneYear()
             ->setPath($store->getStorePath());
 
@@ -62,7 +64,7 @@ class StoreCookieManager implements StoreCookieManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteStoreCookie(StoreInterface $store)
     {
