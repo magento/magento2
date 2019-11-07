@@ -483,6 +483,14 @@ class Tree extends Dbp
 
         foreach ($this->_conn->fetchAll($select) as $item) {
             $pathIds = explode('/', $item['path']);
+
+            array_walk(
+                $pathIds,
+                function (&$pathId) {
+                    $pathId = (int)$pathId;
+                }
+            );
+
             $level = (int)$item['level'];
             while ($level > 0) {
                 $pathIds[count($pathIds) - 1] = '%';
