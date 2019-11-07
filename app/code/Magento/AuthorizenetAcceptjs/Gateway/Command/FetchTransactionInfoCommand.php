@@ -17,6 +17,9 @@ use Magento\Payment\Gateway\Command\Result\ArrayResult;
 
 /**
  * Syncs the transaction status with authorize.net
+ *
+ * @deprecated Starting from Magento 2.2.11 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class FetchTransactionInfoCommand implements CommandInterface
 {

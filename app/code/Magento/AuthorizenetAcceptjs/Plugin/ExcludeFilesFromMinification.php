@@ -9,6 +9,9 @@ use Magento\Framework\View\Asset\Minification;
 
 /**
  * Plugin for Magento\Framework\View\Asset\Minification.
+ *
+ * @deprecated Starting from Magento 2.2.11 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class ExcludeFilesFromMinification
 {
