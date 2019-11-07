@@ -45,7 +45,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Config search engine path.
      */
-    const SEARCH_ENGINE_VALUE_PATH = 'catalog/search/engine';
+    private const SEARCH_ENGINE_VALUE_PATH = 'catalog/search/engine';
 
     /**
      * @var  QueryResponse
