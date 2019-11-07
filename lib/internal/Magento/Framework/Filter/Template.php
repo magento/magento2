@@ -365,45 +365,6 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Evaluate object property access.
-     *
-     * @param object $object
-     * @param string $property
-     * @return null
-     */
-    private function evaluateObjectPropertyAccess($object, $property)
-    {
-        $method = 'get' . $this->string->upperCaseWords($property, '_', '');
-        $this->validateVariableMethodCall($object, $method);
-        return method_exists($object, $method)
-            ? $object->{$method}()
-            : (($object instanceof \Magento\Framework\DataObject) ? $object->getData($property) : null);
-    }
-
-    /**
-     * Evaluate object method call.
-     *
-     * @param object $object
-     * @param string $method
-     * @param array $arguments
-     * @return mixed|null
-     */
-    private function evaluateObjectMethodCall($object, $method, $arguments)
-    {
-        if (method_exists($object, $method)
-            || ($object instanceof \Magento\Framework\DataObject && substr($method, 0, 3) == 'get')
-        ) {
-            $arguments = $this->getStackArgs($arguments);
-            $this->validateVariableMethodCall($object, $method);
-            return call_user_func_array(
-                [$object, $method],
-                $arguments
-            );
-        }
-        return null;
-    }
-
-    /**
      * Loops over a set of stack args to process variables into array argument values
      *
      * @param array $stack

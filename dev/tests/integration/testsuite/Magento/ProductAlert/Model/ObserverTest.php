@@ -71,7 +71,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
         $this->assertContains(
             'ohn Smith,',
-            $transportBuilder->getSentMessage()->getRawMessage()
+            $this->transportBuilder->getSentMessage()->getRawMessage()
         );
     }
 
