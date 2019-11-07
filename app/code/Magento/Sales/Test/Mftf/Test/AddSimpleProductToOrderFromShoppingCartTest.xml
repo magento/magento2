@@ -46,8 +46,9 @@
         </actionGroup>
 
         <!-- Add product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="2"/>
         </actionGroup>
 
         <!-- Login as admin -->
@@ -64,6 +65,7 @@
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
 
         <!-- Check product in customer's activities in shopping cart section -->
+        <see selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="Shopping Cart (2)" stepKey="seeCorrectNumberInCart"/>
         <see selector="{{AdminCustomerActivitiesShoppingCartSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInShoppingCartSection"/>
         <see selector="{{AdminCustomerActivitiesShoppingCartSection.productPrice}}" userInput="$$createProduct.price$$" stepKey="seeProductPriceInShoppingCartSection"/>
 
@@ -75,6 +77,6 @@
         <!-- Assert product in items ordered grid -->
         <see selector="{{AdminCustomerCreateNewOrderSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductName"/>
         <see selector="{{AdminCustomerCreateNewOrderSection.productPrice}}" userInput="$$createProduct.price$$" stepKey="seeProductPrice"/>
-        <seeInField selector="{{AdminCustomerCreateNewOrderSection.productQty}}" userInput="{{ApiSimpleSingleQty.quantity}}" stepKey="seeProductQty"/>
+        <seeInField selector="{{AdminCustomerCreateNewOrderSection.productQty}}" userInput="2" stepKey="seeProductQty"/>
     </test>
 </tests>

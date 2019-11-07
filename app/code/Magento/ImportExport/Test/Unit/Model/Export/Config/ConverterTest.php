@@ -21,7 +21,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected $filePath;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManager;
 

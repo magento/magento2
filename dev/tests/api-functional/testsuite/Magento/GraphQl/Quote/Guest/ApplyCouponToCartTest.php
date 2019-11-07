@@ -41,6 +41,8 @@ class ApplyCouponToCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('applyCouponToCart', $response);
+        self::assertArrayHasKey('id', $response['applyCouponToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['applyCouponToCart']['cart']['id']);
         self::assertEquals($couponCode, $response['applyCouponToCart']['cart']['applied_coupon']['code']);
     }
 
@@ -202,6 +204,7 @@ QUERY;
 mutation {
   applyCouponToCart(input: {cart_id: "$maskedQuoteId", coupon_code: "$couponCode"}) {
     cart {
+    id
       applied_coupon {
         code
       }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminURLKeyWorksWhenUpdatingProductThroughImportingCSVTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Check that new URL Key works after updating a product through importing CSV file"/>
+            <description value="Check that new URL Key works after updating a product through importing CSV file"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6317"/>
+            <useCaseId value="MAGETWO-91544"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <!--Create Product-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProductBeforeUpdate" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Import product from CSV file-->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="importProduct">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="simpleProductUpdate.csv"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 1, Deleted: 0"/>
+        </actionGroup>
+        <!--Assert product's updated url-->
+        <amOnPage url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url('simpleprod')}}" stepKey="seeUpdatedUrl"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="assertProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createProduct.sku$$" stepKey="assertProductSku"/>
+    </test>
+</tests>
