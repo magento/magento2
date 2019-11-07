@@ -15,11 +15,6 @@ use Magento\Framework\Locale\Resolver;
 class DateTime extends Date
 {
     /**
-     * @var Resolve
-     */
-    protected $localeResolver;
-
-    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
@@ -72,7 +67,7 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 "Invalid input datetime format of value '$value'", $e->getCode(), $e
             );
         }
