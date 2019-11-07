@@ -6,7 +6,6 @@
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Locale\Resolver;
 
 /**
  * Date filter. Converts date from localized to internal format.
@@ -15,11 +14,6 @@ use Magento\Framework\Locale\Resolver;
  */
 class Date implements \Zend_Filter_Interface
 {
-    /**
-     * @var Resolve
-     */
-    private $localeResolver;
-
     /**
      * Filter that converts localized input into normalized format
      *
@@ -46,15 +40,11 @@ class Date implements \Zend_Filter_Interface
 
     /**
      * @param TimezoneInterface $localeDate
-     * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
-    public function __construct(
-        TimezoneInterface $localeDate,
-        \Magento\Framework\Locale\Resolver $localeResolver
-    ) {
+    public function __construct(TimezoneInterface $localeDate)
+    {
         $this->_localeDate = $localeDate;
-        $this->localeResolver = $localeResolver;
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             ['date_format' => $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)]
         );
@@ -76,11 +66,7 @@ class Date implements \Zend_Filter_Interface
             $value = $this->_localeDate->date($value, null, false, false);
             return $value->format('Y-m-d');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                "Invalid input datetime format of value '$value'",
-                $e->getCode(),
-                $e
-            );
+            throw new \Exception("Invalid input date format '$value'");
         }
     }
 }

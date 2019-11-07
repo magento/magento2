@@ -26,7 +26,7 @@ class DateTime extends Date
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Locale\Resolver $localeResolver
+        Resolver $localeResolver
     ) {
         $this->localeResolver = $localeResolver;
         parent::__construct($localeDate, $localeResolver);
