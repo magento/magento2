@@ -423,9 +423,6 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -438,9 +435,6 @@ class Store extends AbstractExtensibleModel implements
      * Init not serializable fields
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
