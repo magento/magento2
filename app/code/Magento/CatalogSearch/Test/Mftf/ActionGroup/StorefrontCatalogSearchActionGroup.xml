@@ -41,6 +41,27 @@
         <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
     </actionGroup>
 
+    <actionGroup name="StorefrontQuickSearchTooShortStringActionGroup" extends="StorefrontCheckQuickSearchStringActionGroup">
+        <annotations>
+            <description>Fill the Storefront Search field. Submits the Form. Validates that 'Minimum Search query length' warning appears.</description>
+        </annotations>
+        <arguments>
+            <argument name="minQueryLength" type="string"/>
+        </arguments>
+
+        <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="Minimum Search query length is {{minQueryLength}}" stepKey="assertQuickSearchNeedThreeOrMoreChars"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup">
+        <arguments>
+            <argument name="term" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontCatalogSearchMainSection.relatedSearchTermsTitle}}" stepKey="waitMessageAppears"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.relatedSearchTermsTitle}}" userInput="Related search terms" stepKey="checkRelatedTermsTitle"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.relatedSearchTerm}}" userInput="{{term}}" stepKey="checkRelatedTermExists"/>
+    </actionGroup>
+
     <!-- Opens product from QuickSearch and performs assertions-->
     <actionGroup name="StorefrontOpenProductFromQuickSearch">
         <annotations>
@@ -51,6 +72,7 @@
             <argument name="productUrlKey" type="string"/>
         </arguments>
 
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
         <click stepKey="openProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
         <waitForPageLoad stepKey="waitForProductLoad"/>
         <seeInCurrentUrl url="{{productUrlKey}}" stepKey="checkUrl"/>
@@ -66,7 +88,8 @@
             <argument name="productName" type="string"/>
         </arguments>
 
-        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByIndex('1')}}"/>
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
+        <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
         <click selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontQuickSearchResultsSection.messageSection}}" userInput="You added {{productName}} to your shopping cart." stepKey="seeAddedToCartMessage"/>
@@ -101,7 +124,7 @@
 
         <dontSee selector="{{StorefrontQuickSearchResultsSection.allResults}}" userInput="{{productName}}" stepKey="dontSeeProductName"/>
     </actionGroup>
-    
+
     <!-- Open advanced search page -->
     <actionGroup name="StorefrontOpenAdvancedSearchActionGroup">
         <annotations>

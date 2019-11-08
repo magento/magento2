@@ -65,8 +65,11 @@ class SetBillingAddressOnCart
     {
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
-        $useForShipping = isset($billingAddressInput['use_for_shipping'])
+        // Need to keep this for BC of `use_for_shipping` field
+        $sameAsShipping = isset($billingAddressInput['use_for_shipping'])
             ? (bool)$billingAddressInput['use_for_shipping'] : false;
+        $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
+            ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
 
         if (null === $customerAddressId && null === $addressInput) {
             throw new GraphQlInputException(
@@ -81,15 +84,15 @@ class SetBillingAddressOnCart
         }
 
         $addresses = $cart->getAllShippingAddresses();
-        if ($useForShipping && count($addresses) > 1) {
+        if ($sameAsShipping && count($addresses) > 1) {
             throw new GraphQlInputException(
-                __('Using the "use_for_shipping" option with multishipping is not possible.')
+                __('Using the "same_as_shipping" option with multishipping is not possible.')
             );
         }
 
         $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
 
-        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
+        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
     }
 
     /**
@@ -128,6 +131,15 @@ class SetBillingAddressOnCart
                 (int)$customerAddressId,
                 (int)$context->getUserId()
             );
+        }
+        $errors = $billingAddress->validate();
+
+        if (true !== $errors) {
+            $e = new GraphQlInputException(__('Billing address errors'));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException($error));
+            }
+            throw $e;
         }
 
         return $billingAddress;
