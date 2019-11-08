@@ -6,7 +6,12 @@
 -->
 <!--@subject {{trans "Footer"}} @-->
 <!--@vars {
-"var store.getFrontendName()":"Store Name"
+"var store.frontend_name":"Store Name",
+"var url_about_us":"About Us URL",
+"var url_customer_service":"Customer Service URL",
+"var store_phone":"Store Phone",
+"var store_hours":"Store Hours",
+"var store.formatted_address|raw":"Store Address"
 } @-->
 
                     <!-- End Content -->
@@ -42,7 +47,7 @@
                                 </td>
                                 <td>
                                     <p class="address">
-                                        {{var store.getFormattedAddress()|raw}}
+                                        {{var store.formatted_address|raw}}
                                     </p>
                                 </td>
                             </tr>
