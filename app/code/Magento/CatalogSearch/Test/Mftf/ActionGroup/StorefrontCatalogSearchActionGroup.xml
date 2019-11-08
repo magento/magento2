@@ -72,6 +72,7 @@
             <argument name="productUrlKey" type="string"/>
         </arguments>
 
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
         <click stepKey="openProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
         <waitForPageLoad stepKey="waitForProductLoad"/>
         <seeInCurrentUrl url="{{productUrlKey}}" stepKey="checkUrl"/>
@@ -87,6 +88,7 @@
             <argument name="productName" type="string"/>
         </arguments>
 
+        <scrollTo selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}" stepKey="scrollToProduct"/>
         <moveMouseOver stepKey="hoverOverProduct" selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}}"/>
         <click selector="{{StorefrontQuickSearchResultsSection.productByName(productName)}} {{StorefrontQuickSearchResultsSection.addToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.messageSection}}" time="30" stepKey="waitForProductAdded"/>
