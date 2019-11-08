@@ -11,6 +11,7 @@ use Magento\Backend\Model\Session;
 use Magento\Email\Controller\Adminhtml\Email\Template;
 use Magento\Email\Model\ResourceModel\Template as TemplateResource;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -40,20 +41,20 @@ class Save extends Template implements HttpPostActionInterface
      *
      * @param Context $context
      * @param Registry $coreRegistry
-     * @param DateTime $dateTime
-     * @param TemplateResource $templateResource
-     * @param Session $backendSession
+     * @param DateTime|null $dateTime
+     * @param TemplateResource|null $templateResource
+     * @param Session|null $backendSession
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        DateTime $dateTime,
-        TemplateResource $templateResource,
-        Session $backendSession
+        DateTime $dateTime = null,
+        TemplateResource $templateResource = null,
+        Session $backendSession = null
     ) {
-        $this->dateTime = $dateTime;
-        $this->templateResource = $templateResource;
-        $this->backendSession = $backendSession;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
+        $this->templateResource = $templateResource ?: ObjectManager::getInstance()->get(TemplateResource::class);
+        $this->backendSession = $backendSession ?: ObjectManager::getInstance()->get(Session::class);
         parent::__construct($context, $coreRegistry);
     }
 
