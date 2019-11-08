@@ -136,7 +136,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
 
         $setPaymentMutation = $getMutationClosure($maskedQuoteId);
 
-        foreach($expectedMessages as $expectedMessage){
+        foreach ($expectedMessages as $expectedMessage) {
             $this->expectExceptionMessage($expectedMessage);
         }
         $this->graphQlMutation($setPaymentMutation, [], '', $this->getHeaderMap());
