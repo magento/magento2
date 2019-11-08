@@ -4242,4 +4242,9 @@ return [
     ['Zend_Uri', 'Zend\Uri\Uri'],
     ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
     ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
+    ['Magento\Bundle\Setup\Patch\Schema\ChangeTmpTablesEngine'],
+    ['Magento\Catalog\Setup\Patch\Schema\ChangeTmpTablesEngine'],
+    ['Magento\CatalogInventory\Setup\Patch\Schema\ChangeTmpTablesEngine'],
+    ['Magento\Downloadable\Setup\Patch\Schema\ChangeTmpTablesEngine'],
+    ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
 ];
