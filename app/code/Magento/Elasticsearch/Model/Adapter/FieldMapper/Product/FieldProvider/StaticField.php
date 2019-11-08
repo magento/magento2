@@ -132,11 +132,17 @@ class StaticField implements FieldProviderInterface
 
             if ($attributeAdapter->isTextType()) {
                 $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
+                $index = $this->indexTypeConverter->convert(
+                    IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                );
                 $allAttributes[$fieldName]['fields'][$keywordFieldName] = [
                     'type' => $this->fieldTypeConverter->convert(
                         FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
                     )
                 ];
+                if ($index) {
+                    $allAttributes[$fieldName]['fields'][$keywordFieldName]['index'] = $index;
+                }
             }
 
             if ($attributeAdapter->isComplexType()) {
