@@ -603,7 +603,7 @@ abstract class AbstractType
                 }
             }
             if (count($results) > 0) {
-                throw new LocalizedException(__(implode("\n", array_unique($results))));
+                throw new LocalizedException(__(implode("\n", $results)));
             }
         }
 
