@@ -8,8 +8,7 @@
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-checkout": "*",
-        "magento/module-payment": "*",
-        "magento/module-sales": "*"
+        "magento/module-payment": "*"
     },
     "suggest": {
         "magento/module-config": "*"
