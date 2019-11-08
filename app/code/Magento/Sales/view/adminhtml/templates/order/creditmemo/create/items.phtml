@@ -6,7 +6,11 @@
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items $block */
 ?>
-<?php $_items = $block->getCreditmemo()->getAllItems() ?>
+<?php
+/** @var Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton $viewModel */
+$viewModel = $block->getData('viewModel');
+$_items = $block->getCreditmemo()->getAllItems();
+?>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
@@ -100,6 +104,7 @@
                 <span class="title"><?= $block->escapeHtml(__('Refund Totals')) ?></span>
             </div>
             <?= $block->getChildHtml('creditmemo_totals') ?>
+            <div class="totals-actions"><?= /* @noEscape */ $viewModel->getUpdateTotalsButton() ?></div>
             <div class="order-totals-actions">
                 <div class="field choice admin__field admin__field-option field-append-comments">
                     <input id="notify_customer"
@@ -139,8 +144,8 @@ require(['jquery'], function(jQuery){
 
 //<![CDATA[
 var submitButtons = jQuery('.submit-button');
-var updateButtons = jQuery('.update-button');
-var fields = jQuery('.qty-input');
+var updateButtons = jQuery('.update-button, .update-totals-button');
+var fields = jQuery('.qty-input, .order-subtotal-table input[type="text"]');
 function enableButtons(buttons) {
     buttons.removeClass('disabled').prop('disabled', false);
 }
