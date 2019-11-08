@@ -7,6 +7,9 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
+/**
+ * Tests for \Magento\Catalog\Model\Product\Gallery\GalleryManagement.
+ */
 class GalleryManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -39,11 +42,16 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeValueMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->contentValidatorMock = $this->createMock(\Magento\Framework\Api\ImageContentValidatorInterface::class);
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            [
                 'setStoreId',
                 'getData',
                 'getStoreId',
@@ -51,7 +59,8 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
                 'getCustomAttribute',
                 'getMediaGalleryEntries',
                 'setMediaGalleryEntries',
-            ]);
+            ]
+        );
         $this->mediaGalleryEntryMock =
             $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\Gallery\GalleryManagement(
@@ -151,6 +160,8 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $existingEntryMock->expects($this->once())->method('getId')->willReturn(43);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
+        $existingEntryMock->expects($this->once())->method('getTypes')->willReturn([]);
+        $entryMock->expects($this->once())->method('getTypes')->willReturn([]);
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
         $this->model->update($productSku, $entryMock);
     }
@@ -172,12 +183,19 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
         $existingEntryMock->expects($this->once())->method('getId')->willReturn($entryId);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock]);
+        $existingEntryMock->expects($this->once())->method('getTypes')->willReturn([]);
+        $entryMock->expects($this->once())->method('getTypes')->willReturn([]);
         $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Exception());
         $this->model->update($productSku, $entryMock);
     }
 
+    /**
+     * Check update gallery entry behavior.
+     *
+     * @return void
+     */
     public function testUpdate()
     {
         $productSku = 'testProduct';
@@ -203,14 +221,13 @@ class GalleryManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn([$existingEntryMock, $existingSecondEntryMock]);
 
         $entryMock->expects($this->exactly(2))->method('getId')->willReturn($entryId);
-        $entryMock->expects($this->once())->method('getFile')->willReturn("base64");
-        $entryMock->expects($this->once())->method('setId')->with(null);
-        $entryMock->expects($this->exactly(2))->method('getTypes')->willReturn(['image']);
+        $entryMock->expects($this->once())->method('getTypes')->willReturn(['image']);
 
         $this->productMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([$entryMock, $existingSecondEntryMock])
             ->willReturnSelf();
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
+
         $this->assertTrue($this->model->update($productSku, $entryMock));
     }
 
