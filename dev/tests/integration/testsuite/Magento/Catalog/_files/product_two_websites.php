@@ -16,15 +16,19 @@ use Magento\TestFramework\Helper\Bootstrap;
 require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
 
 $objectManager =  Bootstrap::getObjectManager();
+/** @var ProductFactory $productFactory */
 $productFactory = $objectManager->create(ProductFactory::class);
+/** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
 $websiteId = $websiteRepository->get('test')->getId();
+$defaultWebsiteId = $websiteRepository->get('base')->getId();
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
-    ->setWebsiteIds([1, $websiteId])
+    ->setWebsiteIds([$defaultWebsiteId, $websiteId])
     ->setName('Simple Product on two websites')
     ->setSku('simple-on-two-websites')
     ->setPrice(10)
