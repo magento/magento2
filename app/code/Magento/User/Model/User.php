@@ -413,10 +413,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function getRole()
     {
-        if ($this->getData('extracted_role')) {
-            $this->_role = $this->getData('extracted_role');
-            $this->unsetData('extracted_role');
-        }
         if (null === $this->_role) {
             $this->_role = $this->_roleFactory->create();
             $roles = $this->getRoles();
