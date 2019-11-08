@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-/**
- * {@inheritdoc}
- */
 class ConnectionTypeResolver
 {
     /**
@@ -25,9 +22,6 @@ class ConnectionTypeResolver
         $this->resolvers = $resolvers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConnectionType($connectionName)
     {
         $type = null;
