@@ -52,6 +52,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     public function tearDown()
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
+        $this->restoreOriginalObjectManager();
     }
 
     /**
@@ -117,11 +118,41 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             [
                 'preferences' => [
                     \Magento\Framework\Interception\PluginListInterface::class =>
-                        \Magento\Framework\CompiledInterception\Generator\CompiledPluginList::class,
+                        \Magento\Framework\Interception\PluginList\PluginList::class,
                     \Magento\Framework\Interception\ChainInterface::class =>
                         \Magento\Framework\Interception\Chain\Chain::class,
+                    \Magento\Framework\Interception\Code\Generator\InterceptorInterface::class =>
+                        \Magento\Framework\Interception\Code\Generator\Interceptor::class
                 ],
             ]
         );
+
+        $this->injectConfiguredObjectManager();
+    }
+
+    /**
+     * Inject configured object manager into autoloader.
+     */
+    private function injectConfiguredObjectManager(): void
+    {
+        foreach (spl_autoload_functions() as $autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+                $autoloader[0]->getGenerator()->setObjectManager($this->_objectManager);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Restore original object manager in autoloader.
+     */
+    private function restoreOriginalObjectManager(): void
+    {
+        foreach (spl_autoload_functions() as $autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+                $autoloader[0]->getGenerator()->setObjectManager($this->applicationObjectManager);
+                break;
+            }
+        }
     }
 }

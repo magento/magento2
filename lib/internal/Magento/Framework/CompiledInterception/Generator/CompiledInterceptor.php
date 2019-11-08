@@ -287,7 +287,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
     private function addCodeSubBlock(&$body, $sub, $indent = 1)
     {
         foreach ($sub as $line) {
-            $body[] = str_repeat("\t", $indent) . $line;
+            $body[] = ('' === $line) ? '' : str_repeat("\t", $indent) . $line;
         }
     }
 

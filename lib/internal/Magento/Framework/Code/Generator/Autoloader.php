@@ -89,12 +89,15 @@ class Autoloader
         try {
             $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
             $logger->debug($exception->getMessage(), ['exception' => $exception]);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $ignoreThisException) {
             // Do not take an action here, since the original exception might have been caused by logger
         }
     }
 
     /**
+     * Set generator instance.
+     *
      * @param Generator $generator
      */
     public function setGenerator(Generator $generator): void
@@ -103,6 +106,8 @@ class Autoloader
     }
 
     /**
+     * Get generator instance.
+     *
      * @return Generator
      */
     public function getGenerator(): Generator

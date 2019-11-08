@@ -6,9 +6,8 @@
 
 namespace Magento\Framework\App\Test\Unit\State;
 
-use \Magento\Framework\App\State\CleanupFiles;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Filesystem\DriverPool;
 
 class CleanupFilesTest extends \PHPUnit\Framework\TestCase
@@ -33,13 +32,15 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
     {
         $dir1 = $this->getDirectoryCleanMock();
         $dir2 = $this->getDirectoryCleanMock();
-        $this->filesystem->expects($this->exactly(2))
+        $dir3 = $this->getDirectoryCleanMock();
+        $this->filesystem->expects($this->exactly(3))
             ->method('getDirectoryWrite')
             ->will(
                 $this->returnValueMap(
                     [
                         [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
                         [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
+                        [DirectoryList::STATIC_CACHE, DriverPool::FILE, $dir3],
                     ]
                 )
             );
@@ -50,10 +51,16 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
     {
         $static = $this->getDirectoryCleanMock();
         $var = $this->getDirectoryCleanMock(DirectoryList::TMP_MATERIALIZATION_DIR);
-        $this->filesystem->expects($this->exactly(2))->method('getDirectoryWrite')->will($this->returnValueMap([
-            [DirectoryList::STATIC_VIEW, DriverPool::FILE, $static],
-            [DirectoryList::VAR_DIR, DriverPool::FILE, $var],
-        ]));
+        $this->filesystem->expects(
+            $this->exactly(2)
+        )->method('getDirectoryWrite')->will(
+            $this->returnValueMap(
+                [
+                    [DirectoryList::STATIC_VIEW, DriverPool::FILE, $static],
+                    [DirectoryList::VAR_DIR, DriverPool::FILE, $var],
+                ]
+            )
+        );
         $this->object->clearMaterializedViewFiles();
     }
 

@@ -10,6 +10,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManager\Definition\Runtime;
 
 /**
+ * Definition factory.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefinitionFactory
