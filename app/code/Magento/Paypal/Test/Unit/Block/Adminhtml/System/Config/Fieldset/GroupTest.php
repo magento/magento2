@@ -11,28 +11,31 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     /**
      * @var Group
      */
-    protected $_model;
+    private $_model;
 
     /**
      * @var \Magento\Framework\Data\Form\Element\AbstractElement
      */
-    protected $_element;
+    private $_element;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_authSession;
+    private $_authSession;
 
     /**
      * @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_user;
+    private $_user;
 
     /**
      * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_group;
+    private $_group;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
