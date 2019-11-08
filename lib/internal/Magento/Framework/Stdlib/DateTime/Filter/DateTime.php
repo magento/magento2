@@ -26,10 +26,10 @@ class DateTime extends Date
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        Resolver $localeResolver
+        \Magento\Framework\Locale\Resolver $localeResolver
     ) {
         $this->localeResolver = $localeResolver;
-        parent::__construct($localeDate, $localeResolver);
+        parent::__construct($localeDate);
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
                 'date_format' => $this->_localeDate->getDateTimeFormat(
