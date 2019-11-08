@@ -1135,8 +1135,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 || $this->dataHasChangedFor('is_active')) {
             if (!$productIndexer->isScheduled()) {
                 $productIndexer->reindexList($this->getPathIds());
-            } else {
-                $productIndexer->invalidate();
             }
         }
     }
@@ -1294,6 +1292,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     //@codeCoverageIgnoreEnd
 
+    // phpcs:disable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
     /**
      * Return Data Object data in array format.
      *
@@ -1302,6 +1301,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function __toArray()
     {
+        // phpcs:enable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
         $data = $this->_data;
         $hasToArray = function ($model) {
             return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);

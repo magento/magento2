@@ -264,6 +264,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                         'fields' => [
                             'keyword' => [
                                 'type' => 'string',
+                                'index' => 'not_analyzed'
                             ]
                         ]
                     ],
@@ -294,6 +295,7 @@ class StaticFieldTest extends \PHPUnit\Framework\TestCase
                         'fields' => [
                             'keyword' => [
                                 'type' => 'string',
+                                'index' => 'not_analyzed'
                             ]
                         ]
                     ],
