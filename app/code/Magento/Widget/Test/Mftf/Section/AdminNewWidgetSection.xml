@@ -11,12 +11,17 @@
     <section name="AdminNewWidgetSection">
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
-        <element name="continue" type="button" selector="#continue_button"/>
+        <element name="continue" type="button" timeout="30" selector="#continue_button"/>
         <element name="widgetTitle" type="input" selector="#title"/>
         <element name="widgetStoreIds" type="select" selector="#store_ids"/>
+        <element name="widgetSortOrder" type="input" selector="#sort_order"/>
         <element name="addLayoutUpdate" type="button" selector=".action-default.scalable.action-add"/>
         <element name="selectDisplayOn" type="select" selector="#widget_instance[0][page_group]"/>
         <element name="selectContainer" type="select" selector="#all_pages_0>table>tbody>tr>td:nth-child(1)>div>div>select"/>
+        <element name="displayOnByIndex" type="select" selector="select[name='widget_instance[{{index}}][page_group]']" parameterized="true"/>
+        <element name="layoutByIndex" type="select" selector="select[name='widget_instance[{{index}}][pages][layout_handle]']" parameterized="true"/>
+        <element name="containerByIndex" type="select" selector="select[name='widget_instance[{{index}}][pages][block]']" parameterized="true"/>
+        <element name="templateByIndex" type="select" selector="select[name='widget_instance[{{index}}][pages][template]']" parameterized="true"/>
         <element name="selectTemplate" type="select" selector=".widget-layout-updates .block_template_container .select"/>
         <element name="widgetOptions" type="select" selector="#widget_instace_tabs_properties_section"/>
         <element name="addNewCondition" type="select" selector=".rule-param.rule-param-new-child"/>
