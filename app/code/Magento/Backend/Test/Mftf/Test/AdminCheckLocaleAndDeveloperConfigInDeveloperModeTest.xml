@@ -11,6 +11,7 @@
     <test name="AdminCheckLocaleAndDeveloperConfigInDeveloperModeTest">
         <annotations>
             <features value="Backend"/>
+            <stories value="Menu Navigation"/>
             <title value="Check locale dropdown and developer configuration page are available in developer mode"/>
             <description value="Check locale dropdown and developer configuration page are available in developer mode"/>
             <group value="backend"/>

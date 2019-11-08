@@ -42,6 +42,13 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     protected $httpMethod;
 
     /**
+     * Expected no access response
+     *
+     * @var int
+     */
+    protected $expectedNoAccessResponseCode = 403;
+
+    /**
      * @inheritDoc
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
@@ -85,21 +92,6 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
     }
 
     /**
-     * Utilize backend session model by default
-     *
-     * @param \PHPUnit\Framework\Constraint\Constraint $constraint
-     * @param string|null $messageType
-     * @param string $messageManagerClass
-     */
-    public function assertSessionMessages(
-        \PHPUnit\Framework\Constraint\Constraint $constraint,
-        $messageType = null,
-        $messageManagerClass = \Magento\Framework\Message\Manager::class
-    ) {
-        parent::assertSessionMessages($constraint, $messageType, $messageManagerClass);
-    }
-
-    /**
      * Test ACL configuration for action working.
      */
     public function testAclHasAccess()
@@ -111,8 +103,8 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
             $this->getRequest()->setMethod($this->httpMethod);
         }
         $this->dispatch($this->uri);
-        $this->assertNotSame(403, $this->getResponse()->getHttpResponseCode());
         $this->assertNotSame(404, $this->getResponse()->getHttpResponseCode());
+        $this->assertNotSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }
 
     /**
@@ -130,6 +122,6 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
             ->getAcl()
             ->deny(null, $this->resource);
         $this->dispatch($this->uri);
-        $this->assertSame(403, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame($this->expectedNoAccessResponseCode, $this->getResponse()->getHttpResponseCode());
     }
 }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Creditmemo;
 
 use Magento\Mtf\Client\Locator;

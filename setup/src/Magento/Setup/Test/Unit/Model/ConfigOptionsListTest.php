@@ -179,6 +179,9 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
+        $this->dbValidator->expects($this->once())
+            ->method('checkDatabaseConnectionWithDriverOptions')
+            ->willReturn($configDataMock);
         $this->dbValidator
             ->expects($this->once())
             ->method('checkDatabaseConnectionWithDriverOptions')

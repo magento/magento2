@@ -12,6 +12,9 @@ use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\FilterInterface;
 
 /**
  * Removes a set of fields from the payload
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class RemoveFieldsFilter implements FilterInterface
 {

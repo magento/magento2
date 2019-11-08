@@ -146,7 +146,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -185,7 +185,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -212,10 +212,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
         $this->queryFactory = $catalogSearchData;
-        if ($searchResultFactory === null) {
-            $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
+        $this->searchResultFactory = $searchResultFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
-        }
         parent::__construct(
             $entityFactory,
             $logger,
@@ -427,23 +425,38 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             return;
         }
 
-        $this->prepareSearchTermFilter();
-        $this->preparePriceAggregation();
+        if ($this->searchRequestName !== 'quick_search_container'
+            || strlen(trim($this->queryText))
+        ) {
+            $this->prepareSearchTermFilter();
+            $this->preparePriceAggregation();
 
-        $searchCriteria = $this->getSearchCriteriaResolver()->resolve();
-        try {
-            $this->searchResult = $this->getSearch()->search($searchCriteria);
-            $this->_totalRecords = $this->getTotalRecordsResolver($this->searchResult)->resolve();
-        } catch (EmptyRequestDataException $e) {
-            /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
-            $this->searchResult = $this->searchResultFactory->create()->setItems([]);
-        } catch (NonExistingRequestNameException $e) {
-            $this->_logger->error($e->getMessage());
-            throw new LocalizedException(__('An error occurred. For details, see the error log.'));
+            $searchCriteria = $this->getSearchCriteriaResolver()->resolve();
+            try {
+                $this->searchResult =  $this->getSearch()->search($searchCriteria);
+                $this->_totalRecords = $this->getTotalRecordsResolver($this->searchResult)->resolve();
+            } catch (EmptyRequestDataException $e) {
+                $this->searchResult = $this->createEmptyResult();
+            } catch (NonExistingRequestNameException $e) {
+                $this->_logger->error($e->getMessage());
+                throw new LocalizedException(__('An error occurred. For details, see the error log.'));
+            }
+        } else {
+            $this->searchResult = $this->createEmptyResult();
         }
 
         $this->getSearchResultApplier($this->searchResult)->apply();
         parent::_renderFiltersBefore();
+    }
+
+    /**
+     * Create empty search result
+     *
+     * @return SearchResultInterface
+     */
+    private function createEmptyResult()
+    {
+        return $this->searchResultFactory->create()->setItems([]);
     }
 
     /**

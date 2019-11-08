@@ -8,7 +8,6 @@ namespace Magento\Setup\Validator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants as ConfigOption;
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 /**
@@ -66,7 +65,6 @@ class AdminCredentialsValidator
     public function validate(array $data)
     {
         $driverOptions = $this->driverOptions->getDriverOptions($data);
-
         $dbConnection = $this->connectionFactory->create(
             [
                 ConfigOption::KEY_NAME => $data[ConfigOption::INPUT_KEY_DB_NAME],

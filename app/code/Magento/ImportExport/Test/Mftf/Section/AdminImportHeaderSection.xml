@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminImportHeaderSection">
         <element name="checkDataButton" type="button" selector="#upload_button" timeout="30"/>
+        <element name="messageNote" type="text" selector="#import_file-note" timeout="30"/>
     </section>
 </sections>

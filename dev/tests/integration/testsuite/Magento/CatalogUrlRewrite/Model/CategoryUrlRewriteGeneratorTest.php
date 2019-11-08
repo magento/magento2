@@ -98,12 +98,6 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
                 'catalog/product/view/id/' . $productForTest . '/category/4',
                 1,
                 0
-            ],
-            [
-                '/simple-product-two.html',
-                'catalog/product/view/id/' . $productForTest . '/category/2',
-                1,
-                0
             ]
         ];
 
@@ -184,12 +178,6 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
             [
                 'new-url/category-1-1/simple-product-two.html',
                 'catalog/product/view/id/' . $productForTest . '/category/4',
-                1,
-                0
-            ],
-            [
-                '/simple-product-two.html',
-                'catalog/product/view/id/' . $productForTest . '/category/2',
                 1,
                 0
             ],
@@ -329,6 +317,8 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
      * @magentoAppIsolation enabled
      *
      * @return void
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
      */
     public function testRemoveCatalogUrlRewrites()
     {

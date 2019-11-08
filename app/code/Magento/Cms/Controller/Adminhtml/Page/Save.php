@@ -8,11 +8,14 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Cms\Model\Page;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Save CMS page action.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -59,11 +62,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
-        $this->pageFactory = $pageFactory
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
+        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(\Magento\Cms\Model\PageFactory::class);
         $this->pageRepository = $pageRepository
-            ?: \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Cms\Api\PageRepositoryInterface::class);
+            ?: ObjectManager::getInstance()->get(\Magento\Cms\Api\PageRepositoryInterface::class);
         parent::__construct($context);
     }
 
@@ -100,24 +101,22 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 }
             }
 
+            $data['layout_update_xml'] = $model->getLayoutUpdateXml();
+            $data['custom_layout_update_xml'] = $model->getCustomLayoutUpdateXml();
             $model->setData($data);
 
-            $this->_eventManager->dispatch(
-                'cms_page_prepare_save',
-                ['page' => $model, 'request' => $this->getRequest()]
-            );
-
-            if (!$this->dataProcessor->validate($data)) {
-                return $resultRedirect->setPath('*/*/edit', ['page_id' => $model->getId(), '_current' => true]);
-            }
-
             try {
+                $this->_eventManager->dispatch(
+                    'cms_page_prepare_save',
+                    ['page' => $model, 'request' => $this->getRequest()]
+                );
+
                 $this->pageRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the page.'));
                 return $this->processResultRedirect($model, $resultRedirect, $data);
             } catch (LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e->getPrevious() ?: $e);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving the page.'));
             }
 
