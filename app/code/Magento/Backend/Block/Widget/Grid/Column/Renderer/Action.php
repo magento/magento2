@@ -104,6 +104,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $this->_transformActionData($action, $actionCaption, $row);
 
         if (isset($action['confirm'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $action['onclick'] = 'return window.confirm(\'' . addslashes(
                 $this->escapeHtml($action['confirm'])
             ) . '\')';
@@ -144,7 +145,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     if (is_array($action['url']) && isset($action['field'])) {
                         $params = [$action['field'] => $this->_getValue($row)];
                         if (isset($action['url']['params'])) {
-                            $params = array_merge($action['url']['params'], $params);
+                            $params[] = $action['url']['params'];
                         }
                         $action['href'] = $this->getUrl($action['url']['base'], $params);
                         unset($action['field']);
