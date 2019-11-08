@@ -181,4 +181,13 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="Updated rules applied." stepKey="assertApplySuccess"/>
     </actionGroup>
 
+    <actionGroup name="AdminSaveCatalogPriceRuleActionGroup" extends="AdminSaveAndApplyCatalogPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminSaveAndApplyCatalogPriceRuleActionGroup. Clicks on the Save button.</description>
+        </annotations>
+
+        <remove keyForRemoval="saveAndApply"/>
+        <remove keyForRemoval="assertApplySuccess"/>
+        <click selector="{{AdminMainActionsSection.save}}" after="scrollToPageTop" stepKey="clickSaveButton"/>
+    </actionGroup>
 </actionGroups>

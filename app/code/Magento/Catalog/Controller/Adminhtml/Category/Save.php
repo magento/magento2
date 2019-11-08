@@ -170,29 +170,29 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $products = json_decode($categoryPostData['category_products'], true);
                 $category->setPostedProducts($products);
             }
-            $this->_eventManager->dispatch(
-                'catalog_category_prepare_save',
-                ['category' => $category, 'request' => $this->getRequest()]
-            );
-
-            /**
-             * Check "Use Default Value" checkboxes values
-             */
-            if (isset($categoryPostData['use_default']) && !empty($categoryPostData['use_default'])) {
-                foreach ($categoryPostData['use_default'] as $attributeCode => $attributeValue) {
-                    if ($attributeValue) {
-                        $category->setData($attributeCode, null);
-                    }
-                }
-            }
-
-            /**
-             * Proceed with $_POST['use_config']
-             * set into category model for processing through validation
-             */
-            $category->setData('use_post_data_config', $useConfig);
 
             try {
+                $this->_eventManager->dispatch(
+                    'catalog_category_prepare_save',
+                    ['category' => $category, 'request' => $this->getRequest()]
+                );
+                /**
+                 * Check "Use Default Value" checkboxes values
+                 */
+                if (isset($categoryPostData['use_default']) && !empty($categoryPostData['use_default'])) {
+                    foreach ($categoryPostData['use_default'] as $attributeCode => $attributeValue) {
+                        if ($attributeValue) {
+                            $category->setData($attributeCode, null);
+                        }
+                    }
+                }
+
+                /**
+                 * Proceed with $_POST['use_config']
+                 * set into category model for processing through validation
+                 */
+                $category->setData('use_post_data_config', $useConfig);
+
                 $categoryResource = $category->getResource();
                 if ($category->hasCustomDesignTo()) {
                     $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
@@ -207,7 +207,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new \Exception($error);
+                            throw new \RuntimeException($error);
                         }
                     }
                 }
@@ -216,10 +216,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->save();
                 $this->messageManager->addSuccessMessage(__('You saved the category.'));
+                // phpcs:disable Magento2.Exceptions.ThrowCatch
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e);
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
+                // phpcs:disable Magento2.Exceptions.ThrowCatch
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

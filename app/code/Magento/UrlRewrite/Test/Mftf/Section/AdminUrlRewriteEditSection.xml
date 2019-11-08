@@ -10,5 +10,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminUrlRewriteEditSection">
         <element name="requestPathField" type="input" selector="#request_path"/>
+        <element name="createUrlRewrite" type="select" selector="#entity-type-selector"/>
+        <element name="store" type="select" selector="#store_id"/>
+        <element name="redirectType" type="select" selector="#redirect_type"/>
+        <element name="description" type="input" selector="#description"/>
+        <element name="categoryInTree" type="text" selector="//li[contains(@class,'active-category jstree-open')]/a[contains(., '{{categoryName}}')]" parameterized="true"/>
     </section>
 </sections>

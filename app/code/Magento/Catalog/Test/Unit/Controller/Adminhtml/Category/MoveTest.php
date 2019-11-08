@@ -135,13 +135,10 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
         $categoryMock->expects($this->once())
             ->method('move')
-            ->willThrowException(new \Exception(
-                __('Some exception')
-            ));
+            ->willThrowException(new \Exception(__('Some exception')));
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
             ->with(__('There was a category move error.'));
@@ -209,7 +206,6 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
         $this->messageManager->expects($this->once())
             ->method('addExceptionMessage');
@@ -237,9 +233,7 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $categoryMock->expects($this->once())
             ->method('move')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(
-                __($exceptionMessage)
-            ));
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__($exceptionMessage)));
         $this->resultJsonFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -281,7 +275,6 @@ class MoveTest extends \PHPUnit\Framework\TestCase
             ->willReturn($categoryMock);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->withConsecutive([Registry::class], [Registry::class], [\Magento\Cms\Model\Wysiwyg\Config::class])
             ->willReturnMap([[Registry::class, $registry], [\Magento\Cms\Model\Wysiwyg\Config::class, $wysiwigConfig]]);
         $this->messageManager->expects($this->once())
             ->method('getMessages')

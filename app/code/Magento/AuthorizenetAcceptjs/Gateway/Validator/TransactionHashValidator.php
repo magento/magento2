@@ -17,6 +17,9 @@ use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Validates the transaction hash
+ *
+ * @deprecated Starting from Magento 2.2.11 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class TransactionHashValidator extends AbstractValidator
 {
@@ -159,6 +162,7 @@ class TransactionHashValidator extends AbstractValidator
         string $amount,
         string $transactionId
     ): string {
+        // phpcs:disable Magento2.Security.InsecureFunction
         return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));
     }
 

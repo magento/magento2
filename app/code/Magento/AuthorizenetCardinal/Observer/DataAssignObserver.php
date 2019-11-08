@@ -15,11 +15,14 @@ use Magento\AuthorizenetCardinal\Model\Config;
 
 /**
  * Adds the payment info to the payment object
+ *
+ * @deprecated Starting from Magento 2.2.11 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
     /**
-     * JWT key
+     * Cardinal JWT key
      */
     const JWT_KEY = 'cardinalJWT';
 

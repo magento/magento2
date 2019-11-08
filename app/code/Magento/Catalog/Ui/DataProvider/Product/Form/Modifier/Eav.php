@@ -17,6 +17,7 @@ use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
@@ -221,6 +222,7 @@ class Eav extends AbstractModifier
         'custom_design_from',
         'custom_design_to',
         'custom_layout',
+        'custom_layout_update_file'
     ];
 
     /**
@@ -677,11 +679,17 @@ class Eav extends AbstractModifier
             'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
             '__disableTmpl' => ['label' => true, 'code' => true]
         ]);
+        $product = $this->locator->getProduct();
 
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $options = $attributeModel->getSource()->getAllOptions(true, true);
+            $source = $attributeModel->getSource();
+            if ($source instanceof SpecificSourceInterface) {
+                $options = $source->getOptionsFor($product);
+            } else {
+                $options = $source->getAllOptions(true, true);
+            }
             foreach ($options as &$option) {
                 $option['__disableTmpl'] = true;
             }
@@ -704,7 +712,6 @@ class Eav extends AbstractModifier
             ]);
         }
 
-        $product = $this->locator->getProduct();
         if (in_array($attributeCode, $this->attributesToDisable) || $product->isLockedAttribute($attributeCode)) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'disabled' => true,
@@ -737,10 +744,28 @@ class Eav extends AbstractModifier
                 break;
         }
 
-        //Checking access to design config.
-        if (in_array($attributeCode, $this->designAttributeCodes, true)) {
+        $meta = $this->disableInaccessibleAttribute($attribute, $configPath, $meta);
+
+        return $meta;
+    }
+
+    /**
+     * Disable inaccessible attributes.
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param string $configPath
+     * @param array $meta
+     * @return array Updated meta.
+     */
+    private function disableInaccessibleAttribute(
+        ProductAttributeInterface $attribute,
+        string $configPath,
+        array $meta
+    ): array {
+        if (in_array($attribute->getAttributeCode(), $this->designAttributeCodes, true)) {
+            //Checking access to design configurations
             if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-                $meta = $this->arrayManager->merge(
+                return $this->arrayManager->merge(
                     $configPath,
                     $meta,
                     [

@@ -60,4 +60,7 @@
     <event name="store_save_after">
         <observer name="synchronize_website_attributes" instance="Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange" />
     </event>
+    <event name="catalog_category_prepare_save">
+        <observer name="additional_authorization" instance="Magento\Catalog\Observer\CategoryDesignAuthorization" />
+    </event>
 </config>

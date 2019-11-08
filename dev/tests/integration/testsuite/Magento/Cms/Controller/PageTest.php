@@ -9,6 +9,12 @@
  */
 namespace Magento\Cms\Controller;
 
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
 class PageTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     public function testViewAction()
@@ -61,5 +67,31 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setContent('<h1>Shipping Test Page</h1>')
             ->setPageLayout('1column')
             ->save();
+    }
+
+    /**
+     * Check that custom handles are applied when rendering a page.
+     *
+     * @return void
+     * @throws \Throwable
+     * @magentoDataFixture Magento/Cms/_files/pages_with_layout_xml.php
+     */
+    public function testCustomHandles()
+    {
+        /** @var PageRepositoryInterface $repo */
+        $repo = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class);
+        /** @var SearchCriteriaBuilder $criteria */
+        $criteria = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $results = $repo->getList(
+            $criteria->addFilter(PageInterface::IDENTIFIER, 'test_custom_layout_page_3')->setPageSize(1)->create()
+        )->getItems();
+        $this->assertNotEmpty($results);
+        /** @var PageInterface $page */
+        $page = array_pop($results);
+        $this->dispatch('/cms/page/view/page_id/' .$page->getId());
+        /** @var LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
+        $handles = $layout->getUpdate()->getHandles();
+        $this->assertContains('cms_page_view_selectable_test_custom_layout_page_3_test_selected', $handles);
     }
 }

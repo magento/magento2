@@ -187,6 +187,10 @@ class View extends Action
             if ($settings->getPageLayout()) {
                 $page->getConfig()->setPageLayout($settings->getPageLayout());
             }
+            //Apply custom handles
+            if ($settings->getPageLayoutHandles()) {
+                $page->addPageLayoutHandles($settings->getPageLayoutHandles());
+            }
 
             $hasChildren = $category->hasChildren();
             if ($category->getIsAnchor()) {

@@ -30,7 +30,7 @@
         <variation name="InstallTestVariation3" firstConstraint="Magento\Install\Test\Constraint\AssertSuccessInstall" summary="Install with table prefix">
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/dbTablePrefix" xsi:type="string">pref_</data>
-            <data name="install/storeLanguage" xsi:type="string">Chinese (China)</data>
+            <data name="install/storeLanguage" xsi:type="string">Chinese</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" next="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" prev="Magento\Install\Test\Constraint\AssertSuccessInstall" />
         </variation>
