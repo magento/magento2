@@ -23,6 +23,7 @@
         <remove src="css/styles-m.css"/>
         <remove src="css/styles-s.css"/>
         <remove src="requirejs/require.js"/>
+        <remove src="requirejs/domReady.js"/>
         <remove src="mage/requirejs/mixins.js"/>
         <remove src="requirejs-config.js"/>
     </head>
