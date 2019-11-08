@@ -46,7 +46,6 @@
     <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
 
     <!-- Magento Specific Rules -->
-    <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/FinalImplementation" />
     <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/AllPurposeAction" />
     <rule ref="Magento/CodeMessDetector/resources/rulesets/design.xml/CookieAndSessionMisuse" />
 
