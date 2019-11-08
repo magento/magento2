@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 -->
-<div if="$col.isVisible($row())" class="masonry-image-overlay">
+<div if="$col.isVisible($row())" ko-style="$col.getStyles($row())" class="masonry-image-overlay">
     <span text="$col.getLabel($row())"/>
 </div>
