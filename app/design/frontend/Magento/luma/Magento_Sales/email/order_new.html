@@ -4,16 +4,23 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject {{trans "Your %store_name order confirmation" store_name=$store.getFrontendName()}} @-->
+<!--@subject {{trans "Your %store_name order confirmation" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var order.getEmailCustomerNote()":"Email Order Note",
+"var order_data.email_customer_note|escape|nl2br":"Email Order Note",
 "var order.increment_id":"Order Id",
 "layout handle=\"sales_email_order_items\" order=$order area=\"frontend\"":"Order Items Grid",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
-"var order.getShippingDescription()":"Shipping Description",
-"var shipping_msg":"Shipping message"
+"var order.shipping_description":"Shipping Description",
+"var shipping_msg":"Shipping message",
+"var created_at_formatted":"Order Created At (datetime)",
+"var store.frontend_name":"Store Frontend Name",
+"var store_email":"Store Email",
+"var order":"Order",
+"var order_data.is_not_virtual":"Order Type",
+"var order_data.customer_name":"Customer Name",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL"
 } @-->
 
 {{template config_path="design/email/header_template"}}
@@ -21,9 +28,9 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%customer_name," customer_name=$order.getCustomerName()}}</p>
+            <p class="greeting">{{trans "%customer_name," customer_name=$order_data.customer_name}}</p>
             <p>
-                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+                {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans "Once your package ships we will send you a tracking number."}}
                 {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/',[_nosid:1]) |raw}}
             </p>
@@ -35,16 +42,16 @@
     <tr class="email-summary">
         <td>
             <h1>{{trans 'Your Order <span class="no-link">#%increment_id</span>' increment_id=$order.increment_id |raw}}</h1>
-            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$order.getCreatedAtFormatted(1) |raw}}</p>
+            <p>{{trans 'Placed on <span class="no-link">%created_at</span>' created_at=$created_at_formatted |raw}}</p>
         </td>
     </tr>
     <tr class="email-information">
         <td>
-            {{depend order.getEmailCustomerNote()}}
+            {{depend order_data.email_customer_note}}
             <table class="message-info">
                 <tr>
                     <td>
-                        {{var order.getEmailCustomerNote()|escape|nl2br}}
+                        {{var order_data.email_customer_note|escape|nl2br}}
                     </td>
                 </tr>
             </table>
@@ -55,7 +62,7 @@
                         <h3>{{trans "Billing Info"}}</h3>
                         <p>{{var formattedBillingAddress|raw}}</p>
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="address-details">
                         <h3>{{trans "Shipping Info"}}</h3>
                         <p>{{var formattedShippingAddress|raw}}</p>
@@ -67,10 +74,10 @@
                         <h3>{{trans "Payment Method"}}</h3>
                         {{var payment_html|raw}}
                     </td>
-                    {{depend order.getIsNotVirtual()}}
+                    {{depend order_data.is_not_virtual}}
                     <td class="method-info">
                         <h3>{{trans "Shipping Method"}}</h3>
-                        <p>{{var order.getShippingDescription()}}</p>
+                        <p>{{var order.shipping_description}}</p>
                         {{if shipping_msg}}
                         <p>{{var shipping_msg}}</p>
                         {{/if}}
