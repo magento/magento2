@@ -7,11 +7,8 @@
 namespace Magento\Setup;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
-use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
-use Magento\Framework\Setup\Declaration\Schema\Sharding;
+use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\TestFramework\Deploy\CliCommand;
-use Magento\TestFramework\Deploy\DescribeTable;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
@@ -29,19 +26,28 @@ class SafeInstallerTest extends SetupTestCase
     /**
      * @var CliCommand
      */
-    private $cliCommad;
+    private $cliCommand;
 
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
+    /**
+     * @var DbSchemaReaderInterface
+     */
+    private $dbSchemaReader;
+
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
-        $this->cliCommad = $objectManager->get(CliCommand::class);
+        $this->cliCommand = $objectManager->get(CliCommand::class);
         $this->resourceConnection = $objectManager->get(ResourceConnection::class);
+        $this->dbSchemaReader = $objectManager->get(DbSchemaReaderInterface::class);
     }
 
     /**
@@ -52,7 +58,7 @@ class SafeInstallerTest extends SetupTestCase
     {
         $testTableData = $this->getData();
         $row = reset($testTableData);
-        $this->cliCommad->install(['Magento_TestSetupDeclarationModule4']);
+        $this->cliCommand->install(['Magento_TestSetupDeclarationModule4']);
         $adapter = $this->resourceConnection->getConnection();
         $testTableName = $this->resourceConnection->getTableName('test_table');
         $adapter->insertArray(
@@ -67,7 +73,7 @@ class SafeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->upgrade(
+        $this->cliCommand->upgrade(
             [
                 'safe-mode' => true,
             ]
@@ -79,12 +85,66 @@ class SafeInstallerTest extends SetupTestCase
             'db_schema.xml',
             'etc'
         );
-        $this->cliCommad->upgrade(
+        $this->cliCommand->upgrade(
             [
                 'data-restore' => true,
             ]
         );
         $testTableSelect = $adapter->select()->from($testTableName);
         self::assertEquals($testTableData, $adapter->fetchAll($testTableSelect));
+    }
+
+    /**
+     * Tests that not whitelisted elements should not be removed from DB to avoid backwards-incompatible change.
+     *
+     * @moduleName Magento_TestSetupDeclarationModule6
+     */
+    public function testDestructiveOperationBehaviour()
+    {
+        $this->cliCommand->install(['Magento_TestSetupDeclarationModule6']);
+        $this->assertForeignKeyPresence('test_table', 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF');
+
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule6',
+            'remove_fk_declaration',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule6',
+            'remove_fk_declaration',
+            'db_schema_whitelist.json',
+            'etc'
+        );
+        $this->cliCommand->upgrade();
+        $this->assertForeignKeyPresence('test_table', 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF');
+
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule6',
+            'restore_fk_declaration_to_wl',
+            'db_schema_whitelist.json',
+            'etc'
+        );
+        $this->cliCommand->upgrade();
+        $this->assertForeignKeyPresence('test_table', 'TEST_TABLE_TINYINT_REFERENCE_TABLE_TINYINT_REF', false);
+    }
+
+    /**
+     * Asserts foreign key presence.
+     *
+     * @param string $tableName
+     * @param string $foreignKeyName
+     * @param bool $isPresent
+     * @return void
+     */
+    private function assertForeignKeyPresence(string $tableName, string $foreignKeyName, bool $isPresent = true): void
+    {
+        $foreignKeys = $this->dbSchemaReader
+            ->readReferences($this->resourceConnection->getTableName($tableName), 'default');
+        if ($isPresent) {
+            $this->assertArrayHasKey($foreignKeyName, $foreignKeys);
+        } else {
+            $this->assertArrayNotHasKey($foreignKeyName, $foreignKeys);
+        }
     }
 }

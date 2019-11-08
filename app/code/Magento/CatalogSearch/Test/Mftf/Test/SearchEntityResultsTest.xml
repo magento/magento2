@@ -302,9 +302,6 @@
             <testCaseId value="MC-14784"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-21717"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -383,6 +380,8 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -514,6 +513,7 @@
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -579,7 +579,10 @@
         <after>
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
