@@ -31,7 +31,7 @@ define([
             }
             shippingMethod = quote.shippingMethod();
 
-            if (!_.isArray(shippingMethod)) {
+            if (!_.isArray(shippingMethod) && !_.isObject(shippingMethod)) {
                 return '';
             }
 
