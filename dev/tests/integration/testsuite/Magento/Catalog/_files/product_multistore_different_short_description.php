@@ -21,7 +21,7 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $productFactory = $objectManager->get(ProductFactory::class);
 
 $currentStoreId = $storeManager->getStore()->getId();
-$storeId = $storeManager->getStore('fixturestore')->getId();
+$secondStoreId = $storeManager->getStore('fixturestore')->getId();
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
@@ -38,8 +38,8 @@ $product->setTypeId(Type::TYPE_SIMPLE)
 $productRepository->save($product);
 
 try {
-    $storeManager->setCurrentStore($store->getId());
-    $product = $productRepository->get('simple-different-short-description', false, $storeId);
+    $storeManager->setCurrentStore($secondStoreId);
+    $product = $productRepository->get('simple-different-short-description', false, $secondStoreId);
     $product->setShortDescription('Second store view short description');
     $productRepository->save($product);
 } finally {

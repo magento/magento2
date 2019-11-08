@@ -12,16 +12,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Eav\Model\AttributeSetSearchResults;
-use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Http;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Registry;
-use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Request;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -66,14 +63,14 @@ class ViewTest extends AbstractController
     /** @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var WebsiteRepositoryInterface */
-    private $websiteRepository;
-
     /** @var SortOrderBuilder */
     private $sortOrderBuilder;
 
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
+
+    /** @var GetAttributeSetByName */
+    private $getAttributeSetByName;
 
     /**
      * @inheritdoc
@@ -89,9 +86,9 @@ class ViewTest extends AbstractController
             ->loadByCode(Product::ENTITY);
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
-        $this->websiteRepository = $this->_objectManager->get(WebsiteRepositoryInterface::class);
         $this->sortOrderBuilder = $this->_objectManager->create(SortOrderBuilder::class);
         $this->searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $this->getAttributeSetByName = $this->_objectManager->get(GetAttributeSetByName::class);
     }
 
     /**
@@ -128,7 +125,7 @@ class ViewTest extends AbstractController
         /** @var MockObject|LoggerInterface $logger */
         $logger = $this->setupLoggerMock();
         $product = $this->productRepository->get('simple_with_com');
-        $attributeSetCustom = $this->getProductAttributeSetByName('custom_attribute_set_wout_com');
+        $attributeSetCustom = $this->getAttributeSetByName->execute('custom_attribute_set_wout_com');
         $product->setAttributeSetId($attributeSetCustom->getAttributeSetId());
         $this->productRepository->save($product);
 
@@ -226,7 +223,7 @@ class ViewTest extends AbstractController
      */
     public function testRemoveProductFromOneWebsiteVisibility(): void
     {
-        $websiteId = $this->websiteRepository->get('test')->getId();
+        $websiteId = $this->storeManager->getWebsite('test')->getId();
         $currentStore = $this->storeManager->getStore();
         $secondStoreId = $this->storeManager->getStore('fixture_second_store')->getId();
         $product = $this->updateProduct('simple-on-two-websites', ['website_ids' => [$websiteId]]);
@@ -353,31 +350,6 @@ class ViewTest extends AbstractController
         $this->_objectManager->addSharedInstance($logger, MagentoMonologLogger::class);
 
         return $logger;
-    }
-
-    /**
-     * Get product attribute set by name.
-     *
-     * @param string $attributeSetName
-     * @return Set|null
-     */
-    private function getProductAttributeSetByName(string $attributeSetName): ?Set
-    {
-        $this->searchCriteriaBuilder->addFilter('attribute_set_name', $attributeSetName);
-        $this->searchCriteriaBuilder->addFilter('entity_type_id', $this->productEntityType->getId());
-        $attributeSetIdSortOrder = $this->sortOrderBuilder
-            ->setField('attribute_set_id')
-            ->setDirection(Collection::SORT_ORDER_DESC)
-            ->create();
-        $this->searchCriteriaBuilder->addSortOrder($attributeSetIdSortOrder);
-        $this->searchCriteriaBuilder->setPageSize(1);
-        $this->searchCriteriaBuilder->setCurrentPage(1);
-        /** @var AttributeSetSearchResults $searchResult */
-        $searchResult = $this->attributeSetRepository->getList($this->searchCriteriaBuilder->create());
-        $items = $searchResult->getItems();
-        $result = count($items) > 0 ? reset($items) : null;
-
-        return $result;
     }
 
     /**

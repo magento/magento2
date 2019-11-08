@@ -67,9 +67,9 @@ class ViewTest extends TestCase
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->create(View::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->block = $this->layout->createBlock(View::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->json = $this->objectManager->get(Json::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
