@@ -13,7 +13,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Http;
 use Magento\Framework\Registry;
@@ -66,9 +65,6 @@ class ViewTest extends AbstractController
     /** @var SortOrderBuilder */
     private $sortOrderBuilder;
 
-    /** @var SearchCriteriaBuilder */
-    private $searchCriteriaBuilder;
-
     /** @var GetAttributeSetByName */
     private $getAttributeSetByName;
 
@@ -87,7 +83,6 @@ class ViewTest extends AbstractController
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
         $this->sortOrderBuilder = $this->_objectManager->create(SortOrderBuilder::class);
-        $this->searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
         $this->getAttributeSetByName = $this->_objectManager->get(GetAttributeSetByName::class);
     }
 

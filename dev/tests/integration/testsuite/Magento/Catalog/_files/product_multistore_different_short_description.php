@@ -25,8 +25,8 @@ $secondStoreId = $storeManager->getStore('fixturestore')->getId();
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
+    ->setWebsiteIds([$storeManager->getWebsite(true)->getId()])
     ->setName('Simple Product One')
     ->setSku('simple-different-short-description')
     ->setPrice(10)

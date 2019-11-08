@@ -27,7 +27,7 @@ $defaultWebsiteId = $websiteRepository->get('base')->getId();
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$defaultWebsiteId, $websiteId])
     ->setName('Simple Product on two websites')
     ->setSku('simple-on-two-websites')
