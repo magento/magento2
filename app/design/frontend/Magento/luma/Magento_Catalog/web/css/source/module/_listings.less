@@ -34,12 +34,12 @@
 
     .product {
         &-items {
-            font-size: 0;
+            .lib-inline-block-space-container();
             &:extend(.abs-reset-list all);
         }
 
         &-item {
-            font-size: 1.4rem;
+            .lib-inline-block-space-item();
             vertical-align: top;
 
             .products-grid & {
@@ -107,6 +107,7 @@
 
                 .actions-primary {
                     display: inline-block;
+                    vertical-align: middle;
                 }
             }
 
@@ -122,7 +123,6 @@
                 .reviews-actions {
                     font-size: @font-size__s;
                     margin-top: 5px;
-                    text-transform: lowercase;
                 }
             }
 

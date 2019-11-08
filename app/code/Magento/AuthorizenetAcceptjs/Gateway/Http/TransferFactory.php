@@ -14,6 +14,9 @@ use Magento\AuthorizenetAcceptjs\Gateway\Http\Payload\FilterInterface;
 
 /**
  * Can create a transfer object
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class TransferFactory implements TransferFactoryInterface
 {

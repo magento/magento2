@@ -10,8 +10,9 @@ function onLoadInit() {
 	tinyMCEPopup.resizeToInnerSize();
 
 	// Remove Gecko spellchecking
-	if (tinymce.isGecko)
-		document.body.spellcheck = tinyMCEPopup.editor.getParam("gecko_spellcheck");
+	if (tinymce.isGecko) {
+		document.body.spellcheck = tinyMCEPopup.editor.getParam("gecko_spellcheck", false);
+	}
 
 	document.getElementById('htmlSource').value = tinyMCEPopup.editor.getContent({source_view : true});
 

@@ -49,7 +49,6 @@
         <field name="use_parent_category_settings" is_required="" group="design" />
         <field name="theme" is_required="" group="design" />
         <field name="layout" is_required="" group="design" />
-        <field name="layout_update_xml" is_required="" group="design" />
         <field name="apply_design_to_products" is_required="" group="design" />
         <field name="schedule_update_from" is_required="" group="schedule_design_update" />
         <field name="schedule_update_to" is_required="" group="schedule_design_update" />

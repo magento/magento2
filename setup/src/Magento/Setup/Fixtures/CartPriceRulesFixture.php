@@ -61,7 +61,7 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -115,6 +115,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate condition.
+     *
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
@@ -160,6 +162,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate rules.
+     *
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
@@ -245,6 +249,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate advanced condition.
+     *
      * @param int $ruleId
      * @param array $categoriesArray
      * @return array
@@ -345,6 +351,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generate advanced rules.
+     *
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $categoriesArray
      * @return void
@@ -436,7 +444,7 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -444,7 +452,7 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {

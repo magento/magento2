@@ -113,8 +113,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 $orderPayment->canRefund() && !$this->getInvoice()->getIsUsedForRefund()
             ) {
                 $this->buttonList->add(
-                    'capture',
-                    [ // capture?
+                    'credit-memo',
+                    [
                         'label' => __('Credit Memo'),
                         'class' => 'credit-memo',
                         'onclick' => 'setLocation(\'' . $this->getCreditMemoUrl() . '\')'

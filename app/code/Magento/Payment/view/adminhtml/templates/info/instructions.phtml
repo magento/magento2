@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<p><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
-<?php if ($block->getInstructions()): ?>
+<p><?= $block->escapeHtml($block->getTitle()) ?></p>
+<?php if ($block->getInstructions()) : ?>
     <table>
         <tbody>
             <tr>

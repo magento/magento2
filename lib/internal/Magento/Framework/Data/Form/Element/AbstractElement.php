@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
 /**
  * Data form abstract class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -170,7 +171,11 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getHtmlId()
     {
-        return $this->getForm()->getHtmlIdPrefix() . $this->getData('html_id') . $this->getForm()->getHtmlIdSuffix();
+        return $this->_escaper->escapeHtml(
+            $this->getForm()->getHtmlIdPrefix() .
+            $this->getData('html_id') .
+            $this->getForm()->getHtmlIdSuffix()
+        );
     }
 
     /**
@@ -180,7 +185,7 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getName()
     {
-        $name = $this->getData('name');
+        $name = $this->_escaper->escapeHtml($this->getData('name'));
         if ($suffix = $this->getForm()->getFieldNameSuffix()) {
             $name = $this->getForm()->addSuffixToName($name, $suffix);
         }
@@ -287,7 +292,7 @@ abstract class AbstractElement extends AbstractForm
      */
     protected function _escape($string)
     {
-        return htmlspecialchars($string, ENT_COMPAT);
+        return $this->_escaper->escapeHtml($string);
     }
 
     /**
@@ -339,7 +344,7 @@ abstract class AbstractElement extends AbstractForm
         if ($this->_renderer instanceof \Magento\Framework\View\Element\AbstractBlock) {
             return $this->_renderer->getUiId($this->getType(), $this->getName(), $suffix);
         } else {
-            return ' data-ui-id="form-element-' . $this->getName() . ($suffix ?: '') . '"';
+            return ' data-ui-id="form-element-' . $this->_escaper->escapeHtml($this->getName()) . ($suffix ?: '') . '"';
         }
     }
 

@@ -20,4 +20,10 @@
         <data key="attributeGroupId">7</data>
         <data key="sortOrder">1</data>
     </entity>
+    <entity name="AddToSetBlank" type="ProductAttributeSet">
+        <var key="attributeCode" entityKey="attribute_code" entityType="ProductAttribute"/>
+        <data key="attributeSetId">0</data>
+        <data key="attributeGroupId">0</data>
+        <data key="sortOrder">0</data>
+    </entity>
 </entities>

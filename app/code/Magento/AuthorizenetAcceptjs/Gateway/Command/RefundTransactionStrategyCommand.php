@@ -14,6 +14,9 @@ use Magento\Payment\Gateway\CommandInterface;
 
 /**
  * Chooses the best method of returning the payment based on the status of the transaction
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class RefundTransactionStrategyCommand implements CommandInterface
 {
@@ -59,6 +62,7 @@ class RefundTransactionStrategyCommand implements CommandInterface
      * @param array $commandSubject
      * @return string
      * @throws CommandException
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     private function getCommand(array $commandSubject): string
     {
@@ -66,12 +70,37 @@ class RefundTransactionStrategyCommand implements CommandInterface
             ->execute($commandSubject)
             ->get();
 
-        if ($details['transaction']['transactionStatus'] === 'capturedPendingSettlement') {
+        if ($this->canVoid($details, $commandSubject)) {
             return self::VOID;
-        } elseif ($details['transaction']['transactionStatus'] !== 'settledSuccessfully') {
+        }
+
+        if ($details['transaction']['transactionStatus'] !== 'settledSuccessfully') {
             throw new CommandException(__('This transaction cannot be refunded with its current status.'));
         }
 
         return self::REFUND;
+    }
+
+    /**
+     * Checks if void command can be performed.
+     *
+     * @param array $details
+     * @param array $commandSubject
+     * @return bool
+     * @throws CommandException
+     */
+    private function canVoid(array $details, array $commandSubject) :bool
+    {
+        if ($details['transaction']['transactionStatus'] === 'capturedPendingSettlement') {
+            if ((float) $details['transaction']['authAmount'] !== (float) $commandSubject['amount']) {
+                throw new CommandException(
+                    __('The transaction has not been settled, a partial refund is not yet available.')
+                );
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

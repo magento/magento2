@@ -7,6 +7,9 @@ namespace Magento\Newsletter\Model;
 
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
+/**
+ * \Magento\Newsletter\Model\Subscriber tests
+ */
 class SubscriberTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -35,7 +38,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
         $this->assertContains(
             '/newsletter/subscriber/confirm/id/' . $this->model->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
-            $transportBuilder->getSentMessage()->getRawMessage()
+            $transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
         $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $this->model->getSubscriberStatus());
     }
@@ -97,7 +100,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
 
         $this->assertContains(
             'You have been successfully subscribed to our newsletter.',
-            $transportBuilder->getSentMessage()->getRawMessage()
+            $transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
     }
 }

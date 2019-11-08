@@ -24,9 +24,14 @@
             <data name="configData" xsi:type="string">payflowpro, payflowpro_use_vault</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test, severity:S1</data>
+            <data name="paymentInfo" xsi:type="array">
+                <item name="Credit Card Type" xsi:type="string">Visa</item>
+                <item name="Credit Card Number" xsi:type="string">xxxx-1111</item>
+            </data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
             <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderPaymentInformation" />
         </variation>
     </testCase>
 </config>

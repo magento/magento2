@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="StorefrontCustomerCaptchaEnableConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/enable</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaDisableConfigData">
+        <data key="path">customer/captcha/enable</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnCustomerCreateFormConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Create user</data>
+        <data key="value">user_create</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnContactUsFormConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Contact Us</data>
+        <data key="value">contact_us</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnCustomerLoginConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Login</data>
+        <data key="value">user_login</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnCustomerChangePasswordConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Change password</data>
+        <data key="value">user_edit</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnCustomerForgotPasswordConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Forgot password</data>
+        <data key="value">user_forgotpassword</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaModeAlwaysConfigData">
+        <data key="path">customer/captcha/mode</data>
+        <data key="scope_id">0</data>
+        <data key="label">Always</data>
+        <data key="value">always</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaModeAfterFailConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/mode</data>
+        <data key="scope_id">0</data>
+        <data key="label">After number of attempts to login</data>
+        <data key="value">after_fail</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaLength3ConfigData">
+        <data key="path">customer/captcha/length</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">3</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaSymbols1ConfigData">
+        <data key="path">customer/captcha/symbols</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">1</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaDefaultLengthConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/length</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">4-5</data>
+        <data key="value">4-5</data>
+    </entity>
+    <entity name="StorefrontCustomerCaptchaDefaultSymbolsConfigData">
+        <!-- Magento default value -->
+        <data key="path">customer/captcha/symbols</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+        <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+    </entity>
+    <entity name="AdminCaptchaEnableConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/enable</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminCaptchaDisableConfigData">
+        <data key="path">admin/captcha/enable</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminCaptchaLength3ConfigData">
+        <data key="path">admin/captcha/length</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">3</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="AdminCaptchaSymbols1ConfigData">
+        <data key="path">admin/captcha/symbols</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">1</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminCaptchaDefaultLengthConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/length</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">4-5</data>
+        <data key="value">4-5</data>
+    </entity>
+    <entity name="AdminCaptchaDefaultSymbolsConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/symbols</data>
+        <data key="scope">admin</data>
+        <data key="scope_id">1</data>
+        <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+        <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+    </entity>
+</entities>

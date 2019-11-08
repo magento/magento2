@@ -57,7 +57,12 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -68,6 +73,9 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.SerializationAware)
+     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -100,7 +108,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function merge(array $config)
     {
@@ -108,7 +116,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function get($path = null, $default = null)
     {
@@ -116,7 +124,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function reset()
     {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StoreFrontProductValidationActionGroup">
+        <annotations>
+            <description>Goes to the provided Storefront Product page. Validates that the provided Product details are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontProductPage.url(product.urlKey)}}" stepKey="seeProductPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{product.name}}" stepKey="seeProductInStoreFrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{product.sku}}" stepKey="seeCorrectSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{product.price}}" stepKey="seeCorrectPrice"/>
+    </actionGroup>
+</actionGroups>

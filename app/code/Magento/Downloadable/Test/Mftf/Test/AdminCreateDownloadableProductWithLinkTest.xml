@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDownloadableProductWithLinkTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Downloadable Product"/>
+            <title value="Create Downloadable Product with link"/>
+            <description value="Admin should be able to create downloadable product with one simple link"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14506"/>
+            <group value="Downloadable"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete created downloadable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create downloadable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createProduct">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+
+        <!-- Fill downloadable product values -->
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Add downloadable product to category -->
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Fill downloadable link information before the creation link -->
+        <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
+
+        <!-- Links can be purchased separately -->
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
+
+        <!-- Add downloadable link -->
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+
+        <!-- Save product -->
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!-- Assert product in storefront category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="StorefrontCheckProductPriceInCategoryActionGroup" stepKey="StorefrontCheckCategorySimpleProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Assert product price in storefront product page -->
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{DownloadableProduct.price}}" stepKey="assertProductPrice"/>
+
+        <!-- Select product link in storefront product page-->
+        <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinks"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLinkWithMaxDownloads.title)}}" stepKey="selectProductLink"/>
+
+        <!-- Add product with selected link to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="DownloadableProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Assert product price in cart -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="openShoppingCartPage"/>
+        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$51.99" stepKey="assertProductPriceInCart"/>
+    </test>
+</tests>

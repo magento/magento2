@@ -10,6 +10,8 @@
 namespace Magento\Config\Model\Config\Backend\Admin;
 
 /**
+ * Process custom admin url during configuration value save process.
+ *
  * @api
  * @since 100.0.2
  */
@@ -56,8 +58,9 @@ class Usecustom extends \Magento\Framework\App\Config\Value
     {
         $value = $this->getValue();
         if ($value == 1) {
-            $customUrl = $this->getData('groups/url/fields/custom/value');
-            if (empty($customUrl)) {
+            $customUrlField = $this->getData('groups/url/fields/custom/value');
+            $customUrlConfig = $this->_config->getValue('admin/url/custom');
+            if (empty($customUrlField) && empty($customUrlConfig)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please specify the admin custom URL.'));
             }
         }

@@ -4,16 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Newsletter\Block\Adminhtml\Subscriber $block */
 
 ?>
 <?= $block->getChildHtml('grid') ?>
-<?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()): ?>
+<?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()) : ?>
 <div class="form-buttons">
     <select id="queueList" name="queue">
-    <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
+    <?php foreach ($block->getQueueAsOptions() as $_queue) : ?>
         <option value="<?= $block->escapeHtmlAttr($_queue['value']) ?>"><?= $block->escapeHtml($_queue['label']) ?> #<?= $block->escapeHtml($_queue['value']) ?></option>
     <?php endforeach; ?>
     </select>

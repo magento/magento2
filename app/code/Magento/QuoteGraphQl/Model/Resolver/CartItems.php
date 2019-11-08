@@ -29,7 +29,7 @@ class CartItems implements ResolverInterface
         $cart = $value['model'];
 
         $itemsData = [];
-        foreach ($cart->getAllItems() as $cartItem) {
+        foreach ($cart->getAllVisibleItems() as $cartItem) {
             /**
              * @var QuoteItem $cartItem
              */
@@ -38,7 +38,7 @@ class CartItems implements ResolverInterface
 
             $itemsData[] = [
                 'id' => $cartItem->getItemId(),
-                'qty' => $cartItem->getQty(),
+                'quantity' => $cartItem->getQty(),
                 'product' => $productData,
                 'model' => $cartItem,
             ];

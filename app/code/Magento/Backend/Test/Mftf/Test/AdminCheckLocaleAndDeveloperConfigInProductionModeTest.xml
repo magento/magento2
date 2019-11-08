@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckLocaleAndDeveloperConfigInProductionModeTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Menu Navigation"/>
+            <title value="Check locale dropdown and developer configuration page are not available in production mode"/>
+            <description value="Check locale dropdown and developer configuration page are not available in production mode"/>
+            <testCaseId value="MC-14106" />
+            <severity value="MAJOR"/>
+            <group value="backend"/>
+            <group value="production_mode_only"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Go to the general configuration and make sure the locale dropdown is disabled -->
+        <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
+        <scrollTo selector="{{LocaleOptionsSection.sectionHeader}}" stepKey="scrollToLocaleSection" x="0" y="-80" />
+        <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
+        <assertElementContainsAttribute selector="{{LocaleOptionsSection.locale}}" attribute="disabled" stepKey="seeDisabledLocaleDropdown" />
+
+        <!-- Go to the developer configuration and make sure the redirect to the configuration page takes place -->
+        <actionGroup ref="AdminOpenStoreConfigDeveloperPageActionGroup" stepKey="goToDeveloperConfigPage"/>
+        <seeInCurrentUrl url="{{AdminConfigPage.url}}index/" stepKey="seeConfigurationIndexUrl"/>
+
+        <actionGroup ref="AdminExpandConfigTabActionGroup" stepKey="expandAdvancedTab">
+            <argument name="tabName" value="Advanced" />
+        </actionGroup>
+        <dontSeeElement selector="{{AdminConfigSection.navItemByTitle('Developer')}}" stepKey="assertDeveloperNavItemAbsent" />
+    </test>
+</tests>

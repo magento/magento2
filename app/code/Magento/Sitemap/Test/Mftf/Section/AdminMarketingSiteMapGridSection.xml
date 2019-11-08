@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminMarketingSiteMapGridSection">
+        <element name="resetButton" type="button" selector="button[title='Reset Filter']"/>
+        <element name="searchButton" type="button" selector=".admin__filter-actions [title='Search']"/>
+        <element name="firstSearchResult" type="text" selector="#sitemapGrid_table>tbody>tr:nth-child(1)"/>
+        <element name="fileNameTextField" type="input" selector="#sitemapGrid_filter_sitemap_filename" timeout="90"/>
+    </section>
+</sections>

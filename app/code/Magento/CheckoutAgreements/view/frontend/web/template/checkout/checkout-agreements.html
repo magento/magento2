@@ -5,17 +5,17 @@
  */
 -->
 <div data-role="checkout-agreements">
-    <div class="checkout-agreements" data-bind="visible: isVisible">
+    <div class="checkout-agreements fieldset" data-bind="visible: isVisible">
         <!-- ko foreach: agreements -->
             <!-- ko if: ($parent.isAgreementRequired($data)) -->
-            <div class="checkout-agreement required">
+            <div class="checkout-agreement field choice required">
                 <input type="checkbox" class="required-entry"
                        data-bind="attr: {
                                     'id': $parent.getCheckboxId($parentContext, agreementId),
                                     'name': 'agreement[' + agreementId + ']',
                                     'value': agreementId
                                     }"/>
-                <label data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
+                <label class="label" data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
                     <button type="button"
                             class="action action-show"
                             data-bind="click: function(data, event) { return $parent.showContent(data, event) }"
@@ -35,7 +35,7 @@
             <!-- /ko -->
         <!-- /ko -->
         <div id="checkout-agreements-modal" data-bind="afterRender: initModal" style="display: none">
-            <div class="checkout-agreements-item-content" data-bind="html: modalContent"></div>
+            <div class="checkout-agreements-item-content" data-bind="html: modalContent, style: {height: contentHeight, overflow:'auto' }"></div>
         </div>
     </div>
 </div>

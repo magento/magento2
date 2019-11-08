@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminCreateCustomStoreViewStatusDisabledVerifyErrorSaveMessageTest">
+            <annotations>
+                <stories value="Create Store View"/>
+                <title value="Create Custom Store View Status Disabled and Verify Error Save Message"/>
+                <description value="Test log in to Stores and Create Custom Store View Status Enabled and Verify Error Save Message Test"/>
+                <testCaseId value="MC-14309"/>
+                <severity value="CRITICAL"/>
+                <group value="store"/>
+                <group value="mtf_migrated"/>
+            </annotations>
+            <before>
+                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <!--Create website-->
+                <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                    <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                    <argument name="websiteCode" value="{{customWebsite.code}}"/>
+                </actionGroup>
+                <!-- Create store -->
+                <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore">
+                    <argument name="website" value="{{customWebsite.name}}"/>
+                    <argument name="storeGroupName" value="{{customStore.name}}"/>
+                    <argument name="storeGroupCode" value="{{customStore.code}}"/>
+                </actionGroup>
+            </before>
+            <after>
+                <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                    <argument name="websiteName" value="{{customWebsite.name}}"/>
+                </actionGroup>
+                <actionGroup ref="logout" stepKey="logout"/>
+            </after>
+
+            <!--Create store view selecting store created, choose disabled status and verify AssertStoreDisabledErrorSaveMessage-->
+            <actionGroup ref="StoreViewDisabledErrorSaveMessageActionGroup" stepKey="createStoreViewAssertStoreDisabledErrorSaveMessage">
+                <argument name="storeGroupName" value="{{customStore.name}}"/>
+                <argument name="storeView" value="storeViewDataDisabled"/>
+                <argument name="storeViewStatus" value="{{storeViewDataDisabled.is_active}}"/>
+            </actionGroup>
+        </test>
+</tests>

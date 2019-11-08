@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderStatusDuplicatingCodeTest">
+        <annotations>
+            <stories value="Create order status"/>
+            <title value="Create order status with duplicating code"/>
+            <description value="Receive error when creating order status with the code which is already exist"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-15432" />
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Go to new order status page -->
+        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+
+        <!-- Fill the form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{duplicatingCodeOrderStatus.status}}"/>
+            <argument name="label" value="{{duplicatingCodeOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveDuplicateError" stepKey="seeFormSaveDuplicateError"/>
+    </test>
+</tests>
