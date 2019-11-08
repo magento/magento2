@@ -77,6 +77,38 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests setLocale() with parameter
+     *
+     * @param string|null $localeParam
+     * @param string|null $localeRequestParam
+     * @param string $localeExpected
+     * @dataProvider setLocaleWithParameterDataProvider
+     */
+    public function testSetLocaleWithParameter(
+        ?string $localeParam,
+        ?string $localeRequestParam,
+        string $localeExpected
+    ) {
+        $request = Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\RequestInterface::class);
+        $request->setPostValue(['locale' => $localeRequestParam]);
+        $this->_model->setLocale($localeParam);
+        $this->assertEquals($localeExpected, $this->_model->getLocale());
+    }
+
+    /**
+     * @return array
+     */
+    public function setLocaleWithParameterDataProvider(): array
+    {
+        return [
+            ['ko_KR', 'ja_JP', 'ja_JP'],
+            ['ko_KR', null, 'ko_KR'],
+            [null, 'ja_JP', 'ja_JP'],
+        ];
+    }
+
+    /**
      * Check set locale
      *
      * @param string $localeCodeToCheck
