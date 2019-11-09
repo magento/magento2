@@ -122,12 +122,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * Return the model under test with additional methods mocked.
      *
-<<<<<<< HEAD
      * @param $mockedMethods array
-=======
-     * @param  array $mockedMethods
-     * @param  array $data
->>>>>>> 2d98fde80a1... MC-19918: Introduce scalar variables only mode to E-mail templates
      * @return \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getModelMock(array $mockedMethods = [])
