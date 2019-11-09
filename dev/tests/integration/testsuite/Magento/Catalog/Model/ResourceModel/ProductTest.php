@@ -6,7 +6,12 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Action;
+use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Eav\Model\AttributeSetRepository;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -163,5 +168,34 @@ class ProductTest extends TestCase
 
         $product = $this->productRepository->get('simple', false, 0, true);
         $this->assertEquals(5.99, $product->getSpecialPrice());
+    }
+
+    /**
+     * Checks that product has no attribute values for attributes not assigned to the product's attribute set.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/attribute_set_with_image_attribute.php
+     */
+    public function testChangeAttributeSet()
+    {
+        $attributeCode = 'funny_image';
+        /** @var GetAttributeSetByName $attributeSetModel */
+        $attributeSetModel = $this->objectManager->get(GetAttributeSetByName::class);
+        $attributeSet = $attributeSetModel->execute('attribute_set_with_media_attribute');
+
+        $product = $this->productRepository->get('simple', true, 1, true);
+        $product->setAttributeSetId($attributeSet->getAttributeSetId());
+        $this->productRepository->save($product);
+        $product->setData($attributeCode, 'test');
+        $this->model->saveAttribute($product, $attributeCode);
+
+        $product = $this->productRepository->get('simple', true, 1, true);
+        $this->assertEquals('test', $product->getData($attributeCode));
+
+        $product->setAttributeSetId($product->getDefaultAttributeSetId());
+        $this->productRepository->save($product);
+
+        $attribute = $this->model->getAttributeRawValue($product->getId(), $attributeCode, 1);
+        $this->assertEmpty($attribute);
     }
 }
