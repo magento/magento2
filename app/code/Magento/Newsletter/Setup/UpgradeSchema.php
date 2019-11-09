@@ -31,6 +31,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $connection = $setup->getConnection();
+            $connection->addColumn(
+                $setup->getTable('newsletter_template'),
+                'is_legacy',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
+                    'nullable' => false,
+                    'default' => 0,
+                    'comment' => 'Should the template render in legacy mode',
+                ]
+            );
+            $connection->update($setup->getTable('newsletter_template'), ['is_legacy' => '1']);
+        }
+
         $setup->endSetup();
     }
 }
