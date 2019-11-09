@@ -38,9 +38,7 @@ class Account extends AbstractForm
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
      */
     protected $_extensibleDataObjectConverter;
-
     private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
-
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
@@ -168,20 +166,19 @@ class Account extends AbstractForm
         } catch (\Exception $e) {
             $data = [];
         }
-     
-	$data = isset($customer)
+        $data = isset($customer)
             ? $this->_extensibleDataObjectConverter->toFlatArray(
                 $customer,
                 [],
                 \Magento\Customer\Api\Data\CustomerInterface::class
             )
             : [];
-        
-	foreach ($this->getQuote()->getData() as $key => $value) {
+        foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;
             }
         }
+
         if ($this->getQuote()->getCustomerEmail()) {
             $data['email'] = $this->getQuote()->getCustomerEmail();
         }
