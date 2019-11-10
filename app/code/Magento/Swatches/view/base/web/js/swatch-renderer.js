@@ -296,6 +296,12 @@ define([
          * @private
          */
         _init: function () {
+            // Don't render the same set of swatches twice
+            if ($(this.element).attr('data-rendered')) {
+                return;
+            }
+            $(this.element).attr('data-rendered', true);
+
             if (_.isEmpty(this.options.jsonConfig.images)) {
                 this.options.useAjax = true;
                 // creates debounced variant of _LoadProductMedia()
