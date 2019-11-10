@@ -308,6 +308,39 @@ QUERY;
         $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage A customer with the same email address already exists in an associated website.
+     */
+    public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists()
+    {
+        $existedEmail = 'customer@example.com';
+        $password = 'test123#';
+        $firstname = 'John';
+        $lastname = 'Smith';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            email: "{$existedEmail}"
+            password: "{$password}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
+        }
+    ) {
+        customer {
+            firstname
+            lastname
+            email
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
     public function tearDown()
     {
         $newEmail = 'new_customer@example.com';
