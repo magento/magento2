@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Asset\Command;
 
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
+use Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -71,18 +71,27 @@ class GetById implements GetByIdInterface
             $select = $connection->select()
                 ->from(['amg' => $mediaAssetTable])
                 ->where('amg.id = ?', $mediaAssetId);
-            $data = $connection->query($select)->fetch();
-
-            if (empty($data)) {
-                $message = __('There is no such media asset with id "%1"', $mediaAssetId);
-                throw new NoSuchEntityException($message);
-            }
-
-            return $this->assetFactory->create(['data' => $data]);
+            $mediaAssetData = $connection->query($select)->fetch();
         } catch (\Exception $exception) {
-            $this->logger->critical($exception);
             $message = __(
-                'En error occurred during get media asset with id %id: %error',
+                'En error occurred during get media asset data by id %id: %error',
+                ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
+            );
+            $this->logger->critical($message);
+            throw new IntegrationException($message, $exception);
+        }
+
+        if (empty($mediaAssetData)) {
+            $message = __('There is no such media asset with id "%1"', $mediaAssetId);
+            throw new NoSuchEntityException($message);
+        }
+
+        try {
+            return $this->assetFactory->create(['data' => $mediaAssetData]);
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception->getMessage());
+            $message = __(
+                'En error occurred during initialize media asset with id %id: %error',
                 ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
             );
             throw new IntegrationException($message, $exception);

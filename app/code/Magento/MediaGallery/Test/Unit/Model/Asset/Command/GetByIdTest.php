@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset\Command\GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
@@ -22,6 +23,7 @@ use Zend\Db\Adapter\Driver\Pdo\Statement;
 
 /**
  * Test the GetById command model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetByIdTest extends TestCase
 {
@@ -98,6 +100,22 @@ class GetByIdTest extends TestCase
         $mediaAssetStub = $this->getMockBuilder(AssetInterface::class)->getMock();
         $this->assetFactory->expects($this->once())->method('create')->willReturn($mediaAssetStub);
 
+        $this->assertEquals(
+            $mediaAssetStub,
+            $this->getMediaAssetById->execute(self::MEDIA_ASSET_STUB_ID)
+        );
+    }
+
+    /**
+     * Test an exception during the get asset data query.
+     */
+    public function testExceptionDuringGetMediaAssetData(): void
+    {
+        $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
+        $this->adapter->method('query')->willThrowException(new \Exception());
+
+        $this->expectException(IntegrationException::class);
+
         $this->getMediaAssetById->execute(self::MEDIA_ASSET_STUB_ID);
     }
 
@@ -109,8 +127,23 @@ class GetByIdTest extends TestCase
         $this->statementMock->method('fetch')->willReturn([]);
         $this->adapter->method('query')->willReturn($this->statementMock);
 
+        $this->expectException(NoSuchEntityException::class);
+
+        $this->getMediaAssetById->execute(self::MEDIA_ASSET_STUB_ID);
+    }
+
+    /**
+     * Test case when a problem occurred during asset initialization from received data.
+     */
+    public function testErrorDuringMediaAssetInitializationException(): void
+    {
+        $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
+        $this->adapter->method('query')->willReturn($this->statementMock);
+
+        $this->assetFactory->expects($this->once())->method('create')->willThrowException(new \Exception());
+
         $this->expectException(IntegrationException::class);
-        $this->logger->expects($this->once())
+        $this->logger->expects($this->any())
             ->method('critical')
             ->willReturnSelf();
 
