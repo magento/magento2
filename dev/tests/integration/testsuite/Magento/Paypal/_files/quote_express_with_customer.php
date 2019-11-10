@@ -20,6 +20,9 @@ $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::c
 $customerRepository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
 $customer = $customerRepository->getById(1);
 
+/** @var \Magento\Store\Model\StoreManager $store */
+$store = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore();
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
@@ -36,6 +39,7 @@ $product->setTypeId('simple')
     ])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->save();
 $product->load(1);
 
@@ -62,7 +66,7 @@ $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(false)
     ->setCustomerId($customer->getId())
     ->setCustomer($customer)
-    ->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId())
+    ->setStoreId($store->getId())
     ->setReservedOrderId('test02')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
