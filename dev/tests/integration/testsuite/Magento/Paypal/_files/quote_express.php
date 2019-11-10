@@ -19,6 +19,7 @@
     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$store = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore();
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
@@ -29,6 +30,7 @@ $product->setTypeId('simple')
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->setStockData(
         [
             'qty' => 100,
@@ -73,9 +75,7 @@ $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
-    $objectManager->get(
-        \Magento\Store\Model\StoreManagerInterface::class
-    )->getStore()->getId()
+    $store->getId()
 )->setReservedOrderId(
     '100000002'
 )->setBillingAddress(

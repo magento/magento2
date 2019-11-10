@@ -5,6 +5,7 @@
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$store = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore();
 /** Create simple and bundle products for quote*/
 $simpleProducts[] = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
@@ -16,6 +17,7 @@ $simpleProducts[] = $objectManager->create(\Magento\Catalog\Model\Product::class
     ->setDescription('Description with <b>html tag</b>')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->setCategoryIds([2])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
@@ -30,6 +32,7 @@ $simpleProducts[] = $objectManager->create(\Magento\Catalog\Model\Product::class
     ->setDescription('Description with <b>html tag</b>')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->setCategoryIds([2])
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
@@ -48,6 +51,7 @@ $product
     ->setShortDescription('Bundle')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->setStockData(
         [
             'use_config_manage_stock' => 0,
@@ -180,7 +184,7 @@ $shippingAddress->setId(null)->setAddressType('shipping');
 $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote
     ->setCustomerIsGuest(true)
-    ->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId())
+    ->setStoreId($store->getId())
     ->setReservedOrderId('test01')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)

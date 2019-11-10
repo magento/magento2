@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -33,6 +34,12 @@ $shippingAddress->setAddressType('shipping');
 $billingAddress = clone $shippingAddress;
 $billingAddress->setId(null)
     ->setAddressType('billing');
+
+$product->setWebsiteIds([$store->getWebsiteId()]);
+
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$product = $productRepository->save($product);
 
 /** @var Quote $quote */
 $quote = $objectManager->create(

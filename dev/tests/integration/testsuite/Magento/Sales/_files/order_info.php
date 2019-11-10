@@ -10,6 +10,8 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
 );
 
+$store = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore();
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('virtual')
@@ -26,6 +28,7 @@ $product->setTypeId('virtual')
     ])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->save();
 $product->load(1);
 
@@ -42,7 +45,7 @@ $shippingAddress->setShippingMethod('flatrate_flatrate');
 $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerEmail('admin@example.com');
 $quote->setCustomerIsGuest(true);
-$quote->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId());
+$quote->setStoreId($store->getId());
 $quote->setReservedOrderId('100000001');
 $quote->setBillingAddress($billingAddress);
 $quote->setShippingAddress($shippingAddress);
