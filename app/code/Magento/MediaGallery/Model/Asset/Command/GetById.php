@@ -66,9 +66,10 @@ class GetById implements GetByIdInterface
     public function execute(int $mediaAssetId): AssetInterface
     {
         try {
+            $mediaAssetTable = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
-                ->from(['amg' => $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET)])
+                ->from(['amg' => $mediaAssetTable])
                 ->where('amg.id = ?', $mediaAssetId);
             $data = $connection->query($select)->fetch();
 
@@ -80,7 +81,7 @@ class GetById implements GetByIdInterface
             return $this->assetFactory->create(['data' => $data]);
         } catch (\Exception $exception) {
             $message = __(
-                'En error occurred during get media asset with id %id by id: %error',
+                'En error occurred during get media asset with id %id: %error',
                 ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
             );
             $this->logger->critical($message);
