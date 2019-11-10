@@ -15,6 +15,8 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
+$store = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore();
+
 /** @var \Magento\Catalog\Model\Product $product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
@@ -28,6 +30,7 @@ $product->setTypeId('simple')
     ->setMetaDescription('meta description')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()])
     ->setStockData(
         [
             'qty' => 100,
@@ -46,8 +49,6 @@ $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
-
-$store = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore();
 
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);

@@ -18,6 +18,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
+/** @var \Magento\Store\Api\Data\StoreInterface $store */
+$store = $objectManager->get(StoreManagerInterface::class)
+    ->getStore();
+
 /** @var Product $product */
 $product = $objectManager->create(Product::class);
 $product->setTypeId('simple')
@@ -27,7 +31,8 @@ $product->setTypeId('simple')
     ->setPrice(10)
     ->setQty(100)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
-    ->setStatus(Status::STATUS_ENABLED);
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setWebsiteIds([$store->getWebsiteId()]);
 
 /** @var StockItemInterface $stockItem */
 $stockItem = $objectManager->create(StockItemInterface::class);
@@ -47,10 +52,6 @@ $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)
     ->setAddressType('shipping');
-
-/** @var \Magento\Store\Api\Data\StoreInterface $store */
-$store = $objectManager->get(StoreManagerInterface::class)
-    ->getStore();
 
 /** @var Quote $quote */
 $quote = $objectManager->create(Quote::class);
