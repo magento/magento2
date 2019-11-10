@@ -90,6 +90,9 @@ class CreditmemoSenderTest extends AbstractSenderTest
         $comment = 'comment_test';
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Processing';
+        $isNotVirtual = true;
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
@@ -118,6 +121,22 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 ->method('getCustomerNote')
                 ->willReturn($comment);
 
+            $this->orderMock->expects($this->any())
+                ->method('getCustomerName')
+                ->willReturn($customerName);
+
+            $this->orderMock->expects($this->once())
+                ->method('getIsNotVirtual')
+                ->willReturn($isNotVirtual);
+
+            $this->orderMock->expects($this->once())
+                ->method('getEmailCustomerNote')
+                ->willReturn('');
+
+            $this->orderMock->expects($this->once())
+                ->method('getFrontendStatusLabel')
+                ->willReturn($frontendStatusLabel);
+
             $this->templateContainerMock->expects($this->once())
                 ->method('setTemplateVars')
                 ->with(
@@ -129,7 +148,13 @@ class CreditmemoSenderTest extends AbstractSenderTest
                         'payment_html' => 'payment',
                         'store' => $this->storeMock,
                         'formattedShippingAddress' => $address,
-                        'formattedBillingAddress' => $address
+                        'formattedBillingAddress' => $address,
+                        'order_data' => [
+                            'customer_name' => $customerName,
+                            'is_not_virtual' => $isNotVirtual,
+                            'email_customer_note' => '',
+                            'frontend_status_label' => $frontendStatusLabel
+                        ]
                     ]
                 );
 
@@ -211,8 +236,27 @@ class CreditmemoSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
     {
         $billingAddress = 'address_test';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Complete';
+        $isNotVirtual = false;
 
         $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+
+        $this->orderMock->expects($this->once())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
+
+        $this->orderMock->expects($this->once())
+            ->method('getEmailCustomerNote')
+            ->willReturn('');
+
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
 
         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
@@ -247,7 +291,14 @@ class CreditmemoSenderTest extends AbstractSenderTest
                     'payment_html' => 'payment',
                     'store' => $this->storeMock,
                     'formattedShippingAddress' => $expectedShippingAddress,
-                    'formattedBillingAddress' => $billingAddress
+                    'formattedBillingAddress' => $billingAddress,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'is_not_virtual' => $isNotVirtual,
+                        'email_customer_note' => '',
+                        'frontend_status_label' => $frontendStatusLabel
+                    ]
+
                 ]
             );
 
