@@ -10,6 +10,9 @@
  */
 namespace Magento\TestFramework\Helper;
 
+/**
+ * Integration Test Framework memory management logic.
+ */
 class Memory
 {
     /**
@@ -38,9 +41,9 @@ class Memory
     /**
      * Retrieve the effective memory usage of the current process
      *
-     * memory_get_usage() cannot be used because of the bug
-     * @link https://bugs.php.net/bug.php?id=62467
+     * Function memory_get_usage() cannot be used because of the bug
      *
+     * @link https://bugs.php.net/bug.php?id=62467
      * @return int Memory usage in bytes
      */
     public function getRealMemoryUsage()
@@ -100,6 +103,7 @@ class Memory
      * @return int
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
+     * phpcs:ignore Magento2.Functions.StaticFunction
      */
     public static function convertToBytes($number)
     {
@@ -132,9 +136,10 @@ class Memory
      * - but the value has only one delimiter, such as "234,56", then it is impossible to know whether it is decimal
      *   separator or not. Only knowing the right format would allow this.
      *
-     * @param $number
+     * @param string $number
      * @return string
      * @throws \InvalidArgumentException
+     * phpcs:ignore Magento2.Functions.StaticFunction
      */
     protected static function _convertToNumber($number)
     {
@@ -152,6 +157,7 @@ class Memory
      *
      * @link http://php.net/manual/en/function.php-uname.php
      * @return boolean
+     * phpcs:ignore Magento2.Functions.StaticFunction
      */
     public static function isMacOs()
     {
