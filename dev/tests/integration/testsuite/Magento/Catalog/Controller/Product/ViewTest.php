@@ -13,7 +13,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Http;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
@@ -62,9 +61,6 @@ class ViewTest extends AbstractController
     /** @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var SortOrderBuilder */
-    private $sortOrderBuilder;
-
     /** @var GetAttributeSetByName */
     private $getAttributeSetByName;
 
@@ -82,7 +78,6 @@ class ViewTest extends AbstractController
             ->loadByCode(Product::ENTITY);
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
-        $this->sortOrderBuilder = $this->_objectManager->create(SortOrderBuilder::class);
         $this->getAttributeSetByName = $this->_objectManager->get(GetAttributeSetByName::class);
     }
 
