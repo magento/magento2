@@ -114,11 +114,11 @@ QUERY;
         return [
             'missed_cart_id' => [
                 'cart_item_id: 1',
-                'Required parameter "cart_id" is missing.'
+                'Field RemoveItemFromCartInput.cart_id of required type String! was not provided.'
             ],
             'missed_cart_item_id' => [
                 'cart_id: "test_quote"',
-                'Required parameter "cart_item_id" is missing.'
+                'Field RemoveItemFromCartInput.cart_item_id of required type Int! was not provided.'
             ],
         ];
     }

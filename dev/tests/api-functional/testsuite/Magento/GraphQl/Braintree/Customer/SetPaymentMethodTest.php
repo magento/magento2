@@ -259,6 +259,14 @@ class SetPaymentMethodTest extends GraphQlAbstract
             $methodCode
         );
         $this->expectExceptionMessage("for \"$methodCode\" is missing.");
+        $expectedExceptionMessages = [
+            'braintree' =>
+                'Field BraintreeInput.is_active_payment_token_enabler of required type Boolean! was not provided.',
+            'braintree_cc_vault' =>
+                'Field BraintreeCcVaultInput.public_hash of required type String! was not provided.'
+        ];
+
+        $this->expectExceptionMessage($expectedExceptionMessages[$methodCode]);
         $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
     }
 
@@ -277,7 +285,6 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @dataProvider dataProviderTestSetPaymentMethodInvalidInput
      * @expectedException \Exception
      */
     public function testSetPaymentMethodWithoutRequiredPaymentMethodInput()
@@ -286,7 +293,9 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
         $setPaymentQuery = $this->getSetPaymentBraintreeQueryInvalidPaymentMethodInput($maskedQuoteId);
-        $this->expectExceptionMessage("for \"braintree\" is missing.");
+        $this->expectExceptionMessage(
+            'Field BraintreeInput.is_active_payment_token_enabler of required type Boolean! was not provided.'
+        );
         $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
     }
 
