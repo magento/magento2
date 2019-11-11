@@ -7,6 +7,7 @@ namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Date/Time filter. Converts datetime from localized to internal format.
@@ -60,7 +61,7 @@ class DateTime extends Date
      *
      * @param string $value
      * @return string
-     * @throws \Exception
+     * @throws LocalizedException
      * @since 100.1.0
      */
     public function filter($value)
@@ -86,9 +87,10 @@ class DateTime extends Date
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
             throw new LocalizedException(
-                "Invalid input datetime format of value '$value'",
+                new Phrase("Invalid input datetime format of value '$value'",
                 $e->getCode(),
                 $e
+            )
             );
         }
     }
