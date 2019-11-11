@@ -86,7 +86,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLock()
@@ -104,7 +103,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testlockWithTooLongName()
@@ -122,7 +120,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -142,7 +139,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLockWithUnavailableDeploymentConfig()
@@ -156,7 +152,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testUnlockWithUnavailableDeploymentConfig()
@@ -170,7 +165,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testIsLockedWithUnavailableDB()
