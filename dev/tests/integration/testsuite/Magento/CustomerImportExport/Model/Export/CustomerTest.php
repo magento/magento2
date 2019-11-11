@@ -81,7 +81,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_with_websites.php
      * @return void
      */
-    public function testExportWithMultiWebsites()
+    public function testExportWithMultiWebsites(): void
     {
         $this->processCustomerAttribute();
         $expectedAttributes = $this->getExpectedAttributes();
