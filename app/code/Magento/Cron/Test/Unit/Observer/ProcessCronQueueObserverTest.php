@@ -254,7 +254,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->getMock();
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
         $schedule->expects($this->atLeastOnce())->method('getScheduledAt')->will($this->returnValue($dateScheduledAt));
-        $schedule->expects($this->once())->method('tryLockJob')->will($this->returnValue(false));
+        $schedule->expects($this->exactly(5))->method('tryLockJob')->will($this->returnValue(false));
         $schedule->expects($this->never())->method('setFinishedAt');
 
         $abstractModel = $this->createMock(\Magento\Framework\Model\AbstractModel::class);

@@ -45,7 +45,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceJobMock = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['trySetJobUniqueStatusAtomic', '__wakeup', 'getIdFieldName'])
+            ->setMethods(['trySetJobStatusAtomic', '__wakeup', 'getIdFieldName'])
             ->getMockForAbstractClass();
 
         $this->resourceJobMock->expects($this->any())
@@ -452,7 +452,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $scheduleId = 1;
 
         $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobUniqueStatusAtomic')
+            ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
             ->will($this->returnValue(true));
 
@@ -481,7 +481,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $scheduleId = 1;
 
         $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobUniqueStatusAtomic')
+            ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
             ->will($this->returnValue(false));
 
