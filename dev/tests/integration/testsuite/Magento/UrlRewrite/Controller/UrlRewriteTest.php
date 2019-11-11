@@ -80,11 +80,6 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
             ],
-            'Use Case #7: Request with query params' => [
-                'request' => '/enable-cookies/?test-param',
-                'redirect' => '',
-                HttpResponse::STATUS_CODE_200,
-            ],
         ];
     }
 

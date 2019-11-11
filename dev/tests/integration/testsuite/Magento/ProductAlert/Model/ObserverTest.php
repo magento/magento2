@@ -70,8 +70,8 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observer->process();
         $this->assertContains(
-            'John Smith,',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            'ohn Smith,',
+            $this->transportBuilder->getSentMessage()->getRawMessage()
         );
     }
 
@@ -117,9 +117,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         // dispatch process() method and check sent message
         $this->observer->process();
-        $message = $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $message = $this->transportBuilder->getSentMessage();
+        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
         $expectedText = array_shift($translation);
-        $this->assertContains('/frontend/Magento/luma/pt_BR/', $message);
-        $this->assertContains(substr($expectedText, 0, 50), $message);
+        $this->assertContains('/frontend/Magento/luma/pt_BR/', $messageContent);
+        $this->assertContains(substr($expectedText, 0, 50), $messageContent);
     }
 }

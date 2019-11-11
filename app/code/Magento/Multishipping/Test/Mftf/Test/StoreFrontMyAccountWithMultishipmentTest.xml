@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-19303"/>
             <group value="multishipping"/>
+            <skip>
+                <issueId value="MC-22683"/>
+            </skip>
         </annotations>
 
         <before>

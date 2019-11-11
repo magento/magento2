@@ -146,4 +146,17 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity(x, '4')}}" userInput="2" stepKey="fillQuantity5" after="fillQuantity4"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity(x, '5')}}" userInput="2" stepKey="fillQuantity6" after="fillQuantity5"/>
     </actionGroup>
+
+    <actionGroup name="deleteBundleOptionByIndex">
+        <annotations>
+            <description>Requires Navigation to Product Creation page. Removes any Bundle Option by index specified in arguments. 'deleteIndex' refers to Bundle option number.</description>
+        </annotations>
+        <arguments>
+            <argument name="deleteIndex" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" stepKey="scrollUpABit"/>
+        <click selector="{{AdminProductFormBundleSection.deleteOption(deleteIndex)}}" stepKey="clickDeleteOption"/>
+    </actionGroup>
 </actionGroups>

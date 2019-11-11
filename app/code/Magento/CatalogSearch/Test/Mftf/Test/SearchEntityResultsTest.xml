@@ -78,6 +78,7 @@
     </test>
     <test name="QuickSearchEmptyResults">
         <annotations>
+            <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
             <title value="User should not get search results on query that doesn't return anything"/>
             <description value="Use invalid query to return no products"/>
@@ -97,17 +98,20 @@
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
-            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
+
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="ThisShouldn'tReturnAnything"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmpty"/>
     </test>
+
     <test name="QuickSearchWithTwoCharsEmptyResults" extends="QuickSearchEmptyResults">
         <annotations>
+            <features value="CatalogSearch"/>
             <stories value="Search Product on Storefront"/>
             <title value="User should not get search results on query that only contains two characters"/>
             <description value="Use of 2 character query to return no products"/>
@@ -115,15 +119,30 @@
             <testCaseId value="MC-14794"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-15827"/>
-            </skip>
         </annotations>
-        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,2); return ret;" stepKey="getFirstTwoLetters" before="searchStorefront"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
-            <argument name="phrase" value="{$getFirstTwoLetters}"/>
+
+        <before>
+            <magentoCLI command="config:set {{MinimalQueryLengthFourConfigData.path}} {{MinimalQueryLengthFourConfigData.value}}" after="createSimpleProduct" stepKey="setMinimalQueryLengthToFour"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{MinimalQueryLengthDefaultConfigData.path}} {{MinimalQueryLengthDefaultConfigData.value}}" after="deleteCategory" stepKey="setMinimalQueryLengthToFour"/>
+        </after>
+
+        <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,{{MinimalQueryLengthFourConfigData.value}} - 1); return ret;" before="searchStorefront" stepKey="getFirstLessThenConfigLetters"/>
+
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" after="checkEmpty" stepKey="searchStorefrontConfigLetters">
+            <argument name="phrase" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchTooShortStringActionGroup" after="searchStorefrontConfigLetters" stepKey="checkCannotSearchWithTooShortString">
+            <argument name="phrase" value="$getFirstLessThenConfigLetters"/>
+            <argument name="minQueryLength" value="{{MinimalQueryLengthFourConfigData.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchRelatedSearchTermsAppearsActionGroup" after="checkCannotSearchWithTooShortString" stepKey="checkRelatedSearchTerm">
+            <argument name="term" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
+
     <test name="QuickSearchProductByNameWithThreeLetters" extends="QuickSearchProductBySku">
         <annotations>
             <stories value="Search Product on Storefront"/>
@@ -283,9 +302,6 @@
             <testCaseId value="MC-14784"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-21717"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -364,6 +380,8 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -427,6 +445,8 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="simple1"/>
             <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
             <createData entity="OneSimpleProductLink" stepKey="addProductOne">
@@ -441,10 +461,11 @@
         <after>
             <deleteData stepKey="deleteGroupedProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simple1"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
-            <argument name="phrase" value="$createProduct.name$"/>
+            <argument name="phrase" value="&quot;$createProduct.name$&quot;"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
@@ -492,6 +513,7 @@
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -557,7 +579,10 @@
         <after>
             <deleteData stepKey="deleteBundleProduct" createDataKey="createBundleProduct"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
