@@ -103,10 +103,11 @@ class Memory
      * @return int
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
-     * phpcs:ignore Magento2.Functions.StaticFunction
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function convertToBytes($number)
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         if (!preg_match('/^(.*\d)\h*(\D)$/', $number, $matches)) {
             throw new \InvalidArgumentException("Number format '{$number}' is not recognized.");
         }
@@ -139,10 +140,11 @@ class Memory
      * @param string $number
      * @return string
      * @throws \InvalidArgumentException
-     * phpcs:ignore Magento2.Functions.StaticFunction
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     protected static function _convertToNumber($number)
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         preg_match_all('/(\D+)/', $number, $matches);
         if (count(array_unique($matches[0])) > 1) {
             throw new \InvalidArgumentException(
@@ -157,10 +159,11 @@ class Memory
      *
      * @link http://php.net/manual/en/function.php-uname.php
      * @return boolean
-     * phpcs:ignore Magento2.Functions.StaticFunction
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function isMacOs()
     {
+        // phpcs:enable Magento2.Functions.StaticFunction
         return strtoupper(PHP_OS) === 'DARWIN';
     }
 }
