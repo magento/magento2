@@ -80,8 +80,9 @@ class UrlRewrite implements ResolverInterface
     {
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
+        $count = count($targetPathParts) - 1;
 
-        for ($i = 3; ($i < sizeof($targetPathParts) - 1); $i += 2) {
+        for ($i = 3; $i < $count; $i += 2) {
             $urlParameters[] = [
                 'name' => $targetPathParts[$i],
                 'value' => $targetPathParts[$i + 1]

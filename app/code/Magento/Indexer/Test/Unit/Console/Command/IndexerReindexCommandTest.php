@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Console\Cli;
@@ -85,23 +86,31 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame(1, count($optionsList));
         $this->assertSame('index', $optionsList[0]->getName());
     }
 
     public function testExecuteAll()
     {
-        $this->configMock->expects($this->once())->method('getIndexer')->will($this->returnValue([
-            'title' => 'Title_indexerOne',
-            'shared_index' => null
-        ]));
+        $this->configMock->expects($this->once())
+            ->method('getIndexer')
+            ->will(
+                $this->returnValue(
+                    [
+                        'title' => 'Title_indexerOne',
+                        'shared_index' => null
+                    ]
+                )
+            );
         $this->configureAdminArea();
-        $this->initIndexerCollectionByItems([
-            $this->getIndexerMock(
-                ['reindexAll', 'getStatus'],
-                ['indexer_id' => 'id_indexerOne', 'title' => 'Title_indexerOne']
-            )
-        ]);
+        $this->initIndexerCollectionByItems(
+            [
+                $this->getIndexerMock(
+                    ['reindexAll', 'getStatus'],
+                    ['indexer_id' => 'id_indexerOne', 'title' => 'Title_indexerOne']
+                )
+            ]
+        );
         $this->indexerFactory->expects($this->never())->method('create');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
@@ -118,6 +127,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array $reindexAllCallMatchers
      * @param array $executedIndexers
      * @param array $executedSharedIndexers
+     *
      * @dataProvider executeWithIndexDataProvider
      */
     public function testExecuteWithIndex(
@@ -210,6 +220,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @param array|null $methods
      * @param array $data
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject|StateInterface
      */
     private function getStateMock(array $methods = null, array $data = [])
@@ -329,7 +340,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                     'indexer_5' => $this->once(),
                 ],
                 'executed_indexers' => ['indexer_3', 'indexer_1', 'indexer_5'],
-                'executed_shared_indexers' => [['indexer_2'],['indexer_3']],
+                'executed_shared_indexers' => [['indexer_2'], ['indexer_3']],
             ],
             'With dependencies and multiple indexers in request' => [
                 'inputIndexers' => [
@@ -445,13 +456,16 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             "The following requested index types are not supported: '"
             . join("', '", $inputIndexers)
             . "'." . PHP_EOL . 'Supported types: '
-            . join(", ", array_map(
-                function ($item) {
-                    /** @var IndexerInterface $item */
-                    $item->getId();
-                },
-                $this->indexerCollectionMock->getItems()
-            ))
+            . join(
+                ", ",
+                array_map(
+                    function ($item) {
+                        /** @var IndexerInterface $item */
+                        $item->getId();
+                    },
+                    $this->indexerCollectionMock->getItems()
+                )
+            )
         );
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);

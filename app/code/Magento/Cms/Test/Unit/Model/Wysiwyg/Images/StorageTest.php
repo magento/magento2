@@ -454,7 +454,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $storageCollectionMock->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($collectionArray));
-        $storageCollectionInvMock = $storageCollectionMock->expects($this->exactly(sizeof($expectedRemoveKeys)))
+        $storageCollectionInvMock = $storageCollectionMock->expects($this->exactly(count($expectedRemoveKeys)))
             ->method('removeItemByKey');
         call_user_func_array([$storageCollectionInvMock, 'withConsecutive'], $expectedRemoveKeys);
 

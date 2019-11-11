@@ -47,7 +47,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             return '&nbsp;';
         }
 
-        if (sizeof($actions) == 1 && !$this->getColumn()->getNoLink()) {
+        if (count($actions) == 1 && !$this->getColumn()->getNoLink()) {
             foreach ($actions as $action) {
                 if (is_array($action)) {
                     return $this->_toLinkHtml($action, $row);
@@ -104,6 +104,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $this->_transformActionData($action, $actionCaption, $row);
 
         if (isset($action['confirm'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $action['onclick'] = 'return window.confirm(\'' . addslashes(
                 $this->escapeHtml($action['confirm'])
             ) . '\')';
@@ -117,8 +118,8 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * Prepares action data for html render
      *
-     * @param array &$action
-     * @param string &$actionCaption
+     * @param &array $action
+     * @param &string $actionCaption
      * @param \Magento\Framework\DataObject $row
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -144,7 +145,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     if (is_array($action['url']) && isset($action['field'])) {
                         $params = [$action['field'] => $this->_getValue($row)];
                         if (isset($action['url']['params'])) {
-                            $params = array_merge($action['url']['params'], $params);
+                            $params[] = $action['url']['params'];
                         }
                         $action['href'] = $this->getUrl($action['url']['base'], $params);
                         unset($action['field']);
