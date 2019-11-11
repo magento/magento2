@@ -114,7 +114,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
+     * @expectedExceptionMessage "input" value should be specified
      */
     public function testCreateCustomerIfInputDataIsEmpty()
     {
@@ -140,7 +140,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
+     * @expectedExceptionMessage  Required parameters are missing: Email
      */
     public function testCreateCustomerIfEmailMissed()
     {
