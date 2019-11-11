@@ -59,6 +59,16 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     {
         $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, true);
         $billingAddress = $this->addressMock;
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Complete';
+
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
+
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
@@ -70,7 +80,11 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
                         'billing' => $billingAddress,
                         'store' => $this->storeMock,
                         'formattedShippingAddress' => null,
-                        'formattedBillingAddress' => 1
+                        'formattedBillingAddress' => 1,
+                        'order_data' => [
+                            'customer_name' => $customerName,
+                            'frontend_status_label' => $frontendStatusLabel
+                        ]
                     ]
                 )
             );
@@ -83,6 +97,15 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     {
         $billingAddress = $this->addressMock;
         $comment = 'comment_test';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Complete';
+
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
@@ -102,7 +125,11 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
                         'billing' => $billingAddress,
                         'store' => $this->storeMock,
                         'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
+                        'formattedBillingAddress' => 1,
+                        'order_data' => [
+                            'customer_name' => $customerName,
+                            'frontend_status_label' => $frontendStatusLabel
+                        ]
                     ]
                 )
             );
@@ -115,6 +142,15 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     {
         $billingAddress = $this->addressMock;
         $comment = 'comment_test';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Complete';
+
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
@@ -134,7 +170,11 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
                         'comment' => $comment,
                         'store' => $this->storeMock,
                         'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
+                        'formattedBillingAddress' => 1,
+                        'order_data' => [
+                            'customer_name' => $customerName,
+                            'frontend_status_label' => $frontendStatusLabel
+                        ]
                     ]
                 )
             );

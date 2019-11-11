@@ -10,5 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminNewCatalogPriceRulePage" url="catalog_rule/promo_catalog/new/" module="Magento_CatalogRule" area="admin">
         <section name="AdminNewCatalogPriceRule"/>
+        <section name="AdminNewCatalogPriceRuleConditions"/>
     </page>
 </pages>
