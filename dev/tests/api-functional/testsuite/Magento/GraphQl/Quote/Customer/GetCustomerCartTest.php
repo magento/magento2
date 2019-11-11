@@ -201,7 +201,7 @@ mutation{
 }
 QUERY;
 
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
