@@ -63,7 +63,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * How long to wait for cron group to become unlocked
      */
-    const LOCK_TIMEOUT = self::MAX_RETRIES;
+    const LOCK_TIMEOUT = 5;
 
     /**
      * Static lock prefix for cron group locking
