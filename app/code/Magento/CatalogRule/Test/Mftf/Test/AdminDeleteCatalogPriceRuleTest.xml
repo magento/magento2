@@ -19,14 +19,14 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!-- Create a category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-
             <!-- Create a simple product -->
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-
+            <!-- Login to Admin page -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
             <actionGroup ref="createConfigurableProduct" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
@@ -34,9 +34,16 @@
             </actionGroup>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
+            <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCatalogRuleGridFilters"/>
+            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a catalog price rule -->
