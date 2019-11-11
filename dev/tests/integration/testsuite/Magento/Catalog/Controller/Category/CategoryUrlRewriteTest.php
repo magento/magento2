@@ -9,10 +9,10 @@ namespace Magento\Catalog\Controller\Category;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\TestCase\AbstractController;
-use Zend\Http\Response;
 
 /**
  * Checks category availability on storefront by url rewrite
@@ -59,7 +59,7 @@ class CategoryUrlRewriteTest extends AbstractController
         $currentCategory = $this->registry->registry('current_category');
         $response = $this->getResponse();
         $this->assertEquals(
-            Response::STATUS_CODE_200,
+            Http::STATUS_CODE_200,
             $response->getHttpResponseCode(),
             'Response code does not match expected value'
         );
