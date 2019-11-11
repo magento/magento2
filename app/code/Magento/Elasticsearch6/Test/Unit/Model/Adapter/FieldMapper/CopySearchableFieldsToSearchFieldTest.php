@@ -8,27 +8,14 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper;
 
 use Magento\Elasticsearch6\Model\Adapter\FieldMapper\CopySearchableFieldsToSearchField;
-use Magento\Framework\TestFramework\Unit\BaseTestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test mapping preprocessor CopySearchableFieldsToSearchField
  */
-class CopySearchableFieldsToSearchFieldTest extends BaseTestCase
+class CopySearchableFieldsToSearchFieldTest extends TestCase
 {
-    /**
-     * @var CopySearchableFieldsToSearchField
-     */
-    private $model;
-
-    /**
-     * @inheritDoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->model = $this->objectManager->getObject(CopySearchableFieldsToSearchField::class);
-    }
-
     /**
      * Test "copy_to" parameter should be added to searchable fields.
      *
@@ -38,7 +25,9 @@ class CopySearchableFieldsToSearchFieldTest extends BaseTestCase
      */
     public function testProcess(array $mappingBefore, array $mappingAfter)
     {
-        $this->assertEquals($mappingAfter, $this->model->process($mappingBefore));
+        $objectManager = new ObjectManager($this);
+        $model = $objectManager->getObject(CopySearchableFieldsToSearchField::class);
+        $this->assertEquals($mappingAfter, $model->process($mappingBefore));
     }
 
     /**
