@@ -134,7 +134,7 @@
                 <field id="include_taxes" translate="label" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Request Tax-Inclusive Rate</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>When applicable, taxes (sales tax, VAT etc.) are included in the rate</comment>
+                    <comment>When applicable, taxes (sales tax, VAT etc.) are included in the rate.</comment>
                 </field>
                 <field id="shipper_number" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Shipper Number</label>

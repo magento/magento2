@@ -93,12 +93,12 @@
                 <field id="amount" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Amount</label>
                     <validate>validate-number validate-greater-than-zero</validate>
-                    <comment>Subtotal after discount</comment>
+                    <comment>Subtotal after discount.</comment>
                 </field>
                 <field id="include_discount_amount" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Include Discount Amount</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Choosing yes will be used subtotal after discount, otherwise only subtotal will be used</comment>
+                    <comment>Choosing yes will be used subtotal after discount, otherwise only subtotal will be used.</comment>
                 </field>
                 <field id="tax_including" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Include Tax to Amount</label>
@@ -182,7 +182,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -212,7 +212,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Order Comment Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -242,7 +242,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -272,7 +272,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Invoice Comment Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -302,7 +302,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -332,7 +332,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Shipment Comment Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -362,7 +362,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -392,7 +392,7 @@
                 </field>
                 <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Send Credit Memo Comment Email Copy To</label>
-                    <comment>Comma-separated</comment>
+                    <comment>Comma-separated.</comment>
                     <validate>validate-emails</validate>
                 </field>
                 <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
