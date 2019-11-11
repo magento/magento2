@@ -814,14 +814,16 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->_config->expects($this->atLeastOnce())->method('getJobs')->will($this->returnValue($jobConfig));
 
         $this->_scopeConfig->expects($this->any())->method('getValue')
-            ->willReturnMap([
-                ['system/cron/test_group/use_separate_process', 0],
-                ['system/cron/test_group/history_cleanup_every', 10],
-                ['system/cron/test_group/schedule_lifetime', 2*24*60],
-                ['system/cron/test_group/history_success_lifetime', 0],
-                ['system/cron/test_group/history_failure_lifetime', 0],
-                ['system/cron/test_group/schedule_generate_every', 0],
-            ]);
+            ->willReturnMap(
+                [
+                    ['system/cron/test_group/use_separate_process', 0],
+                    ['system/cron/test_group/history_cleanup_every', 10],
+                    ['system/cron/test_group/schedule_lifetime', 2*24*60],
+                    ['system/cron/test_group/history_success_lifetime', 0],
+                    ['system/cron/test_group/history_failure_lifetime', 0],
+                    ['system/cron/test_group/schedule_generate_every', 0],
+                ]
+            );
 
         $this->_collection->expects($this->any())->method('addFieldToFilter')->will($this->returnSelf());
         $this->_collection->expects($this->any())->method('load')->will($this->returnSelf());

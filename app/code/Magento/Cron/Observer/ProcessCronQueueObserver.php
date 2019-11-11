@@ -792,6 +792,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     private function tryRunJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
     {
         // use sha1 to limit length
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $lockName =  md5(self::LOCK_PREFIX . $groupId . '_' . $schedule->getJobCode());
 
         try {
