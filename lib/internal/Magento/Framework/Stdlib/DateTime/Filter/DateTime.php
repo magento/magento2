@@ -6,6 +6,7 @@
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Date/Time filter. Converts datetime from localized to internal format.
@@ -25,10 +26,8 @@ class DateTime extends Date
      *
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Locale\Resolver $localeResolver
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {
-        $this->localeResolver = $localeResolver;
         parent::__construct($localeDate);
         $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
             [
@@ -43,6 +42,21 @@ class DateTime extends Date
     }
 
     /**
+     * Get locale resolver
+     *
+     * @return \Magento\Framework\Locale\ResolverInterface|mixed
+     */
+    private function getLocaleResolver()
+    {
+        if ($this->localeResolver === null) {
+            $this->localeResolver = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Locale\ResolverInterface::class
+            );
+        }
+        return $this->localeResolver;
+    }
+
+    /**
      * Convert date from localized to internal format
      *
      * @param string $value
@@ -52,7 +66,7 @@ class DateTime extends Date
      */
     public function filter($value)
     {
-        $currentLocaleCode = $this->localeResolver->getLocale(); //retruning this value zh_Hans_CN, but we need zh_CN
+        $currentLocaleCode = $this->getLocaleResolver()->getLocale(); //retruning this value zh_Hans_CN, but we need zh_CN
         if (strlen($currentLocaleCode>5)) {
             $languageCode = explode('_', $currentLocaleCode);
             $useCode = $languageCode[0].'_'.$languageCode[2];
@@ -72,10 +86,11 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotDeleteException(
-                "Invalid input datetime format of value '$value'",
+            throw new LocalizedException(
+                new Phrase("Invalid input datetime format of value '$value'",
                 $e->getCode(),
-                $e
+                $e    
+            )
             );
         }
     }
