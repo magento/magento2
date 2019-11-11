@@ -22,7 +22,6 @@ class DateTime extends Date
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Locale\Resolver $localeResolver
      *
      */
     public function __construct(
@@ -66,7 +65,7 @@ class DateTime extends Date
      */
     public function filter($value)
     {
-        $currentLocaleCode = $this->getLocaleResolver()->getLocale(); //retruning this value zh_Hans_CN, but we need zh_CN
+        $currentLocaleCode = $this->getLocaleResolver()->getLocale(); //retruning value zh_Hans_CN, but we need zh_CN
         if (strlen($currentLocaleCode>5)) {
             $languageCode = explode('_', $currentLocaleCode);
             $useCode = $languageCode[0].'_'.$languageCode[2];
@@ -86,11 +85,9 @@ class DateTime extends Date
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new LocalizedException(
-                new Phrase("Invalid input datetime format of value '$value'",
+            throw new LocalizedException("Invalid input datetime format of value '$value'",
                 $e->getCode(),
-                $e    
-            )
+                $e
             );
         }
     }
