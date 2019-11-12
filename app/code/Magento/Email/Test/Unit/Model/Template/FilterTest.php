@@ -111,6 +111,16 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     private $pubDirectoryRead;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filter\VariableResolver\StrategyResolver
+     */
+    private $variableResolver;
+
+    /**
+     * @var array
+     */
+    private $directiveProcessors;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -178,6 +188,30 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->pubDirectoryRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->variableResolver =
+            $this->getMockBuilder(\Magento\Framework\Filter\VariableResolver\StrategyResolver::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $this->directiveProcessors = [
+            'depend' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\DependDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+            'if' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\IfDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+            'template' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\TemplateDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+            'legacy' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\LegacyDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+        ];
+
     }
 
     /**
@@ -204,6 +238,8 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                     $this->configVariables,
                     [],
                     $this->cssInliner,
+                    $this->directiveProcessors,
+                    $this->variableResolver,
                     $this->cssProcessor,
                     $this->pubDirectory
                 ]
@@ -349,43 +385,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
 
         $filter->applyInlineCss('test');
-    }
-
-    /**
-     * Ensure that after filter callbacks are reset after exception is thrown during filtering
-     */
-    public function testAfterFilterCallbackGetsResetWhenExceptionTriggered()
-    {
-        $value = '{{var random_var}}';
-        $exception = new \Exception('Test exception');
-        $exceptionResult = sprintf(__('Error filtering template: %s'), $exception->getMessage());
-
-        $this->appState->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
-        $this->logger->expects($this->once())
-            ->method('critical')
-            ->with($exception);
-
-        $filter = $this->getModel(['varDirective', 'resetAfterFilterCallbacks']);
-        $filter->expects($this->once())
-            ->method('varDirective')
-            ->will($this->throwException($exception));
-
-        // Callbacks must be reset after exception is thrown
-        $filter->expects($this->once())
-            ->method('resetAfterFilterCallbacks');
-
-        // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
-            ->getMock();
-        // Callback should never run due to exception happening during filtering
-        $callbackObject->expects($this->never())
-            ->method('afterFilterCallbackMethod');
-        $filter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
-
-        $this->assertEquals($exceptionResult, $filter->filter($value));
     }
 
     public function testConfigDirectiveAvailable()
