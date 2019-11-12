@@ -126,17 +126,19 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @dataProvider dataProviderSetPaymentInvalidInput
      * @param \Closure $getMutationClosure
-     * @param string $expectedMessage
+     * @param array $expectedMessages
      * @expectedException \Exception
      */
-    public function testSetPaymentInvalidInput(\Closure $getMutationClosure, string $expectedMessage)
+    public function testSetPaymentInvalidInput(\Closure $getMutationClosure, array $expectedMessages)
     {
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
         $setPaymentMutation = $getMutationClosure($maskedQuoteId);
 
-        $this->expectExceptionMessage($expectedMessage);
+        foreach ($expectedMessages as $expectedMessage) {
+            $this->expectExceptionMessage($expectedMessage);
+        }
         $this->graphQlMutation($setPaymentMutation, [], '', $this->getHeaderMap());
     }
 
@@ -152,13 +154,20 @@ class SetPaymentMethodTest extends GraphQlAbstract
                 function (string $maskedQuoteId) {
                     return $this->getInvalidSetPaymentMutation($maskedQuoteId);
                 },
-                'Required parameter "authorizenet_acceptjs" for "payment_method" is missing.',
+                [
+                    'Required parameter "authorizenet_acceptjs" for "payment_method" is missing.'
+                ]
             ],
             [
                 function (string $maskedQuoteId) {
                     return $this->getEmptyAcceptJsInput($maskedQuoteId);
                 },
-                'for "authorizenet_acceptjs" is missing.',
+                [
+                    'Field AuthorizenetInput.cc_last_4 of required type Int! was not provided.',
+                    'Field AuthorizenetInput.opaque_data_descriptor of required type String! was not provided.',
+                    'Field AuthorizenetInput.opaque_data_value of required type String! was not provided.'
+                ]
+
             ],
             [
                 function (string $maskedQuoteId) {
@@ -168,13 +177,17 @@ class SetPaymentMethodTest extends GraphQlAbstract
                         static::VALID_NONCE
                     );
                 },
-                'parameter "cc_last_4" for "authorizenet_acceptjs" is missing',
+                [
+                    'Field AuthorizenetInput.cc_last_4 of required type Int! was not provided',
+                ]
             ],
             [
                 function (string $maskedQuoteId) {
                     return $this->getMissingOpaqueDataValueAcceptJsInput($maskedQuoteId, static::VALID_DESCRIPTOR);
                 },
-                'parameter "opaque_data_value" for "authorizenet_acceptjs" is missing',
+                [
+                    'Field AuthorizenetInput.opaque_data_value of required type String! was not provided',
+                ]
             ],
         ];
     }
