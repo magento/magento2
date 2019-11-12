@@ -59,7 +59,7 @@ class CarrierTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->loggerMock->method('debug')
             ->willReturnCallback(
-                function (string $message, array $context = []) {
+                function (string $message) {
                     $this->logs[] = $message;
                 }
             );
