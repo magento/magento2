@@ -28,6 +28,11 @@ class PageActions extends Column
     protected $actionUrlBuilder;
 
     /**
+     * @var \Magento\Cms\ViewModel\Page\Grid\UrlBuilder
+     */
+    private $scopeUrlBuilder;
+
+    /**
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
@@ -50,6 +55,7 @@ class PageActions extends Column
      * @param array $components
      * @param array $data
      * @param string $editUrl
+     * @param \Magento\Cms\ViewModel\Page\Grid\UrlBuilder|null $scopeUrlBuilder
      */
     public function __construct(
         ContextInterface $context,
@@ -58,12 +64,15 @@ class PageActions extends Column
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = [],
-        $editUrl = self::CMS_URL_PATH_EDIT
+        $editUrl = self::CMS_URL_PATH_EDIT,
+        \Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;
         $this->editUrl = $editUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->scopeUrlBuilder = $scopeUrlBuilder ?: ObjectManager::getInstance()
+            ->get(\Magento\Cms\ViewModel\Page\Grid\UrlBuilder::class);
     }
 
     /**
@@ -77,7 +86,8 @@ class PageActions extends Column
                 if (isset($item['page_id'])) {
                     $item[$name]['edit'] = [
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
-                        'label' => __('Edit')
+                        'label' => __('Edit'),
+                        '__disableTmpl' => true,
                     ];
                     $title = $this->getEscaper()->escapeHtml($item['title']);
                     $item[$name]['delete'] = [
@@ -85,19 +95,22 @@ class PageActions extends Column
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $title),
-                            'message' => __('Are you sure you want to delete a %1 record?', $title)
+                            'message' => __('Are you sure you want to delete a %1 record?', $title),
+                            '__disableTmpl' => true,
                         ],
-                        'post' => true
+                        'post' => true,
+                        '__disableTmpl' => true,
                     ];
                 }
                 if (isset($item['identifier'])) {
                     $item[$name]['preview'] = [
-                        'href' => $this->actionUrlBuilder->getUrl(
+                        'href' => $this->scopeUrlBuilder->getUrl(
                             $item['identifier'],
                             isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
                             isset($item['store_code']) ? $item['store_code'] : null
                         ),
-                        'label' => __('View')
+                        'label' => __('View'),
+                        '__disableTmpl' => true,
                     ];
                 }
             }

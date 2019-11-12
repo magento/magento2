@@ -83,7 +83,8 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/type UPS
      *
      * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
@@ -116,6 +117,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodTitle, $shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**
@@ -138,7 +140,8 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Ups/_files/enable_ups_shipping_method.php
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/type UPS
      *
      * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
@@ -171,6 +174,7 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
         self::assertEquals(self::CARRIER_TITLE, $shippingAddress['selected_shipping_method']['carrier_title']);
 
         self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals($methodTitle, $shippingAddress['selected_shipping_method']['method_title']);
     }
 
     /**

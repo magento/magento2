@@ -32,7 +32,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
 
     protected function setUp()
     {
-        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Indexer\Product\Eav\Processor::class
         );
     }
@@ -46,24 +46,24 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
     public function testReindexAll()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
-        $attr = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
+        $attr = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class)
             ->getAttribute('catalog_product', 'weight');
         $attr->setIsFilterable(1)->save();
 
         $this->assertTrue($attr->isIndexable());
 
-        $priceIndexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $priceIndexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
         );
         $priceIndexerProcessor->reindexAll();
 
         $this->_processor->reindexAll();
 
-        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\CategoryFactory::class
         );
         /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
-        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Block\Product\ListProduct::class
         );
 
@@ -81,13 +81,5 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
             $this->assertEquals('Short description', $product->getShortDescription());
             $this->assertEquals(1, $product->getWeight());
         }
-    }
-
-    /**
-     * teardown
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
     }
 }

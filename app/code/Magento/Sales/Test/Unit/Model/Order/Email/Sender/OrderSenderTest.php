@@ -30,7 +30,7 @@ class OrderSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\OrderIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -56,11 +56,16 @@ class OrderSenderTest extends AbstractSenderTest
      * @param $senderSendException
      * @return void
      * @dataProvider sendDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSend($configValue, $forceSyncMode, $emailSendingResult, $senderSendException)
     {
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
+        $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Processing';
+        $isNotVirtual = true;
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -77,6 +82,10 @@ class OrderSenderTest extends AbstractSenderTest
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($senderSendException ? $this->never() : $this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
                 $this->addressRenderer->expects($this->any())
@@ -92,6 +101,27 @@ class OrderSenderTest extends AbstractSenderTest
                     ->method('getShippingAddress')
                     ->willReturn($addressMock);
 
+                $this->orderMock->expects($this->once())
+                    ->method('getCreatedAtFormatted')
+                    ->with(2)
+                    ->willReturn($createdAtFormatted);
+
+                $this->orderMock->expects($this->any())
+                    ->method('getCustomerName')
+                    ->willReturn($customerName);
+
+                $this->orderMock->expects($this->once())
+                    ->method('getIsNotVirtual')
+                    ->willReturn($isNotVirtual);
+
+                $this->orderMock->expects($this->once())
+                    ->method('getEmailCustomerNote')
+                    ->willReturn('');
+
+                $this->orderMock->expects($this->once())
+                    ->method('getFrontendStatusLabel')
+                    ->willReturn($frontendStatusLabel);
+
                 $this->templateContainerMock->expects($this->once())
                     ->method('setTemplateVars')
                     ->with(
@@ -101,7 +131,15 @@ class OrderSenderTest extends AbstractSenderTest
                             'payment_html' => 'payment',
                             'store' => $this->storeMock,
                             'formattedShippingAddress' => $address,
-                            'formattedBillingAddress' => $address
+                            'formattedBillingAddress' => $address,
+                            'created_at_formatted'=>$createdAtFormatted,
+                            'order_data' => [
+                                'customer_name' => $customerName,
+                                'is_not_virtual' => $isNotVirtual,
+                                'email_customer_note' => '',
+                                'frontend_status_label' => $frontendStatusLabel
+                            ]
+
                         ]
                     );
 
@@ -200,6 +238,10 @@ class OrderSenderTest extends AbstractSenderTest
     {
         $address = 'address_test';
         $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $createdAtFormatted='Oct 14, 2019, 4:11:58 PM';
+        $customerName = 'test customer';
+        $frontendStatusLabel = 'Complete';
+        $isNotVirtual = false;
 
         $this->orderMock->expects($this->once())
             ->method('setSendEmail')
@@ -214,6 +256,10 @@ class OrderSenderTest extends AbstractSenderTest
             ->method('isEnabled')
             ->willReturn(true);
 
+        $this->identityContainerMock->expects($this->once())
+            ->method('getCopyMethod')
+            ->willReturn('copy');
+
         $addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
 
         $this->addressRenderer->expects($this->exactly($formatCallCount))
@@ -222,6 +268,27 @@ class OrderSenderTest extends AbstractSenderTest
             ->willReturn($address);
 
         $this->stepAddressFormat($addressMock, $isVirtualOrder);
+
+        $this->orderMock->expects($this->once())
+            ->method('getCreatedAtFormatted')
+            ->with(2)
+            ->willReturn($createdAtFormatted);
+
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+
+        $this->orderMock->expects($this->once())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
+
+        $this->orderMock->expects($this->once())
+            ->method('getEmailCustomerNote')
+            ->willReturn('');
+
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
 
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
@@ -232,7 +299,14 @@ class OrderSenderTest extends AbstractSenderTest
                     'payment_html' => 'payment',
                     'store' => $this->storeMock,
                     'formattedShippingAddress' => $expectedShippingAddress,
-                    'formattedBillingAddress' => $address
+                    'formattedBillingAddress' => $address,
+                    'created_at_formatted'=>$createdAtFormatted,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'is_not_virtual' => $isNotVirtual,
+                        'email_customer_note' => '',
+                        'frontend_status_label' => $frontendStatusLabel
+                    ]
                 ]
             );
 

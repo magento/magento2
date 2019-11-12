@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateProductConfigurationsPanel">
+        <element name="attributeOption" type="checkbox" selector="li[data-attribute-option-title='{{colorOption}}']" parameterized="true"/>
         <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
         <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
@@ -22,7 +23,9 @@
         <element name="selectAll" type="button" selector=".action-select-all"/>
         <element name="selectAllByAttribute" type="button" selector="//div[@data-attribute-title='{{attr}}']//button[contains(@class, 'action-select-all')]" parameterized="true"/>
         <element name="createNewValue" type="input" selector=".action-create-new" timeout="30"/>
+        <element name="attributeNameInTitle" type="input" selector="//div[contains(@class,'attribute-entity-title-block')]/div[contains(@class,'attribute-entity-title')]"/>
         <element name="attributeName" type="input" selector="li[data-attribute-option-title=''] .admin__field-create-new .admin__control-text"/>
+        <element name="attributeNameWithError" type="text" selector="//li[@data-attribute-option-title='']/div[contains(@class,'admin__field admin__field-create-new _error')]"/>
         <element name="saveAttribute" type="button" selector="li[data-attribute-option-title=''] .action-save" timeout="30"/>
         <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
@@ -39,6 +42,9 @@
         <element name="attribute3" type="input" selector="#apply-single-price-input-2"/>
 
         <element name="applySingleQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-single-inventory-radio']" timeout="30"/>
+        <element name="applyUniqueQuantityToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-inventory-radio']" timeout="30"/>
+        <element name="selectQuantity" type="select" selector="#apply-single-price-input-qty" timeout="30"/>
+        <element name="applyUniqueQuantity" type="input" selector="//*[text()='{{option}}']/ancestor::div[contains(@class, 'admin__field _required')]//input[contains(@id, 'apply-qty-input')]" parameterized="true"/>
         <element name="applyUniqueImagesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-images-radio']" timeout="30"/>
         <element name="applyUniquePricesToEachSkus" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']" timeout="30"/>
         <element name="selectImagesButton" type="select" selector="#apply-images-attributes" timeout="30"/>

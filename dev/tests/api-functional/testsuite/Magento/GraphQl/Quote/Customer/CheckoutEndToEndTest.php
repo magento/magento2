@@ -158,7 +158,7 @@ QUERY;
   products (
     filter: {
       sku: {
-        like:"simple%"
+        eq:"simple1"
       }
     }
     pageSize: 1
@@ -212,7 +212,7 @@ mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$cartId}"
-      cartItems: [
+      cart_items: [
         {
           data: {
             quantity: {$qty}
@@ -259,7 +259,6 @@ mutation {
           telephone: "88776655"
           region: "TX"
           country_code: "US"
-          save_in_address_book: false
          }
       }
     }
@@ -298,7 +297,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -309,7 +307,9 @@ mutation {
         available_shipping_methods {
           carrier_code
           method_code
-          amount
+          amount {
+            value
+          }
         }
       }
     }
@@ -334,7 +334,8 @@ QUERY;
         self::assertNotEmpty($availableShippingMethod['method_code']);
 
         self::assertArrayHasKey('amount', $availableShippingMethod);
-        self::assertNotEmpty($availableShippingMethod['amount']);
+        self::assertArrayHasKey('value', $availableShippingMethod['amount']);
+        self::assertNotEmpty($availableShippingMethod['amount']['value']);
 
         return $availableShippingMethod;
     }
@@ -423,7 +424,7 @@ mutation {
     }
   ) {
     order {
-      order_id
+      order_number
     }
   }
 }
@@ -431,10 +432,10 @@ QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->headers);
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertNotEmpty($response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertNotEmpty($response['placeOrder']['order']['order_number']);
 
-        return $response['placeOrder']['order']['order_id'];
+        return $response['placeOrder']['order']['order_number'];
     }
 
     /**

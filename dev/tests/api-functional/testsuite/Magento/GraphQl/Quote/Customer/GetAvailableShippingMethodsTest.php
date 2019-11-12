@@ -58,15 +58,23 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
         self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
 
         $expectedAddressData = [
-            'amount' => 10,
-            'base_amount' => 10,
+            'amount' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
             'method_code' => 'flatrate',
             'method_title' => 'Fixed',
-            'price_incl_tax' => 10,
-            'price_excl_tax' => 10,
+            'price_incl_tax' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
+            'price_excl_tax' => [
+                'value' => 10,
+                'currency' => 'USD',
+            ],
         ];
         self::assertEquals(
             $expectedAddressData,
@@ -122,7 +130,9 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/disable_offline_shipping_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 0
+     * @magentoConfigFixture default_store carriers/tablerate/active 0
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
      */
     public function testGetAvailableShippingMethodsIfShippingMethodsAreNotPresent()
     {
@@ -158,15 +168,23 @@ query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
         available_shipping_methods {
-          amount
-          base_amount
+          amount {
+            value
+            currency
+          }
           carrier_code
           carrier_title
           error_message
           method_code
           method_title
-          price_excl_tax
-          price_incl_tax
+          price_excl_tax {
+            value
+            currency
+          }
+          price_incl_tax {
+            value
+            currency
+          }
         }
     }
   }

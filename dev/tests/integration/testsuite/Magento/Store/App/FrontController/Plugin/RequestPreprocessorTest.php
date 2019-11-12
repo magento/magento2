@@ -14,7 +14,7 @@ use Magento\TestFramework\Response;
 use Zend\Stdlib\Parameters;
 
 /**
- * Class RequestPreprocessorTest @covers \Magento\Store\App\FrontController\Plugin\RequestPreprocessor.
+ * Tests \Magento\Store\App\FrontController\Plugin\RequestPreprocessor.
  */
 class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -24,6 +24,28 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
      * @var string
      */
     private $baseUrl;
+    /**
+     * @var array;
+     */
+    private $config;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->config = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        $this->setConfig($this->config);
+        parent::tearDown();
+    }
 
     /**
      * Test non-secure POST request is redirected right away on completely secure frontend.
@@ -63,6 +85,115 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
     }
 
     /**
+     * Test auto redirect to base URL
+     *
+     * @param array $config
+     * @param string $requestUrl
+     * @param string $redirectUrl
+     * @dataProvider autoRedirectToBaseURLDataProvider
+     */
+    public function testAutoRedirectToBaseURL(array $config, string $requestUrl, string $redirectUrl)
+    {
+        $request = [
+            'REQUEST_SCHEME' => parse_url($requestUrl, PHP_URL_SCHEME),
+            'SERVER_NAME' => parse_url($requestUrl, PHP_URL_HOST),
+            'SCRIPT_NAME' => '/index.php',
+            'SCRIPT_FILENAME' => 'index.php',
+            'REQUEST_URI' => parse_url($requestUrl, PHP_URL_PATH),
+        ];
+        $this->setConfig($config);
+        $this->setServer($request);
+        $app = $this->_objectManager->create(\Magento\Framework\App\Http::class, ['_request' => $this->getRequest()]);
+        $this->_response = $app->launch();
+        $this->assertRedirect($this->equalTo($redirectUrl));
+    }
+
+    /**
+     * @return array
+     */
+    public function autoRedirectToBaseURLDataProvider(): array
+    {
+        $baseConfig = [
+            'web/unsecure/base_url' => 'http://magento.com/us/',
+            'web/session/use_frontend_sid' => 0,
+            'web/seo/use_rewrites' => 1,
+        ];
+
+        return [
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b/c/d/e.html',
+                'redirectUrl' => 'http://magento.com/us/a/b/c/d/e.html'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b/c/d.html',
+                'redirectUrl' => 'http://magento.com/us/a/b/c/d.html'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b/c.html',
+                'redirectUrl' => 'http://magento.com/us/a/b/c.html'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b.html',
+                'redirectUrl' => 'http://magento.com/us/a/b.html'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a.html',
+                'redirectUrl' => 'http://magento.com/us/a.html'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b/c/d/e',
+                'redirectUrl' => 'http://magento.com/us/a/b/c/d/e'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b/c/d',
+                'redirectUrl' => 'http://magento.com/us/a/b/c/d'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b/c',
+                'redirectUrl' => 'http://magento.com/us/a/b/c'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a/b',
+                'redirectUrl' => 'http://magento.com/us/a/b'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/a',
+                'redirectUrl' => 'http://magento.com/us/a'
+            ],
+            [
+                'config' => $baseConfig,
+                'request' => 'http://magento.com/',
+                'redirectUrl' => 'http://magento.com/us/'
+            ],
+            [
+                'config' => array_merge($baseConfig, ['web/seo/use_rewrites' => 0]),
+                'request' => 'http://magento.com/',
+                'redirectUrl' => 'http://magento.com/us/index.php/'
+            ],
+            [
+                'config' => array_merge($baseConfig, ['web/seo/use_rewrites' => 0]),
+                'request' => 'http://magento.com/a/b/c/d.html',
+                'redirectUrl' => 'http://magento.com/us/index.php/a/b/c/d.html'
+            ],
+            [
+                'config' => array_merge($baseConfig, ['web/seo/use_rewrites' => 0]),
+                'request' => 'http://magento.com/a/b/c/d',
+                'redirectUrl' => 'http://magento.com/us/index.php/a/b/c/d'
+            ],
+        ];
+    }
+
+    /**
      * Assert response is redirect with https protocol.
      *
      * @param Response $response
@@ -83,22 +214,26 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
      */
     private function prepareRequest(bool $isSecure = false)
     {
-        $post = new Parameters([
-            'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
-            'login' => [
-                'username' => 'customer@example.com',
-                'password' => 'password'
+        $post = new Parameters(
+            [
+                'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                'login' => [
+                    'username' => 'customer@example.com',
+                    'password' => 'password'
+                ]
             ]
-        ]);
+        );
         $request = $this->getRequest();
         $request->setMethod(\Magento\TestFramework\Request::METHOD_POST);
         $request->setRequestUri('customer/account/loginPost/');
         $request->setPost($post);
         if ($isSecure) {
-            $server = new Parameters([
-                'HTTPS' => 'on',
-                'SERVER_PORT' => 443
-            ]);
+            $server = new Parameters(
+                [
+                    'HTTPS' => 'on',
+                    'SERVER_PORT' => 443
+                ]
+            );
             $request->setServer($server);
         }
 
@@ -150,5 +285,46 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
         $configValue->save();
         $reinitibleConfig = $this->_objectManager->create(ReinitableConfigInterface::class);
         $reinitibleConfig->reinit();
+    }
+
+    private function setConfig(array $config): void
+    {
+        foreach ($config as $path => $value) {
+            $model = $this->_objectManager->create(Value::class);
+            $model->load($path, 'path');
+            if (!isset($this->config[$path])) {
+                $this->config[$path] = $model->getValue();
+            }
+            if (!$model->getPath()) {
+                $model->setPath($path);
+            }
+            if ($value !== null) {
+                $model->setValue($value);
+                $model->save();
+            } elseif ($model->getId()) {
+                $model->delete();
+            }
+        }
+        $this->_objectManager->create(ReinitableConfigInterface::class)->reinit();
+    }
+
+    private function setServer(array $server)
+    {
+        $request = $this->getRequest();
+        $properties = [
+            'baseUrl',
+            'basePath',
+            'requestUri',
+            'originalPathInfo',
+            'pathInfo',
+        ];
+        $reflection = new \ReflectionClass($request);
+
+        foreach ($properties as $name) {
+            $property = $reflection->getProperty($name);
+            $property->setAccessible(true);
+            $property->setValue($request, null);
+        }
+        $request->setServer(new Parameters($server));
     }
 }

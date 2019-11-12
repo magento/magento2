@@ -349,6 +349,7 @@
                 <settings>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
+                        <rule name="validate-number" xsi:type="boolean">true</rule>
                     </validation>
                     <additionalClasses>
                         <class name="admin__field-small">true</class>
@@ -466,7 +467,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Theme</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
         </field>
@@ -475,7 +476,7 @@
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
         </field>
@@ -484,7 +485,16 @@
                 <dataType>string</dataType>
                 <label translate="true">Layout Update XML</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
+                </imports>
+            </settings>
+        </field>
+        <field name="custom_layout_update_file" component="Magento_Catalog/js/components/use-parent-settings/select" sortOrder="205" formElement="select">
+            <settings>
+                <dataType>string</dataType>
+                <label translate="true">Custom Layout Update</label>
+                <imports>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
         </field>
@@ -501,7 +511,7 @@
                 <dataType>boolean</dataType>
                 <label translate="true">Apply Design to Products</label>
                 <imports>
-                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked</link>
+                    <link name="serviceDisabled">${ $.parentName }.custom_use_parent_settings:checked || $.data.serviceDisabled</link>
                 </imports>
             </settings>
             <formElements>
@@ -527,13 +537,7 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="additionalClasses" xsi:type="string">admin__control-grouped-date</item>
-                    <item name="label" xsi:type="string" translate="true">Schedule Update From</item>
-                    <item name="required" xsi:type="boolean">false</item>
                     <item name="breakLine" xsi:type="boolean">false</item>
-                    <item name="scopeLabel" xsi:type="string">[STORE VIEW]</item>
-                    <item name="imports" xsi:type="array">
-                        <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
-                    </item>
                 </item>
             </argument>
             <field name="custom_design_from" sortOrder="230" formElement="date">
@@ -543,9 +547,7 @@
                     </additionalClasses>
                     <dataType>string</dataType>
                     <label translate="true">Schedule Update From</label>
-                    <imports>
-                        <link name="disabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked</link>
-                    </imports>
+                    <scopeLabel>[STORE VIEW]</scopeLabel>
                 </settings>
             </field>
             <field name="custom_design_to" sortOrder="240" formElement="date">
@@ -556,9 +558,6 @@
                     </additionalClasses>
                     <dataType>string</dataType>
                     <label translate="true">To</label>
-                    <imports>
-                        <link name="disabled">ns = ${ $.ns }, index = custom_use_parent_settings :checked</link>
-                    </imports>
                 </settings>
             </field>
         </container>

@@ -8,11 +8,56 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateConfigurableProductWithAttributeSet">
+        <annotations>
+            <description>Admin edit created product as configurable. Choose created options</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="category" defaultValue="_defaultCategory"/>
+            <argument name="label" type="string" defaultValue="mySet"/>
+            <argument name="option" type="string" defaultValue="['option1', 'option2', 'option3', 'option4']"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{label}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <selectOption selector="{{AdminProductFormSection.additionalOptions}}" parameterArray="{{option}}" stepKey="searchAndMultiSelectCreatedOption"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateConfigurationsForAttribute" extends="generateConfigurationsByAttributeCode">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Click to apply single price to all Skus. Enter Attribute price</description>
+        </annotations>
+        <arguments>
+            <argument name="price" type="string" defaultValue="100"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="clickOnNextButton2" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="waitForNextPageOpened2" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}" before="clickOnApplySingleQuantityToEachSku" stepKey="enterAttributePrice"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateConfigurableProductWithAttributeUncheckOption" extends="generateConfigurationsByAttributeCode">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Click to uncheck created option. Enter Attribute price</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeOption" type="string" defaultValue="option1"/>
+            <argument name="price" type="string" defaultValue="100"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption('attributeOption')}}" after="clickOnSelectAll" stepKey="clickToUncheckOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" after="clickToUncheckOption" stepKey="clickOnNextButton22"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="clickOnNextButton22" stepKey="waitForNextPageOpened2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" after="waitForNextPageOpened2" stepKey="clickOnApplySinglePriceToAllSkus"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}" before="clickOnApplySingleQuantityToEachSku" stepKey="enterAttributePrice"/>
+    </actionGroup>
     <!--Filter the product grid and view expected products-->
     <actionGroup name="viewConfigurableProductInAdminGrid">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Validates the provided Configurable Product is present and correct in the grid.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
         </arguments>
+
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoadInitial"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
@@ -36,15 +81,13 @@
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
     </actionGroup>
 
-    <!--
-
-    Create a configurable product with three options for color: red, white, and blue
-
+    <!--Create a configurable product with three options for color: red, white, and blue
     Expected start state = logged in as an admin
-    End state = on the product edit page in the admin
-
-    -->
+    End state = on the product edit page in the admin-->
     <actionGroup name="createConfigurableProduct">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Creates a Configurable Product using the default Product Options.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="_defaultProduct"/>
             <argument name="category" defaultValue="_defaultCategory"/>
@@ -79,6 +122,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
         <fillField userInput="{{colorProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
@@ -105,10 +149,73 @@
         <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
     </actionGroup>
 
+    <actionGroup name="createConfigurableProductWithTwoAttributes" extends="createConfigurableProduct">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Creates a Configurable Product with 2 product attributes.</description>
+        </annotations>
+        <arguments>
+            <argument name="attribute1" defaultValue="ProductColorAttribute"/>
+            <argument name="attribute2" defaultValue="ProductSizeAttribute"/>
+        </arguments>
+        <remove keyForRemoval="clickOnNewAttribute"/>
+        <remove keyForRemoval="waitForIFrame"/>
+        <remove keyForRemoval="switchToNewAttributeIFrame"/>
+        <remove keyForRemoval="fillDefaultLabel"/>
+        <remove keyForRemoval="clickOnNewAttributePanel"/>
+        <remove keyForRemoval="waitForSaveAttribute"/>
+        <remove keyForRemoval="switchOutOfIFrame"/>
+        <remove keyForRemoval="waitForFilters"/>
+        <remove keyForRemoval="clickOnFilters"/>
+        <remove keyForRemoval="fillFilterAttributeCodeField"/>
+        <remove keyForRemoval="clickApplyFiltersButton"/>
+        <remove keyForRemoval="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attribute1.attribute_code)}}" stepKey="selectAttribute1" after="clickOnCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeCheckbox(attribute2.attribute_code)}}" stepKey="selectAttribute2" after="selectAttribute1"/>
+        <remove keyForRemoval="waitCreateNewValueAppears"/>
+        <remove keyForRemoval="clickOnCreateNewValue1"/>
+        <remove keyForRemoval="fillFieldForNewAttribute1"/>
+        <remove keyForRemoval="clickOnSaveNewAttribute1"/>
+        <remove keyForRemoval="clickOnCreateNewValue2"/>
+        <remove keyForRemoval="fillFieldForNewAttribute2"/>
+        <remove keyForRemoval="clickOnSaveNewAttribute2"/>
+        <remove keyForRemoval="clickOnCreateNewValue3"/>
+        <remove keyForRemoval="fillFieldForNewAttribute3"/>
+        <remove keyForRemoval="clickOnSaveNewAttribute3"/>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attribute1.frontend_label)}}" stepKey="selectAllOptionsOfAttribute1" before="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attribute2.frontend_label)}}" stepKey="selectAllOptionsOfAttribute2" before="clickOnNextButton2"/>
+        <remove keyForRemoval="applyUniquePricesByAttributeToEachSku"/>
+        <remove keyForRemoval="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <remove keyForRemoval="selectAttributes"/>
+        <remove keyForRemoval="fillAttributePrice1"/>
+        <remove keyForRemoval="fillAttributePrice2"/>
+        <remove keyForRemoval="fillAttributePrice3"/>
+        <remove keyForRemoval="clickOnSaveButton2"/>
+        <remove keyForRemoval="clickOnConfirmInPopup"/>
+        <remove keyForRemoval="seeSaveProductMessage"/>
+        <remove keyForRemoval="seeProductNameInTitle"/>
+    </actionGroup>
+    <actionGroup name="saveConfigurableProduct">
+        <annotations>
+            <description>Save configurable product</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="seeProductNameInTitle"/>
+    </actionGroup>
+
     <actionGroup name="generateConfigurationsByAttributeCode">
+        <annotations>
+            <description>Generates the Product Configurations for the provided Attribute Code on the Configurable Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeCode" type="string" defaultValue="SomeString"/>
         </arguments>
+
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
@@ -122,16 +229,43 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
     </actionGroup>
+    <actionGroup name="createOptionsForAttribute">
+        <arguments>
+            <argument name="attributeName" type="string" defaultValue="{{productAttributeColor.default_label}}"/>
+            <argument name="firstOptionName" type="string" defaultValue="option1"/>
+            <argument name="secondOptionName" type="string" defaultValue="option2"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
+        <fillField userInput="{{attributeName}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateFirstNewValue"/>
+        <fillField userInput="{{firstOptionName}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateSecondNewValue"/>
+        <fillField userInput="{{secondOptionName}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewSecondOption"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+    </actionGroup>
 
     <actionGroup name="createConfigurationsForAttribute" extends="generateConfigurationsByAttributeCode">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Clicks on the Save button. Clicks on the Confirm button.</description>
+        </annotations>
         <arguments>
             <argument name="attributeCode" type="string" defaultValue="SomeString"/>
         </arguments>
+
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
     </actionGroup>
 
     <actionGroup name="createConfigurationsForAttributeWithImages" extends="generateConfigurationsByAttributeCode">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Adds the provided Attribute Image to the provided Attribute Code.</description>
+        </annotations>
         <arguments>
             <argument name="attributeCode" type="string" defaultValue="SomeString"/>
             <argument name="image" defaultValue="ProductImage"/>
@@ -148,9 +282,13 @@
     </actionGroup>
 
     <actionGroup name="createConfigurationsForTwoAttribute" extends="generateConfigurationsByAttributeCode">
+        <annotations>
+            <description>EXTENDS: generateConfigurationsByAttributeCode. Generates the Product Configurations for the 2 provided Attribute Codes on the Configurable Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="secondAttributeCode" type="string"/>
         </arguments>
+
         <remove keyForRemoval="clickOnSelectAll"/>
         <remove keyForRemoval="clickFilters"/>
         <remove keyForRemoval="fillFilterAttributeCodeField"/>
@@ -168,17 +306,31 @@
     </actionGroup>
 
     <actionGroup name="saveConfiguredProduct">
+        <annotations>
+            <description>Save the Configurable Product on the Configurable Product creation/edit page. Validates that the Success Message is present.</description>
+        </annotations>
+
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
     </actionGroup>
 
+    <!--Generate and save configurable product after setting options-->
+    <actionGroup name="GenerateAndSaveConfiguredProductAfterSettingOptions" extends="saveConfiguredProduct">
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" before="clickOnSaveButton2" stepKey="clickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" after="clickOnNextButton" stepKey="clickOnGenerateProductsButton"/>
+    </actionGroup>
+
     <actionGroup name="addNewProductConfigurationAttribute">
+        <annotations>
+            <description>Generates the Product Configurations for the 2 provided Attribute Names on the Configurable Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" type="entity"/>
             <argument name="firstOption" type="entity"/>
             <argument name="secondOption" type="entity"/>
         </arguments>
+
         <!-- Create new attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
         <waitForPageLoad stepKey="waitForIFrame"/>
@@ -188,12 +340,14 @@
         <waitForPageLoad stepKey="waitForSaveAttribute"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <waitForPageLoad stepKey="waitForFilters"/>
+
         <!-- Find created below attribute and add option; save attribute -->
         <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickOnFilters"/>
         <fillField userInput="{{attribute.default_label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateFirstNewValue"/>
         <fillField userInput="{{firstOption.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>
@@ -205,12 +359,32 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnThirdNextButton"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnFourthNextButton"/>
     </actionGroup>
-
+    <actionGroup name="selectCreatedAttributeAndCreateTwoOptions" extends="addNewProductConfigurationAttribute">
+        <remove keyForRemoval="clickOnNewAttribute"/>
+        <remove keyForRemoval="waitForIFrame"/>
+        <remove keyForRemoval="switchToNewAttributeIFrame"/>
+        <remove keyForRemoval="fillDefaultLabel"/>
+        <remove keyForRemoval="clickOnNewAttributePanel"/>
+        <remove keyForRemoval="waitForSaveAttribute"/>
+        <remove keyForRemoval="switchOutOfIFrame"/>
+        <remove keyForRemoval="waitForFilters"/>
+        <fillField userInput="{{attribute.attribute_code}}" selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+        <fillField userInput="{{firstOption.label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewFirstOption"/>
+        <fillField userInput="{{secondOption.label}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewSecondOption"/>
+        <remove keyForRemoval="clickOnSelectAll"/>
+        <remove keyForRemoval="clickOnSecondNextButton"/>
+        <remove keyForRemoval="clickOnThirdNextButton"/>
+        <remove keyForRemoval="clickOnFourthNextButton"/>
+    </actionGroup>
     <actionGroup name="changeProductConfigurationsInGrid">
+        <annotations>
+            <description>Edit the Product Configuration via the Admin Product grid page.</description>
+        </annotations>
         <arguments>
             <argument name="firstOption" type="entity"/>
             <argument name="secondOption" type="entity"/>
         </arguments>
+
         <fillField userInput="{{firstOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(firstOption.name)}}" stepKey="fillFieldNameForFirstAttributeOption"/>
         <fillField userInput="{{secondOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(secondOption.name)}}" stepKey="fillFieldNameForSecondAttributeOption"/>
         <fillField userInput="{{firstOption.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(firstOption.name)}}" stepKey="fillFieldSkuForFirstAttributeOption"/>
@@ -222,17 +396,34 @@
         <fillField userInput="{{firstOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(firstOption.name)}}" stepKey="fillFieldWeightForFirstAttributeOption"/>
         <fillField userInput="{{secondOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(secondOption.name)}}" stepKey="fillFieldWeightForSecondAttributeOption"/>
     </actionGroup>
-
+    <actionGroup name="changeConfigurableProductChildProductPrice">
+        <annotations>
+            <description>Change the price of a configurable child product in the grid under configurations.</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttributes" type="string"/>
+            <argument name="productPrice" type="string"/>
+        </arguments>
+        <fillField userInput="{{productPrice}}" selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(productAttributes)}}" stepKey="fillPriceForConfigurableProductAttributeOption"/>
+    </actionGroup>
     <actionGroup name="changeProductConfigurationsInGridExceptSku" extends="changeProductConfigurationsInGrid">
+        <annotations>
+            <description>EXTENDS: changeProductConfigurationsInGrid. Removes 'fillFieldSkuForFirstAttributeOption' and 'fillFieldSkuForSecondAttributeOption'.</description>
+        </annotations>
+
         <remove keyForRemoval="fillFieldSkuForFirstAttributeOption"/>
         <remove keyForRemoval="fillFieldSkuForSecondAttributeOption"/>
     </actionGroup>
 
     <actionGroup name="addProductToConfigurationsGrid">
+        <annotations>
+            <description>Adds the provided Product SKU to the provided Product Name.</description>
+        </annotations>
         <arguments>
             <argument name="sku" type="string"/>
             <argument name="name" type="string"/>
         </arguments>
+
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(name)}}" stepKey="clickToExpandFirstActions"/>
         <click selector="{{AdminProductFormConfigurationsSection.addProduct(name)}}" stepKey="clickChooseFirstDifferentProduct"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
@@ -244,11 +435,15 @@
     </actionGroup>
 
     <actionGroup name="addUniqueImageToConfigurableProductOption">
+        <annotations>
+            <description>Adds the provided Image to a Configurable Product on the Admin Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="image" defaultValue="ProductImage"/>
             <argument name="frontend_label" type="string"/>
             <argument name="label" type="string"/>
         </arguments>
+
         <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="clickOnApplyUniqueImagesToEachSku"/>
         <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanel.selectImagesButton}}" stepKey="selectOption"/>
         <attachFile selector="{{AdminCreateProductConfigurationsPanel.uploadImagesButton(label)}}" userInput="{{image.file}}" stepKey="uploadFile"/>
@@ -257,17 +452,35 @@
     </actionGroup>
 
     <actionGroup name="addUniquePriceToConfigurableProductOption">
+        <annotations>
+            <description>On the 'Step 3: Bulk Images, Price and Quantity' page of the 'Create Product Configurations' model click on 'Apply unique prices...'. Select provided Option. Fill price.</description>
+        </annotations>
         <arguments>
             <argument name="frontend_label" type="string"/>
             <argument name="label" type="string"/>
             <argument name="price" type="string"/>
         </arguments>
+
         <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesToEachSkus}}" stepKey="clickOnApplyUniquePricesToEachSku"/>
         <selectOption userInput="{{frontend_label}}" selector="{{AdminCreateProductConfigurationsPanel.selectPriceButton}}" stepKey="selectOption"/>
         <fillField selector="{{AdminCreateProductConfigurationsPanel.price(label)}}" userInput="{{price}}" stepKey="enterAttributeQuantity"/>
     </actionGroup>
+    <actionGroup name="addUniqueQuantityToConfigurableProductOption">
+        <arguments>
+            <argument name="frontend_label" type="string" defaultValue="{{productAttributeColor.default_label}}"/>
+            <argument name="label" type="string" defaultValue="option1"/>
+            <argument name="quantity" type="string" defaultValue="10"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantityToEachSkus}}" stepKey="clickOnApplyUniqueQuantitiesToEachSku"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectQuantity}}" userInput="{{frontend_label}}" stepKey="selectOption"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantity(label)}}" userInput="{{quantity}}" stepKey="enterAttributeQuantity"/>
+    </actionGroup>
 
     <actionGroup name="saveConfigurableProductWithNewAttributeSet">
+        <annotations>
+            <description>Clicks on 'Save'. Clicks radio for '...new Attribute Set...' in the 'Choose Affected Attribute Set' modal. Clicks on 'Confirm' in the model on the Configurable Product creation/edit page.</description>
+        </annotations>
+
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveConfigurableProduct"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" time="30" stepKey="waitForAttributeSetConfirmation"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.addNewAttrSet}}" stepKey="clickAddNewAttributeSet"/>
@@ -277,6 +490,10 @@
     </actionGroup>
 
     <actionGroup name="saveConfigurableProductAddToCurrentAttributeSet">
+        <annotations>
+            <description>Clicks on 'Save'. Clicks on 'Confirm' in the 'Choose Affected Attribute Set' model on the Configurable Product creation/edit page.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveBtnVisible"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductAgain"/>
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="waitPopUpVisible"/>
@@ -285,9 +502,13 @@
     </actionGroup>
 
     <actionGroup name="assertConfigurableProductOnAdminProductPage">
+        <annotations>
+            <description>Validates that the provided Configurable Product Name, SKU and Price are present and correct on the Configurable Product creation/edit page. PLEASE NOTE: The Product Data is Hardcoded.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
         </arguments>
+
         <seeInField userInput="{{ApiConfigurableProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="seeNameRequired"/>
         <seeInField userInput="{{ApiConfigurableProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="seeSkuRequired"/>
         <dontSeeInField userInput="{{ApiConfigurableProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="dontSeePriceRequired"/>
@@ -295,11 +516,30 @@
 
     <!--Click in Next Step and see Title-->
     <actionGroup name="AdminConfigurableWizardMoveToNextStepActionGroup">
+        <annotations>
+            <description>Click on the 'Next' button in the 'Create Product Configurations' panel on the Configurable Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="title" type="string"/>
         </arguments>
+
         <click selector="{{ConfigurableProductSection.nextButton}}" stepKey="clickNextButton"/>
         <waitForPageLoad stepKey="waitForNextStepLoaded"/>
         <see userInput="{{title}}" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeStepTitle"/>
+    </actionGroup>
+    <actionGroup name="AdminConfigurableProductDisableConfigurationsActionGroup">
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
+        </arguments>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(productName)}}" stepKey="clickToExpandActionsSelect"/>
+        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct"/>
+        <see selector="{{AdminProductFormConfigurationsSection.confProductOptionStatusCell(productName)}}" userInput="Disabled" stepKey="seeConfigDisabled"/>
+    </actionGroup>
+
+    <!--You are on AdminProductEditPage-->
+    <!--Start create configurations for attribute and fill quantity-->
+    <actionGroup name="StartCreateConfigurationsForAttribute" extends="generateConfigurationsByAttributeCode">
+        <remove keyForRemoval="clickOnNextButton3"/>
+        <remove keyForRemoval="clickOnNextButton4"/>
     </actionGroup>
 </actionGroups>

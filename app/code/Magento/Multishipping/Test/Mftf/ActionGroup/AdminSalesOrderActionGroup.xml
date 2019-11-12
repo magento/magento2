@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <actionGroup name="AdminSalesOrderActionGroup">
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.subTotal}}" stepKey="grabValueForSubtotal"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.shippingAndHandling}}" stepKey="grabValueForShippingHandling"/>
+        <grabTextFrom selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="grabValueForGrandTotal"/>
+        <executeJS function="
+        var grandTotal = '{$grabValueForGrandTotal}'.substr(1);
+        return (grandTotal);" stepKey="grandTotalValue"/>
+        <executeJS function="
+               var subtotal = '{$grabValueForSubtotal}'.substr(1);
+               var handling = '{$grabValueForShippingHandling}'.substr(1);
+               var subtotalHandling = (parseFloat(subtotal) + parseFloat(handling)).toFixed(2);
+               return (subtotalHandling);" stepKey="sumTotalValue"/>
+        <assertEquals stepKey="assertSubTotalPrice">
+            <expectedResult type="variable">$sumTotalValue</expectedResult>
+            <actualResult type="variable">$grandTotalValue</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

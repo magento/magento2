@@ -31,5 +31,8 @@
         <element name="storesArrow" type="button" selector="#ZmF2aWNvbi9zdG9yZXM- > .jstree-icon" />
         <element name="checkIfStoresArrowExpand" type="button" selector="//li[@id='ZmF2aWNvbi9zdG9yZXM-' and contains(@class,'jstree-closed')]" />
         <element name="storeLink" type="button" selector="#ZmF2aWNvbi9zdG9yZXMvMQ-- > a"/>
+        <element name="imageWatermarkType" type="text" selector="//div[contains(@class, 'fieldset-wrapper-title')]//span[contains(text(), '{{watermarkType}}')]" parameterized="true"/>
+        <element name="appliedTheme" type="select" selector="select[name='theme_theme_id']"/>
+        <element name="scopeEditLinkByName" type="button" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[normalize-space(.)= '{{scope}}']/preceding-sibling::th)+1][contains(.,'{{scopeName}}')]/..//a[contains(@class, 'action-menu-item')]" timeout="30" parameterized="true"/>
     </section>
 </sections>

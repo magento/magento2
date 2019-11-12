@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillProductAttributePropertiesActionGroup">
+        <arguments>
+            <argument name="attributeName" type="string"/>
+            <argument name="attributeType" type="string"/>
+        </arguments>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attributeName}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{attributeType}}" stepKey="selectInputType"/>
+    </actionGroup>
+
+    <!--You are on AdminProductEditPage-->
+    <!-- Switch scope for product attribute-->
+    <!-- !Note! Scope   : 0 - Store View; 1 - Global; 2 - Website; -->
+    <actionGroup name="AdminSwitchScopeForProductAttributeActionGroup">
+        <arguments>
+            <argument name="scope" type="string" defaultValue="1"/>
+        </arguments>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.Scope}}" stepKey="waitOpenAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectNecessaryScope"/>
+    </actionGroup>
+</actionGroups>

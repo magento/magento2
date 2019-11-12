@@ -76,25 +76,19 @@ class RuleProductPricesPersistor
             );
         }
 
-        $productIds = [];
-
-        try {
-            foreach ($priceData as $key => $data) {
-                $productIds['product_id'] = $data['product_id'];
-                $priceData[$key]['rule_date'] = $this->dateFormat->formatDate($data['rule_date'], false);
-                $priceData[$key]['latest_start_date'] = $this->dateFormat->formatDate(
-                    $data['latest_start_date'],
-                    false
-                );
-                $priceData[$key]['earliest_end_date'] = $this->dateFormat->formatDate(
-                    $data['earliest_end_date'],
-                    false
-                );
-            }
-            $connection->insertOnDuplicate($indexTable, $priceData);
-        } catch (\Exception $e) {
-            throw $e;
+        foreach ($priceData as $key => $data) {
+            $priceData[$key]['rule_date'] = $this->dateFormat->formatDate($data['rule_date'], false);
+            $priceData[$key]['latest_start_date'] = $this->dateFormat->formatDate(
+                $data['latest_start_date'],
+                false
+            );
+            $priceData[$key]['earliest_end_date'] = $this->dateFormat->formatDate(
+                $data['earliest_end_date'],
+                false
+            );
         }
+        $connection->insertOnDuplicate($indexTable, $priceData);
+
         return true;
     }
 }

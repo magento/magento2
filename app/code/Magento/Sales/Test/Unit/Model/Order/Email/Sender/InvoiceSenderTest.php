@@ -57,7 +57,7 @@ class InvoiceSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId', 'getCopyMethod']
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -90,6 +90,9 @@ class InvoiceSenderTest extends AbstractSenderTest
         $comment = 'comment_test';
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
+        $customerName = 'Test Customer';
+        $isNotVirtual = true;
+        $frontendStatusLabel = 'Processing';
 
         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
@@ -116,6 +119,22 @@ class InvoiceSenderTest extends AbstractSenderTest
                 ->method('getShippingAddress')
                 ->willReturn($addressMock);
 
+            $this->orderMock->expects($this->any())
+                ->method('getCustomerName')
+                ->willReturn($customerName);
+
+            $this->orderMock->expects($this->once())
+                ->method('getIsNotVirtual')
+                ->willReturn($isNotVirtual);
+
+            $this->orderMock->expects($this->once())
+                ->method('getEmailCustomerNote')
+                ->willReturn('');
+
+            $this->orderMock->expects($this->once())
+                ->method('getFrontendStatusLabel')
+                ->willReturn($frontendStatusLabel);
+
             $this->invoiceMock->expects($this->once())
                 ->method('getCustomerNoteNotify')
                 ->willReturn($customerNoteNotify);
@@ -135,7 +154,13 @@ class InvoiceSenderTest extends AbstractSenderTest
                         'payment_html' => 'payment',
                         'store' => $this->storeMock,
                         'formattedShippingAddress' => $address,
-                        'formattedBillingAddress' => $address
+                        'formattedBillingAddress' => $address,
+                        'order_data' => [
+                            'customer_name' => $customerName,
+                            'is_not_virtual' => $isNotVirtual,
+                            'email_customer_note' => '',
+                            'frontend_status_label' => $frontendStatusLabel
+                        ]
                     ]
                 );
 
@@ -144,6 +169,10 @@ class InvoiceSenderTest extends AbstractSenderTest
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $this->identityContainerMock->expects($this->once())
+                    ->method('getCopyMethod')
+                    ->willReturn('copy');
+
                 $this->senderBuilderFactoryMock->expects($this->once())
                     ->method('create')
                     ->willReturn($this->senderMock);
@@ -212,6 +241,9 @@ class InvoiceSenderTest extends AbstractSenderTest
     {
         $billingAddress = 'address_test';
         $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $customerName = 'Test Customer';
+        $frontendStatusLabel = 'Complete';
+        $isNotVirtual = false;
 
         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
@@ -234,6 +266,21 @@ class InvoiceSenderTest extends AbstractSenderTest
         $this->invoiceMock->expects($this->once())
             ->method('getCustomerNoteNotify')
             ->willReturn(false);
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($customerName);
+
+        $this->orderMock->expects($this->once())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
+
+        $this->orderMock->expects($this->once())
+            ->method('getEmailCustomerNote')
+            ->willReturn('');
+
+        $this->orderMock->expects($this->once())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($frontendStatusLabel);
 
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
@@ -246,7 +293,13 @@ class InvoiceSenderTest extends AbstractSenderTest
                     'payment_html' => 'payment',
                     'store' => $this->storeMock,
                     'formattedShippingAddress' => $expectedShippingAddress,
-                    'formattedBillingAddress' => $billingAddress
+                    'formattedBillingAddress' => $billingAddress,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'is_not_virtual' => false,
+                        'email_customer_note' => '',
+                        'frontend_status_label' => $frontendStatusLabel
+                    ]
                 ]
             );
 

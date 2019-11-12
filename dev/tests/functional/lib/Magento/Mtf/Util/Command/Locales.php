@@ -7,6 +7,7 @@ namespace Magento\Mtf\Util\Command;
 
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
  * Returns array of locales depends on fetching type.
@@ -26,7 +27,7 @@ class Locales
     /**
      * Url to locales.php.
      */
-    const URL = 'dev/tests/functional/utils/locales.php';
+    const URL = '/dev/tests/functional/utils/locales.php';
 
     /**
      * Curl transport protocol.
@@ -36,11 +37,20 @@ class Locales
     private $transport;
 
     /**
-     * @param CurlTransport $transport Curl transport protocol
+     * Webapi handler.
+     *
+     * @var WebapiDecorator
      */
-    public function __construct(CurlTransport $transport)
+    private $webapiHandler;
+
+    /**
+     * @param CurlTransport $transport Curl transport protocol
+     * @param WebapiDecorator $webapiHandler
+     */
+    public function __construct(CurlTransport $transport, WebapiDecorator $webapiHandler)
     {
         $this->transport = $transport;
+        $this->webapiHandler = $webapiHandler;
     }
 
     /**
@@ -51,12 +61,28 @@ class Locales
      */
     public function getList($type = self::TYPE_ALL)
     {
-        $url = $_ENV['app_frontend_url'] . self::URL . '?type=' . $type;
-        $curl = $this->transport;
-        $curl->write($url, [], CurlInterface::GET);
-        $result = $curl->read();
-        $curl->close();
-
+        $this->transport->write(
+            rtrim(str_replace('index.php', '', $_ENV['app_frontend_url']), '/') . self::URL,
+            $this->prepareParamArray($type),
+            CurlInterface::POST,
+            []
+        );
+        $result = $this->transport->read();
+        $this->transport->close();
         return explode('|', $result);
+    }
+
+    /**
+     * Prepare parameter array.
+     *
+     * @param string $type
+     * @return array
+     */
+    private function prepareParamArray($type)
+    {
+        return [
+            'token' => urlencode($this->webapiHandler->getWebapiToken()),
+            'type' => urlencode($type)
+        ];
     }
 }

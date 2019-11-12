@@ -17,7 +17,7 @@
         <element name="AddTrackingNumber" type="button" selector="#tracking_numbers_table tfoot [data-ui-id='shipment-tracking-add-button']"/>
         <element name="Carrier" type="select" selector="#tracking_numbers_table tr:nth-of-type({{row}}) .col-carrier select" parameterized="true"/>
         <element name="Title" type="input" selector="#tracking_numbers_table tr:nth-of-type({{row}}) .col-title input" parameterized="true"/>
-        <element name="Number" type="input" selector="#tracking_numbers_table tr:nth-of-type({{row}} .col-number input)" parameterized="true"/>
+        <element name="Number" type="input" selector="#tracking_numbers_table tr:nth-of-type({{row}}) .col-number input" parameterized="true"/>
         <element name="Delete" type="button" selector="#tracking_numbers_table tr:nth-of-type({{row}} .col-delete button.action-delete)" parameterized="true"/>
     </section>
 </sections>

@@ -10,23 +10,23 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.1.3||~7.2.0",
+        "php": "~7.1.3||~7.2.0||~7.3.0",
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
+        "ext-intl": "*",
         "ext-openssl": "*",
         "ext-simplexml": "*",
-        "ext-spl": "*",
         "ext-xsl": "*",
         "ext-bcmath": "*",
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.6",
-        "magento/zendframework1": "~1.14.0",
+        "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
-        "oyejorge/less.php": "~1.7.0",
+        "wikimedia/less.php": "~1.8.0",
         "symfony/console": "~4.1.0",
         "symfony/process": "~4.1.0",
         "tedivm/jshrink": "~1.3.0",
@@ -34,9 +34,12 @@
         "zendframework/zend-crypt": "^2.6.0",
         "zendframework/zend-http": "^2.6.0",
         "zendframework/zend-mvc": "~2.7.0",
-        "zendframework/zend-stdlib": "^2.7.7",
+        "zendframework/zend-stdlib": "^3.2.1",
         "zendframework/zend-uri": "^2.5.1",
-        "zendframework/zend-validator": "^2.6.0"
+        "zendframework/zend-validator": "^2.6.0",
+        "zendframework/zend-mail": "^2.9.0",
+        "zendframework/zend-mime": "^2.5.0",
+        "guzzlehttp/guzzle": "^6.3.3"
     },
     "archive": {
         "exclude": [

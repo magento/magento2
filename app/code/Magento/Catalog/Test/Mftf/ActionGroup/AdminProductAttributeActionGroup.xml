@@ -9,33 +9,45 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="navigateToCreatedProductAttribute">
+        <annotations>
+            <description>Goes to the Product Attributes grid page. Filters the grid based on the provided Product Attribute. Clicks on the 1st row.</description>
+        </annotations>
         <arguments>
             <argument name="ProductAttribute"/>
         </arguments>
+
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
-        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}"
-                   userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
+
     <actionGroup name="navigateToEditProductAttribute">
+        <annotations>
+            <description>Goes to the Product Attributes grid page. Filters the grid based on the provided Product Attribute. Clicks on the 1st row.</description>
+        </annotations>
         <arguments>
             <argument name="ProductAttribute" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
-        <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="{{ProductAttribute}}" stepKey="navigateToAttributeEditPage1" />
-        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="navigateToAttributeEditPage2" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
-        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="navigateToAttributeEditPage3" />
-        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="{{ProductAttribute}}" stepKey="navigateToAttributeEditPage1"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="navigateToAttributeEditPage2"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="navigateToAttributeEditPage3"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
     </actionGroup>
 
     <actionGroup name="AdminCreateAttributeFromProductPage">
+        <annotations>
+            <description>From the Product creation/edit page, under 'Configurations', Clicks on 'Create Configurations'. Clicks on 'Create New Attribute'. Fills Label. Selects Type. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="attributeType" type="string" defaultValue="TextField"/>
         </arguments>
+
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
         <see userInput="Select Attribute" stepKey="checkNewAttributePopUpAppeared"/>
         <click selector="{{AdminProductFormAttributeSection.createNewAttribute}}" stepKey="clickCreateNewAttribute"/>
@@ -43,13 +55,24 @@
         <selectOption selector="{{AdminProductFormNewAttributeSection.attributeType}}" userInput="{{attributeType}}" stepKey="selectAttributeType"/>
         <click selector="{{AdminProductFormNewAttributeSection.saveAttribute}}" stepKey="saveAttribute"/>
     </actionGroup>
+    <actionGroup name="AdminCreateAttributeFromProductPageWithScope" extends="AdminCreateAttributeFromProductPage" insertAfter="selectAttributeType">
+        <arguments>
+            <argument name="scope" type="string" defaultValue="Store View"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductFormNewAttributeAdvancedSection.sectionHeader}}" dependentSelector="{{AdminProductFormNewAttributeAdvancedSection.scope}}" visible="false" stepKey="openAttributeAdvancedSection"/>
+        <selectOption selector="{{AdminProductFormNewAttributeAdvancedSection.scope}}" userInput="{{scope}}" stepKey="selectScope"/>
+    </actionGroup>
 
     <actionGroup name="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPage" extends="AdminCreateAttributeFromProductPage">
         <remove keyForRemoval="saveAttribute"/>
+        <annotations>
+            <description>EXTENDS: AdminCreateAttributeFromProductPage. Adds the 2 provided Store Views to a Product. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="firstStoreViewName" type="string"/>
             <argument name="secondStoreViewName" type="string"/>
         </arguments>
+
         <click selector="{{AdminProductFormNewAttributeSection.addValue}}" stepKey="addValue" after="selectAttributeType"/>
         <seeElement selector="{{AdminProductFormNewAttributeSection.optionViewName(firstStoreViewName))}}" stepKey="seeFirstStoreView"/>
         <seeElement selector="{{AdminProductFormNewAttributeSection.optionViewName(firstStoreViewName))}}" stepKey="seeSecondStoreView"/>
@@ -67,11 +90,15 @@
 
     <!-- Creates attribute and attribute set from the product page-->
     <actionGroup name="AdminProductPageCreateAttributeSetWithAttribute">
+        <annotations>
+            <description>Adds the provided Product Attribute Set to a Product on the Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="attributeSetName" type="string"/>
             <argument name="attributeType" type="string" defaultValue="TextField"/>
         </arguments>
+
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
         <waitForPageLoad stepKey="waitForSidePanel"/>
         <see userInput="Select Attribute" stepKey="checkNewAttributePopUpAppeared"/>
@@ -89,10 +116,14 @@
 
     <!-- Create attribute and set with given search weight and defaultValue from the Edit Product Page -->
     <actionGroup name="AdminCreateAttributeWithSearchWeight" extends="AdminProductPageCreateAttributeSetWithAttribute" insertAfter="selectAttributeType">
+        <annotations>
+            <description>EXTENDS: AdminProductPageCreateAttributeSetWithAttribute. Sets the provided Search Weight and Default Values.</description>
+        </annotations>
         <arguments>
             <argument name="weight" type="string" defaultValue="1"/>
             <argument name="defaultValue" type="string" defaultValue="default"/>
         </arguments>
+
         <click selector="{{AdminProductFormNewAttributeAdvancedSection.sectionHeader}}" stepKey="openAdvancedSection"/>
         <fillField selector="{{AdminProductFormNewAttributeAdvancedSection.defaultValue}}" userInput="{{defaultValue}}" stepKey="inputDefault"/>
         <click selector="{{AdminProductFormNewAttributeStorefrontSection.sectionHeader}}" stepKey="openStorefrontSection"/>
@@ -102,44 +133,65 @@
     </actionGroup>
     
     <actionGroup name="AdminProductPageSelectAttributeSet">
+        <annotations>
+            <description>Selects the provided Attribute Set from the Admin Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeSetName" type="string"/>
         </arguments>
+
         <click stepKey="openDropdown" selector="{{AdminProductFormSection.attributeSet}}"/>
         <fillField stepKey="filter" selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{attributeSetName}}"/>
         <click stepKey="clickResult" selector="{{AdminProductFormSection.attributeSetFilterResult}}"/>
     </actionGroup>
 
     <actionGroup name="AdminProductPageFillTextAttributeValueByName">
+        <annotations>
+            <description>Fills in the Attribute Name field with the provided value.</description>
+        </annotations>
         <arguments>
             <argument name="attributeName" type="string"/>
             <argument name="value" type="string"/>
         </arguments>
+
         <click stepKey="openSection" selector="{{AdminProductAttributeSection.attributeSectionHeader}}"/>
         <fillField stepKey="fillValue" selector="{{AdminProductAttributeSection.textAttributeByName(attributeName)}}" userInput="{{value}}"/>
     </actionGroup>
 
     <actionGroup name="changeUseForPromoRuleConditionsProductAttribute">
+        <annotations>
+            <description>Select the provided value for the 'Use for Promo Rule Conditions' dropdown menu. Clicks on Save. Validates that the Save message is present.</description>
+        </annotations>
         <arguments>
             <argument name="option" type="string"/>
         </arguments>
+        
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{option}}" stepKey="changeOption"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="successMessage"/>
     </actionGroup>
+
     <actionGroup name="deleteProductAttribute" extends="navigateToCreatedProductAttribute">
+        <annotations>
+            <description>EXTENDS: navigateToCreatedProductAttribute. Deletes the Product Attribute. Validates that the success message is present.</description>
+        </annotations>
+        
         <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
-                    stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
+
     <actionGroup name="deleteProductAttributeByLabel">
+        <annotations>
+            <description>Goes to the Admin Product Attributes grid page. Filters the grid for the provided Product Attribute (Label). Deletes the Product Attribute from the grid. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="ProductAttribute"/>
         </arguments>
+
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttribute.default_label}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
@@ -150,53 +202,84 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
+
     <!-- Delete product attribute by Attribute Code -->
     <actionGroup name="deleteProductAttributeByAttributeCode">
+        <annotations>
+            <description>Goes to the Admin Product Attributes grid page. Filters the grid for the provided Product Attribute Code. Deletes the Product Attribute from the grid. Validates that the Success Message is present.</description>
+        </annotations>
         <arguments>
             <argument name="ProductAttributeCode" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <waitForPageLoad stepKey="waitForAttributeGridPageLoad"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
         <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
+
     <!--Filter product attribute by Attribute Code -->
     <actionGroup name="filterProductAttributeByAttributeCode">
+        <annotations>
+            <description>Filters the Product Attributes grid by the provided Product Attribute Code.</description>
+        </annotations>
         <arguments>
             <argument name="ProductAttributeCode" type="string"/>
         </arguments>
+
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
         <waitForPageLoad stepKey="waitForUserInput"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
     </actionGroup>
+
     <!--Filter product attribute by Default Label -->
     <actionGroup name="filterProductAttributeByDefaultLabel">
+        <annotations>
+            <description>Filters the Product Attributes grid by the provided Product Attribute Label.</description>
+        </annotations>
         <arguments>
             <argument name="productAttributeLabel" type="string"/>
         </arguments>
+
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="{{productAttributeLabel}}" stepKey="setDefaultLabel"/>
         <waitForPageLoad stepKey="waitForUserInput"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
     </actionGroup>
+
     <actionGroup name="saveProductAttribute">
+        <annotations>
+            <description>Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
     </actionGroup>
+
     <actionGroup name="confirmChangeInputTypeModal">
+        <annotations>
+            <description>Clicks on the Confirm button for the 'Product Data My Be Lost' modal.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{AdminEditProductAttributesSection.ProductDataMayBeLostConfirmButton}}" stepKey="waitForChangeInputTypeButton"/>
         <click selector="{{AdminEditProductAttributesSection.ProductDataMayBeLostConfirmButton}}" stepKey="clickChangeInputTypeButton"/>
         <waitForElementNotVisible selector="{{AdminEditProductAttributesSection.ProductDataMayBeLostModal}}" stepKey="waitForChangeInputTypeModalGone"/>
     </actionGroup>
+
     <actionGroup name="saveProductAttributeInUse">
+        <annotations>
+            <description>Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
+
         <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
@@ -205,9 +288,13 @@
 
     <!--Clicks Add Attribute and adds the given attribute-->
     <actionGroup name="addProductAttributeInProductModal">
+        <annotations>
+            <description>Adds the provided Attribute Code to the Product on the Admin Product creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="attributeCode" type="string"/>
         </arguments>
+
         <click stepKey="addAttribute" selector="{{AdminProductFormActionSection.addAttributeButton}}"/>
         <conditionalClick selector="{{AdminProductAddAttributeModalSection.clearFilters}}" dependentSelector="{{AdminProductAddAttributeModalSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
         <click stepKey="clickFilters" selector="{{AdminProductAddAttributeModalSection.filters}}"/>
@@ -220,18 +307,31 @@
 
     <!--Clicks createNewAttribute and fills out form-->
     <actionGroup name="createProductAttribute">
+        <annotations>
+            <description>Clicks on 'Add New Attribute'. Fills in the Attribute Details (Label, Input Type and Value Required). Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="attribute" type="entity" defaultValue="productAttributeWysiwyg"/>
         </arguments>
+
         <click stepKey="createNewAttribute" selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}"/>
         <fillField stepKey="fillDefaultLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attribute.attribute_code}}"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}" stepKey="checkInputType" userInput="{{attribute.frontend_input}}"/>
         <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" stepKey="checkRequired" userInput="{{attribute.is_required_admin}}"/>
         <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
     </actionGroup>
+    <actionGroup name="AdminCreateSearchableProductAttribute" extends="createProductAttribute" insertAfter="checkRequired">
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{StorefrontPropertiesSection.PageTitle}}" stepKey="waitTabLoad"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="setSearchable"/>
+    </actionGroup>
 
     <!-- Inputs text default value and attribute code-->
     <actionGroup name="createProductAttributeWithTextField" extends="createProductAttribute" insertAfter="checkRequired">
+        <annotations>
+            <description>EXTENDS: createProductAttribute. Fills in the Attribute Code and Default Value (Attribute Type: Text Field).</description>
+        </annotations>
+
         <click stepKey="openAdvancedProperties" selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"/>
         <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
         <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueText}}" userInput="{{attribute.default_value}}"/>
@@ -239,9 +339,13 @@
 
     <!-- Inputs date default value and attribute code-->
     <actionGroup name="createProductAttributeWithDateField" extends="createProductAttribute" insertAfter="checkRequired">
+        <annotations>
+            <description>EXTENDS: createProductAttribute. Fills in the Attribute Code and Default Value (Attribute Type: Date Field).</description>
+        </annotations>
         <arguments>
             <argument name="date" type="string"/>
         </arguments>
+
         <click stepKey="openAdvancedProperties" selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}"/>
         <fillField stepKey="fillCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attribute.attribute_code}}"/>
         <fillField stepKey="fillDefaultValue" selector="{{AdvancedAttributePropertiesSection.DefaultValueDate}}" userInput="{{date}}"/>
@@ -249,11 +353,15 @@
 
     <!-- Creates dropdown option at row without saving-->
     <actionGroup name="createAttributeDropdownNthOption">
+        <annotations>
+            <description>Creates an Option for a Product Attribute (Attribute Type: Dropdown).</description>
+        </annotations>
         <arguments>
             <argument name="row" type="string"/>
             <argument name="adminName" type="string"/>
             <argument name="frontName" type="string"/>
         </arguments>
+
         <click stepKey="clickAddOptions" selector="{{AttributePropertiesSection.dropdownAddOptions}}"/>
         <waitForPageLoad stepKey="waitForNewOption"/>
         <fillField stepKey="fillAdmin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin(row)}}" userInput="{{adminName}}"/>
@@ -262,6 +370,10 @@
 
     <!-- Creates dropdown option at row as default-->
     <actionGroup name="createAttributeDropdownNthOptionAsDefault" extends="createAttributeDropdownNthOption">
+        <annotations>
+            <description>EXTENDS: createAttributeDropdownNthOption. Checks the 'Is Default' option.</description>
+        </annotations>
+
         <checkOption selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault(row)}}" stepKey="setAsDefault" after="fillStoreView"/>
     </actionGroup>
 </actionGroups>

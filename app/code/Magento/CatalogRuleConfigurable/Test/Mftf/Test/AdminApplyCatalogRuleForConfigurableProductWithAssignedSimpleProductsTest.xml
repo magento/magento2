@@ -17,6 +17,9 @@
             <testCaseId value="MC-14063"/>
             <group value="catalogRuleConfigurable"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-17140"/>
+            </skip>
         </annotations>
         <before>
             <!-- Create category for first configurable product -->

@@ -212,7 +212,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing.
+     * @expectedExceptionMessage Field UpdateCartItemsInput.cart_id of required type String! was not provided.
      */
     public function testUpdateWithMissedCartItemId()
     {
@@ -277,15 +277,15 @@ QUERY;
         return [
             'missed_cart_items' => [
                 '',
-                'Required parameter "cart_items" is missing.'
+                'Field UpdateCartItemsInput.cart_items of required type [CartItemUpdateInput]! was not provided.'
             ],
             'missed_cart_item_id' => [
                 'cart_items: [{ quantity: 2 }]',
-                'Required parameter "cart_item_id" for "cart_items" is missing.'
+                'Field CartItemUpdateInput.cart_item_id of required type Int! was not provided.'
             ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
-                'Field CartItemUpdateInput.quantity of required type Float! was not provided.'
+                'Required parameter "quantity" for "cart_items" is missing.'
             ],
         ];
     }

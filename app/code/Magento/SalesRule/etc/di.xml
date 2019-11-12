@@ -13,7 +13,7 @@
     <preference for="Magento\SalesRule\Api\Data\ConditionInterface"
                 type="Magento\SalesRule\Model\Data\Condition" />
     <preference for="Magento\SalesRule\Api\Data\RuleSearchResultInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\SalesRule\Model\RuleSearchResult" />
     <preference for="Magento\SalesRule\Api\Data\RuleLabelInterface"
                 type="Magento\SalesRule\Model\Data\RuleLabel" />
     <preference for="Magento\SalesRule\Api\Data\CouponInterface"
@@ -23,13 +23,17 @@
     <preference for="Magento\SalesRule\Model\Spi\CouponResourceInterface"
                 type="Magento\SalesRule\Model\ResourceModel\Coupon" />
     <preference for="Magento\SalesRule\Api\Data\CouponSearchResultInterface"
-                type="Magento\Framework\Api\SearchResults" />
+                type="Magento\SalesRule\Model\CouponSearchResult" />
     <preference for="Magento\SalesRule\Api\Data\CouponGenerationSpecInterface"
                 type="Magento\SalesRule\Model\Data\CouponGenerationSpec" />
     <preference for="Magento\SalesRule\Api\Data\CouponMassDeleteResultInterface"
                 type="Magento\SalesRule\Model\Data\CouponMassDeleteResult" />
     <preference for="Magento\SalesRule\Api\CouponManagementInterface"
                 type="Magento\SalesRule\Model\Service\CouponManagementService" />
+    <preference for="Magento\SalesRule\Api\Data\RuleDiscountInterface"
+                type="Magento\SalesRule\Model\Data\RuleDiscount" />
+    <preference for="Magento\SalesRule\Api\Data\DiscountDataInterface"
+                type="Magento\SalesRule\Model\Data\DiscountData" />
     <type name="Magento\SalesRule\Helper\Coupon">
         <arguments>
             <argument name="couponParameters" xsi:type="array">
@@ -178,8 +182,14 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Quote\Model\Cart\CartTotalRepository">
         <plugin name="coupon_label_plugin" type="Magento\SalesRule\Plugin\CartTotalRepository" />
     </type>
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20"/>
+        <plugin name="coupon_uses_decrement_plugin" type="Magento\SalesRule\Plugin\CouponUsagesDecrement" />
+    </type>
+    <preference
+            for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"
+            type="Magento\SalesRule\Model\Coupon\CodeLimitManager" />
 </config>

@@ -5,12 +5,39 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
+use Magento\Config\Model\Config\Backend\Admin\Custom as AdminBackendConfig;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
+    /**
+     * @var Collection
+     */
+    private $collection;
+
+    /**
+     * @var string
+     */
+    private $defaultTimezone;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp()
+    {
+        $scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
+        $this->defaultTimezone = $scopeConfig->getValue(AdminBackendConfig::XML_PATH_GENERAL_LOCALE_TIMEZONE);
+
+        $this->collection = Bootstrap::getObjectManager()->create(Collection::class);
+    }
+
     /**
      * @magentoDataFixture Magento/SalesRule/_files/rules.php
      * @magentoDataFixture Magento/SalesRule/_files/coupons.php
@@ -21,12 +48,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetValidationFilter($couponCode, $expectedItems)
     {
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-        $items = array_values($collection->setValidationFilter(1, 0, $couponCode)->getItems());
-
-        $ids = [];
+        /** @var \Magento\SalesRule\Model\Rule[] $items */
+        $items = array_values($this->collection->setValidationFilter(1, 0, $couponCode)->getItems());
 
         $this->assertEquals(
             count($expectedItems),
@@ -34,6 +57,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'Invalid number of items in the result collection'
         );
 
+        $ids = [];
         foreach ($items as $key => $item) {
             $this->assertEquals($expectedItems[$key], $item->getName());
             $this->assertFalse(
@@ -71,7 +95,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetValidationFilterWithGroup()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\SalesRule\Model\Rule $rule */
         $rule = $objectManager->get(\Magento\Framework\Registry::class)
@@ -82,13 +106,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $quote->load('test_order_item_with_items', 'reserved_order_id');
 
         //gather only the existing rules that obey the validation filter
-        /** @var  \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
-        $ruleCollection = $objectManager->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-
         $appliedRulesArray = array_keys(
-            $ruleCollection->setValidationFilter(
+            $this->collection->setValidationFilter(
                 $quote->getStore()->getWebsiteId(),
                 0,
                 '',
@@ -108,7 +127,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetValidationFilterAnyCategory()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\SalesRule\Model\Rule $rule */
         $rule = $objectManager->get(\Magento\Framework\Registry::class)
@@ -119,13 +138,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $quote->load('test_order_item_with_items', 'reserved_order_id');
 
         //gather only the existing rules that obey the validation filter
-        /** @var  \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
-        $ruleCollection = $objectManager->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-
         $appliedRulesArray = array_keys(
-            $ruleCollection->setValidationFilter(
+            $this->collection->setValidationFilter(
                 $quote->getStore()->getWebsiteId(),
                 0,
                 '',
@@ -146,20 +160,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetValidationFilterOther()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
 
         //gather only the existing rules that obey the validation filter
-        /** @var  \Magento\SalesRule\Model\ResourceModel\Rule\Collection $ruleCollection */
-        $ruleCollection = $objectManager->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-
         $appliedRulesArray = array_keys(
-            $ruleCollection->setValidationFilter(
+            $this->collection->setValidationFilter(
                 $quote->getStore()->getWebsiteId(),
                 0,
                 '',
@@ -181,11 +190,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testMultiRulesWithTimezone()
     {
         $this->setSpecificTimezone('Europe/Kiev');
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-        $collection->addWebsiteGroupDateFilter(1, 0);
-        $items = array_values($collection->getItems());
+        $this->collection->addWebsiteGroupDateFilter(1, 0);
+        $items = array_values($this->collection->getItems());
         $this->assertNotEmpty($items);
     }
 
@@ -200,11 +206,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testMultiRulesWithDifferentTimezone()
     {
         $this->setSpecificTimezone('Australia/Sydney');
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-        $collection->addWebsiteGroupDateFilter(1, 0);
-        $items = array_values($collection->getItems());
+        $this->collection->addWebsiteGroupDateFilter(1, 0);
+        $items = array_values($this->collection->getItems());
         $this->assertNotEmpty($items);
     }
 
@@ -224,7 +227,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Config\Model\Config\Factory::class)
+        Bootstrap::getObjectManager()->get(\Magento\Config\Model\Config\Factory::class)
             ->create()
             ->addData($localeData)
             ->save();
@@ -239,11 +242,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeInConditionFilterPositive()
     {
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-        $collection->addAttributeInConditionFilter('attribute_for_sales_rule_1');
-        $item = $collection->getFirstItem();
+        $this->collection->addAttributeInConditionFilter('attribute_for_sales_rule_1');
+        /** @var \Magento\SalesRule\Model\Rule $item */
+        $item = $this->collection->getFirstItem();
         $this->assertEquals('50% Off on some attribute', $item->getName());
     }
 
@@ -256,16 +257,57 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeInConditionFilterNegative()
     {
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
-        );
-        $collection->addAttributeInConditionFilter('attribute_for_sales_rule_2');
-        $this->assertEquals(0, $collection->count());
+        $this->collection->addAttributeInConditionFilter('attribute_for_sales_rule_2');
+        $this->assertEquals(0, $this->collection->count());
     }
 
-    public function tearDown()
+    /**
+     * @magentoAppIsolation disabled
+     * @magentoDataFixture Magento/SalesRule/_files/multi_websites_rules.php
+     * @dataProvider addWebsiteFilterDataProvider
+     * @param string[] $websiteCodes
+     * @param int $count
+     */
+    public function testAddWebsiteFilter(array $websiteCodes, int $count)
+    {
+        $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepositoryInterface::class);
+        $websiteIds = [];
+        foreach ($websiteCodes as $websiteCode) {
+            $websiteIds[] = (int) $websiteRepository->get($websiteCode)->getId();
+        }
+
+        $this->collection->addWebsiteFilter($websiteIds);
+        $this->assertEquals($count, $this->collection->getSize());
+        $this->assertCount($count, $this->collection->getItems());
+    }
+
+    /**
+     * @return array
+     */
+    public function addWebsiteFilterDataProvider(): array
+    {
+        return [
+            [
+                ['base'],
+                4,
+            ],
+            [
+                ['test'],
+                2,
+            ],
+            [
+                ['base', 'test'],
+                5,
+            ],
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
     {
         // restore default timezone
-        $this->setSpecificTimezone('America/Los_Angeles');
+        $this->setSpecificTimezone($this->defaultTimezone);
     }
 }

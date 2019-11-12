@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateUrlOnGetVideoInformationTest">
+        <annotations>
+            <stories value="Admin validates the url when getting video information"/>
+            <title value="Admin validates the url when getting video information"/>
+            <description value="Testing for a required video url when getting video information"/>
+            <severity value="CRITICAL"/>
+            <group value="ProductVideo"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig"/>
+        </before>
+        <after>
+            <createData entity="DefaultProductVideoConfig" stepKey="setStoreDefaultConfig"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenProductVideoModalActionGroup" stepKey="openAddProductVideoModal"/>
+        <actionGroup ref="AdminGetVideoInformationActionGroup" stepKey="clickOnGetVideoInformation"/>
+        <actionGroup ref="AssertAdminVideoValidationErrorActionGroup" stepKey="seeUrlValidationMessage">
+            <argument name="inputName" value="video_url"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductVideoFieldActionGroup" stepKey="fillVideoUrlField">
+            <argument name="input" value="{{AdminProductNewVideoSection.videoUrlTextField}}"/>
+            <argument name="value" value="{{mftfTestProductVideo.videoUrl}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminGetVideoInformationActionGroup" stepKey="clickOnGetVideoInformation2"/>
+        <actionGroup ref="AdminAssertVideoNoValidationErrorActionGroup" stepKey="dontSeeUrlValidationMessage">
+            <argument name="inputName" value="video_url"/>
+        </actionGroup>
+    </test>
+</tests>

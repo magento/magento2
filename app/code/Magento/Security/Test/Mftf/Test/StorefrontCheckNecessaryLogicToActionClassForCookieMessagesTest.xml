@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckNecessaryLogicToActionClassForCookieMessagesTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Check necessary logic to action class for cookie messages"/>
+            <title value="Storefront check necessary logic to action class for cookie messages test"/>
+            <description value="Check necessary logic to action class for cookie messages"/>
+            <testCaseId value="MC-6141" />
+            <severity value="CRITICAL"/>
+            <group value="security"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login to application -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Open 'My Account' page and click 'Edit; link -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+        <click selector="{{StorefrontCustomerDashboardAccountInformationSection.editLink}}" stepKey="clickEditContactInformation"/>
+
+        <!-- Mark as checked 'Change email' check-box. Assert 2 labels under 'Change Email' block -->
+        <checkOption selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox"/>
+        <seeElement selector="{{StorefrontCustomerAccountInformationSection.email}}" stepKey="seeEmailField"/>
+        <seeElement selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" stepKey="seeCurrentPasswordField"/>
+
+        <!-- Change email attribute 'type' from email to text and type script after email address. Click 'Save' button -->
+        <executeJS function="document.querySelector('{{StorefrontCustomerAccountInformationSection.emailField}}').setAttribute('type', 'text');" stepKey="changeAttributeFromEmailToText"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.email}}" userInput="$$createCustomer.email$$&lt;script&gt;alert('Hello')&lt;/script&gt;" stepKey="fillEmailWithScript"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="clickSave"/>
+
+        <!-- Assert error messages for email and password fields -->
+        <dontSee selector="{{StorefrontCustomerAccountInformationSection.emailErrorMessage}}" userInput="Please enter a valid email address." stepKey="dontSeeEmailErrorMessage"/>
+        <see selector="{{StorefrontCustomerAccountInformationSection.currentPasswordErrorMessage}}" userInput="This is a required field." stepKey="seeErrorPasswordMessage"/>
+
+        <!-- Fill password and click 'Save' button -->
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.currentPassword}}" userInput="$$createCustomer.password$$" stepKey="fillCurrentPassword"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChanges"/>
+
+        <!-- Throw validation error message (server side validation) with escaped customer input -->
+        <see selector="{{StorefrontCustomerAccountMainSection.alertMessage}}" userInput="&quot;Email&quot; is not a valid hostname. 'example.com&lt;script&gt;alert('Hello')&lt;/script&gt;' looks like a DNS hostname but we cannot match it against the hostname schema for TLD 'com&lt;script&gt;alert('Hello')&lt;/script&gt;'. 'example.com&lt;script&gt;alert('Hello')&lt;/script&gt;' does not look like a valid local network name." stepKey="seeValidationErrorMessage"/>
+    </test>
+</tests>
