@@ -26,6 +26,8 @@
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
             <actionGroup ref="SetTaxClassForShipping" stepKey="setShippingTaxClass"/>
+
+            <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
         </before>
         <after>
             <actionGroup ref="ResetTaxClassForShipping" stepKey="resetTaxClassForShipping"/>
