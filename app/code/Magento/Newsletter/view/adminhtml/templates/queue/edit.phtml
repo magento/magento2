@@ -48,9 +48,9 @@ queueControl = {
     id: 'text',
     preview: function() {
         if (this.isEditor() && wysiwyg.get(this.id)) {
-            wysiwyg.triggerSave();
+            tinyMCE.triggerSave();
             $('preview_text').value = wysiwyg.get(this.id).getContent();
-            wysiwyg.triggerSave();
+            tinyMCE.triggerSave();
         } else {
             $('preview_text').value = $(this.id).value;
         }
