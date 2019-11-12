@@ -100,7 +100,7 @@ class ImagesResizeCommand extends Command
         return [
             new InputOption(
                 self::ASYNC_RESIZE,
-                '-a',
+                'a',
                 InputOption::VALUE_NONE,
                 'Resize image in asynchronous mode'
             ),
