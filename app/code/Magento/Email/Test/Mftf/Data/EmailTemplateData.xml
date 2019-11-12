@@ -17,6 +17,6 @@
         <data key="templateName" unique="suffix">Template</data>
         <data key="templateSubject" unique="suffix">Template Subject_</data>
         <data key="templateText">Template {{var this.template_id}}{{var this.getData(template_id)}} Text</data>
-        <data key="expectedText">Template 123 Text</data>
+        <data key="expectedTemplate">Template 123 Text</data>
     </entity>
 </entities>
