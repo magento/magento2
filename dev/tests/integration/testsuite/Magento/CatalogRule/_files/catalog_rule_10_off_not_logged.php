@@ -31,3 +31,4 @@ $catalogRule
 $indexBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
 $indexBuilder->reindexFull();
+sleep(1);
