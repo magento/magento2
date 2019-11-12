@@ -87,22 +87,6 @@ class BulkStatus implements \Magento\Framework\Bulk\BulkStatusInterface
      */
     public function getOperationsCountByBulkIdAndStatus($bulkUuid, $status)
     {
-        if ($status === OperationInterface::STATUS_TYPE_OPEN) {
-            /**
-             * Total number of operations that has been scheduled within the given bulk
-             */
-            $allOperationsQty = $this->getOperationCount($bulkUuid);
-
-            /**
-             * Number of operations that has been processed (i.e. operations with any status but 'open')
-             */
-            $allProcessedOperationsQty = (int)$this->operationCollectionFactory->create()
-                ->addFieldToFilter('bulk_uuid', $bulkUuid)
-                ->getSize();
-
-            return $allOperationsQty - $allProcessedOperationsQty;
-        }
-
         /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection $collection */
         $collection = $this->operationCollectionFactory->create();
         return $collection->addFieldToFilter('bulk_uuid', $bulkUuid)
