@@ -211,7 +211,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                     ->disableOriginalConstructor()
                     ->getMock(),
         ];
-
     }
 
     /**
