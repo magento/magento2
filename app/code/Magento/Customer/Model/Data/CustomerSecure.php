@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -17,6 +18,9 @@ namespace Magento\Customer\Model\Data;
  * @method setRpTokenCreatedAt(string $rpTokenCreatedAt)
  * @method setPasswordHash(string $hashedPassword)
  * @method setDeleteable(bool $deleteable)
+ * @method setFailuresNum(int $failureNum)
+ * @method setFirstFailure(?string $firstFailure)
+ * @method setLockExpires(?string $lockExpires)
  */
 class CustomerSecure extends \Magento\Framework\DataObject
 {

@@ -6,9 +6,11 @@
 
 namespace Magento\Customer\Model\ResourceModel;
 
+use Exception;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerSearchResultsInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\NotificationStorage;
@@ -17,6 +19,7 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Customer\Model\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -26,6 +29,10 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -174,14 +181,15 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Create or update a customer.
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param CustomerInterface $customer
      * @param string $passwordHash
-     * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\InputException If bad input is provided
-     * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return CustomerInterface
+     * @throws InputException If bad input is provided
+     * @throws InputMismatchException If the provided email is already used
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
@@ -237,7 +245,7 @@ class CustomerRepository implements CustomerRepositoryInterface
             $customerModel->setDefaultShipping($prevCustomerDataArr['default_shipping']);
         }
         $this->setValidationFlag($customerArr, $customerModel);
-        $customerModel->save();
+        $this->customerResourceModel->save($customerModel);
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
         if (!$customer->getAddresses()
@@ -286,10 +294,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Set secure data to customer model
      *
-     * @param \Magento\Customer\Model\Customer $customerModel
+     * @param CustomerModel $customerModel
      * @param string|null $passwordHash
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return void
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function populateCustomerWithSecureData($customerModel, $passwordHash = null)
     {
@@ -317,9 +326,9 @@ class CustomerRepository implements CustomerRepositoryInterface
      *
      * @param string $email
      * @param int|null $websiteId
-     * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified email does not exist.
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return CustomerInterface
+     * @throws NoSuchEntityException If customer with the specified email does not exist.
+     * @throws LocalizedException
      */
     public function get($email, $websiteId = null)
     {
@@ -331,9 +340,9 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Get customer by Customer ID.
      *
      * @param int $customerId
-     * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return CustomerInterface
+     * @throws NoSuchEntityException If customer with the specified ID does not exist.
+     * @throws LocalizedException
      */
     public function getById($customerId)
     {
@@ -348,15 +357,15 @@ class CustomerRepository implements CustomerRepositoryInterface
      * included. See https://devdocs.magento.com/codelinks/attributes.html#CustomerRepositoryInterface to determine
      * which call to use to get detailed information about all attributes for an object.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return CustomerSearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
-        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
+        /** @var Collection $collection */
         $collection = $this->customerFactory->create()->getCollection();
         $this->extensionAttributesJoinProcessor->process(
             $collection,
@@ -381,7 +390,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $searchResults->setTotalCount($collection->getSize());
 
         $customers = [];
-        /** @var \Magento\Customer\Model\Customer $customerModel */
+        /** @var CustomerModel $customerModel */
         foreach ($collection as $customerModel) {
             $customers[] = $customerModel->getDataModel();
         }
@@ -392,9 +401,9 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Delete customer.
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param CustomerInterface $customer
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function delete(CustomerInterface $customer)
     {
@@ -406,13 +415,14 @@ class CustomerRepository implements CustomerRepositoryInterface
      *
      * @param int $customerId
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     * @throws Exception
      */
     public function deleteById($customerId)
     {
         $customerModel = $this->customerRegistry->retrieve($customerId);
-        $customerModel->delete();
+        $this->customerResourceModel->delete($customerModel);
         $this->customerRegistry->remove($customerId);
         $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
 
@@ -443,7 +453,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Set ignore_validation_flag to skip model validation
      *
      * @param array $customerArray
-     * @param Customer $customerModel
+     * @param CustomerModel $customerModel
      * @return void
      */
     private function setValidationFlag($customerArray, $customerModel)

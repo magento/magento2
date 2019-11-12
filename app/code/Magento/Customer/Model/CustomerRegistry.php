@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,11 +9,16 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\ResourceModel\CustomerFactory as CustomerResourceFactory;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
+ *
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class CustomerRegistry
 {
@@ -49,20 +55,29 @@ class CustomerRegistry
     private $storeManager;
 
     /**
+     * @var CustomerResourceFactory
+     */
+    private $customerResourceFactory;
+
+    /**
      * Constructor
      *
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
      * @param StoreManagerInterface $storeManager
+     * @param CustomerResourceFactory $customerResourceFactory
      */
     public function __construct(
         CustomerFactory $customerFactory,
         CustomerSecureFactory $customerSecureFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CustomerResourceFactory $customerResourceFactory = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
         $this->storeManager = $storeManager;
+        $this->customerResourceFactory = $customerResourceFactory
+            ?? ObjectManager::getInstance()->get(CustomerResourceFactory::class);
     }
 
     /**
@@ -77,8 +92,9 @@ class CustomerRegistry
         if (isset($this->customerRegistryById[$customerId])) {
             return $this->customerRegistryById[$customerId];
         }
-        /** @var Customer $customer */
-        $customer = $this->customerFactory->create()->load($customerId);
+        $customer = $this->customerFactory->create();
+        $this->customerResourceFactory->create()
+            ->load($customer, $customerId);
         if (!$customer->getId()) {
             // customer does not exist
             throw NoSuchEntityException::singleField('customerId', $customerId);
@@ -97,6 +113,7 @@ class CustomerRegistry
      * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
      * @return Customer
      * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
@@ -108,7 +125,6 @@ class CustomerRegistry
             return $this->customerRegistryByEmail[$emailKey];
         }
 
-        /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
         if (isset($websiteId)) {
@@ -148,9 +164,9 @@ class CustomerRegistry
         if (isset($this->customerSecureRegistryById[$customerId])) {
             return $this->customerSecureRegistryById[$customerId];
         }
-        /** @var Customer $customer */
+        /** @var CustomerResourceFactory $customer */
         $customer = $this->retrieve($customerId);
-        /** @var $customerSecure CustomerSecure*/
+        /** @var $customerSecure CustomerSecure */
         $customerSecure = $this->customerSecureFactory->create();
         $customerSecure->setPasswordHash($customer->getPasswordHash());
         $customerSecure->setRpToken($customer->getRpToken());
@@ -188,6 +204,7 @@ class CustomerRegistry
      * @param string $customerEmail Customers email address
      * @param string|null $websiteId Optional website ID, if not set, will use the current websiteId
      * @return void
+     * @throws NoSuchEntityException
      */
     public function removeByEmail($customerEmail, $websiteId = null)
     {
