@@ -149,4 +149,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Catalog\Helper\Data">
+        <arguments>
+            <argument name="templateFilterModel" xsi:type="string">Magento\Widget\Model\Template\FilterEmulate</argument>
+        </arguments>
+    </type>
 </config>
