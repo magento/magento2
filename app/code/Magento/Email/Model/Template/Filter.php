@@ -8,6 +8,7 @@ namespace Magento\Email\Model\Template;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 
@@ -50,6 +51,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Modifier Callbacks
      *
      * @var array
+     * @deprecated Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -195,6 +197,8 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param array $variables
      * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
+     * @param array $directiveProcessors
+     * @param VariableResolverInterface|null $variableResolver
      * @param Css\Processor|null $cssProcessor
      * @param Filesystem|null $pubDirectory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -215,6 +219,8 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Variable\Model\Source\Variables $configVariables,
         $variables = [],
         \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null,
+        array $directiveProcessors = [],
+        VariableResolverInterface $variableResolver = null,
         Css\Processor $cssProcessor = null,
         Filesystem $pubDirectory = null
     ) {
@@ -237,7 +243,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->pubDirectory = $pubDirectory ?: ObjectManager::getInstance()
             ->get(Filesystem::class);
         $this->configVariables = $configVariables;
-        parent::__construct($string, $variables);
+        parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
     /**
@@ -633,7 +639,10 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+        list($directive, $modifiers) = $this->explodeModifiers(
+            $construction[2] . ($construction['filters'] ?? ''),
+            'escape'
+        );
         return $this->applyModifiers($this->getVariable($directive, ''), $modifiers);
     }
 
@@ -650,6 +659,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $default assumed modifier if none present
      * @return array
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -668,6 +678,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $modifiers
      * @return string
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -695,6 +706,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $value
      * @param string $type
      * @return string
+     * @deprecated Use the new FilterApplier or Directive Processor interfaces
      */
     public function modifierEscape($value, $type = 'html')
     {

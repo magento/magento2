@@ -136,11 +136,12 @@ QUERY;
                 'payment_method: {
                   code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
                   }',
-                'Required parameter "cart_id" is missing',
+                'Field SetPaymentMethodAndPlaceOrderInput.cart_id of required type String! was not provided.',
             ],
             'missed_payment_method' => [
                 'cart_id: "cart_id_value"',
-                'Required parameter "code" for "payment_method" is missing.',
+                'Field SetPaymentMethodAndPlaceOrderInput.payment_method of required type PaymentMethodInput!'
+                . ' was not provided.',
             ],
             'place_order_with_out_of_stock_products' => [
                 'cart_id: "cart_id_value"
