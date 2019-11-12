@@ -778,7 +778,7 @@ XMLRequest;
 XMLRequest;
 
         $xmlRequest .= $xmlParams;
-
+        $debugData = ['request' => $xmlParams];
         $httpResponse = $this->asyncHttpClient->request(
             new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
         );
@@ -786,12 +786,18 @@ XMLRequest;
         return $this->deferredProxyFactory->create(
             [
                 'deferred' => new CallbackDeferred(
-                    function () use ($httpResponse) {
+                    function () use ($httpResponse, $debugData) {
                         if ($httpResponse->get()->getStatusCode() >= 400) {
                             $xmlResponse = '';
+                            $debugData['result'] = [
+                                'error' => $httpResponse->get()->getBody(),
+                                'code' => $httpResponse->get()->getStatusCode()
+                            ];
                         } else {
                             $xmlResponse = $httpResponse->get()->getBody();
+                            $debugData['result'] = $xmlResponse;
                         }
+                        $this->_debug($debugData);
 
                         return $this->_parseXmlResponse($xmlResponse);
                     }
@@ -1094,6 +1100,7 @@ XMLAuth;
 
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
+        $debugTrackingData = [];
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1111,6 +1118,7 @@ XMLAuth;
 </TrackRequest>
 XMLAuth;
 
+            $debugTrackingData[] = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest];
             $trackingResponses[] = $this->asyncHttpClient->request(
                 new Request(
                     $url,
@@ -1120,14 +1128,20 @@ XMLAuth;
                 )
             );
         }
-        foreach ($trackingResponses as $response) {
+        foreach ($trackingResponses as $i => $response) {
             $httpResponse = $response->get();
             if ($httpResponse->getStatusCode() >= 400) {
                 $xmlResponse = '';
+                $debugTrackingData[$i]['result'] = [
+                    'error' => $httpResponse->getBody(),
+                    'code' => $httpResponse->getStatusCode()
+                ];
             } else {
                 $xmlResponse = $httpResponse->getBody();
+                $debugTrackingData[$i]['result'] = $httpResponse->getBody();
             }
 
+            $this->_debug($debugTrackingData[$i]);
             $this->_parseXmlTrackingResponse($tracking, $xmlResponse);
         }
 
