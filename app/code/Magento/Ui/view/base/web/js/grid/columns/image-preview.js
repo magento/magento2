@@ -106,7 +106,7 @@ define([
         show: function (record) {
             var img;
             
-            if (record._rowIndex === this.lastOpenedImage()
+            if (record._rowIndex === this.visibleRecord()
                 && this.isVisible(record)) {
                 this.hide();
                 return;
