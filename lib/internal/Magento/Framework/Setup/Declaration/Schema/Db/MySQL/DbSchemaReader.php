@@ -147,9 +147,10 @@ class DbSchemaReader implements DbSchemaReaderInterface
     }
 
     /**
+     * Read references (foreign keys) from Magento tables.
+     *
      * As MySQL has bug and do not show foreign keys during DESCRIBE and other directives required
-     * to take it from SHOW CREATE TABLE ...
-     * command
+     * to take it from "SHOW CREATE TABLE ..." command.
      *
      * @inheritdoc
      */
@@ -177,6 +178,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
 
     /**
      * Reading DB constraints.
+     *
      * Primary and unique constraints are always non_unique=0.
      *
      * @inheritdoc
