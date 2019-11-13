@@ -34,7 +34,7 @@
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForPreviewButton"/>
         <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
         <switchToNextTab stepKey="switchToPreviewTab"/>
-        <waitForPageLoad stepKey="waitForPreviewTabLoaded"/>
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.previewIframe}}" stepKey="waitForIframeVisible"/>
         <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
         <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
         <waitForPageLoad stepKey="waitForPreviewIframeLoaded"/>
@@ -44,7 +44,7 @@
         <arguments>
             <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
         </arguments>
-        <see userInput="{{Newsletter.expectedTemplate}}" stepKey="checkTemplateContainsText"/>
+        <waitForText userInput="{{Newsletter.expectedTemplate}}" stepKey="checkTemplateContainsText"/>
     </actionGroup>
 
 </actionGroups>
