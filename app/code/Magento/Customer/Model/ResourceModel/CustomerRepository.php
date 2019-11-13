@@ -390,7 +390,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $searchResults->setTotalCount($collection->getSize());
 
         $customers = [];
-        /** @var CustomerModel $customerModel */
+        /* @var CustomerModel $customerModel */
         foreach ($collection as $customerModel) {
             $customers[] = $customerModel->getDataModel();
         }
@@ -401,7 +401,8 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Delete customer.
      *
-     * @param CustomerInterface $customer
+     * @param CustomerInterface $customer Customer object
+     *
      * @return bool true on success
      * @throws LocalizedException
      */
@@ -413,7 +414,8 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Delete customer by Customer ID.
      *
-     * @param int $customerId
+     * @param int $customerId Customer Id
+     *
      * @return bool true on success
      * @throws NoSuchEntityException
      * @throws LocalizedException
@@ -424,7 +426,10 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customerModel = $this->customerRegistry->retrieve($customerId);
         $this->customerResourceModel->delete($customerModel);
         $this->customerRegistry->remove($customerId);
-        $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
+        $this->notificationStorage->remove(
+            NotificationStorage::UPDATE_CUSTOMER_SESSION,
+            $customerId
+        );
 
         return true;
     }
@@ -432,10 +437,10 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 100.2.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
+     * @deprecated 100.2.0
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {

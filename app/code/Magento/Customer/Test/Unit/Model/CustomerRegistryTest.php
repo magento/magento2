@@ -6,28 +6,45 @@
 
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+use Magento\Customer\Model\ResourceModel\CustomerFactory as CustomerResourceFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for CustomerRegistry
  *
  */
-class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
+class CustomerRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry
+     * @var CustomerRegistry
      */
     private $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerFactory|MockObject
      */
     private $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|MockObject
      */
     private $customer;
+
+    /**
+     * @var CustomerResource|MockObject
+     */
+    private $customerResource;
+
+    /**
+     * @var CustomerResourceFactory|MockObject
+     */
+    private $customerResourceFactory;
 
     /**#@+
      * Sample customer data
@@ -38,20 +55,26 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->customerFactory = $this->getMockBuilder(\Magento\Customer\Model\CustomerFactory::class)
+        $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->customerResourceFactory = $this->createPartialMock(
+            CustomerResourceFactory::class,
+            ['create']
+        );
         $objectManager = new ObjectManager($this);
         $this->customerRegistry = $objectManager->getObject(
-            \Magento\Customer\Model\CustomerRegistry::class,
-            ['customerFactory' => $this->customerFactory]
+            CustomerRegistry::class,
+            [
+                'customerFactory' => $this->customerFactory,
+                'customerResourceFactory' => $this->customerResourceFactory
+            ]
         );
-        $this->customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $this->customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                    'load',
                     'getId',
                     'getEmail',
                     'getWebsiteId',
@@ -62,14 +85,21 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
+
+        $this->customerResource = $this->createPartialMock(
+            CustomerResource::class,
+            ['load']
+        );
     }
 
     public function testRetrieve()
     {
-        $this->customer->expects($this->once())
+        $this->customerResourceFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->customerResource));
+        $this->customerResource->expects($this->once())
             ->method('load')
-            ->with(self::CUSTOMER_ID)
-            ->will($this->returnValue($this->customer));
+            ->with($this->customer, self::CUSTOMER_ID);
         $this->customer->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(self::CUSTOMER_ID));
@@ -117,10 +147,12 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
      */
     public function testRetrieveException()
     {
-        $this->customer->expects($this->once())
+        $this->customerResourceFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->customerResource));
+        $this->customerResource->expects($this->once())
             ->method('load')
-            ->with(self::CUSTOMER_ID)
-            ->will($this->returnValue($this->customer));
+            ->with($this->customer, self::CUSTOMER_ID);
         $this->customer->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(null));
@@ -159,10 +191,12 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 
     public function testRemove()
     {
-        $this->customer->expects($this->exactly(2))
+        $this->customerResourceFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($this->customerResource));
+        $this->customerResource->expects($this->atLeastOnce())
             ->method('load')
-            ->with(self::CUSTOMER_ID)
-            ->will($this->returnValue($this->customer));
+            ->with($this->customer, self::CUSTOMER_ID);
         $this->customer->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(self::CUSTOMER_ID));
