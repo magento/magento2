@@ -55,6 +55,23 @@
             <argument name="payment" xsi:type="object">BraintreePayPalFacade</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Braintree\Block\Paypal\ButtonShoppingCartVirtual" type="Magento\Braintree\Block\Paypal\Button">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Magento_Braintree::paypal/button_shopping_cart.phtml</item>
+                <item name="alias" xsi:type="string">braintree.paypal.mini-cart</item>
+                <item name="button_id" xsi:type="string">braintree-paypal-mini-cart</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Braintree\Observer\AddPaypalShortcuts">
+        <arguments>
+            <argument name="buttonBlocks" xsi:type="array">
+                <item name="mini_cart" xsi:type="string">Magento\Braintree\Block\Paypal\Button</item>
+                <item name="shopping_cart" xsi:type="string">Magento\Braintree\Block\Paypal\ButtonShoppingCartVirtual</item>
+            </argument>
+        </arguments>
+    </type>
     
     <type name="Magento\Braintree\Model\Ui\PayPal\ConfigProvider">
         <arguments>

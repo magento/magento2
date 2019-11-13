@@ -7,6 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <dev>
+            <js>
+                <minify_exclude>
+                    <cardinal_commerce>/v1/songbird</cardinal_commerce>
+                </minify_exclude>
+            </js>
+        </dev>
         <three_d_secure>
             <cardinal>
                 <environment>production</environment>

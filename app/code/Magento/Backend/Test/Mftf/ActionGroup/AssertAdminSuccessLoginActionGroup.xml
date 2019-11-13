@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminSuccessLoginActionGroup">
-        <waitForElementVisible selector="{{AdminHeaderSection.adminUserAccountText}}" stepKey="waitForAdminAccountTextVisible" />
+        <annotations>
+            <description>Wait for the current Admin Name to appear in the Backend Admin.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{AdminHeaderSection.adminUserAccountText}}" stepKey="waitForAdminAccountTextVisible"/>
     </actionGroup>
 </actionGroups>

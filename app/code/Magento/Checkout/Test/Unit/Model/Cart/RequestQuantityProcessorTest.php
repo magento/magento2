@@ -48,6 +48,9 @@ class RequestQuantityProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->requestProcessor->process($cartData), $expected);
     }
 
+    /**
+     * @return array
+     */
     public function cartDataProvider()
     {
         return [

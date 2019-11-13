@@ -51,6 +51,21 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionTX</requiredEntity>
     </entity>
+    <entity name="US_Address_TX_Without_Default" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
     <entity name="US_Address_TX_Default_Billing" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -239,6 +254,21 @@
         <data key="state">Côtes-d'Armor</data>
         <data key="postcode">12345</data>
     </entity>
+    <entity name="updateCustomerChinaAddress" type="address">
+        <data key="firstname">Xian</data>
+        <data key="lastname">Shai</data>
+        <data key="company">Hunan Fenmian</data>
+        <data key="telephone">+86 851 8410 4337</data>
+        <array key="street">
+            <item>Nanyuan Rd, Wudang</item>
+            <item>Hunan Fenmian</item>
+        </array>
+        <data key="country_id">CN</data>
+        <data key="country">China</data>
+        <data key="city">Guiyang</data>
+        <data key="state">Guizhou Sheng</data>
+        <data key="postcode">550002</data>
+    </entity>
     <entity name="updateCustomerNoXSSInjection" type="address">
         <data key="firstname">Jany</data>
         <data key="lastname">Doe</data>
@@ -271,6 +301,20 @@
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionUT</requiredEntity>
     </entity>
+    <entity name="CustomerUKAddress" type="address">
+        <data key="firstname">Jane</data>
+        <data key="lastname">Miller</data>
+        <data key="company">Magento</data>
+        <data key="telephone">44 20 7123 1234</data>
+        <array key="street">
+            <item>1 London Bridge Street</item>
+        </array>
+        <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
+        <data key="city">London</data>
+        <data key="state"></data>
+        <data key="postcode">SE12 9GF</data>
+    </entity>
     <entity name="DE_Address_Berlin_Not_Default_Address" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -297,5 +341,38 @@
         <data key="state">California</data>
         <data key="postcode">90230</data>
         <data key="telephone">555-55-555-55</data>
+    </entity>
+    <entity name="US_Address_AE" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+            <item>113</item>
+        </array>
+        <data key="city">Los Angeles</data>
+        <data key="state">Armed Forces Europe</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">90001</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionAE</requiredEntity>
+    </entity>
+    <entity name="updateCustomerBelgiumAddress" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Chaussee de Wavre</item>
+            <item>318</item>
+        </array>
+        <data key="city">Bihain</data>
+        <data key="state">Hainaut</data>
+        <data key="country_id">BE</data>
+        <data key="country">Belgium</data>
+        <data key="postcode">6690</data>
+        <data key="telephone">0477-58-77867</data>
     </entity>
 </entities>

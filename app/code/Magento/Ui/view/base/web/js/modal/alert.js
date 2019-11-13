@@ -9,7 +9,7 @@
 define([
     'jquery',
     'underscore',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'Magento_Ui/js/modal/confirm',
     'mage/translate'
 ], function ($, _) {

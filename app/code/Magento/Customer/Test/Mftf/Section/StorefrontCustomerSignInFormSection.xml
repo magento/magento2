@@ -20,6 +20,7 @@
         <element name="email" type="input" selector="#customer-email"/>
         <element name="password" type="input" selector="#pass"/>
         <element name="signIn" type="button" selector="#send2" timeout="30"/>
+        <element name="createAnAccount" type="button" selector="//div[contains(@class,'actions-toolbar')]//a[contains(.,'Create an Account')]" timeout="30"/>
     </section>
     <section name="StorefrontCustomerSignInLinkSection">
         <element name="signInLink" type="button" selector=".action-auth-toggle" timeout="30"/>

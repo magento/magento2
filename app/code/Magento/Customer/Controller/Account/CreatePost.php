@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
@@ -19,6 +21,7 @@ use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -115,6 +118,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * @var AccountRedirect
@@ -349,35 +357,33 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
             $confirmation = $this->getRequest()->getParam('password_confirmation');
             $redirectUrl = $this->session->getBeforeAuthUrl();
             $this->checkPasswordConfirmation($password, $confirmation);
+
+            $extensionAttributes = $customer->getExtensionAttributes();
+            $extensionAttributes->setIsSubscribed($this->getRequest()->getParam('is_subscribed', false));
+            $customer->setExtensionAttributes($extensionAttributes);
+
             $customer = $this->accountManagement
                 ->createAccount($customer, $password, $redirectUrl);
 
-            if ($this->getRequest()->getParam('is_subscribed', false)) {
-                $extensionAttributes = $customer->getExtensionAttributes();
-                $extensionAttributes->setIsSubscribed(true);
-                $customer->setExtensionAttributes($extensionAttributes);
-                $this->customerRepository->save($customer);
-            }
             $this->_eventManager->dispatch(
                 'customer_register_success',
                 ['account_controller' => $this, 'customer' => $customer]
             );
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
             if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
-                $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
-                // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccess(
-                    __(
-                        'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
-                        $email
-                    )
+                $this->messageManager->addComplexSuccessMessage(
+                    'confirmAccountSuccessMessage',
+                    [
+                        'url' => $this->customerUrl->getEmailConfirmationUrl($customer->getEmail()),
+                    ]
                 );
-                // @codingStandardsIgnoreEnd
                 $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
-                $this->messageManager->addSuccess($this->getSuccessMessage());
+
+                $this->messageManager->addMessage($this->getMessageManagerSuccessMessage());
+
                 $requestedRedirect = $this->accountRedirect->getRedirectCookie();
                 if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
                     $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
@@ -394,23 +400,21 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
 
             return $resultRedirect;
         } catch (StateException $e) {
-            $url = $this->urlModel->getUrl('customer/account/forgotpassword');
-            // @codingStandardsIgnoreStart
-            $message = __(
-                'There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.',
-                $url
+            $this->messageManager->addComplexErrorMessage(
+                'customerAlreadyExistsErrorMessage',
+                [
+                    'url' => $this->urlModel->getUrl('customer/account/forgotpassword'),
+                ]
             );
-            // @codingStandardsIgnoreEnd
-            $this->messageManager->addError($message);
         } catch (InputException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($e->getMessage());
             foreach ($e->getErrors() as $error) {
-                $this->messageManager->addError($this->escaper->escapeHtml($error->getMessage()));
+                $this->messageManager->addErrorMessage($error->getMessage());
             }
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t save the customer.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t save the customer.'));
         }
 
         $this->session->setCustomerFormData($this->getRequest()->getPostValue());
@@ -436,6 +440,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     /**
      * Retrieve success message
      *
+     * @deprecated
+     * @see getMessageManagerSuccessMessage()
      * @return string
      */
     protected function getSuccessMessage()
@@ -459,6 +465,39 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         } else {
             $message = __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName());
         }
+        return $message;
+    }
+
+    /**
+     * Retrieve success message manager message
+     *
+     * @return MessageInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getMessageManagerSuccessMessage(): MessageInterface
+    {
+        if ($this->addressHelper->isVatValidationEnabled()) {
+            if ($this->addressHelper->getTaxCalculationAddressType() == Address::TYPE_SHIPPING) {
+                $identifier = 'customerVatShippingAddressSuccessMessage';
+            } else {
+                $identifier = 'customerVatBillingAddressSuccessMessage';
+            }
+
+            $message = $this->messageManager
+                ->createMessage(MessageInterface::TYPE_SUCCESS, $identifier)
+                ->setData(
+                    [
+                        'url' => $this->urlModel->getUrl('customer/address/edit'),
+                    ]
+                );
+        } else {
+            $message = $this->messageManager
+                ->createMessage(MessageInterface::TYPE_SUCCESS)
+                ->setText(
+                    __('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+                );
+        }
+
         return $message;
     }
 }

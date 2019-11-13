@@ -22,6 +22,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
 /**
+ * Repository for performing CRUD operations for a configurable product's options.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionRepositoryInterface
@@ -112,7 +113,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $id)
     {
@@ -131,7 +132,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {
@@ -141,7 +142,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(OptionInterface $option)
     {
@@ -167,7 +168,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($sku, $id)
     {
@@ -184,7 +185,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($sku, OptionInterface $option)
@@ -213,6 +214,16 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 throw new \InvalidArgumentException('Incompatible product type');
             }
             $option->setProductId($product->getData($metadata->getLinkField()));
+            if (!empty($option->getProductId() && !empty($option->getAttributeId()))) {
+                $id = $this->optionResource->getIdByProductIdAndAttributeId(
+                    $option,
+                    $option->getProductId(),
+                    $option->getAttributeId()
+                );
+                if (!empty($id)) {
+                    $option->setId($id);
+                }
+            }
         }
 
         try {
@@ -296,6 +307,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
 
     /**
      * Get MetadataPool instance
+     *
      * @return MetadataPool
      */
     private function getMetadataPool()

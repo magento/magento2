@@ -32,7 +32,8 @@ return [
                 'label' => 'installment',
                 'installmentperiod' => 0
             ],
-            'isVisibleOnProductPage' => 0
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true
         ]
     ],
     'checkout' => [
@@ -61,7 +62,8 @@ return [
                 'label' => 'installment',
                 'installmentperiod' => 0
             ],
-            'isVisibleOnProductPage' => 0
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true
         ]
     ],
     'mini_cart' => [
@@ -89,7 +91,8 @@ return [
                 'shape' => 'rect',
                 'label' => 'paypal'
             ],
-            'isVisibleOnProductPage' => 0
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true
         ]
     ],
     'mini_cart' => [
@@ -117,7 +120,8 @@ return [
                 'shape' => 'rect',
                 'label' => 'paypal'
             ],
-            'isVisibleOnProductPage' => 0
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true
         ]
     ],
     'product' => [
@@ -145,7 +149,8 @@ return [
                 'shape' => 'rect',
                 'label' => 'paypal',
             ],
-            'isVisibleOnProductPage' => 0
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true
         ]
     ]
 ];

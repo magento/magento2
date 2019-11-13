@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateApiDynamicBundleProductActionGroup">
+        <annotations>
+            <description>Creates 4 products with varying prices. Creates the bundle product with specified name. Adds the multiple select and checkbox options and 4 links to the created products. Uses the 'ApiBundleProduct' entity.</description>
+        </annotations>
         <arguments>
             <argument name="productName" defaultValue="Api Dynamic Bundle Product" type="string"/>
         </arguments>
+
         <!--Create 4 simple products-->
         <createData entity="SimpleProduct2" stepKey="simpleProduct1">
             <field key="price">4.99</field>
@@ -25,6 +29,7 @@
         <createData entity="SimpleProduct2" stepKey="simpleProduct4">
             <field key="price">18.25</field>
         </createData>
+
         <!-- Create the bundle product based -->
         <createData entity="ApiBundleProduct" stepKey="createBundleProduct">
             <field key="name">{{productName}}</field>
@@ -57,10 +62,15 @@
             <requiredEntity createDataKey="simpleProduct4"/>
         </createData>
     </actionGroup>
+
     <actionGroup name="AdminCreateApiFixedBundleProductActionGroup">
+        <annotations>
+            <description>Creates 4 products with varying prices. Creates the bundle product with specified name. Adds the multiple select and checkbox options and 4 links to the created products. Uses the 'ApiFixedBundleProduct' entity.</description>
+        </annotations>
         <arguments>
             <argument name="productName" defaultValue="Api Fixed Bundle Product" type="string"/>
         </arguments>
+
         <!--Create 4 simple products-->
         <createData entity="SimpleProduct2" stepKey="simpleProduct1">
             <field key="price">4.99</field>
@@ -74,6 +84,7 @@
         <createData entity="SimpleProduct2" stepKey="simpleProduct4">
             <field key="price">18.25</field>
         </createData>
+
         <!-- Create the bundle product based -->
         <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct">
             <field key="name">{{productName}}</field>
@@ -106,10 +117,15 @@
             <requiredEntity createDataKey="simpleProduct4"/>
         </createData>
     </actionGroup>
+
     <actionGroup name="AdminCreateApiDynamicBundleProductAllOptionTypesActionGroup">
+        <annotations>
+            <description>Creates 3 products with varying prices. Creates the dynamic bundle product with specified name. Adds the multiple select, checkbox options and links to the created products. Uses the 'ApiBundleProduct' entity.</description>
+        </annotations>
         <arguments>
             <argument name="productName" defaultValue="Api Dynamic Bundle Product" type="string"/>
         </arguments>
+
         <!-- Create simple products -->
         <createData entity="SimpleProduct2" stepKey="simpleProduct1">
             <field key="price">10</field>
@@ -117,6 +133,7 @@
         <createData entity="SimpleProduct2" stepKey="simpleProduct2">
             <field key="price">20</field>
         </createData>
+
         <!-- Create Bundle product -->
         <createData entity="ApiBundleProduct" stepKey="createBundleProduct">
             <field key="name">{{productName}}</field>

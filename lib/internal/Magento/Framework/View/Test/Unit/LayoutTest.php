@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Test\Unit;
 
 use Magento\Framework\Serialize\SerializerInterface;
@@ -113,6 +114,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
@@ -146,10 +150,12 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->generatorPoolMock->expects($this->any())
             ->method('getGenerator')
             ->will(
-                $this->returnValueMap([
-                    [\Magento\Framework\View\Layout\Generator\Block::TYPE, $this->generatorBlockMock],
-                    [\Magento\Framework\View\Layout\Generator\Container::TYPE, $this->generatorContainerMock],
-                ])
+                $this->returnValueMap(
+                    [
+                        [\Magento\Framework\View\Layout\Generator\Block::TYPE, $this->generatorBlockMock],
+                        [\Magento\Framework\View\Layout\Generator\Container::TYPE, $this->generatorContainerMock],
+                    ]
+                )
             );
 
         $this->readerContextFactoryMock = $this->getMockBuilder(
@@ -183,13 +189,19 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->serializer->expects($this->any())->method('serialize')
-            ->willReturnCallback(function ($value) {
-                return json_encode($value);
-            });
-        $this->serializer->expects($this->any())->method('unserialize')
-            ->willReturnCallback(function ($value) {
-                return json_decode($value, true);
-            });
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
+            );
+        $this->serializer->expects(
+            $this->any()
+        )->method('unserialize')
+            ->willReturnCallback(
+                function ($value) {
+                    return json_decode($value, true);
+                }
+            );
 
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,

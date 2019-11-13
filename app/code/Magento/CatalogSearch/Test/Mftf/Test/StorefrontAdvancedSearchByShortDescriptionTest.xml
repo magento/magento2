@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchByShortDescriptionTest" extends="StorefrontAdvancedSearchEntitySimpleProductTest">
+        <annotations>
+            <stories value="Use Advanced Search"/>
+            <title value="Search product in advanced search by short description"/>
+            <description value="Search product in advanced search by short description"/>
+            <testCaseId value="MAGETWO-24729"/>
+            <severity value="CRITICAL"/>
+            <group value="searchFrontend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <remove keyForRemoval="createProduct"/>
+        <remove keyForRemoval="deleteProduct"/>
+        <remove keyForRemoval="seeProductName"/>
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
+            <argument name="short_description" value="dfj_short"/>
+        </actionGroup>
+        <see userInput="We can't find any items matching these search criteria. Modify your search." selector="{{StorefrontQuickSearchResultsSection.messageSection}}" stepKey="see"/>
+    </test>
+</tests>

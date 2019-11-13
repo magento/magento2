@@ -8,7 +8,6 @@ namespace Magento\Quote\Model\Cart;
 use Magento\Quote\Api;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
-use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
@@ -40,7 +39,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     private $dataObjectHelper;
 
     /**
-     * @var ConfigurationPool
+     * @var ItemConverter
      */
     private $itemConverter;
 

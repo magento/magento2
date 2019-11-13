@@ -13,6 +13,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product Test
@@ -40,7 +41,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleManager;
 
@@ -208,6 +209,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $eavConfig;
 
     /**
+     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -215,7 +221,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
         $this->moduleManager = $this->createPartialMock(
-            \Magento\Framework\Module\ModuleManagerInterface::class,
+            \Magento\Framework\Module\Manager::class,
             ['isEnabled']
         );
         $this->extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
@@ -303,13 +309,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $storeManager->expects($this->any())
+        $this->storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->store));
-        $storeManager->expects($this->any())
+        $this->storeManager->expects($this->any())
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
         $this->indexerRegistryMock = $this->createPartialMock(
@@ -394,7 +400,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 'extensionFactory' => $this->extensionAttributesFactory,
                 'productPriceIndexerProcessor' => $this->productPriceProcessor,
                 'catalogProductOptionFactory' => $optionFactory,
-                'storeManager' => $storeManager,
+                'storeManager' => $this->storeManager,
                 'resource' => $this->resource,
                 'registry' => $this->registry,
                 'moduleManager' => $this->moduleManager,
@@ -448,6 +454,51 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->model->setWebsiteIds($websiteIds);
         $this->website->expects($this->once())->method('getStoreIds')->will($this->returnValue($expectedStoreIds));
         $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
+    }
+
+    /**
+     * @dataProvider getSingleStoreIds
+     * @param bool $isObjectNew
+     */
+    public function testGetStoreSingleSiteModelIds(
+        bool $isObjectNew
+    ) {
+        $websiteIDs = [0 => 2];
+        $this->model->setWebsiteIds(
+            !$isObjectNew ? $websiteIDs : array_flip($websiteIDs)
+        );
+
+        $this->model->isObjectNew($isObjectNew);
+
+        $this->storeManager->expects(
+            $this->exactly(
+                (int) !$isObjectNew
+            )
+        )
+            ->method('isSingleStoreMode')
+            ->will($this->returnValue(true));
+
+        $this->website->expects(
+            $this->once()
+        )->method('getStoreIds')
+            ->will($this->returnValue($websiteIDs));
+
+        $this->assertEquals($websiteIDs, $this->model->getStoreIds());
+    }
+
+    /**
+     * @return array
+     */
+    public function getSingleStoreIds()
+    {
+        return [
+          [
+              false
+          ],
+          [
+              true
+          ],
+        ];
     }
 
     public function testGetStoreId()
@@ -1026,6 +1077,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $outputRelatedLink->setPosition(0);
         $expectedOutput = [$outputRelatedLink];
         $this->productLinkRepositoryMock->expects($this->once())->method('getList')->willReturn($expectedOutput);
+        $typeInstance = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
+            ->setMethods(['getSku'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $typeInstance->method('getSku')->willReturn('model');
+        $this->productTypeInstanceMock->method('factory')->willReturn($typeInstance);
         $links = $this->model->getProductLinks();
         $this->assertEquals($links, $expectedOutput);
     }
@@ -1221,8 +1278,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $mediaEntries =
             [
-            'images' =>
-                [
+            'images' => [
                 [
                     'value_id' => 1,
                     'file' => 'imageFile.jpg',

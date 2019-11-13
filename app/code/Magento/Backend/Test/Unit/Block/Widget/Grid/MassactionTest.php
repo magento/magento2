@@ -4,14 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Backend\Block\Widget\Grid\Massaction
- */
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget\Grid\Massaction\VisibilityCheckerInterface as VisibilityChecker;
 use Magento\Framework\Authorization;
+use Magento\Framework\Data\Collection\AbstractDb as Collection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 
+/**
+ * Test class for \Magento\Backend\Block\Widget\Grid\Massaction
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -53,6 +58,21 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
      * @var VisibilityChecker|\PHPUnit_Framework_MockObject_MockObject
      */
     private $visibilityCheckerMock;
+
+    /**
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $gridCollectionMock;
+
+    /**
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $gridCollectionSelectMock;
+
+    /**
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $connectionMock;
 
     protected function setUp()
     {
@@ -96,6 +116,18 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isAllowed'])
             ->getMock();
+
+        $this->gridCollectionMock = $this->createMock(Collection::class);
+        $this->gridCollectionSelectMock = $this->createMock(Select::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+
+        $this->gridCollectionMock->expects($this->any())
+            ->method('getSelect')
+            ->willReturn($this->gridCollectionSelectMock);
+
+        $this->gridCollectionMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -267,6 +299,41 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setUseSelectAll(false);
         $this->assertEmpty($this->_block->getGridIdsJson());
+    }
+
+    /**
+     * Test for getGridIdsJson when select all functionality flag set to true.
+     */
+    public function testGetGridIdsJsonWithUseSelectAll()
+    {
+        $this->_block->setUseSelectAll(true);
+
+        $this->_gridMock->expects($this->once())
+            ->method('getCollection')
+            ->willReturn($this->gridCollectionMock);
+
+        $this->gridCollectionSelectMock->expects($this->exactly(4))
+            ->method('reset')
+            ->withConsecutive(
+                [Select::ORDER],
+                [Select::LIMIT_COUNT],
+                [Select::LIMIT_OFFSET],
+                [Select::COLUMNS]
+            );
+
+        $this->gridCollectionSelectMock->expects($this->once())
+            ->method('columns')
+            ->with('test_id');
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($this->gridCollectionSelectMock)
+            ->willReturn([1, 2, 3]);
+
+        $this->assertEquals(
+            '1,2,3',
+            $this->_block->getGridIdsJson()
+        );
     }
 
     /**

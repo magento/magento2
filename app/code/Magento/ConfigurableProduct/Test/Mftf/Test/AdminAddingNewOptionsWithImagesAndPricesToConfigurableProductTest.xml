@@ -29,6 +29,11 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
+                <argument name="productName" value="$$createConfigProductAttributeCreateConfigurableProduct.name$$"/>
+            </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -46,6 +51,7 @@
         <seeElement selector="{{AdminProductFormConfigurationsSection.attributeEntityByName($$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$)}}" stepKey="seeAttribute"/>
 
         <!--Create one color option via "Create New Value" link-->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue"/>
         <fillField userInput="{{colorDefaultProductAttribute1.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute"/>

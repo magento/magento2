@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateProductConfigurationsPanel">
+        <element name="attributeOption" type="checkbox" selector="li[data-attribute-option-title='{{colorOption}}']" parameterized="true"/>
         <element name="next" type="button" selector=".steps-wizard-navigation .action-next-step" timeout="30"/>
         <element name="createNewAttribute" type="button" selector=".select-attributes-actions button[title='Create New Attribute']" timeout="30"/>
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>

@@ -23,24 +23,33 @@ class FieldMetaReader
     private $docReader;
 
     /**
-     * @var CacheTagReader
+     * @var CacheAnnotationReader
      */
-    private $cacheTagReader;
+    private $cacheAnnotationReader;
+
+    /**
+     * @var DeprecatedAnnotationReader
+     */
+    private $deprecatedAnnotationReader;
 
     /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
-     * @param CacheTagReader|null $cacheTagReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
+     * @param DeprecatedAnnotationReader|null $deprecatedAnnotationReader
      */
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheTagReader $cacheTagReader = null
+        CacheAnnotationReader $cacheAnnotationReader = null,
+        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
-        $this->cacheTagReader = $cacheTagReader ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(CacheTagReader::class);
+        $this->cacheAnnotationReader = $cacheAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheAnnotationReader::class);
+        $this->deprecatedAnnotationReader = $deprecatedAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DeprecatedAnnotationReader::class);
     }
 
     /**
@@ -72,8 +81,12 @@ class FieldMetaReader
             $result['description'] = $this->docReader->read($fieldMeta->astNode->directives);
         }
 
-        if ($this->docReader->read($fieldMeta->astNode->directives)) {
-            $result['cache'] = $this->cacheTagReader->read($fieldMeta->astNode->directives);
+        if ($this->cacheAnnotationReader->read($fieldMeta->astNode->directives)) {
+            $result['cache'] = $this->cacheAnnotationReader->read($fieldMeta->astNode->directives);
+        }
+
+        if ($this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives)) {
+            $result['deprecated'] = $this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives);
         }
 
         $arguments = $fieldMeta->args;
@@ -86,17 +99,41 @@ class FieldMetaReader
                 $result['arguments'][$argumentName]['defaultValue'] = $argumentMeta->defaultValue;
             }
             $typeMeta = $argumentMeta->getType();
-            $result['arguments'][$argumentName] = array_merge(
-                $result['arguments'][$argumentName],
-                $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
-            );
+            $result['arguments'][$argumentName] = $this->argumentMetaType($typeMeta, $argumentMeta, $result);
 
             if ($this->docReader->read($argumentMeta->astNode->directives)) {
                 $result['arguments'][$argumentName]['description'] =
                     $this->docReader->read($argumentMeta->astNode->directives);
             }
+
+            if ($this->deprecatedAnnotationReader->read($argumentMeta->astNode->directives)) {
+                $result['arguments'][$argumentName]['deprecated'] =
+                    $this->deprecatedAnnotationReader->read($argumentMeta->astNode->directives);
+            }
         }
         return $result;
+    }
+
+    /**
+     * Get the argumentMetaType result array
+     *
+     * @param \GraphQL\Type\Definition\InputType $typeMeta
+     * @param \GraphQL\Type\Definition\FieldArgument $argumentMeta
+     * @param array $result
+     * @return array
+     */
+    private function argumentMetaType(
+        \GraphQL\Type\Definition\InputType $typeMeta,
+        \GraphQL\Type\Definition\FieldArgument $argumentMeta,
+        $result
+    ) : array {
+        $argumentName = $argumentMeta->name;
+        $result['arguments'][$argumentName]  = array_merge(
+            $result['arguments'][$argumentName],
+            $this->typeMetaReader->read($typeMeta, TypeMetaWrapperReader::ARGUMENT_PARAMETER)
+        );
+
+        return $result['arguments'][$argumentName];
     }
 
     /**

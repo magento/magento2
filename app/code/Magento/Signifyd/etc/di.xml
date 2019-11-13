@@ -9,7 +9,7 @@
     <preference for="Magento\Signifyd\Api\Data\CaseInterface" type="Magento\Signifyd\Model\CaseEntity" />
     <preference for="Magento\Signifyd\Api\CaseRepositoryInterface" type="Magento\Signifyd\Model\CaseRepository" />
     <preference for="Magento\Signifyd\Api\CaseManagementInterface" type="Magento\Signifyd\Model\CaseManagement" />
-    <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Signifyd\Api\Data\CaseSearchResultsInterface" type="Magento\Signifyd\Model\CaseSearchResults" />
     <preference for="Magento\Signifyd\Api\CaseCreationServiceInterface" type="Magento\Signifyd\Model\CaseServices\CreationService" />
     <preference for="Magento\Signifyd\Api\GuaranteeCreationServiceInterface" type="Magento\Signifyd\Model\Guarantee\CreationService" />
     <preference for="Magento\Signifyd\Api\GuaranteeCancelingServiceInterface" type="Magento\Signifyd\Model\Guarantee\CancelingService" />
@@ -68,6 +68,9 @@
             <argument name="converter" xsi:type="object">Magento\Signifyd\Model\PaymentMethodMapper\XmlToArrayConfigConverter</argument>
             <argument name="schemaLocator" xsi:type="object">PaymentMapperSchemaLocator</argument>
             <argument name="fileName" xsi:type="string">signifyd_payment_mapping.xml</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/payment_method_list/payment_method" xsi:type="string">name</item>
+            </argument>
         </arguments>
     </virtualType>
     <virtualType name="PaymentMethodConfigData" type="Magento\Framework\Config\Data">

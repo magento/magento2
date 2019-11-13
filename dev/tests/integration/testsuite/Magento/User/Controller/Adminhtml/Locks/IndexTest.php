@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\User\Controller\Adminhtml\Locks;
 
 /**
- * Testing locked users list.
+ * Locked users page test.
+ *
+ * @magentoAppArea adminhtml
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {

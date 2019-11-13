@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Cookie\Block\Html\Notices $block */
 ?>
-<?php if ($this->helper(\Magento\Cookie\Helper\Cookie::class)->isCookieRestrictionModeEnabled()): ?>
+<?php if ($this->helper(\Magento\Cookie\Helper\Cookie::class)->isCookieRestrictionModeEnabled()) : ?>
     <div role="alertdialog"
          tabindex="-1"
          class="message global cookie"

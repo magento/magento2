@@ -19,6 +19,7 @@
         <element name="description" type="textarea" selector="//div[@class='admin__field-control']/textarea[@name='description']"/>
         <element name="active" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='is_active']/../label"/>
         <element name="websites" type="multiselect" selector="select[name='website_ids']"/>
+        <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
         <element name="customerGroupsOptions" type="multiselect" selector="select[name='customer_group_ids'] option"/>
         <element name="coupon" type="select" selector="select[name='coupon_type']"/>
@@ -33,7 +34,9 @@
 
         <!-- Conditions sub-form -->
         <element name="conditionsHeader" type="button" selector="div[data-index='conditions']" timeout="30"/>
+        <element name="conditionsHeaderNew" type="button" selector="div[data-index='block_promo_catalog_edit_tab_conditions'] " timeout="30"/>
         <element name="conditionsHeaderOpen" type="button" selector="div[data-index='conditions'] div[data-state-collapsible='open']" timeout="30"/>
+        <element name="conditionsHeaderOpenNew" type="button" selector="div[data-index='block_promo_catalog_edit_tab_conditions'] div[data-state-collapsible='open']" timeout="30"/>
         <element name="conditionsValue" type="input" selector=".rule-param-edit input"/>
         <element name="conditionsOperator" type="select" selector=".rule-param-edit select"/>
         <element name="addCondition" type="button" selector="//*[@id='conditions__{{arg}}__children']//span" parameterized="true"/>

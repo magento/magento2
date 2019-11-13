@@ -8,7 +8,6 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Base class for all blocks.
@@ -17,6 +16,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * Marked as public API because it is actively used now.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -188,12 +188,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
-     * @param LockGuardedCacheLoader|null $lockQuery
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
-        array $data = [],
-        LockGuardedCacheLoader $lockQuery = null
+        array $data = []
     ) {
         $this->_request = $context->getRequest();
         $this->_layout = $context->getLayout();
@@ -212,12 +210,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $this->filterManager = $context->getFilterManager();
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
+        $this->lockQuery = $context->getLockGuardedCacheLoader();
         if (isset($data['jsLayout'])) {
             $this->jsLayout = $data['jsLayout'];
             unset($data['jsLayout']);
         }
-        $this->lockQuery = $lockQuery
-            ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
         parent::__construct($data);
         $this->_construct();
     }
@@ -248,6 +245,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Please override this one instead of overriding real __construct constructor
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
@@ -443,9 +441,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function unsetCallChild($alias, $callback, $result, $params)
     {
+        $args = func_get_args();
         $child = $this->getChildBlock($alias);
         if ($child) {
-            $args = func_get_args();
             $alias = array_shift($args);
             $callback = array_shift($args);
             $result = (string)array_shift($args);
@@ -878,7 +876,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $namespace = substr(
             $className,
             0,
-            strpos($className, '\\' . 'Block')
+            strpos($className, '\\' . 'Block' . '\\')
         );
         return str_replace('\\', '_', $namespace);
     }

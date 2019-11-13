@@ -12,12 +12,12 @@
         <?php foreach ($_options as $_option) : ?>
             <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-            <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>
-                <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
+            <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
+                <?= $block->escapeHtml($_formatedOptionValue['value'], ['span']) ?>
                 <?php if (isset($_formatedOptionValue['full_view'])) : ?>
                     <dl class="item options tooltip content">
                         <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                        <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                        <dd><?= $block->escapeHtml($_formatedOptionValue['full_view'], ['span']) ?></dd>
                     </dl>
                 <?php endif; ?>
             </dd>

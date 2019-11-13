@@ -11,7 +11,8 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterfa
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\FieldMetaReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\ImplementsReader;
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheTagReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnotationReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DeprecatedAnnotationReader;
 
 /**
  * Composite configuration reader to handle the object type meta
@@ -34,28 +35,37 @@ class ObjectType implements TypeMetaReaderInterface
     private $implementsAnnotation;
 
     /**
-     * @var CacheTagReader
+     * @var CacheAnnotationReader
      */
-    private $cacheTagReader;
+    private $cacheAnnotationReader;
+
+    /**
+     * @var DeprecatedAnnotationReader
+     */
+    private $deprecatedAnnotationReader;
 
     /**
      * ObjectType constructor.
      * @param FieldMetaReader $fieldMetaReader
      * @param DocReader $docReader
      * @param ImplementsReader $implementsAnnotation
-     * @param CacheTagReader|null $cacheTagReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
+     * @param DeprecatedAnnotationReader|null $deprecatedAnnotationReader
      */
     public function __construct(
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
         ImplementsReader $implementsAnnotation,
-        CacheTagReader $cacheTagReader = null
+        CacheAnnotationReader $cacheAnnotationReader = null,
+        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
         $this->implementsAnnotation = $implementsAnnotation;
-        $this->cacheTagReader = $cacheTagReader ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(CacheTagReader::class);
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
+        $this->deprecatedAnnotationReader = $deprecatedAnnotationReader
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DeprecatedAnnotationReader::class);
     }
 
     /**
@@ -85,11 +95,15 @@ class ObjectType implements TypeMetaReaderInterface
             }
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
-                    $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
+                $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
 
-            if ($this->docReader->read($typeMeta->astNode->directives)) {
-                $result['cache'] = $this->cacheTagReader->read($typeMeta->astNode->directives);
+            if ($this->cacheAnnotationReader->read($typeMeta->astNode->directives)) {
+                $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
+            }
+
+            if ($this->deprecatedAnnotationReader->read($typeMeta->astNode->directives)) {
+                $result['deprecated'] = $this->deprecatedAnnotationReader->read($typeMeta->astNode->directives);
             }
 
             return $result;

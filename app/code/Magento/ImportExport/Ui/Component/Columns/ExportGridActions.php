@@ -65,7 +65,8 @@ class ExportGridActions extends Column
                         'confirm' => [
                             'title' => __('Delete'),
                             'message' => __('Are you sure you wan\'t to delete a file?')
-                        ]
+                        ],
+                        'post' => true,
                     ];
                 }
             }

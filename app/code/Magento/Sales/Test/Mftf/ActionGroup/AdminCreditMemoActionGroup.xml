@@ -10,12 +10,16 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Check customer information is correct in credit memo-->
     <actionGroup name="verifyBasicCreditMemoInformation">
+        <annotations>
+            <description>Validates that the provided Customer, Shipping/Billing Address and Customer Group are present and correct on the Admin Credit Memo view page.</description>
+        </annotations>
         <arguments>
             <argument name="customer" defaultValue=""/>
             <argument name="shippingAddress" defaultValue=""/>
             <argument name="billingAddress" defaultValue=""/>
             <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
         </arguments>
+
         <see selector="{{AdminCreditMemoOrderInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>
         <see selector="{{AdminCreditMemoOrderInformationSection.customerEmail}}" userInput="{{customer.email}}" stepKey="seeCustomerEmail"/>
         <see selector="{{AdminCreditMemoOrderInformationSection.customerGroup}}" userInput="{{customerGroup.code}}" stepKey="seeCustomerGroup"/>
@@ -32,9 +36,35 @@
     </actionGroup>
 
     <actionGroup name="seeProductInItemsRefunded">
+        <annotations>
+            <description>Validates that the provided Product appears in the 'Product' column on the Admin Credit Memo view page.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+
         <see selector="{{AdminCreditMemoItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
+    </actionGroup>
+
+    <actionGroup name="StartToCreateCreditMemoActionGroup">
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="navigateToOrderPage"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
+        <waitForElementVisible selector="{{AdminHeaderSection.pageTitle}}" stepKey="waitForPageTitle"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+    </actionGroup>
+    <actionGroup name="SubmitCreditMemoActionGroup">
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="waitButtonEnabled"/>
+        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
+        <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}$grabOrderId" stepKey="seeViewOrderPageCreditMemo"/>
+    </actionGroup>
+    <actionGroup name="UpdateCreditMemoTotalsActionGroup">
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="waitUpdateTotalsButtonEnabled"/>
+        <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
     </actionGroup>
 </actionGroups>
