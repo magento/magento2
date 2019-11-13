@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Zend\Db\Adapter\Driver\Pdo\Statement;
 
 /**
- * Test the GetById command model with exception during media asset initialization
+ * Test the GetById command with exception during media asset initialization
  */
 class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framework\TestCase
 {

@@ -19,9 +19,9 @@ use Psr\Log\LoggerInterface;
 use Zend\Db\Adapter\Driver\Pdo\Statement;
 
 /**
- * Test the GetById command model
+ * Test the GetById command successful scenario
  */
-class GetByIdTest extends \PHPUnit\Framework\TestCase
+class GetByIdSuccessfulTest extends \PHPUnit\Framework\TestCase
 {
     private const MEDIA_ASSET_STUB_ID = 1;
 
