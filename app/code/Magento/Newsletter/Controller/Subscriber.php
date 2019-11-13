@@ -24,7 +24,7 @@ abstract class Subscriber extends \Magento\Framework\App\Action\Action
     /**
      * Configuration path to newsletter active setting
      */
-    const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
+    private const XML_PATH_NEWSLETTER_ACTIVE = 'newsletter/general/active';
 
     /**
      * Customer session
