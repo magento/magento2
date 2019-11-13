@@ -10,11 +10,16 @@ define([
 
     return Column.extend({
         defaults: {
+            bodyTmpl: 'ui/grid/columns/image-preview',
             previewImageSelector: '[data-image-preview]',
             visibleRecord: null,
             height: 0,
             displayedRecord: {},
             lastOpenedImage: null,
+            fields: {
+                previewUrl: 'preview_url',
+                title: 'title'
+            },
             modules: {
                 masonry: '${ $.parentName }',
                 thumbnailComponent: '${ $.parentName }.thumbnail_url'
@@ -152,6 +157,26 @@ define([
             }
 
             return this.visibleRecord() === record._rowIndex || false;
+        },
+
+        /**
+         * Returns preview image url for a given record.
+         *
+         * @param {Object} record
+         * @return {String}
+         */
+        getUrl: function (record) {
+            return record[this.fields.previewUrl];
+        },
+
+        /**
+         * Returns image title for a given record.
+         *
+         * @param {Object} record
+         * @return {String}
+         */
+        getTitle: function (record) {
+            return record[this.fields.title];
         },
 
         /**
