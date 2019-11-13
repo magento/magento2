@@ -37,7 +37,7 @@ class CompiledPluginList extends \Magento\Framework\CompiledInterception\Generat
         OriginalPluginList $unused
     ) {
         $objectManager = ObjectManager::getInstance();
-        $this->pluginList = ObjectManager::getInstance()->create(
+        $this->pluginList = $objectManager->create(
             PluginList::class,
             [
                 $objectManager->get(Dom::class),

@@ -54,21 +54,15 @@ class DefinitionFactory
      */
     public function createClassDefinition()
     {
-        $autoloaderAbsent = true;
-        $codeGenerator = $this->getCodeGenerator();
-
         foreach (spl_autoload_functions() as $autoloader) {
             if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
-                $autoloader[0]->setGenerator($codeGenerator);
-                $autoloaderAbsent = false;
+                spl_autoload_unregister($autoloader);
                 break;
             }
         }
 
-        if ($autoloaderAbsent) {
-            $autoloaderInstance = new Autoloader($codeGenerator);
-            spl_autoload_register([$autoloaderInstance, 'load']);
-        }
+        $autoloader = new Autoloader($this->getCodeGenerator());
+        spl_autoload_register([$autoloader, 'load']);
 
         return new Runtime();
     }
@@ -107,6 +101,7 @@ class DefinitionFactory
             );
             $this->codeGenerator = new \Magento\Framework\Code\Generator($generatorIo);
         }
+
         return $this->codeGenerator;
     }
 }

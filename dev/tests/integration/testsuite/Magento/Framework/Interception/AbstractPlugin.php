@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\Code\Generator\Autoloader;
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Class GeneralTest
  *
@@ -52,7 +55,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     public function tearDown()
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
-        $this->restoreOriginalObjectManager();
+        $this->injectObjectManager($this->applicationObjectManager);
     }
 
     /**
@@ -127,30 +130,23 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->injectConfiguredObjectManager();
+        $this->injectObjectManager($this->_objectManager);
     }
 
     /**
-     * Inject configured object manager into autoloader.
+     * Inject object manager into autoloader.
+     *
+     * @param ObjectManagerInterface $objectManager
+     * @throws \ReflectionException
      */
-    private function injectConfiguredObjectManager(): void
+    private function injectObjectManager(ObjectManagerInterface $objectManager): void
     {
         foreach (spl_autoload_functions() as $autoloader) {
-            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
-                $autoloader[0]->getGenerator()->setObjectManager($this->_objectManager);
-                break;
-            }
-        }
-    }
-
-    /**
-     * Restore original object manager in autoloader.
-     */
-    private function restoreOriginalObjectManager(): void
-    {
-        foreach (spl_autoload_functions() as $autoloader) {
-            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
-                $autoloader[0]->getGenerator()->setObjectManager($this->applicationObjectManager);
+            if (is_array($autoloader) && $autoloader[0] instanceof Autoloader) {
+                $autoloaderReflection = new \ReflectionClass($autoloader[0]);
+                $generatorProperty = $autoloaderReflection->getProperty('_generator');
+                $generatorProperty->setAccessible(true);
+                $generatorProperty->getValue($autoloader[0])->setObjectManager($objectManager);
                 break;
             }
         }

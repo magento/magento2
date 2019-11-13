@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Code\Generator\Autoloader;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
@@ -93,8 +94,11 @@ class CliTest extends \PHPUnit\Framework\TestCase
         $cliReflection = new \ReflectionClass($cli);
 
         foreach (spl_autoload_functions() as $autoloader) {
-            if (is_array($autoloader) && $autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
-                $autoloader[0]->getGenerator()->setObjectManager($this->objectManager);
+            if (is_array($autoloader) && $autoloader[0] instanceof Autoloader) {
+                $autoloaderReflection = new \ReflectionClass($autoloader[0]);
+                $generatorProperty = $autoloaderReflection->getProperty('_generator');
+                $generatorProperty->setAccessible(true);
+                $generatorProperty->getValue($autoloader[0])->setObjectManager($this->objectManager);
                 break;
             }
         }
