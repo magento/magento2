@@ -53,15 +53,15 @@ define([
             var trElement = Event.findElement(event, 'tr'),
                 eventElement = Event.element(event),
                 isInputCheckbox = eventElement.tagName === 'INPUT' && eventElement.type === 'checkbox',
-                isInputPosition = grid.targetElement
-                    && grid.targetElement.tagName === 'INPUT'
-                    && grid.targetElement.name === 'position',
+                isInputPosition = grid.targetElement &&
+                    grid.targetElement.tagName === 'INPUT' &&
+                    grid.targetElement.name === 'position',
                 checked = false,
                 checkbox = null;
 
-            if (eventElement.tagName === 'LABEL'
-                && trElement.querySelector('#' + eventElement.htmlFor)
-                && trElement.querySelector('#' + eventElement.htmlFor).type === 'checkbox'
+            if (eventElement.tagName === 'LABEL' &&
+                trElement.querySelector('#' + eventElement.htmlFor) &&
+                trElement.querySelector('#' + eventElement.htmlFor).type === 'checkbox'
             ) {
                 event.stopPropagation();
                 trElement.querySelector('#' + eventElement.htmlFor).trigger('click');
