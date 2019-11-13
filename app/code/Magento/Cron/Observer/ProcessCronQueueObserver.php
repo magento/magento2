@@ -63,7 +63,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * How long to wait for cron group to become unlocked
      */
-    const LOCK_TIMEOUT = 5;
+    const LOCK_TIMEOUT = 60;
 
     /**
      * Static lock prefix for cron group locking
@@ -270,7 +270,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      */
     private function lockGroup($groupId, callable $callback)
     {
-        if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, 60)) {
+        if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
             $this->logger->warning(
                 sprintf(
                     "Could not acquire lock for cron group: %s, skipping run",
