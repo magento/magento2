@@ -63,6 +63,10 @@ class CreateCustomer implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (empty($args['input']) || !is_array($args['input'])) {
+            throw new GraphQlInputException(__('"input" value should be specified'));
+        }
+
         if (!$this->newsLetterConfig->isActive(ScopeInterface::SCOPE_STORE)) {
             $args['input']['is_subscribed'] = false;
         }
