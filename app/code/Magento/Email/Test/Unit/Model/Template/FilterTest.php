@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template;
 
 use Magento\Email\Model\Template\Css\Processor;
@@ -14,6 +17,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class FilterTest extends \PHPUnit\Framework\TestCase
 {
@@ -92,6 +96,31 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      */
     private $cssInliner;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Email\Model\Template\Css\Processor
+     */
+    private $cssProcessor;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
+     */
+    private $pubDirectory;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
+     */
+    private $pubDirectoryRead;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filter\VariableResolver\StrategyResolver
+     */
+    private $variableResolver;
+
+    /**
+     * @var array
+     */
+    private $directiveProcessors;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -147,6 +176,41 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $this->cssInliner = $this->objectManager->getObject(
             \Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class
         );
+
+        $this->cssProcessor = $this->getMockBuilder(\Magento\Email\Model\Template\Css\Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->pubDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->pubDirectoryRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->variableResolver =
+            $this->getMockBuilder(\Magento\Framework\Filter\VariableResolver\StrategyResolver::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+        $this->directiveProcessors = [
+            'depend' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\DependDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+            'if' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\IfDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+            'template' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\TemplateDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+            'legacy' =>
+                $this->getMockBuilder(\Magento\Framework\Filter\DirectiveProcessor\LegacyDirective::class)
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+        ];
     }
 
     /**
@@ -173,6 +237,10 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                     $this->configVariables,
                     [],
                     $this->cssInliner,
+                    $this->directiveProcessors,
+                    $this->variableResolver,
+                    $this->cssProcessor,
+                    $this->pubDirectory
                 ]
             )
             ->setMethods($mockedMethods)
@@ -252,17 +320,16 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->with($file, $designParams)
             ->willReturn($asset);
 
-        $pubDirectory = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
-        $reflectionClass = new \ReflectionClass(Filter::class);
-        $reflectionProperty = $reflectionClass->getProperty('pubDirectory');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($filter, $pubDirectory);
-        $pubDirectory->expects($this->once())
+        $this->pubDirectory
+            ->expects($this->once())
+            ->method('getDirectoryRead')
+            ->willReturn($this->pubDirectoryRead);
+
+        $this->pubDirectoryRead->expects($this->once())
             ->method('isExist')
             ->with($path . DIRECTORY_SEPARATOR . $file)
             ->willReturn(true);
-        $pubDirectory->expects($this->once())
+        $this->pubDirectoryRead->expects($this->once())
             ->method('readFile')
             ->with($path . DIRECTORY_SEPARATOR . $file)
             ->willReturn($css);
@@ -317,43 +384,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->willReturnArgument(0);
 
         $filter->applyInlineCss('test');
-    }
-
-    /**
-     * Ensure that after filter callbacks are reset after exception is thrown during filtering
-     */
-    public function testAfterFilterCallbackGetsResetWhenExceptionTriggered()
-    {
-        $value = '{{var random_var}}';
-        $exception = new \Exception('Test exception');
-        $exceptionResult = sprintf(__('Error filtering template: %s'), $exception->getMessage());
-
-        $this->appState->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
-        $this->logger->expects($this->once())
-            ->method('critical')
-            ->with($exception);
-
-        $filter = $this->getModel(['varDirective', 'resetAfterFilterCallbacks']);
-        $filter->expects($this->once())
-            ->method('varDirective')
-            ->will($this->throwException($exception));
-
-        // Callbacks must be reset after exception is thrown
-        $filter->expects($this->once())
-            ->method('resetAfterFilterCallbacks');
-
-        // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
-            ->getMock();
-        // Callback should never run due to exception happening during filtering
-        $callbackObject->expects($this->never())
-            ->method('afterFilterCallbackMethod');
-        $filter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
-
-        $this->assertEquals($exceptionResult, $filter->filter($value));
     }
 
     public function testConfigDirectiveAvailable()
