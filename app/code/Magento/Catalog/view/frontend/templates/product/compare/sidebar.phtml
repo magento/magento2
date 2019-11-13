@@ -11,7 +11,17 @@
 <div class="block block-compare" data-bind="scope: 'compareProducts'" data-role="compare-products-sidebar">
     <div class="block-title">
         <strong id="block-compare-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('Compare Products')) ?></strong>
-        <span class="counter qty no-display" data-bind="text: compareProducts().countCaption, css: {'no-display': !compareProducts().count}"></span>
+        <!-- ko if: compareProducts().count -->
+        <span class="counter qty no-display" data-bind="css: {'no-display': !compareProducts().count}">
+            <span data-bind="text: compareProducts().count"></span>
+            <!-- ko if: (compareProducts().count === 1) -->
+                <?= $block->escapeHtmlAttr(__(' item')) ?>
+            <!--/ko-->
+            <!-- ko if: (compareProducts().count > 1) -->
+                <?= $block->escapeHtmlAttr(__(' items')) ?>
+            <!--/ko-->
+        </span>
+        <!-- /ko -->
     </div>
     <!-- ko if: compareProducts().count -->
     <div class="block-content no-display" aria-labelledby="block-compare-heading" data-bind="css: {'no-display': !compareProducts().count}">

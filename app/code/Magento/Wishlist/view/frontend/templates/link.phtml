@@ -9,7 +9,15 @@
 <li class="link wishlist" data-bind="scope: 'wishlist'">
     <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><?= $block->escapeHtml($block->getLabel()) ?>
         <!-- ko if: wishlist().counter -->
-        <span data-bind="text: wishlist().counter" class="counter qty"></span>
+        <span class="counter qty">
+            <span data-bind="text: wishlist().counter"></span>
+            <!-- ko if: (wishlist().counter === 1) -->
+                <?= $block->escapeHtmlAttr(__(' item')) ?>
+            <!--/ko-->
+            <!-- ko if: (wishlist().counter > 1) -->
+                <?= $block->escapeHtmlAttr(__(' items')) ?>
+            <!--/ko-->
+        </span>
         <!-- /ko -->
     </a>
 </li>

@@ -11,7 +11,17 @@
        data-bind="attr: {'href': compareProducts().listUrl}, css: {'no-display': !compareProducts().count}"
     >
         <?= $block->escapeHtml(__('Compare Products')) ?>
-        <span class="counter qty" data-bind="text: compareProducts().countCaption"></span>
+        <!-- ko if: compareProducts().count -->
+        <span class="counter qty">
+            <span data-bind="text: compareProducts().count"></span>
+            <!-- ko if: (compareProducts().count === 1) -->
+                <?= $block->escapeHtmlAttr(__(' item')) ?>
+            <!--/ko-->
+            <!-- ko if: (compareProducts().count > 1) -->
+                <?= $block->escapeHtmlAttr(__(' items')) ?>
+            <!--/ko-->
+        </span>
+        <!-- /ko -->
     </a>
 </li>
 <script type="text/x-magento-init">

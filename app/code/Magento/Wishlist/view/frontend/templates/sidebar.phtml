@@ -14,7 +14,15 @@ $wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
             <!-- ko if: wishlist().counter -->
-            <span data-bind="text: wishlist().counter" class="counter"></span>
+            <span class="counter no-display" data-bind="css: {'no-display': !wishlist().counter}">
+                <span data-bind="text: wishlist().counter"></span>
+                <!-- ko if: (wishlist().counter === 1) -->
+                    <?= $block->escapeHtmlAttr(__(' item')) ?>
+                <!--/ko-->
+                <!-- ko if: (wishlist().counter > 1) -->
+                    <?= $block->escapeHtmlAttr(__(' items')) ?>
+                <!--/ko-->
+            </span>
             <!-- /ko -->
         </div>
         <div class="block-content">
