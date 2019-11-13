@@ -65,6 +65,7 @@ define([
             ) {
                 event.stopPropagation();
                 trElement.querySelector('#' + eventElement.htmlFor).trigger('click');
+                
                 return;
             }
 
