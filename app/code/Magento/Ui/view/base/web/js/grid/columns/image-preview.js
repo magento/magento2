@@ -163,7 +163,7 @@ define([
          * Returns preview image url for a given record.
          *
          * @param {Object} record
-         * @return {*|bool}
+         * @return {String}
          */
         getUrl: function (record) {
             return record[this.fields.previewUrl];
@@ -173,7 +173,7 @@ define([
          * Returns image title for a given record.
          *
          * @param {Object} record
-         * @return {*|bool}
+         * @return {String}
          */
         getTitle: function (record) {
             return record[this.fields.title];
