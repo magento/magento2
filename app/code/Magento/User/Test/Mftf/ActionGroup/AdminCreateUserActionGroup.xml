@@ -36,6 +36,7 @@
     <!--Create new user with role-->
     <actionGroup name="AdminCreateUserWithRoleActionGroup">
         <arguments>
+            <argument name="role"/>
             <argument name="user" defaultValue="newAdmin"/>
         </arguments>
         <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
@@ -49,31 +50,8 @@
         <fillField selector="{{AdminCreateUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
         <scrollToTopOfPage stepKey="scrollToTopOfPage" />
         <click stepKey="clickUserRole" selector="{{AdminCreateUserSection.userRoleTab}}"/>
-        <checkOption selector="{{AdminNewUserFormSection.roleRadiobutton(user.role)}}" stepKey="assignRole"/>
+        <click stepKey="chooseRole" selector="{{AdminStoreSection.createdRoleInUserPage(role.name)}}"/>
         <click selector="{{AdminCreateUserSection.saveButton}}" stepKey="clickSaveUser" />
-        <waitForPageLoad stepKey="waitForSaveTheUser" />
-        <see userInput="You saved the user." stepKey="seeSuccessMessage" />
-    </actionGroup>
-
-    <!--Create new user with role and active/inactive setting-->
-    <actionGroup name="AdminCreateUserWithRoleAndIsActiveActionGroup">
-        <arguments>
-            <argument name="user" defaultValue="newAdmin"/>
-        </arguments>
-        <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
-        <waitForPageLoad stepKey="waitForUsersPage" />
-        <fillField selector="{{AdminNewUserFormSection.username}}" userInput="{{user.username}}" stepKey="enterUserName" />
-        <fillField selector="{{AdminNewUserFormSection.firstname}}" userInput="{{user.firstName}}" stepKey="enterFirstName" />
-        <fillField selector="{{AdminNewUserFormSection.lastname}}" userInput="{{user.lastName}}" stepKey="enterLastName" />
-        <fillField selector="{{AdminNewUserFormSection.email}}" userInput="{{user.username}}@magento.com" stepKey="enterEmail" />
-        <fillField selector="{{AdminNewUserFormSection.password}}" userInput="{{user.password}}" stepKey="enterPassword" />
-        <fillField selector="{{AdminNewUserFormSection.passwordConfirmation}}" userInput="{{user.password}}" stepKey="confirmPassword" />
-        <checkOption selector="{{AdminNewUserFormSection.userIsActive(user.is_active)}}" stepKey="checkIsActive" />
-        <fillField selector="{{AdminNewUserFormSection.currentPassword}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword" />
-        <scrollToTopOfPage stepKey="scrollToTopOfPage" />
-        <click stepKey="clickUserRole" selector="{{AdminNewUserFormSection.userRoleTab}}"/>
-        <checkOption selector="{{AdminNewUserFormSection.roleRadiobutton(user.role)}}" stepKey="assignRole"/>
-        <click selector="{{AdminNewUserFormSection.save}}" stepKey="clickSaveUser" />
         <waitForPageLoad stepKey="waitForSaveTheUser" />
         <see userInput="You saved the user." stepKey="seeSuccessMessage" />
     </actionGroup>

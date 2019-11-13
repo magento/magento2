@@ -19,7 +19,7 @@
         <element name="password" type="input" selector="#page_tabs_main_section_content input[name='password']"/>
         <element name="passwordConfirmation" type="input" selector="#page_tabs_main_section_content input[name='password_confirmation']"/>
         <element name="interfaceLocale" type="select" selector="#page_tabs_main_section_content select[name='interface_locale']"/>
-        <element name="userIsActive" type="select" selector="#page_tabs_main_section_content select[id='user_is_active'] > option[value='{{var}}']" parameterized="true"/>
+        <element name="userIsActive" type="select" selector="#page_tabs_main_section_content select[id='user_is_active'] > option[value='{{isActive}}']" parameterized="true"/>
         <element name="currentPassword" type="input" selector="#page_tabs_main_section_content input[name='current_password']"/>
 
         <element name="userRoleTab" type="button" selector="#page_tabs_roles_section"/>

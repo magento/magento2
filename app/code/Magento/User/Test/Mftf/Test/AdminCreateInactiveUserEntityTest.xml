@@ -22,8 +22,15 @@
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
         </before>
+        <after>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="inactiveAdmin"/>
+            </actionGroup>
+        </after>
 
         <actionGroup ref="AdminCreateUserWithRoleAndIsActiveActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="genericAdminRole"/>
             <argument name="user" value="inactiveAdmin"/>
         </actionGroup>
         <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>

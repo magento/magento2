@@ -24,4 +24,8 @@
         <data key="resourceAccess">Custom</data>
         <data key="resources">['Magento_Sales::sales','Magento_Sales::sales_operation','Magento_Sales::actions','Magento_Sales::sales_order','Magento_Sales::create','Magento_Sales::actions_view','Magento_Sales::email','Magento_Sales::reorder','Magento_Sales::actions_edit','Magento_Sales::cancel','Magento_Sales::review_payment','Magento_Sales::capture','Magento_Sales::invoice','Magento_Sales::creditmemo','Magento_Sales::hold','Magento_Sales::unhold','Magento_Sales::ship','Magento_Sales::comment','Magento_Sales::emails','Magento_Backend::system','Magento_Backend::system_other_settings','Magento_AdminNotification::adminnotification','Magento_AdminNotification::show_list']</data>
     </entity>
+
+    <entity name="genericAdminRole" type="role">
+        <data key="name">Administrators</data>
+    </entity>
 </entities>
