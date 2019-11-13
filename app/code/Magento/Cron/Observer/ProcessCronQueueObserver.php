@@ -20,6 +20,7 @@ use Magento\Framework\Profiler\Driver\Standard\StatFactory;
  * The observer for processing cron jobs.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ProcessCronQueueObserver implements ObserverInterface
 {
