@@ -13,7 +13,7 @@ define([
 
     return Listing.extend({
         defaults: {
-            template: 'Magento_Ui/grid/masonry',
+            template: 'ui/grid/masonry',
             imports: {
                 rows: '${ $.provider }:data.items',
                 errorMessage: '${ $.provider }:data.errorMessage'

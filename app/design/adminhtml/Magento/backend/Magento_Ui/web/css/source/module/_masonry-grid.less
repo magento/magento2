@@ -1,0 +1,108 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+@admin__masonry_grid_image__space: 20px;
+@admin__masonry_grid_background_color: #fff;
+@admin__masonry_overlay_background_color: #507dc8;
+
+& when (@media-common = true) {
+    .masonry-image {
+        &-grid {
+            margin: @admin__masonry_grid_image__space/2 -(@admin__masonry_grid_image__space/2);
+            overflow: hidden;
+            position: relative;
+
+            .no-data-message-container,
+            .error-message-container {
+                font-size: @data-grid__no-records__font-size;
+                padding: @data-grid__no-records__padding;
+                text-align: center;
+            }
+        }
+
+        &-column {
+            background-color: @admin__masonry_grid_background_color;
+            float: left;
+            margin: @admin__masonry_grid_image__space/2;
+            overflow: hidden;
+
+            img {
+                cursor: pointer;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        &-overlay {
+            position: absolute;
+            color: #fff;
+            z-index: 10;
+            padding: .5rem;
+            opacity: 1;
+            width: 80px;
+            background-color: @admin__masonry_overlay_background_color;
+            text-align: center;
+        }
+
+        &-preview {
+            background-color: @admin__masonry_grid_background_color;
+            display: table;
+            left: 0;
+            position: absolute;
+            right: 0;
+            width: 100%;
+
+            .container {
+                margin: auto;
+                max-width: 880px;
+                padding-top: 10px;
+
+                .action-buttons {
+                    text-align: right;
+
+                    .action {
+                        &-close {
+                            padding: 30px;
+                            position: static;
+                        }
+
+                        &-previous,
+                        &-next {
+                            background: transparent;
+                            border: none;
+                            margin: 0;
+                            white-space: nowrap;
+                        }
+
+                        &-close,
+                        &-previous,
+                        &-next {
+                            font-size: 2rem;
+                        }
+                    }
+                }
+
+                .preview-row-content {
+                    display: flex;
+
+                    &:after {
+                        display: table;
+                        clear: both;
+                        content: '';
+                    }
+
+                    img.preview {
+                        display: block;
+                        flex-basis: 300px;
+                        float: left;
+                        margin-bottom: 20px;
+                        max-height: 500px;
+                        max-width: 60%;
+                        width: auto;
+                    }
+                }
+            }
+        }
+    }
+}
