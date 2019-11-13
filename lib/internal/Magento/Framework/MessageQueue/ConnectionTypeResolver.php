@@ -26,7 +26,9 @@ class ConnectionTypeResolver
     }
 
     /**
-     * @param $connectionName
+     * Get connection type. 
+     *
+     * @param string $connectionName
      * @return string|null
      */
     public function getConnectionType($connectionName)
