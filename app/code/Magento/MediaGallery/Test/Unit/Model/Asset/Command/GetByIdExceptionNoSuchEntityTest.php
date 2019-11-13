@@ -25,8 +25,6 @@ class GetByIdExceptionNoSuchEntityTest extends \PHPUnit\Framework\TestCase
 {
     private const MEDIA_ASSET_STUB_ID = 1;
 
-    private const MEDIA_ASSET_DATA = ['id' => 1];
-
     /**
      * @var GetById|MockObject
      */
