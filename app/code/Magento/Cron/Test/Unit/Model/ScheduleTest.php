@@ -45,7 +45,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
 
         $this->resourceJobMock = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['trySetJobStatusAtomic', '__wakeup', 'getIdFieldName'])
+            ->setMethods(['trySetJobStatusAtomic', '__wakeup', 'getIdFieldName', 'trySetJobStatuses'])
             ->getMockForAbstractClass();
 
         $this->resourceJobMock->expects($this->any())
@@ -450,7 +450,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function testTryLockJobSuccess(): void
     {
         $scheduleId = 1;
+        $jobCode = 'test_job';
 
+        $this->resourceJobMock->expects($this->once())
+            ->method('trySetJobStatuses')
+            ->with($jobCode, Schedule::STATUS_ERROR, Schedule::STATUS_RUNNING)
+            ->willReturn(1);
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
@@ -464,6 +469,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $model->setId($scheduleId);
+        $model->setJobCode($jobCode);
         $this->assertEquals(0, $model->getStatus());
 
         $model->tryLockJob();
@@ -479,7 +485,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function testTryLockJobFailure(): void
     {
         $scheduleId = 1;
+        $jobCode = 'test_job';
 
+        $this->resourceJobMock->expects($this->once())
+            ->method('trySetJobStatuses')
+            ->with($jobCode, Schedule::STATUS_ERROR, Schedule::STATUS_RUNNING)
+            ->willReturn(1);
         $this->resourceJobMock->expects($this->once())
             ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
@@ -493,6 +504,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $model->setId($scheduleId);
+        $model->setJobCode($jobCode);
         $this->assertEquals(0, $model->getStatus());
 
         $model->tryLockJob();

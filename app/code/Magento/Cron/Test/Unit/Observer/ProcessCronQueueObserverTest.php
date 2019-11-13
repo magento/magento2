@@ -91,6 +91,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     private $lockManagerMock;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventManager;
+
+    /**
      * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $scheduleResource;
@@ -148,6 +153,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->lockManagerMock->method('lock')->willReturn(true);
         $this->lockManagerMock->method('unlock')->willReturn(true);
 
+        $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+
         $this->observer = $this->createMock(\Magento\Framework\Event\Observer::class);
 
         $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
@@ -195,7 +202,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             $this->loggerMock,
             $this->appStateMock,
             $this->statFactory,
-            $this->lockManagerMock
+            $this->lockManagerMock,
+            $this->eventManager
         );
     }
 
@@ -204,6 +212,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testDispatchNoJobConfig()
     {
+        $this->eventManager->expects($this->never())->method('dispatch');
         $lastRun = $this->time + 10000000;
         $this->_cache->expects($this->atLeastOnce())->method('load')->will($this->returnValue($lastRun));
         $this->_scopeConfig->expects($this->atLeastOnce())->method('getValue')->will($this->returnValue(0));
@@ -242,6 +251,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     public function testDispatchCanNotLock()
     {
         $lastRun = $this->time + 10000000;
+        $this->eventManager->expects($this->never())->method('dispatch');
         $this->_cache->expects($this->any())->method('load')->will($this->returnValue($lastRun));
         $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue(0));
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
@@ -290,6 +300,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $jobCode = 'test_job1';
 
         $lastRun = $this->time + 10000000;
+        $this->eventManager->expects($this->never())->method('dispatch');
         $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);
         $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn(0);
         $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
@@ -359,6 +370,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $exceptionMessage = 'No callbacks found for cron job ' . $jobName;
         $exception = new \Exception(__($exceptionMessage));
 
+        $this->eventManager->expects($this->never())->method('dispatch');
+
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
         $schedule = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
@@ -413,6 +426,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      * @param mixed $cronJobObject
      * @param string $exceptionMessage
      * @param int $saveCalls
+     * @param int $dispatchCalls
      * @param \Exception $exception
      *
      * @dataProvider dispatchExceptionInCallbackDataProvider
@@ -422,6 +436,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $cronJobObject,
         $exceptionMessage,
         $saveCalls,
+        $dispatchCalls,
         $exception
     ) {
         $jobConfig = [
@@ -429,6 +444,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'test_job1' => ['instance' => $cronJobType, 'method' => 'execute'],
             ],
         ];
+
+        $this->eventManager->expects($this->exactly($dispatchCalls))
+            ->method('dispatch')
+            ->with('cron_job_run', ['job_name' => 'cron/test_group/test_job1']);
 
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
 
@@ -488,6 +507,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 '',
                 'Invalid callback: Not_Existed_Class::execute can\'t be called',
                 1,
+                0,
                 new \Exception(__('Invalid callback: Not_Existed_Class::execute can\'t be called'))
             ],
             'exception in execution' => [
@@ -495,6 +515,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 new \Magento\Cron\Test\Unit\Model\CronJobException(),
                 'Test exception',
                 2,
+                1,
                 new \Exception(__('Test exception'))
             ],
             'throwable in execution' => [
@@ -504,6 +525,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 ),
                 'Error when running a cron job',
                 2,
+                1,
                 new \RuntimeException(
                     'Error when running a cron job',
                     0,
@@ -522,6 +544,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
+
+        $this->eventManager->expects($this->once())
+            ->method('dispatch')
+            ->with('cron_job_run', ['job_name' => 'cron/test_group/test_job1']);
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
         $scheduleMethods = [
@@ -603,6 +629,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
 
+        $this->eventManager->expects($this->never())->method('dispatch');
+
         $this->_config->expects($this->at(0))->method('getJobs')->will($this->returnValue($jobConfig));
         $this->_config->expects(
             $this->at(1)
@@ -680,6 +708,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'job3' => ['schedule' => '* * * * *'],
             ],
         ];
+        $this->eventManager->expects($this->never())->method('dispatch');
         $this->_config->expects($this->at(0))->method('getJobs')->willReturn($jobConfig);
         $this->_config->expects($this->at(1))->method('getJobs')->willReturn($jobs);
         $this->_config->expects($this->at(2))->method('getJobs')->willReturn($jobs);
@@ -749,6 +778,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
 
+        $this->eventManager->expects($this->never())->method('dispatch');
         $dateExecutedAt = date('Y-m-d H:i:s', $this->time - 86400);
         $schedule = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
@@ -794,6 +824,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testMissedJobsCleanedInTime()
     {
+        $this->eventManager->expects($this->never())->method('dispatch');
+
         /* 1. Initialize dependencies of _cleanup() method which is called first */
         $scheduleMock = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class

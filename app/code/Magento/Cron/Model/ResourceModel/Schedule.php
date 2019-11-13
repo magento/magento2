@@ -14,6 +14,11 @@ namespace Magento\Cron\Model\ResourceModel;
 class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * Max retries for deadlocks
+     */
+    private const MAX_RETRIES = 5;
+
+    /**
      * Initialize resource
      *
      * @return void
@@ -37,25 +42,17 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function trySetJobStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {
         $connection = $this->getConnection();
-        $retries = 5;
-        $result = 0;
-        while ($retries--) {
-            try {
-                $result = $connection->update(
+        $result = (int) $this->retry(
+            function () use ($connection, $newStatus, $scheduleId, $currentStatus) {
+                return $connection->update(
                     $this->getTable('cron_schedule'),
                     ['status' => $newStatus],
                     ['schedule_id = ?' => $scheduleId, 'status = ?' => $currentStatus]
                 );
-                break;
-            } catch (\Magento\Framework\DB\Adapter\DeadlockException $e) {
-                continue;
             }
-        }
+        );
 
-        if ($result == 1) {
-            return true;
-        }
-        return false;
+        return $result == 1;
     }
 
     /**
@@ -97,9 +94,77 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
         $result = $connection->query($update)->rowCount();
 
-        if ($result == 1) {
-            return true;
+        return $result == 1;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        return $this->retry(
+            function () use ($object) {
+                return parent::save($object);
+            }
+        );
+    }
+
+    /**
+     * Clean up schedule
+     *
+     * @param mixed $where
+     * @return int
+     */
+    public function cleanup($where = ''): int
+    {
+        $connection = $this->getConnection();
+
+        return (int) $this->retry(
+            function () use ($connection, $where) {
+                return $connection->delete($this->getTable('cron_schedule'), $where);
+            }
+        );
+    }
+
+    /**
+     * Sets new status for records in the schedule table by job code
+     *
+     * @param string $jobCode
+     * @param string $newStatus
+     * @param string $currentStatus
+     * @return int
+     */
+    public function trySetJobStatuses(string $jobCode, string $newStatus, string $currentStatus): int
+    {
+        $connection = $this->getConnection();
+
+        return (int) $this->retry(
+            function () use ($connection, $jobCode, $newStatus, $currentStatus) {
+                return $connection->update(
+                    $this->getTable('cron_schedule'),
+                    ['status' => $newStatus],
+                    ['job_code = ?' => $jobCode, 'status = ?' => $currentStatus]
+                );
+            }
+        );
+    }
+
+    /**
+     * Retry deadlocks
+     *
+     * @param callable $callback
+     * @return mixed
+     */
+    private function retry(callable $callback)
+    {
+        for ($retries = self::MAX_RETRIES - 1; $retries > 0; $retries--) {
+            try {
+                return $callback();
+            } catch (\Magento\Framework\DB\Adapter\DeadlockException $e) {
+                continue;
+            }
         }
-        return false;
+
+        return $callback();
     }
 }
