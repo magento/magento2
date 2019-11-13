@@ -804,7 +804,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             'with_store_view_code' => [
                 '$rowData' => [
                     'store_view_code' => '',
-                    'custom_options' => 
+                    'custom_options' =>
                         'name=Test Field Title,type=field,required=1;sku=1-text,price=0,price_type=fixed'
                 ],
                 '$responseData' => [
@@ -826,7 +826,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ],
             'without_store_view_code' => [
                 '$rowData' => [
-                    'custom_options' => 
+                    'custom_options' =>
                         'name=Test Field Title,type=field,required=1;sku=1-text,price=0,price_type=fixed'
                 ],
                 '$responseData' => [
