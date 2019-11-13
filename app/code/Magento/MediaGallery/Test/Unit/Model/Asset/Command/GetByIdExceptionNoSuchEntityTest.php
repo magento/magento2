@@ -53,25 +53,20 @@ class GetByIdExceptionNoSuchEntityTest extends \PHPUnit\Framework\TestCase
     private $statementMock;
 
     /**
-     * @var LoggerInterface|MockObject
-     */
-    private $logger;
-
-    /**
      * Initialize basic test class mocks
      */
     protected function setUp(): void
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
             [
                 'resourceConnection' => $resourceConnection,
                 'assetFactory' => $this->assetFactory,
-                'logger' =>  $this->logger,
+                'logger' =>  $logger,
             ]
         );
         $this->adapter = $this->createMock(AdapterInterface::class);

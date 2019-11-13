@@ -42,6 +42,11 @@ class GetByIdExceptionOnGetDataTest extends \PHPUnit\Framework\TestCase
     private $selectStub;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+
+    /**
      * @var Statement|MockObject
      */
     private $statementMock;
@@ -53,14 +58,14 @@ class GetByIdExceptionOnGetDataTest extends \PHPUnit\Framework\TestCase
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
             [
                 'resourceConnection' => $resourceConnection,
                 'assetFactory' => $assetFactory,
-                'logger' =>  $logger,
+                'logger' =>  $this->logger,
             ]
         );
         $this->adapter = $this->createMock(AdapterInterface::class);
@@ -83,6 +88,9 @@ class GetByIdExceptionOnGetDataTest extends \PHPUnit\Framework\TestCase
         $this->adapter->method('query')->willThrowException(new \Exception());
 
         $this->expectException(IntegrationException::class);
+        $this->logger->expects($this->any())
+            ->method('critical')
+            ->willReturnSelf();
 
         $this->getMediaAssetById->execute(self::MEDIA_ASSET_STUB_ID);
     }
