@@ -82,37 +82,4 @@ class UrlRewriteTest extends AbstractController
             ],
         ];
     }
-
-    /**
-     * @magentoDbIsolation enabled
-     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
-     * @dataProvider categoryRewriteProvider
-     * @param string $request
-     * @return void
-     */
-    public function testCategoryUrlRewrite(string $request): void
-    {
-        $this->dispatch($request);
-        $response = $this->getResponse();
-        $this->assertEquals(
-            HttpResponse::STATUS_CODE_200,
-            $response->getHttpResponseCode(),
-            'Response code does not match expected value'
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function categoryRewriteProvider(): array
-    {
-        return [
-            [
-                'category-1.html',
-                'category-1/category-1-1.html',
-                'category-1/category-1-1/category-1-1-1.html',
-            ],
-        ];
-    }
 }
