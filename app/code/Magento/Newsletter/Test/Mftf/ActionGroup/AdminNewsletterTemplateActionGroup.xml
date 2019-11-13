@@ -13,4 +13,38 @@
         <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
+    <actionGroup name="NavigateToNewsletterGrid">
+        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <waitForPageLoad stepKey="waitForNewNewsletterPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="FillNewsletterForm">
+        <arguments>
+            <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
+        </arguments>
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForTemplateNameField"/>
+        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{Newsletter.name}}" stepKey="fillTemplateName" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{Newsletter.subject}}" stepKey="fillTemplateSubject" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{Newsletter.senderName}}" stepKey="fillSenderName" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{Newsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateText}}" userInput="{{Newsletter.templateText}}" stepKey="fillTemplateText" />
+    </actionGroup>
+
+    <actionGroup name="OpenNewsletterPreviewTab">
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForPreviewButton"/>
+        <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
+        <switchToNextTab stepKey="switchToPreviewTab"/>
+        <waitForPageLoad stepKey="waitForPreviewTabLoaded"/>
+        <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
+        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
+        <waitForPageLoad stepKey="waitForPreviewIframeLoaded"/>
+    </actionGroup>
+
+    <actionGroup name="AssertNewsletterContent">
+        <arguments>
+            <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
+        </arguments>
+        <see userInput="{{Newsletter.expectedTemplate}}" stepKey="checkTemplateContainsText"/>
+    </actionGroup>
+
 </actionGroups>

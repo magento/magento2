@@ -11,6 +11,7 @@
         <annotations>
             <features value="Newsletter"/>
             <group value="Newsletter"/>
+            <group value="WYSIWYGDisabled"/>
             <title value="Admin should be able to preview Newsletter content in draft mode"/>
             <description value="Admin should be able to preview newsletter content in draft mode"/>
             <severity value="CRITICAL"/>
@@ -26,20 +27,18 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <!--Create a newsletter template that contains an image-->
-        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
-        <waitForPageLoad stepKey="waitForNewNewsletterPageLoad"/>
-        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{NewsletterWithDirectives.name}}" stepKey="fillTemplateName" />
-        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{NewsletterWithDirectives.subject}}" stepKey="fillTemplateSubject" />
-        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{NewsletterWithDirectives.senderName}}" stepKey="fillSenderName" />
-        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{NewsletterWithDirectives.senderEmail}}" stepKey="fillSenderEmail" />
-        <fillField selector="{{BasicFieldNewsletterSection.templateText}}" userInput="{{NewsletterWithDirectives.templateText}}" stepKey="fillTemplateText" />
-        <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
-        <switchToNextTab stepKey="switchToPreviewTab"/>
-        <waitForPageLoad stepKey="waitForPreviewTabLoaded"/>
-        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
-        <waitForPageLoad stepKey="waitForPreviewIframeLoaded"/>
-        <see userInput="{{NewsletterWithDirectives.expectedTemplate}}" stepKey="checkTemplateContainsText"/>
+        <actionGroup ref="NavigateToNewsletterGrid" stepKey="navigateToGrid"/>
+
+        <actionGroup ref="FillNewsletterForm" stepKey="fillForm">
+            <argument name="Newsletter" value="NewsletterWithDirectives"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenNewsletterPreviewTab" stepKey="openPreviewTab"/>
+
+        <actionGroup ref="AssertNewsletterContent" stepKey="assertTemplateContent">
+            <argument name="Newsletter" value="NewsletterWithDirectives"/>
+        </actionGroup>
+
         <closeTab stepKey="closeTab"/>
     </test>
 </tests>

@@ -18,6 +18,7 @@
             <testCaseId value="MC-15794"/>
             <useCaseId value="MC-11050"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>
@@ -47,6 +48,7 @@
             <severity value="CRITICAL"/>
             <useCaseId value="MC-23058"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
             <stories value="Email Template Preview"/>
         </annotations>
 
@@ -80,6 +82,7 @@
             <severity value="CRITICAL"/>
             <useCaseId value="MC-23058"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
             <stories value="Email Template Preview"/>
         </annotations>
 
