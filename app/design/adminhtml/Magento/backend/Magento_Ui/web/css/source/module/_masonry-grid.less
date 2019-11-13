@@ -35,14 +35,14 @@
         }
 
         &-overlay {
-            position: absolute;
-            color: #fff;
-            z-index: 10;
-            padding: .5rem;
-            opacity: 1;
-            width: 80px;
             background-color: @admin__masonry_overlay_background_color;
+            color: @admin__masonry_grid_background_color;
+            opacity: 1;
+            padding: .5rem;
+            position: absolute;
             text-align: center;
+            width: 80px;
+            z-index: 10;
         }
 
         &-preview {
@@ -87,9 +87,9 @@
                     display: flex;
 
                     &:after {
-                        display: table;
                         clear: both;
                         content: '';
+                        display: table;
                     }
 
                     img.preview {
