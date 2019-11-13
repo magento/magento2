@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Wishlist\Test\Unit\Observer;
+namespace Magento\Wishlist\Test\Unit\ViewModel;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
