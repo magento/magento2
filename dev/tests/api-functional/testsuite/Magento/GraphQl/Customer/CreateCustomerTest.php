@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for create customer functionallity
+ * Test for create customer functionality
  */
 class CreateCustomerTest extends GraphQlAbstract
 {
@@ -27,7 +27,7 @@ class CreateCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -114,7 +114,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage "input" value should be specified
+     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
      */
     public function testCreateCustomerIfInputDataIsEmpty()
     {
@@ -140,7 +140,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage  Required parameters are missing: Email
+     * @expectedExceptionMessage Field CustomerInput.email of required type String! was not provided
      */
     public function testCreateCustomerIfEmailMissed()
     {
@@ -341,7 +341,7 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $newEmail = 'new_customer@example.com';
         try {
