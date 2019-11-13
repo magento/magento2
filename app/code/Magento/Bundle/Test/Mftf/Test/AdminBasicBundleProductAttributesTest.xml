@@ -84,8 +84,8 @@
         <seeElement selector="{{AdminProductFormBundleSection.defaultCategory}}" stepKey="seeDefaultCategory"/>
 
         <!--New from - to-->
-        <seeInField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="10/10/2018" stepKey="seeFirstDate"/>
-        <seeInField selector="{{AdminProductFormBundleSection.toDate}}" userInput="10/10/2018" stepKey="seeSecondDate"/>
+        <seeInField selector="{{AdminProductFormBundleSection.fromDate}}" userInput="2018/10/10" stepKey="seeFirstDate"/>
+        <seeInField selector="{{AdminProductFormBundleSection.toDate}}" userInput="2018/10/10" stepKey="seeSecondDate"/>
 
         <!--Country of manufacture-->
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="Italy" stepKey="seeCountryOfManufacture"/>
