@@ -229,28 +229,6 @@ MUTATION;
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage Address "id" value should be specified
-     */
-    public function testDeleteCustomerAddressWithZeroAddressEntityId()
-    {
-        $userName = 'customer@example.com';
-        $password = 'password';
-        $addressId = 0;
-
-        $mutation
-            = <<<MUTATION
-mutation {
-  deleteCustomerAddress(id: {$addressId})
-}
-MUTATION;
-        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
-     *
-     * @expectedException Exception
      * @expectedExceptionMessage The account is locked
      */
     public function testDeleteCustomerAddressIfAccountIsLocked()
