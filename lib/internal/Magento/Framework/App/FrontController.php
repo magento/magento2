@@ -1,7 +1,5 @@
 <?php
 /**
- * Front controller responsible for dispatching application requests
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,6 +15,8 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
+ * Front controller responsible for dispatching application requests
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FrontController implements FrontControllerInterface
@@ -116,6 +116,8 @@ class FrontController implements FrontControllerInterface
     }
 
     /**
+     * Process (validate and dispatch) the incoming request
+     *
      * @param HttpRequest $request
      * @param ActionInterface $actionInstance
      * @throws NotFoundException
