@@ -787,7 +787,7 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\CompiledInterception\Generator\CompiledInterceptor"/>
-    <preference for="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface" type="Magento\Setup\Module\Di\Compiler\Config\Chain\CompiledInterceptorSubstitution"/>
+    <preference for="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface" type="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution"/>
     <type name="Magento\Setup\Module\Di\App\Task\Operation\Interception">
         <arguments>
             <argument name="interceptorGeneratorClass" xsi:type="string">Magento\Framework\CompiledInterception\Generator\CompiledInterceptor</argument>

@@ -81,11 +81,11 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
     }
 
     /**
-     * Get properties to be injected from DI
+     * Get properties to be set in constructor.
      *
      * @return array
      */
-    public static function propertiesToInjectToConstructor()
+    public static function propertiesToSetInConstructor()
     {
         return [
             ScopeInterface::class => '____scope',
@@ -127,7 +127,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
     {
         return $this->injectPropertiesSettersToConstructor(
             $this->getSourceClassReflection()->getConstructor(),
-            static::propertiesToInjectToConstructor()
+            static::propertiesToSetInConstructor()
         );
     }
 
@@ -159,7 +159,7 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
             $this->classMethods = [];
             $this->classProperties = [];
 
-            foreach (static::propertiesToInjectToConstructor() as $type => $name) {
+            foreach (static::propertiesToSetInConstructor() as $type => $name) {
                 $this->_classGenerator->addUse($type);
                 $this->classProperties[] = [
                     'name' => $name,
@@ -245,29 +245,25 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
             }
             $body = ["parent::__construct(" . implode(', ', $parentCallParams) . ");"];
         }
-        $extraParams = $properties;
-        $extraSetters = array_combine($properties, $properties);
+        $extraSetters = array_fill_keys(array_values($properties), null);
         foreach ($parameters as $parameter) {
             if ($parameter->getType()) {
                 $type = $parameter->getType()->getName();
                 if (isset($properties[$type])) {
                     $extraSetters[$properties[$type]] = $parameter->getName();
-                    unset($extraParams[$type]);
                 }
             }
         }
         $parameters = array_map([$this, '_getMethodParameterInfo'], $parameters);
-        foreach ($extraParams as $type => $name) {
-            array_unshift(
-                $parameters,
-                [
-                    'name' => $name,
-                    'type' => $type
-                ]
-            );
-        }
         foreach ($extraSetters as $name => $paramName) {
-            array_unshift($body, "\$this->$name = \$$paramName;");
+            $class = array_search($name, $properties);
+            if ($paramName !== null) {
+                array_unshift($body, "\$this->$name = \$$paramName;");
+            } elseif ($class === ObjectManagerInterface::class) {
+                array_unshift($body, "\$this->$name = \Magento\Framework\App\ObjectManager::getInstance();");
+            } else {
+                array_unshift($body, "\$this->$name = \Magento\Framework\App\ObjectManager::getInstance()->get(\\$class::class);");
+            }
         }
         return [
             'name' => '__construct',

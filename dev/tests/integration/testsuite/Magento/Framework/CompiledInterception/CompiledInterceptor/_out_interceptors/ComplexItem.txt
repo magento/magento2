@@ -21,10 +21,10 @@ class Interceptor extends \Magento\Framework\CompiledInterception\CompiledInterc
     /**
      * @inheritdoc
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $____om, \Magento\Framework\Config\ScopeInterface $____scope)
+    public function __construct()
     {
-        $this->____om = $____om;
-        $this->____scope = $____scope;
+        $this->____om = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->____scope = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Config\ScopeInterface::class);
     }
 
     /**

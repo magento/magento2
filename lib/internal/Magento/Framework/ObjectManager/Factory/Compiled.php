@@ -55,14 +55,8 @@ class Compiled extends AbstractFactory
      */
     public function create($requestedType, array $arguments = [])
     {
+        $args = $this->config->getArguments($requestedType);
         $type = $this->config->getInstanceType($requestedType);
-        $requestedTypeArgs = $this->config->getArguments($requestedType);
-        $realTypeArgs = $this->config->getArguments($type);
-        if ($realTypeArgs !== null && $requestedTypeArgs !== null) {
-            $args = array_merge($realTypeArgs, $requestedTypeArgs);
-        } else {
-            $args = $requestedTypeArgs ?? $realTypeArgs;
-        }
 
         if ($args === []) {
             // Case 1: no arguments required
