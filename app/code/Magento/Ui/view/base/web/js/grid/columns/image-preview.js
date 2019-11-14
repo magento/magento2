@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/grid/columns/column'
-], function ($, Column) {
+    'Magento_Ui/js/grid/columns/column',
+    'Magento_Ui/js/lib/key-codes'
+], function ($, Column, keyCodes) {
     'use strict';
 
     return Column.extend({
@@ -30,6 +31,18 @@ define([
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
             }
+        },
+
+        /**
+         * Initialize image preview component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            this.setNavigationListener();
+
+            return this;
         },
 
         /**
@@ -174,6 +187,36 @@ define([
                 block: 'center',
                 inline: 'nearest'
             });
-        }
+        },
+
+        /**
+         * Set image preview keyboard navigation listener
+         */
+        setNavigationListener: function () {
+            var imageIndex, endIndex, key,
+                startIndex = 0,
+                imageColumnSelector = '.masonry-image-column',
+                adobeModalSelector = '.adobe-stock-modal',
+                imageGridSelector = '.masonry-image-grid';
+
+            $(document).on('keydown', function(e) {
+                key = keyCodes[e.keyCode];
+                endIndex = $(imageGridSelector)[0].children.length - 1;
+
+                if($(this.previewImageSelector).length > 0) {
+                    imageIndex = $(this.previewImageSelector)
+                        .parents(imageColumnSelector)
+                        .data('repeatIndex');
+                }
+
+                if($(adobeModalSelector).hasClass('_show')) {
+                    if(key === 'pageLeftKey' && imageIndex !== startIndex) {
+                        $(this.previewImageSelector + ' .action-previous').click();
+                    } else if (key === 'pageRightKey' && imageIndex !== endIndex) {
+                        $(this.previewImageSelector + ' .action-next').click();
+                    }
+                }
+            });
+        },
     });
 });
