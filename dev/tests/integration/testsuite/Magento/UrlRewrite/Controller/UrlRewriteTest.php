@@ -80,6 +80,36 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/page-similar/',
                 'redirect' => '/page-b',
             ],
+            'Use Case #7: Rewrite: page-similar --(301)--> page-a; '
+            . 'Request: page-similar?param=1 --(301)--> page-a?param=1' => [
+                'request' => '/page-similar?param=1',
+                'redirect' => '/page-a?param=1',
+            ],
+            'Use Case #8: Rewrite: page-similar/ --(301)--> page-b; '
+            . 'Request: page-similar/?param=1 --(301)--> page-b?param=1' => [
+                'request' => '/page-similar/?param=1',
+                'redirect' => '/page-b?param=1',
+            ],
+            'Use Case #9: Rewrite: page-similar-query-param --(301)--> page-d?param1=1;'
+            . 'Request: page-similar-query-param --(301)--> page-d?param1=1' => [
+                'request' => '/page-similar-query-param',
+                'redirect' => '/page-d?param1=1',
+            ],
+            'Use Case #10: Rewrite: page-similar-query-param --(301)--> page-d?param1=1; '
+            . 'Request: page-similar-query-param?param2=1 --(301)--> page-d?param1=1&param2=1' => [
+                'request' => '/page-similar-query-param?param2=1',
+                'redirect' => '/page-d?param1=1&param2=1',
+            ],
+            'Use Case #11: Rewrite: page-similar-query-param/ --(301)--> page-e?param1=1; '
+            . 'Request: page-similar-query-param/ --(301)--> page-e?param1=1' => [
+                'request' => '/page-similar-query-param/',
+                'redirect' => '/page-e?param1=1',
+            ],
+            'Use Case #12: Rewrite: page-similar-query-param/ --(301)--> page-e?param1=1;'
+            . 'Request: page-similar-query-param/?param2=1 --(301)--> page-e?param1=1&param2=1' => [
+                'request' => '/page-similar-query-param/?param2=1',
+                'redirect' => '/page-e?param1=1&param2=1',
+            ],
         ];
     }
 }

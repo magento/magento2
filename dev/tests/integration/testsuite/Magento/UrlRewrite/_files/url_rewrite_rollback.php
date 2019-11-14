@@ -19,6 +19,8 @@ $pageRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->g
 $pageRepository->deleteById('page-a');
 $pageRepository->deleteById('page-b');
 $pageRepository->deleteById('page-c');
+$pageRepository->deleteById('page-d');
+$pageRepository->deleteById('page-e');
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -29,7 +31,7 @@ $urlRewriteCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManage
     ->create(\Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class);
 $collection = $urlRewriteCollection
     ->addFieldToFilter('entity_type', 'custom')
-    ->addFieldToFilter('target_path', ['page-a/', 'page-a', 'page-b', 'page-c'])
+    ->addFieldToFilter('target_path', ['page-a/', 'page-a', 'page-b', 'page-c', 'page-d?param1=1', 'page-e?param1=1'])
     ->load()
     ->walk('delete');
 

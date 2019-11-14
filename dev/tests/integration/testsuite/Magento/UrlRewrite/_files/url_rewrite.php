@@ -64,6 +64,26 @@ $page->setTitle('Cms C')
     ->setStores([$storeID, $secondStoreId]);
 $pageResource->save($page);
 
+$page = $objectManager->create(Page::class);
+$page->setTitle('Cms D')
+    ->setIdentifier('page-d')
+    ->setIsActive(1)
+    ->setContent('<h1>Cms Page D</h1>')
+    ->setPageLayout('1column')
+    ->setCustomTheme('Magento/blank')
+    ->setStores([$storeID, $secondStoreId]);
+$pageResource->save($page);
+
+$page = $objectManager->create(Page::class);
+$page->setTitle('Cms E')
+    ->setIdentifier('page-e')
+    ->setIsActive(1)
+    ->setContent('<h1>Cms Page E</h1>')
+    ->setPageLayout('1column')
+    ->setCustomTheme('Magento/blank')
+    ->setStores([$storeID, $secondStoreId]);
+$pageResource->save($page);
+
 $rewrite = $objectManager->create(UrlRewrite::class);
 $rewrite->setEntityType('custom')
     ->setRequestPath('page-one/')
@@ -88,7 +108,7 @@ $rewrite->setEntityType('custom')
     ->setTargetPath('page-a')
     ->setRedirectType(OptionProvider::PERMANENT)
     ->setStoreId($storeID)
-    ->setDescription('From age-similar without trailing slash to page-a');
+    ->setDescription('From page-similar without trailing slash to page-a');
 $rewriteResource->save($rewrite);
 
 $rewrite = $objectManager->create(UrlRewrite::class);
@@ -97,7 +117,7 @@ $rewrite->setEntityType('custom')
     ->setTargetPath('page-b')
     ->setRedirectType(OptionProvider::PERMANENT)
     ->setStoreId($storeID)
-    ->setDescription('From age-similar with trailing slash to page-b');
+    ->setDescription('From page-similar with trailing slash to page-b');
 $rewriteResource->save($rewrite);
 
 //Emulating auto-generated aliases (like the ones used for categories).
@@ -116,4 +136,22 @@ $rewrite->setEntityType('custom')
     ->setTargetPath('page-c')
     ->setRedirectType(0)
     ->setStoreId($secondStoreId);
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('page-similar-query-param')
+    ->setTargetPath('page-d?param1=1')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From page-similar-query-param to page-d with query param');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('page-similar-query-param/')
+    ->setTargetPath('page-e?param1=1')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From page-similar-query-param with trailing slash to page-e with query param');
 $rewriteResource->save($rewrite);
