@@ -660,7 +660,7 @@ QUERY;
             ],
             'missed_cart_id' => [
                 'billing_address: {}',
-                'Required parameter "cart_id" is missing'
+                'Field SetBillingAddressOnCartInput.cart_id of required type String! was not provided.'
             ],
             'missed_region' => [
                 'cart_id: "cart_id_value"
