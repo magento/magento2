@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BasicFieldNewsletterSection">
+        <element name="templateName" type="input" selector="#code"/>
+        <element name="templateSubject" type="input" selector="#subject"/>
+        <element name="templateText" type="input" selector="#text"/>
+        <element name="senderName" type="input" selector="#sender_name"/>
+        <element name="senderEmail" type="input" selector="#sender_email"/>
+        <element name="preview" type="button" selector="button[data-role='template-preview']"/>
+        <element name="previewIframe" type="iframe" selector="#preview_iframe"/>
+    </section>
+</sections>
