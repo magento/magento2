@@ -70,17 +70,7 @@
                     </depends>
                 </field>
 
-                <field id="elasticsearch6_minimum_should_match" translate="label" type="text" sortOrder="78" showInDefault="1"
-                       showInWebsite="0" showInStore="0">
-                    <label>Minimum Terms to Match</label>
-                    <depends>
-                        <field id="engine">elasticsearch6</field>
-                    </depends>
-                    <comment><![CDATA[See <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-minimum-should-match.html">here</a> for possible values.]]></comment>
-                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
-                </field>
-
-                <field id="elasticsearch6_test_connect_wizard" translate="button_label" sortOrder="79" showInDefault="1"
+                <field id="elasticsearch6_test_connect_wizard" translate="button_label" sortOrder="78" showInDefault="1"
                        showInWebsite="0" showInStore="0">
                     <label/>
                     <button_label>Test Connection</button_label>
@@ -88,6 +78,15 @@
                     <depends>
                         <field id="engine">elasticsearch6</field>
                     </depends>
+                </field>
+                <field id="elasticsearch6_minimum_should_match" translate="label" type="text" sortOrder="93" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Minimum Terms to Match</label>
+                    <depends>
+                        <field id="engine">elasticsearch6</field>
+                    </depends>
+                    <comment><![CDATA[<a href="https://docs.magento.com/m2/ce/user_guide/catalog/search-elasticsearch.html">Learn more</a> about valid syntax.]]></comment>
+                    <backend_model>Magento\Elasticsearch\Model\Config\Backend\MinimumShouldMatch</backend_model>
                 </field>
             </group>
         </section>
