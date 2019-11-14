@@ -68,7 +68,7 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -80,6 +80,8 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
+     * Get number of wishlist items
+     *
      * @return string
      */
     protected function getCounter()

@@ -186,7 +186,6 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 'count' => $count,
-                'countCaption' =>  __('%1 items', $count),
                 'listUrl' => 'http://list.url',
                 'items' => [
                     [
@@ -231,7 +230,6 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 'count' => $count,
-                'countCaption' =>  __('%1 items', $count),
                 'listUrl' => 'http://list.url',
                 'items' => []
             ],
@@ -269,7 +267,6 @@ class CompareProductsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             [
                 'count' => 1,
-                'countCaption' =>  __('1 item'),
                 'listUrl' => 'http://list.url',
                 'items' => [
                     [

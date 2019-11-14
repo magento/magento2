@@ -7,6 +7,9 @@ namespace Magento\Catalog\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 
+/**
+ * CompareProducts section
+ */
 class CompareProducts implements SectionSourceInterface
 {
     /**
@@ -40,7 +43,7 @@ class CompareProducts implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
@@ -53,6 +56,8 @@ class CompareProducts implements SectionSourceInterface
     }
 
     /**
+     * Get items in Compare List
+     *
      * @return array
      */
     protected function getItems()

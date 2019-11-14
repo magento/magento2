@@ -97,7 +97,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $itemRemoveParams = ['remove_params'];
 
         $result = [
-            'counter' => __('1 item'),
+            'counter' => 1,
             'items' => [
                 [
                     'image' => [
@@ -286,7 +286,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
         $items = [$itemMock, $itemMock];
 
         $result = [
-            'counter' =>  __('%1 items', count($items)),
+            'counter' =>  2,
             'items' => [
                 [
                     'image' => [
