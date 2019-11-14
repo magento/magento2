@@ -72,7 +72,7 @@ define([
                  * Escape key press handler,
                  * close modal window
                  */
-                escapeKey: function (event) {
+                escapeKey: function () {
                     if (this.modal.find(document.activeElement).length ||
                         this.modal[0] === document.activeElement) {
                         this.closeModal();
