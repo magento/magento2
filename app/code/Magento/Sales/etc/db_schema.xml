@@ -1386,8 +1386,6 @@
                 comment="Adjustment Negative"/>
         <column xsi:type="decimal" name="order_base_grand_total" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Order Grand Total"/>
-        <column xsi:type="varchar" name="order_currency_code" nullable="true" length="3" comment="Order Currency Code"/>
-        <column xsi:type="varchar" name="base_currency_code" nullable="true" length="3" comment="Base Currency Code"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>

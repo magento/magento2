@@ -254,6 +254,21 @@
         <data key="state">Côtes-d'Armor</data>
         <data key="postcode">12345</data>
     </entity>
+    <entity name="updateCustomerChinaAddress" type="address">
+        <data key="firstname">Xian</data>
+        <data key="lastname">Shai</data>
+        <data key="company">Hunan Fenmian</data>
+        <data key="telephone">+86 851 8410 4337</data>
+        <array key="street">
+            <item>Nanyuan Rd, Wudang</item>
+            <item>Hunan Fenmian</item>
+        </array>
+        <data key="country_id">CN</data>
+        <data key="country">China</data>
+        <data key="city">Guiyang</data>
+        <data key="state">Guizhou Sheng</data>
+        <data key="postcode">550002</data>
+    </entity>
     <entity name="updateCustomerNoXSSInjection" type="address">
         <data key="firstname">Jany</data>
         <data key="lastname">Doe</data>
@@ -344,5 +359,20 @@
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
         <requiredEntity type="region">RegionAE</requiredEntity>
+    </entity>
+    <entity name="updateCustomerBelgiumAddress" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>Chaussee de Wavre</item>
+            <item>318</item>
+        </array>
+        <data key="city">Bihain</data>
+        <data key="state">Hainaut</data>
+        <data key="country_id">BE</data>
+        <data key="country">Belgium</data>
+        <data key="postcode">6690</data>
+        <data key="telephone">0477-58-77867</data>
     </entity>
 </entities>

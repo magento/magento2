@@ -17,7 +17,7 @@ class JsonHexTagTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     private $json;
-    
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -37,6 +37,9 @@ class JsonHexTagTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);

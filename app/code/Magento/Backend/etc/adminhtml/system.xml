@@ -586,11 +586,6 @@
                     <label>Validate HTTP_USER_AGENT</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="use_frontend_sid" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Use SID on Storefront</label>
-                    <comment>Allows customers to stay logged in when switching between different stores.</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
             </group>
         </section>
     </system>

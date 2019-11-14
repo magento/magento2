@@ -57,7 +57,11 @@ class AddVirtualProductWithCustomOptionsToCartTest extends GraphQlAbstract
 
         $customOptionsValues = $this->getCustomOptionsValuesForQueryBySku->execute($sku);
         /* Generate customizable options fragment for GraphQl request */
-        $queryCustomizableOptionValues = preg_replace('/"([^"]+)"\s*:\s*/', '$1:', json_encode($customOptionsValues));
+        $queryCustomizableOptionValues = preg_replace(
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
+            json_encode(array_values($customOptionsValues))
+        );
 
         $customizableOptions = "customizable_options: {$queryCustomizableOptionValues}";
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
@@ -68,13 +72,14 @@ class AddVirtualProductWithCustomOptionsToCartTest extends GraphQlAbstract
         self::assertCount(1, $response['addVirtualProductsToCart']['cart']);
 
         $customizableOptionsOutput = $response['addVirtualProductsToCart']['cart']['items'][0]['customizable_options'];
-        $assignedOptionsCount = count($customOptionsValues);
-        for ($counter = 0; $counter < $assignedOptionsCount; $counter++) {
-            $expectedValues = $this->buildExpectedValuesArray($customOptionsValues[$counter]['value_string']);
+        $count = 0;
+        foreach ($customOptionsValues as $value) {
+            $expectedValues = $this->buildExpectedValuesArray($value['value_string']);
             self::assertEquals(
                 $expectedValues,
-                $customizableOptionsOutput[$counter]['values']
+                $customizableOptionsOutput[$count]['values']
             );
+            $count++;
         }
     }
 

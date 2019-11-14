@@ -87,7 +87,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var EmailMessageInterface
+     * @var MessageInterface
      */
     protected $message;
 
@@ -432,6 +432,8 @@ class TransportBuilder
                 $this->messageData[$addressType],
                 $convertedAddressArray
             );
+        } else {
+            $this->messageData[$addressType] = $convertedAddressArray;
         }
     }
 }

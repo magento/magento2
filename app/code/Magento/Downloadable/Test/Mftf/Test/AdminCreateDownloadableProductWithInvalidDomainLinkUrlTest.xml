@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDownloadableProductWithInvalidDomainLinkUrlTest" extends="AdminCreateDownloadableProductWithLinkTest">
+        <annotations>
+            <stories value="Create Downloadable Product"/>
+            <title value="Create Downloadable Product with invalid domain link url"/>
+            <description value="Admin should not be able to create downloadable product with invalid domain link url"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-18282"/>
+            <useCaseId value="MC-17700"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="addDownloadableDomain" />
+        </before>
+        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableProductLink">
+            <argument name="link" value="downloadableLink"/>
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormNoSuccessCheck" stepKey="saveProduct"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="Link URL's domain is not in list of downloadable_domains in env.php." stepKey="seeLinkUrlInvalidMessage" after="saveProduct" />
+        <magentoCLI stepKey="addDownloadableDomain2" command="downloadable:domains:add static.magento.com" after="seeLinkUrlInvalidMessage" />
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductFormAgain" after="addDownloadableDomain2">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable" after="fillDownloadableProductFormAgain"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkIsLinksPurchasedSeparately" after="checkIsDownloadable"/>
+        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableProductLinkAgain" after="checkIsLinksPurchasedSeparately">
+            <argument name="link" value="downloadableLink"/>
+            <argument name="index" value="0"/>
+        </actionGroup>
+        <actionGroup ref="saveProductForm" stepKey="saveProductAfterAddingDomainToWhitelist" after="addDownloadableProductLinkAgain" />
+        <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="scrollToLinks"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectProductLink"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$52.99" stepKey="assertProductPriceInCart"/>
+    </test>
+</tests>

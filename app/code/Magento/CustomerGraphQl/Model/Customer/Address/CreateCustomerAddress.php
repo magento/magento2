@@ -67,6 +67,10 @@ class CreateCustomerAddress
      */
     public function execute(int $customerId, array $data): AddressInterface
     {
+        // It is needed because AddressInterface has country_id field.
+        if (isset($data['country_code'])) {
+            $data['country_id'] = $data['country_code'];
+        }
         $this->validateData($data);
 
         /** @var AddressInterface $address */
