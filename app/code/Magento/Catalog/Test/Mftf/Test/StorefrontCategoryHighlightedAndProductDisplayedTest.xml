@@ -37,10 +37,6 @@
             <createData entity="SimpleProduct" stepKey="product4">
                 <requiredEntity createDataKey="category2"/>
             </createData>
-
-            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
