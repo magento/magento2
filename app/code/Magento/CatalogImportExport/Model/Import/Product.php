@@ -3061,6 +3061,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $positionAttrId
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         array $bunch,
@@ -3149,7 +3150,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @return void
      * @throws LocalizedException
      */
-    private function deleteProductsLinks(Link $resource, array $linksToDelete) {
+    private function deleteProductsLinks(Link $resource, array $linksToDelete)
+    {
         if (!empty($linksToDelete) && Import::BEHAVIOR_APPEND === $this->getBehavior()) {
             foreach ($linksToDelete as $linkTypeId => $productIds) {
                 if (!empty($productIds)) {
