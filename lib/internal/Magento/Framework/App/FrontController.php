@@ -141,7 +141,8 @@ class FrontController implements FrontControllerInterface
                 //Validation failed - processing validation results.
                 $this->logger->debug(
                     'Request validation failed for action "'
-                    .get_class($actionInstance) .'"'
+                    . get_class($actionInstance) . '"',
+                    ["exception" => $exception]
                 );
                 $result = $exception->getReplaceResult();
                 if ($messages = $exception->getMessages()) {
