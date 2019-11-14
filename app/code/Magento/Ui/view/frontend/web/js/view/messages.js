@@ -20,6 +20,8 @@ define([
             template: 'Magento_Ui/messages',
             selector: '[data-role=checkout-messages]',
             isHidden: false,
+            hideTimeout: 5000,
+            hideSpeed: 500,
             listens: {
                 isHidden: 'onHiddenChange'
             }
@@ -68,8 +70,8 @@ define([
             // Hide message block if needed
             if (isHidden) {
                 setTimeout(function () {
-                    $(self.selector).hide('blind', {}, 500);
-                }, 5000);
+                    $(self.selector).hide('blind', {}, self.hideSpeed);
+                }, self.hideTimeout);
             }
         }
     });
