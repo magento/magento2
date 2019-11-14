@@ -9,6 +9,7 @@ define([
 
     return Column.extend({
         defaults: {
+            bodyTmpl: 'ui/grid/columns/image',
             modules: {
                 previewComponent: '${ $.parentName }.preview'
             },
