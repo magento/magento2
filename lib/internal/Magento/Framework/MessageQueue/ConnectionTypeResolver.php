@@ -26,7 +26,7 @@ class ConnectionTypeResolver
     }
 
     /**
-     * Get connection type. 
+     * Get connection type.
      *
      * @param string $connectionName
      * @return string|null
