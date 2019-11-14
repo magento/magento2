@@ -10,6 +10,7 @@ use Magento\ImportExport\Model\Import\AbstractEntity;
 /**
  * Data source with columns for Magento_ImportExport
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

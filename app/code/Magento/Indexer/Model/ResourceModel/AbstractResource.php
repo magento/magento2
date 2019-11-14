@@ -11,6 +11,7 @@ use Magento\Framework\DB\Select;
 /**
  * Abstract resource model. Can be used as base for indexer resources
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

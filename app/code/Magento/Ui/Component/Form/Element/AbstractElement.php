@@ -10,6 +10,7 @@ use Magento\Ui\Component\AbstractComponent;
 /**
  * Class AbstractElement
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
  * Base class for credit memo total
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>

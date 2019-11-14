@@ -12,6 +12,7 @@ namespace Magento\Eav\Model\Entity\Increment;
  * - pad_char
  * - last_id
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

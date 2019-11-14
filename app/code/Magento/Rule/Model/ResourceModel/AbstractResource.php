@@ -9,6 +9,7 @@ namespace Magento\Rule\Model\ResourceModel;
 /**
  * Abstract Rule entity resource model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

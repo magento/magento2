@@ -10,6 +10,7 @@ use Magento\Framework\Backup\Filesystem;
 /**
  * Filesystem rollback workers abstract class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */
 abstract class AbstractRollback

@@ -8,6 +8,7 @@ namespace Magento\Framework\Message;
 /**
  * Abstract message model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */
 abstract class AbstractMessage implements MessageInterface

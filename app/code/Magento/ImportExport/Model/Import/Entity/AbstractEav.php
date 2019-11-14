@@ -10,6 +10,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import EAV entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

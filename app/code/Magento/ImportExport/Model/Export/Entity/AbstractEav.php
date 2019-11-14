@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Export EAV entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

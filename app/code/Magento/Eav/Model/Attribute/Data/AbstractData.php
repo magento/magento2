@@ -13,6 +13,7 @@ use Magento\Framework\Validator\EmailAddress;
 /**
  * EAV Attribute Abstract Data Model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

@@ -8,6 +8,7 @@ namespace Magento\Catalog\Block\Product\View;
 /**
  * Product view abstract block
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @deprecated 101.1.0
  * @since 100.0.2

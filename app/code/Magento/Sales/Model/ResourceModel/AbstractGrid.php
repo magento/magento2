@@ -10,6 +10,8 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
  * Class AbstractGrid
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

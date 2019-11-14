@@ -9,6 +9,8 @@ use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Abstract model for catalog entities
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>

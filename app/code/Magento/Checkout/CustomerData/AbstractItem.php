@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote\Item;
 /**
  * Abstract item
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */
 abstract class AbstractItem implements ItemInterface

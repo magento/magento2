@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Entity/Attribute/Model - attribute backend abstract
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2

@@ -22,6 +22,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 /**
  * EAV entity attribute form renderer.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

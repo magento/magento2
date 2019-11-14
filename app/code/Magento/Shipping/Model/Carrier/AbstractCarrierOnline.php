@@ -15,6 +15,7 @@ use Magento\Framework\Xml\Security;
 /**
  * Abstract online shipping carrier model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2

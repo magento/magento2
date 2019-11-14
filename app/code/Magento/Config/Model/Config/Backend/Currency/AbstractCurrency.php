@@ -16,6 +16,7 @@ namespace Magento\Config\Model\Config\Backend\Currency;
 /**
  * Base currency class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

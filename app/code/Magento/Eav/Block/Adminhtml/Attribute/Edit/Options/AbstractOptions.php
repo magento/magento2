@@ -8,6 +8,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 /**
  * Attribute add/edit form options tab
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @deprecated 100.2.0
  * @since 100.0.2

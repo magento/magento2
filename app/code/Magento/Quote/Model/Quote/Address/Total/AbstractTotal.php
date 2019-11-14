@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
 /**
  * Sales Quote Address Total  abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -10,6 +10,8 @@ use Magento\Framework\DataObject;
 
 /**
  * Backend grid item abstract renderer
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api

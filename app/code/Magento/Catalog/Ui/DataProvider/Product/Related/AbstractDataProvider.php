@@ -19,6 +19,7 @@ use Magento\Store\Api\StoreRepositoryInterface;
 /**
  * Class AbstractDataProvider
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 101.0.0
  */

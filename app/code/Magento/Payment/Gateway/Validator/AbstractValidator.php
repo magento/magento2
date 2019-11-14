@@ -11,6 +11,7 @@ namespace Magento\Payment\Gateway\Validator;
 /**
  * Represents a basic validator shell that can create a result
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

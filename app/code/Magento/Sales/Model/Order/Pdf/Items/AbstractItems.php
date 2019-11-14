@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Sales Order Pdf Items renderer Abstract
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2

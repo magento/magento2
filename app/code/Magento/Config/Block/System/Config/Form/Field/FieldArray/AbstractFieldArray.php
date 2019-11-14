@@ -10,6 +10,8 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  * Backend system config array field renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

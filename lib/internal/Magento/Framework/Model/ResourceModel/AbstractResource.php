@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Abstract resource model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */
 abstract class AbstractResource

@@ -12,6 +12,7 @@ use Magento\Shipping\Model\Shipment\Request;
 /**
  * Class AbstractCarrier
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

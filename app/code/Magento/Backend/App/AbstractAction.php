@@ -8,6 +8,7 @@ namespace Magento\Backend\App;
 /**
  * Generic backend controller
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

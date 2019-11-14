@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Collection;
 /**
  * Flat sales abstract collection
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2

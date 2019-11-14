@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * Abstract model for product type implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)

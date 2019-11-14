@@ -11,6 +11,7 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 /**
  * Export entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)

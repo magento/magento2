@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache\Manager;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

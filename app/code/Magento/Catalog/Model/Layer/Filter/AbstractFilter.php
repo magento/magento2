@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter;
 /**
  * Layer category filter abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

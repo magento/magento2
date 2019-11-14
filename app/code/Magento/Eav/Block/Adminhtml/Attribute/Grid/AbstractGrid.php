@@ -8,6 +8,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
 /**
  * Product attributes grid
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @deprecated 100.2.0

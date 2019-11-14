@@ -15,6 +15,7 @@ use Magento\Framework\Pricing\PriceInfoInterface;
  * Class AbstractPrice
  * Should be the base for creating any Price type class
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */
 abstract class AbstractPrice implements PriceInterface

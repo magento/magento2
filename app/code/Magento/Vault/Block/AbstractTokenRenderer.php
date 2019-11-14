@@ -11,6 +11,8 @@ use Magento\Vault\Block\Customer\IconInterface;
 
 /**
  * Class AbstractTokenRenderer
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.2.0
  */

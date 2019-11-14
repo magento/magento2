@@ -7,6 +7,8 @@ namespace Magento\Sales\Model\Order\Total;
 
 /**
  * Base class for configure totals order
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>

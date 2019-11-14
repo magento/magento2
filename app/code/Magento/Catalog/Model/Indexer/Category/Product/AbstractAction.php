@@ -18,6 +18,7 @@ use Magento\Store\Model\Store;
 /**
  * Class AbstractAction
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

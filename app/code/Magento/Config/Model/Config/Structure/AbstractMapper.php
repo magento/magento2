@@ -10,6 +10,7 @@
 namespace Magento\Config\Model\Config\Structure;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

@@ -11,6 +11,7 @@ use Magento\Payment\Model\Method\SpecificationInterface;
 /**
  * Abstract specification
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

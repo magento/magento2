@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Comment\Collection;
 /**
  * Flat sales order abstract comments collection, used as parent for: invoice, shipment, creditmemo
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2

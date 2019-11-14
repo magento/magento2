@@ -10,6 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 /**
  * Export entity product type abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */

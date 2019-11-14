@@ -17,6 +17,7 @@ use Magento\Framework\Data\ValueSourceInterface;
 /**
  * Abstract class AbstractComponent
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2

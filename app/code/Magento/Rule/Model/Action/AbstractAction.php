@@ -11,6 +11,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Abstract rule action
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
