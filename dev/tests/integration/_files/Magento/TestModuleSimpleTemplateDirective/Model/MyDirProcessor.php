@@ -30,7 +30,7 @@ class MyDirProcessor implements ProcessorInterface
     public function process(
         $value,
         array $parameters,
-        ?string $html
+        $html = null
     ): string {
         return $value . $parameters['param1'] . $html;
     }
@@ -38,7 +38,7 @@ class MyDirProcessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function getDefaultFilters(): ?array
+    public function getDefaultFilters()
     {
         return ['foofilter'];
     }
