@@ -1077,6 +1077,12 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $outputRelatedLink->setPosition(0);
         $expectedOutput = [$outputRelatedLink];
         $this->productLinkRepositoryMock->expects($this->once())->method('getList')->willReturn($expectedOutput);
+        $typeInstance = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
+            ->setMethods(['getSku'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $typeInstance->method('getSku')->willReturn('model');
+        $this->productTypeInstanceMock->method('factory')->willReturn($typeInstance);
         $links = $this->model->getProductLinks();
         $this->assertEquals($links, $expectedOutput);
     }

@@ -6,7 +6,6 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Api\Data\AttributeSetInterfaceFactory;
@@ -21,8 +20,6 @@ $attributeSetRepository = $objectManager->get(AttributeSetRepositoryInterface::c
 $attributeSetFactory = $objectManager->get(AttributeSetInterfaceFactory::class);
 /** @var Type $entityType */
 $entityType = $objectManager->create(Type::class)->loadByCode(ProductAttributeInterface::ENTITY_TYPE_CODE);
-/** @var ProductInterface $product */
-$product = $objectManager->create(ProductInterface::class);
 $attributeSet = $attributeSetFactory->create(
     [
         'data' => [
@@ -37,7 +34,7 @@ $attributeSet->isObjectNew(true);
 $attributeSet->setHasDataChanges(true);
 $attributeSet->validate();
 $attributeSetRepository->save($attributeSet);
-$attributeSet->initFromSkeleton($product->getDefaultAttributeSetid());
+$attributeSet->initFromSkeleton($entityType->getDefaultAttributeSetId());
 /** @var AttributeGroupInterface $newGroup */
 $newGroup = $objectManager->get(GroupFactory::class)->create();
 $newGroup->setId(null)

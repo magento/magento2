@@ -39,6 +39,12 @@
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <actionGroup ref="OpenOrderById" stepKey="openOrder">
+            <argument name="orderId" value="$getOrderId"/>
+        </actionGroup>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
         <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductStockStatus">
             <argument name="productId" value="$$simpleProduct.id$$"/>
             <argument name="stockStatus" value="Out of Stock"/>
