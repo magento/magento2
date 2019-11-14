@@ -73,10 +73,10 @@ define([
                  * close modal window
                  * @param {Object} event - event
                  */
-                escapeKey: function () {
-                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
-                        this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this._close();
+                escapeKey: function (event) {
+                    if (this.modal.find(document.activeElement).length ||
+                        this.modal[0] === document.activeElement) {
+                        this.closeModal();
                     }
                 }
             }
