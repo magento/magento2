@@ -63,10 +63,11 @@ class Attribute extends AbstractFilter
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
-        $label = $this->getOptionText($attributeValue);
-        if (is_array($label)) {
-            $label = implode(',', $label);
+        $labels = [];
+        foreach ((array) $attributeValue as $value) {
+            $labels[] = $this->getOptionText($value);
         }
+        $label = implode(',', $labels);
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));
