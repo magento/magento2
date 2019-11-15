@@ -8,15 +8,11 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="EmailTemplate" type="template">
-        <data key="templateName" unique="suffix">Template</data>
-        <data key="templateSubject" unique="suffix">Template Subject_</data>
-        <data key="templateText" unique="suffix">Template Text_</data>
-    </entity>
-
-    <entity name="EmailTemplateWithDirectives" type="template">
-        <data key="templateName" unique="suffix">Template</data>
-        <data key="templateSubject" unique="suffix">Template Subject_</data>
+    <entity name="NewsletterWithDirectives" type="template">
+        <data key="name" unique="suffix">Test Newsletter Template</data>
+        <data key="subject">Test Newsletter Subject</data>
+        <data key="senderName">Admin</data>
+        <data key="senderEmail">admin@magento.com</data>
         <data key="templateText">Template {{var this.template_id}}{{var this.getData(template_id)}} Text</data>
         <data key="expectedTemplate">Template 123 Text</data>
     </entity>

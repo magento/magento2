@@ -65,6 +65,8 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->setTemplateType($this->getRequest()->getParam('type'));
             $template->setTemplateText($this->getRequest()->getParam('text'));
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
+            // Emulate DB-loaded template to invoke strict mode
+            $template->setTemplateId(123);
         }
 
         $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));

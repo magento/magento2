@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAdminSwitchToPreviewIframeActionGroup">
+        <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
+        <wait time="10" stepKey="waitBeforeSwitchToIframe"/>
+        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+    <actionGroup name="AdminNavigateToNewsletterGrid">
+        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <waitForPageLoad stepKey="waitForNewNewsletterPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="AdminFillNewsletterForm">
+        <arguments>
+            <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
+        </arguments>
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForTemplateNameField"/>
+        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{Newsletter.name}}" stepKey="fillTemplateName" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{Newsletter.subject}}" stepKey="fillTemplateSubject" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{Newsletter.senderName}}" stepKey="fillSenderName" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{Newsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateText}}" userInput="{{Newsletter.templateText}}" stepKey="fillTemplateText" />
+    </actionGroup>
+
+    <actionGroup name="AdminOpenNewsletterPreviewTab">
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForPreviewButton"/>
+        <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
+        <switchToNextTab stepKey="switchToPreviewTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.previewIframe}}" stepKey="waitForIframeVisible"/>
+        <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
+        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
+        <waitForElementVisible selector="body" stepKey="waitForIframeLoad"/>
+    </actionGroup>
+
+    <actionGroup name="AdminAssertNewsletterContent">
+        <arguments>
+            <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
+        </arguments>
+        <waitForText userInput="{{Newsletter.expectedTemplate}}" stepKey="checkTemplateContainsText" time="30"/>
+    </actionGroup>
+</actionGroups>

@@ -33,7 +33,7 @@ interface ProcessorInterface
     public function process(
         $value,
         array $parameters,
-        ?string $html
+        $html = null
     ): string;
 
     /**
@@ -41,5 +41,5 @@ interface ProcessorInterface
      *
      * @return string[]|null
      */
-    public function getDefaultFilters(): ?array;
+    public function getDefaultFilters();
 }
