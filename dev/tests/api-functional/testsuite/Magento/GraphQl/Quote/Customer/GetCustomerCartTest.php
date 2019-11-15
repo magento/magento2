@@ -90,10 +90,8 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     public function testGetNewCustomerCart()
     {
-        $customerToken = $this->generateCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
-        $headers = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($customerCartQuery, [], '', $headers);
+        $response = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['id']);
@@ -118,12 +116,13 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Query for customer cart after customer token is revoked
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage The request is allowed for logged in customer
      */
     public function testGetCustomerCartAfterTokenRevoked()
     {
-        $customerToken = $this->generateCustomerToken();
-        $headers = ['Authorization' => 'Bearer ' . $customerToken];
         $customerCartQuery = $this->getCustomerCartQuery();
+        $headers = $this->getHeaderMap();
         $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('id', $response['customerCart']);
@@ -131,9 +130,6 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->assertNotEmpty($response['customerCart']['id']);
         $this->revokeCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
-        $this->expectExceptionMessage(
-            'The request is allowed for logged in customer'
-        );
         $this->graphQlQuery($customerCartQuery, [], '', $headers);
     }
 
@@ -144,16 +140,14 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     public function testRequestCustomerCartTwice()
     {
-        $customerToken = $this->generateCustomerToken();
-        $headers = ['Authorization' => 'Bearer ' . $customerToken];
         $customerCartQuery = $this->getCustomerCartQuery();
-        $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);
+        $response = $this->graphQlMutation($customerCartQuery, [], '', $this->getHeaderMap());
         $this->assertArrayHasKey('customerCart', $response);
         $this->assertArrayHasKey('id', $response['customerCart']);
         $this->assertNotNull($response['customerCart']['id']);
         $cartId = $response['customerCart']['id'];
         $customerCartQuery = $this->getCustomerCartQuery();
-        $response2 = $this->graphQlQuery($customerCartQuery, [], '', $headers);
+        $response2 = $this->graphQlQuery($customerCartQuery, [], '', $this->getHeaderMap());
         $this->assertEquals($cartId, $response2['customerCart']['id']);
     }
 
@@ -193,31 +187,6 @@ class GetCustomerCartTest extends GraphQlAbstract
     }
 
     /**
-     * Query to generate customer token
-     *
-     * @return string
-     */
-    private function generateCustomerToken(): string
-    {
-        $query = <<<QUERY
-mutation {
-  generateCustomerToken(
-    email: "customer@example.com"
-    password: "password"
-  ) {
-    token
-  }
-}
-QUERY;
-        $response = $this->graphQlMutation($query);
-        self::assertArrayHasKey('generateCustomerToken', $response);
-        self::assertArrayHasKey('token', $response['generateCustomerToken']);
-        self::assertNotEmpty($response['generateCustomerToken']['token']);
-
-        return $response['generateCustomerToken']['token'];
-    }
-
-    /**
      * Query to revoke customer token
      *
      * @return void
@@ -232,8 +201,7 @@ mutation{
 }
 QUERY;
 
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-        $this->assertTrue($response['revokeCustomerToken']['result']);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
