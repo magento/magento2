@@ -21,7 +21,6 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation enabled
  * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractUrlRewriteTest extends TestCase
 {

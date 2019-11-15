@@ -23,7 +23,6 @@ use Magento\UrlRewrite\Model\OptionProvider;
  *
  * @magentoDbIsolation enabled
  * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductUrlRewriteTest extends AbstractUrlRewriteTest
 {
