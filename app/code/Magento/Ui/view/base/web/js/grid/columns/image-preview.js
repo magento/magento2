@@ -102,11 +102,11 @@ define([
             var img;
 
             this.hide();
-            
+
             if (record._rowIndex === this.visibleRecord()) {
                 return;
             }
-            
+
             this.displayedRecord(record);
             this._selectRow(record.rowNumber || null);
             this.visibleRecord(record._rowIndex);
