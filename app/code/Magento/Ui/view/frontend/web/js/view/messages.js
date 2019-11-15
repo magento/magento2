@@ -65,13 +65,11 @@ define([
          * @param {Boolean} isHidden
          */
         onHiddenChange: function (isHidden) {
-            var self = this;
-
             // Hide message block if needed
             if (isHidden) {
                 setTimeout(function () {
-                    $(self.selector).hide('blind', {}, self.hideSpeed);
-                }, self.hideTimeout);
+                    $(this.selector).hide('blind', {}, this.hideSpeed);
+                }.bind(this), this.hideTimeout);
             }
         }
     });
