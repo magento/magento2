@@ -13,5 +13,6 @@
         <data key="subject">Test Newsletter Subject</data>
         <data key="senderName">Admin</data>
         <data key="senderEmail">admin@magento.com</data>
+        <data key="containContent">Follow this link to unsubscribe</data>
     </entity>
 </entities>
