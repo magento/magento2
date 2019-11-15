@@ -93,6 +93,7 @@ class FetchPolicy implements SimplePolicyInterface
      * @param string[] $nonceValues
      * @param string[] $hashValues
      * @param bool $dynamicAllowed
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $id,

@@ -62,7 +62,6 @@ class ConfigManager implements ModeConfigManagerInterface
             throw new \RuntimeException('CSP can only be configured for storefront or admin area');
         }
 
-
         $reportOnly = $this->config->isSetFlag(
             'csp/mode/' . $configArea .'/report_only',
             ScopeInterface::SCOPE_STORE,

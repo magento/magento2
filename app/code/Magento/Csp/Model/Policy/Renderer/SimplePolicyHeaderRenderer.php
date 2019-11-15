@@ -25,11 +25,6 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
     private $modeConfig;
 
     /**
-     * @var ModeConfiguredInterface
-     */
-    private $config;
-
-    /**
      * @param ModeConfigManagerInterface $modeConfig
      */
     public function __construct(ModeConfigManagerInterface $modeConfig)

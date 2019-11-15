@@ -81,6 +81,7 @@ class SandboxPolicy implements SimplePolicyInterface
      * @param bool $scriptsAllowed
      * @param bool $topNavigationAllowed
      * @param bool $topNavigationByUserActivationAllowed
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         bool $formAllowed,
@@ -228,6 +229,8 @@ class SandboxPolicy implements SimplePolicyInterface
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getValue(): string
     {

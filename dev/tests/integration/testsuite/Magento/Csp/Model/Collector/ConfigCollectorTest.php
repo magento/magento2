@@ -34,6 +34,55 @@ class ConfigCollectorTest extends TestCase
     }
 
     /**
+     * Create expected policy objects.
+     *
+     * @return PolicyInterface[]
+     */
+    private function getExpectedPolicies(): array
+    {
+        return [
+            'child-src' => new FetchPolicy(
+                'child-src',
+                false,
+                ['http://magento.com', 'http://devdocs.magento.com'],
+                ['http'],
+                true,
+                true,
+                false,
+                [],
+                [],
+                true
+            ),
+            'child-src2' => new FetchPolicy('child-src', false, [], [], false, false, true),
+            'connect-src' => new FetchPolicy('connect-src'),
+            'default-src' => new FetchPolicy(
+                'default-src',
+                false,
+                ['http://magento.com', 'http://devdocs.magento.com'],
+                [],
+                true
+            ),
+            'font-src' => new FetchPolicy('font-src', false, [], [], true),
+            'frame-src' => new FetchPolicy('frame-src', false, [], [], true, false, false, [], [], true),
+            'img-src' => new FetchPolicy('img-src', false, [], [], true),
+            'manifest-src' => new FetchPolicy('manifest-src', false, [], [], true),
+            'media-src' => new FetchPolicy('media-src', false, [], [], true),
+            'object-src' => new FetchPolicy('object-src', false, [], [], true),
+            'script-src' => new FetchPolicy('script-src', false, [], [], true),
+            'style-src' => new FetchPolicy('style-src', false, [], [], true),
+            'base-uri' => new FetchPolicy('base-uri', false, [], [], true),
+            'plugin-types' => new PluginTypesPolicy(
+                ['application/x-shockwave-flash', 'application/x-java-applet']
+            ),
+            'sandbox' => new SandboxPolicy(true, true, true, true, false, false, true, true, true, true, true),
+            'form-action' => new FetchPolicy('form-action', false, [], [], true),
+            'frame-ancestors' => new FetchPolicy('frame-ancestors', false, [], [], true),
+            'block-all-mixed-content' => new FlagPolicy('block-all-mixed-content'),
+            'upgrade-insecure-requests' => new FlagPolicy('upgrade-insecure-requests')
+        ];
+    }
+
+    /**
      * Test initiating policies from config.
      *
      * @magentoAppArea frontend
@@ -90,7 +139,7 @@ class ConfigCollectorTest extends TestCase
      * @magentoConfigFixture default_store csp/policies/storefront/frame_ancestors/none 0
      * @magentoConfigFixture default_store csp/policies/storefront/frame_ancestors/self 1
      * @magentoConfigFixture default_store csp/policies/storefront/plugin_types/policy_id plugin-types
-     * @magentoConfigFixture default_store csp/policies/storefront/plugin_types/types/flash application/x-shockwave-flash
+     * @magentoConfigFixture default_store csp/policies/storefront/plugin_types/types/fl application/x-shockwave-flash
      * @magentoConfigFixture default_store csp/policies/storefront/plugin_types/types/applet application/x-java-applet
      * @magentoConfigFixture default_store csp/policies/storefront/sandbox/policy_id sandbox
      * @magentoConfigFixture default_store csp/policies/storefront/sandbox/forms 1
@@ -111,233 +160,20 @@ class ConfigCollectorTest extends TestCase
     public function testCollecting(): void
     {
         $policies = $this->collector->collect([]);
-        $childScrChecked = false;
-        $childScr2Checked = false;
-        $connectScrChecked = false;
-        $defaultScrChecked = false;
-        $fontScrChecked = false;
-        $frameScrChecked = false;
-        $imgScrChecked = false;
-        $manifestScrChecked = false;
-        $mediaScrChecked = false;
-        $objectScrChecked = false;
-        $scriptScrChecked = false;
-        $styleScrChecked = false;
-        $baseUriChecked = false;
-        $pluginTypesChecked = false;
-        $sandboxChecked = false;
-        $formActionChecked = false;
-        $frameAncestorsChecked = false;
-        $blockAllMixedChecked = false;
-        $upgradeChecked = false;
+        $checked = [];
+        $expectedPolicies = $this->getExpectedPolicies();
 
         $this->assertNotEmpty($policies);
-        /** @var PolicyInterface|FetchPolicy|FlagPolicy|SandboxPolicy|PluginTypesPolicy $policy */
+        /** @var PolicyInterface $policy */
         foreach ($policies as $policy) {
-            switch ($policy->getId())
-            {
-                case 'child-src':
-                    if ($policy->isEvalAllowed()) {
-                        $childScr2Checked = true;
-                    } else {
-                        $childScrChecked = !$policy->isNoneAllowed()
-                            && $policy->getHostSources() == ['http://magento.com', 'http://devdocs.magento.com']
-                            && $policy->getSchemeSources() == ['http']
-                            && $policy->isSelfAllowed()
-                            && !$policy->isEvalAllowed()
-                            && $policy->isDynamicAllowed()
-                            && $policy->getHashes() == []
-                            && $policy->getNonceValues() == []
-                            && $policy->isInlineAllowed();
-                    }
-                    break;
-                case 'connect-src':
-                    $connectScrChecked = $policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && !$policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'default-src':
-                    $defaultScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == ['http://magento.com', 'http://devdocs.magento.com']
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'font-src':
-                    $fontScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'frame-src':
-                    $frameScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && $policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'img-src':
-                    $imgScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'manifest-src':
-                    $manifestScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'media-src':
-                    $mediaScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'object-src':
-                    $objectScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'script-src':
-                    $scriptScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'style-src':
-                    $styleScrChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'base-uri':
-                    $baseUriChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'plugin-types':
-                    $pluginTypesChecked = $policy->getTypes()
-                        == ['application/x-shockwave-flash', 'application/x-java-applet'];
-                    break;
-                case 'sandbox':
-                    $sandboxChecked = $policy->isFormAllowed()
-                        && $policy->isModalsAllowed()
-                        && $policy->isOrientationLockAllowed()
-                        && $policy->isPointerLockAllowed()
-                        && !$policy->isPopupsAllowed()
-                        && !$policy->isPopupsToEscapeSandboxAllowed()
-                        && $policy->isPresentationAllowed()
-                        && $policy->isSameOriginAllowed()
-                        && $policy->isScriptsAllowed()
-                        && $policy->isTopNavigationAllowed()
-                        && $policy->isTopNavigationByUserActivationAllowed();
-                    break;
-                case 'form-action':
-                    $formActionChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'frame-ancestors':
-                    $frameAncestorsChecked = !$policy->isNoneAllowed()
-                        && $policy->getHostSources() == []
-                        && $policy->getSchemeSources() == []
-                        && $policy->isSelfAllowed()
-                        && !$policy->isEvalAllowed()
-                        && !$policy->isDynamicAllowed()
-                        && $policy->getHashes() == []
-                        && $policy->getNonceValues() == []
-                        && !$policy->isInlineAllowed();
-                    break;
-                case 'block-all-mixed-content':
-                    $blockAllMixedChecked = $policy instanceof FlagPolicy;
-                    break;
-                case 'upgrade-insecure-requests':
-                    $upgradeChecked = $policy instanceof FlagPolicy;
-                    break;
+            $id = $policy->getId();
+            if ($id === 'child-src' && $policy->isEvalAllowed()) {
+                $id = 'child-src2';
             }
+            $this->assertEquals($expectedPolicies[$id], $policy);
+            $checked[] = $id;
         }
-
-        $this->assertTrue($childScrChecked);
-        $this->assertTrue($childScr2Checked);
-        $this->assertTrue($connectScrChecked);
-        $this->assertTrue($defaultScrChecked);
-        $this->assertTrue($fontScrChecked);
-        $this->assertTrue($frameScrChecked);
-        $this->assertTrue($imgScrChecked);
-        $this->assertTrue($manifestScrChecked);
-        $this->assertTrue($mediaScrChecked);
-        $this->assertTrue($objectScrChecked);
-        $this->assertTrue($scriptScrChecked);
-        $this->assertTrue($styleScrChecked);
-        $this->assertTrue($baseUriChecked);
-        $this->assertTrue($pluginTypesChecked);
-        $this->assertTrue($sandboxChecked);
-        $this->assertTrue($formActionChecked);
-        $this->assertTrue($frameAncestorsChecked);
-        $this->assertTrue($blockAllMixedChecked);
-        $this->assertTrue($upgradeChecked);
+        $expectedIds = array_keys($expectedPolicies);
+        $this->assertEquals(sort($expectedIds), sort($checked));
     }
 }

@@ -51,7 +51,6 @@ class CspWhitelistXmlCollector implements PolicyCollectorInterface
             );
         }
 
-
         return $policies;
     }
 }
