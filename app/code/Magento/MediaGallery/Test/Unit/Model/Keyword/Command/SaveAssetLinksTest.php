@@ -13,6 +13,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * SaveAssetLinksTest.
@@ -35,16 +36,22 @@ class SaveAssetLinksTest extends TestCase
     private $resourceConnectionMock;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+
+    /**
      * Prepare test objects.
      */
     public function setUp(): void
     {
-
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->sut = new SaveAssetLinks(
-            $this->resourceConnectionMock
+            $this->resourceConnectionMock,
+            $this->logger
         );
     }
 
@@ -56,6 +63,8 @@ class SaveAssetLinksTest extends TestCase
      * @param int $assetId
      * @param array $keywordIds
      * @param array $values
+     *
+     * @throws CouldNotSaveException
      */
     public function testAssetKeywordsSave(int $assetId, array $keywordIds, array $values): void
     {
@@ -96,6 +105,9 @@ class SaveAssetLinksTest extends TestCase
             ->method('insertArray')
             ->willThrowException((new \Exception()));
         $this->expectException(CouldNotSaveException::class);
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->willReturnSelf();
 
         $this->sut->execute(1, [1, 2]);
     }
