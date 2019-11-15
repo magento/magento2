@@ -34,17 +34,19 @@
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForPreviewButton"/>
         <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
         <switchToNextTab stepKey="switchToPreviewTab"/>
+        <waitForPageLoad stepKey="waitForTabLoaded"/>
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.previewIframe}}" stepKey="waitForIframeVisible"/>
-        <executeJS function="Array.from(document.getElementById('preview_iframe').sandbox.values()).map(document.getElementById('preview_iframe').sandbox.remove)" stepKey="removeSandboxValues"/>
-        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
-        <waitForPageLoad stepKey="waitForPreviewIframeLoaded"/>
+        <waitForJS function="return document.getElementById('preview_iframe').sandbox.add('allow-scripts') || true" stepKey="removeSandboxValues"/>
     </actionGroup>
 
     <actionGroup name="AssertNewsletterContent">
         <arguments>
             <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
         </arguments>
-        <waitForText userInput="{{Newsletter.expectedTemplate}}" stepKey="checkTemplateContainsText"/>
+        <executeJS function="return document.getElementById('preview_iframe').contentDocument.body.textContent" stepKey="grabTemplateText"/>
+        <assertContains stepKey="checkTemplateContainsText">
+            <actualResult type="variable">grabTemplateText</actualResult>
+            <expectedResult type="string">{{Newsletter.expectedTemplate}}</expectedResult>
+        </assertContains>
     </actionGroup>
-
 </actionGroups>
