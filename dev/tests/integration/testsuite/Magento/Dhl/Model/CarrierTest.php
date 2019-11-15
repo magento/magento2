@@ -15,6 +15,7 @@ use Magento\Framework\Simplexml\Element;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Shipping\Model\Tracking\Result\Status;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
@@ -411,7 +412,106 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectRates()
     {
-        $requestData = [
+        $requestData = $this->getRequestData();
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $response = new Response(
+            200,
+            [],
+            file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $expectedRates = [
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 45.85, 'method' => 'E', 'price' => 45.85],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'Q', 'price' => 35.26],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 37.38, 'method' => 'Y', 'price' => 37.38],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'P', 'price' => 35.26]
+        ];
+
+        $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
+
+        self::assertEquals(count($expectedRates), count($actualRates));
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            unset($actualRate['method_title']);
+            self::assertEquals($expectedRates[$i], $actualRate);
+        }
+        $requestXml = $this->httpClient->getLastRequest()->getBody();
+        self::assertContains('<Weight>18.223</Weight>', $requestXml);
+        self::assertContains('<Height>0.63</Height>', $requestXml);
+        self::assertContains('<Width>0.63</Width>', $requestXml);
+        self::assertContains('<Depth>0.63</Depth>', $requestXml);
+    }
+
+    /**
+     * Tests that quotes request doesn't contain dimensions when it shouldn't.
+     *
+     * @param string|null $size
+     * @param string|null $height
+     * @param string|null $width
+     * @param string|null $depth
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     * @dataProvider collectRatesWithoutDimensionsDataProvider
+     */
+    public function testCollectRatesWithoutDimensions(?string $size, ?string $height, ?string $width, ?string $depth)
+    {
+        $requestData = $this->getRequestData();
+        $this->setDhlConfig(['size' => $size, 'height' => $height, 'width' => $width, 'depth' => $depth]);
+
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
+        $this->dhlCarrier->collectRates($request)->getAllRates();
+
+        $requestXml = $this->httpClient->getLastRequest()->getBody();
+        $this->assertNotContains('<Width>', $requestXml);
+        $this->assertNotContains('<Height>', $requestXml);
+        $this->assertNotContains('<Depth>', $requestXml);
+    }
+
+    /**
+     * @return array
+     */
+    public function collectRatesWithoutDimensionsDataProvider()
+    {
+        return [
+            ['size' => '0', 'height' => '1.1', 'width' => '0.6', 'depth' => '0.7'],
+            ['size' => '1', 'height' => '', 'width' => '', 'depth' => ''],
+            ['size' => null, 'height' => '1.1', 'width' => '0.6', 'depth' => '0.7'],
+            ['size' => '1', 'height' => '1', 'width' => '', 'depth' => ''],
+            ['size' => null, 'height' => null, 'width' => null, 'depth' => null],
+        ];
+    }
+
+    /**
+     * Sets DHL config value.
+     *
+     * @param array $params
+     * @return void
+     */
+    private function setDhlConfig(array $params)
+    {
+        foreach ($params as $name => $val) {
+            if ($val !== null) {
+                $this->config->setValue(
+                    'carriers/dhl/' . $name,
+                    $val,
+                    ScopeInterface::SCOPE_STORE
+                );
+            }
+        }
+    }
+
+    /**
+     * Returns request data.
+     *
+     * @return array
+     */
+    private function getRequestData(): array
+    {
+        return [
             'data' => [
                 'dest_country_id' => 'DE',
                 'dest_region_id' => '82',
@@ -454,35 +554,5 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'all_items' => [],
             ]
         ];
-        //phpcs:disable Magento2.Functions.DiscouragedFunction
-        $response = new Response(
-            200,
-            [],
-            file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
-        );
-        //phpcs:enable Magento2.Functions.DiscouragedFunction
-        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
-        $expectedRates = [
-            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 45.85, 'method' => 'E', 'price' => 45.85],
-            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'Q', 'price' => 35.26],
-            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 37.38, 'method' => 'Y', 'price' => 37.38],
-            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'P', 'price' => 35.26]
-        ];
-
-        $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
-
-        self::assertEquals(count($expectedRates), count($actualRates));
-        foreach ($actualRates as $i => $actualRate) {
-            $actualRate = $actualRate->getData();
-            unset($actualRate['method_title']);
-            self::assertEquals($expectedRates[$i], $actualRate);
-        }
-        $requestXml = $this->httpClient->getLastRequest()->getBody();
-        self::assertContains('<Weight>18.223</Weight>', $requestXml);
-        self::assertContains('<Height>0.630</Height>', $requestXml);
-        self::assertContains('<Width>0.630</Width>', $requestXml);
-        self::assertContains('<Depth>0.630</Depth>', $requestXml);
     }
 }
