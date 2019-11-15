@@ -11,7 +11,7 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\ResourceModel\CategoryFactory as CategoryResourceFactory;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
@@ -32,8 +32,8 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     /** @var CategoryRepositoryInterface */
     private $categoryRepository;
 
-    /** @var CategoryResourceFactory */
-    private $categoryResourceFactory;
+    /** @var CategoryResource */
+    private $categoryResource;
 
     /** @var CategoryLinkManagementInterface */
     private $categoryLinkManagement;
@@ -52,7 +52,7 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
         parent::setUp();
 
         $this->categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
-        $this->categoryResourceFactory = $this->objectManager->get(CategoryResourceFactory::class);
+        $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->categoryLinkManagement = $this->objectManager->create(CategoryLinkManagementInterface::class);
         $this->categoryFactory = $this->objectManager->get(CategoryFactory::class);
         $this->suffix = $this->config->getValue(
@@ -69,7 +69,7 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
      */
     public function testUrlRewriteOnCategorySave(array $data): void
     {
-        $categoryModel = $this->resourceSaveCategoryWithData($data['data']);
+        $categoryModel = $this->saveCategory($data['data']);
         $this->assertNotNull($categoryModel->getId(), 'The category was not created');
         $urlRewriteCollection = $this->getEntityRewriteCollection($categoryModel->getId());
         $this->assertRewrites(
@@ -174,7 +174,7 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     {
         $this->expectException(UrlAlreadyExistsException::class);
         $this->expectExceptionMessage((string)__('URL key for specified store already exists.'));
-        $this->resourceSaveCategoryWithData($data);
+        $this->saveCategory($data);
     }
 
     /**
@@ -339,7 +339,7 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
         $categoryId = 333;
         $category = $this->categoryRepository->get($categoryId);
         $urlKeyFirstStore = $category->getUrlKey();
-        $this->resourceSaveCategoryWithData(
+        $this->saveCategory(
             ['store_id' => $secondStoreId, 'url_key' => $urlKeySecondStore],
             $category
         );
@@ -383,12 +383,11 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
      * @param CategoryInterface|null $category
      * @return CategoryInterface
      */
-    private function resourceSaveCategoryWithData(array $data, $category = null): CategoryInterface
+    private function saveCategory(array $data, $category = null): CategoryInterface
     {
         $category = $category ?: $this->categoryFactory->create();
         $category->addData($data);
-        $categoryResource = $this->categoryResourceFactory->create();
-        $categoryResource->save($category);
+        $this->categoryResource->save($category);
 
         return $category;
     }
@@ -405,7 +404,7 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
         $productRewriteCollection = $this->urlRewriteCollectionFactory->create();
         $productRewriteCollection
             ->join(
-                ['p' => Product::TABLE_NAME],
+                ['p' => $this->categoryResource->getTable(Product::TABLE_NAME)],
                 'main_table.url_rewrite_id = p.url_rewrite_id',
                 'category_id'
             )

@@ -12,7 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\ResourceModel\ProductFactory as ProductResourceFactory;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
@@ -32,8 +32,8 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /** @var string */
     private $suffix;
 
-    /** @var ProductResourceFactory */
-    private $productResourceFactory;
+    /** @var ProductResource */
+    private $productResource;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
@@ -45,7 +45,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     {
         parent::setUp();
 
-        $this->productResourceFactory = $this->objectManager->create(ProductResourceFactory::class);
+        $this->productResource = $this->objectManager->create(ProductResource::class);
         $this->productFactory = $this->objectManager->get(ProductFactory::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->suffix = $this->config->getValue(
@@ -61,7 +61,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
      */
     public function testUrlRewriteOnProductSave(array $data): void
     {
-        $product = $this->resourceSaveProductWithData($data['data']);
+        $product = $this->saveProduct($data['data']);
         $this->assertNotNull($product->getId(), 'The product was not created');
         $productUrlRewriteCollection = $this->getEntityRewriteCollection($product->getId());
         $this->assertRewrites(
@@ -144,7 +144,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             'url_key_create_redirect' => $product->getUrlKey(),
             'save_rewrites_history' => true,
         ];
-        $product = $this->resourceSaveProductWithData($data, $product);
+        $product = $this->saveProduct($data, $product);
         $productRewriteCollection = $this->getEntityRewriteCollection($product->getId());
         $this->assertRewrites(
             $productRewriteCollection,
@@ -184,7 +184,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     {
         $this->expectException(UrlAlreadyExistsException::class);
         $this->expectExceptionMessage((string)__('URL key for specified store already exists.'));
-        $this->resourceSaveProductWithData($data);
+        $this->saveProduct($data);
     }
 
     /**
@@ -255,7 +255,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
         $secondStoreId = $this->storeRepository->get('fixture_second_store')->getId();
         $product = $this->productRepository->get('simple2');
         $urlKeyFirstStore = $product->getUrlKey();
-        $product = $this->resourceSaveProductWithData(
+        $product = $this->saveProduct(
             ['store_id' => $secondStoreId, 'url_key' => $urlKeySecondStore],
             $product
         );
@@ -275,12 +275,11 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
      * @param ProductInterface|null $product
      * @return ProductInterface
      */
-    protected function resourceSaveProductWithData(array $data, $product = null): ProductInterface
+    protected function saveProduct(array $data, $product = null): ProductInterface
     {
         $product = $product ?: $this->productFactory->create();
         $product->addData($data);
-        $productResource = $this->productResourceFactory->create();
-        $productResource->save($product);
+        $this->productResource->save($product);
 
         return $product;
     }
