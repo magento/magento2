@@ -62,11 +62,11 @@ class DeleteByPath implements DeleteByPathInterface
             $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
             $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' = ?' => $mediaAssetPath]);
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __(
                 'Could not delete media asset with path %path: %error',
                 ['path' => $mediaAssetPath, 'error' => $exception->getMessage()]
             );
-            $this->logger->critical($message);
             throw new CouldNotDeleteException($message, $exception);
         }
     }

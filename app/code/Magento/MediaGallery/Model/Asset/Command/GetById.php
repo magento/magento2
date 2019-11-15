@@ -89,7 +89,7 @@ class GetById implements GetByIdInterface
         try {
             return $this->assetFactory->create(['data' => $mediaAssetData]);
         } catch (\Exception $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->critical($exception);
             $message = __(
                 'En error occurred during initialize media asset with id %id: %error',
                 ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
