@@ -16,7 +16,11 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
+/**
+ * GetAssetKeywordsTest
+ */
 class GetAssetKeywordsTest extends TestCase
 {
     /**
@@ -34,14 +38,21 @@ class GetAssetKeywordsTest extends TestCase
      */
     private $assetKeywordFactoryStub;
 
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+
     protected function setUp(): void
     {
         $this->resourceConnectionStub = $this->createMock(ResourceConnection::class);
         $this->assetKeywordFactoryStub = $this->createMock(KeywordInterfaceFactory::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->sut = new GetAssetKeywords(
             $this->resourceConnectionStub,
-            $this->assetKeywordFactoryStub
+            $this->assetKeywordFactoryStub,
+            $this->logger
         );
     }
 
@@ -80,7 +91,7 @@ class GetAssetKeywordsTest extends TestCase
     }
 
     /**
-     * Negative test
+     * Test case when an error occured during get data request.
      *
      * @throws NotFoundException
      */
@@ -93,6 +104,9 @@ class GetAssetKeywordsTest extends TestCase
             ->willThrowException((new \Exception()));
 
         $this->expectException(NotFoundException::class);
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->willReturnSelf();
 
         $this->sut->execute($randomAssetId);
     }
