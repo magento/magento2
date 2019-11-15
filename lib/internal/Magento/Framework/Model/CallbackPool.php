@@ -10,6 +10,8 @@ namespace Magento\Framework\Model;
 use Magento\Framework\DB\Adapter\Pdo\CallbackPool as PdoCallbackPool;
 
 /**
+ * Callback pool.
+ *
  * @deprecated please use Magento\Framework\DB\Adapter\Pdo\CallbackPool.
  */
 class CallbackPool

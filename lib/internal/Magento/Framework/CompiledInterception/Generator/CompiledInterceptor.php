@@ -258,11 +258,20 @@ class CompiledInterceptor extends EntityAbstract implements InterceptorInterface
         foreach ($extraSetters as $name => $paramName) {
             $class = array_search($name, $properties);
             if ($paramName !== null) {
-                array_unshift($body, "\$this->$name = \$$paramName;");
+                array_unshift(
+                    $body,
+                    "\$this->$name = \$$paramName;"
+                );
             } elseif ($class === ObjectManagerInterface::class) {
-                array_unshift($body, "\$this->$name = \Magento\Framework\App\ObjectManager::getInstance();");
+                array_unshift(
+                    $body,
+                    "\$this->$name = \Magento\Framework\App\ObjectManager::getInstance();"
+                );
             } else {
-                array_unshift($body, "\$this->$name = \Magento\Framework\App\ObjectManager::getInstance()->get(\\$class::class);");
+                array_unshift(
+                    $body,
+                    "\$this->$name = \Magento\Framework\App\ObjectManager::getInstance()->get(\\$class::class);"
+                );
             }
         }
         return [
