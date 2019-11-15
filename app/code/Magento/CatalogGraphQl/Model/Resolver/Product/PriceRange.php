@@ -86,7 +86,7 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
-        $minPriceArray = $this->formatPrice($regularPrice, $finalPrice, $store);
+        $minPriceArray = $this->formatPrice((float) $regularPrice, (float) $finalPrice, $store);
         $minPriceArray['model'] = $product;
         return $minPriceArray;
     }
