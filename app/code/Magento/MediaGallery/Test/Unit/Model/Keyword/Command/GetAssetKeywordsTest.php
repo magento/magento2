@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
 
+use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -93,7 +93,7 @@ class GetAssetKeywordsTest extends TestCase
     /**
      * Test case when an error occured during get data request.
      *
-     * @throws NotFoundException
+     * @throws IntegrationException
      */
     public function testNotFoundBecauseOfError(): void
     {
@@ -103,7 +103,7 @@ class GetAssetKeywordsTest extends TestCase
             ->method('getConnection')
             ->willThrowException((new \Exception()));
 
-        $this->expectException(NotFoundException::class);
+        $this->expectException(IntegrationException::class);
         $this->logger->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
