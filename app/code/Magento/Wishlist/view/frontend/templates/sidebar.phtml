@@ -6,10 +6,7 @@
 
 /** @var \Magento\Wishlist\Block\Customer\Sidebar $block */
 ?>
-<?php
-$wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
-?>
-<?php if ($wishlistHelper->isAllow()) : ?>
+<?php if ($block->isWishlistAllowed()) : ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
@@ -67,7 +64,7 @@ $wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
                 <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
-                           href="<?= $block->escapeUrl($this->helper(\Magento\Wishlist\Helper\Data::class)->getListUrl()) ?>"
+                           href="<?= $block->escapeUrl($block->getWishlistUrl()) ?>"
                            title="<?= $block->escapeHtmlAttr(__('Go to Wish List')) ?>"><span><?= $block->escapeHtml(__('Go to Wish List')) ?></span></a>
                     </div>
                 </div>
