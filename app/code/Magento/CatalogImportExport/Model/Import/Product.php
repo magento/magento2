@@ -3090,7 +3090,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             foreach ($linkNameToId as $linkName => $linkId) {
                 $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
                 //process empty value
-                if (!empty($linkSkus[0]) && $linkSkus[0] === Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT) {
+                if (!empty($linkSkus[0]) && $linkSkus[0] === $this->getEmptyAttributeValueConstant()) {
                     $linksToDelete[$linkId][] = $productId;
                     continue;
                 }
