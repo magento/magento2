@@ -35,7 +35,7 @@
         <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
         <switchToNextTab stepKey="switchToPreviewTab"/>
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.previewIframe}}" stepKey="waitForIframeVisible"/>
-        <executeJS function="Array.from(document.getElementById('preview_iframe').sandbox.values()).map(document.getElementById('preview_iframe').sandbox.remove)" stepKey="addSandboxValue"/>
+        <executeJS function="Array.from(document.getElementById('preview_iframe').sandbox.values()).map(document.getElementById('preview_iframe').sandbox.remove)" stepKey="removeSandboxValues"/>
         <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
         <waitForPageLoad stepKey="waitForPreviewIframeLoaded"/>
     </actionGroup>
