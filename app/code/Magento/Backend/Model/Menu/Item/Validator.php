@@ -5,10 +5,6 @@
  */
 namespace Magento\Backend\Model\Menu\Item;
 
-use BadMethodCallException;
-use InvalidArgumentException;
-use Zend_Validate;
-
 /**
  * Class Validator
  *
@@ -35,7 +31,7 @@ class Validator
     /**
      * The list of primitive validators
      *
-     * @var Zend_Validate[]
+     * @var \Zend_Validate[]
      */
     protected $_validators = [];
 
@@ -44,17 +40,17 @@ class Validator
      */
     public function __construct()
     {
-        $idValidator = new Zend_Validate();
+        $idValidator = new \Zend_Validate();
         $idValidator->addValidator(new \Zend_Validate_StringLength(['min' => 3]));
         $idValidator->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9\/:_]+$/'));
 
-        $resourceValidator = new Zend_Validate();
+        $resourceValidator = new \Zend_Validate();
         $resourceValidator->addValidator(new \Zend_Validate_StringLength(['min' => 8]));
         $resourceValidator->addValidator(
             new \Zend_Validate_Regex('/^[A-Z][A-Za-z0-9]+_[A-Z][A-Za-z0-9]+::[A-Za-z_0-9]+$/')
         );
 
-        $attributeValidator = new Zend_Validate();
+        $attributeValidator = new \Zend_Validate();
         $attributeValidator->addValidator(new \Zend_Validate_StringLength(['min' => 3]));
         $attributeValidator->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9\/_\-]+$/'));
 
@@ -77,8 +73,8 @@ class Validator
      *
      * @param array $data
      * @return void
-     * @throws InvalidArgumentException
-     * @throws BadMethodCallException
+     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
      */
     public function validate($data)
     {
@@ -111,13 +107,13 @@ class Validator
      *
      * @param array $data
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
      */
     private function assertContainsRequiredParameters($data)
     {
         foreach ($this->_required as $param) {
             if (!isset($data[$param])) {
-                throw new BadMethodCallException('Missing required param ' . $param);
+                throw new \BadMethodCallException('Missing required param ' . $param);
             }
         }
     }
@@ -126,12 +122,12 @@ class Validator
      * Check that menu item id is not used
      *
      * @param string $id
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function assertIdentifierIsNotUsed($id)
     {
         if (array_search($id, $this->_ids) !== false) {
-            throw new InvalidArgumentException('Item with id ' . $id . ' already exists');
+            throw new \InvalidArgumentException('Item with id ' . $id . ' already exists');
         }
     }
 
@@ -140,7 +136,7 @@ class Validator
      *
      * @param string $param
      * @param mixed $value
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function validateMenuItemParameter($param, $value)
     {
@@ -156,7 +152,7 @@ class Validator
             return;
         }
 
-        throw new InvalidArgumentException(
+        throw new \InvalidArgumentException(
             "Param " . $param . " doesn't pass validation: " . implode(
                 '; ',
                 $validator->getMessages()
@@ -170,16 +166,16 @@ class Validator
      * @param string $param
      * @param mixed $value
      * @return void
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function validateParam($param, $value)
     {
         if (in_array($param, $this->_required) && $value === null) {
-            throw new InvalidArgumentException('Param ' . $param . ' is required');
+            throw new \InvalidArgumentException('Param ' . $param . ' is required');
         }
 
         if ($value !== null && isset($this->_validators[$param]) && !$this->_validators[$param]->isValid($value)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Param ' . $param . ' doesn\'t pass validation: ' . implode(
                     '; ',
                     $this->_validators[$param]->getMessages()
