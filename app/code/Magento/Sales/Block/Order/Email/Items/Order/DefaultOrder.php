@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Order\Email\Items\Order;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
@@ -27,6 +30,8 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve the item options
+     *
      * @return array
      */
     public function getItemOptions()
@@ -48,6 +53,8 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve the Html for the given value
+     *
      * @param string|array $value
      * @return string
      */
@@ -68,6 +75,8 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve the item SKU
+     *
      * @param mixed $item
      * @return mixed
      */
@@ -93,11 +102,23 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     /**
      * Get the html for item price
      *
-     * @param OrderItem $item
+     * @param CreditMemoItem|OrderItem|InvoiceItem $item
      * @return string
+     * @throws LocalizedException
      */
-    public function getItemPrice(OrderItem $item)
+    public function getItemPrice($item)
     {
+        switch (true) {
+            case $item instanceof CreditMemoItem:
+            case $item instanceof InvoiceItem:
+            case $item instanceof OrderItem:
+                break;
+            default:
+                throw new LocalizedException(
+                    __('Invalid input for $item, should be an instance of order, creditmemo or invoice item.')
+                );
+        }
+
         $block = $this->getLayout()->getBlock('item_price');
         $block->setItem($item);
         return $block->toHtml();
