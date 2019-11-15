@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Zend\Http\Header\GenericMultiHeader;
+
 /**
  * Base HTTP response object
  */
@@ -77,11 +79,18 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     {
         $value = (string)$value;
 
+        $headers = $this->getHeaders();
         if ($replace) {
+            $headers->addHeaderLine($name, $value);
             $this->clearHeader($name);
+        } else {
+            //Zend framework will only force multiple headers for header objects
+            //extending MultiHeader interface.
+            $pluginKey = str_replace('-', '', mb_strtolower($name));
+            $headers->getPluginClassLoader()->registerPlugin($pluginKey, GenericMultiHeader::class);
+            $headers->addHeader(new GenericMultiHeader($name, $value));
         }
 
-        $this->getHeaders()->addHeaderLine($name, $value);
         return $this;
     }
 
