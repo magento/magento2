@@ -284,9 +284,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->getMock();
         $this->storeResolver =
             $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class)
-                ->setMethods([
-                    'getStoreCodeToId',
-                ])
+                ->setMethods(
+                    [
+                        'getStoreCodeToId',
+                    ]
+                )
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->skuProcessor =
@@ -596,9 +598,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testGetMultipleValueSeparatorFromParameters()
     {
         $expectedSeparator = 'value';
-        $this->setPropertyValue($this->importProduct, '_parameters', [
-            \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $expectedSeparator,
-        ]);
+        $this->setPropertyValue(
+            $this->importProduct,
+            '_parameters',
+            [
+                \Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $expectedSeparator,
+            ]
+        );
 
         $this->assertEquals(
             $expectedSeparator,
@@ -618,9 +624,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     public function testGetEmptyAttributeValueConstantFromParameters()
     {
         $expectedSeparator = '__EMPTY__VALUE__TEST__';
-        $this->setPropertyValue($this->importProduct, '_parameters', [
-            \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
-        ]);
+        $this->setPropertyValue(
+            $this->importProduct,
+            '_parameters',
+            [
+                \Magento\ImportExport\Model\Import::FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT => $expectedSeparator,
+            ]
+        );
 
         $this->assertEquals(
             $expectedSeparator,
@@ -632,9 +642,12 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setParameters', '_deleteProducts'
-            ])
+            ->setMethods(
+                [
+                    'setParameters',
+                    '_deleteProducts'
+                ]
+            )
             ->getMock();
 
         $importProduct->expects($this->once())->method('setParameters')->with(
@@ -764,9 +777,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'key 3' => 'val',
         ];
         $expectedResult = array_keys($productValue);
-        $this->setPropertyValue($this->importProduct, 'websitesCache', [
-            $productSku => $productValue
-        ]);
+        $this->setPropertyValue(
+            $this->importProduct,
+            'websitesCache',
+            [
+                $productSku => $productValue
+            ]
+        );
 
         $actualResult = $this->importProduct->getProductWebsites($productSku);
 
@@ -785,9 +802,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'key 3' => 'val',
         ];
         $expectedResult = array_keys($productValue);
-        $this->setPropertyValue($this->importProduct, 'categoriesCache', [
-            $productSku => $productValue
-        ]);
+        $this->setPropertyValue(
+            $this->importProduct,
+            'categoriesCache',
+            [
+                $productSku => $productValue
+            ]
+        );
 
         $actualResult = $this->importProduct->getProductCategories($productSku);
 
@@ -1112,9 +1133,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->disableOriginalConstructor()
             ->getMock();
         $productType->expects($this->once())->method('isRowValid')->with($expectedRowData);
-        $this->setPropertyValue($importProduct, '_productTypeModels', [
-            $newSku['type_id'] => $productType
-        ]);
+        $this->setPropertyValue(
+            $importProduct,
+            '_productTypeModels',
+            [
+                $newSku['type_id'] => $productType
+            ]
+        );
 
         //suppress option validation
         $this->_rewriteGetOptionEntityInImportProduct($importProduct);
