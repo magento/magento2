@@ -1101,6 +1101,7 @@ XMLAuth;
             $xmlRequest = <<<XMLAuth
 <?xml version="1.0" ?>
 <TrackRequest xml:lang="en-US">
+    <IncludeMailInnovationIndicator/>
     <Request>
         <RequestAction>Track</RequestAction>
         <RequestOption>1</RequestOption>

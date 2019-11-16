@@ -151,7 +151,14 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
         $setPaymentQuery = $this->getSetPaymentBraintreeQueryInvalidMethodInput($maskedQuoteId);
-        $this->expectExceptionMessage("for \"braintree\" is missing.");
+
+        $this->expectExceptionMessage(
+            'Field BraintreeInput.is_active_payment_token_enabler of required type Boolean! was not provided'
+        );
+        $this->expectExceptionMessage(
+            'Field BraintreeInput.payment_method_nonce of required type String! was not provided.'
+        );
+
         $this->graphQlMutation($setPaymentQuery);
     }
 

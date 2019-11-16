@@ -116,6 +116,11 @@ class UpdateCartItems implements ResolverInterface
             $itemId = (int)$item['cart_item_id'];
             $customizableOptions = $item['customizable_options'] ?? [];
 
+            $cartItem = $cart->getItemById($itemId);
+            if ($cartItem && $cartItem->getParentItemId()) {
+                throw new GraphQlInputException(__('Child items may not be updated.'));
+            }
+
             if (count($customizableOptions) === 0 && !isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));
             }

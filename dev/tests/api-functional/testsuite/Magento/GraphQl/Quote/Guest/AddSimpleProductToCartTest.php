@@ -50,6 +50,8 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
         self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
         self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
+        self::assertArrayHasKey('id', $response['addSimpleProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addSimpleProductsToCart']['cart']['id']);
 
         self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
         $price = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price'];
@@ -79,7 +81,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     * @expectedExceptionMessage Field AddSimpleProductsToCartInput.cart_id of required type String! was not provided.
      */
     public function testAddSimpleProductToCartIfCartIdIsMissed()
     {
@@ -128,10 +130,6 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
-     */
     public function testAddSimpleProductToCartIfCartItemsAreMissed()
     {
         $query = <<<QUERY
@@ -149,6 +147,11 @@ mutation {
   }
 }
 QUERY;
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Field AddSimpleProductsToCartInput.cart_items of required type [SimpleProductCartItemInput]!'
+            . ' was not provided.'
+        );
 
         $this->graphQlMutation($query);
     }
@@ -254,6 +257,7 @@ mutation {
     }
   ) {
     cart {
+    id
       items {
         quantity
         product {

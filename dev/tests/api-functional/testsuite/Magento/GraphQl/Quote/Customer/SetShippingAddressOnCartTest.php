@@ -99,7 +99,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -164,7 +164,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -328,7 +328,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -462,6 +462,50 @@ QUERY;
     }
 
     /**
+     * Covers case with empty street
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Field CartAddressInput.street of required type [String]! was not provided.
+     */
+    public function testSetNewShippingAddressWithMissedRequiredStreetParameters()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            country_code: "US"
+            firstname: "J"
+            lastname: "D"
+            telephone: "+"
+            city: "C"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+        shipping_addresses {
+            city
+        }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @return array
      */
     public function dataProviderUpdateWithMissedRequiredParameters(): array
@@ -478,8 +522,56 @@ QUERY;
             ],
             'missed_cart_id' => [
                 'shipping_addresses: {}',
-                'Required parameter "cart_id" is missing'
-            ]
+                'Field SetShippingAddressesOnCartInput.cart_id of required type String! was not provided.'
+            ],
+            'missed_region' => [
+                'cart_id: "cart_id_value"
+                 shipping_addresses: [{
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        city: "test city"
+                        postcode: "887766"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }]',
+                '"regionId" is required. Enter and try again.'
+            ],
+            'missed_multiple_fields' => [
+                'cart_id: "cart_id_value"
+                 shipping_addresses: [{
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        city: "test city"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }]',
+                '"postcode" is required. Enter and try again.
+"regionId" is required. Enter and try again.'
+            ],
+            'wrong_required_region' => [
+                'cart_id: "cart_id_value"
+                 shipping_addresses: [{
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        region: "wrong region"
+                        city: "test city"
+                        country_code: "US"
+                        telephone: "88776655"
+                        }
+                    }]',
+                'Region is not available for the selected country'
+            ],
         ];
     }
 
@@ -509,7 +601,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -522,7 +614,7 @@ mutation {
             company: "test company 2"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -565,7 +657,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2", "test street 3"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -748,8 +840,59 @@ mutation {
   }
 }
 QUERY;
-        $this->expectExceptionMessage('The address failed to save. Verify the address and try again.');
+        $this->expectExceptionMessage('Country is not available');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressesWithNotRequiredRegion()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "Vasyl"
+            lastname: "Doe"
+            street: ["1 Svobody"]
+            city: "Lviv"
+            region: "Lviv"
+            postcode: "00000"
+            country_code: "UA"
+            telephone: "555-555-55-55"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        region {
+          label
+        }
+        country {
+          code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertEquals('UA', $cartResponse['shipping_addresses'][0]['country']['code']);
+        self::assertEquals('Lviv', $cartResponse['shipping_addresses'][0]['region']['label']);
     }
 
     /**
@@ -774,7 +917,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -845,7 +988,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AZ"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"

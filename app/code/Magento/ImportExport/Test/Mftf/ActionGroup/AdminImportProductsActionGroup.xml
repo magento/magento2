@@ -17,7 +17,7 @@
             <argument name="validationStrategy" type="string" defaultValue="Stop on Error"/>
             <argument name="allowedErrorsCount" type="string" defaultValue="10"/>
             <argument name="importFile" type="string"/>
-            <argument name="importNoticeMessage" type="string"/>
+            <argument name="importNoticeMessage" type="string" defaultValue=""/>
             <argument name="importMessageType" type="string" defaultValue="success"/>
             <argument name="importMessage" type="string" defaultValue="Import successfully done"/>
         </arguments>

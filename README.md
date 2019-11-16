@@ -5,9 +5,6 @@
 </p>
 <p align="center">
     <br /><br />
-    <a href="https://travis-ci.org/magento/magento2">
-        <img src="https://travis-ci.org/magento/magento2.svg?branch=2.3-develop" alt="Build Status" />
-    </a>
     <a href="https://www.codetriage.com/magento/magento2">
         <img src="https://www.codetriage.com/magento/magento2/badges/users.svg" alt="Open Source Helpers" />
     </a>
@@ -19,7 +16,7 @@
     </a>
 </p>
 
-<h2>Welcome</h2>
+## Welcome
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 ## Magento System Requirements
@@ -48,7 +45,7 @@ To suggest documentation improvements, click [here][4].
 [4]: https://devdocs.magento.com
 
 <h3>Community Maintainers</h3>
-The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks to these Community Maintainers for their valuable contributions.
 
 <a href="https://magento.com/magento-contributors#maintainers">
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>
