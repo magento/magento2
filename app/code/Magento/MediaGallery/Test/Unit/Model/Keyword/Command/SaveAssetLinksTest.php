@@ -38,7 +38,7 @@ class SaveAssetLinksTest extends TestCase
     /**
      * @var LoggerInterface|MockObject
      */
-    private $logger;
+    private $loggerMock;
 
     /**
      * Prepare test objects.
@@ -47,11 +47,11 @@ class SaveAssetLinksTest extends TestCase
     {
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->sut = new SaveAssetLinks(
             $this->resourceConnectionMock,
-            $this->logger
+            $this->loggerMock
         );
     }
 
@@ -63,8 +63,6 @@ class SaveAssetLinksTest extends TestCase
      * @param int $assetId
      * @param array $keywordIds
      * @param array $values
-     *
-     * @throws CouldNotSaveException
      */
     public function testAssetKeywordsSave(int $assetId, array $keywordIds, array $values): void
     {
@@ -105,7 +103,7 @@ class SaveAssetLinksTest extends TestCase
             ->method('insertArray')
             ->willThrowException((new \Exception()));
         $this->expectException(CouldNotSaveException::class);
-        $this->logger->expects($this->once())
+        $this->loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
 

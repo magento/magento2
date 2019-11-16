@@ -41,18 +41,18 @@ class GetAssetKeywordsTest extends TestCase
     /**
      * @var LoggerInterface|MockObject
      */
-    private $logger;
+    private $loggerMock;
 
     protected function setUp(): void
     {
         $this->resourceConnectionStub = $this->createMock(ResourceConnection::class);
         $this->assetKeywordFactoryStub = $this->createMock(KeywordInterfaceFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->sut = new GetAssetKeywords(
             $this->resourceConnectionStub,
             $this->assetKeywordFactoryStub,
-            $this->logger
+            $this->loggerMock
         );
     }
 
@@ -62,7 +62,6 @@ class GetAssetKeywordsTest extends TestCase
      * @dataProvider casesProvider()
      * @param array $databaseQueryResult
      * @param int $expectedNumberOfFoundKeywords
-     * @throws NotFoundException
      */
     public function testFind(array $databaseQueryResult, int $expectedNumberOfFoundKeywords): void
     {
@@ -104,7 +103,7 @@ class GetAssetKeywordsTest extends TestCase
             ->willThrowException((new \Exception()));
 
         $this->expectException(IntegrationException::class);
-        $this->logger->expects($this->once())
+        $this->loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnSelf();
 
