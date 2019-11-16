@@ -22,6 +22,8 @@ use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
 
 /**
  * Test for DHL integration.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CarrierTest extends \PHPUnit\Framework\TestCase
 {
@@ -469,6 +471,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains('<Width>', $requestXml);
         $this->assertNotContains('<Height>', $requestXml);
         $this->assertNotContains('<Depth>', $requestXml);
+
+        $this->config->reinit();
     }
 
     /**
