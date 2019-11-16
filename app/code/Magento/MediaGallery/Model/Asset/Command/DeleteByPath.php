@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Asset\Command;
 
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
