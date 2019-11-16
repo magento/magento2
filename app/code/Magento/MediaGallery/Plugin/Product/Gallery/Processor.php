@@ -67,7 +67,7 @@ class Processor
         try {
             $this->deleteMediaAssetByPath->execute($file);
         } catch (\Exception $exception) {
-            $this->logger->critical($$exception);
+            $this->logger->critical($exception);
         }
 
         return $result;
