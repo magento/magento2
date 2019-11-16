@@ -7,10 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontVerifyDynamicBundleProductPricesForCombinationOfOptionsTest">
         <annotations>
             <features value="Bundle"/>
+            <stories value="View bundle products"/>
             <title value="Verify dynamic bundle product prices for combination of options"/>
             <description value="Verify prices for various configurations of Dynamic Bundle product"/>
             <severity value="CRITICAL"/>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
+        <!--Assert configuration are disabled in DHL section-->
+        <comment userInput="Assert configuration are disabled in DHL section" stepKey="commentSeeDisabledDHLConfigs"/>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" visible="false" stepKey="expandDHLTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="waitDHLTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" userInput="disabled" stepKey="grabDHLActiveDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveDisabled" stepKey="assertDHLActiveDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLTitle}}" userInput="disabled" stepKey="grabDHLTitleDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLTitleDisabled" stepKey="assertDHLTitleDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="disabled" stepKey="grabDHLAccessIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLAccessIdDisabled" stepKey="assertDHLAccessIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLPassword}}" userInput="disabled" stepKey="grabDHLPasswordDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLPasswordDisabled" stepKey="assertDHLPasswordDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccount}}" userInput="disabled" stepKey="grabDHLAccountDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLAccountDisabled" stepKey="assertDHLAccountDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLContentType}}" userInput="disabled" stepKey="grabDHLContentTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLContentTypeDisabled" stepKey="assertDHLContentTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingType}}" userInput="disabled" stepKey="grabDHLHandlingTypeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLHandlingTypeDisabled" stepKey="assertDHLHandlingTypeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingAction}}" userInput="disabled" stepKey="grabDHLHandlingDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLHandlingDisabled" stepKey="assertDHLHandlingDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLDivideOrderWeight}}" userInput="disabled" stepKey="grabDHLDivideOrderWeightDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLDivideOrderWeightDisabled" stepKey="assertDHLDivideOrderWeightDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLUnitOfMeasure}}" userInput="disabled" stepKey="grabDHLUnitOfMeasureDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLUnitOfMeasureDisabled" stepKey="assertDHLUnitOfMeasureDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSize}}" userInput="disabled" stepKey="grabDHLSizeDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLSizeDisabled" stepKey="assertDHLSizeDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLNonDocAllowedMethod}}" userInput="disabled" stepKey="grabDHLNonDocAllowedMethodDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLNonDocAllowedMethodDisabled" stepKey="assertDHLNonDocAllowedMethodDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSmartPostHubId}}" userInput="disabled" stepKey="grabDHLSmartPostHubIdDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLSmartPostHubIdDisabled" stepKey="assertDHLSmartPostHubIdDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSpecificErrMsg}}" userInput="disabled" stepKey="grabDHLSpecificErrMsgDisabled"/>
+        <assertEquals expected='true' expectedType="string" actual="$grabDHLSpecificErrMsgDisabled" stepKey="assertDHLSpecificErrMsgDisabled"/>
+    </test>
+</tests>

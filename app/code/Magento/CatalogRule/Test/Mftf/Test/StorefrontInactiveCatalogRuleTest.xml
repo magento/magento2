@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontInactiveCatalogRuleTest">
         <annotations>
             <features value="CatalogRule"/>
@@ -26,9 +26,14 @@
             </createData>
             <actionGroup stepKey="createNewPriceRule" ref="newCatalogPriceRuleByUI"/>
             <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
-            <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="Inactive" stepKey="setInactive"/>
+            <scrollToTopOfPage stepKey="scrollToTop"/>
+            <click stepKey="setInactive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="seeSuccess"/>
+
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
@@ -54,6 +59,7 @@
         <!-- Verify price is not discounted in the cart -->
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForCheckout"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$$createProduct.price$$" stepKey="seePrice3"/>

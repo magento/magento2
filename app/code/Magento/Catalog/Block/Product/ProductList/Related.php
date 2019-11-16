@@ -77,11 +77,13 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Prepare data
+     *
      * @return $this
      */
     protected function _prepareData()
     {
-        $product = $this->_coreRegistry->registry('product');
+        $product = $this->getProduct();
         /* @var $product \Magento\Catalog\Model\Product */
 
         $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
@@ -103,6 +105,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Before to html handler
+     *
      * @return $this
      */
     protected function _beforeToHtml()
@@ -112,6 +116,8 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     }
 
     /**
+     * Get collection items
+     *
      * @return Collection
      */
     public function getItems()
@@ -135,6 +141,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements
     {
         $identities = [];
         foreach ($this->getItems() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;

@@ -6,7 +6,21 @@
   */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="defaultTaxRule" type="taxRule">
+        <data key="code" unique="suffix">TaxIdentifier</data>
+        <data key="position">1</data>
+        <data key="priority">1</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+        </array>
+    </entity>
     <entity name="SimpleTaxRule" type="taxRule">
         <data key="code" unique="suffix">TaxRule</data>
         <data key="position">0</data>
@@ -22,5 +36,91 @@
             <item>2</item>
         </array>
         <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="taxRuleWithCustomPriorityPosition" type="taxRule">
+        <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">1</data>
+        <data key="priority">1</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+            <item>2</item>
+        </array>
+        <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="taxRuleWithCustomPriority" type="taxRule">
+        <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">0</data>
+        <data key="priority">1</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+            <item>2</item>
+        </array>
+        <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="taxRuleWithCustomPosition" type="taxRule">
+        <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">1</data>
+        <data key="priority">0</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+            <item>2</item>
+        </array>
+        <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="taxRuleWithUpdatePriorityPosition" type="taxRule">
+        <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">2</data>
+        <data key="priority">2</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+            <item>2</item>
+        </array>
+        <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="taxRuleWithCustomTaxClasses" type="taxRule">
+        <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">0</data>
+        <data key="priority">0</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+            <item>2</item>
+        </array>
+        <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="TaxRule" type="taxRule">
+        <data key="name" unique="suffix">TaxName</data>
+    </entity>
+    <entity name="TaxRuleZeroRate" type="taxRule">
+        <data key="name" unique="suffix">TaxNameZeroRate</data>
     </entity>
 </entities>

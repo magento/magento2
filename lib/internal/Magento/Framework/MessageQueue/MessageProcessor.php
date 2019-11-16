@@ -13,6 +13,11 @@ use Magento\Framework\App\ResourceConnection;
 class MessageProcessor implements MessageProcessorInterface
 {
     /**
+     * Maximum number of transaction retries
+     */
+    const MAX_TRANSACTION_RETRIES = 10;
+
+    /**
      * @var \Magento\Framework\MessageQueue\MessageStatusProcessor
      */
     private $messageStatusProcessor;
@@ -21,6 +26,11 @@ class MessageProcessor implements MessageProcessorInterface
      * @var \Magento\Framework\App\ResourceConnection
      */
     private $resource;
+
+    /**
+     * @var int
+     */
+    private $retryCount = 0;
 
     /**
      * @param MessageStatusProcessor $messageStatusProcessor
@@ -53,8 +63,19 @@ class MessageProcessor implements MessageProcessorInterface
         } catch (ConnectionLostException $e) {
             $this->resource->getConnection()->rollBack();
         } catch (\Exception $e) {
+            $retry = false;
             $this->resource->getConnection()->rollBack();
-            $this->messageStatusProcessor->rejectMessages($queue, $messages);
+            if (strpos($e->getMessage(), 'Error while sending QUERY packet') !== false
+                && $this->retryCount < self::MAX_TRANSACTION_RETRIES
+            ) {
+                $retry = true;
+                $this->retryCount++;
+                $this->resource->closeConnection();
+                $this->process($queue, $configuration, $messages, $messagesToAcknowledge, $mergedMessages);
+            }
+            if (!$retry) {
+                $this->messageStatusProcessor->rejectMessages($queue, $messages);
+            }
         }
     }
 

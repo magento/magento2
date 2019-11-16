@@ -7,19 +7,21 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="stock" type="input" selector=".stock.available"/>
         <element name="productName" type="text" selector=".base"/>
         <element name="productSku" type="text" selector=".product.attribute.sku>.value"/>
         <element name="productPriceLabel" type="text" selector=".price-label"/>
-        <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
+        <element name="price" type="text" selector=".product-info-main [data-price-type='finalPrice']"/>
+        <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="qty" type="input" selector="#qty"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
+        <element name="specialPriceAmount" type="text" selector=".special-price span.price"/>
         <element name="updatedPrice" type="text" selector="div.price-box.price-final_price [data-price-type='finalPrice'] .price"/>
         <element name="oldPrice" type="text" selector=".old-price"/>
         <element name="oldPriceTag" type="text" selector=".old-price .price-label"/>
-        <element name="oldPriceAmount" type="text" selector=".old-price .price"/>
+        <element name="oldPriceAmount" type="text" selector=".old-price span.price"/>
         <element name="productStockStatus" type="text" selector=".stock[title=Availability]>span"/>
         <element name="productImage" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[@class='fotorama__img']"/>
         <element name="productImageSrc" type="text" selector="//*[@id='maincontent']//div[@class='gallery-placeholder']//img[contains(@src, '{{src}}')]" parameterized="true"/>
@@ -28,14 +30,18 @@
         <element name="productOptionAreaInput" type="textarea" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//textarea" parameterized="true"/>
         <element name="productOptionFile" type="file" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'OptionFile')]/../div[@class='control']//input[@type='file']" parameterized="true"/>
         <element name="productOptionSelect" type="select" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//select" parameterized="true"/>
-
+        <element name="asLowAs" type="input" selector="span[class='price-wrapper '] "/>
+        <element name="specialPriceValue" type="text" selector="//span[@class='special-price']//span[@class='price']"/>
+        <element name="mapPrice" type="text" selector="//div[@class='price-box price-final_price']//span[contains(@class, 'price-msrp_price')]"/>
+        <element name="clickForPriceLink" type="text" selector="//div[@class='price-box price-final_price']//a[contains(text(), 'Click for price')]"/>
 
         <!-- The parameter is the nth custom option that you want to get -->
         <element name="nthCustomOption" type="block" selector="//*[@id='product-options-wrapper']/*[@class='fieldset']/*[contains(@class, 'field')][{{customOptionNum}}]" parameterized="true" />
+
         <!-- The 1st parameter is the nth custom option, the 2nd parameter is the nth value in the option -->
         <element name="nthCustomOptionInput" type="radio" selector="//*[@id='product-options-wrapper']/*[@class='fieldset']/*[contains(@class, 'field')][{{customOptionNum}}]//*[contains(@class, 'admin__field-option')][{{customOptionValueNum}}]//input" parameterized="true" />
+        <element name="customOptionByTitle" type="text" selector="//span[text()='{{title}}']/ancestor::div[contains(@class, 'field ') and contains(@class, 'required')]" parameterized="true" timeout="30"/>
         <element name="productOptionRadioButtonsCheckbox" type="checkbox" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//input[@price='{{var2}}']" parameterized="true"/>
-
         <element name="productOptionDataMonth" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='month']" parameterized="true"/>
         <element name="productOptionDataDay" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='day']" parameterized="true"/>
         <element name="productOptionDataYear" type="date" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//legend[contains(.,'{{var1}}')]/../div[@class='control']//select[@data-calendar-role='year']" parameterized="true"/>
@@ -49,7 +55,6 @@
 
         <!-- Only one of Upload/Url Inputs are available for File and Sample depending on the value of the corresponding TypeSelector -->
         <element name="addLinkFileUploadFile" type="file" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//input[@type='file']" parameterized="true" />
-
         <element name="productShortDescription" type="text" selector="//div[@class='product attribute overview']//div[@class='value']"/>
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>
@@ -66,8 +71,37 @@
         <element name="productOptionDropDownOptionTitle" type="text" selector="//label[contains(.,'{{var1}}')]/../div[@class='control']//select//option[contains(.,'{{var2}}')]" parameterized="true"/>
 
         <!-- Tier price selectors -->
+        <element name="tierPriceText" type="text" selector=".prices-tier li[class='item']" />
         <element name="productTierPriceByForTextLabel" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}][contains(text(),'Buy {{var2}} for')]" parameterized="true"/>
         <element name="productTierPriceAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(text(), '{{var2}}')]" parameterized="true"/>
         <element name="productTierPriceSavePercentageAmount" type="text" selector="//ul[contains(@class, 'prices-tier')]//li[{{var1}}]//span[contains(@class, 'percent')][contains(text(), '{{var2}}')]" parameterized="true"/>
+
+        <!-- Special price selectors -->
+        <element name="productSpecialPrice" type="text" selector="//span[@data-price-type='finalPrice']/span"/>
+        <element name="specialProductText" type="text" selector="//span[text()='Regular Price']"/>
+        <element name="oldProductPrice" type="text" selector="//span[@data-price-type='oldPrice']/span"/>
+
+        <!-- Customizable Option selectors -->
+        <element name="allCustomOptionLabels" type="text" selector="#product-options-wrapper label"/>
+        <element name="customOptionLabel" type="text" selector="//label[contains(., '{{customOptionTitle}}')]" parameterized="true"/>
+        <element name="customSelectOptions" type="select" selector="#{{selectId}} option" parameterized="true"/>
+        <element name="requiredCustomInput" type="text" selector="//div[contains(.,'{{customOptionTitle}}') and contains(@class, 'required') and .//input[@aria-required='true']]" parameterized="true"/>
+        <element name="requiredCustomSelect" type="select" selector="//div[contains(.,'{{customOptionTitle}}') and contains(@class, 'required') and .//select[@aria-required='true']]" parameterized="true"/>
+        <element name="requiredCustomField" type="text" selector="//div[@class='field required']/label/span[contains(.,'{{optionTitle}}')]//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="requiredCustomFile" type="text" selector="//div[@class='field file required']/label/span[contains(.,'{{OptionFileTitle}}')]//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="requiredCustomTextArea" type="text" selector="//div[@class='field textarea required']/label/span[contains(.,'{{OptionAreaTitle}}')]//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="requiredCustomDate" type="text" selector="//div[@class='field date required']//span[text()='{{OptionDateTitle}}']//../../div/div[contains(.,'This is a required field.')]" parameterized="true"/>
+        <element name="customOptionField" type="input" selector="//input[contains(@class,'input-text product-custom-option')]"/>
+        <element name="customOptionTextArea" type="textarea" selector="//textarea[contains(@class,'product-custom-option')]"/>
+        <element name="customOptionDropDown" type="select" selector="//select[contains(@class,' required product-custom-option admin__control-select')]/option[contains(.,'{{option}}')]" parameterized="true"/>
+        <element name="customRadioOption" type="checkbox" selector="//div/input[@type='radio']/../label/span"/>
+        <element name="customOptionCheckBox" type="checkbox" selector="//div/input[@type='checkbox']/../label/span[contains(.,'{{option}}')]" parameterized="true"/>
+        <element name="customMultiSelectOption" type="select" selector="//select[contains(@class,'multiselect admin__control-multiselect required product-custom-option')]/option[contains(.,'{{option'}})]" parameterized="true"/>
+        <element name="customOptionMonth" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='month']" parameterized="true"/>
+        <element name="customOptionDay" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='day']" parameterized="true"/>
+        <element name="customOptionYear" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='year']" parameterized="true"/>
+        <element name="customOptionHour" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='hour']" parameterized="true"/>
+        <element name="customOptionMinute" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='minute']" parameterized="true"/>
+        <element name="customOptionDayPart" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='day_part']" parameterized="true"/>
     </section>
 </sections>

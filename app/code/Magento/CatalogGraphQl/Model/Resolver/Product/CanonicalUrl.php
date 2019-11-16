@@ -8,33 +8,31 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Resolve data for product canonical URL
  */
 class CanonicalUrl implements ResolverInterface
 {
-    /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
+    /** @var ProductHelper */
+    private $productHelper;
 
     /**
-     * @param ValueFactory $valueFactory
+     * @param Product $productHelper
      */
-    public function __construct(
-        ValueFactory $valueFactory
-    ) {
-        $this->valueFactory = $valueFactory;
+    public function __construct(ProductHelper $productHelper)
+    {
+        $this->productHelper = $productHelper;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -42,21 +40,19 @@ class CanonicalUrl implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ): Value {
+    ) {
         if (!isset($value['model'])) {
-            $result = function () {
-                return null;
-            };
-            return $this->valueFactory->create($result);
+            throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /* @var $product Product */
+        /* @var Product $product */
         $product = $value['model'];
-        $url = $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
-        $result = function () use ($url) {
-            return $url;
-        };
-
-        return $this->valueFactory->create($result);
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        if ($this->productHelper->canUseCanonicalTag($store)) {
+            $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]);
+            return $product->getRequestPath();
+        }
+        return null;
     }
 }

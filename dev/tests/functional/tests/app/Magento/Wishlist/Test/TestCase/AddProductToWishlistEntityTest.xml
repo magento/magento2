@@ -108,7 +108,7 @@
         </variation>
         <variation name="AddProductToWishlistEntityTestVariation14" ticketId="MAGETWO-90131">
             <data name="product" xsi:type="array">
-                <item name="0" xsi:type="string">bundleProduct::with_special_price_and_custom_options</item>
+                <item name="0" xsi:type="string">bundleProduct::default_with_one_simple_product</item>
             </data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertAddProductToWishlistSuccessMessage"/>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist"/>

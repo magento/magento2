@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="LayerNavigationOfCatalogSearchTest">
+        <annotations>
+            <stories value="Search terms"/>
+            <title value="Layer Navigation of Catalog Search Should Equalize Price Range As Default Configuration"/>
+            <description value="Make sure filter of custom attribute with type of price displays on storefront Catalog page and price range should respect the configuration in Admin site"/>
+            <testCaseId value="MC-16979"/>
+            <useCaseId value="MC-16650"/>
+            <severity value="MAJOR"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set catalog/layered_navigation/price_range_calculation auto" stepKey="setAutoPriceRange"/>
+            <createData stepKey="createPriceAttribute" entity="productAttributeTypeOfPrice"/>
+            <createData stepKey="assignPriceAttributeGroup" entity="AddToDefaultSet">
+                <requiredEntity createDataKey="createPriceAttribute"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="subCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="subCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="subCategory"/>
+            </createData>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="subCategory"/>
+            <deleteData stepKey="deleteSimpleProduct1" createDataKey="simpleProduct1"/>
+            <deleteData stepKey="deleteSimpleProduct2" createDataKey="simpleProduct2"/>
+            <deleteData createDataKey="createPriceAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Update value for price attribute of Product 1-->
+        <comment userInput="Update value for price attribute of Product 1" stepKey="comment1"/>
+        <actionGroup ref="navigateToCreatedProductEditPage" stepKey="navigateToCreatedProductEditPage1">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminProductFormSection.attributeLabelByText($$createPriceAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="grabAttributeLabel"/>
+        <fillField selector="{{AdminProductAttributeSection.customAttribute($$createPriceAttribute.attribute_code$$)}}" userInput="30" stepKey="fillCustomPrice1"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton1"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSaved1"/>
+        <!--Update value for price attribute of Product 2-->
+        <comment userInput="Update value for price attribute of Product 1" stepKey="comment2"/>
+        <actionGroup ref="navigateToCreatedProductEditPage" stepKey="navigateToCreatedProductEditPage2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductAttributeSection.customAttribute($$createPriceAttribute.attribute_code$$)}}" userInput="70" stepKey="fillCustomPrice2"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton2"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSaved2"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!--Navigate to category on Storefront-->
+        <comment userInput="Navigate to category on Storefront" stepKey="comment3"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$subCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="{$grabAttributeLabel}" selector="{{StorefrontCategoryFilterSection.CustomPriceAttribute}}" stepKey="seePriceLayerNavigationOnStorefront"/>
+    </test>
+</tests>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

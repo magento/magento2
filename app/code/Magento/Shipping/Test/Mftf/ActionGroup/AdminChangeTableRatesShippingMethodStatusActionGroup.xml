@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Enable/Disable Table Rates shipping method -->
+    <actionGroup name="AdminChangeTableRatesShippingMethodStatusActionGroup">
+        <arguments>
+            <argument name="status" type="string" defaultValue="1"/>
+        </arguments>
+        <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTab"/>
+        <uncheckOption selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" userInput="{{status}}" stepKey="changeTableRatesMethodStatus"/>
+    </actionGroup>
+    <actionGroup name="AdminImportFileTableRatesShippingMethodActionGroup">
+        <annotations>
+            <description>Import a file in Table Rates tab in Shipping Method config page.</description>
+        </annotations>
+        <arguments>
+            <argument name="file" type="string" defaultValue="test_tablerates.csv"/>
+        </arguments>
+        <conditionalClick selector="{{AdminShippingMethodTableRatesSection.carriersTableRateTab}}" dependentSelector="{{AdminShippingMethodTableRatesSection.carriersTableRateActive}}" visible="false" stepKey="expandTab"/>
+        <attachFile selector="{{AdminShippingMethodTableRatesSection.importFile}}" userInput="{{file}}" stepKey="attachFileForImport"/>
+    </actionGroup>
+</actionGroups>

@@ -7,33 +7,33 @@
 namespace Magento\SalesRule\Setup\Patch\Data;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class PrepareRuleModelSerializedData
+ *
  * @package Magento\SalesRule\Setup\Patch
  */
 class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
+     * @var ModuleDataSetupInterface
      */
     private $moduleDataSetup;
 
     /**
      * PatchInitial constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -59,7 +59,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -67,7 +67,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -75,7 +75,7 @@ class PrepareRuleModelSerializedData implements DataPatchInterface, PatchVersion
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

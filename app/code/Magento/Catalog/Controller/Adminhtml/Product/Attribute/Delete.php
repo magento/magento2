@@ -6,7 +6,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
-class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute implements HttpPostActionInterface
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect

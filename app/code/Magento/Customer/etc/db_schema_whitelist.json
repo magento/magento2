@@ -73,7 +73,8 @@
             "vat_request_success": true
         },
         "index": {
-            "CUSTOMER_ADDRESS_ENTITY_PARENT_ID": true
+            "CUSTOMER_ADDRESS_ENTITY_PARENT_ID": true,
+            "FTI_BA70344390184AC3F063AB2EB38BC0ED": true
         },
         "constraint": {
             "PRIMARY": true,

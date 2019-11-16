@@ -6,7 +6,7 @@
   */
 -->
 
-<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="PersistentConfigDefault" type="persistent_config_state">
         <requiredEntity type="persistent_options_enabled">persistentDefaultState</requiredEntity>
     </entity>
@@ -18,6 +18,77 @@
         <requiredEntity type="persistent_options_enabled">persistentEnabledState</requiredEntity>
     </entity>
     <entity name="persistentEnabledState" type="persistent_options_enabled">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="PersistentLogoutClearEnabled" type="persistent_config_state">
+        <requiredEntity type="persistent_options_logout_clear">PersistentEnabledLogoutClear</requiredEntity>
+    </entity>
+    <entity name="PersistentEnabledLogoutClear" type="logout_clear">
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="PersistentLogoutClearDisable" type="persistent_config_state">
+        <requiredEntity type="persistent_options_logout_clear">PersistentDisableLogoutClear</requiredEntity>
+    </entity>
+    <entity name="PersistentDisableLogoutClear" type="logout_clear">
+        <data key="value">0</data>
+    </entity>
+
+
+    <!-- Persistent Configurations settings -->
+    <entity name="PersistentConfigSettings" type="persistent_config_state">
+        <requiredEntity type="persistent_options_enabled">persistentEnabledState</requiredEntity>
+        <requiredEntity type="persistent_options_lifetime">SecondsOfPersistentLifetime</requiredEntity>
+        <requiredEntity type="persistent_options_remember_enabled">EnablePersistentRememberMe</requiredEntity>
+        <requiredEntity type="persistent_options_remember_default">EnablePersistentRememberMeDefaultValue</requiredEntity>
+        <requiredEntity type="persistent_options_logout_clear">PersistentDisableLogoutClear</requiredEntity>
+        <requiredEntity type="persistent_options_shopping_cart">EnablePersistentShoppingCart</requiredEntity>
+    </entity>
+
+    <entity name="SecondsOfPersistentLifetime" type="lifetime">
+        <data key="value">31536000</data>
+    </entity>
+    <entity name="EnablePersistentRememberMe" type="persistent_options_remember_enabled">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnablePersistentRememberMeDefaultValue" type="persistent_options_remember_default">
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnablePersistentShoppingCart" type="persistent_options_shopping_cart">
+        <data key="value">1</data>
+    </entity>
+
+    <!-- Use System Value settings -->
+    <entity name="PersistentConfigUseSystemValue" type="persistent_config_state">
+        <requiredEntity type="persistent_options_enabled">RestorePersistentOptionsEnabled</requiredEntity>
+        <requiredEntity type="persistent_options_lifetime">RestorePersistentOptionsLifetime</requiredEntity>
+        <requiredEntity type="persistent_options_remember_enabled">RestorePersistentOptionsRememberEnabled</requiredEntity>
+        <requiredEntity type="persistent_options_remember_default">RestorePersistentOptionsRememberDefault</requiredEntity>
+        <requiredEntity type="persistent_options_logout_clear">RestorePersistentOptionsLogout</requiredEntity>
+        <requiredEntity type="persistent_options_shopping_cart">RestorePersistentOptionsShoppingCart</requiredEntity>
+    </entity>
+
+    <entity name="RestorePersistentOptionsEnabled" type="persistent_options_enabled">
+        <requiredEntity type="persistent_options_use_system_value">PersistentOptionsUseInherit</requiredEntity>
+    </entity>
+    <entity name="RestorePersistentOptionsLogout" type="persistent_options_logout_clear">
+        <requiredEntity type="persistent_options_use_system_value">PersistentOptionsUseInherit</requiredEntity>
+    </entity>
+    <entity name="RestorePersistentOptionsLifetime" type="persistent_options_lifetime">
+        <requiredEntity type="persistent_options_use_system_value">PersistentOptionsUseInherit</requiredEntity>
+    </entity>
+    <entity name="RestorePersistentOptionsRememberEnabled" type="persistent_options_remember_enabled">
+        <requiredEntity type="persistent_options_use_system_value">PersistentOptionsUseInherit</requiredEntity>
+    </entity>
+    <entity name="RestorePersistentOptionsRememberDefault" type="persistent_options_remember_default">
+        <requiredEntity type="persistent_options_use_system_value">PersistentOptionsUseInherit</requiredEntity>
+    </entity>
+    <entity name="RestorePersistentOptionsShoppingCart" type="persistent_options_shopping_cart">
+        <requiredEntity type="persistent_options_use_system_value">PersistentOptionsUseInherit</requiredEntity>
+    </entity>
+
+    <entity name="PersistentOptionsUseInherit" type="persistent_options_use_system_value">
         <data key="value">1</data>
     </entity>
 </entities>

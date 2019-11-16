@@ -13,7 +13,7 @@
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
                 <field id="merchant_country" type="select" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Merchant Country</label>
-                    <comment>If not specified, Default Country from General Config will be used</comment>
+                    <comment>If not specified, Default Country from General Config will be used.</comment>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Country</frontend_model>
                     <source_model>Magento\Paypal\Model\System\Config\Source\MerchantCountry</source_model>
                     <backend_model>Magento\Paypal\Model\System\Config\Backend\MerchantCountry</backend_model>
@@ -75,9 +75,9 @@
                     <label>Payments Pro</label>
                     <attribute type="activity_path">payment/paypal_payment_pro/active</attribute>
                     <group id="configuration_details">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
                     </group>
-                    <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
+                    <group id="paypal_payflow_required" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <field id="enable_paypal_payflow">
                             <attribute type="shared">0</attribute>
                             <config_path>payment/paypal_payment_pro/active</config_path>
@@ -90,12 +90,12 @@
                         <label>Basic Settings - PayPal Payments Pro</label>
                     </group>
                 </group>
-                <group id="wps_express" extends="payment_all_paypal/express_checkout">
+                <group id="wps_express" translate="label comment" extends="payment_all_paypal/express_checkout">
                     <label>Payments Standard</label>
                     <comment>Accept credit card and PayPal payments securely.</comment>
                     <attribute type="activity_path">payment/wps_express/active</attribute>
                     <group id="configuration_details">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-standard.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-standard.html</comment>
                     </group>
                     <group id="express_checkout_required">
                         <group id="express_checkout_required_express_checkout">
@@ -106,12 +106,23 @@
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
-                        <field id="enable_express_checkout_bml">
+                        <field id="enable_express_checkout_bml" showInDefault="1" showInWebsite="1">
                             <config_path>payment/wps_express_bml/active</config_path>
                         </field>
+                        <field id="express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1"/>
                     </group>
-                    <group id="settings_ec">
+                    <group id="settings_ec" translate="label">
                         <label>Basic Settings - PayPal Website Payments Standard</label>
+                        <group id="settings_ec_advanced">
+                            <group id="express_checkout_frontend">
+                                <field id="checkout_display" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="checkout_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="product_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="cart_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="mini_cart_page_button" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                                <group id="features" showInDefault="0" showInWebsite="0" showInStore="0"/>
+                            </group>
+                        </group>
                     </group>
                 </group>
             </group>
@@ -124,7 +135,7 @@
                 <group id="payflow_link_us" extends="payment_all_paypal/payflow_link"/>
             </group>
         </section>
-        <section id="payment_gb" extends="payment"  showInDefault="0" showInWebsite="0" showInStore="0">
+        <section id="payment_gb" extends="payment" showInDefault="0" showInWebsite="0" showInStore="0">
             <group id="paypal_alternative_payment_methods" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="0">
                 <group id="express_checkout_gb" translate="label comment" extends="payment_all_paypal/express_checkout" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PayPal Express Checkout</label>
@@ -158,15 +169,15 @@
                     </group>
                 </group>
                 <include path="Magento_Paypal::system/payments_pro_hosted_solution_with_express_checkout.xml"/>
-                <group id="wps_express" extends="payment_all_paypal/express_checkout" sortOrder="50">
+                <group id="wps_express" translate="label comment" extends="payment_all_paypal/express_checkout" sortOrder="50">
                     <label>Website Payments Standard</label>
                     <comment>Accept credit card and PayPal payments securely.</comment>
                     <attribute type="activity_path">payment/wps_express/active</attribute>
                     <group id="configuration_details">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-standard.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-standard.html</comment>
                     </group>
                     <group id="express_checkout_required">
-                        <group id="express_checkout_required_express_checkout">
+                        <group id="express_checkout_required_express_checkout" translate="label">
                             <label>Website Payments Standard</label>
                         </group>
                         <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
@@ -178,7 +189,7 @@
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
-                    <group id="settings_ec">
+                    <group id="settings_ec" translate="label">
                         <label>Basic Settings - PayPal Website Payments Standard</label>
                     </group>
                 </group>
@@ -227,17 +238,17 @@
                 <comment>Choose a secure bundled payment solution for your business.</comment>
                 <help_url>https://www.paypal-marketing.com/emarketing/partner/na/merchantlineup/home.page#mainTab=checkoutlineup&amp;subTab=newlineup</help_url>
                 <attribute type="displayIn">other_paypal_payment_solutions</attribute>
-                <group id="wps_other" extends="payment_all_paypal/express_checkout" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="wps_other" translate="label comment" extends="payment_all_paypal/express_checkout" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Website Payments Standard</label>
                     <fieldset_css>complex</fieldset_css>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                     <comment>Accept credit card and PayPal payments securely.</comment>
                     <attribute type="activity_path">payment/wps_express/active</attribute>
                     <group id="configuration_details">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-standard.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-standard.html</comment>
                     </group>
                     <group id="express_checkout_required">
-                        <group id="express_checkout_required_express_checkout">
+                        <group id="express_checkout_required_express_checkout" translate="label">
                             <label>Website Payments Standard</label>
                         </group>
                         <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
@@ -271,7 +282,7 @@
             <group id="paypal_group_all_in_one">
                 <group id="wps_other" sortOrder="20"/>
             </group>
-            <group id="paypal_payment_gateways" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="paypal_payment_gateways" translate="label" showInDefault="1" showInWebsite="1" showInStore="1">
                 <fieldset_css>complex paypal-other-section paypal-gateways-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
                 <label><![CDATA[PayPal Payment Gateways&nbsp;<i>Process payments using your own internet merchant account.</i>]]></label>
@@ -279,7 +290,7 @@
                     <label>Website Payments Pro</label>
                     <attribute type="activity_path">payment/paypal_payment_pro/active</attribute>
                     <group id="configuration_details">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
+                        <comment>https://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
                     </group>
                     <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <group id="paypal_payflow_api_settings">

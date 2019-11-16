@@ -7,15 +7,15 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AddressStateFieldShouldNotAcceptJustIntegerValuesTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="MAGETWO-91465"/>
-            <title value="Guest Checkout"/>
+            <title value="Guest Checkout - address State field should not allow just integer values"/>
             <description value="Address State field should not allow just integer values"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-93203"/>
+            <testCaseId value="MC-6223"/>
             <group value="checkout"/>
         </annotations>
         <before>

@@ -87,6 +87,9 @@ define([
          * @private
          */
         _doUpdate: function () {
+            var uploaderLinkUrl,
+                uploaderLink;
+
             this.reset();
             this.element.find(this.options.container).append(
                 '<div class="' +
@@ -105,20 +108,15 @@ define([
             this.element.find(this.options.metaData.DOM.duration).text(this.options.metaData.data.duration);
 
             if (this.options.videoProvider === 'youtube') {
-                this.element.find(this.options.metaData.DOM.uploader).html(
-                    '<a href="https://youtube.com/channel/' +
-                    this.options.metaData.data.uploaderUrl +
-                    '" target="_blank">' +
-                    this.options.metaData.data.uploader +
-                    '</a>'
-                );
+                uploaderLinkUrl = 'https://youtube.com/channel/' + this.options.metaData.data.uploaderUrl;
             } else if (this.options.videoProvider === 'vimeo') {
-                this.element.find(this.options.metaData.DOM.uploader).html(
-                    '<a href="' +
-                    this.options.metaData.data.uploaderUrl +
-                    '" target="_blank">' + this.options.metaData.data.uploader +
-                    '</a>');
+                uploaderLinkUrl = this.options.metaData.data.uploaderUrl;
             }
+            uploaderLink = document.createElement('a');
+            uploaderLink.setAttribute('href', uploaderLinkUrl);
+            uploaderLink.setAttribute('target', '_blank');
+            uploaderLink.innerText = this.options.metaData.data.uploader;
+            this.element.find(this.options.metaData.DOM.uploader)[0].appendChild(uploaderLink);
             this.element.find('.' + this.options.videoClass).productVideoLoader();
 
         },
@@ -284,9 +282,15 @@ define([
          * @private
          */
         _onGetVideoInformationClick: function () {
-            this._onlyVideoPlayer = false;
-            this._isEditPage = false;
-            this._videoUrlWidget.trigger('update_video_information');
+            var videoForm = this.element.find(this._videoFormSelector);
+
+            videoForm.validation();
+
+            if (this.element.find(this._videoUrlSelector).valid()) {
+                this._onlyVideoPlayer = false;
+                this._isEditPage = false;
+                this._videoUrlWidget.trigger('update_video_information');
+            }
         },
 
         /**
@@ -301,6 +305,14 @@ define([
          * @private
          */
         _onGetVideoInformationStartRequest: function () {
+            var videoForm = this.element.find(this._videoFormSelector);
+
+            try {
+                videoForm.validation('clearError');
+            } catch (e) {
+                // Do nothing
+            }
+
             this._videoRequestComplete = false;
         },
 

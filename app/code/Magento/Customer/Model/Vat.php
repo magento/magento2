@@ -179,15 +179,23 @@ class Vat
             return $gatewayResponse;
         }
 
+        $countryCodeForVatNumber = $this->getCountryCodeForVatNumber($countryCode);
+        $requesterCountryCodeForVatNumber = $this->getCountryCodeForVatNumber($requesterCountryCode);
+
         try {
             $soapClient = $this->createVatNumberValidationSoapClient();
 
             $requestParams = [];
-            $requestParams['countryCode'] = $countryCode;
-            $requestParams['vatNumber'] = str_replace([' ', '-'], ['', ''], $vatNumber);
-            $requestParams['requesterCountryCode'] = $requesterCountryCode;
-            $requestParams['requesterVatNumber'] = str_replace([' ', '-'], ['', ''], $requesterVatNumber);
-
+            $requestParams['countryCode'] = $countryCodeForVatNumber;
+            $vatNumberSanitized = $this->isCountryInEU($countryCode)
+                ? str_replace([' ', '-', $countryCodeForVatNumber], ['', '', ''], $vatNumber)
+                : str_replace([' ', '-'], ['', ''], $vatNumber);
+            $requestParams['vatNumber'] = $vatNumberSanitized;
+            $requestParams['requesterCountryCode'] = $requesterCountryCodeForVatNumber;
+            $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode)
+                ? str_replace([' ', '-', $requesterCountryCodeForVatNumber], ['', '', ''], $requesterVatNumber)
+                : str_replace([' ', '-'], ['', ''], $requesterVatNumber);
+            $requestParams['requesterVatNumber'] = $reqVatNumSanitized;
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
@@ -295,5 +303,23 @@ class Vat
             $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId)
         );
         return in_array($countryCode, $euCountries);
+    }
+
+    /**
+     * Returns the country code to use in the VAT number which is not always the same as the normal country code
+     *
+     * @param string $countryCode
+     * @return string
+     */
+    private function getCountryCodeForVatNumber(string $countryCode): string
+    {
+        // Greece uses a different code for VAT numbers then its country code
+        // See: http://ec.europa.eu/taxation_customs/vies/faq.html#item_11
+        // And https://en.wikipedia.org/wiki/VAT_identification_number:
+        // "The full identifier starts with an ISO 3166-1 alpha-2 (2 letters) country code
+        // (except for Greece, which uses the ISO 639-1 language code EL for the Greek language,
+        // instead of its ISO 3166-1 alpha-2 country code GR)"
+
+        return $countryCode === 'GR' ? 'EL' : $countryCode;
     }
 }

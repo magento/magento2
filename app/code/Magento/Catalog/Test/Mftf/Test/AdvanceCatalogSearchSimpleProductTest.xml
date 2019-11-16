@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdvanceCatalogSearchSimpleProductByNameTest">
         <annotations>
             <features value="Catalog"/>
@@ -19,10 +19,13 @@
             <group value="Catalog"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchSimpleProductBySkuTest">
@@ -36,7 +39,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <createData entity="ApiProductWithDescription" stepKey="product"/>
+            <createData entity="ApiProductWithDescriptionAndUnderscoredSku" stepKey="product"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
@@ -87,6 +90,9 @@
             <group value="Catalog"/>
         </annotations>
         <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+
             <createData entity="ApiProductWithDescription" stepKey="product"/>
             <getData entity="GetProduct" stepKey="arg1">
                 <requiredEntity createDataKey="product"/>
@@ -100,6 +106,7 @@
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
     </test>
 </tests>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateWebsiteTest">
+        <annotations>
+            <stories value="Create Website"/>
+            <title value="Create Website and Verify Store Form"/>
+            <description value="Test log in to Stores and Create Website Test"/>
+            <testCaseId value="MC-14302"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create website and AssertWebsiteSuccessSaveMessage-->
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+            <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+            <argument name="websiteCode" value="{{customWebsite.code}}"/>
+        </actionGroup>
+
+        <!--Search created website in grid and verify AssertWebsiteInGrid-->
+        <actionGroup ref="AssertWebsiteInGrid" stepKey="seeWebsiteInGrid">
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+
+        <!--Verify website name and websitecode on website form (AssertWebsiteForm and AssertWebsiteOnStoreForm)-->
+        <actionGroup ref="AssertWebsiteForm" stepKey="seeWebsiteForm">
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+            <argument name="websiteCode" value="{{customWebsite.code}}"/>
+        </actionGroup>
+    </test>
+</tests>

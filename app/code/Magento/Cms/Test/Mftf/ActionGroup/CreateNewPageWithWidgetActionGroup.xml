@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateNewPageWithWidget">
+        <annotations>
+            <description>Goes to Admin CMS Page creation page. Adds the provided Title, Category, Conditions and Widget. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="pageTitle" type="string" defaultValue="{{defaultCmsPage.title}}"/>
+            <argument name="category" type="string"/>
+            <argument name="condition" type="string"/>
+            <argument name="widgetType" type="string"/>
+        </arguments>
+        
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnCMSNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <click selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="clickToInsertWidget"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible stepKey="waitForInsertWidgetTitle" selector="{{WidgetSection.InsertWidgetTitle}}"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="{{widgetType}}" stepKey="selectCatalogProductsList"/>
+        <waitForElementVisible selector="{{WidgetSection.AddParam}}" stepKey="waitForAddParam"/>
+        <scrollTo selector="{{WidgetSection.AddParam}}" stepKey="scrollToAddParamElement"/>
+        <click selector="{{WidgetSection.AddParam}}" stepKey="addParam"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="{{condition}}" stepKey="selectCategory"/>
+        <waitForElementVisible selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParam"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickToAddRuleParam"/>
+        <click selector="{{WidgetSection.Chooser}}" stepKey="clickToSelectFromList"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{WidgetSection.PreCreateCategory(category)}}" stepKey="selectPreCategory"/>
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickToSaveInsertedWidget"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{CmsNewBlockBlockActionsSection.savePage}}" stepKey="saveCMSPage"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.savePageSuccessMessage}}" stepKey="waitForSuccessMessageLoggedOut" time="5"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -179,7 +179,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testCanOnepageCheckout()
     {
-        $this->scopeConfig->expects($this->once())->method('getValue')->with(
+        $this->scopeConfig->expects($this->once())->method('isSetFlag')->with(
             'checkout/options/onepage_checkout_enabled',
             'store'
         )->will($this->returnValue(true));

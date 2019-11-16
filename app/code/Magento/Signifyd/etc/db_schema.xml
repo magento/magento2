@@ -24,19 +24,20 @@
         <column xsi:type="varchar" name="review_disposition" nullable="true" length="32" comment="Review_disposition"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created_at"/>
         <column xsi:type="timestamp" name="updated_at" on_update="false" nullable="true" comment="Updated_at"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" name="SIGNIFYD_CASE_ORDER_ID_SALES_ORDER_ENTITY_ID" table="signifyd_case"
+        <constraint xsi:type="foreign" referenceId="SIGNIFYD_CASE_ORDER_ID_SALES_ORDER_ENTITY_ID" table="signifyd_case"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
-        <constraint xsi:type="unique" name="SIGNIFYD_CASE_ORDER_ID">
+        <constraint xsi:type="unique" referenceId="SIGNIFYD_CASE_ORDER_ID">
             <column name="order_id"/>
         </constraint>
-        <constraint xsi:type="unique" name="SIGNIFYD_CASE_CASE_ID">
+        <constraint xsi:type="unique" referenceId="SIGNIFYD_CASE_CASE_ID">
             <column name="case_id"/>
         </constraint>
     </table>
     <table name="sales_order_grid" resource="sales" comment="Sales Flat Order Grid">
-        <column xsi:type="varchar" name="signifyd_guarantee_status" nullable="true" length="32"/>
+        <column xsi:type="varchar" name="signifyd_guarantee_status" nullable="true" length="32"
+                comment="Signifyd Guarantee Disposition Status"/>
     </table>
 </schema>

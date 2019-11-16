@@ -7,9 +7,10 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductDownloadableSection">
         <element name="sectionHeader" type="button" selector="div[data-index='downloadable']" timeout="30" />
+        <element name="sectionLinkGrid" type="text" selector="//div[@data-index='link']" timeout="30"/>
         <element name="isDownloadableProduct" type="input" selector="input[name='is_downloadable']" />
         <element name="linksTitleInput" type="input" selector="input[name='product[links_title]']" />
         <element name="isLinksPurchasedSeparately" type="input" selector="input[name='product[links_purchased_separately]']" />

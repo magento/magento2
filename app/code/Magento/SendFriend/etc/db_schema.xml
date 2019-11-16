@@ -16,13 +16,13 @@
                 comment="Log time"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
-        <constraint xsi:type="primary" name="PRIMARY">
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="log_id"/>
         </constraint>
-        <index name="SENDFRIEND_LOG_IP" indexType="btree">
+        <index referenceId="SENDFRIEND_LOG_IP" indexType="btree">
             <column name="ip"/>
         </index>
-        <index name="SENDFRIEND_LOG_TIME" indexType="btree">
+        <index referenceId="SENDFRIEND_LOG_TIME" indexType="btree">
             <column name="time"/>
         </index>
     </table>

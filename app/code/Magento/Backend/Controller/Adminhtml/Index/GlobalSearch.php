@@ -6,11 +6,15 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Index;
 
+use Magento\Backend\Controller\Adminhtml\Index as IndexAction;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+
 /**
  * @api
  * @since 100.0.2
  */
-class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
+class GlobalSearch extends IndexAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

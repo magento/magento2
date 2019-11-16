@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddWidgetToWYSIWYGWithCatalogProductListTypeTest">
         <annotations>
             <features value="Cms"/>
@@ -42,7 +42,7 @@
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList" />
@@ -57,8 +57,29 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
         <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4" />
         <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
+
+        <!-- Test that the "<" operand functions correctly -->
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn2" />
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible2"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Price" stepKey="selectPriceCondition"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3"/>
+        <click selector="{{WidgetSection.RuleParamLabel('2','1')}}" stepKey="clickOperatorLabel"/>
+        <selectOption selector="{{WidgetSection.RuleParamSelect('2','1')}}" userInput="&lt;" stepKey="selectLessThanCondition"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam2"/>
+        <fillField selector="{{WidgetSection.RuleParamInput('2','2')}}" userInput="125" stepKey="fillMaxPrice"/>
+
+        <!-- Test that the ">" operand functions correctly -->
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn3" />
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible3"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Price" stepKey="selectPriceCondition2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear5"/>
+        <click selector="{{WidgetSection.RuleParamLabel('3','1')}}" stepKey="clickOperatorLabel2"/>
+        <selectOption selector="{{WidgetSection.RuleParamSelect('3','1')}}" userInput="&gt;" stepKey="selectLessThanCondition2"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam3"/>
+        <fillField selector="{{WidgetSection.RuleParamInput('3','2')}}" userInput="1" stepKey="fillMinPrice"/>
+
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
         <waitForPageLoad stepKey="wait6" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />

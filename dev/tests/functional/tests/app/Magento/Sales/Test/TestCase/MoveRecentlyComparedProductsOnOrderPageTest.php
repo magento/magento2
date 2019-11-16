@@ -8,10 +8,13 @@ namespace Magento\Sales\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\TestStep\CreateProductsStep;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
+use Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep;
+use Magento\Mtf\Util\Command\Cli\Config;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
@@ -92,20 +95,26 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
     protected $catalogProductCompare;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * Create customer.
-     *
      * @param Customer $customer
      * @param BrowserInterface $browser
+     * @param Config $config
      * @return array
      */
-    public function __prepare(Customer $customer, BrowserInterface $browser)
+    public function __prepare(Customer $customer, BrowserInterface $browser, Config $config)
     {
         $customer->persist();
         // Login under customer
         $this->objectManager
-            ->create(\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class, ['customer' => $customer])
+            ->create(LoginCustomerOnFrontendStep::class, ['customer' => $customer])
             ->run();
         $this->browser = $browser;
+        $this->config = $config;
 
         return ['customer' => $customer];
     }
@@ -137,20 +146,26 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $this->catalogProductCompare = $catalogProductCompare;
     }
 
+    public function setUp()
+    {
+        $this->config->setConfig('reports/options/enabled', 1);
+        parent::setUp();
+    }
+
     /**
      * Move recently compared products on order page.
-     *
      * @param Customer $customer
      * @param string $products
      * @param bool $productsIsConfigured
      * @return array
+     * @throws \Exception
      */
     public function test(Customer $customer, $products, $productsIsConfigured = false)
     {
         // Preconditions
         // Create product
         $products = $this->objectManager->create(
-            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
+            CreateProductsStep::class,
             ['products' => $products]
         )->run()['products'];
         foreach ($products as $itemProduct) {
@@ -170,5 +185,11 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $activitiesBlock->updateChanges();
 
         return ['products' => $products, 'productsIsConfigured' => $productsIsConfigured];
+    }
+
+    public function tearDown()
+    {
+        $this->config->setConfig('reports/options/enabled', 0);
+        parent::tearDown();
     }
 }

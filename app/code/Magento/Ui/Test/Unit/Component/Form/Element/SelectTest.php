@@ -15,13 +15,16 @@ use Magento\Ui\Component\Form\Element\Select;
 class SelectTest extends AbstractElementTest
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getModelName()
     {
         return Select::class;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function testGetComponentName()
     {
         $this->assertSame(Select::NAME, $this->getModel()->getComponentName());

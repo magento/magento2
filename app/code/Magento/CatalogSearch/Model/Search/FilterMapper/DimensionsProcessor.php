@@ -16,6 +16,9 @@ use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
 /**
  * Class DimensionsProcessor
  * Adds dimension conditions to select query
+ *
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class DimensionsProcessor
 {

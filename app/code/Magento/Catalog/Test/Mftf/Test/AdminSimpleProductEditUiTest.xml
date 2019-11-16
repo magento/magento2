@@ -7,13 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSimpleProductUiValidationTest">
         <annotations>
+            <features value="Catalog"/>
+            <stories value="Edit products"/>
             <title value="UI elements on the simple product edit screen should be organized as expected"/>
             <description value="Admin should be able to use simple product UI in expected manner"/>
             <testCaseId value="MAGETWO-92835"/>
             <group value="Catalog"/>
+            <severity value="AVERAGE"/>
         </annotations>
 
         <before>

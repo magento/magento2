@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCustomerGroupNotOnCatalogPriceRuleFormActionGroup">
+        <annotations>
+            <description>Validate that the provided Customer Group is not present on the Catalog Price Rules creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerGroup" type="entity"/>
+        </arguments>
+
+        <grabMultiple selector="{{AdminNewCatalogPriceRule.customerGroupsOptions}}" stepKey="customerGroups"/>
+        <assertNotContains stepKey="assertCustomerGroupNotInOptions">
+            <actualResult type="variable">customerGroups</actualResult>
+            <expectedResult type="string">{{customerGroup.code}}</expectedResult>
+        </assertNotContains>
+    </actionGroup>
+</actionGroups>

@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Item\Configure $block */
 ?>
-<?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+<?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow()) : ?>
     <a href="#" data-post='<?= /* @noEscape */ $block->getUpdateParams() ?>' class="action towishlist updated" data-action="add-to-wishlist">
         <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
     </a>
@@ -16,7 +14,7 @@
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions()) ?>
+            "addToWishlist": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getWishlistOptions()) ?>
         }
     }
 </script>

@@ -11,7 +11,9 @@ use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.
+ *
  * This class provides access to all these connections.
+ *
  * @api
  */
 class ResourceConnection
@@ -53,7 +55,7 @@ class ResourceConnection
     protected $connectionFactory;
 
     /**
-     * @var DeploymentConfig $deploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 

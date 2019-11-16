@@ -116,6 +116,7 @@
     <preference for="Magento\Sales\Api\RefundOrderInterface" type="Magento\Sales\Model\RefundOrder"/>
     <preference for="Magento\Sales\Api\RefundInvoiceInterface" type="Magento\Sales\Model\RefundInvoice"/>
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
+    <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -745,6 +746,10 @@
     <virtualType name="ShippingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -768,6 +773,10 @@
     <virtualType name="BillingAddressAggregator" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="columns" xsi:type="array">
+                <item name="company" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">company</item>
+                </item>
                 <item name="street" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_billing_address</item>
                     <item name="columnName" xsi:type="string">street</item>
@@ -1007,4 +1016,9 @@
     <preference
             for="Magento\Sales\Api\OrderCustomerDelegateInterface"
             type="Magento\Sales\Model\Order\OrderCustomerDelegate" />
+    <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
+        <arguments>
+            <argument name="productAvailabilityChecks" xsi:type="array" />
+        </arguments>
+    </type>
 </config>

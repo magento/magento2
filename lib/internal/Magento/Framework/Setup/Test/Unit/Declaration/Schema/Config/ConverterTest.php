@@ -46,7 +46,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                 <table name="test_table" resource="default">
                     <column xsi:type="int" name="id" nullable="false" identity="true" comment="Id"/>
                     <column xsi:type="varchar" name="data" length="100" identity="false" comment="Data"/>
-                    <constraint xsi:type="primary" name="PRIMARY">
+                    <constraint xsi:type="primary" referenceId="PRIMARY_INDEX">
                         <column name="id"/>
                     </constraint>
                 </table>
@@ -74,12 +74,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                         'constraint' => [
-                            'PRIMARY' => [
+                            'PRIMARY_INDEX' => [
                                 'column' => [
                                     'id' => 'id',
                                 ],
                                 'type' => 'primary',
-                                'name' => 'PRIMARY',
+                                'referenceId' => 'PRIMARY_INDEX',
                             ],
                         ],
                         'name' => 'test_table',

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteStoreGroupTest">
+        <annotations>
+            <stories value="Delete Store Group"/>
+            <title value="Delete store group and save backup"/>
+            <description value="Test log in to Stores and Delete Store Group Test"/>
+            <testCaseId value="MC-14297"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
+            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create custom store group-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewCustomStoreGroup">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStore.name}}"/>
+                <argument name="storeGroupCode" value="{{customStore.code}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Delete custom store group and verify AssertStoreGroupSuccessDeleteAndBackupMessages-->
+        <actionGroup ref="DeleteCustomStoreBackupEnabledYesActionGroup" stepKey="deleteCustomStoreGroup">
+            <argument name="storeGroupName" value="{{customStore.name}}"/>
+        </actionGroup>
+
+        <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
+        <actionGroup ref="AssertStoreNotInGrid" stepKey="verifyDeletedStoreGroupNotInGrid">
+            <argument name="storeGroupName" value="{{customStore.name}}"/>
+        </actionGroup>
+
+        <!--Go to backup index page and verify AssertBackupInGrid-->
+        <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupIndexPage"/>
+        <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
+        <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
+        <!--Delete database backup-->
+        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+            <argument name="backup" value="WebSetupWizardBackup"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -80,7 +80,7 @@ class Validator
                                 ["templateName" => $name]
                             )
                         );
-                    };
+                    }
                 }
             }
         }

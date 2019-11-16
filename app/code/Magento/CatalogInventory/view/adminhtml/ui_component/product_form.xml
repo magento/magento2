@@ -35,9 +35,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Manage Stock</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                     </item>
                 </argument>
                 <field name="manage_stock" formElement="select">
@@ -112,9 +110,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Out-of-Stock Threshold</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -274,9 +270,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Maximum Qty Allowed in Shopping Cart</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                     </item>
                 </argument>
                 <field name="max_sale_qty" formElement="input">
@@ -289,6 +283,7 @@
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
                             <rule name="validate-number" xsi:type="boolean">true</rule>
+                            <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Maximum Qty Allowed in Shopping Cart</label>
                         <dataScope>max_sale_qty</dataScope>
@@ -373,9 +368,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Backorders</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -438,9 +431,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Notify for Quantity Below</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>
@@ -495,9 +486,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                     </item>
                 </argument>
                 <field name="enable_qty_increments" formElement="select">
@@ -554,9 +543,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Qty Increments</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.enable_qty_increments</item>
                         </item>
@@ -615,9 +602,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
-                        <item name="label" xsi:type="string" translate="true">Stock Status</item>
                         <item name="dataScope" xsi:type="string">quantity_and_stock_status</item>
-                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
                         </item>

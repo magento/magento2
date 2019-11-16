@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCategoryProductSection">
         <element name="ProductTitleByNumber" type="button" selector="//main//li[{{var1}}]//a[@class='product-item-link']" parameterized="true"/>
         <element name="ProductPriceByNumber" type="text" selector="//main//li[{{var1}}]//span[@class='price']" parameterized="true"/>
@@ -16,10 +16,13 @@
         <element name="ProductInfoByNumber" type="text" selector="//main//li[{{var1}}]//div[@class='product-item-info']" parameterized="true"/>
         <element name="ProductAddToCompareByNumber" type="text" selector="//main//li[{{var1}}]//a[contains(@class, 'tocompare')]" parameterized="true"/>
         <element name="listedProduct" type="block" selector="ol li:nth-child({{productPositionInList}}) img" parameterized="true"/>
+        <element name="ProductImageByNumber" type="button" selector="//main//li[{{var1}}]//img" parameterized="true"/>
         <element name="categoryListView" type="button" selector="a[title='List']" timeout="30"/>
 
         <element name="ProductTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="ProductPriceByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
+        <element name="ProductCatalogRuleSpecialPriceTitleByName" type="text" selector="//div[descendant::*[contains(text(), '{{var1}}')]]//*[contains(@class, 'special-price')]" parameterized="true"/>
+        <element name="ProductCatalogRulePriceTitleByName" type="text" selector="//div[descendant::*[contains(text(), '{{var1}}')]]//*[contains(@class, 'price-label')]" parameterized="true"/>
         <element name="ProductImageByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[@class='product-image-photo']" parameterized="true"/>
         <element name="ProductImageBySrc" type="text" selector=".products-grid img[src*='{{pattern}}']" parameterized="true"/>
         <element name="ProductInfoByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//div[@class='product-item-info']" parameterized="true"/>
@@ -28,7 +31,9 @@
         <element name="productPriceLabel" type="text" selector="//span[@class='price-label'][contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="productPriceLinkAfterLabel" type="text" selector="//span[@class='price-label'][contains(text(),'{{var1}}')]/following::span[contains(text(), '{{var2}}')]" parameterized="true"/>
         <element name="ProductAddToCartByName" type="button" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocart')]" parameterized="true"/>
-        <element name="ProductAddToCompareByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>
+        <!--<element name="ProductAddToCompareByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>-->
+        <element name="ProductAddToCompareByName" type="text" selector="//*[contains(@class,'product-item-info')][descendant::a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>
         <element name="ProductImageByNameAndSrc" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[contains(@src, '{{src}}')]" parameterized="true"/>
+        <element name="ProductStockUnavailable" type="text" selector="//*[text()='Out of stock']"/>
     </section>
 </sections>

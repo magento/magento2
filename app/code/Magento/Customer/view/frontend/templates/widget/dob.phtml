@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Widget\Dob $block */
 
 /*
@@ -29,7 +27,7 @@ $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
 <div class="<?= $block->escapeHtmlAttr($fieldCssClass) ?>">
-    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?= $block->escapeHtml($block->getLabel()) ?></span></label>
+    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?= $block->escapeHtml($block->getStoreLabel('dob')) ?></span></label>
     <div class="control customer-dob">
         <?= $block->getFieldHtml() ?>
         <?php if ($_message = $block->getAdditionalDescription()) : ?>
@@ -37,3 +35,11 @@ $fieldCssClass .= $block->isRequired() ? ' required' : '';
         <?php endif; ?>
     </div>
 </div>
+
+<script type="text/x-magento-init">
+    {
+       "*": {
+           "Magento_Customer/js/validation": {}
+       }
+    }
+ </script>

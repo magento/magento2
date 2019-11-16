@@ -7,10 +7,12 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMainActionsSection">
         <element name="storeSwitcher" type="text" selector=".store-switcher"/>
         <element name="storeViewDropdown" type="button" selector="#store-change-button"/>
-        <element name="storeViewByName" type="button" selector="//*[@class='store-switcher-store-view  ']/a[contains(text(), '{{storeViewName}}')]" timeout="30" parameterized="true"/>
+        <element name="storeViewByName" type="button" selector="//*[contains(@class,'store-switcher-store-view')]/*[contains(text(), '{{storeViewName}}')]" timeout="30" parameterized="true"/>
+        <element name="websiteByName" type="button" selector="//*[@class='store-switcher-website  ']/a[contains(text(), '{{websiteName}}')]" timeout="30" parameterized="true"/>
+        <element name="allStoreViews" type="button" selector=".store-switcher .store-switcher-all" timeout="30"/>
     </section>
 </sections>

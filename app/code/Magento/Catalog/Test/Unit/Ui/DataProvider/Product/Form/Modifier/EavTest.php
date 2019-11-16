@@ -19,6 +19,7 @@ use Magento\Eav\Model\Entity\Attribute\Group;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -86,6 +87,11 @@ class EavTest extends AbstractModifierTest
      * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
      */
     private $entityTypeMock;
+
+    /**
+     * @var AttributeCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCollectionFactoryMock;
 
     /**
      * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -225,6 +231,10 @@ class EavTest extends AbstractModifierTest
         $this->entityTypeMock = $this->getMockBuilder(EntityType::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeCollectionFactoryMock = $this->getMockBuilder(AttributeCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->attributeCollectionMock = $this->getMockBuilder(AttributeCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -256,15 +266,17 @@ class EavTest extends AbstractModifierTest
         $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->getMockForAbstractClass();
         $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods([
-                'load',
-                'getAttributeGroupCode',
-                'getApplyTo',
-                'getFrontendInput',
-                'getAttributeCode',
-                'usesSource',
-                'getSource',
-            ])
+            ->setMethods(
+                [
+                    'load',
+                    'getAttributeGroupCode',
+                    'getApplyTo',
+                    'getFrontendInput',
+                    'getAttributeCode',
+                    'usesSource',
+                    'getSource',
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -297,9 +309,7 @@ class EavTest extends AbstractModifierTest
             ->willReturnSelf();
         $this->groupCollectionMock->expects($this->any())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([
-                $this->groupMock,
-            ]));
+            ->willReturn(new \ArrayIterator([$this->groupMock]));
         $this->attributeCollectionMock->expects($this->any())
             ->method('addFieldToSelect')
             ->willReturnSelf();
@@ -314,9 +324,7 @@ class EavTest extends AbstractModifierTest
             ->willReturn($this->attributeCollectionMock);
         $this->productMock->expects($this->any())
             ->method('getAttributes')
-            ->willReturn([
-                $this->attributeMock,
-            ]);
+            ->willReturn([$this->attributeMock,]);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
@@ -345,23 +353,27 @@ class EavTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(Eav::class, [
-            'locator' => $this->locatorMock,
-            'eavValidationRules' => $this->eavValidationRulesMock,
-            'eavConfig' => $this->eavConfigMock,
-            'request' => $this->requestMock,
-            'groupCollectionFactory' => $this->groupCollectionFactoryMock,
-            'storeManager' => $this->storeManagerMock,
-            'formElementMapper' => $this->formElementMapperMock,
-            'metaPropertiesMapper' => $this->metaPropertiesMapperMock,
-            'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-            'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
-            'sortOrderBuilder' => $this->sortOrderBuilderMock,
-            'attributeRepository' => $this->attributeRepositoryMock,
-            'arrayManager' => $this->arrayManagerMock,
-            'eavAttributeFactory' => $this->eavAttributeFactoryMock,
-            '_eventManager' => $this->eventManagerMock
-        ]);
+        return $this->objectManager->getObject(
+            Eav::class,
+            [
+                'locator' => $this->locatorMock,
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'eavConfig' => $this->eavConfigMock,
+                'request' => $this->requestMock,
+                'groupCollectionFactory' => $this->groupCollectionFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'formElementMapper' => $this->formElementMapperMock,
+                'metaPropertiesMapper' => $this->metaPropertiesMapperMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+                'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
+                'sortOrderBuilder' => $this->sortOrderBuilderMock,
+                'attributeRepository' => $this->attributeRepositoryMock,
+                'arrayManager' => $this->arrayManagerMock,
+                'eavAttributeFactory' => $this->eavAttributeFactoryMock,
+                '_eventManager' => $this->eventManagerMock,
+                'attributeCollectionFactory' => $this->attributeCollectionFactoryMock
+            ]
+        );
     }
 
     public function testModifyData()
@@ -374,84 +386,66 @@ class EavTest extends AbstractModifierTest
             ]
         ];
 
-        $this->locatorMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
+        $this->attributeCollectionFactoryMock->expects($this->once())->method('create')
+            ->willReturn($this->attributeCollectionMock);
 
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
-        $this->productMock->expects($this->once())
-            ->method('getAttributeSetId')
-            ->willReturn(4);
-        $this->productMock->expects($this->once())
-            ->method('getData')
-            ->with(ProductAttributeInterface::CODE_PRICE)->willReturn('19.9900');
-
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('addFilter')
-            ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->searchCriteriaMock);
-        $this->attributeGroupRepositoryMock->expects($this->any())
-            ->method('getList')
-            ->willReturn($this->searchCriteriaMock);
-        $this->searchCriteriaMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$this->attributeGroupMock]);
-        $this->sortOrderBuilderMock->expects($this->once())
-            ->method('setField')
-            ->willReturnSelf();
-        $this->sortOrderBuilderMock->expects($this->once())
-            ->method('setAscendingDirection')
-            ->willReturnSelf();
-        $dataObjectMock = $this->createMock(\Magento\Framework\Api\AbstractSimpleObject::class);
-        $this->sortOrderBuilderMock->expects($this->once())
-            ->method('create')
-            ->willReturn($dataObjectMock);
-
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('addFilter')
-            ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addSortOrder')
-            ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->searchCriteriaMock);
-
-        $this->attributeRepositoryMock->expects($this->once())
-            ->method('getList')
-            ->with($this->searchCriteriaMock)
-            ->willReturn($this->searchResultsMock);
-        $this->eavAttributeMock->expects($this->any())
-            ->method('getAttributeGroupCode')
-            ->willReturn('product-details');
-        $this->eavAttributeMock->expects($this->once())
-            ->method('getApplyTo')
-            ->willReturn([]);
-        $this->eavAttributeMock->expects($this->once())
-            ->method('getFrontendInput')
-            ->willReturn('price');
-        $this->eavAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn(ProductAttributeInterface::CODE_PRICE);
-        $this->searchResultsMock->expects($this->once())
-            ->method('getItems')
+        $this->attributeCollectionMock->expects($this->any())->method('getItems')
             ->willReturn([$this->eavAttributeMock]);
 
-        $this->storeMock->expects(($this->once()))
-            ->method('getBaseCurrencyCode')
+        $this->locatorMock->expects($this->any())->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $this->productMock->expects($this->any())->method('getId')
+            ->willReturn(1);
+        $this->productMock->expects($this->once())->method('getAttributeSetId')
+            ->willReturn(4);
+        $this->productMock->expects($this->once())->method('getData')
+            ->with(ProductAttributeInterface::CODE_PRICE)->willReturn('19.9900');
+
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('addFilter')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('create')
+            ->willReturn($this->searchCriteriaMock);
+        $this->attributeGroupRepositoryMock->expects($this->any())->method('getList')
+            ->willReturn($this->searchCriteriaMock);
+        $this->searchCriteriaMock->expects($this->once())->method('getItems')
+            ->willReturn([$this->attributeGroupMock]);
+        $this->sortOrderBuilderMock->expects($this->once())->method('setField')
+            ->willReturnSelf();
+        $this->sortOrderBuilderMock->expects($this->once())->method('setAscendingDirection')
+            ->willReturnSelf();
+        $dataObjectMock = $this->createMock(\Magento\Framework\Api\AbstractSimpleObject::class);
+        $this->sortOrderBuilderMock->expects($this->once())->method('create')
+            ->willReturn($dataObjectMock);
+
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('addFilter')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->once())->method('addSortOrder')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->any())->method('create')
+            ->willReturn($this->searchCriteriaMock);
+
+        $this->attributeRepositoryMock->expects($this->once())->method('getList')
+            ->with($this->searchCriteriaMock)
+            ->willReturn($this->searchResultsMock);
+        $this->eavAttributeMock->expects($this->any())->method('getAttributeGroupCode')
+            ->willReturn('product-details');
+        $this->eavAttributeMock->expects($this->once())->method('getApplyTo')
+            ->willReturn([]);
+        $this->eavAttributeMock->expects($this->once())->method('getFrontendInput')
+            ->willReturn('price');
+        $this->eavAttributeMock->expects($this->any())->method('getAttributeCode')
+            ->willReturn(ProductAttributeInterface::CODE_PRICE);
+        $this->searchResultsMock->expects($this->once())->method('getItems')
+            ->willReturn([$this->eavAttributeMock]);
+
+        $this->storeMock->expects(($this->once()))->method('getBaseCurrencyCode')
             ->willReturn('en_US');
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
+        $this->storeManagerMock->expects($this->once())->method('getStore')
             ->willReturn($this->storeMock);
-        $this->currencyMock->expects($this->once())
-            ->method('toCurrency')
+        $this->currencyMock->expects($this->once())->method('toCurrency')
             ->willReturn('19.99');
-        $this->currencyLocaleMock->expects($this->once())
-            ->method('getCurrency')
+        $this->currencyLocaleMock->expects($this->once())->method('getCurrency')
             ->willReturn($this->currencyMock);
 
         $this->assertEquals($sourceData, $this->eav->modifyData([]));
@@ -485,11 +479,11 @@ class EavTest extends AbstractModifierTest
             ['value' => ['test1', 'test2'], 'label' => 'Array label'],
         ];
         $attributeOptionsExpected = [
-            ['value' => '1', 'label' => 'Int label'],
-            ['value' => '1.5', 'label' => 'Float label'],
-            ['value' => '1', 'label' => 'Boolean label'],
-            ['value' => 'string', 'label' => 'String label'],
-            ['value' => ['test1', 'test2'], 'label' => 'Array label'],
+            ['value' => '1', 'label' => 'Int label', '__disableTmpl' => true],
+            ['value' => '1.5', 'label' => 'Float label', '__disableTmpl' => true],
+            ['value' => '1', 'label' => 'Boolean label', '__disableTmpl' => true],
+            ['value' => 'string', 'label' => 'String label', '__disableTmpl' => true],
+            ['value' => ['test1', 'test2'], 'label' => 'Array label', '__disableTmpl' => true],
         ];
 
         $this->productMock->method('getId')->willReturn($productId);
@@ -568,6 +562,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_not_new_locked_and_required' => [
@@ -587,6 +582,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -607,6 +603,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_and_not_required' => [
@@ -626,6 +623,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_locked_and_not_required' => [
@@ -645,6 +643,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -665,6 +664,7 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
+                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ]
         ];

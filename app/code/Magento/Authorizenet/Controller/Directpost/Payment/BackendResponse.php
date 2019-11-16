@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
 use Magento\Authorizenet\Helper\DataFactory;
@@ -16,9 +18,18 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Psr\Log\LoggerInterface;
 
-class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements CsrfAwareActionInterface
+/**
+ * Class BackendResponse
+ * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ */
+class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Payment implements
+    CsrfAwareActionInterface,
+    HttpGetActionInterface,
+    HttpPostActionInterface
 {
     /**
      * @var LoggerInterface
@@ -70,6 +81,7 @@ class BackendResponse extends \Magento\Authorizenet\Controller\Directpost\Paymen
 
     /**
      * Response action.
+     *
      * Action for Authorize.net SIM Relay Request.
      *
      * @return \Magento\Framework\Controller\ResultInterface

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CompareTwoProductsOrder">
+        <annotations>
+            <description>Goes to the Storefront. Validates that the 2 provided Products appear in the correct order.</description>
+        </annotations>
+        <arguments>
+            <argument name="page" defaultValue="{{StorefrontHomePage.url}}" type="string"/>
+            <argument name="product_1"/>
+            <argument name="product_2"/>
+        </arguments>
+
+        <amOnPage url="{{page}}" stepKey="goToHomePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad5" time="60"/>
+        <executeJS function="window.localStorage.clear()" stepKey="clearWidgetCache" />
+        <reloadPage stepKey="goToHomePageAfterCacheCleared"/>
+        <waitForPageLoad stepKey="waitForPageLoad5AfterCacheCleared" time="60"/>
+        <waitForElement selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" time="120" stepKey="waitCompareWidgetLoad" />
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('1')}}" userInput="alt" stepKey="grabFirstProductName1_1"/>
+        <assertEquals  expected="{{product_1.name}}" actual="($grabFirstProductName1_1)" message="notExpectedOrder" stepKey="compare1"/>
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByNumber('2')}}" userInput="alt" stepKey="grabFirstProductName2_2"/>
+        <assertEquals  expected="{{product_2.name}}" actual="($grabFirstProductName2_2)" message="notExpectedOrder" stepKey="compare2"/>
+    </actionGroup>
+</actionGroups>

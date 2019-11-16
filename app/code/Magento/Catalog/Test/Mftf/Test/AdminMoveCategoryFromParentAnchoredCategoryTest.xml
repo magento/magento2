@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMoveCategoryFromParentAnchoredCategoryTest">
+        <annotations>
+            <stories value="Move categories"/>
+            <title value="Move default subcategory with anchored parent to default subcategory"/>
+            <description value="Login as admin,move subcategory with anchored parent to default subcategory"/>
+            <testCaseId value="MC-6492"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+            <features value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+        </before>
+        <after>
+            <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
+            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="SimpleSubCategory"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open Category page-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <!--Enable Anchor for _defaultCategory category -->
+        <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
+        <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
+        <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
+
+        <!--Create a Subcategory under _defaultCategory category-->
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+
+        <!--Add a product to SimpleSubCategory category-->
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$" stepKey="selectProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
+        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+
+        <!--Run re-index task -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!--Verify category displayed in store front page-->
+        <amOnPage url="/$$createDefaultCategory.name$$/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <waitForPageLoad  stepKey="waitForStoreFrontPageLoad"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeDefaultCategoryOnStoreNavigationBar"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigationBar"/>
+
+        <!--Check category breadcrumbs in store  front page-->
+        <grabMultiple selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}"  stepKey="breadcrumbs"/>
+        <assertEquals  stepKey="verifyTheCategoryInStoreFrontPage">
+            <expectedResult type="array">['Home', $$createDefaultCategory.name$$,{{SimpleSubCategory.name}}]</expectedResult>
+            <actualResult type="variable">breadcrumbs</actualResult>
+        </assertEquals>
+
+        <!--Verify Product displayed in category store front page-->
+        <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>
+        <waitForPageLoad  stepKey="waitForProductToLoad1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+
+        <!--Open Category Page-->
+        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+
+        <!--Move SubCategory under Default Category-->
+        <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="moveCategory"/>
+        <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
+        <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
+
+        <!--Open category in store front page-->
+        <amOnPage url="/{{SimpleSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFrontPage1"/>
+        <waitForPageLoad  stepKey="waitForStoreFrontPageLoad1"/>
+
+        <!--Verify breadcrumbs after the move in store front page-->
+        <grabMultiple selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}"  stepKey="breadcrumbsAfterMove"/>
+        <assertEquals  stepKey="verifyBreadcrumbsInFrontPageAfterMove">
+            <expectedResult type="array">['Home',{{SimpleSubCategory.name}}]</expectedResult>
+            <actualResult type="variable">breadcrumbsAfterMove</actualResult>
+        </assertEquals>
+
+       <!--Open category store front page -->
+        <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.name)}}"  stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+
+        <!--Verify Category in store front-->
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeSubCategoryOnStoreNavigationBarAfterMove"/>
+        <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct1"/>
+        <waitForPageLoad  stepKey="waitForProductToLoad2"/>
+
+        <!--Verify product name on Store Front-->
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductNameAfterMove"/>
+    </test>
+</tests>

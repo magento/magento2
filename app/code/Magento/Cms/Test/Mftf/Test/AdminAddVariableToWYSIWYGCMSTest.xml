@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddVariableToWYSIWYGCMSTest">
         <annotations>
             <features value="Cms"/>
@@ -43,9 +43,9 @@
         <waitForText userInput="Insert Variable" stepKey="waitForSlideOutOpen"/>
         <!--see Insert Variable button disabled-->
         <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{VariableSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
-        <!--see 4 colums-->
+        <!--see 4 columns-->
         <see selector="{{VariableSection.ColName('Select')}}" userInput="Select" stepKey="selectCol" />
         <see selector="{{VariableSection.ColName('Variable Name')}}" userInput="Variable Name" stepKey="variableCol" />
         <see selector="{{VariableSection.ColName('Type')}}" userInput="Type" stepKey="typeCol" />

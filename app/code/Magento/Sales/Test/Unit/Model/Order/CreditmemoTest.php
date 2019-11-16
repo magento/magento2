@@ -6,10 +6,12 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class CreditmemoTest
@@ -19,14 +21,19 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCo
 class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $orderFactory;
+    protected $orderRepository;
 
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo
      */
     protected $creditmemo;
+
+    /**
+     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeConfigMock;
 
     /**
      * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -35,7 +42,8 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
@@ -54,7 +62,6 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             'creditmemoConfig' => $this->createMock(
                 \Magento\Sales\Model\Order\Creditmemo\Config::class
             ),
-            'orderFactory' => $this->orderFactory,
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
             'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
             'storeManager' => $this->createMock(\Magento\Store\Model\StoreManagerInterface::class),
@@ -62,6 +69,8 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             'commentCollectionFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class
             ),
+            'scopeConfig' => $this->scopeConfigMock,
+            'orderRepository' => $this->orderRepository,
         ];
         $this->creditmemo = $objectManagerHelper->getObject(
             \Magento\Sales\Model\Order\Creditmemo::class,
@@ -83,14 +92,10 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->method('setHistoryEntityName')
             ->with($entityName)
             ->will($this->returnSelf());
-        $order->expects($this->atLeastOnce())
-            ->method('load')
+        $this->orderRepository->expects($this->atLeastOnce())
+            ->method('get')
             ->with($orderId)
-            ->will($this->returnValue($order));
-
-        $this->orderFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $this->assertEquals($order, $this->creditmemo->getOrder());
     }
@@ -109,7 +114,6 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     public function testIsValidGrandTotalGrandTotal()
     {
         $this->creditmemo->setGrandTotal(0);
-        $this->creditmemo->getAllowZeroGrandTotal(true);
         $this->assertFalse($this->creditmemo->isValidGrandTotal());
     }
 

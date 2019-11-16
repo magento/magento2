@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadata;
-use Magento\Framework\App\State;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Filesystem\Driver\File;
@@ -18,13 +19,16 @@ use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Magento 2 CLI Application.
+ *
  * This is the hood for all command line tools supported by Magento.
  *
- * {@inheritdoc}
+ * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends Console\Application
@@ -59,13 +63,18 @@ class Cli extends Console\Application
     private $objectManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param string $name the application name
      * @param string $version the application version
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         try {
+            // phpcs:ignore Magento2.Security.IncludeFile
             $configuration = require BP . '/setup/config/application.config.php';
             $bootstrapApplication = new Application();
             $application = $bootstrapApplication->bootstrap($configuration);
@@ -73,13 +82,12 @@ class Cli extends Console\Application
 
             $this->assertCompilerPreparation();
             $this->initObjectManager();
-            $this->assertGenerationPermissions();
         } catch (\Exception $exception) {
             $output = new \Symfony\Component\Console\Output\ConsoleOutput();
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
-
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
         }
 
@@ -91,16 +99,25 @@ class Cli extends Console\Application
         }
 
         parent::__construct($name, $version);
+        $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
+        $this->logger = $this->objectManager->get(LoggerInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \Exception The exception in case of unexpected error
      */
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
-        $exitCode = parent::doRun($input, $output);
+        $exitCode = null;
+        try {
+            $exitCode = parent::doRun($input, $output);
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            $this->logger->error($errorMessage);
+            $this->initException = $e;
+        }
 
         if ($this->initException) {
             throw $this->initException;
@@ -110,7 +127,7 @@ class Cli extends Console\Application
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDefaultCommands()
     {
@@ -157,6 +174,7 @@ class Cli extends Console\Application
     {
         $params = (new ComplexParameter(self::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
         $params[Bootstrap::PARAM_REQUIRE_MAINTENANCE] = null;
+        $params = $this->documentRootResolver($params);
         $requestParams = $this->serviceManager->get('magento-init-params');
         $appBootstrapKey = Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
 
@@ -169,33 +187,6 @@ class Cli extends Console\Application
         /** @var ObjectManagerProvider $omProvider */
         $omProvider = $this->serviceManager->get(ObjectManagerProvider::class);
         $omProvider->setObjectManager($this->objectManager);
-    }
-
-    /**
-     * Checks whether generation directory is read-only.
-     * Depends on the current mode:
-     *      production - application will proceed
-     *      default - application will be terminated
-     *      developer - application will be terminated
-     *
-     * @return void
-     * @throws GenerationDirectoryAccessException If generation directory is read-only in developer mode
-     */
-    private function assertGenerationPermissions()
-    {
-        /** @var GenerationDirectoryAccess $generationDirectoryAccess */
-        $generationDirectoryAccess = $this->objectManager->create(
-            GenerationDirectoryAccess::class,
-            ['serviceManager' => $this->serviceManager]
-        );
-        /** @var State $state */
-        $state = $this->objectManager->get(State::class);
-
-        if ($state->getMode() !== State::MODE_PRODUCTION
-            && !$generationDirectoryAccess->check()
-        ) {
-            throw new GenerationDirectoryAccessException();
-        }
     }
 
     /**
@@ -233,6 +224,7 @@ class Cli extends Console\Application
         $commands = [];
         foreach (CommandLocator::getCommands() as $commandListClass) {
             if (class_exists($commandListClass)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $commands = array_merge(
                     $commands,
                     $objectManager->create($commandListClass)->getCommands()
@@ -241,5 +233,27 @@ class Cli extends Console\Application
         }
 
         return $commands;
+    }
+
+    /**
+     * Provides updated configuration in accordance to document root settings.
+     *
+     * @param array $config
+     * @return array
+     */
+    private function documentRootResolver(array $config = []): array
+    {
+        $params = [];
+        $deploymentConfig = $this->serviceManager->get(DeploymentConfig::class);
+        if ((bool)$deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB)) {
+            $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
+                DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+                DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
+                DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
+                DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
+            ];
+        }
+
+        return array_merge_recursive($config, $params);
     }
 }

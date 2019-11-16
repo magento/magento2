@@ -6,9 +6,10 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 use Magento\Reports\Model\Flag;
 
-class Invoiced extends \Magento\Reports\Controller\Adminhtml\Report\Sales
+class Invoiced extends \Magento\Reports\Controller\Adminhtml\Report\Sales implements HttpGetActionInterface
 {
     /**
      * Invoice report action

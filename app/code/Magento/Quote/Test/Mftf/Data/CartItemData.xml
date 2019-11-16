@@ -7,9 +7,19 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SimpleCartItem" type="CartItem">
         <data key="qty">1</data>
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+    <entity name="SimpleTwoCartItems" type="CartItem">
+        <data key="qty">2</data>
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+    <entity name="NotValidCartItems" type="CartItem">
+        <data key="qty">abc</data>
         <var key="quote_id" entityKey="return" entityType="GuestCart"/>
         <var key="sku" entityKey="sku" entityType="product"/>
     </entity>

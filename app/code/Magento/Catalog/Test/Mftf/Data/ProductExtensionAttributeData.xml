@@ -7,7 +7,7 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EavStockItem" type="product_extension_attribute">
         <requiredEntity type="stock_item">Qty_1000</requiredEntity>
     </entity>
@@ -16,5 +16,17 @@
     </entity>
     <entity name="EavStock10" type="product_extension_attribute">
         <requiredEntity type="stock_item">Qty_10</requiredEntity>
+    </entity>
+    <entity name="EavStock1" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_1</requiredEntity>
+    </entity>
+    <entity name="EavStock0" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_0</requiredEntity>
+    </entity>
+    <entity name="EavStock777" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_777</requiredEntity>
+    </entity>
+    <entity name="EavStock25" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_25</requiredEntity>
     </entity>
 </entities>

@@ -7,11 +7,12 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateCategoryFromProductPageTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="Create/Edit Category in Admin"/>
+            <title value="Admin should be able to create category from the product page"/>
             <description value="Admin should be able to create category from the product page" />
             <severity value="AVERAGE"/>
             <testCaseId value="MC-234"/>

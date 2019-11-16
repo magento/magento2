@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminDataGridHeaderSection">
         <!--Search by keyword element-->
         <element name="search" type="input" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] input[placeholder='Search by keyword']"/>
@@ -25,5 +25,7 @@
         <!--Visible columns management-->
         <element name="columnsToggle" type="button" selector="div.admin__data-grid-action-columns button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="columnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
+        <element name="perPage" type="select" selector="#product_attributes_listing.product_attributes_listing.listing_top.listing_paging_sizes"/>
+        <element name="attributeName" type="input" selector="//div[text()='{{arg}}']/../preceding-sibling::td//input" parameterized="true"/>
     </section>
 </sections>

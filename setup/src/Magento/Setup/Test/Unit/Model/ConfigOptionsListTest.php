@@ -9,8 +9,12 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Validator\DbValidator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -33,12 +37,29 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
      */
     private $dbValidator;
 
+    /**
+     * @var \Magento\Framework\Encryption\KeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $encryptionKeyValidator;
+
+    /**
+     * @var ConfigOptionsList\DriverOptions
+     */
+    private $driverOptionsMock;
+
     protected function setUp()
     {
         $this->generator = $this->createMock(\Magento\Setup\Model\ConfigGenerator::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
-        $this->object = new ConfigOptionsList($this->generator, $this->dbValidator);
+        $this->encryptionKeyValidator = $this->createMock(\Magento\Framework\Encryption\KeyValidator::class);
+        $this->driverOptionsMock = $this->createMock(ConfigOptionsList\DriverOptions::class);
+        $this->object = new ConfigOptionsList(
+            $this->generator,
+            $this->dbValidator,
+            $this->encryptionKeyValidator,
+            $this->driverOptionsMock
+        );
     }
 
     public function testGetOptions()
@@ -82,7 +103,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createCacheHostsConfig')->willReturn($configDataMock);
 
-        $configData = $this->object->createConfig([], $this->deploymentConfig);
+        $configData = $this->object->createConfig([Lock::INPUT_KEY_LOCK_PROVIDER => 'db'], $this->deploymentConfig);
         $this->assertGreaterThanOrEqual(6, count($configData));
     }
 
@@ -96,7 +117,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createCacheHostsConfig')->willReturn($configDataMock);
 
-        $configData = $this->object->createConfig([], $this->deploymentConfig);
+        $configData = $this->object->createConfig([Lock::INPUT_KEY_LOCK_PROVIDER => 'db'], $this->deploymentConfig);
         $this->assertGreaterThanOrEqual(6, count($configData));
     }
 
@@ -109,7 +130,8 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'name',
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST => 'host',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'user',
-            ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass'
+            ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass',
+            Lock::INPUT_KEY_LOCK_PROVIDER => 'db'
         ];
         $this->prepareValidationMocks();
 
@@ -127,7 +149,8 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'name',
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST => 'host',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'user',
-            ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass'
+            ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass',
+            Lock::INPUT_KEY_LOCK_PROVIDER => 'db'
         ];
         $this->prepareValidationMocks();
 
@@ -141,10 +164,11 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     {
         $options = [
             ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => true,
-            ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => ''
+            ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => '',
+            Lock::INPUT_KEY_LOCK_PROVIDER => 'db'
         ];
         $this->assertEquals(
-            ['Invalid encryption key'],
+            ['Invalid encryption key. Encryption key must be 32 character string without any white space.'],
             $this->object->validate($options, $this->deploymentConfig)
         );
     }
@@ -155,7 +179,13 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
-        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
+        $this->dbValidator->expects($this->once())
+            ->method('checkDatabaseConnectionWithDriverOptions')
+            ->willReturn($configDataMock);
+        $this->dbValidator
+            ->expects($this->once())
+            ->method('checkDatabaseConnectionWithDriverOptions')
+            ->willReturn($configDataMock);
     }
 
     /**
@@ -167,7 +197,8 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     {
         $options = [
             ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => true,
-            ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS => $hosts
+            ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS => $hosts,
+            Lock::INPUT_KEY_LOCK_PROVIDER => 'db'
         ];
         $result = $this->object->validate($options, $this->deploymentConfig);
         if ($expectedError) {

@@ -19,15 +19,17 @@
                 <field id="engine" canRestore="1">
                     <backend_model>Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend\Engine</backend_model>
                 </field>
-                <field id="min_query_length" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="min_query_length" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minimal Query Length</label>
                     <validate>validate-digits</validate>
+                    <comment>This value must be compatible with the corresponding setting in the configured search engine. Be aware: a low query length limit may cause the performance impact.</comment>
                 </field>
-                <field id="max_query_length" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="max_query_length" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Maximum Query Length</label>
                     <validate>validate-digits</validate>
+                    <comment>This value must be compatible with the corresponding setting in the configured search engine.</comment>
                 </field>
-                <field id="max_count_cacheable_search_terms" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="max_count_cacheable_search_terms" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Number of top search results to cache</label>
                     <comment>Number of popular search terms to be cached for faster response. Use “0” to cache all results after a term is searched for the second time.</comment>
                     <validate>validate-digits</validate>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSortingByPriceForConfigurableProductWithCatalogRuleAppliedTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View soting by price in storefront"/>
+            <title value="Sorting by price for Configurable with Catalog Rule applied"/>
+            <description value="Sort by price should be correct if the apply Catalog Rule to child product of configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-69988"/>
+            <group value="configurable_product"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">5.00</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="price">15.00</field>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <field key="price">20.00</field>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+                <field key="price">25.00</field>
+            </createData>
+            <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--SKU Product Attribute is enabled for Promo Rule Conditions-->
+            <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
+                <argument name="ProductAttribute" value="sku"/>
+            </actionGroup>
+            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes">
+                <argument name="option" value="Yes"/>
+            </actionGroup>
+            <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!--SKU Product Attribute is disable for Promo Rule Conditions-->
+            <actionGroup ref="navigateToEditProductAttribute" stepKey="navigateToSkuProductAttribute">
+                <argument name="ProductAttribute" value="sku"/>
+            </actionGroup>
+            <actionGroup ref="changeUseForPromoRuleConditionsProductAttribute" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
+                <argument name="option" value="No"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Open category with products and Sort by price desc-->
+        <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="grid"/>
+            <argument name="numOfProductsPerPage" value="25"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct"/>
+
+        <!--Create and apply catalog price rule-->
+        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsSKU" stepKey="createCatalogPriceRule">
+            <argument name="catalogRule" value="CatalogRuleByPercentWith96Amount" />
+            <argument name="productSku" value="$$createConfigChildProduct3.sku$$" />
+        </actionGroup>
+        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
+
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!--Reopen category with products and Sort by price desc-->
+        <actionGroup ref="GoToStorefrontCategoryPageByParameters" stepKey="goToStorefrontCategoryPage2">
+            <argument name="category" value="$$createCategory.custom_attributes[url_key]$$"/>
+            <argument name="mode" value="grid"/>
+            <argument name="numOfProductsPerPage" value="9"/>
+            <argument name="sortBy" value="price"/>
+            <argument name="sort" value="desc"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('1')}}" userInput="$$createSimpleProduct2.name$$" stepKey="seeSimpleProductTwo2"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('2')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
+        <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProduct2"/>
+
+        <!-- Delete the rule -->
+        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <argument name="name" value="{{CatalogRuleByPercentWith96Amount.name}}"/>
+            <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+        </actionGroup>
+    </test>
+</tests>

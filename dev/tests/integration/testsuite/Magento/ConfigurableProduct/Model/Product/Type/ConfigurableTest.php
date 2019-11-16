@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -128,6 +130,10 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($testConfigurable->getData(), $attributes[$attributeId]->getData());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
     public function testGetConfigurableAttributes()
     {
         $collection = $this->model->getConfigurableAttributes($this->product);
@@ -149,6 +155,19 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('Option 2', $options[1]['label']);
             break;
         }
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_custom.php
+     */
+    public function testGetConfigurableAttributesWithSourceModel()
+    {
+        $collection = $this->model->getConfigurableAttributes($this->product);
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
+        $configurableAttribute = $collection->getFirstItem();
+        $attribute = $this->_getAttributeByCode('test_configurable_with_sm');
+        $this->assertSameSize($attribute->getSource()->getAllOptions(), $configurableAttribute->getOptions());
     }
 
     /**
@@ -236,6 +255,33 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests the $requiredAttributes parameter; uses meta_description as an example of an attribute that is not
+     * included in default attribute select.
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_metadescription.php
+     */
+    public function testGetUsedProductsWithRequiredAttributes()
+    {
+        $requiredAttributeIds = [86];
+        $products = $this->model->getUsedProducts($this->product, $requiredAttributeIds);
+        foreach ($products as $product) {
+            self::assertNotNull($product->getData('meta_description'));
+        }
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_metadescription.php
+     */
+    public function testGetUsedProductsWithoutRequiredAttributes()
+    {
+        $products = $this->model->getUsedProducts($this->product);
+        foreach ($products as $product) {
+            self::assertNull($product->getData('meta_description'));
+        }
+    }
+
+    /**
      * Test getUsedProducts returns array with same indexes regardless collections was cache or not.
      *
      * @magentoAppIsolation enabled
@@ -319,8 +365,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $product->addCustomOption(
-            'attributes',
+        $product->addCustomOption('attributes',
             $serializer->serialize([$attribute['attribute_id'] => $optionValueId])
         );
 

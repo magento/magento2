@@ -6,7 +6,9 @@
  */
 namespace Magento\Customer\Controller\Address;
 
-class Edit extends \Magento\Customer\Controller\Address
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Edit extends \Magento\Customer\Controller\Address implements HttpGetActionInterface
 {
     /**
      * Customer address edit action

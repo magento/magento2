@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Stdlib\DateTime;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Timezone Interface
  * @api
@@ -80,6 +82,7 @@ interface TimezoneInterface
 
     /**
      * Get scope timestamp
+     *
      * Timestamp will be built with scope timezone settings
      *
      * @param   mixed $scope
@@ -121,6 +124,8 @@ interface TimezoneInterface
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
 
     /**
+     * Format date according to date and time formats, locale, timezone and pattern.
+     *
      * @param string|\DateTimeInterface $date
      * @param int $dateType
      * @param int $timeType
@@ -139,9 +144,14 @@ interface TimezoneInterface
     );
 
     /**
+     * Convert date from config timezone to UTC.
+     *
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
      * @param string|\DateTimeInterface $date
      * @param string $format
      * @return string
+     * @throws LocalizedException
      * @since 100.1.0
      */
     public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s');

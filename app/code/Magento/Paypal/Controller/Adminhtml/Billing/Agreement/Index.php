@@ -6,7 +6,9 @@
  */
 namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 
-class Index extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+
+class Index extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

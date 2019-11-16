@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddUrlRewrite">
+        <annotations>
+            <description>Goes to the Admin Add URL Rewrite edit page. Fills in the provided URL details. Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="category" type="string"/>
+            <argument name="customUrlRewriteValue" type="string"/>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteEditPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="waitForCreateUrlRewriteVisible"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" userInput="{{customUrlRewriteValue}}" stepKey="selectUrlRewriteTypeOption"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="waitForCategoryInTreeVisible"/>
+        <click selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="clickOnCategoryInTree"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.store}}" stepKey="waitForStoreSelectVisible"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.store}}" userInput="{{storeValue}}" stepKey="selectStoreOption"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPathField"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.redirectType}}" userInput="{{redirectTypeValue}}" stepKey="selectRedirectType"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescriptionField"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The URL Rewrite has been saved." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminAddUrlRewriteForProduct">
+        <annotations>
+            <description>Adds the provided URL Rewrite details for a Product.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{AdminUrlRewriteProductSection.skipCategoryButton}}" stepKey="waitForSkipCategoryButton"/>
+        <click selector="{{AdminUrlRewriteProductSection.skipCategoryButton}}" stepKey="clickOnSkipCategoryButton"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="clickOnRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminAddCustomUrlRewrite">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite edit page. Adds the provided Custom URL Rewrite details. Clicks on Save. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="customUrlRewriteValue" type="string"/>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="targetPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteEditPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad" after="openUrlRewriteEditPage"/>
+        <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="clickOnCustonUrlRewrite"/>
+        <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewriteValue('customUrlRewriteValue')}}" stepKey="selectCustom"/>
+        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.targetPath}}" userInput="{{targetPath}}" stepKey="fillTargetPath"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="selectRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminUpdateUrlRewrite">
+        <annotations>
+            <description>Updates the URL Rewrite fields with the provided details.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue(storeValue)}}" stepKey="clickOnStoreValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
+        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue(redirectTypeValue)}}" stepKey="selectRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminUpdateCustomUrlRewrite">
+        <annotations>
+            <description>Updates the Custom URL Rewrite fields with the provided details.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeValue" type="string"/>
+            <argument name="requestPath" type="string"/>
+            <argument name="targetPath" type="string"/>
+            <argument name="redirectTypeValue" type="string"/>
+            <argument name="description" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
+        <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.targetPath}}" userInput="{{targetPath}}" stepKey="fillTargetPath"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.redirectType}}" userInput="{{redirectTypeValue}}" stepKey="selectRedirectTypeValue"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+    </actionGroup>
+</actionGroups>

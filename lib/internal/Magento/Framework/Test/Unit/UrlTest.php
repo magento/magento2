@@ -149,8 +149,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $httpHost string
-     * @param $url string
+     * @param string $httpHost
+     * @param string $url
      * @dataProvider getCurrentUrlProvider
      */
     public function testGetCurrentUrl($httpHost, $url)
@@ -435,7 +435,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $url
+     * @param string $inputUrl
      * @dataProvider getRebuiltUrlDataProvider
      */
     public function testGetRebuiltUrl($inputUrl, $outputUrl)

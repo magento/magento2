@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndEditBundleProductSettingsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Admin should be able to set/edit other product information when creating/editing a bundle product"/>
+            <description value="Admin should be able to set/edit other product information when creating/editing a bundle product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-224"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create a Website -->
+            <createData entity="customWebsite" stepKey="createWebsite"/>
+
+            <!-- Create a simple product for a bundle option -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete a Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create new bundle product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createBundleProduct">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainProductFields"/>
+
+        <!-- Add the bundle option to the product -->
+        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="{{RadioButtonsOption.title}}"/>
+            <argument name="inputType" value="{{RadioButtonsOption.type}}"/>
+        </actionGroup>
+
+        <!-- Set product in created Website -->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Set Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings">
+            <argument name="designSettings" value="simpleLumaDesignThreeColumns"/>
+        </actionGroup>
+
+        <!-- Set Gift Options settings for the product -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="enableGiftMessageSettings">
+            <argument name="status" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product Design settings "layout 3 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutThreeColumns}}" stepKey="seeDesignChanges"/>
+
+        <!-- Assert Gift Option product settings is present -->
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <actionGroup ref="StorefrontAssertGiftMessageFieldsActionGroup" stepKey="assertGiftMessageFieldsArePresent"/>
+
+        <!-- Open created product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Assert product in assigned to Website -->
+        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Edit product in Websites -->
+        <actionGroup ref="AdminUnassignProductInWebsiteActionGroup" stepKey="uncheckProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Edit product Search Engine Optimization settings -->
+        <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
+            <argument name="productName" value="ApiBundleProduct.name"/>
+        </actionGroup>
+
+        <!-- Edit Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings"/>
+
+        <!-- Edit Gift Option product settings -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+
+        <!-- Verify Url Key after changing -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{ApiBundleProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert product design settings "Layout empty" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsLeft}}" stepKey="seeNewDesignChanges"/>
+
+        <!-- Assert Gift Option product settings  -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
+
+        <!-- Delete created bundle product -->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+    </test>
+    <test name="AdminCreateAndEditBundleProductOptionsNegativeTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Modify bundle product in Admin"/>
+            <title value="Admin should be able to remove any bundle option a bundle product"/>
+            <description value="Admin should be able to set/edit other product information when creating/editing a bundle product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-224"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2/issues/25468"/>
+            </skip>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create a Website -->
+            <createData entity="customWebsite" stepKey="createWebsite"/>
+
+            <!-- Create first simple product for a bundle option -->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+
+            <!-- Create second simple product for a bundle option -->
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+
+            <!-- Delete a Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="Second Website"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create new bundle product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createBundleProduct">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainProductFields"/>
+
+        <!-- Add first bundle option to the product -->
+        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addFirstBundleOption">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
+            <argument name="prodTwoSku" value="$$createSecondSimpleProduct.sku$$"/>
+            <argument name="optionTitle" value="{{RadioButtonsOption.title}}"/>
+            <argument name="inputType" value="{{RadioButtonsOption.type}}"/>
+        </actionGroup>
+
+        <!-- Add second bundle option to the product -->
+        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addSecondBundleOption">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
+            <argument name="prodTwoSku" value="$$createSecondSimpleProduct.sku$$"/>
+            <argument name="optionTitle" value="{{CheckboxOption.title}}"/>
+            <argument name="inputType" value="{{CheckboxOption.type}}"/>
+        </actionGroup>
+
+        <!-- Add third bundle option to the product -->
+        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addThirdBundleOption">
+            <argument name="x" value="2"/>
+            <argument name="n" value="3"/>
+            <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
+            <argument name="prodTwoSku" value="$$createSecondSimpleProduct.sku$$"/>
+            <argument name="optionTitle" value="{{RadioButtonsOption.title}}"/>
+            <argument name="inputType" value="{{RadioButtonsOption.type}}"/>
+        </actionGroup>
+
+        <!-- Set product in created Website -->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="$createWebsite.website[name]$"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="saveWithThreeOptions"/>
+
+        <!-- Open created product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Remove second option -->
+        <actionGroup ref="deleteBundleOptionByIndex" stepKey="deleteSecondOption">
+            <argument name="deleteIndex" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWithTwoOptions"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+
+        <!-- Delete created bundle product -->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+    </test>
+</tests>
+

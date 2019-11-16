@@ -7,15 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="ThemeTest">
         <annotations>
-            <features value="Theme Test"/>
+            <features value="Theme"/>
+            <stories value="Themes"/>
             <title value="Magento Rush theme should not be available in Themes grid"/>
             <description value="Magento Rush theme should not be available in Themes grid"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-91409"/>
-            <group value="theme"/>
+            <group value="Theme"/>
         </annotations>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>

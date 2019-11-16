@@ -7,12 +7,16 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertProductInStorefrontCategoryPage">
+        <annotations>
+            <description>Goes to Storefront Category page for the provided Category. Validates that the Product details are present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="category"/>
             <argument name="product"/>
         </arguments>
+
         <!-- Go to storefront category page, assert product visibility -->
         <amOnPage url="{{StorefrontCategoryPage.url(category.name)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>

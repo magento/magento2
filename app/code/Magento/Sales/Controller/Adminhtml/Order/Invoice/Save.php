@@ -7,6 +7,7 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
@@ -15,11 +16,14 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Service\InvoiceService;
+use Magento\Sales\Helper\Data as SalesData;
 
 /**
+ * Save invoice controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\App\Action
+class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -54,12 +58,18 @@ class Save extends \Magento\Backend\App\Action
     private $invoiceService;
 
     /**
+     * @var SalesData
+     */
+    private $salesData;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceSender $invoiceSender
      * @param ShipmentSender $shipmentSender
      * @param ShipmentFactory $shipmentFactory
      * @param InvoiceService $invoiceService
+     * @param SalesData $salesData
      */
     public function __construct(
         Action\Context $context,
@@ -67,7 +77,8 @@ class Save extends \Magento\Backend\App\Action
         InvoiceSender $invoiceSender,
         ShipmentSender $shipmentSender,
         ShipmentFactory $shipmentFactory,
-        InvoiceService $invoiceService
+        InvoiceService $invoiceService,
+        SalesData $salesData = null
     ) {
         $this->registry = $registry;
         $this->invoiceSender = $invoiceSender;
@@ -75,6 +86,7 @@ class Save extends \Magento\Backend\App\Action
         $this->shipmentFactory = $shipmentFactory;
         $this->invoiceService = $invoiceService;
         parent::__construct($context);
+        $this->salesData = $salesData ?? $this->_objectManager->get(SalesData::class);
     }
 
     /**
@@ -86,13 +98,18 @@ class Save extends \Magento\Backend\App\Action
     protected function _prepareShipment($invoice)
     {
         $invoiceData = $this->getRequest()->getParam('invoice');
-
+        $itemArr = [];
+        if (!isset($invoiceData['items']) || empty($invoiceData['items'])) {
+            $orderItems = $invoice->getOrder()->getItems();
+            foreach ($orderItems as $item) {
+                $itemArr[$item->getId()] = (int)$item->getQtyOrdered();
+            }
+        }
         $shipment = $this->shipmentFactory->create(
             $invoice->getOrder(),
-            isset($invoiceData['items']) ? $invoiceData['items'] : [],
+            isset($invoiceData['items']) ? $invoiceData['items'] : $itemArr,
             $this->getRequest()->getPost('tracking')
         );
-
         if (!$shipment->getTotalQty()) {
             return false;
         }
@@ -102,6 +119,7 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * Save invoice
+     *
      * We can save only new invoice. Existing invoices are not editable
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -193,15 +211,9 @@ class Save extends \Magento\Backend\App\Action
             }
             $transactionSave->save();
 
-            if (!empty($data['do_shipment'])) {
-                $this->messageManager->addSuccessMessage(__('You created the invoice and shipment.'));
-            } else {
-                $this->messageManager->addSuccessMessage(__('The invoice has been created.'));
-            }
-
             // send invoice/shipment emails
             try {
-                if (!empty($data['send_email'])) {
+                if (!empty($data['send_email']) || $this->salesData->canSendNewInvoiceEmail()) {
                     $this->invoiceSender->send($invoice);
                 }
             } catch (\Exception $e) {
@@ -210,13 +222,18 @@ class Save extends \Magento\Backend\App\Action
             }
             if ($shipment) {
                 try {
-                    if (!empty($data['send_email'])) {
+                    if (!empty($data['send_email']) || $this->salesData->canSendNewShipmentEmail()) {
                         $this->shipmentSender->send($shipment);
                     }
                 } catch (\Exception $e) {
                     $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                     $this->messageManager->addErrorMessage(__('We can\'t send the shipment right now.'));
                 }
+            }
+            if (!empty($data['do_shipment'])) {
+                $this->messageManager->addSuccessMessage(__('You created the invoice and shipment.'));
+            } else {
+                $this->messageManager->addSuccessMessage(__('The invoice has been created.'));
             }
             $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);

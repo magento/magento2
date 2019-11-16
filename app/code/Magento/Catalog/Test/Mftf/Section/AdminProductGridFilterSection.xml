@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductGridFilterSection">
         <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
         <element name="clearAll" type="button" selector=".admin__data-grid-header .admin__data-grid-filters-current._show .action-clear" timeout="30"/>
@@ -28,8 +28,13 @@
         <element name="priceFilterTo" type="input" selector="input.admin__control-text[name='price[to]']"/>
         <element name="typeFilter" type="select" selector="select.admin__control-select[name='type_id']"/>
         <element name="statusFilter" type="select" selector="select.admin__control-select[name='status']"/>
+        <element name="firstRowBySku" type="button" selector="//div[text()='{{var}}']/ancestor::tr" parameterized="true" timeout="30"/>
         <element name="newFromDateFilter" type="input" selector="input.admin__control-text[name='news_from_date[from]']"/>
         <element name="keywordSearch" type="input" selector="input#fulltext"/>
         <element name="keywordSearchButton" type="button" selector=".data-grid-search-control-wrap button.action-submit" timeout="30"/>
+        <element name="nthRow" type="block" selector=".data-row:nth-of-type({{var}})" parameterized="true" timeout="30"/>
+        <element name="productCount" type="text" selector="#catalog_category_products-total-count"/>
+        <element name="productPerPage" type="select" selector="#catalog_category_products_page-limit"/>
+        <element name="storeViewDropdown" type="text" selector="//select[@name='store_id']/option[contains(.,'{{storeView}}')]" parameterized="true"/>
     </section>
 </sections>

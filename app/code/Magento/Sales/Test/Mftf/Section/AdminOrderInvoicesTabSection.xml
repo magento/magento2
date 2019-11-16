@@ -7,10 +7,17 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderInvoicesTabSection">
         <element name="spinner" type="text" selector="[data-role='spinner'][data-component*='sales_order_view_invoice']"/>
         <element name="gridRow" type="text" selector="#sales_order_view_tabs_order_invoices_content .data-grid tbody > tr:nth-of-type({{row}})" parameterized="true"/>
         <element name="viewGridRow" type="button" selector="#sales_order_view_tabs_order_invoices_content .data-grid tbody > tr:nth-of-type({{row}}) a[href*='order_invoice/view']" parameterized="true"/>
+        <element name="viewInvoice" type="button" selector="//div[@class='admin__data-grid-wrap']//a[@class='action-menu-item']"/>
+        <element name="clearFilters" type="button" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//button[@data-action='grid-filter-reset']" timeout="30"/>
+        <element name="filters" type="button" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//button[@data-action='grid-filter-expand']" timeout="30"/>
+        <element name="applyFilters" type="button" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//button[@data-action='grid-filter-apply']" timeout="30"/>
+        <element name="invoiceId" type="input" selector="//div[@id='sales_order_view_tabs_order_invoices_content']//input[@name='increment_id']" timeout="30"/>
+        <element name="amountFrom" type="input" selector="[name='grand_total[from]']" timeout="30"/>
+        <element name="amountTo" type="input" selector="[name='grand_total[to]']" timeout="30"/>
     </section>
 </sections>

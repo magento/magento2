@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditProductAttributesSection">
         <element name="AttributeName" type="text" selector="#name"/>
         <element name="ChangeAttributeNameToggle" type="checkbox" selector="#toggle_name"/>
@@ -18,5 +18,9 @@
         <element name="AttributeDescription" type="text" selector="#description"/>
         <element name="ChangeAttributeDescriptionToggle" type="checkbox" selector="#toggle_description"/>
         <element name="Save" type="button" selector="button[title=Save]" timeout="30"/>
+        <element name="ProductDataMayBeLostModal" type="button" selector="//aside[contains(@class,'_show')]//header[contains(.,'Product data may be lost')]"/>
+        <element name="ProductDataMayBeLostConfirmButton" type="button" selector="//aside[contains(@class,'_show')]//button[.='Change Input Type']"/>
+        <element name="defaultLabel" type="text" selector="//td[contains(text(), '{{attributeName}}')]/following-sibling::td[contains(@class, 'col-frontend_label')]" parameterized="true"/>
+        <element name="formByStoreId" type="block" selector="//form[contains(@action,'store/{{store_id}}')]" parameterized="true"/>
     </section>
 </sections>

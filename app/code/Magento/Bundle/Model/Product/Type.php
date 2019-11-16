@@ -6,13 +6,14 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
+use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
-use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
+use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
  * Bundle Type Model
@@ -161,6 +162,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $selectionCollectionFilterApplier;
 
     /**
+     * @var ArrayUtils
+     */
+    private $arrayUtility;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -185,6 +191,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param MetadataPool|null $metadataPool
      * @param SelectionCollectionFilterApplier|null $selectionCollectionFilterApplier
+     * @param ArrayUtils|null $arrayUtility
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -212,7 +219,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         Json $serializer = null,
         MetadataPool $metadataPool = null,
-        SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null
+        SelectionCollectionFilterApplier $selectionCollectionFilterApplier = null,
+        ArrayUtils $arrayUtility = null
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -232,6 +240,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $this->selectionCollectionFilterApplier = $selectionCollectionFilterApplier
             ?: ObjectManager::getInstance()->get(SelectionCollectionFilterApplier::class);
+        $this->arrayUtility= $arrayUtility ?: ObjectManager::getInstance()->get(ArrayUtils::class);
 
         parent::__construct(
             $catalogProductOption,
@@ -308,8 +317,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $selectionIds = $this->serializer->unserialize($customOption->getValue());
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
-                    foreach ($selections->getItems() as $selection) {
-                        $skuParts[] = $selection->getSku();
+                    foreach ($selectionIds as $selectionId) {
+                        $entity = $selections->getItemByColumnValue('selection_id', $selectionId);
+                        if (isset($entity) && $entity->getEntityId()) {
+                            $skuParts[] = $entity->getSku();
+                        }
                     }
                 }
             }
@@ -537,7 +549,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 foreach ($options as $quoteItemOption) {
                     if ($quoteItemOption->getCode() == 'selection_qty_' . $selection->getSelectionId()) {
                         if ($optionUpdateFlag) {
-                            $quoteItemOption->setValue(intval($quoteItemOption->getValue()));
+                            $quoteItemOption->setValue((int) $quoteItemOption->getValue());
                         } else {
                             $quoteItemOption->setValue($value);
                         }
@@ -559,7 +571,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function prepareQuoteItemQty($qty, $product)
     {
-        return intval($qty);
+        return (int) $qty;
     }
 
     /**
@@ -625,6 +637,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Prepare product and its configuration to be added to some products list.
+     *
      * Perform standard preparation process and then prepare of bundle selections options.
      *
      * @param \Magento\Framework\DataObject $buyRequest
@@ -669,7 +682,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $options
                 );
 
-                $selectionIds = $this->multiToFlatArray($options);
+                $selectionIds = array_values($this->arrayUtility->flatten($options));
                 // If product has not been configured yet then $selections array should be empty
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
@@ -733,9 +746,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                      * for selection (not for all bundle)
                      */
                     $price = $product->getPriceModel()
-                        ->getSelectionFinalTotalPrice($product, $selection, 0, $qty);
+                        ->getSelectionFinalTotalPrice($product, $selection, 0, 1);
                     $attributes = [
-                        'price' => $this->priceCurrency->convert($price),
+                        'price' => $price,
                         'qty' => $qty,
                         'option_label' => $selection->getOption()
                             ->getTitle(),
@@ -790,6 +803,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Cast array values to int
+     *
      * @param array $array
      * @return int[]|int[][]
      */
@@ -806,24 +821,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $array;
-    }
-
-    /**
-     * @param array $array
-     * @return int[]
-     */
-    private function multiToFlatArray(array $array)
-    {
-        $flatArray = [];
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
-            } else {
-                $flatArray[$key] = $value;
-            }
-        }
-
-        return $flatArray;
     }
 
     /**
@@ -920,8 +917,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Prepare additional options/information for order item which will be
-     * created from this product
+     * Prepare additional options/information for order item which will be created from this product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
@@ -987,6 +983,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Sort selections method for usort function
+     *
      * Sort selections by option position, selection position and selection id
      *
      * @param  \Magento\Catalog\Model\Product $firstItem
@@ -1009,10 +1006,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $secondItem->getPosition(),
             $secondItem->getSelectionId(),
         ];
-        if ($aPosition == $bPosition) {
-            return 0;
-        }
-        return $aPosition < $bPosition ? -1 : 1;
+
+        return $aPosition <=> $bPosition;
     }
 
     /**
@@ -1050,6 +1045,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve additional searchable data from type instance
+     *
      * Using based on product id and store_id data
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -1118,6 +1114,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * Retrieve products divided into groups required to purchase
+     *
      * At least one product in each group has to be purchased
      *
      * @param  \Magento\Catalog\Model\Product $product
@@ -1214,6 +1211,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns selection qty
+     *
      * @param \Magento\Framework\DataObject $selection
      * @param int[] $qtys
      * @param int $selectionOptionId
@@ -1232,6 +1231,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Returns qty
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\DataObject $selection
      * @return float|int
@@ -1249,6 +1250,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate required options
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
      * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
@@ -1270,6 +1273,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Check if selection is salable
+     *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
      * @param bool $skipSaleableCheck
      * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
@@ -1300,6 +1305,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate result
+     *
      * @param array $_result
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1318,6 +1325,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Merge selections with options
+     *
      * @param \Magento\Catalog\Model\Product\Option[] $options
      * @param \Magento\Framework\DataObject[] $selections
      * @return \Magento\Framework\DataObject[]

@@ -7,7 +7,7 @@
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataOperation.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
     <operation name="CreateBundleLink" dataType="bundle_link" type="create" auth="adminOauth" url="/V1/bundle-products/{sku}/links/{return}" method="POST">
         <contentType>application/json</contentType>
         <object dataType="bundle_link" key="linkedProduct">

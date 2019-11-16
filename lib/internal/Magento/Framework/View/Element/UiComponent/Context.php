@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
@@ -95,6 +97,11 @@ class Context implements ContextInterface
     protected $uiComponentFactory;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
      * @param PageLayoutInterface $pageLayout
      * @param RequestInterface $request
      * @param ButtonProviderFactory $buttonProviderFactory
@@ -104,7 +111,8 @@ class Context implements ContextInterface
      * @param Processor $processor
      * @param UiComponentFactory $uiComponentFactory
      * @param DataProviderInterface|null $dataProvider
-     * @param null $namespace
+     * @param string $namespace
+     * @param AuthorizationInterface|null $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,7 +125,8 @@ class Context implements ContextInterface
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
         DataProviderInterface $dataProvider = null,
-        $namespace = null
+        $namespace = null,
+        AuthorizationInterface $authorization = null
     ) {
         $this->namespace = $namespace;
         $this->request = $request;
@@ -129,6 +138,9 @@ class Context implements ContextInterface
         $this->urlBuilder = $urlBuilder;
         $this->processor = $processor;
         $this->uiComponentFactory = $uiComponentFactory;
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(
+            AuthorizationInterface::class
+        );
         $this->setAcceptType();
     }
 
@@ -152,7 +164,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getComponentsDefinitions()
     {
@@ -160,7 +172,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRenderEngine()
     {
@@ -168,7 +180,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNamespace()
     {
@@ -176,7 +188,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAcceptType()
     {
@@ -184,7 +196,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRequestParams()
     {
@@ -192,7 +204,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRequestParam($key, $defaultValue = null)
     {
@@ -200,7 +212,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFiltersParams()
     {
@@ -208,7 +220,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilterParam($key, $defaultValue = null)
     {
@@ -217,7 +229,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataProvider()
     {
@@ -225,7 +237,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData(UiComponentInterface $component)
     {
@@ -250,7 +262,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPageLayout()
     {
@@ -258,7 +270,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addButtons(array $buttons, UiComponentInterface $component)
     {
@@ -280,6 +292,9 @@ class Context implements ContextInterface
             uasort($buttons, [$this, 'sortButtons']);
 
             foreach ($buttons as $buttonId => $buttonData) {
+                if (isset($buttonData['aclResource']) && !$this->authorization->isAllowed($buttonData['aclResource'])) {
+                    continue;
+                }
                 if (isset($buttonData['url'])) {
                     $buttonData['url'] = $this->getUrl($buttonData['url']);
                 }
@@ -297,14 +312,14 @@ class Context implements ContextInterface
      */
     public function sortButtons(array $itemA, array $itemB)
     {
-        $sortOrderA = isset($itemA['sort_order']) ? intval($itemA['sort_order']) : 0;
-        $sortOrderB = isset($itemB['sort_order']) ? intval($itemB['sort_order']) : 0;
+        $sortOrderA = isset($itemA['sort_order']) ? (int)$itemA['sort_order'] : 0;
+        $sortOrderB = isset($itemB['sort_order']) ? (int)$itemB['sort_order'] : 0;
 
         return $sortOrderA - $sortOrderB;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component)
@@ -336,7 +351,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDataProvider(DataProviderInterface $dataProvider)
     {
@@ -344,7 +359,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl($route = '', $params = [])
     {
@@ -370,7 +385,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProcessor()
     {
@@ -378,7 +393,7 @@ class Context implements ContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUiComponentFactory()
     {

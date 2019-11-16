@@ -10,10 +10,13 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * Catalog search request generator.
+ */
 class General implements GeneratorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilterData(Attribute $attribute, $filterName)
     {
@@ -26,7 +29,7 @@ class General implements GeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAggregationData(Attribute $attribute, $bucketName)
     {

@@ -7,16 +7,15 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxInformationInShoppingCartForGuestVirtualQuoteTest">
         <annotations>
-            <features value="Tax information in shopping cart for Guest (virtual quote)"/>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
             <title value="Tax information are updating/recalculating on fly in shopping cart for Guest (virtual quote)"/>
             <description value="Tax information are updating/recalculating on fly in shopping cart for Guest (virtual quote)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-41931"/>
-            <!--Skip because of issue MAGETWO-90966 on 4 step-->
-            <group value="skip"/>
             <group value="checkout"/>
             <group value="tax"/>
          </annotations>
@@ -57,6 +56,8 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$3.30" stepKey="checkTaxAmountCA" />
         <click selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="taxSummary"/>

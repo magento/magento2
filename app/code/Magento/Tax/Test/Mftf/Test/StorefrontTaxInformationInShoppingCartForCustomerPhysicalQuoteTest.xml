@@ -7,10 +7,11 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontTaxInformationInShoppingCartForCustomerPhysicalQuoteTest">
         <annotations>
-            <features value="Tax information in shopping cart for Customer with default addresses (physical quote)"/>
+            <features value="Tax"/>
+            <stories value="Shopping cart taxes"/>
             <title value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <description value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <severity value="CRITICAL"/>
@@ -62,6 +63,7 @@
             <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
@@ -87,9 +89,13 @@
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
         <!--  Step 4: Open Estimate Shipping and Tax section -->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
-        <see selector="{{CheckoutCartSummarySection.country}}" userInput="$$createCustomer.country_id$$" stepKey="checkCustomerCountry" />
-        <see selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="$$createCustomer.state$$" stepKey="checkCustomerRegion" />
-        <see selector="{{CheckoutCartSummarySection.postcode}}" userInput="$$createCustomer.postcode$$" stepKey="checkCustomerPostcode" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
+        <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
+        <assertEquals  message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
+            <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
+            <actualResult type="variable">grabTextPostCode</actualResult>
+        </assertEquals>
         <see selector="{{CheckoutCartSummarySection.amountFPT}}" userInput="$10" stepKey="checkFPTAmountCA" />
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$0.83" stepKey="checkTaxAmountCA" />
         <scrollTo selector="{{CheckoutCartSummarySection.taxSummary}}" stepKey="scrollToTaxSummary" />

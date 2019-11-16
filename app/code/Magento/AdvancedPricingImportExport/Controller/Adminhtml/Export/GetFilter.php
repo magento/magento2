@@ -5,12 +5,14 @@
  */
 namespace Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
-class GetFilter extends ExportController
+class GetFilter extends ExportController implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Get grid-filter of entity attributes action.
@@ -37,10 +39,10 @@ class GetFilter extends ExportController
                 );
                 return $resultLayout;
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent.'));
+            $this->messageManager->addErrorMessage(__('Please correct the data sent.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

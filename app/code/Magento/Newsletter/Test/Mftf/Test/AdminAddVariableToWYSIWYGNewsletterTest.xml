@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddVariableToWYSIWYGNewsletterTest">
         <annotations>
             <features value="Newsletter"/>
@@ -15,6 +15,7 @@
             <title value="Admin should be able to add variable to WYSIWYG Editor of Newsletter"/>
             <description value="Admin should be able to add variable to WYSIWYG Editor Newsletter"/>
             <testCaseId value="MAGETWO-84379"/>
+            <severity value="AVERAGE"/>
         </annotations>
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
@@ -48,9 +49,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForPageLoad3"/>
         <!--see Insert Variable button disabled-->
         <see selector="{{VariableSection.InsertVariableBtnDisabled}}" userInput="Insert Variable" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{VariableSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
-        <!--see 4 colums-->
+        <!--see 4 columns-->
         <see selector="{{VariableSection.ColName('Select')}}" userInput="Select" stepKey="selectCol" />
         <see selector="{{VariableSection.ColName('Variable Name')}}" userInput="Variable Name" stepKey="variableCol" />
         <see selector="{{VariableSection.ColName('Type')}}" userInput="Type" stepKey="typeCol" />
@@ -82,8 +83,7 @@
         <waitForPageLoad stepKey="waitForPageLoad9" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview1" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow1"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe1" />
-        <waitForPageLoad stepKey="waitForPageLoad7"/>
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
         <!--see Default Variable on Storefront-->
         <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
         <!--see Custom Variable on Storefront-->
@@ -94,8 +94,7 @@
         <amOnPage url="{{NewsletterTemplateGrid.url}}" stepKey="amOnTemplateGrid" />
         <click selector="{{NewsletterWYSIWYGSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview2" />
         <switchToWindow userInput="action_window" stepKey="switchToWindow2"/>
-        <switchToIFrame  userInput="preview_iframe" stepKey="switchToIframe2" />
-        <wait time="10" stepKey="waitForPageLoad8"/>
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframeAfterVariableDelete"/>
         <!--see custom variable blank-->
         <dontSee userInput="{{customVariable.html}}" stepKey="dontSeeCustomVariableName" />
         <closeTab stepKey="closeTab"/>

@@ -70,7 +70,8 @@ class UploadTest extends \PHPUnit\Framework\TestCase
             $this->context,
             $this->fileUploaderFactory,
             $this->addressMetadataService,
-            $this->logger
+            $this->logger,
+            'address'
         );
     }
 
@@ -104,27 +105,27 @@ class UploadTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $attributeCode = 'attribute_code';
+        $attributeCode = 'file_address_attribute';
+        $resultFileSize = 20000;
+        $resultFileName = 'text.txt';
+        $resultType = 'text/plain';
 
         $_FILES = [
-            'address' => [
-                'name' => [
-                    'new_0' => [
-                        $attributeCode => 'filename',
-                    ],
-                ],
+            $attributeCode => [
+                'name' => $resultFileName,
+                'type' => $resultType,
+                'size' => $resultFileSize
             ],
         ];
 
-        $resultFileName = '/filename.ext1';
         $resultFilePath = 'filepath';
         $resultFileUrl = 'viewFileUrl';
 
         $result = [
             'name' => $resultFileName,
-            'file' => $resultFileName,
-            'path' => $resultFilePath,
-            'tmp_name' => $resultFilePath . $resultFileName,
+            'type' => $resultType,
+            'size' => $resultFileSize,
+            'tmp_name' => $resultFilePath . '/' . $resultFileName,
             'url' => $resultFileUrl,
         ];
 
@@ -173,15 +174,16 @@ class UploadTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteWithErrors()
     {
-        $attributeCode = 'attribute_code';
+        $attributeCode = 'file_address_attribute';
+        $resultFileSize = 20000;
+        $resultFileName = 'text.txt';
+        $resultType = 'text/plain';
 
         $_FILES = [
-            'address' => [
-                'name' => [
-                    'new_0' => [
-                        $attributeCode => 'filename',
-                    ],
-                ],
+            $attributeCode => [
+                'name' => $resultFileName,
+                'type' => $resultType,
+                'size' => $resultFileSize
             ],
         ];
 

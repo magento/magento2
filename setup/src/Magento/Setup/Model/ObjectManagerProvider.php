@@ -76,10 +76,9 @@ class ObjectManagerProvider
     {
         /** @var CommandListInterface $commandList */
         $commandList = $this->objectManager->create(CommandListInterface::class);
+        $application = $this->serviceLocator->get(Application::class);
         foreach ($commandList->getCommands() as $command) {
-            $command->setApplication(
-                $this->serviceLocator->get(Application::class)
-            );
+            $application->add($command);
         }
     }
 

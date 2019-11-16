@@ -12,7 +12,7 @@ use Magento\Framework\Api\ArrayObjectSearch;
 class Date extends AbstractData
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
@@ -21,7 +21,7 @@ class Date extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -95,21 +95,15 @@ class Date extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function compactValue($value)
     {
-        if ($value !== false) {
-            if (empty($value)) {
-                $value = null;
-            }
-            return $value;
-        }
-        return false;
+        return $value;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function restoreValue($value)
     {
@@ -117,7 +111,7 @@ class Date extends AbstractData
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
     {

@@ -13,6 +13,8 @@ namespace Magento\AsynchronousOperations\Api\Data;
  */
 interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterface
 {
+    const USER_TYPE = 'user_type';
+
     /**
      * Retrieve existing extension attributes object.
      *
@@ -31,4 +33,19 @@ interface BulkSummaryInterface extends \Magento\Framework\Bulk\BulkSummaryInterf
     public function setExtensionAttributes(
         \Magento\AsynchronousOperations\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
     );
+
+    /**
+     * Get user type
+     *
+     * @return int
+     */
+    public function getUserType();
+
+    /**
+     * Set user type
+     *
+     * @param int $userType
+     * @return $this
+     */
+    public function setUserType($userType);
 }

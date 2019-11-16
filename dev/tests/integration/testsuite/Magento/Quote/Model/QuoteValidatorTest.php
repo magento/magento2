@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -55,7 +57,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         )->setValue(
             'general/country/allow',
             'US',
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $quote = $this->getQuote();
         $quote->getShippingAddress()->setCountryId('AF');
@@ -133,6 +135,19 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Checks a case when the default website has country restrictions and the quote created
+     * for the another website with different country restrictions.
+     *
+     * @magentoDataFixture Magento/Quote/Fixtures/quote_sec_website.php
+     * @magentoDbIsolation disabled
+     */
+    public function testValidateBeforeSubmit()
+    {
+        $quote = $this->getQuoteById('0000032134');
+        $this->quoteValidator->validateBeforeSubmit($quote);
+    }
+
+    /**
      * @return Quote
      */
     private function getQuote(): Quote
@@ -184,5 +199,26 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
         $quoteRepository->save($quote);
 
         return $quote;
+    }
+
+    /**
+     * Gets quote entity by reserved order id.
+     *
+     * @param string $reservedOrderId
+     * @return Quote
+     */
+    private function getQuoteById(string $reservedOrderId): Quote
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
+            ->create();
+
+        /** @var CartRepositoryInterface $repository */
+        $repository = Bootstrap::getObjectManager()->get(CartRepositoryInterface::class);
+        $items = $repository->getList($searchCriteria)
+            ->getItems();
+
+        return array_pop($items);
     }
 }

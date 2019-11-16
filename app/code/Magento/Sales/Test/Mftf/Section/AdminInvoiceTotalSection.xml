@@ -7,10 +7,14 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminInvoiceTotalSection">
         <element name="subtotalRow" type="text" selector=".order-subtotal-table tbody > tr:nth-of-type({{row}}) td span.price" parameterized="true"/>
         <element name="total" type="text" selector="//table[contains(@class,'order-subtotal-table')]/tbody/tr/td[contains(text(), '{{total}}')]/following-sibling::td/span/span[contains(@class, 'price')]" parameterized="true"/>
         <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
+        <element name="invoiceComment" type="textarea" selector="[name='invoice[comment_text]']" timeout="30"/>
+        <element name="itemQty" type="text" selector="td.col-qty"/>
+        <element name="itemName" type="text" selector=".col-product .product-title"/>
+        <element name="itemTotalPrice" type="text" selector=".col-total .price"/>
     </section>
 </sections>

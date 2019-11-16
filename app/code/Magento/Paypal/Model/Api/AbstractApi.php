@@ -454,6 +454,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
 
     /**
      * Prepare shipping options request
+     *
      * Returns false if there are no shipping options
      *
      * @param array &$request
@@ -520,7 +521,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
     }
 
     /**
-     * region_id workaround: PayPal requires state code, try to find one in the address
+     * Region_id workaround: PayPal requires state code, try to find one in the address
      *
      * @param \Magento\Framework\DataObject $address
      * @return string
@@ -577,6 +578,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
 
     /**
      * Filter qty in API calls
+     *
      * Paypal note: The value for quantity must be a positive integer. Null, zero, or negative numbers are not allowed.
      *
      * @param float|string|int $value
@@ -584,7 +586,7 @@ abstract class AbstractApi extends \Magento\Framework\DataObject
      */
     protected function _filterQty($value)
     {
-        return intval($value);
+        return (int)$value;
     }
 
     /**

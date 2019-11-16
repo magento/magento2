@@ -7,10 +7,14 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormActionSection">
         <element name="SubmitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
         <element name="Cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
         <element name="CreateNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
+        <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="30"/>
+        <element name="cancel" type="button" selector="#reset_order_top_button" timeout="30"/>
+        <element name="createNewCustomer" type="button" selector="#order-customer-selector .actions button.primary" timeout="30"/>
+        <element name="pageHeader" type="text" selector=".page-header.row"/>
     </section>
 </sections>

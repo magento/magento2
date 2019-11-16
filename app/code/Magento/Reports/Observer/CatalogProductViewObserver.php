@@ -6,9 +6,11 @@
 namespace Magento\Reports\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Reports\Model\Event;
 
 /**
  * Reports Event observer model
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogProductViewObserver implements ObserverInterface
 {
@@ -38,24 +40,32 @@ class CatalogProductViewObserver implements ObserverInterface
     protected $eventSaver;
 
     /**
+     * @var \Magento\Reports\Model\ReportStatus
+     */
+    private $reportStatus;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param EventSaver $eventSaver
+     * @param \Magento\Reports\Model\ReportStatus $reportStatus
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        EventSaver $eventSaver
+        EventSaver $eventSaver,
+        \Magento\Reports\Model\ReportStatus $reportStatus
     ) {
         $this->_storeManager = $storeManager;
         $this->_productIndxFactory = $productIndxFactory;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
         $this->eventSaver = $eventSaver;
+        $this->reportStatus = $reportStatus;
     }
 
     /**
@@ -66,6 +76,10 @@ class CatalogProductViewObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        if (!$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_VIEW)) {
+            return;
+        }
+
         $productId = $observer->getEvent()->getProduct()->getId();
 
         $viewData['product_id'] = $productId;
@@ -78,6 +92,6 @@ class CatalogProductViewObserver implements ObserverInterface
 
         $this->_productIndxFactory->create()->setData($viewData)->save()->calculate();
 
-        $this->eventSaver->save(\Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW, $productId);
+        $this->eventSaver->save(Event::EVENT_PRODUCT_VIEW, $productId);
     }
 }

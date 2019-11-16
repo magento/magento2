@@ -43,6 +43,11 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     protected $node;
 
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
+     */
+    private $treeResourceFactoryMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -59,6 +64,12 @@ class TreeTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\StoreManagerInterface::class
         )->disableOriginalConstructor()->getMock();
 
+        $this->treeResourceFactoryMock = $this->createMock(
+            \Magento\Catalog\Model\ResourceModel\Category\TreeFactory::class
+        );
+        $this->treeResourceFactoryMock->method('create')
+            ->willReturn($this->categoryTreeMock);
+
         $methods = ['create'];
         $this->treeFactoryMock =
             $this->createPartialMock(\Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory::class, $methods);
@@ -70,7 +81,8 @@ class TreeTest extends \PHPUnit\Framework\TestCase
                     'categoryCollection' => $this->categoryCollection,
                     'categoryTree' => $this->categoryTreeMock,
                     'storeManager' => $this->storeManagerMock,
-                    'treeFactory' => $this->treeFactoryMock
+                    'treeFactory' => $this->treeFactoryMock,
+                    'treeResourceFactory' => $this->treeResourceFactoryMock,
                 ]
             );
     }

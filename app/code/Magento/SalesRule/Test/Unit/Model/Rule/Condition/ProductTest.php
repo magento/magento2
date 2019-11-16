@@ -247,10 +247,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param boolean $isValid
      * @param string $conditionValue
      * @param string $operator
-     * @param double $productPrice
+     * @param string $productPrice
      * @dataProvider localisationProvider
      */
-    public function testQuoteLocaleFormatPrice($isValid, $conditionValue, $operator = '>=', $productPrice = 2000.00)
+    public function testQuoteLocaleFormatPrice($isValid, $conditionValue, $operator = '>=', $productPrice = '2000.00')
     {
         $attr = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
@@ -298,8 +298,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($product);
 
-        $this->model->setAttribute('quote_item_price')
-            ->setOperator($operator);
+        $this->model->setAttribute('quote_item_price');
+        $this->model->setData('operator', $operator);
 
         $this->assertEquals($isValid, $this->model->setValue($conditionValue)->validate($item));
     }

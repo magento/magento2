@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddWidgetToWYSIWYGWithCatalogCategoryLinkTypeTest">
         <annotations>
             <features value="Cms"/>
@@ -37,7 +37,7 @@
         <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Category Link" stepKey="selectCatalogCategoryLink" />
@@ -46,7 +46,9 @@
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Category Link Block Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectCategoryBtn" />
         <waitForLoadingMaskToDisappear stepKey="wait3"/>
-        <click userInput="$$createPreReqCategory.name$$" stepKey="selectPreCreateCategory" />
+        <click selector="{{AdminCategorySidebarTreeSection.expandRootCategory}}" stepKey="expandRootCategory" />
+        <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
+        <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCreateCategory" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectCategoryTitle}}" stepKey="waitForSlideoutCloses1" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
         <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses2" />
@@ -62,9 +64,19 @@
         <see userInput="Hello CMS Page!" stepKey="seeContent"/>
         <!--see widget on Storefront-->
         <see userInput="$$createPreReqCategory.name$$" stepKey="seeCategoryLink"/>
+        <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage2"/>
+        <waitForPageLoad stepKey="wait6" />
+        <see userInput="Hello CMS Page!" stepKey="seeContent2"/>
+        <!--see widget on Storefront-->
+        <grabAttributeFrom selector=".widget a" userInput="href" stepKey="dataHref" />
+        <assertRegExp expected="|$$createPreReqCategory.name$$.html|i"
+                      expectedType="string" actual="$dataHref" actualType="variable"
+                      stepKey="seeProductLinkInCategory"/>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
     </test>

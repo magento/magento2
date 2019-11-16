@@ -6,8 +6,8 @@
 namespace Magento\Store\Model\Argument\Interpreter;
 
 use Magento\Framework\Data\Argument\InterpreterInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreRepository;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Interpreter that builds Service URL by input path and optional parameters
@@ -25,9 +25,9 @@ class ServiceUrl implements InterpreterInterface
     private $service;
 
     /**
-     * @var StoreResolverInterface
+     * @var StoreManagerInterface
      */
-    private $storeResolver;
+    private $storeManager;
 
     /**
      * @var string
@@ -41,21 +41,21 @@ class ServiceUrl implements InterpreterInterface
 
     /**
      * @param \Magento\Framework\Url $url
-     * @param StoreResolverInterface $storeResolver
+     * @param StoreManagerInterface $storeManager
      * @param StoreRepository $storeRepository
      * @param string $service
      * @param string $version
      */
     public function __construct(
         \Magento\Framework\Url $url,
-        StoreResolverInterface $storeResolver,
+        StoreManagerInterface $storeManager,
         StoreRepository $storeRepository,
         $service = "rest",
         $version = "V1"
     ) {
         $this->url = $url;
         $this->service = $service;
-        $this->storeResolver = $storeResolver;
+        $this->storeManager = $storeManager;
         $this->version = $version;
         $this->storeRepository = $storeRepository;
     }
@@ -67,14 +67,16 @@ class ServiceUrl implements InterpreterInterface
      */
     private function getServiceUrl()
     {
-        $store = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
+        $store = $this->storeRepository->getById($this->storeManager->getStore()->getId());
         return $this->url->getUrl(
             $this->service . "/" . $store->getCode() . "/" . $this->version
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Compute and return effective value of an argument
+     *
+     * @param array $data
      * @return string
      * @throws \InvalidArgumentException
      */

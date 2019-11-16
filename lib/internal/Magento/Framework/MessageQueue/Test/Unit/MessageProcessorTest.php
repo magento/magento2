@@ -75,7 +75,7 @@ class MessageProcessorTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willReturn([]);
         $this->messageStatusProcessor->expects($this->exactly(2))->method('acknowledgeMessages');
-        $mergedMessage = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $mergedMessage = $this->getMockBuilder(\Magento\Framework\Api\CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $message = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
@@ -116,7 +116,7 @@ class MessageProcessorTest extends \PHPUnit\Framework\TestCase
         $exception = new \Magento\Framework\MessageQueue\ConnectionLostException(__('Exception Message'));
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willThrowException($exception);
         $this->messageStatusProcessor->expects($this->once())->method('acknowledgeMessages');
-        $mergedMessage = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $mergedMessage = $this->getMockBuilder(\Magento\Framework\Api\CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $message = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
@@ -158,7 +158,7 @@ class MessageProcessorTest extends \PHPUnit\Framework\TestCase
         $configuration->expects($this->atLeastOnce())->method('getHandlers')->willThrowException($exception);
         $this->messageStatusProcessor->expects($this->once())->method('acknowledgeMessages');
         $this->messageStatusProcessor->expects($this->atLeastOnce())->method('rejectMessages');
-        $mergedMessage = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $mergedMessage = $this->getMockBuilder(\Magento\Framework\Api\CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $message = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCorrectnessInvoicedItemInBundleProductTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Product invoice"/>
+            <title value="Check correctness of invoiced items in a Bundle Product"/>
+            <description value="Check correctness of invoiced items in a Bundle Product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11059"/>
+            <useCaseId value="MC-10969"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!--Create category and simple product-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Create bundle product-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+                <field key="qty">10</field>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+
+            <actionGroup ref="logout" stepKey="logOut"/>
+        </after>
+
+        <!--Complete Bundle product creation-->
+        <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+        <!--Go to bundle product page-->
+        <amOnPage url="{{StorefrontProductPage.url($$createCategory.name$$)}}" stepKey="navigateToBundleProductPage"/>
+
+        <!--Place order bundle product with 10 options-->
+        <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="product" value="$$createBundleProduct$$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage" />
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <!--Go to order page submit invoice-->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
+        <actionGroup ref="goToInvoiceIntoOrder" stepKey="goToInvoiceIntoOrderPage"/>
+        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="5" stepKey="ChangeQtyToInvoice"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded"/>
+        <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
+
+        <!--Verify invoiced items qty in ship tab-->
+        <actionGroup ref="goToShipmentIntoOrder" stepKey="goToShipment"/>
+        <grabTextFrom selector="{{AdminShipmentItemsSection.itemQtyInvoiced('1')}}" stepKey="grabInvoicedItemQty"/>
+        <assertEquals expected="5" expectedType="string" actual="$grabInvoicedItemQty" stepKey="assertInvoicedItemsQty"/>
+    </test>
+</tests>

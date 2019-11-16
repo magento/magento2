@@ -167,6 +167,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
             'context_group',
             1,
             5,
+            10,
             'some_serialized_conditions',
             json_encode('request_params'),
             'test_template',
@@ -274,6 +275,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
                 'addAttributeToSelect',
                 'addUrlRewrite',
                 'addStoreFilter',
+                'addAttributeToSort',
                 'setPageSize',
                 'setCurPage',
                 'distinct'
@@ -288,6 +290,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
         $collection->expects($this->once())->method('addUrlRewrite')->willReturnSelf();
         $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSort')->with('created_at', 'desc')->willReturnSelf();
         $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
         $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
         $collection->expects($this->once())->method('distinct')->willReturnSelf();

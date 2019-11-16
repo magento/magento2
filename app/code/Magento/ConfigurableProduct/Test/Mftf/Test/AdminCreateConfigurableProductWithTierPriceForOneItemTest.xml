@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithTierPriceForOneItemTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Create configurable product with tier price for one item"/>
+            <description value="Admin should be able to create configurable product with tier price for one item"/>
+            <testCaseId value="MC-13695"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create attribute with 2 options to be used in children products -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionOne"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOptionTwo"/>
+            </createData>
+
+            <!--Add tier price in one product -->
+            <createData entity="tierProductPrice" stepKey="addTierPrice">
+            <requiredEntity createDataKey="createFirstSimpleProduct" />
+            </createData>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete created data -->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Create configurable product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitProductGridPageLoad"/>
+        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Fill configurable product values -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Create product configurations and add attribute and select all options -->
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+         <!-- Add associated products to configurations grid -->
+        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addFirstSimpleProduct">
+            <argument name="sku" value="$$createFirstSimpleProduct.sku$$"/>
+            <argument name="name" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addSecondSimpleProduct">
+            <argument name="sku" value="$$createSecondSimpleProduct.sku$$"/>
+            <argument name="name" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
+        </actionGroup>
+
+        <!-- Save configurable product -->
+        <actionGroup ref="saveProductForm" stepKey="saveConfigurableProduct"/>
+
+        <!-- Assert product tier price on product page -->
+        <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <selectOption userInput="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage">
+            <expectedResult type="string">Buy {{tierProductPrice.quantity}} for ${{tierProductPrice.price}} each and save 27%</expectedResult>
+            <actualResult type="variable">tierPriceText</actualResult>
+        </assertEquals>
+    </test>
+</tests>

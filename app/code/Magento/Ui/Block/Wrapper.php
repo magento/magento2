@@ -10,8 +10,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Model\UiComponentGenerator;
 
 /**
- * This block is wrapper for UI component, this done in order to save compatability with old
- * widgets mechanism
+ * This block is wrapper for UI component, this done in order to save compatibility with old widgets mechanism
  */
 class Wrapper extends \Magento\Framework\View\Element\Template
 {

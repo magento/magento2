@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var $block Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main */
 ?>
 <div class="attribute-set">
 
@@ -31,11 +30,11 @@
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?= /* @escapeNotVerified */ __('Groups') ?></span>
+            <span class="title"><?= $block->escapeHtml(__('Groups')) ?></span>
         </div>
-        <?php if (!$block->getIsReadOnly()): ?>
-            <?= /* @escapeNotVerified */ $block->getAddGroupButton() ?>&nbsp;<?= /* @escapeNotVerified */ $block->getDeleteGroupButton() ?>
-            <p class="note-block"><?= /* @escapeNotVerified */ __('Double click on a group to rename it.') ?></p>
+        <?php if (!$block->getIsReadOnly()) :?>
+            <?= /* @noEscape */ $block->getAddGroupButton() ?>&nbsp;<?= /* @noEscape */ $block->getDeleteGroupButton() ?>
+            <p class="note-block"><?= $block->escapeHtml(__('Double click on a group to rename it.')) ?></p>
         <?php endif; ?>
 
         <?= $block->getSetsFilterHtml() ?>
@@ -43,7 +42,7 @@
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?= /* @escapeNotVerified */ __('Unassigned Attributes') ?></span>
+            <span class="title"><?= $block->escapeHtml(__('Unassigned Attributes')) ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
         <script id="ie-deferred-loader" defer="defer" src="//:"></script>
@@ -58,8 +57,8 @@
                 ], function(jQuery, prompt, alert){
 
                 //<![CDATA[
-                var allowDragAndDrop = <?= /* @escapeNotVerified */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
-                var canEditGroups = <?= /* @escapeNotVerified */ ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+                var allowDragAndDrop = <?= ($block->getIsReadOnly() ? 'false' : 'true') ?>;
+                var canEditGroups = <?=  ($block->getIsReadOnly() ? 'false' : 'true') ?>;
 
                 var TreePanels = function() {
                     // shorthand
@@ -80,13 +79,13 @@
                             // set the root node
                             this.root = new Ext.tree.TreeNode({
                                 text: 'ROOT',
-                                allowDrug:false,
+                                allowDrag:false,
                                 allowDrop:true,
                                 id:'1'
                             });
 
                             tree.setRootNode(this.root);
-                            buildCategoryTree(this.root, <?= /* @escapeNotVerified */ $block->getGroupTreeJson() ?>);
+                            buildCategoryTree(this.root, <?= /* @noEscape */ $block->getGroupTreeJson() ?>);
                             // render the tree
                             tree.render();
                             this.root.expand(false, false);
@@ -94,7 +93,7 @@
 
                             this.ge = new Ext.tree.TreeEditor(tree, {
                                 allowBlank:false,
-                                blankText:'<?= /* @escapeNotVerified */ __('A name is required.') ?>',
+                                blankText:'<?= $block->escapeJs(__('A name is required.')) ?>',
                                 selectOnFocus:true,
                                 cls:'folder'
                             });
@@ -125,7 +124,7 @@
                                 id:'free'
                             });
                             tree2.setRootNode(this.root2);
-                            buildCategoryTree(this.root2, <?= /* @escapeNotVerified */ $block->getAttributeTreeJson() ?>);
+                            buildCategoryTree(this.root2, <?= /* @noEscape */ $block->getAttributeTreeJson() ?>);
 
                             this.root2.addListener('beforeinsert', editSet.rightBeforeInsert);
                             this.root2.addListener('beforeappend', editSet.rightBeforeAppend);
@@ -188,20 +187,36 @@
                                 for( j in config[i].children ) {
                                     if(config[i].children[j].id) {
                                         newNode = new Ext.tree.TreeNode(config[i].children[j]);
-                                        node.appendChild(newNode);
-                                        newNode.addListener('click', editSet.unregister);
+
+                                        if (typeof newNode.ui.onTextChange === 'function') {
+                                            newNode.ui.onTextChange = function (_3, _4, _5) {
+                                                if (this.rendered) {
+                                                    this.textNode.innerText = _4;
+                                                }
+                                            }
+                                        }
                                     }
+                                    node.appendChild(newNode);
+                                    newNode.addListener('click', editSet.unregister);
                                 }
                             }
                         }
                     }
                 }
 
-                editSet = function() {
-                    return {
-                        register : function(node) {
-                            editSet.currentNode = node;
-                        },
+
+                    editSet = function () {
+                        return {
+                            register: function (node) {
+                                editSet.currentNode = node;
+                                if (typeof node.ui.onTextChange === 'function') {
+                                    node.ui.onTextChange = function (_3, _4, _5) {
+                                        if (this.rendered) {
+                                            this.textNode.innerText = _4;
+                                        }
+                                    }
+                                }
+                            },
 
                         unregister : function() {
                             editSet.currentNode = false;
@@ -264,8 +279,8 @@
 
                         addGroup : function() {
                             prompt({
-                                title: "<?= /* @escapeNotVerified */ __('Add New Group') ?>",
-                                content: "<?= /* @escapeNotVerified */ __('Please enter a new group name.') ?>",
+                                title: "<?= $block->escapeJs($block->escapeHtml(__('Add New Group'))) ?>",
+                                content: "<?= $block->escapeJs($block->escapeHtml(__('Please enter a new group name.'))) ?>",
                                 value: "",
                                 validation: true,
                                 validationRules: ['required-entry'],
@@ -292,6 +307,14 @@
                                             allowDrop : true,
                                             allowDrag : true
                                         });
+
+                                        if (typeof newNode.ui.onTextChange === 'function') {
+                                            newNode.ui.onTextChange = function (_3, _4, _5) {
+                                                if (this.rendered) {
+                                                    this.textNode.innerText = _4;
+                                                }
+                                            }
+                                        }
 
                                         TreePanels.root.appendChild(newNode);
                                         newNode.addListener('beforemove', editSet.groupBeforeMove);
@@ -322,7 +345,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?= /* @escapeNotVerified */ __('An attribute group named "/name/" already exists.') ?>';
+                                    errorText = '<?= $block->escapeJs(__('An attribute group named "/name/" already exists.')) ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
@@ -350,7 +373,7 @@
                                 editSet.req.form_key = FORM_KEY;
                             }
                             var req = {data : Ext.util.JSON.encode(editSet.req)};
-                            var con = new Ext.lib.Ajax.request('POST', '<?= /* @escapeNotVerified */ $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
+                            var con = new Ext.lib.Ajax.request('POST', '<?= $block->escapeJs($block->escapeUrl($block->getMoveUrl())) ?>', {success:editSet.success,failure:editSet.failure}, req);
                         },
 
                         success : function(o) {
@@ -425,7 +448,7 @@
                         rightRemove : function(tree, nodeThis, node) {
                             if( nodeThis.firstChild == null && node.id != 'empty' ) {
                                 var newNode = new Ext.tree.TreeNode({
-                                    text : '<?= /* @escapeNotVerified */ __('Empty') ?>',
+                                    text : '<?= $block->escapeJs(__('Empty')) ?>',
                                     id : 'empty',
                                     cls : 'folder',
                                     is_user_defined : 1,

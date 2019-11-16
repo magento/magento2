@@ -7,14 +7,20 @@
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/DataGenerator/etc/dataProfileSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultVariable" type="cms_page">
         <data key="city"> Austin </data>
     </entity>
     <entity name="customVariable" type="cms_page">
-        <data key="code" unique="suffix">variale-code</data>
+        <data key="code" unique="suffix">variable-code</data>
         <data key="name">Test Variable</data>
         <data key="html"> Sample Variable </data>
         <data key="plain">variable-plain-</data>
+    </entity>
+    <entity name="SampleVariable">
+        <data key="code" unique="suffix">variable-code-</data>
+        <data key="name">Test Sample Variable</data>
+        <data key="html">Test Sample Variable HTML value</data>
+        <data key="plain">Test Sample Variable PLAIN value</data>
     </entity>
 </entities>

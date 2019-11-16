@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Test\TestCase;
 
 use Magento\Mtf\TestCase\Scenario;
+use Magento\Mtf\Util\Command\Cli\EnvWhitelist;
 
 /**
  * Preconditions:
@@ -44,12 +45,40 @@ class OnePageCheckoutOfflinePaymentMethodsTest extends Scenario
     /* end tags */
 
     /**
+     * DomainWhitelist CLI
+     *
+     * @var EnvWhitelist
+     */
+    private $envWhitelist;
+
+    /**
+     * Perform needed injections
+     *
+     * @param EnvWhitelist $envWhitelist
+     */
+    public function __inject(EnvWhitelist $envWhitelist)
+    {
+        $this->envWhitelist = $envWhitelist;
+    }
+
+    /**
      * Runs one page checkout test.
      *
      * @return void
      */
     public function test()
     {
+        $this->envWhitelist->addHost('example.com');
         $this->executeScenario();
+    }
+
+    /**
+     * Clean data after running test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->envWhitelist->removeHost('example.com');
     }
 }

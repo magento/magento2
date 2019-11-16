@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NewProductsListWidgetBundleProductTest" extends="NewProductsListWidgetTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="New products list widget"/>
+            <title value="Admin should be able to set Bundle Product as new so that it shows up in the Catalog New Products List Widget"/>
+            <description value="Admin should be able to set Bundle Product as new so that it shows up in the Catalog New Products List Widget"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-123"/>
+            <group value="Bundle"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- A Cms page containing the New Products Widget gets created here via extends -->
+
+        <!-- Create a product to appear in the widget, fill in basic info first -->
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
+        <waitForPageLoad stepKey="waitForProductList"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addBundleProduct}}" stepKey="clickAddBundleProduct"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
+        <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>
+
+        <!-- and then configure bundled items for this product -->
+
+        <scrollTo selector="{{AdminProductFormBundleSection.addOption}}" stepKey="scrollToAddOptionButton"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+        <waitForPageLoad stepKey="waitForOptions"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="MFTF Test Bundle 1" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="checkbox" stepKey="selectInputType"/>
+        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="filterProductGridBySku" stepKey="filterBundleProductOptions2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="1" stepKey="fillProductDefaultQty1"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="1" stepKey="fillProductDefaultQty2"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+
+        <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
+
+        <!-- Check for product on the CMS page with the New Products widget -->
+
+        <amOnPage url="{{_newDefaultCmsPage.identifier}}" stepKey="amOnCmsPage"/>
+        <waitForPageLoad stepKey="waitForCmsPage"/>
+        <see selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="{{_defaultProduct.name}}" stepKey="seeProductName"/>
+    </test>
+</tests>

@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAddDefaultImageGroupedProductTest">
         <annotations>
             <features value="GroupedProduct"/>
@@ -29,6 +29,9 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="deleteProductBySku" stepKey="deleteGroupedProduct">
+                <argument name="sku" value="{{GroupedProduct.sku}}"/>
+            </actionGroup>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>

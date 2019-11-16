@@ -6,10 +6,12 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontBundleProductActionSection">
-        <element name="customizeAndAddToCartButton" type="button" selector="#bundle-slide"/>
+        <element name="customizeAndAddToCartButton" type="button" selector="#bundle-slide" timeout="30"/>
         <element name="quantityField" type="input" selector="#qty"/>
-        <element name="addToCartButton" type="button" selector="#product-addtocart-button"/>
+        <element name="addToCartButton" type="button" selector="#product-addtocart-button" timeout="30"/>
+        <element name="dropdownSelectOption" type="select" selector="//div[@class='control']/select"/>
+        <element name="dropdownProductSelection" type="select" selector="//div[@class='control']/select/option[contains(.,'{{productName}}')]" parameterized="true"/>
     </section>
 </sections>

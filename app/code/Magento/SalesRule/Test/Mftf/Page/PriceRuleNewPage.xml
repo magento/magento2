@@ -4,7 +4,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<pages xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/PageObject.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<pages xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <page name="PriceRuleNewPage" url="sales_rule/promo_quote/new/" area="admin" module="Magento_SalesRule">
         <section name="PriceRuleConditionsSection"/>
     </page>

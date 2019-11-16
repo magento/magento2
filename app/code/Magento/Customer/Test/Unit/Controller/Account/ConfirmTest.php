@@ -203,10 +203,9 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo('key'), false)
             ->will($this->returnValue($key));
 
-        $exception = new \Exception('Bad request.');
         $this->messageManagerMock->expects($this->once())
-            ->method('addException')
-            ->with($this->equalTo($exception), $this->equalTo('There was an error confirming the account'));
+            ->method('addErrorMessage')
+            ->with(__('Bad request.'));
 
         $testUrl = 'http://example.com';
         $this->urlMock->expects($this->once())
@@ -255,10 +254,12 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['id', false, $customerId],
-                ['key', false, $key],
-            ]);
+            ->willReturnMap(
+                [
+                    ['id', false, $customerId],
+                    ['key', false, $key],
+                ]
+            );
 
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
@@ -372,11 +373,13 @@ class ConfirmTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturnMap([
-                ['id', false, $customerId],
-                ['key', false, $key],
-                ['back_url', false, $backUrl],
-            ]);
+            ->willReturnMap(
+                [
+                    ['id', false, $customerId],
+                    ['key', false, $key],
+                    ['back_url', false, $backUrl],
+                ]
+            );
 
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')

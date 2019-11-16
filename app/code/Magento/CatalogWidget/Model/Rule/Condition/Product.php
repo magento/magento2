@@ -9,7 +9,9 @@
  */
 namespace Magento\CatalogWidget\Model\Rule\Condition;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Store\Model\Store;
 
 /**
  * Class Product
@@ -77,17 +79,22 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadAttributeOptions()
     {
         $productAttributes = $this->_productResource->loadAllAttributes()->getAttributesByCode();
+        $productAttributes = array_filter(
+            $productAttributes,
+            function ($attribute) {
+                return $attribute->getFrontendLabel() &&
+                    $attribute->getFrontendInput() !== 'text' &&
+                    $attribute->getAttributeCode() !== ProductInterface::STATUS;
+            }
+        );
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            if (!$attribute->getFrontendLabel() || $attribute->getFrontendInput() == 'text') {
-                continue;
-            }
             $attributes[$attribute->getAttributeCode()] = $attribute->getFrontendLabel();
         }
 
@@ -100,7 +107,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param array &$attributes
      * @return void
@@ -158,6 +165,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Adds Attributes that belong to Global Scope
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
@@ -194,6 +203,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Adds Attributes that don't belong to Global Scope
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return $this
@@ -202,7 +213,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
         \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
     ) {
-        $storeId =  $this->storeManager->getStore()->getId();
+        $storeId = $this->storeManager->getStore()->getId();
         $values = $collection->getAllAttributeValues($attribute);
         $validEntities = [];
         if ($values) {
@@ -212,7 +223,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                         $validEntities[] = $entityId;
                     }
                 } else {
-                    if ($this->validateAttribute($storeValues[\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
+                    if (isset($storeValues[Store::DEFAULT_STORE_ID]) &&
+                        $this->validateAttribute($storeValues[Store::DEFAULT_STORE_ID])
+                    ) {
                         $validEntities[] = $entityId;
                     }
                 }
@@ -230,7 +243,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return string
      */
@@ -251,7 +264,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this

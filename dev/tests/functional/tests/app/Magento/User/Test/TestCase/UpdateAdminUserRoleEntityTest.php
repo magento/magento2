@@ -102,6 +102,8 @@ class UpdateAdminUserRoleEntityTest extends Injectable
         $this->adminAuthLogin->open();
         $this->adminAuthLogin->getLoginBlock()->fill($user);
         $this->adminAuthLogin->getLoginBlock()->submit();
+        $this->adminAuthLogin->waitForHeaderBlock();
+        $this->adminAuthLogin->dismissAdminUsageNotification();
         $this->rolePage->open();
         $this->rolePage->getRoleGrid()->searchAndOpen($filter);
         $this->userRoleEditRole->getRoleFormTabs()->fill($role);
@@ -121,6 +123,11 @@ class UpdateAdminUserRoleEntityTest extends Injectable
      */
     public function tearDown()
     {
+        sleep(3);
+        $modalMessage = $this->dashboard->getModalMessage();
+        if ($modalMessage->isVisible()) {
+            $modalMessage->acceptAlert();
+        }
         $this->dashboard->getAdminPanelHeader()->logOut();
     }
 }

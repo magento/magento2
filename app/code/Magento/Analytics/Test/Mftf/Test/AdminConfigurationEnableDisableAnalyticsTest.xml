@@ -6,7 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigurationEnableDisableAnalyticsTest">
         <annotations>
             <features value="Analytics"/>
@@ -16,32 +16,26 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-66465"/>
             <group value="analytics"/>
-            <skip>
-                <issueId value="MAGETWO-90659"/>
-            </skip>
         </annotations>
         <after>
-            <amOnPage stepKey="amOnLogoutPage" url="admin/admin/auth/logout/"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
-        <!--Goto admin stores configure page -->
-        <amOnPage stepKey="amOnAdminConfig" url="{{AdminConfigPage.url}}"/>
-        <!--Enable Advanced Reporting-->
-        <click stepKey="clickAdvancedReportingConfigMenu" selector="{{AdminConfigSection.advancedReportingMenuItem}}"/>
-        <see stepKey="seeAdvancedReportingServiceLabelEnabled" selector="{{AdminConfigSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service"/>
-        <selectOption stepKey="selectAdvancedReportingServiceEnabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Enable"/>
-        <see stepKey="seeAdvancedReportingIndustryLabel" selector="{{AdminConfigSection.advancedReportingIndustryLabel}}" userInput="Industry"/>
-        <selectOption stepKey="selectAdvancedReportingIndustry" selector="{{AdminConfigSection.advancedReportingIndustry}}" userInput="Apps and Games"/>
-        <click stepKey="clickSaveConfigButtonEnabled" selector="{{AdminConfigSection.saveButton}}"/>
-        <see stepKey="seeSaveConfigurationMessageEnabled" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
-        <see stepKey="seeAdvancedReportingServiceEnabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Enable"/>
-        <see stepKey="seeAdvancedReportingServiceStatusEnabled" selector="{{AdminConfigSection.advancedReportingServiceStatus}}" userInput="Subscription status: Pending"/>
+        <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service" stepKey="seeAdvancedReportingServiceLabelEnabled"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustryLabel}}" userInput="Industry" stepKey="seeAdvancedReportingIndustryLabel"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingIndustry}}" userInput="Apps and Games" stepKey="selectAdvancedReportingIndustry"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="seeAdvancedReportingServiceEnabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceStatus}}" userInput="Subscription status: Pending" stepKey="seeAdvancedReportingServiceStatusEnabled"/>
         <!--Disable Advanced Reporting-->
-        <see stepKey="seeAdvancedReportingServiceLabelDisabled" selector="{{AdminConfigSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service"/>
-        <selectOption stepKey="selectAdvancedReportingServiceDisabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Disable"/>
-        <click stepKey="clickSaveConfigButtonDisabled" selector="{{AdminConfigSection.saveButton}}"/>
-        <see stepKey="seeSaveConfigurationMessageDisabled" selector="{{AdminConfigSection.advancedReportingSuccessMessage}}" userInput="You saved the configuration."/>
-        <see stepKey="seeAdvancedReportingServiceDisabled" selector="{{AdminConfigSection.advancedReportingService}}" userInput="Disable"/>
-        <see stepKey="seeAdvancedReportingServiceStatusDisabled" selector="{{AdminConfigSection.advancedReportingServiceStatus}}" userInput="Subscription status: Disabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service" stepKey="seeAdvancedReportingServiceLabelDisabled"/>
+        <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Disable" stepKey="selectAdvancedReportingServiceDisabled"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton2"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess2"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Disable" stepKey="seeAdvancedReportingServiceDisabled"/>
+        <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceStatus}}" userInput="Subscription status: Disabled" stepKey="seeAdvancedReportingServiceStatusDisabled"/>
     </test>
 </tests>

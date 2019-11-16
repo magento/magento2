@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRemoveDefaultVideoDownloadableProductTest" extends="AdminRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to remove default video from a Downloadable Product"/>
+            <description value="Admin should be able to remove default video from a Downloadable Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-207"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="enableAdminAccountSharing"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="setStoreDefaultConfig"/>
+        </after>
+
+        <!-- Create a downloadable product -->
+        <!-- Replacing steps in base AdminRemoveDefaultVideoSimpleProductTest -->
+        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Add downloadable links -->
+        <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToSection" after="addProductVideo"/>
+        <conditionalClick selector="{{AdminProductDownloadableSection.sectionHeader}}" dependentSelector="{{AdminProductDownloadableSection.isDownloadableProduct}}" visible="false" stepKey="openDownloadableSection" after="scrollToSection"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkOptionIsDownloadable" after="openDownloadableSection"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillLinkTitle" after="checkOptionIsDownloadable"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately" after="fillLinkTitle"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillSampleTitle" after="checkOptionPurchaseSeparately"/>
+        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLinkWithMaxDownloads" after="fillSampleTitle">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableProductLink" before="saveProductForm">
+            <argument name="link" value="downloadableLink"/>
+        </actionGroup>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+    </test>
+</tests>

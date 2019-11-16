@@ -6,8 +6,10 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Page/etc/SectionObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductGridSection">
+        <element name="productRowBySku" type="block" selector="//td[count(../../..//th[./*[.='SKU']]/preceding-sibling::th) + 1][./*[.='{{sku}}']]" parameterized="true" />
+        <element name="productRowCheckboxBySku" type="block" selector="//td[count(../../..//th[./*[.='SKU']]/preceding-sibling::th) + 1][./*[.='{{sku}}']]/../td//input[@data-action='select-row']" parameterized="true" />
         <element name="loadingMask" type="text" selector=".admin__data-grid-loading-mask[data-component*='product_listing']"/>
         <element name="columnHeader" type="button" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]/thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <element name="column" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
@@ -15,6 +17,8 @@
         <element name="productGridElement2" type="text" selector="#addselector" />
         <element name="productGridRows" type="text" selector="table.data-grid tr.data-row"/>
         <element name="firstProductRow" type="text" selector="table.data-grid tr.data-row:first-of-type"/>
+        <element name="firstProductRowName" type="text" selector="table.data-grid tr.data-row:first-of-type > td:nth-of-type(4)"/>
+        <element name="firstProductRowEditButton" type="button" selector="table.data-grid tr.data-row td .action-menu-item:first-of-type"/>
         <element name="productThumbnail" type="text" selector="table.data-grid tr:nth-child({{row}}) td.data-grid-thumbnail-cell > img" parameterized="true"/>
         <element name="productThumbnailBySrc" type="text" selector="img.admin__control-thumbnail[src*='{{pattern}}']" parameterized="true"/>
         <element name="productGridCell" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
@@ -28,6 +32,8 @@
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>
         <element name="productGridCheckboxOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td[1]//input" parameterized="true"/>
         <element name="productGridNameProduct" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
+        <element name="productGridContentsOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td" parameterized="true"/>
         <element name="selectRowBasedOnName" type="input" selector="//td/div[text()='{{var1}}']" parameterized="true"/>
+        <element name="changeStatus" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-menu-item')]//ul/li/span[text() = '{{status}}']" parameterized="true"/>
     </section>
 </sections>

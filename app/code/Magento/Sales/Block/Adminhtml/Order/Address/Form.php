@@ -113,6 +113,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
             $this->getUrl('sales/*/addressSave', ['address_id' => $this->_getAddress()->getId()])
         );
         $this->_form->setUseContainer(true);
+
         return $this;
     }
 
@@ -134,5 +135,13 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     public function getFormValues()
     {
         return $this->_getAddress()->getData();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAddressStoreId()
+    {
+        return $this->_getAddress()->getOrder()->getStoreId();
     }
 }

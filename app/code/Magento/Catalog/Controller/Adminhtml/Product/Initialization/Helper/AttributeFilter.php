@@ -46,6 +46,8 @@ class AttributeFilter
     }
 
     /**
+     * Reset "Use Config Settings" to false in product data.
+     *
      * @param Product $product
      * @param string $attributeCode
      * @param array $productData
@@ -62,6 +64,8 @@ class AttributeFilter
     }
 
     /**
+     * Prepare default attribute data for product.
+     *
      * @param array $attributeList
      * @param string $attributeCode
      * @param array $productData
@@ -73,7 +77,7 @@ class AttributeFilter
             /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $attributeList[$attributeCode];
             $attributeType = $attribute->getBackendType();
-            // For non-numberic types set the attributeValue to 'false' to trigger their removal from the db
+            // For non-numeric types set the attributeValue to 'false' to trigger their removal from the db
             if ($attributeType === 'varchar' || $attributeType === 'text' || $attributeType === 'datetime') {
                 $attribute->setIsRequired(false);
                 $productData[$attributeCode] = false;
@@ -86,6 +90,8 @@ class AttributeFilter
     }
 
     /**
+     * Check, whether attribute should not be updated.
+     *
      * @param Product $product
      * @param array $useDefaults
      * @param string $attribute

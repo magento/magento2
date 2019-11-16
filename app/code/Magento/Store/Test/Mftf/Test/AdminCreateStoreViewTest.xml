@@ -6,23 +6,41 @@
   */
 -->
 <!-- Test XML Example -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../dev/tests/acceptance/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
         <test name="AdminCreateStoreViewTest">
             <annotations>
                 <features value="Store"/>
                 <stories value="Create a store view in admin"/>
-                <title value="Admin should be able to create a store view"/>
-                <description value="Admin should be able to create a store view"/>
+                <title value="Admin shouldn't be able to create a Store View with the same code"/>
+                <description value="Admin shouldn't be able to create a Store View with the same code"/>
                 <group value="storeView"/>
+                <severity value="AVERAGE"/>
+                <useCaseId value="MAGETWO-95111"/>
+                <testCaseId value="MC-15422"/>
             </annotations>
+
             <before>
-                <actionGroup ref="LoginActionGroup" stepKey="login"/>
+                <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
             </before>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
-            <!--Confirm new store view on Store Grid-->
-            <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilter"/>
-            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch" />
-            <waitForPageLoad stepKey="waitForPageLoad"/>
-            <see selector="{{AdminStoresGridSection.storeNameInFirstRow}}" userInput="{{customStore.name}}" stepKey="seeNewStoreView" />
+
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="customStore"/>
+                </actionGroup>
+                <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+                <actionGroup ref="logout" stepKey="logout"/>
+            </after>
+
+            <!--Filter grid and see created store view-->
+            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
+            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+            <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
+            <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
+            <see selector="{{AdminStoresGridSection.gridCell('1', 'Store View')}}" userInput="{{customStore.name}}" stepKey="seeNewStoreView"/>
+            <!--Try to create store view with the same code-->
+            <actionGroup ref="AdminCreateStoreViewWithoutCheckActionGroup" stepKey="createSameStoreView"/>
+            <dontSeeElement selector="{{AdminMessagesSection.success}}" stepKey="dontSeeSuccessMessage"/>
+            <see selector="{{AdminMessagesSection.error}}" userInput="Store with the same code already exists." stepKey="seeErrorMessage"/>
         </test>
 </tests>

@@ -12,6 +12,8 @@ use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
 /**
+ * Catalog search full test search data provider.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @api
@@ -568,14 +570,13 @@ class DataProvider
             }
         }
         foreach ($indexData as $entityId => $attributeData) {
-            foreach ($attributeData as $attributeId => $attributeValue) {
-                $value = $this->getAttributeValue($attributeId, $attributeValue, $storeId);
+            foreach ($attributeData as $attributeId => $attributeValues) {
+                $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
                 if (!empty($value)) {
-                    if (isset($index[$attributeId])) {
-                        $index[$attributeId][$entityId] = $value;
-                    } else {
-                        $index[$attributeId] = [$entityId => $value];
+                    if (!isset($index[$attributeId])) {
+                        $index[$attributeId] = [];
                     }
+                        $index[$attributeId][$entityId] = $value;
                 }
             }
         }
@@ -600,16 +601,16 @@ class DataProvider
      * Retrieve attribute source value for search
      *
      * @param int $attributeId
-     * @param mixed $valueId
+     * @param mixed $valueIds
      * @param int $storeId
      * @return string
      */
-    private function getAttributeValue($attributeId, $valueId, $storeId)
+    private function getAttributeValue($attributeId, $valueIds, $storeId)
     {
         $attribute = $this->getSearchableAttribute($attributeId);
-        $value = $this->engine->processAttributeValue($attribute, $valueId);
+        $value = $this->engine->processAttributeValue($attribute, $valueIds);
         if (false !== $value) {
-            $optionValue = $this->getAttributeOptionValue($attributeId, $valueId, $storeId);
+            $optionValue = $this->getAttributeOptionValue($attributeId, $valueIds, $storeId);
             if (null === $optionValue) {
                 $value = $this->filterAttributeValue($value);
             } else {
@@ -624,13 +625,15 @@ class DataProvider
      * Get attribute option value
      *
      * @param int $attributeId
-     * @param int $valueId
+     * @param int|string $valueIds
      * @param int $storeId
      * @return null|string
      */
-    private function getAttributeOptionValue($attributeId, $valueId, $storeId)
+    private function getAttributeOptionValue($attributeId, $valueIds, $storeId)
     {
         $optionKey = $attributeId . '-' . $storeId;
+        $attributeValueIds = explode(',', $valueIds);
+        $attributeOptionValue = '';
         if (!array_key_exists($optionKey, $this->attributeOptions)
         ) {
             $attribute = $this->getSearchableAttribute($attributeId);
@@ -641,15 +644,22 @@ class DataProvider
                 $attribute->setStoreId($storeId);
                 $options = $attribute->getSource()->toOptionArray();
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
-                $this->attributeOptions[$optionKey] = array_map(function ($value) {
-                    return $this->filterAttributeValue($value);
-                }, $this->attributeOptions[$optionKey]);
+                $this->attributeOptions[$optionKey] = array_map(
+                    function ($value) {
+                        return $this->filterAttributeValue($value);
+                    },
+                    $this->attributeOptions[$optionKey]
+                );
             } else {
                 $this->attributeOptions[$optionKey] = null;
             }
         }
-
-        return $this->attributeOptions[$optionKey][$valueId] ?? null;
+        foreach ($attributeValueIds as $attrValueId) {
+            if (isset($this->attributeOptions[$optionKey][$attrValueId])) {
+                $attributeOptionValue .= $this->attributeOptions[$optionKey][$attrValueId] . ' ';
+            }
+        }
+        return empty($attributeOptionValue) ? null : trim($attributeOptionValue);
     }
 
     /**

@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
+/**
+ * Reindex multiple rows action.
+ *
+ * @package Magento\Catalog\Model\Indexer\Category\Product\Action
+ */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
     /**
@@ -23,11 +28,19 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
-        $this->limitationByCategories = $entityIds;
+        foreach ($entityIds as $entityId) {
+            $this->limitationByCategories[] = (int)$entityId;
+            $path = $this->getPathFromCategoryId($entityId);
+            if (!empty($path)) {
+                $pathIds = explode('/', $path);
+                foreach ($pathIds as $pathId) {
+                    $this->limitationByCategories[] = (int)$pathId;
+                }
+            }
+        }
+        $this->limitationByCategories = array_unique($this->limitationByCategories);
         $this->useTempTable = $useTempTable;
-
         $this->removeEntries();
-
         $this->reindex();
 
         return $this;

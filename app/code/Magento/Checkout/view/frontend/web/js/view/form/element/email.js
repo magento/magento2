@@ -17,7 +17,16 @@ define([
 ], function ($, Component, ko, customer, checkEmailAvailability, loginAction, quote, checkoutData, fullScreenLoader) {
     'use strict';
 
-    var validatedEmail = checkoutData.getValidatedEmailValue();
+    var validatedEmail;
+
+    if (!checkoutData.getValidatedEmailValue() &&
+        window.checkoutConfig.validatedEmailValue
+    ) {
+        checkoutData.setInputFieldEmailValue(window.checkoutConfig.validatedEmailValue);
+        checkoutData.setValidatedEmailValue(window.checkoutConfig.validatedEmailValue);
+    }
+
+    validatedEmail = checkoutData.getValidatedEmailValue();
 
     if (validatedEmail && !customer.isLoggedIn()) {
         quote.guestEmail = validatedEmail;
@@ -33,6 +42,9 @@ define([
             listens: {
                 email: 'emailHasChanged',
                 emailFocused: 'validateEmail'
+            },
+            ignoreTmpls: {
+                email: true
             }
         },
         checkDelay: 2000,
@@ -133,12 +145,19 @@ define([
             var loginFormSelector = 'form[data-role=email-with-possible-login]',
                 usernameSelector = loginFormSelector + ' input[name=username]',
                 loginForm = $(loginFormSelector),
-                validator;
+                validator,
+                valid;
 
             loginForm.validation();
 
             if (focused === false && !!this.email()) {
-                return !!$(usernameSelector).valid();
+                valid = !!$(usernameSelector).valid();
+
+                if (valid) {
+                    $(usernameSelector).removeAttr('aria-invalid aria-describedby');
+                }
+
+                return valid;
             }
 
             validator = loginForm.validate();
@@ -168,11 +187,15 @@ define([
         },
 
         /**
-         * Resolves an initial sate of a login form.
+         * Resolves an initial state of a login form.
          *
          * @returns {Boolean} - initial visibility state.
          */
         resolveInitialPasswordVisibility: function () {
+            if (checkoutData.getInputFieldEmailValue() !== '' && checkoutData.getCheckedEmailValue() === '') {
+                return true;
+            }
+
             if (checkoutData.getInputFieldEmailValue() !== '') {
                 return checkoutData.getInputFieldEmailValue() === checkoutData.getCheckedEmailValue();
             }
