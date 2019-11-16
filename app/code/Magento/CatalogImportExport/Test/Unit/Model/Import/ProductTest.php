@@ -410,7 +410,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::ROOT)
-            ->will($this->returnValue(self::MEDIA_DIRECTORY));
+            ->willReturn($this->_mediaDirectory);
 
         $this->validator->expects($this->any())->method('init');
         return $this;
@@ -1230,6 +1230,56 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     }
 
     /**
+     * @param bool $isRead
+     * @param bool $isWrite
+     * @param string $message
+     * @dataProvider fillUploaderObjectDataProvider
+     */
+    public function testFillUploaderObject($isRead, $isWrite, $message)
+    {
+        $fileUploaderMock = $this
+            ->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Uploader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $fileUploaderMock
+            ->method('setTmpDir')
+            ->with('pub/media/import')
+            ->willReturn($isRead);
+
+        $fileUploaderMock
+            ->method('setDestDir')
+            ->with('pub/media/catalog/product')
+            ->willReturn($isWrite);
+
+        $this->_mediaDirectory
+            ->method('getRelativePath')
+            ->willReturnMap(
+                [
+                    ['import', 'import'],
+                    ['catalog/product', 'catalog/product'],
+                ]
+            );
+
+        $this->_mediaDirectory
+            ->method('create')
+            ->with('pub/media/catalog/product');
+
+        $this->_uploaderFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($fileUploaderMock);
+
+        try {
+            $this->importProduct->getUploader();
+            $this->assertNotNull($this->getPropertyValue($this->importProduct, '_fileUploader'));
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->assertNull($this->getPropertyValue($this->importProduct, '_fileUploader'));
+            $this->assertEquals($message, $e->getMessage());
+        }
+    }
+
+    /**
      * Test that errors occurred during importing images are logged.
      *
      * @param string $fileName
@@ -1273,6 +1323,20 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $expectedFileName,
             $actualFileName
         );
+    }
+
+    /**
+     * Data provider for testFillUploaderObject.
+     *
+     * @return array
+     */
+    public function fillUploaderObjectDataProvider()
+    {
+        return [
+            [false, true, 'File directory \'pub/media/import\' is not readable.'],
+            [true, false, 'File directory \'pub/media/catalog/product\' is not writable.'],
+            [true, true, ''],
+        ];
     }
 
     /**
