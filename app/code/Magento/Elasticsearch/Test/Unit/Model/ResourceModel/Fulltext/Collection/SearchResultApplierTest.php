@@ -37,7 +37,7 @@ class SearchResultApplierTest extends TestCase
     private $searchResult;
 
     /**
-     * @var DocumentInterface
+     * @var DocumentInterface|MockObject
      */
     private $document;
 
