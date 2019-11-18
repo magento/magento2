@@ -16,7 +16,7 @@
             <argument name="orderNumber" defaultValue="000000001" type="string"/>
         </arguments>
 
-        <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderNumberLink"/>
+        <click selector="{{CheckoutSuccessMainSection.orderLinkByOrderNumber(orderNumber)}}" stepKey="clickOrderNumberLink"/>
         <waitForPageLoad stepKey="waitForOrderPageIsLoaded"/>
         <see userInput="Order # {{orderNumber}}" selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="assertOrderNumberIsCorrect"/>
     </actionGroup>

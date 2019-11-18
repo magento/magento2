@@ -18,7 +18,7 @@
             <testCaseId value="MC-5832"/>
             <group value="ConfigurableProduct"/>
             <skip>
-                <issueId value="DEPRECATED">Use StorefrontConfigurableProductCategoryViewChildOnly2Test instead</issueId>
+                <issueId value="DEPRECATED">Use StorefrontShouldSeeOnlyConfigurableProductChildAssignedToSeparateCategoryTest instead</issueId>
             </skip>
         </annotations>
         <before>

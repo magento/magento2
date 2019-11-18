@@ -8,13 +8,14 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminChangeSingleCustomerGroupViaGrid">
+    <test name="AdminChangeSingleCustomerGroupViaGridTest">
         <annotations>
+            <features value="Customer"/>
             <title value="Change a single customer group via grid"/>
             <description value="From the selection of All Customers select a single customer to change their group"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-10921"/>
-            <stories value="Change Customer Group"/>
+            <stories value="Customer Edit"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -29,8 +30,8 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCustomerGroup" stepKey="deleteCustomerGroup"/>
             <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
-            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCustomersGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCustomersGridFilter"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
         <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>

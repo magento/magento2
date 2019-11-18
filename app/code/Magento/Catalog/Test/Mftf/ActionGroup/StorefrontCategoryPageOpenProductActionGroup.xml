@@ -9,13 +9,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontCategoryPageOpenProductActionGroup">
         <annotations>
-            <description>Click on the provided Product on category page.</description>
+            <description>Click on the provided product on category page.</description>
         </annotations>
         <arguments>
-            <argument name="product" defaultValue="ApiSimpleProduct"/>
+            <argument name="productName" type="string" defaultValue="{{ApiSimpleProduct.name}}"/>
         </arguments>
 
-        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(product.name)}}" stepKey="openProductPage"/>
-        <waitForAjaxLoad stepKey="waitForImageLoader"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo(productName)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
     </actionGroup>
 </actionGroups>

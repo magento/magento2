@@ -64,7 +64,7 @@
     <!-- Check simple product on the category page -->
     <actionGroup name="StorefrontCheckCategorySimpleProduct">
         <annotations>
-            <description>DEPRECATED Use AssertStorefrontCategorySimpleProductActionGroup. Validate that the provided Simple Product is present and correct on a Category page.</description>
+            <description>DEPRECATED Use AssertStorefrontCategorySimpleProductShownActionGroup. Validate that the provided Simple Product is present and correct on a Category page.</description>
         </annotations>
         <arguments>
             <argument name="product"/>

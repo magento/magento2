@@ -8,10 +8,10 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontConfigurableProductCategoryViewChildOnly2Test">
+    <test name="StorefrontShouldSeeOnlyConfigurableProductChildAssignedToSeparateCategoryTest">
         <annotations>
             <features value="ConfigurableProduct"/>
-            <stories value="View configurable product child in storefront"/>
+            <stories value="View products"/>
             <title value="It should be possible to only view the child product of a configurable product"/>
             <description value="Create configurable product, add to category such that only child variation is visible in category"/>
             <severity value="CRITICAL"/>
@@ -83,7 +83,7 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdmin"/>
         </before>
 
         <after>
@@ -114,8 +114,9 @@
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToSecondCategoryStorefront">
             <argument name="category" value="$$secondCategory$$"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontCategorySimpleProductActionGroup" stepKey="seeChildProductInCategory">
-            <argument name="product" value="$$createConfigChildProduct1$$"/>
+        <actionGroup ref="AssertStorefrontCategorySimpleProductShownActionGroup" stepKey="seeChildProductInCategory">
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
+            <argument name="productPrice" value="$$createConfigChildProduct1.price$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckProductIsMissingInCategoryProductsPageActionGroup" stepKey="dontSeeOtherChildProduct">
             <argument name="productName" value="$$createConfigChildProduct2.name$$"/>
@@ -124,7 +125,7 @@
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCategoryPageOpenProductActionGroup" stepKey="openConfigChildProductFromCategoryPage">
-            <argument name="product" value="$$createConfigChildProduct1$$"/>
+            <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontProductDetailPageNameAndUrlActionGroup" stepKey="checkStorefrontConfigChildProductPage">
             <argument name="productName" value="$$createConfigChildProduct1.name$$"/>
