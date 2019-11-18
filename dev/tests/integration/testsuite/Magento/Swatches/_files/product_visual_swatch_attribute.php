@@ -16,15 +16,15 @@ $installer = $objectManager->create(CategorySetup::class);
 $attribute = $objectManager->create(AttributeFactory::class)->create();
 $attributeRepository = $objectManager->create(ProductAttributeRepositoryInterface::class);
 $entityType = $installer->getEntityTypeId(ProductAttributeInterface::ENTITY_TYPE_CODE);
-if (!$attribute->loadByCode($entityType, 'text_swatch_attribute')->getAttributeId()) {
+if (!$attribute->loadByCode($entityType, 'visual_swatch_attribute')->getAttributeId()) {
     $attribute->setData(
         [
-            'frontend_label' => ['Text swatch attribute'],
+            'frontend_label' => ['Visual swatch attribute'],
             'entity_type_id' => $entityType,
             'frontend_input' => 'select',
             'backend_type' => 'int',
             'is_required' => '0',
-            'attribute_code' => 'text_swatch_attribute',
+            'attribute_code' => 'visual_swatch_attribute',
             'is_global' => '1',
             'is_user_defined' => 1,
             'is_unique' => '0',
@@ -36,24 +36,26 @@ if (!$attribute->loadByCode($entityType, 'text_swatch_attribute')->getAttributeI
             'is_html_allowed_on_front' => '1',
             'used_in_product_listing' => '1',
             'used_for_sort_by' => '0',
-            'swatch_input_type' => 'text',
-            'optiontext' => [
-                'order' => [
-                    'option_0' => 1,
-                    'option_1' => 2,
-                    'option_3' => 3,
-                ],
+            'swatch_input_type' => 'visual',
+            'swatchvisual' => [
                 'value' => [
-                    'option_0' => ['Option 1'],
-                    'option_1' => ['Option 2'],
-                    'option_2' => ['Option 3'],
+                    'option_1' => '#555555',
+                    'option_2' => '#aaaaaa',
+                    'option_3' => '#ffffff',
                 ],
             ],
-            'swatchtext' => [
+            'optionvisual' => [
                 'value' => [
-                    'option_0' => ['Swatch 1'],
-                    'option_1' => ['Swatch 2'],
-                    'option_2' => ['Swatch 3'],
+                    'option_1' => ['option 1'],
+                    'option_2' => ['option 2'],
+                    'option_3' => ['option 3']
+                ],
+            ],
+            'options' => [
+                'option' => [
+                    ['label' => 'Option 1', 'value' => 'option_1'],
+                    ['label' => 'Option 2', 'value' => 'option_2'],
+                    ['label' => 'Option 3', 'value' => 'option_3'],
                 ],
             ],
         ]
