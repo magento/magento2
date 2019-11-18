@@ -9,7 +9,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
-use \Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -372,6 +373,68 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($stepData['complex'], $session->getStepData('complex'));
         $this->assertFalse($session->getStepData('simple', 'invalid_sub_key'));
         $this->assertEquals($stepData['complex']['key'], $session->getStepData('complex', 'key'));
+    }
+
+    /**
+     * Ensure that if quote not exist for customer quote will be null
+     *
+     * @return void
+     */
+    public function testGetQuote(): void
+    {
+        $storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
+        $customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $quoteRepository = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $quoteFactory = $this->createMock(\Magento\Quote\Model\QuoteFactory::class);
+        $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $loggerMethods = get_class_methods(\Psr\Log\LoggerInterface::class);
+
+        $quoteFactory->expects($this->once())
+             ->method('create')
+             ->willReturn($quote);
+        $customerSession->expects($this->exactly(3))
+             ->method('isLoggedIn')
+             ->willReturn(true);
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+             ->disableOriginalConstructor()
+             ->setMethods(['getWebsiteId', '__wakeup'])
+             ->getMock();
+        $storeManager->expects($this->any())
+             ->method('getStore')
+             ->will($this->returnValue($store));
+        $storage = $this->getMockBuilder(\Magento\Framework\Session\Storage::class)
+             ->disableOriginalConstructor()
+             ->setMethods(['setData', 'getData'])
+             ->getMock();
+        $storage->expects($this->at(0))
+             ->method('getData')
+             ->willReturn(1);
+        $quoteRepository->expects($this->once())
+             ->method('getActiveForCustomer')
+         ->willThrowException(new NoSuchEntityException());
+
+        foreach ($loggerMethods as $method) {
+            $logger->expects($this->never())->method($method);
+        }
+
+        $quote->expects($this->once())
+             ->method('setCustomer')
+             ->with(null);
+
+        $constructArguments = $this->_helper->getConstructArguments(
+            \Magento\Checkout\Model\Session::class,
+            [
+                'storeManager' => $storeManager,
+                'quoteRepository' => $quoteRepository,
+                'customerSession' => $customerSession,
+                'storage' => $storage,
+                'quoteFactory' => $quoteFactory,
+                'logger' => $logger
+            ]
+        );
+        $this->_session = $this->_helper->getObject(\Magento\Checkout\Model\Session::class, $constructArguments);
+        $this->_session->getQuote();
     }
 
     public function testSetStepData()

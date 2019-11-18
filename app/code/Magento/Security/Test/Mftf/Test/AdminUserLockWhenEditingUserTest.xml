@@ -20,14 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <!--
-                @TODO: Remove "executeJS" in scope of MQE-1561
-                Hack to be able to pass current admin user password without hardcoding it.
-            -->
-            <executeJS function="return '{{DefaultAdminUser.password}}'" stepKey="adminPassword" />
-            <createData entity="NewAdminUser" stepKey="user">
-                <field key="current_password">{$adminPassword}</field>
-            </createData>
+            <createData entity="NewAdminUser" stepKey="user" />
             <!-- Log in to Admin Panel -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>

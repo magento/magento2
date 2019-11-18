@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
  * Data provider for quantity in the Configurable products
@@ -17,21 +16,6 @@ class ConfigurableQty extends AbstractModifier
 {
     const CODE_QUANTITY = 'qty';
     const CODE_QTY_CONTAINER = 'quantity_and_stock_status_qty';
-
-    /**
-     * @var LocatorInterface
-     */
-    private $locator;
-
-    /**
-     * ConfigurableQty constructor
-     *
-     * @param LocatorInterface $locator
-     */
-    public function __construct(LocatorInterface $locator)
-    {
-        $this->locator = $locator;
-    }
 
     /**
      * @inheritdoc
@@ -48,8 +32,7 @@ class ConfigurableQty extends AbstractModifier
     {
         if ($groupCode = $this->getGroupCodeByField($meta, self::CODE_QTY_CONTAINER)) {
             $parentChildren = &$meta[$groupCode]['children'];
-            $isConfigurable = $this->locator->getProduct()->getTypeId() === 'configurable';
-            if (!empty($parentChildren[self::CODE_QTY_CONTAINER]) && $isConfigurable) {
+            if (!empty($parentChildren[self::CODE_QTY_CONTAINER])) {
                 $parentChildren[self::CODE_QTY_CONTAINER] = array_replace_recursive(
                     $parentChildren[self::CODE_QTY_CONTAINER],
                     [

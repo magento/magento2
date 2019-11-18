@@ -141,7 +141,11 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertEquals(0, $quoteCount);
         $this->assertSessionMessages(
-            $this->contains('You can buy this product only in quantities of 5 at a time for "Simple Product".'),
+            $this->contains(
+                htmlspecialchars(
+                    'You can buy this product only in quantities of 5 at a time for "Simple Product".'
+                )
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
@@ -175,7 +179,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\TestFramework\Mail\Template\TransportBuilderMock::class
         );
 
-        $actualResult = quoted_printable_decode($transportBuilder->getSentMessage()->getRawMessage());
+        $actualResult = $transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
 
         $this->assertStringMatchesFormat(
             '%A' . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject())
