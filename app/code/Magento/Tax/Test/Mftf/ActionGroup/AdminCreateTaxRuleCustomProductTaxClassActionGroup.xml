@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateTaxRuleCustomProductTaxClassActionGroup">
+        <annotations>
+            <description>Admin create tax rule with custom product tax class</description>
+        </annotations>
+        <arguments>
+            <argument name="taxRateCode" type="string" defaultValue="{{US_NY_Rate_1.code}}"/>
+            <argument name="taxRuleCode" type="string" defaultValue="{{defaultTaxRule.code}}"/>
+            <argument name="productTaxClassName" type="string" defaultValue="NewTaxClass"/>
+        </arguments>
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
+        <waitForPageLoad stepKey="waitForTaxRatePageLoaded"/>
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewTaxRate"/>
+        <fillField selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{taxRuleCode}}" stepKey="fillRuleName"/>
+        <click selector="{{AdminTaxRulesSection.selectTaxRate(taxRateCode)}}" stepKey="selectTaxRate"/>
+        <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
+        <click selector="{{AdminTaxRulesSection.selectTaxClass(taxableGoodsTaxClass.class_name)}}" stepKey="unSelectTaxClass"/>
+        <click selector="{{AdminTaxRulesSection.selectTaxClass(productTaxClassName)}}" stepKey="selectProductTaxClass"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the tax rule." stepKey="verifyRuleSaved"/>
+    </actionGroup>
+</actionGroups>

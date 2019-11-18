@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenCreditMemoFromOrderPageActionGroup">
+        <annotations>
+            <description>Admin open creditmemo from order</description>
+        </annotations>
+        <click selector="{{AdminCreditMemoTotalSection.creditMemoItem}}" stepKey="goToCreatedCreditMemo"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.viewMemo}}" stepKey="waitForCreditMemoPage"/>
+        <click selector="{{AdminCreditMemoTotalSection.viewMemo}}" stepKey="viewMemo"/>
+        <waitForPageLoad stepKey="waitForCreditMemoOpened"/>
+    </actionGroup>
+</actionGroups>

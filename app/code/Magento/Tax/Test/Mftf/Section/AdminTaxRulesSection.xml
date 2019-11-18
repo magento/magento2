@@ -31,9 +31,10 @@
         <element name="defaultTaxClass" type="button" selector="//*[@id='tax_product_class']/following-sibling::section//div[@class='mselect-items-wrapper']/div[1]"/>
         <element name="deleteTaxClassName" type="button" selector="//span[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="deleteTaxClass" type="button" selector="//span[contains(text(),'{{var1}}')]/../..//*[@class='mselect-delete']" parameterized="true"/>
-        <element name="popUpDialogOK" type="button" selector="//*[@class='modal-footer']//*[contains(text(),'OK')]"/>
+        <element name="popUpDialogOK" type="button" selector=".modal-footer .action-accept"/>
         <element name="taxRateMultiSelectItems" type="block" selector=".mselect-list-item"/>
         <element name="taxRateNumber" type="button" selector="//div[@data-ui-id='tax-rate-form-fieldset-element-form-field-tax-rate']//div[@class='mselect-items-wrapper']//label[{{var}}]" parameterized="true"/>
         <element name="selectTaxRate" type="input" selector="//span[text()='{{taxCode}}']" parameterized="true"/>
+        <element name="selectTaxClass" type="input" selector="//span[text()='{{taxClass}}']" parameterized="true"/>
     </section>
 </sections>
