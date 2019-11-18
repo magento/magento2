@@ -34,7 +34,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $table = new Table($output);
-        $table->setHeaders(['Title', 'Status', 'Update On', 'Schedule Status', 'Schedule Updated']);
+        $table->setHeaders(['ID', 'Title', 'Status', 'Update On', 'Schedule Status', 'Schedule Updated']);
 
         $rows = [];
 
@@ -43,6 +43,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
             $view = $indexer->getView();
 
             $rowData = [
+                'ID'                => $indexer->getId(),
                 'Title'             => $indexer->getTitle(),
                 'Status'            => $this->getStatus($indexer),
                 'Update On'         => $indexer->isScheduled() ? 'Schedule' : 'Save',
