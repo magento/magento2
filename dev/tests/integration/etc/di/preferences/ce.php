@@ -15,7 +15,7 @@ return [
     \Magento\Framework\App\ResponseInterface::class => \Magento\TestFramework\Response::class,
     \Magento\Framework\App\Response\Http::class => \Magento\TestFramework\Response::class,
     \Magento\Framework\Interception\PluginListInterface::class =>
-        \Magento\TestFramework\Interception\CompiledPluginList::class,
+        \Magento\TestFramework\Interception\PluginList::class,
     \Magento\Framework\Interception\ObjectManager\ConfigInterface::class =>
         \Magento\TestFramework\ObjectManager\Config::class,
     \Magento\Framework\Interception\ObjectManager\Config\Developer::class =>

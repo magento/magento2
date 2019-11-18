@@ -69,7 +69,7 @@
     <preference for="Magento\Framework\Component\ComponentRegistrarInterface" type="Magento\Framework\Component\ComponentRegistrar"/>
     <preference for="Magento\Framework\Event\ConfigInterface" type="Magento\Framework\Event\Config" />
     <preference for="Magento\Framework\Event\InvokerInterface" type="Magento\Framework\Event\Invoker\InvokerDefault" />
-    <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\CompiledInterception\Generator\CompiledPluginList" />
+    <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\Interception\PluginList\PluginList" />
     <preference for="Magento\Framework\Event\ManagerInterface" type="Magento\Framework\Event\Manager\Proxy" />
     <preference for="Magento\Framework\View\LayoutInterface" type="Magento\Framework\View\Layout" />
     <preference for="Magento\Framework\View\Layout\ProcessorInterface" type="Magento\Framework\View\Model\Layout\Merge" />
@@ -786,14 +786,8 @@
             <argument name="pluginList" xsi:type="object">\Magento\Framework\CompiledInterception\PluginList\PluginList</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\CompiledInterception\Generator\CompiledInterceptor"/>
+    <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\Interception\Code\Generator\Interceptor"/>
     <preference for="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface" type="Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution"/>
-    <type name="Magento\Setup\Module\Di\App\Task\Operation\Interception">
-        <arguments>
-            <argument name="interceptorGeneratorClass" xsi:type="string">Magento\Framework\CompiledInterception\Generator\CompiledInterceptor</argument>
-        </arguments>
-    </type>
-
     <type name="Magento\Framework\App\Cache\Frontend\Pool">
         <arguments>
             <argument name="frontendSettings" xsi:type="array">
