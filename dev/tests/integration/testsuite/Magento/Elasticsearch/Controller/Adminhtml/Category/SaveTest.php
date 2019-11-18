@@ -78,6 +78,11 @@ class SaveTest extends AbstractBackendController
             self::equalTo(['You saved the category.']),
             MessageInterface::TYPE_SUCCESS
         );
+
+        $fulltextIndexer = $this->getIndexer(FulltextIndexer::INDEXER_ID);
+        self::assertTrue($fulltextIndexer->isInvalid(), 'Fulltext indexer should be invalidated.');
+        $categoryIndexer = $this->getIndexer(CategoryIndexer::INDEXER_ID);
+        self::assertTrue($categoryIndexer->isInvalid(), 'Category indexer should be invalidated.');
     }
 
     /**
