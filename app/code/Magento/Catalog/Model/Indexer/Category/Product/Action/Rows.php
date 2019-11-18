@@ -5,6 +5,11 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
+/**
+ * Reindex multiple rows action.
+ *
+ * @package Magento\Catalog\Model\Indexer\Category\Product\Action
+ */
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
@@ -19,8 +24,9 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 
 /**
- * Action for partial reindex
+ * Reindex multiple rows action.
  *
+ * @package Magento\Catalog\Model\Indexer\Category\Product\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -82,7 +88,17 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
-        $this->limitationByCategories = $entityIds;
+        foreach ($entityIds as $entityId) {
+            $this->limitationByCategories[] = (int)$entityId;
+            $path = $this->getPathFromCategoryId($entityId);
+            if (!empty($path)) {
+                $pathIds = explode('/', $path);
+                foreach ($pathIds as $pathId) {
+                    $this->limitationByCategories[] = (int)$pathId;
+                }
+            }
+        }
+        $this->limitationByCategories = array_unique($this->limitationByCategories);
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
         $workingState = $indexer->isWorking();
