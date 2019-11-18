@@ -158,6 +158,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice</item>
                     <item name="sortOrder" xsi:type="number">150</item>
                 </item>
+                <item name="custom_layout_update" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\LayoutUpdate</item>
+                    <item name="sortOrder" xsi:type="number">160</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>

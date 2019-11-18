@@ -48,7 +48,7 @@
             </group>
             <group id="currencyconverterapi" translate="label" sortOrder="45" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Currency Converter API</label>
-                <field id="api_key" translate="label" type="obscure" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Key</label>
                     <config_path>currency/currencyconverterapi/api_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
