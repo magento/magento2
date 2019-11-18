@@ -33,7 +33,6 @@ class StoreValidationTest extends GraphQlAbstract
 QUERY;
         $this->expectExceptionMessage($errorMessage);
         $this->graphQlMutation($query, [], '', ['Store' => $code]);
-
     }
 
     /**
