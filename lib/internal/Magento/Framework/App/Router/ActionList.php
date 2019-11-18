@@ -75,7 +75,7 @@ class ActionList
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $state = $objectManager->get(State::class);
 
-        if ($state->getMode() == State::MODE_PRODUCTION) {
+        if ($state->getMode() === State::MODE_PRODUCTION) {
             $directoryList = $objectManager->get(DirectoryList::class);
             $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheKey . '.' . 'php';
 
