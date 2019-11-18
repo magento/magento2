@@ -5,11 +5,6 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
-/**
- * Reindex multiple rows action.
- *
- * @package Magento\Catalog\Model\Indexer\Category\Product\Action
- */
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
