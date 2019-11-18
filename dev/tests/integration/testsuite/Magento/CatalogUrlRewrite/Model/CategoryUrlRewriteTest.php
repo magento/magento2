@@ -26,6 +26,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  *
  * @magentoDbIsolation enabled
  * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
 {
