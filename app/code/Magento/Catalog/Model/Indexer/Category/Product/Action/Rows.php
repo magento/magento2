@@ -85,6 +85,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param int[] $entityIds
      * @param bool $useTempTable
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
