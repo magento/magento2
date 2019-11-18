@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\WebsiteFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
@@ -26,8 +26,8 @@ class UpdateProductWebsiteTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var  WebsiteFactory */
-    private $websiteProductsResourceFactory;
+    /** @var  Link */
+    private $productWebsiteLink;
 
     /** @var WebsiteRepositoryInterface */
     private $websiteRepository;
@@ -43,7 +43,7 @@ class UpdateProductWebsiteTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->websiteProductsResourceFactory = $this->objectManager->get(WebsiteFactory::class);
+        $this->productWebsiteLink = $this->objectManager->get(Link::class);
         $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
     }
@@ -58,7 +58,10 @@ class UpdateProductWebsiteTest extends TestCase
         $defaultWebsiteId = $this->websiteRepository->get('base')->getId();
         $secondWebsiteId = $this->websiteRepository->get('test')->getId();
         $product = $this->updateProductWebsites('simple2', [$defaultWebsiteId, $secondWebsiteId]);
-        $this->assertProductWebsites((int)$product->getId(), [$defaultWebsiteId, $secondWebsiteId]);
+        $this->assertEquals(
+            [$defaultWebsiteId, $secondWebsiteId],
+            $this->productWebsiteLink->getWebsiteIdsByProductId($product->getId())
+        );
     }
 
     /**
@@ -68,11 +71,9 @@ class UpdateProductWebsiteTest extends TestCase
      */
     public function testUnassignProductFromWebsite(): void
     {
-        $product = $this->productRepository->get('simple-on-two-websites');
         $secondWebsiteId = $this->websiteRepository->get('test')->getId();
-        $product->setWebsiteIds([$secondWebsiteId]);
-        $product = $this->productRepository->save($product);
-        $this->assertProductWebsites((int)$product->getId(), [$secondWebsiteId]);
+        $product = $this->updateProductWebsites('simple-on-two-websites', [$secondWebsiteId]);
+        $this->assertEquals([$secondWebsiteId], $this->productWebsiteLink->getWebsiteIdsByProductId($product->getId()));
     }
 
     /**
@@ -101,18 +102,5 @@ class UpdateProductWebsiteTest extends TestCase
         $product->setWebsiteIds($websiteIds);
 
         return $this->productRepository->save($product);
-    }
-
-    /**
-     * Assert that websites attribute was correctly saved
-     *
-     * @param int $productId
-     * @param array $expectedData
-     * @return void
-     */
-    private function assertProductWebsites(int $productId, array $expectedData): void
-    {
-        $websiteResource = $this->websiteProductsResourceFactory->create();
-        $this->assertEquals($expectedData, $websiteResource->getWebsites([$productId])[$productId]);
     }
 }
