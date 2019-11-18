@@ -370,14 +370,6 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function getEntityFactory()
-    {
-        return $this->categoryFactory;
-    }
-
-    /**
      * Save product with data using resource model directly
      *
      * @param array $data
