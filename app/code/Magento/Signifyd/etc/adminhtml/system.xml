@@ -38,7 +38,7 @@
                     </field>
                     <field id="api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API Key</label>
-                        <comment><![CDATA[Your API key can be found on the <a href="http://signifyd.com/settings" target="_blank">settings page</a> in the Signifyd console]]></comment>
+                        <comment><![CDATA[Your API key can be found on the <a href="http://signifyd.com/settings" target="_blank">settings page</a> in the Signifyd console.]]></comment>
                         <config_path>fraud_protection/signifyd/api_key</config_path>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     </field>
