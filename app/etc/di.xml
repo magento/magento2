@@ -783,7 +783,7 @@
     </virtualType>
     <type name="Magento\Framework\CompiledInterception\Generator\CompiledPluginList">
         <arguments>
-            <argument name="pluginList" xsi:type="object" shared="false">\Magento\Framework\CompiledInterception\PluginList\PluginList</argument>
+            <argument name="pluginList" xsi:type="object">\Magento\Framework\CompiledInterception\PluginList\PluginList</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Interception\Code\Generator\InterceptorInterface" type="Magento\Framework\CompiledInterception\Generator\CompiledInterceptor"/>
