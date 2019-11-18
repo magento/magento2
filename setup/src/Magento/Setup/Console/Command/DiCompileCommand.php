@@ -363,6 +363,7 @@ class DiCompileCommand extends Command
         }
 
         $operations = [
+            OperationFactory::APPLICATION_ACTION_LIST_GENERATOR => [],
             OperationFactory::PROXY_GENERATOR => [],
             OperationFactory::REPOSITORY_GENERATOR => [
                 'paths' => $compiledPathsList['application'],
@@ -395,7 +396,7 @@ class DiCompileCommand extends Command
                 $compiledPathsList['application'],
                 $compiledPathsList['library'],
                 $compiledPathsList['generated_helpers'],
-            ]
+            ],
         ];
 
         return $operations;
