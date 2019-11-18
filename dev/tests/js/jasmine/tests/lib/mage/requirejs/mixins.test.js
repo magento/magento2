@@ -4,6 +4,8 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
+// jscs:disable jsDoc
+
 require.config({
     paths: {
         'mixins': 'mage/requirejs/mixins'
@@ -13,136 +15,173 @@ require.config({
 define(['rjsResolver', 'mixins'], function (resolver, mixins) {
     'use strict';
 
-    var context = {
-        config: {}
-    };
-
     describe('mixins module', function () {
         beforeEach(function (done) {
+            spyOn(mixins, 'hasMixins').and.callThrough();
+            spyOn(mixins, 'getMixins').and.callThrough();
+            spyOn(mixins, 'load').and.callThrough();
+
             // Wait for all modules to be loaded so they don't interfere with testing.
             resolver(function () {
                 done();
             });
         });
 
-        describe('processNames method', function () {
-            beforeEach(function () {
-                spyOn(mixins, 'processNames').and.callThrough();
-                spyOn(mixins, 'hasMixins').and.callThrough();
+        it('does not affect modules without mixins', function (done) {
+            var name = 'tests/assets/mixins/no-mixins',
+                mixinName = 'tests/assets/mixins/no-mixins-ext';
+
+            mixins.hasMixins.and.returnValue(false);
+
+            define(name, [], function () {
+                return {
+                    value: 'original'
+                };
             });
 
-            it('gets called when module is both required and defined', function (done) {
-                var name = 'tests/assets/mixins/defined-module',
-                    dependencyName = 'tests/assets/mixins/defined-module-dependency';
+            define(mixinName, [], function () {
+                return function (module) {
+                    module.value = 'changed';
 
-                define(dependencyName, [], function () {});
-                define(name, [dependencyName], function () {});
-
-                require([name], function () {
-                    expect(mixins.processNames.calls.argsFor(0)[0]).toEqual([]);
-                    expect(mixins.processNames.calls.argsFor(1)[0]).toEqual([dependencyName]);
-                    expect(mixins.processNames.calls.argsFor(2)[0]).toEqual([name]);
-                    done();
-                });
+                    return module;
+                };
             });
 
-            it('keeps name intact when it already contains another plugin', function () {
-                mixins.hasMixins.and.returnValue(true);
+            require([name], function (module) {
+                expect(module.value).toBe('original');
 
-                expect(mixins.processNames('plugin!module', context)).toBe('plugin!module');
-            });
-
-            it('keeps name intact when it has no mixins', function () {
-                mixins.hasMixins.and.returnValue(false);
-
-                expect(mixins.processNames('module', context)).toBe('module');
-            });
-
-            it('keeps names intact when they have no mixins', function () {
-                mixins.hasMixins.and.returnValue(false);
-
-                expect(mixins.processNames(['module'], context)).toEqual(['module']);
-            });
-
-            it('adds prefix to name when it has mixins', function () {
-                mixins.hasMixins.and.returnValue(true);
-
-                expect(mixins.processNames('module', context)).toBe('mixins!module');
-            });
-
-            it('adds prefix to name when it contains a relative path', function () {
-                mixins.hasMixins.and.returnValue(false);
-
-                expect(mixins.processNames('./module', context)).toBe('mixins!./module');
-            });
-
-            it('adds prefix to names when they contain a relative path', function () {
-                mixins.hasMixins.and.returnValue(false);
-
-                expect(mixins.processNames(['./module'], context)).toEqual(['mixins!./module']);
-            });
-
-            it('adds prefix to names when they have mixins', function () {
-                mixins.hasMixins.and.returnValue(true);
-
-                expect(mixins.processNames(['module'], context)).toEqual(['mixins!module']);
+                done();
             });
         });
 
-        describe('load method', function () {
-            it('is not called when module has mixins', function (done) {
-                var name = 'tests/assets/mixins/load-not-called';
+        it('does not affect modules that are loaded with plugins', function (done) {
+            var name = 'plugin!tests/assets/mixins/no-mixins',
+                mixinName = 'tests/assets/mixins/no-mixins-ext';
 
-                spyOn(mixins, 'hasMixins').and.returnValue(false);
-                spyOn(mixins, 'load').and.callThrough();
+            mixins.hasMixins.and.returnValue(true);
+            mixins.getMixins.and.returnValue([mixinName]);
 
-                define(name, [], function () {});
-
-                require([name], function () {
-                    expect(mixins.load.calls.any()).toBe(false);
-                    done();
-                });
+            define('plugin', [], function () {
+                return {
+                    load: function (module, req, onLoad) {
+                        req(module, onLoad);
+                    }
+                };
             });
 
-            it('is called when module has mixins', function (done) {
-                var name = 'tests/assets/mixins/load-called';
-
-                spyOn(mixins, 'hasMixins').and.returnValue(true);
-                spyOn(mixins, 'load').and.callThrough();
-
-                define(name, [], function () {});
-
-                require([name], function () {
-                    expect(mixins.load.calls.mostRecent().args[0]).toEqual(name);
-                    done();
-                });
+            define(name, [], function () {
+                return {
+                    value: 'original'
+                };
             });
 
-            it('applies mixins for loaded module', function (done) {
-                var name = 'tests/assets/mixins/mixins-applied',
-                    mixinName = 'tests/assets/mixins/mixins-applied-ext';
+            define(mixinName, [], function () {
+                return function (module) {
+                    module.value = 'changed';
 
-                spyOn(mixins, 'hasMixins').and.returnValue(true);
-                spyOn(mixins, 'load').and.callThrough();
-                spyOn(mixins, 'getMixins').and.returnValue([mixinName]);
-
-                define(name, [], function () {
-                    return { value: 'original' };
-                });
-
-                define(mixinName, [], function () {
-                    return function(module) {
-                        module.value = 'changed';
-
-                        return module;
-                    };
-                });
-
-                require([name], function (module) {
-                    expect(module.value).toBe('changed');
-                    done();
-                });
+                    return module;
+                };
             });
+
+            require([name], function (module) {
+                expect(module.value).toBe('original');
+
+                done();
+            });
+        });
+
+        it('applies mixins for normal module with mixins', function (done) {
+            var name = 'tests/assets/mixins/mixins-applied',
+                mixinName = 'tests/assets/mixins/mixins-applied-ext';
+
+            mixins.hasMixins.and.returnValue(true);
+            mixins.getMixins.and.returnValue([mixinName]);
+
+            define(name, [], function () {
+                return {
+                    value: 'original'
+                };
+            });
+
+            define(mixinName, [], function () {
+                return function (module) {
+                    module.value = 'changed';
+
+                    return module;
+                };
+            });
+
+            require([name], function (module) {
+                expect(module.value).toBe('changed');
+
+                done();
+            });
+        });
+
+        it('applies mixins for module that is a dependency', function (done) {
+            var name = 'tests/assets/mixins/module-with-dependency',
+                dependencyName = 'tests/assets/mixins/dependency-module',
+                mixinName = 'tests/assets/mixins/dependency-module-ext';
+
+            mixins.hasMixins.and.returnValue(true);
+            mixins.getMixins.and.returnValue([mixinName]);
+
+            define(dependencyName, [], function () {
+                return {
+                    value: 'original'
+                };
+            });
+
+            define(name, [dependencyName], function (module) {
+                expect(module.value).toBe('changed');
+
+                done();
+
+                return {};
+            });
+
+            define(mixinName, [], function () {
+                return function (module) {
+                    module.value = 'changed';
+
+                    return module;
+                };
+            });
+
+            require([name], function () {});
+        });
+
+        it('applies mixins for module that is a relative dependency', function (done) {
+            var name = 'tests/assets/mixins/module-with-relative-dependency',
+                dependencyName = 'tests/assets/mixins/relative-module',
+                mixinName = 'tests/assets/mixins/relative-module-ext';
+
+            mixins.hasMixins.and.returnValue(true);
+            mixins.getMixins.and.returnValue([mixinName]);
+
+            define(dependencyName, [], function () {
+                return {
+                    value: 'original'
+                };
+            });
+
+            define(name, ['./relative-module'], function (module) {
+                expect(module.value).toBe('changed');
+
+                done();
+
+                return {};
+            });
+
+            define(mixinName, [], function () {
+                return function (module) {
+                    module.value = 'changed';
+
+                    return module;
+                };
+            });
+
+            require([name], function () {});
         });
     });
 });
