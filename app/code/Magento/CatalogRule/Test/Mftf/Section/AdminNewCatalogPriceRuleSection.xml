@@ -20,7 +20,8 @@
         <element name="ruleNameNew" type="input" selector="[name='staging[name]']"/>
         <element name="description" type="textarea" selector="[name='description']"/>
         <element name="status" type="select" selector="[name='is_active']"/>
-        <element name="isActive" type="select" selector="input[name='is_active']+label"/>
+        <element name="isActive" type="text" selector="input[name='is_active']+label"/>
+        <element name="activeByStatus" type="text" selector="div.admin__actions-switch input[name='is_active'][value='{{value}}']+label" parameterized="true"/>
 
         <element name="websites" type="select" selector="[name='website_ids']"/>
         <element name="active" type="checkbox" selector="//div[contains(@class, 'admin__actions-switch')]/input[@name='is_active']/../label"/>
@@ -34,9 +35,15 @@
         <element name="startDateButton" type="button" selector="[name='staging[start_time]'] + button" timeout="15"/>
         <element name="toDateButton" type="button" selector="[name='to_date'] + button" timeout="15"/>
         <element name="todayDate" type="button" selector="#ui-datepicker-div [data-handler='today']"/>
+        <element name="fromDate" type="input" selector="[name='from_date']"/>
+        <element name="toDate" type="input" selector="[name='to_date']"/>
         <element name="priority" type="input" selector="[name='sort_order']"/>
         <element name="conditionsTab" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions']"/>
+        <element name="conditionsTabTitle" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions'] .fieldset-wrapper-title"/>
+        <element name="conditionsTabBody" type="block" selector="[data-index='block_promo_catalog_edit_tab_conditions'] .admin__fieldset-wrapper-content"/>
         <element name="actionsTab" type="block" selector="[data-index='actions']"/>
+        <element name="actionsTabTitle" type="block" selector="[data-index='actions'] .fieldset-wrapper-title"/>
+        <element name="actionsTabBody" type="block" selector="[data-index='actions'] .admin__fieldset-wrapper-content"/>
     </section>
 
     <section name="AdminNewCatalogPriceRuleActions">
