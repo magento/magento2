@@ -14,12 +14,4 @@
         <data key="senderName">Admin</data>
         <data key="senderEmail">admin@magento.com</data>
     </entity>
-    <entity name="NewsletterWithDirectives" type="template">
-        <data key="name" unique="suffix">Test Newsletter Template</data>
-        <data key="subject">Test Newsletter Subject</data>
-        <data key="senderName">Admin</data>
-        <data key="senderEmail">admin@magento.com</data>
-        <data key="templateText">Template {{var this.template_id}}{{var this.getData(template_id)}} Text</data>
-        <data key="expectedTemplate">Template 123 Text</data>
-    </entity>
 </entities>

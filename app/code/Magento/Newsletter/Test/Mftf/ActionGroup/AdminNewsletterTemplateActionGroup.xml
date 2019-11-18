@@ -13,46 +13,4 @@
         <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
-    <actionGroup name="NavigateToNewsletterGrid">
-        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
-        <waitForPageLoad stepKey="waitForNewNewsletterPageLoad"/>
-    </actionGroup>
-
-    <actionGroup name="FillNewsletterForm">
-        <arguments>
-            <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
-        </arguments>
-        <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForTemplateNameField"/>
-        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{Newsletter.name}}" stepKey="fillTemplateName" />
-        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{Newsletter.subject}}" stepKey="fillTemplateSubject" />
-        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{Newsletter.senderName}}" stepKey="fillSenderName" />
-        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{Newsletter.senderEmail}}" stepKey="fillSenderEmail" />
-        <fillField selector="{{BasicFieldNewsletterSection.templateText}}" userInput="{{Newsletter.templateText}}" stepKey="fillTemplateText" />
-    </actionGroup>
-
-    <actionGroup name="OpenNewsletterPreviewTab">
-        <annotations>
-            <description>Open the currently drafted newletter in new tab preview mode. The JS is required due to the sandboxed iframe not playing nicely with selenium.</description>
-        </annotations>
-        <waitForElementVisible selector="{{BasicFieldNewsletterSection.preview}}" stepKey="waitForPreviewButton"/>
-        <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
-        <switchToNextTab stepKey="switchToPreviewTab"/>
-        <waitForPageLoad stepKey="waitForTabLoaded"/>
-        <waitForElementVisible selector="{{BasicFieldNewsletterSection.previewIframe}}" stepKey="waitForIframeVisible"/>
-        <waitForJS function="return document.getElementById('preview_iframe').sandbox.add('allow-scripts') || true" stepKey="addSandboxValue"/>
-    </actionGroup>
-
-    <actionGroup name="AssertNewsletterContent">
-        <annotations>
-            <description>Validate the content of the newsletter preview tab that is open. JS is used due to strange behaviors with selenium and the posted form sandboxed iframe containing the text.</description>
-        </annotations>
-        <arguments>
-            <argument name="Newsletter" defaultValue="BasicFieldNewsletterSection"/>
-        </arguments>
-        <waitForJS function="return document.getElementById('preview_iframe').contentDocument.body.textContent" stepKey="grabTemplateText"/>
-        <assertContains stepKey="checkTemplateContainsText">
-            <actualResult type="variable">grabTemplateText</actualResult>
-            <expectedResult type="string">{{Newsletter.expectedTemplate}}</expectedResult>
-        </assertContains>
-    </actionGroup>
 </actionGroups>

@@ -87,7 +87,6 @@
         <waitForPageLoad after="switchToIframe" stepKey="waitForPageLoaded"/>
     </actionGroup>
 
-
     <actionGroup name="AssertEmailTemplateContent">
         <arguments>
             <argument name="expectedContent" type="string" defaultValue="{{EmailTemplate.templateText}}"/>
