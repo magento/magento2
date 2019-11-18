@@ -75,7 +75,7 @@ class VclGenerator implements VclGeneratorInterface
         $gracePeriod,
         $sslOffloadedHeader,
         $designExceptions = [],
-        DirectoryList $directoryList
+        ?DirectoryList $directoryList = null
     ) {
         $this->backendHost = $backendHost;
         $this->backendPort = $backendPort;
@@ -84,7 +84,8 @@ class VclGenerator implements VclGeneratorInterface
         $this->vclTemplateLocator = $vclTemplateLocator;
         $this->sslOffloadedHeader = $sslOffloadedHeader;
         $this->designExceptions = $designExceptions;
-        $this->directoryList = $directoryList;
+        $this->directoryList = $directoryList ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(DirectoryList::class);
     }
 
     /**
