@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ConnectionTypeResolver
 {
@@ -26,7 +26,9 @@ class ConnectionTypeResolver
     }
 
     /**
-     * @param $connectionName
+     * Get connection type based on connection name
+     *
+     * @param string $connectionName
      * @return string|null
      */
     public function getConnectionType($connectionName)
