@@ -51,7 +51,7 @@ class SwatchTextFilterTest extends AbstractFiltersTest
             'not_used_in_navigation' => [
                 'products_data' => [],
                 'filterable' => 0,
-                'expectation' => []
+                'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
                 'products_data' => [
@@ -62,7 +62,7 @@ class SwatchTextFilterTest extends AbstractFiltersTest
                 'expectation' => [
                     ['label' => 'Option 1', 'count' => 1],
                     ['label' => 'Option 2', 'count' => 1],
-                ]
+                ],
             ],
             'used_in_navigation_without_results' => [
                 'products_data' => [
@@ -74,7 +74,7 @@ class SwatchTextFilterTest extends AbstractFiltersTest
                     ['label' => 'Option 3', 'count' => 0],
                     ['label' => 'Option 1', 'count' => 1],
                     ['label' => 'Option 2', 'count' => 1],
-                ]
+                ],
             ],
         ];
     }

@@ -50,7 +50,7 @@ class BooleanFilterTest extends AbstractFiltersTest
             'not_used_in_navigation' => [
                 'products_data' => [],
                 'filterable' => 0,
-                'expectation' => []
+                'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
                 'products_data' => [
@@ -60,7 +60,7 @@ class BooleanFilterTest extends AbstractFiltersTest
                 'filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
                 'expectation' => [
                     ['label' => 'Yes', 'count' => 2],
-                ]
+                ],
             ],
             'used_in_navigation_without_results' => [
                 'products_data' => [
@@ -71,7 +71,7 @@ class BooleanFilterTest extends AbstractFiltersTest
                 'expectation' => [
                     ['label' => 'Yes', 'count' => 2],
                     ['label' => 'No', 'count' => 0],
-                ]
+                ],
             ],
         ];
     }

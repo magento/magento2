@@ -95,7 +95,7 @@ class DecimalFilterTest extends AbstractFiltersTest
             'not_used_in_navigation' => [
                 'products_data' => [],
                 'filterable' => 0,
-                'expectation' => []
+                'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
                 'products_data' => [
@@ -114,7 +114,7 @@ class DecimalFilterTest extends AbstractFiltersTest
                         'value' => '20-',
                         'count' => 1,
                     ],
-                ]
+                ],
             ],
         ];
     }
