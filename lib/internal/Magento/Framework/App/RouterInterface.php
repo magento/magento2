@@ -8,16 +8,17 @@
 namespace Magento\Framework\App;
 
 /**
- * Interface \Magento\Framework\App\RouterInterface
- *
+ * Main application route dispatcher
  */
 interface RouterInterface
 {
     /**
      * Match application action by request
      *
+     * Must either return an action capable of handling the request, or null
+     *
      * @param RequestInterface $request
-     * @return ActionInterface
+     * @return ActionInterface|null
      */
     public function match(RequestInterface $request);
 }
