@@ -42,7 +42,7 @@ https://magefan.com/contact
 ## License
 The code is licensed under [EULA](https://magefan.com/end-user-license-agreement).
 
-## Other Magento 2 Extensions by Magefan
+## Other [Magento 2 Extensions](https://magefan.com/magento2-extensions) by Magefan
   * [Magento 2 Blog Extension](https://magefan.com/magento2-blog-extension)
   * [Magento 2 Blog Plus Extension](https://magefan.com/magento2-blog-extension/pricing)
   * [Magento 2 Blog Extra Extension](https://magefan.com/magento2-blog-extension/pricing)
