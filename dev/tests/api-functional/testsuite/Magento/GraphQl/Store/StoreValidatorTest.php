@@ -12,16 +12,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test the GraphQL `Store` header validation
  */
-class StoreValidationTest extends GraphQlAbstract
+class StoreValidatorTest extends GraphQlAbstract
 {
     /**
+     * @param string $storeCode
+     * @param string $errorMessage
+     *
      * @dataProvider dataProviderInvalidStore
      * @magentoApiDataFixture Magento/Store/_files/inactive_store.php
-     *
-     * @param string $code
-     * @param string $errorMessage
      */
-    public function testInvalidStoreHeader(string $code, string $errorMessage)
+    public function testInvalidStoreHeader(string $storeCode, string $errorMessage)
     {
         $query
             = <<<QUERY
@@ -32,7 +32,7 @@ class StoreValidationTest extends GraphQlAbstract
 }
 QUERY;
         $this->expectExceptionMessage($errorMessage);
-        $this->graphQlMutation($query, [], '', ['Store' => $code]);
+        $this->graphQlMutation($query, [], '', ['Store' => $storeCode]);
     }
 
     /**
