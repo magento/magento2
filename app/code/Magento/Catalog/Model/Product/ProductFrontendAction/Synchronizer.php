@@ -125,12 +125,16 @@ class Synchronizer
         $lifetime = $this->getLifeTimeByNamespace($typeId);
         $actionsNumber = $lifetime * self::TIME_TO_DO_ONE_ACTION;
 
-        uasort($productsData, function (array $firstProduct, array $secondProduct) {
-            if (isset($firstProduct['added_at']) && isset($secondProduct['added_at'])) {
-                return $firstProduct['added_at'] > $secondProduct['added_at'];
+        uasort(
+            $productsData,
+            function (array $firstProduct, array $secondProduct) {
+                if (isset($firstProduct['added_at']) && isset($secondProduct['added_at'])) {
+                    return $firstProduct['added_at'] > $secondProduct['added_at'];
+                }
+
+                return false;
             }
-            return false;
-        });
+        );
 
         return array_slice($productsData, 0, $actionsNumber, true);
     }
@@ -188,15 +192,17 @@ class Synchronizer
 
             foreach ($productsData as $productId => $productData) {
                 /** @var ProductFrontendActionInterface $action */
-                $action = $this->productFrontendActionFactory->create([
-                    'data' => [
-                        'visitor_id' => $customerId ? null : $visitorId,
-                        'customer_id' => $this->session->getCustomerId(),
-                        'added_at' => $productData['added_at'],
-                        'product_id' => $productId,
-                        'type_id' => $typeId
+                $action = $this->productFrontendActionFactory->create(
+                    [
+                        'data' => [
+                            'visitor_id' => $customerId ? null : $visitorId,
+                            'customer_id' => $this->session->getCustomerId(),
+                            'added_at' => $productData['added_at'],
+                            'product_id' => $productId,
+                            'type_id' => $typeId
+                        ]
                     ]
-                ]);
+                );
 
                 $this->entityManager->save($action);
             }
