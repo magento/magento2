@@ -126,7 +126,10 @@ class Synchronizer
         $actionsNumber = $lifetime * self::TIME_TO_DO_ONE_ACTION;
 
         uasort($productsData, function (array $firstProduct, array $secondProduct) {
-            return $firstProduct['added_at'] > $secondProduct['added_at'];
+            if (isset($firstProduct['added_at']) && isset($secondProduct['added_at'])) {
+                return $firstProduct['added_at'] > $secondProduct['added_at'];
+            }
+            return false;
         });
 
         return array_slice($productsData, 0, $actionsNumber, true);
