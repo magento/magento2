@@ -23,11 +23,13 @@ $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
 try {
     $productRepository->deleteById('simple1000');
 } catch (NoSuchEntityException $e) {
+    //Already deleted.
 }
 
 try {
     $productRepository->deleteById('simple1001');
 } catch (NoSuchEntityException $e) {
+    //Already deleted.
 }
 
 try {
@@ -38,6 +40,7 @@ try {
         ->getFirstItem();
     $categoryRepository->delete($category);
 } catch (NoSuchEntityException $e) {
+    //Already deleted.
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -56,7 +56,7 @@ abstract class AbstractCategoryTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->categoryCollectionFactory = $this->objectManager->create(CollectionFactory::class);
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
-        $this->layout = $this->objectManager->create(LayoutInterface::class);
+        $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->navigationBlock = $this->objectManager->create(Category::class);
         parent::setUp();
     }

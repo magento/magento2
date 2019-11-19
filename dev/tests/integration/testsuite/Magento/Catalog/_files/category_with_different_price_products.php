@@ -15,7 +15,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
-$categoryFactory = Bootstrap::getObjectManager()->get(CategoryInterfaceFactory::class);
+$categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 

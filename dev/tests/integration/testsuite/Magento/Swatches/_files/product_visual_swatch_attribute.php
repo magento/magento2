@@ -60,7 +60,7 @@ if (!$attribute->loadByCode($entityType, 'visual_swatch_attribute')->getAttribut
             ],
         ]
     );
-    $attribute->save();
+    $attributeRepository->save($attribute);
     $installer->addAttributeToGroup(
         ProductAttributeInterface::ENTITY_TYPE_CODE,
         'Default',
