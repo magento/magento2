@@ -223,4 +223,38 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
+
+    /**
+     * Test for Configurable product in invalid state with no children does not raise error
+     */
+    public function testChildIsNotUsedForValidationWhenConfigurableProductIsMissingChildren()
+    {
+        $configurableProductMock = $this->createProductMock();
+        $configurableProductMock
+            ->expects($this->any())
+            ->method('getTypeId')
+            ->willReturn(Configurable::TYPE_CODE);
+
+        $configurableProductMock
+            ->expects($this->any())
+            ->method('hasData')
+            ->with($this->equalTo('special_price'))
+            ->willReturn(false);
+
+        /* @var AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMockBuilder(AbstractItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setProduct', 'getProduct', 'getChildren'])
+            ->getMockForAbstractClass();
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($configurableProductMock);
+        $item->expects($this->any())
+            ->method('getChildren')
+            ->willReturn([]);
+
+        $this->validator->setAttribute('special_price');
+
+        $this->validatorPlugin->beforeValidate($this->validator, $item);
+    }
 }
