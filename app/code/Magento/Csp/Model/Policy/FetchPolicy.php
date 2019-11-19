@@ -199,6 +199,8 @@ class FetchPolicy implements SimplePolicyInterface
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getValue(): string
     {

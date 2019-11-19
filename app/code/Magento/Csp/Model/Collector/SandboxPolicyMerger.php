@@ -17,6 +17,7 @@ class SandboxPolicyMerger implements MergerInterface
 {
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function merge(PolicyInterface $policy1, PolicyInterface $policy2): PolicyInterface
     {
