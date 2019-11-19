@@ -40,7 +40,7 @@ define([
          */
         initialize: function () {
             this._super();
-            this.setNavigationListener();
+            $(document).on('keydown', this.handleKeyDown.bind(this));
 
             return this;
         },
@@ -67,8 +67,13 @@ define([
          * @param {Object} record
          */
         next: function (record) {
-            var recordToShow = this.getRecord(record._rowIndex + 1);
+            var recordToShow;
 
+            if (record._rowIndex + 1 === this.masonry().rows().length) {
+                return;
+            }
+
+            recordToShow = this.getRecord(record._rowIndex + 1);
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -79,6 +84,9 @@ define([
          * @param {Object} record
          */
         prev: function (record) {
+            if (record._rowIndex === 0) {
+                return;
+            }
             var recordToShow = this.getRecord(record._rowIndex - 1);
 
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
@@ -190,33 +198,20 @@ define([
         },
 
         /**
-         * Set image preview keyboard navigation listener
+         * Handle keyboard navigation for image preview
+         *
+         * @param {Object} e
          */
-        setNavigationListener: function () {
-            var imageIndex, endIndex, key,
-                startIndex = 0,
-                imageColumnSelector = '.masonry-image-column',
-                adobeModalSelector = '.adobe-stock-modal',
-                imageGridSelector = '.masonry-image-grid';
+        handleKeyDown: function (e) {
+            var key = keyCodes[e.keyCode];
 
-            $(document).on('keydown', function(e) {
-                key = keyCodes[e.keyCode];
-                endIndex = $(imageGridSelector)[0].children.length - 1;
-
-                if($(this.previewImageSelector).length > 0) {
-                    imageIndex = $(this.previewImageSelector)
-                        .parents(imageColumnSelector)
-                        .data('repeatIndex');
+            if (this.visibleRecord() !== null) {
+                if (key === 'pageLeftKey') {
+                    this.prev(this.displayedRecord());
+                } else if (key === 'pageRightKey') {
+                    this.next(this.displayedRecord());
                 }
-
-                if($(adobeModalSelector).hasClass('_show')) {
-                    if(key === 'pageLeftKey' && imageIndex !== startIndex) {
-                        $(this.previewImageSelector + ' .action-previous').click();
-                    } else if (key === 'pageRightKey' && imageIndex !== endIndex) {
-                        $(this.previewImageSelector + ' .action-next').click();
-                    }
-                }
-            });
-        },
+            }
+        }
     });
 });
