@@ -12,8 +12,8 @@ use Magento\Csp\Model\Collector\Config\PolicyReaderPool;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
 
 /**
  * Reads Magento config.
@@ -36,26 +36,26 @@ class ConfigCollector implements PolicyCollectorInterface
     private $state;
 
     /**
-     * @var Store
+     * @var StoreManagerInterface
      */
-    private $storeModel;
+    private $storeManager;
 
     /**
      * @param ScopeConfigInterface $config
      * @param PolicyReaderPool $readersPool
      * @param State $state
-     * @param Store $storeModel
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ScopeConfigInterface $config,
         PolicyReaderPool $readersPool,
         State $state,
-        Store $storeModel
+        StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
         $this->readersPool = $readersPool;
         $this->state = $state;
-        $this->storeModel = $storeModel;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -77,7 +77,7 @@ class ConfigCollector implements PolicyCollectorInterface
             $policiesConfig = $this->config->getValue(
                 'csp/policies/' . $configArea,
                 ScopeInterface::SCOPE_STORE,
-                $this->storeModel->getStore()
+                $this->storeManager->getStore()
             );
             if (is_array($policiesConfig) && $policiesConfig) {
                 foreach ($policiesConfig as $policyConfig) {

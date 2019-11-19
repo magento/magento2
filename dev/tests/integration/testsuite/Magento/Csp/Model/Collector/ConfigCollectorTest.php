@@ -160,11 +160,17 @@ class ConfigCollectorTest extends TestCase
      */
     public function testCollecting(): void
     {
-        $policies = $this->collector->collect([]);
+        $policies = $this->collector->collect([new FlagPolicy('upgrade-insecure-requests')]);
         $checked = [];
         $expectedPolicies = $this->getExpectedPolicies();
 
+        //Policies were collected
         $this->assertNotEmpty($policies);
+        //Default policies are being kept
+        /** @var PolicyInterface $defaultPolicy */
+        $defaultPolicy = array_shift($policies);
+        $this->assertEquals('upgrade-insecure-requests', $defaultPolicy->getId());
+        //Comparing collected with configured
         /** @var PolicyInterface $policy */
         foreach ($policies as $policy) {
             $id = $policy->getId();
