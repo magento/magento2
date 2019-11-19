@@ -21,6 +21,12 @@
                 <item name="config" xsi:type="object">Magento\Csp\Model\Collector\ConfigCollector</item>
                 <item name="csp_whitelist" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXmlCollector</item>
             </argument>
+            <argument name="mergers" xsi:type="array">
+                <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\FetchPolicyMerger</item>
+                <item name="flag" xsi:type="object">Magento\Csp\Model\Collector\FlagPolicyMerger</item>
+                <item name="plugins" xsi:type="object">Magento\Csp\Model\Collector\PluginTypesPolicyMerger</item>
+                <item name="sandbox" xsi:type="object">Magento\Csp\Model\Collector\SandboxPolicyMerger</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Csp\Model\Collector\Config\PolicyReaderPool">

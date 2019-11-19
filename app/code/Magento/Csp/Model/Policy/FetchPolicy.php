@@ -83,6 +83,11 @@ class FetchPolicy implements SimplePolicyInterface
     private $dynamicAllowed;
 
     /**
+     * @var bool
+     */
+    private $eventHandlersAllowed;
+
+    /**
      * @param string $id
      * @param bool $noneAllowed
      * @param string[] $hostSources
@@ -93,6 +98,7 @@ class FetchPolicy implements SimplePolicyInterface
      * @param string[] $nonceValues
      * @param string[] $hashValues
      * @param bool $dynamicAllowed
+     * @param bool $eventHandlersAllowed
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,7 +111,8 @@ class FetchPolicy implements SimplePolicyInterface
         bool $evalAllowed = false,
         array $nonceValues = [],
         array $hashValues = [],
-        bool $dynamicAllowed = false
+        bool $dynamicAllowed = false,
+        bool $eventHandlersAllowed = false
     ) {
         $this->id = $id;
         $this->noneAllowed = $noneAllowed;
@@ -117,6 +124,7 @@ class FetchPolicy implements SimplePolicyInterface
         $this->nonceValues = array_unique($nonceValues);
         $this->hashes = $hashValues;
         $this->dynamicAllowed = $dynamicAllowed;
+        $this->eventHandlersAllowed = $eventHandlersAllowed;
     }
 
     /**
@@ -213,6 +221,9 @@ class FetchPolicy implements SimplePolicyInterface
             if ($this->isDynamicAllowed()) {
                 $sources[] = '\'strict-dynamic\'';
             }
+            if ($this->areEventHandlersAllowed()) {
+                $sources[] = '\'unsafe-hashes\'';
+            }
             foreach ($this->getNonceValues() as $nonce) {
                 $sources[] = '\'nonce-' .base64_encode($nonce) .'\'';
             }
@@ -256,5 +267,15 @@ class FetchPolicy implements SimplePolicyInterface
     public function isDynamicAllowed(): bool
     {
         return $this->dynamicAllowed;
+    }
+
+    /**
+     * Allows to whitelist event handlers (but not javascript: URLs) with hashes.
+     *
+     * @return bool
+     */
+    public function areEventHandlersAllowed(): bool
+    {
+        return $this->eventHandlersAllowed;
     }
 }

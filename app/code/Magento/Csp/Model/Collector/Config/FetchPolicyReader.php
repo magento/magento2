@@ -30,7 +30,8 @@ class FetchPolicyReader implements PolicyReaderInterface
             !empty($value['eval']),
             [],
             [],
-            !empty($value['dynamic'])
+            !empty($value['dynamic']),
+            !empty($value['event_handlers'])
         );
     }
 

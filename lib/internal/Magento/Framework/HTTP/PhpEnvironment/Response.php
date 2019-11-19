@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\HTTP\PhpEnvironment;
+declare(strict_types=1);
 
-use Zend\Http\Header\GenericMultiHeader;
+namespace Magento\Framework\HTTP\PhpEnvironment;
 
 /**
  * Base HTTP response object
@@ -79,18 +79,11 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     {
         $value = (string)$value;
 
-        $headers = $this->getHeaders();
         if ($replace) {
-            $headers->addHeaderLine($name, $value);
             $this->clearHeader($name);
-        } else {
-            //Zend framework will only force multiple headers for header objects
-            //extending MultiHeader interface.
-            $pluginKey = str_replace('-', '', mb_strtolower($name));
-            $headers->getPluginClassLoader()->registerPlugin($pluginKey, GenericMultiHeader::class);
-            $headers->addHeader(new GenericMultiHeader($name, $value));
         }
 
+        $this->getHeaders()->addHeaderLine($name, $value);
         return $this;
     }
 
@@ -189,5 +182,28 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     public function __sleep()
     {
         return ['content', 'isRedirect', 'statusCode'];
+    }
+
+    /**
+     * Sending provided headers.
+     *
+     * Had to be overridden because the original did not work correctly with multi-headers.
+     */
+    public function sendHeaders()
+    {
+        if ($this->headersSent()) {
+            return $this;
+        }
+
+        $status  = $this->renderStatusLine();
+        header($status);
+
+        /** @var \Zend\Http\Header\HeaderInterface $header */
+        foreach ($this->getHeaders() as $header) {
+            header($header->toString(), false);
+        }
+
+        $this->headersSent = true;
+        return $this;
     }
 }

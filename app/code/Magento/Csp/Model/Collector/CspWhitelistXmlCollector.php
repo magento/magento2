@@ -47,7 +47,9 @@ class CspWhitelistXmlCollector implements PolicyCollectorInterface
                 false,
                 false,
                 [],
-                $values['hashes']
+                $values['hashes'],
+                false,
+                false
             );
         }
 

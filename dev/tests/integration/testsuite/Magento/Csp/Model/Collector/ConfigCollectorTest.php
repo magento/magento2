@@ -68,7 +68,7 @@ class ConfigCollectorTest extends TestCase
             'manifest-src' => new FetchPolicy('manifest-src', false, [], [], true),
             'media-src' => new FetchPolicy('media-src', false, [], [], true),
             'object-src' => new FetchPolicy('object-src', false, [], [], true),
-            'script-src' => new FetchPolicy('script-src', false, [], [], true),
+            'script-src' => new FetchPolicy('script-src', false, [], [], true, false, false, [], [], false, true),
             'style-src' => new FetchPolicy('style-src', false, [], [], true),
             'base-uri' => new FetchPolicy('base-uri', false, [], [], true),
             'plugin-types' => new PluginTypesPolicy(
@@ -126,6 +126,7 @@ class ConfigCollectorTest extends TestCase
      * @magentoConfigFixture default_store csp/policies/storefront/script_src/policy_id script-src
      * @magentoConfigFixture default_store csp/policies/storefront/script_src/none 0
      * @magentoConfigFixture default_store csp/policies/storefront/script_src/self 1
+     * @magentoConfigFixture default_store csp/policies/storefront/script_src/event_handlers 1
      * @magentoConfigFixture default_store csp/policies/storefront/base_uri/policy_id base-uri
      * @magentoConfigFixture default_store csp/policies/storefront/base_uri/none 0
      * @magentoConfigFixture default_store csp/policies/storefront/base_uri/self 1

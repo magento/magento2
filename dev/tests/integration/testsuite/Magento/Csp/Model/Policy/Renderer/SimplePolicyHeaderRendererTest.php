@@ -93,13 +93,30 @@ class SimplePolicyHeaderRendererTest extends TestCase
      */
     public function testRenderReportMode(): void
     {
-        $policy = new FetchPolicy('default-src', false, ['https://magento.com'], [], true);
+        $policy = new FetchPolicy(
+            'default-src',
+            false,
+            ['https://magento.com'],
+            ['https'],
+            true,
+            true,
+            true,
+            ['5749837589457695'],
+            ['B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256'],
+            true,
+            true
+        );
 
         $this->renderer->render($policy, $this->response);
 
         $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy-Report-Only'));
         $this->assertEmpty($this->response->getHeader('Content-Security-Policy'));
-        $this->assertEquals('default-src https://magento.com \'self\';', $header->getFieldValue());
+        $this->assertEquals(
+            'default-src https://magento.com https: \'self\' \'unsafe-inline\' \'unsafe-eval\' \'strict-dynamic\''
+            . ' \'unsafe-hashes\' \'nonce-'.base64_encode($policy->getNonceValues()[0]).'\''
+            . ' \'sha256-B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=\';',
+            $header->getFieldValue()
+        );
     }
 
     /**
