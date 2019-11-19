@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:ignore Magento2.Security.IncludeFile
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -71,3 +72,4 @@ $review->setEntityId(
         )->getStore()->getId()
     ]
 )->save();
+$review->aggregate();

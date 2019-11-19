@@ -122,11 +122,13 @@
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
         <waitForPageLoad stepKey="waitForAddToCart1"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!-- Add the second product to the cart -->
         <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
         <waitForPageLoad stepKey="waitForAddToCart2"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
 
         <!--View and edit cart-->
         <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickViewAndEditCartFromMiniCart"/>

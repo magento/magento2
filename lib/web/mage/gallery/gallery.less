@@ -697,8 +697,8 @@
     }
     .fotorama_horizontal_ratio {
         .fotorama__img {
-            .translateX(-50%);
-            height: 100%;
+            .translate(-50%, -50%);
+            top: 50%;
             left: 50%;
             position: absolute;
             width: auto;
@@ -762,6 +762,7 @@
     img {
         left: 0;
         max-width: inherit;
+        max-height: inherit;
         position: absolute;
         top: 0;
         object-fit: scale-down;
@@ -977,12 +978,9 @@
 
 // While first time init
 .gallery-placeholder {
-    .loading-mask {
-        padding: 0 0 50%;
-        position: static;
-    }
-    .loader img {
-        position: absolute;
+    &__image {
+        display: block;
+        margin: auto;
     }
 }
 
@@ -1003,6 +1001,7 @@
         display: block;
     }
 }
+
 .fotorama__product-video--loaded {
     .fotorama__img, .fotorama__img--full {
         display: none !important;

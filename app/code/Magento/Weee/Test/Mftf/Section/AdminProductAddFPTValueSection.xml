@@ -14,5 +14,7 @@
         <element name="selectCountryForFPT" type="select" selector="(//select[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[country]')])[last()]" parameterized="true"/>
         <element name="selectStateForFPT" type="select" selector="(//select[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[state]')])[last()]" parameterized="true"/>
         <element name="setTaxValueForFPT" type="text" selector="(//input[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[value]')])[last()]" parameterized="true"/>
+        <element name="setWebSiteForFPT" type="text" selector="(//select[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[website_id]')])[last()]" parameterized="true"/>
+        <element name="setWebSiteForFPTOption" type="text" selector="(//select[contains(@name, 'product[{{FPTAttributeCode}}]') and contains(@name, '[website_id]')])/option[contains(text(), '{{website}}')]" parameterized="true"/>
     </section>
 </sections>

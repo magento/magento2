@@ -9,12 +9,11 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as DataProvider;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 
 /**
  * Collection for fetching configurable child product data.
@@ -27,19 +26,9 @@ class Collection
     private $childCollectionFactory;
 
     /**
-     * @var ProductFactory
-     */
-    private $productFactory;
-
-    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
-
-    /**
-     * @var DataProvider
-     */
-    private $productDataProvider;
 
     /**
      * @var MetadataPool
@@ -62,24 +51,26 @@ class Collection
     private $attributeCodes = [];
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
      * @param CollectionFactory $childCollectionFactory
-     * @param ProductFactory $productFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DataProvider $productDataProvider
      * @param MetadataPool $metadataPool
+     * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
         CollectionFactory $childCollectionFactory,
-        ProductFactory $productFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        DataProvider $productDataProvider,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        CollectionProcessorInterface $collectionProcessor
     ) {
         $this->childCollectionFactory = $childCollectionFactory;
-        $this->productFactory = $productFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productDataProvider = $productDataProvider;
         $this->metadataPool = $metadataPool;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
@@ -90,14 +81,17 @@ class Collection
      */
     public function addParentProduct(Product $product) : void
     {
-        if (isset($this->parentProducts[$product->getId()])) {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productId = $product->getData($linkField);
+
+        if (isset($this->parentProducts[$productId])) {
             return;
         }
 
         if (!empty($this->childrenMap)) {
             $this->childrenMap = [];
         }
-        $this->parentProducts[$product->getId()] = $product;
+        $this->parentProducts[$productId] = $product;
     }
 
     /**
@@ -140,16 +134,16 @@ class Collection
             return $this->childrenMap;
         }
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($this->parentProducts as $product) {
             $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
-            $childCollection->addAttributeToSelect($attributeData);
-
-            /** @var Product $product */
-            $product->setData($linkField, $product->getId());
             $childCollection->setProductFilter($product);
+            $this->collectionProcessor->process(
+                $childCollection,
+                $this->searchCriteriaBuilder->create(),
+                $attributeData
+            );
 
             /** @var Product $childProduct */
             foreach ($childCollection->getItems() as $childProduct) {

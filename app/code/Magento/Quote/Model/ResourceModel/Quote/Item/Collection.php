@@ -256,9 +256,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         foreach ($this as $item) {
             /** @var ProductInterface $product */
             $product = $productCollection->getItemById($item->getProductId());
-            $isValidProduct = $this->isValidProduct($product);
             $qtyOptions = [];
-            if ($isValidProduct) {
+            if ($product && $this->isValidProduct($product)) {
                 $product->setCustomOptions([]);
                 $optionProductIds = $this->getOptionProductIds($item, $product, $productCollection);
                 foreach ($optionProductIds as $optionProductId) {
@@ -277,7 +276,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             }
         }
         if ($this->recollectQuote && $this->_quote) {
-            $this->_quote->collectTotals();
+            $this->_quote->setTotalsCollectedFlag(false);
         }
         \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 

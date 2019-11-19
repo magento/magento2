@@ -152,14 +152,14 @@
             }
 
             .product-item-name-block {
-                display: table-cell;
+                display: block;
                 padding-right: @indent__xs;
                 text-align: left;
             }
 
             .subtotal {
-                display: table-cell;
-                text-align: right;
+                display: block;
+                text-align: left;
             }
 
             .price {
@@ -227,6 +227,30 @@
         .modal-header {
             .action-close {
                 display: none;
+            }
+        }
+    }
+}
+
+//
+//  Tablet
+//  _____________________________________________
+
+@media only screen and (max-width: @screen__m) {
+    .opc-block-summary {
+        .product-item {
+            .product-item-inner {
+                display: block;
+            }
+
+            .product-item-name-block {
+                display: block;
+                text-align: left;
+            }
+
+            .subtotal {
+                display: block;
+                text-align: left;
             }
         }
     }

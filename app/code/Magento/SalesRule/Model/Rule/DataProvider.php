@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesRule\Model\Rule;
 
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
@@ -37,6 +38,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $metadataValueProvider;
 
     /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
      * Initialize dependencies.
      *
      * @param string $name
@@ -47,6 +53,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Metadata\ValueProvider $metadataValueProvider
      * @param array $meta
      * @param array $data
+     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         $name,
@@ -56,12 +63,16 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\Registry $registry,
         \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        DataPersistorInterface $dataPersistor = null
     ) {
         $this->collection = $collectionFactory->create();
         $this->coreRegistry = $registry;
         $this->metadataValueProvider = $metadataValueProvider;
         $meta = array_replace_recursive($this->getMetadataValues(), $meta);
+        $this->dataPersistor = $dataPersistor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
+            DataPersistorInterface::class
+        );
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
@@ -77,7 +88,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData()
     {
@@ -92,6 +103,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $rule->setDiscountQty($rule->getDiscountQty() * 1);
 
             $this->loadedData[$rule->getId()] = $rule->getData();
+        }
+        $data = $this->dataPersistor->get('sale_rule');
+        if (!empty($data)) {
+            $rule = $this->collection->getNewEmptyItem();
+            $rule->setData($data);
+            $this->loadedData[$rule->getId()] = $rule->getData();
+            $this->dataPersistor->clear('sale_rule');
         }
 
         return $this->loadedData;

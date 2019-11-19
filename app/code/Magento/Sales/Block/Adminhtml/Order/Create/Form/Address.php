@@ -9,6 +9,8 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Eav\Model\AttributeDataFactory;
 
 /**
  * Order create address form
@@ -191,17 +193,19 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         $emptyAddressForm = $this->_customerFormFactory->create(
             'customer_address',
             'adminhtml_customer_address',
-            [\Magento\Customer\Api\Data\AddressInterface::COUNTRY_ID => $defaultCountryId]
+            [AddressInterface::COUNTRY_ID => $defaultCountryId]
         );
-        $data = [0 => $emptyAddressForm->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON)];
+        $data = [0 => $emptyAddressForm->outputData(AttributeDataFactory::OUTPUT_FORMAT_JSON)];
         foreach ($this->getAddressCollection() as $address) {
             $addressForm = $this->_customerFormFactory->create(
                 'customer_address',
                 'adminhtml_customer_address',
-                $this->addressMapper->toFlatArray($address)
+                $this->addressMapper->toFlatArray($address),
+                false,
+                false
             );
             $data[$address->getId()] = $addressForm->outputData(
-                \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON
+                AttributeDataFactory::OUTPUT_FORMAT_JSON
             );
         }
 
@@ -267,21 +271,24 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
         $this->_form->setValues($this->getFormValues());
 
-        if ($this->_form->getElement('country_id')->getValue()) {
-            $countryId = $this->_form->getElement('country_id')->getValue();
-            $this->_form->getElement('country_id')->setValue(null);
-            foreach ($this->_form->getElement('country_id')->getValues() as $country) {
+        $countryElement = $this->_form->getElement('country_id');
+
+        $this->processCountryOptions($countryElement);
+
+        if ($countryElement->getValue()) {
+            $countryId = $countryElement->getValue();
+            $countryElement->setValue(null);
+            foreach ($countryElement->getValues() as $country) {
                 if ($country['value'] == $countryId) {
-                    $this->_form->getElement('country_id')->setValue($countryId);
+                    $countryElement->setValue($countryId);
                 }
             }
         }
-        if ($this->_form->getElement('country_id')->getValue() === null) {
-            $this->_form->getElement('country_id')->setValue(
+        if ($countryElement->getValue() === null) {
+            $countryElement->setValue(
                 $this->directoryHelper->getDefaultCountry($this->getStore())
             );
         }
-        $this->processCountryOptions($this->_form->getElement('country_id'));
         // Set custom renderer for VAT field if needed
         $vatIdElement = $this->_form->getElement('vat_id');
         if ($vatIdElement && $this->getDisplayVatValidationButton() !== false) {
@@ -305,7 +312,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      */
     private function processCountryOptions(\Magento\Framework\Data\Form\Element\AbstractElement $countryElement)
     {
-        $storeId = $this->getBackendQuoteSession()->getStoreId();
+        $storeId = $this->getAddressStoreId();
         $options = $this->getCountriesCollection()
             ->loadByStore($storeId)
             ->toOptionArray();
@@ -383,5 +390,15 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         }
 
         return $this->escapeHtml($result);
+    }
+
+    /**
+     * Return address store id.
+     *
+     * @return int
+     */
+    protected function getAddressStoreId()
+    {
+        return $this->getBackendQuoteSession()->getStoreId();
     }
 }

@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that properties are sorted alphabetically
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#sorting
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#sorting
  */
 class PropertiesSortingSniff implements Sniff
 {

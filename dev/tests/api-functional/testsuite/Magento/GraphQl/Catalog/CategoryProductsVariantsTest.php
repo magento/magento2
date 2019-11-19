@@ -18,14 +18,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CategoryProductsVariantsTest extends GraphQlAbstract
 {
     /**
-     *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetSimpleProductsFromCategory()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/360');
-
         $query
             = <<<QUERY
 {

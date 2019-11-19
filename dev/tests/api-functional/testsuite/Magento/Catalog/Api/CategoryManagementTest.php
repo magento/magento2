@@ -9,8 +9,10 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 
+/**
+ * Tests CategoryManagement
+ */
 class CategoryManagementTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/categories';
@@ -18,10 +20,12 @@ class CategoryManagementTest extends WebapiAbstract
     const SERVICE_NAME = 'catalogCategoryManagementV1';
 
     /**
+     * Tests getTree operation
+     *
      * @dataProvider treeDataProvider
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
      */
-    public function testTree($rootCategoryId, $depth, $expectedLevel, $expectedId)
+    public function testTree($rootCategoryId, $depth, $expected)
     {
         $requestData = ['rootCategoryId' => $rootCategoryId, 'depth' => $depth];
         $serviceInfo = [
@@ -36,24 +40,102 @@ class CategoryManagementTest extends WebapiAbstract
             ]
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);
-
-        for ($i = 0; $i < $expectedLevel; $i++) {
-            if (!array_key_exists(0, $result['children_data'])) {
-                $this->fail('Category "' . $result['name'] . '" doesn\'t have children but expected to have');
-            }
-            $result = $result['children_data'][0];
-        }
-        $this->assertEquals($expectedId, $result['id']);
-        $this->assertEmpty($result['children_data']);
+        $expected = array_replace_recursive($result, $expected);
+        $this->assertEquals($expected, $result);
     }
 
-    public function treeDataProvider()
+    /**
+     * @return array
+     */
+    public function treeDataProvider(): array
     {
         return [
-            [2, 100, 3, 402],
-            [2, null, 3, 402],
-            [400, 1, 1, 401],
-            [401, 0, 0, 401],
+            [
+                2,
+                100,
+                [
+                    'id' => 2,
+                    'name' => 'Default Category',
+                    'children_data' => [
+                        [
+                            'id' => 400,
+                            'name' => 'Category 1',
+                            'children_data' => [
+                                [
+                                    'id' => 401,
+                                    'name' => 'Category 1.1',
+                                    'children_data' => [
+                                        [
+                                            'id' => 402,
+                                            'name' => 'Category 1.1.1',
+                                            'children_data' => [
+
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                2,
+                null,
+                [
+                    'id' => 2,
+                    'name' => 'Default Category',
+                    'children_data' => [
+                        [
+                            'id' => 400,
+                            'name' => 'Category 1',
+                            'children_data' => [
+                                [
+                                    'id' => 401,
+                                    'name' => 'Category 1.1',
+                                    'children_data' => [
+                                        [
+                                            'id' => 402,
+                                            'name' => 'Category 1.1.1',
+                                            'children_data' => [
+
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                400,
+                1,
+                [
+                    'id' => 400,
+                    'name' => 'Category 1',
+                    'children_data' => [
+                        [
+                            'id' => 401,
+                            'name' => 'Category 1.1',
+                            'children_data' => [
+
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                400,
+                0,
+                [
+                    'id' => 400,
+                    'name' => 'Category 1',
+                    'children_data' => [
+
+                    ]
+                ]
+            ],
         ];
     }
 

@@ -16,5 +16,6 @@
         <element name="indexerSelect" type="select" selector="//select[contains(@class,'action-select-multiselect')]"/>
         <element name="indexerStatus" type="text" selector="//tr[descendant::td[contains(., '{{status}}')]]//*[contains(@class, 'col-indexer_status')]/span" parameterized="true"/>
         <element name="successMessage" type="text" selector="//*[@data-ui-id='messages-message-success']"/>
+        <element name="selectMassAction" type="select" selector="#gridIndexer_massaction-mass-select"/>
     </section>
 </sections>

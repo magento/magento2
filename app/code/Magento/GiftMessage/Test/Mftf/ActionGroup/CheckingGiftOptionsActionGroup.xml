@@ -7,8 +7,12 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CheckingGiftOptionsActionGroup">
+        <annotations>
+            <description>Clicks on Checkout with Multiple Addresses. Clicks on Add Gift option. Validates that the Success Message is present and correct. PLEASE NOTE: The message is Hardcoded.</description>
+        </annotations>
+        
         <click stepKey="clickOnCheckoutWithMultipleAddresses" selector="{{MultishippingSection.checkoutWithMultipleAddresses}}"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click stepKey="goToShippingInformation" selector="{{AdminShipmentAddressInformationSection.goToShippingInformation}}"/>
@@ -20,4 +24,3 @@
         <dontSee stepKey="dontSeeOtherElement2" userInput="Add Printed Card"/>
     </actionGroup>
 </actionGroups>
-

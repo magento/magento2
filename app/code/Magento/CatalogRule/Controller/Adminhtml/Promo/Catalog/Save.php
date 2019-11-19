@@ -97,6 +97,9 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog imple
                     unset($data['rule']);
                 }
 
+                unset($data['conditions_serialized']);
+                unset($data['actions_serialized']);
+
                 $model->loadPost($data);
 
                 $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setPageData($data);

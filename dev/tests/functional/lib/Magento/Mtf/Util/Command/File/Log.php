@@ -59,6 +59,7 @@ class Log
         );
         $data = $this->transport->read();
         $this->transport->close();
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return unserialize($data);
     }
 

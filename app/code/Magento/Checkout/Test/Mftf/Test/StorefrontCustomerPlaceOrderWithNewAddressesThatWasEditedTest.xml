@@ -71,6 +71,7 @@
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
 
         <!--Refresh Page and Place Order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <reloadPage stepKey="reloadPage"/>
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
@@ -89,7 +90,7 @@
         <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="goToOrderReviewPage"/>
         <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
              selector="{{StorefrontCustomerOrderViewSection.shippingAddress}}" stepKey="checkShippingAddress"/>
-        <see userInput="{{UK_Not_Default_Address.street[0]}} {{UK_Not_Default_Address.city}}, {{UK_Not_Default_Address.postcode}}"
+        <see userInput="{{US_Address_TX_Default_Billing.street[0]}}"
              selector="{{StorefrontCustomerOrderViewSection.billingAddress}}" stepKey="checkBillingAddress"/>
     </test>
 </tests>

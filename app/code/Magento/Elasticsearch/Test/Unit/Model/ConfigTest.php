@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'password' => 'pass',
             'timeout' => 1,
         ];
-        $this->assertEquals($options, $this->model->prepareClientOptions($options));
+        $this->assertEquals($options, $this->model->prepareClientOptions(array_merge($options, ['test' => 'test'])));
     }
 
     /**

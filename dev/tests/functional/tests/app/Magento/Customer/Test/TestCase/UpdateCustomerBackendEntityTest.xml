@@ -25,6 +25,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation2">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/email" xsi:type="string">-</data>
             <data name="address/data/prefix" xsi:type="string">Prefix%isolation%_</data>
@@ -75,6 +76,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation4" summary="Address w/o zip/state required, default billing/shipping checked">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">default</data>
             <data name="customer/data/email" xsi:type="string">-</data>
             <data name="address/data/default_billing" xsi:type="string">Yes</data>
@@ -95,6 +97,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerLogin" />
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation5" summary="Default billing/shipping unchecked">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">johndoe_unique_TX</data>
             <data name="customer/data/email" xsi:type="string">-</data>
             <data name="address/data/default_billing" xsi:type="string">No</data>
@@ -114,6 +117,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
         </variation>
         <variation name="UpdateCustomerBackendEntityTestVariation6" summary="Delete customer address">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="initialCustomer/dataset" xsi:type="string">johndoe_with_multiple_addresses</data>
             <data name="customer/data/email" xsi:type="string">-</data>
             <data name="addressIndexToDelete" xsi:type="number">1</data>

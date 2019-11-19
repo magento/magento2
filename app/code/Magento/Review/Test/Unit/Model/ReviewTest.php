@@ -51,7 +51,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Review\Model\ResourceModel\Review|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
-    /** @var int  */
+    /** @var int */
     protected $reviewId = 8;
 
     protected function setUp()
@@ -135,6 +135,9 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->review, $this->review->aggregate());
     }
 
+    /**
+     * @deprecated
+     */
     public function testGetEntitySummary()
     {
         $productId = 6;

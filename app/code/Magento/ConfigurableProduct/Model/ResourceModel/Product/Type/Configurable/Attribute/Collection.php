@@ -1,7 +1,5 @@
 <?php
 /**
- * Catalog Configurable Product Attribute Collection
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -18,6 +16,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
+ * Catalog Configurable Product Attribute Collection
+ *
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -302,6 +302,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Load related options' data.
+     *
      * @return void
      */
     protected function loadOptions()
@@ -340,6 +342,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Catalog\Model\Product[] $usedProducts
      * @param AbstractAttribute $productAttribute
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getIncludedOptions(array $usedProducts, AbstractAttribute $productAttribute)
     {

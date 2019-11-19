@@ -14,6 +14,7 @@ use Magento\Framework\App\RequestSafetyInterface;
  *
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
@@ -172,6 +173,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         if ($this->requestSafety->isSafeMethod()) {
             return $this;
         }
+        
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -263,7 +265,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Create binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteCreate($observer)
     {
@@ -281,7 +283,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Destroy binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteDestroy($observer)
     {

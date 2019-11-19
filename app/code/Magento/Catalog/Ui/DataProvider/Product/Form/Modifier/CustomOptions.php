@@ -871,6 +871,7 @@ class CustomOptions extends AbstractModifier
                         'formElement' => Hidden::NAME,
                         'dataScope' => static::FIELD_SORT_ORDER_NAME,
                         'dataType' => Number::NAME,
+                        'visible' => false,
                         'sortOrder' => $sortOrder,
                     ],
                 ],
@@ -1152,7 +1153,7 @@ class CustomOptions extends AbstractModifier
 
             if (count($group['optgroup'])) {
                 $options[] = $group;
-                $groupIndex += 1;
+                $groupIndex++;
             }
         }
 

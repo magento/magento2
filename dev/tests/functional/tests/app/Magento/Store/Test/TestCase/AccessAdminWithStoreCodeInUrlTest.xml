@@ -11,6 +11,7 @@
             <data name="configData" xsi:type="string">add_store_code_to_urls</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="storeCode" xsi:type="string">default</data>
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Store\Test\Constraint\AssertStoreCodeInUrl" />
         </variation>

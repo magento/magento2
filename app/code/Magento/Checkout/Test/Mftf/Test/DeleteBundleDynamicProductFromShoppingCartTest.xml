@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteBundleDynamicProductFromShoppingCartTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Delete Products from Shopping Cart"/>
+            <title value="Delete bundle dynamic product from shopping cart test"/>
+            <description value="Delete bundle dynamic product from shopping cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14689"/>
+            <group value="checkout"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create category and simple product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleDynamicProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createBundleDynamicProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createNewBundleLink">
+                <requiredEntity createDataKey="createBundleDynamicProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        </before>
+        <after>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete bundle product data -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createBundleDynamicProduct" stepKey="deleteBundleProduct"/>
+        </after>
+
+        <!-- Go to bundle product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createBundleDynamicProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Add product to the cart -->
+        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCart">
+            <argument name="productName" value="$$createBundleDynamicProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Remove product from cart -->
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
+        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
+            <argument name="productName" value="$$createBundleDynamicProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -14,6 +14,7 @@
         <element name="imageUploadButton" type="button" selector="div.image div.fileinput-button"/>
         <element name="imageFile" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]" parameterized="true"/>
         <element name="removeImageButton" type="button" selector=".action-remove"/>
+        <element name="removeImageButtonForExactImage" type="button" selector="[id='media_gallery_content'] img[src*='{{imageName}}'] + div[class='actions']  button[class='action-remove']" parameterized="true"/>
         <element name="modalOkBtn" type="button" selector="button.action-primary.action-accept"/>
         <element name="uploadProgressBar" type="text" selector=".uploader .file-row"/>
         <element name="productImagesToggleState" type="button" selector="[data-index='gallery'] > [data-state-collapsible='{{status}}']" parameterized="true"/>
@@ -27,6 +28,7 @@
         <element name="roleSmall" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Small']"/>
         <element name="roleThumbnail" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Thumbnail']"/>
         <element name="roleSwatch" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Swatch']"/>
+        <element name="isRoleChecked" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = '{{role}}']/parent::li[contains(@class,'selected')]" parameterized="true"/>
 
         <element name="isBaseSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Base']"/>
         <element name="isSmallSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Small']"/>

@@ -9,6 +9,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
+ * Serialized backend model
+ *
  * @api
  * @since 100.0.2
  */
@@ -46,17 +48,32 @@ class Serialized extends \Magento\Framework\App\Config\Value
     }
 
     /**
+     * Processing object after load data
+     *
      * @return void
      */
     protected function _afterLoad()
     {
         $value = $this->getValue();
         if (!is_array($value)) {
-            $this->setValue(empty($value) ? false : $this->serializer->unserialize($value));
+            try {
+                $this->setValue(empty($value) ? false : $this->serializer->unserialize($value));
+            } catch (\Exception $e) {
+                $this->_logger->critical(
+                    sprintf(
+                        'Failed to unserialize %s config value. The error is: %s',
+                        $this->getPath(),
+                        $e->getMessage()
+                    )
+                );
+                $this->setValue(false);
+            }
         }
     }
 
     /**
+     * Processing object before save data
+     *
      * @return $this
      */
     public function beforeSave()

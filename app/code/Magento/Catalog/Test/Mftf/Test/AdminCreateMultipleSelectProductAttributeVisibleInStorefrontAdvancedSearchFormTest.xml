@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateMultipleSelectProductAttributeVisibleInStorefrontAdvancedSearchFormTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Multiple Select product attribute and check its visibility in Advanced Search form"/>
+            <title value="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form"/>
+            <description value="Admin should be able to create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form"/>
+            <testCaseId value="MC-10828"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Create a multiple select product attribute with two options -->
+            <createData entity="productAttributeMultiselectTwoOptionsNotSearchable" stepKey="attribute"/>
+            <createData entity="productAttributeOption1" stepKey="option1">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="option2">
+                <requiredEntity createDataKey="attribute"/>
+            </createData>
+
+            <!-- Create product attribute set -->
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete product attribute -->
+            <deleteData createDataKey="attribute" stepKey="deleteProductAttribute"/>
+
+            <!-- Delete product attribute set -->
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Filter product attribute set by attribute set name -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <actionGroup ref="FilterProductAttributeSetGridByAttributeSetName" stepKey="filterProductAttrSetGridByAttrSetName">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+
+        <!-- Assert created attribute in an unassigned attributes -->
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassignedAttr"/>
+
+        <!-- Assign attribute in the group -->
+        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$attribute.attribute_code$$"/>
+        </actionGroup>
+        <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+
+        <!-- Go to Product Attribute Grid page -->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$$attribute.attribute_code$$" stepKey="fillAttrCodeField" />
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearchBtn" />
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="chooseFirstRow" />
+
+        <!-- Change attribute property: Frontend Label -->
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{productDropDownAttribute.attribute_code}}" stepKey="fillDefaultLabel"/>
+
+        <!-- Change attribute property: Use in Search >Yes -->
+        <scrollToTopOfPage stepKey="scrollToTabs"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="seeInSearch"/>
+
+        <!-- Change attribute property: Visible In Advanced Search >No -->
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.VisibleInAdvancedSearch}}" userInput="No" stepKey="dontSeeInAdvancedSearch"/>
+
+        <!-- Save the new product attributes -->
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
+
+        <!-- Flash cache -->
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <!-- Go to store's advanced catalog search page -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <dontSeeElement selector="{{StorefrontCatalogSearchAdvancedFormSection.AttributeByCode('$$attribute.attribute_code$$')}}" stepKey="dontSeeAttribute"/>
+    </test>
+</tests>
