@@ -41,8 +41,8 @@ class GetQuoteByReservedOrderId
     public function execute(string $reservedOrderId): ?CartInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)->create();
-        $quote = $this->cartRepository->getList($searchCriteria)->getItems();
+        $quotes = $this->cartRepository->getList($searchCriteria)->getItems();
 
-        return array_shift($quote);
+        return array_shift($quotes);
     }
 }
