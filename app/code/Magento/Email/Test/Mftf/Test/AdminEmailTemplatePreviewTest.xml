@@ -18,6 +18,7 @@
             <testCaseId value="MC-15794"/>
             <useCaseId value="MC-11050"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>
@@ -36,5 +37,76 @@
         <actionGroup ref="CreateCustomTemplate" stepKey="createTemplate"/>
         <actionGroup ref="PreviewEmailTemplate" stepKey="previewTemplate"/>
         <actionGroup ref="AssertEmailTemplateContent" stepKey="assertContent"/>
+    </test>
+
+    <test name="AdminEmailTemplatePreviewWithDirectivesTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Create email template with directives"/>
+            <title value="Check email template preview with directives"/>
+            <description value="Check if email template preview works correctly with directives"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-23058"/>
+            <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
+            <stories value="Email Template Preview"/>
+        </annotations>
+
+        <before>
+            <!--Login to Admin Area-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <!--Delete created Template-->
+            <actionGroup ref="DeleteEmailTemplate" stepKey="deleteTemplate"/>
+            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+            <!--Logout from Admin Area-->
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="CreateCustomTemplate" stepKey="createTemplate">
+            <argument name="template" value="EmailTemplateWithDirectives"/>
+        </actionGroup>
+        <actionGroup ref="PreviewEmailTemplate" stepKey="previewTemplate"/>
+        <actionGroup ref="AssertEmailTemplateContent" stepKey="assertContent">
+            <argument name="expectedContent" value="{{EmailTemplateWithDirectives.expectedTemplate}}"/>
+        </actionGroup>
+    </test>
+    <test name="AdminEmailTemplatePreviewAsDraftWithDirectivesTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Create email template with directives and preview as draft"/>
+            <title value="Check email template preview with directives and preview as draft"/>
+            <description value="Check if email template preview works correctly with directives in draft mode"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-23058"/>
+            <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
+            <stories value="Email Template Preview"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="PrepareDraftCustomTemplate" stepKey="createDraftTemplate">
+            <argument name="template" value="EmailTemplateWithDirectives"/>
+        </actionGroup>
+
+        <click selector="{{AdminEmailTemplateEditSection.previewTemplateButton}}" stepKey="clickPreviewTemplate"/>
+        <switchToNextTab stepKey="switchToPreviewTab"/>
+        <seeInCurrentUrl url="{{AdminEmailTemplatePreviewPage.url}}" stepKey="seePreviewInUrl"/>
+        <seeElement selector="{{AdminEmailTemplatePreviewSection.iframe}}" stepKey="seeIframeOnPage"/>
+        <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
+        <waitForPageLoad stepKey="waitForPreviewLoaded"/>
+
+        <actionGroup ref="AssertEmailTemplateContent" stepKey="assertContent">
+            <argument name="expectedContent" value="{{EmailTemplateWithDirectives.expectedTemplate}}"/>
+        </actionGroup>
     </test>
 </tests>
