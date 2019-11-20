@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
@@ -12,25 +13,32 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+$storeManager = $objectManager->get(StoreManagerInterface::class);
 $categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+$currentStoreId = $storeManager->getStore()->getId();
 
-$category = $categoryFactory->create();
-$category->isObjectNew(true);
-$category->setName('Category 999')
-    ->setParentId(2)->setPath('1/2')
-    ->setLevel(2)
-    ->setAvailableSortBy('name')
-    ->setDefaultSortBy('name')
-    ->setIsActive(true)
-    ->setPosition(1)
-    ->setStoreId(Store::DEFAULT_STORE_ID)
-    ->setAvailableSortBy(['position'])
-    ->save();
+try {
+    $storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+    $category = $categoryFactory->create();
+    $category->isObjectNew(true);
+    $category->setName('Category 999')
+        ->setParentId(2)
+        ->setLevel(2)
+        ->setAvailableSortBy('name')
+        ->setDefaultSortBy('name')
+        ->setIsActive(true)
+        ->setPosition(1);
+    $category = $categoryRepository->save($category);
+} finally {
+    $storeManager->setCurrentStore($currentStoreId);
+}
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)

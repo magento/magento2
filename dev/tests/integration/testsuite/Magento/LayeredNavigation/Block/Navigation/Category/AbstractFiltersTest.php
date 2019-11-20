@@ -130,11 +130,10 @@ abstract class AbstractFiltersTest extends AbstractCategoryTest
         $items = [];
         /** @var Item $item */
         foreach ($filter->getItems() as $item) {
-            $itemArray = [
+            $items[] = [
                 'label' => $item->getData('label'),
                 'count' => $item->getData('count'),
             ];
-            $items[] = $itemArray;
         }
 
         return $items;
