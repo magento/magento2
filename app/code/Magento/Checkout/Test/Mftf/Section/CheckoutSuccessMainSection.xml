@@ -20,6 +20,6 @@
         <element name="createAnAccount" type="button" selector="[data-bind*=&quot;i18n: 'Create an Account'&quot;]" timeout="30"/>
         <element name="printLink" type="button" selector=".print" timeout="30"/>
         <element name="orderNumberWithoutLink" type="text" selector="//div[contains(@class, 'checkout-success')]//p/span"/>
-        <element name="orderLinkByOrderNumber" type="text" selector="//a[.='{{orderNumber}}']" parameterized="true" timeout="30"/>
+        <element name="orderLinkByOrderNumber" type="text" selector="//div[contains(@class,'success')]//a[contains(.,'{{orderNumber}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

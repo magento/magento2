@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminChangAllCustomersGroupViaGridTest" extends="AdminChangeSingleCustomerGroupViaGridTest">
+    <test name="AdminChangeAllCustomersGroupViaGridTest" extends="AdminChangeSingleCustomerGroupViaGridTest">
         <annotations>
             <title value="Change all customers' group via grid"/>
             <description value="Select All customers to change their group"/>

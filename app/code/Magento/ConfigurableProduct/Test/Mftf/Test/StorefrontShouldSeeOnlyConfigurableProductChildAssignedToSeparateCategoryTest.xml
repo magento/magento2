@@ -93,7 +93,7 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
             <deleteData createDataKey="secondCategory" stepKey="deleteSecondCategory"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Go to the product page for the first product -->

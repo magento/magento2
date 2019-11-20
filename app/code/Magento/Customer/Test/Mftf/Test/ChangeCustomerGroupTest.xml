@@ -71,7 +71,7 @@
             <group value="customer"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="DEPRECATED">Use AdminChangAllCustomersGroupViaGridTest instead</issueId>
+                <issueId value="DEPRECATED">Use AdminChangeAllCustomersGroupViaGridTest instead</issueId>
             </skip>
         </annotations>
 
