@@ -65,7 +65,7 @@
                 </field>
                 <field id="grid_per_page" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on Grid Default Value</label>
-                    <comment>Must be in the allowed values list</comment>
+                    <comment>Must be in the allowed values list.</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
                 <field id="list_per_page_values" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -75,7 +75,7 @@
                 </field>
                 <field id="list_per_page" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Products per Page on List Default Value</label>
-                    <comment>Must be in the allowed values list</comment>
+                    <comment>Must be in the allowed values list.</comment>
                     <validate>validate-per-page-value</validate>
                 </field>
                 <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
@@ -90,12 +90,12 @@
                 </field>
                 <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Product Listing Sort by</label>
-                    <comment>Applies to category pages</comment>
+                    <comment>Applies to category pages.</comment>
                     <source_model>Magento\Catalog\Model\Config\Source\ListSort</source_model>
                 </field>
                 <field id="list_allow_all" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allow All Products per Page</label>
-                    <comment>Whether to show "All" option in the "Show X Per Page" dropdown</comment>
+                    <comment>Whether to show "All" option in the "Show X Per Page" dropdown.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="remember_pagination" translate="label comment" type="select" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">

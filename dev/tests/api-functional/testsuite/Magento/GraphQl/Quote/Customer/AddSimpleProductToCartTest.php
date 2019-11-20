@@ -29,7 +29,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
@@ -85,7 +85,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     * @expectedExceptionMessage Field AddSimpleProductsToCartInput.cart_id of required type String! was not provided.
      */
     public function testAddSimpleProductToCartIfCartIdIsMissed()
     {
@@ -138,7 +138,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
      */
     public function testAddSimpleProductToCartIfCartItemsAreMissed()
     {
@@ -157,6 +156,11 @@ mutation {
   }
 }
 QUERY;
+
+        $this->expectExceptionMessage(
+            'Field AddSimpleProductsToCartInput.cart_items of required type'
+            . ' [SimpleProductCartItemInput]! was not provided.'
+        );
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
