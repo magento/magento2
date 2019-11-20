@@ -2038,11 +2038,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     protected function _getNewCustomerEmail()
     {
         $email = $this->getData('account/email');
-        
+
         if ($email || $this->isEmailRequired()) {
             return $email;
         }
-        
+
         return $this->generateEmail();
     }
 
@@ -2055,7 +2055,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_session->getStore()->getId()
         );
     }
 
@@ -2075,7 +2076,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $account = $this->getData('account');
         $account['email'] = $email;
         $this->setData('account', $account);
-        
+
         return $email;
     }
 

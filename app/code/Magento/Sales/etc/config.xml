@@ -113,7 +113,7 @@
         </dev>
         <customer>
           <create_account>
-              <email_required_create_order>0</email_required_create_order>
+              <email_required_create_order>1</email_required_create_order>
           </create_account>
         </customer>
     </default>
