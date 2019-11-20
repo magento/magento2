@@ -44,6 +44,34 @@ abstract class AbstractFiltersTest extends AbstractCategoryTest
     }
 
     /**
+     * Tests getFilters method from navigation block.
+     *
+     * @param array $products
+     * @param int $filterable
+     * @param array $expectation
+     * @param string $attributeCode
+     * @return void
+     */
+    protected function getFiltersAndAssert(
+        array $products,
+        int $filterable,
+        array $expectation,
+        string $attributeCode
+    ): void {
+        $this->updateAttribute($attributeCode, $filterable);
+        $this->updateProducts($products, $attributeCode);
+        $this->prepareNavigationBlock('Category 999');
+        $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), $attributeCode);
+
+        if ($filterable) {
+            $this->assertNotNull($filter);
+            $this->assertEquals($expectation, $this->prepareFilterItems($filter));
+        } else {
+            $this->assertNull($filter);
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     protected function prepareNavigationBlock(string $categoryName, int $storeId = Store::DEFAULT_STORE_ID): void
@@ -58,7 +86,7 @@ abstract class AbstractFiltersTest extends AbstractCategoryTest
     /**
      * Returns filter with specified attribute.
      *
-     * @param array $filters
+     * @param AbstractFilter[] $filters
      * @param string $code
      * @return AbstractFilter|null
      */
@@ -68,7 +96,7 @@ abstract class AbstractFiltersTest extends AbstractCategoryTest
             $filters,
             function (AbstractFilter $filter) use ($code) {
                 return $filter->getData('attribute_model')
-                    && $filter->getData('attribute_model')->getAttributeCode() == $code;
+                    && $filter->getData('attribute_model')->getAttributeCode() === $code;
             }
         );
 
@@ -76,29 +104,19 @@ abstract class AbstractFiltersTest extends AbstractCategoryTest
     }
 
     /**
-     * Updates attribute and products data.
+     * Updates attribute data.
      *
      * @param string $attributeCode
      * @param int $filterable
-     * @param array $products
      * @return void
      */
-    protected function updateAttributeAndProducts(
+    protected function updateAttribute(
         string $attributeCode,
-        int $filterable,
-        array $products
+        int $filterable
     ): void {
         $attribute = $this->attributeRepository->get($attributeCode);
         $attribute->setData('is_filterable', $filterable);
         $this->attributeRepository->save($attribute);
-
-        foreach ($products as $productSku => $stringValue) {
-            $product = $this->productRepository->get($productSku, false, Store::DEFAULT_STORE_ID, true);
-            $product->addData(
-                [$attribute->getAttributeCode() => $attribute->getSource()->getOptionId($stringValue)]
-            );
-            $this->productRepository->save($product);
-        }
     }
 
     /**
@@ -112,13 +130,33 @@ abstract class AbstractFiltersTest extends AbstractCategoryTest
         $items = [];
         /** @var Item $item */
         foreach ($filter->getItems() as $item) {
-            $item = [
+            $itemArray = [
                 'label' => $item->getData('label'),
                 'count' => $item->getData('count'),
             ];
-            $items[] = $item;
+            $items[] = $itemArray;
         }
 
         return $items;
+    }
+
+    /**
+     * Update products data by attribute.
+     *
+     * @param array $products
+     * @param string $attributeCode
+     * @return void
+     */
+    protected function updateProducts(array $products, string $attributeCode): void
+    {
+        $attribute = $this->attributeRepository->get($attributeCode);
+
+        foreach ($products as $productSku => $stringValue) {
+            $product = $this->productRepository->get($productSku, false, Store::DEFAULT_STORE_ID, true);
+            $product->addData(
+                [$attribute->getAttributeCode() => $attribute->getSource()->getOptionId($stringValue)]
+            );
+            $this->productRepository->save($product);
+        }
     }
 }

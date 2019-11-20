@@ -30,16 +30,7 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
      */
     public function testGetFiltersWithCustomAttribute(array $products, int $filterable, array $expectation): void
     {
-        $this->updateAttributeAndProducts('visual_swatch_attribute', $filterable, $products);
-        $this->prepareNavigationBlock('Category 999');
-        $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), 'visual_swatch_attribute');
-
-        if ($filterable) {
-            $this->assertNotNull($filter);
-            $this->assertEquals($expectation, $this->prepareFilterItems($filter));
-        } else {
-            $this->assertNull($filter);
-        }
+        $this->getFiltersAndAssert($products, $filterable, $expectation, 'visual_swatch_attribute');
     }
 
     /**

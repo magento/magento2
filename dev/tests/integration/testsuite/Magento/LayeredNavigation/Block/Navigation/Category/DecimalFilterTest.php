@@ -31,23 +31,11 @@ class DecimalFilterTest extends AbstractFiltersTest
      */
     public function testGetFiltersWithCustomAttribute(array $products, int $filterable, array $expectation): void
     {
-        $this->updateAttributeAndProducts('decimal_attribute', $filterable, $products);
-        $this->prepareNavigationBlock('Category 999');
-        $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), 'decimal_attribute');
-
-        if ($filterable) {
-            $this->assertNotNull($filter);
-            $this->assertEquals($expectation, $this->prepareFilterItems($filter));
-        } else {
-            $this->assertNull($filter);
-        }
+        $this->getFiltersAndAssert($products, $filterable, $expectation, 'decimal_attribute');
     }
 
     /**
-     * Returns filter items as array.
-     *
-     * @param AbstractFilter $filter
-     * @return array
+     * @inheritdoc
      */
     protected function prepareFilterItems(AbstractFilter $filter): array
     {
@@ -68,14 +56,9 @@ class DecimalFilterTest extends AbstractFiltersTest
     /**
      * @inheritdoc
      */
-    protected function updateAttributeAndProducts(
-        string $attributeCode,
-        int $filterable,
-        array $products
-    ): void {
+    protected function updateProducts(array $products, string $attributeCode): void
+    {
         $attribute = $this->attributeRepository->get($attributeCode);
-        $attribute->setData('is_filterable', $filterable);
-        $this->attributeRepository->save($attribute);
 
         foreach ($products as $productSku => $value) {
             $product = $this->productRepository->get($productSku, false, Store::DEFAULT_STORE_ID, true);

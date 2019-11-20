@@ -66,7 +66,7 @@ class CategoryTest extends AbstractCategoryTest
      */
     public function testCanShowBlockWithDisplayMode(string $displayMode, bool $canShow): void
     {
-        $this->updateTestCategory($displayMode, 'Category 999');
+        $this->updateCategoryDisplayMode('Category 999', $displayMode);
         $this->prepareNavigationBlock('Category 999');
         $this->assertEquals($canShow, $this->navigationBlock->canShowBlock());
     }
@@ -98,8 +98,8 @@ class CategoryTest extends AbstractCategoryTest
         bool $canShow
     ): void {
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
-        $this->updateTestCategory($defaultMode, 'Category 999');
-        $this->updateTestCategory($storeMode, 'Category 999', $secondStoreId);
+        $this->updateCategoryDisplayMode('Category 999', $defaultMode);
+        $this->updateCategoryDisplayMode('Category 999', $storeMode, $secondStoreId);
         $this->prepareNavigationBlock('Category 999', $secondStoreId);
         $this->assertEquals($canShow, $this->navigationBlock->canShowBlock());
     }
@@ -131,21 +131,20 @@ class CategoryTest extends AbstractCategoryTest
     /**
      * Updates category display mode.
      *
-     * @param string $displayMode
      * @param string $categoryName
+     * @param string $displayMode
      * @param int $storeId
      * @return void
      */
-    private function updateTestCategory(
-        string $displayMode,
+    private function updateCategoryDisplayMode(
         string $categoryName,
+        string $displayMode,
         int $storeId = Store::DEFAULT_STORE_ID
     ): void {
         $category = $this->loadCategory($categoryName, $storeId);
-        $currentMode = $category->getData('display_mode');
+        $category->setData('display_mode', $displayMode);
 
-        if ($currentMode !== $displayMode) {
-            $category->setData('display_mode', $displayMode);
+        if ($category->dataHasChangedFor('display_mode')) {
             $this->categoryResource->save($category);
         }
     }
