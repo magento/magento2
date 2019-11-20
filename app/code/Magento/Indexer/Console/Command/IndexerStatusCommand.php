@@ -64,11 +64,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
 
         usort(
             $rows,
-            function ($comp1, $comp2) {
-                /**
-                 * @var array $comp1
-                 * @var array $comp2
-                 */
+            function (array $comp1, array $comp2) {
                 return strcmp($comp1['Title'], $comp2['Title']);
             }
         );
