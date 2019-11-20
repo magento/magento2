@@ -10,11 +10,11 @@ include __DIR__ . '/product_date_attribute.php';
 
 $attribute->setData('is_used_for_promo_rules', 1);
 
-/** @var ProductFactory $productFactory */
+/** @var \Magento\Catalog\Model\ProductFactory $productFactory */
 $productFactory = $objectManager->get(Magento\Catalog\Model\ProductFactory::class);
 $product = $productFactory->create();
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple Product with date')
     ->setSku('simple_with_date')
@@ -30,7 +30,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $product2 = $productFactory->create();
 $product2->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple Product with date -1')
     ->setSku('simple_with_date2')
@@ -46,7 +46,7 @@ $product2->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $product3 = $productFactory->create();
 $product3->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple Product with date +1')
     ->setSku('simple_with_date3')
