@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Element;
 
@@ -887,6 +888,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param array|null $allowedTags
      * @return string
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeHtml($data, $allowedTags = null)
     {
@@ -899,6 +901,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @return string
      * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeJs($string)
     {
@@ -912,6 +915,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param boolean $escapeSingleQuote
      * @return string
      * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -924,6 +928,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @return string
      * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeCss($string)
     {
@@ -951,6 +956,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeUrl($string)
     {
