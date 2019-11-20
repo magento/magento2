@@ -60,7 +60,7 @@ QUERY;
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);

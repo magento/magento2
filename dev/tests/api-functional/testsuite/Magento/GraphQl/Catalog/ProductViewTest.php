@@ -273,7 +273,7 @@ QUERY;
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
@@ -659,11 +659,11 @@ QUERY;
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $firstProduct->setId(
-            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
         $secondProduct->setId(
-            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);

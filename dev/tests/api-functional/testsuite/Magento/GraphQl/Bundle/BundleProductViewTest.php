@@ -87,7 +87,7 @@ QUERY;
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
         $bundleProduct->setId(
-            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         if ((bool)$bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
@@ -186,7 +186,7 @@ QUERY;
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         $bundleProduct = $productRepository->get($productSku, false, null, true);
         $bundleProduct->setId(
-            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $bundleProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         if ((bool)$bundleProduct->getShipmentType()) {
             $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
@@ -251,7 +251,7 @@ QUERY;
         $childProduct = $productRepository->get($childProductSku);
         /** @var MetadataPool $metadataPool */
         $childProduct->setId(
-            $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $childProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
         );
         $this->assertEquals(1, count($options));
         $this->assertResponseFields(
