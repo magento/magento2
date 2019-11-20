@@ -1263,7 +1263,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
             foreach ($optionsCollection->getItems() as $option) {
-                if ($option->getRequired() && !isset($options[$option->getId()])) {
+                if ($option->getRequired() && empty($options[$option->getId()])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Please select all required options.')
                     );
