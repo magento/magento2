@@ -16,15 +16,15 @@
             <description value="Checking Credit memo Totals"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-6159"/>
-            <group value="creditMemo"/>
             <group value="tax"/>
+            <group value="sales"/>
         </annotations>
         <before>
             <!-- Create productTaxClass -->
             <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
             <!--Set configs-->
-            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
-            <magentoCLI command="config:set tax/classes/default_product_tax_class $createProductTaxClass.return$" stepKey="setDefaultProductTaxClass"/>
+            <magentoCLI command="config:set {{DisableGenerateCategoryProductUrlRewrites.path}} {{DisableGenerateCategoryProductUrlRewrites.value}}" stepKey="disableGenerateUrlRewrite"/>
+            <magentoCLI command="config:set {{DefaultProductTaxClass.path}} $createProductTaxClass.return$" stepKey="setDefaultProductTaxClass"/>
             <!--Create category and product-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
@@ -42,8 +42,8 @@
         </before>
         <after>
             <!--Set configs-->
-            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <magentoCLI command="config:set tax/classes/default_product_tax_class 2" stepKey="setDefaultProductTaxClass"/>
+            <magentoCLI command="config:set {{EnableGenerateCategoryProductUrlRewrites.path}} {{EnableGenerateCategoryProductUrlRewrites.value}}" stepKey="enableGenerateUrlRewrite"/>
+            <magentoCLI command="config:set {{DefaultProductTaxClass.path}} {{DefaultProductTaxClass.value}}" stepKey="setDefaultProductTaxClass"/>
             <!--Delete category and product-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -61,7 +61,7 @@
             <!-- Delete Tax Class -->
             <deleteData createDataKey="createProductTaxClass" stepKey="deleteProductTaxClass"/>
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create new order-->
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
@@ -79,12 +79,12 @@
         <actionGroup ref="StartCreateInvoiceFromOrderPage" stepKey="startCreateInvoice"/>
         <actionGroup ref="SubmitInvoice" stepKey="submitInvoice"/>
         <!--Create Credit Memo-->
-        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="createCreditMemo"/>
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startCreatingCreditMemo"/>
         <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
         <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateTotals"/>
         <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
         <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemoFromOrderPageActionGroup"/>
-        <actionGroup ref="AdminAssertCreditMemoGrandTotalActionGroup" stepKey="assertGrandTotal">
+        <actionGroup ref="AssertAdminCreditMemoGrandTotalActionGroup" stepKey="assertGrandTotal">
             <argument name="expectedGrandTotal" value="$133.30"/>
         </actionGroup>
     </test>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertCreditMemoGrandTotalActionGroup">
+    <actionGroup name="AssertAdminCreditMemoGrandTotalActionGroup">
         <annotations>
             <description>Admin assert creditmemo grant total sum</description>
         </annotations>
@@ -16,6 +16,6 @@
             <argument name="expectedGrandTotal" type="string" defaultValue="$123.00"/>
         </arguments>
         <grabTextFrom selector="{{AdminCreditMemoTotalSection.grandTotal}}" stepKey="getGrandTotal"/>
-        <assertEquals expected='{{expectedGrandTotal}}' expectedType="string" actual="$getGrandTotal" stepKey="assertGrandTotalValue"/>
+        <assertEquals expected='{{expectedGrandTotal}}' actualType="variable" expectedType="string" actual="getGrandTotal" stepKey="assertGrandTotalValue"/>
     </actionGroup>
 </actionGroups>

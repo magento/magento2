@@ -10,16 +10,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateTaxRuleCustomProductTaxClassActionGroup">
         <annotations>
-            <description>Admin create tax rule with custom product tax class</description>
+            <description>Admin create tax rule with custom tax rate and product tax class</description>
         </annotations>
         <arguments>
-            <argument name="taxRateCode" type="string" defaultValue="{{US_NY_Rate_1.code}}"/>
             <argument name="taxRuleCode" type="string" defaultValue="{{defaultTaxRule.code}}"/>
+            <argument name="taxRateCode" type="string" defaultValue="{{US_NY_Rate_1.code}}"/>
             <argument name="productTaxClassName" type="string" defaultValue="NewTaxClass"/>
         </arguments>
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
-        <waitForPageLoad stepKey="waitForTaxRatePageLoaded"/>
-        <click selector="{{AdminMainActionsSection.add}}" stepKey="addNewTaxRate"/>
+        <amOnPage url="{{AdminNewTaxRulePage.url}}" stepKey="goNewTaxRulePage"/>
+        <waitForPageLoad stepKey="waitForNewTaxRulePageLoaded"/>
         <fillField selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{taxRuleCode}}" stepKey="fillRuleName"/>
         <click selector="{{AdminTaxRulesSection.selectTaxRate(taxRateCode)}}" stepKey="selectTaxRate"/>
         <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
