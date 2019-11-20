@@ -41,22 +41,34 @@
                         <comment><![CDATA[Your API key can be found on the <a href="http://signifyd.com/settings" target="_blank">settings page</a> in the Signifyd console.]]></comment>
                         <config_path>fraud_protection/signifyd/api_key</config_path>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
                     </field>
                     <field id="api_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API URL</label>
                         <config_path>fraud_protection/signifyd/api_url</config_path>
                         <comment>Don’t change unless asked to do so.</comment>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
                     </field>
                     <field id="debug" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Debug</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>fraud_protection/signifyd/debug</config_path>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
                     </field>
                     <field id="webhook_url" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Webhook URL</label>
                         <comment><![CDATA[Your webhook URL will be used to <a href="https://app.signifyd.com/settings/notifications" target="_blank">configure</a> a guarantee completed webhook in Signifyd. Webhooks are used to sync Signifyd`s guarantee decisions back to Magento.]]></comment>
                         <attribute type="handler_url">signifyd/webhooks/handler</attribute>
                         <frontend_model>Magento\Signifyd\Block\Adminhtml\System\Config\Field\WebhookUrl</frontend_model>
+                        <depends>
+                            <field id="active">1</field>
+                        </depends>
                     </field>
                 </group>
             </group>
