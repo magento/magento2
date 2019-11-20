@@ -9,7 +9,7 @@
     <system>
         <section id="payment">
             <group id="authorizenet_acceptjs" translate="label" type="text" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Authorize.Net</label>
+                <label>Authorize.Net (Deprecated)</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

@@ -16,6 +16,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-148"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="MC-22577"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
@@ -148,7 +151,7 @@
             <argument name="attribute" value="{{productAttributeDropdownTwoOptions.attribute_code}}"/>
         </actionGroup>
         <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
-        
+
         <!-- First Simple Product: choose green as attribute value -->
         <actionGroup ref="filterAndSelectProduct" stepKey="openFirstSimpleProduct">
             <argument name="productSku" value="$$createFirstProduct.sku$$"/>
