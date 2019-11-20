@@ -81,7 +81,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
     /**
      * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     * @expectedExceptionMessage Field AddSimpleProductsToCartInput.cart_id of required type String! was not provided.
      */
     public function testAddSimpleProductToCartIfCartIdIsMissed()
     {
@@ -130,10 +130,6 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
-     */
     public function testAddSimpleProductToCartIfCartItemsAreMissed()
     {
         $query = <<<QUERY
@@ -151,6 +147,11 @@ mutation {
   }
 }
 QUERY;
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Field AddSimpleProductsToCartInput.cart_items of required type [SimpleProductCartItemInput]!'
+            . ' was not provided.'
+        );
 
         $this->graphQlMutation($query);
     }

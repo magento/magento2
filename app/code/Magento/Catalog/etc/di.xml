@@ -1243,4 +1243,83 @@
             <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="category_ids" xsi:type="string">catalog_product</item>
+                    <item name="country_of_manufacture" xsi:type="string">catalog_product</item>
+                    <item name="created_at" xsi:type="string">catalog_product</item>
+                    <item name="custom_design" xsi:type="string">catalog_product</item>
+                    <item name="custom_design_from" xsi:type="string">catalog_product</item>
+                    <item name="custom_design_to" xsi:type="string">catalog_product</item>
+                    <item name="custom_layout" xsi:type="string">catalog_product</item>
+                    <item name="custom_layout_update" xsi:type="string">catalog_product</item>
+                    <item name="description" xsi:type="string">catalog_product</item>
+                    <item name="gallery" xsi:type="string">catalog_product</item>
+                    <item name="has_options" xsi:type="string">catalog_product</item>
+                    <item name="image" xsi:type="string">catalog_product</item>
+                    <item name="image_label" xsi:type="string">catalog_product</item>
+                    <item name="media_gallery" xsi:type="string">catalog_product</item>
+                    <item name="meta_description" xsi:type="string">catalog_product</item>
+                    <item name="meta_keyword" xsi:type="string">catalog_product</item>
+                    <item name="meta_title" xsi:type="string">catalog_product</item>
+                    <item name="minimal_price" xsi:type="string">catalog_product</item>
+                    <item name="name" xsi:type="string">catalog_product</item>
+                    <item name="news_from_date" xsi:type="string">catalog_product</item>
+                    <item name="news_to_date" xsi:type="string">catalog_product</item>
+                    <item name="old_id" xsi:type="string">catalog_product</item>
+                    <item name="options_container" xsi:type="string">catalog_product</item>
+                    <item name="page_layout" xsi:type="string">catalog_product</item>
+                    <item name="price" xsi:type="string">catalog_product</item>
+                    <item name="quantity_and_stock_status" xsi:type="string">catalog_product</item>
+                    <item name="required_options" xsi:type="string">catalog_product</item>
+                    <item name="short_description" xsi:type="string">catalog_product</item>
+                    <item name="sku" xsi:type="string">catalog_product</item>
+                    <item name="small_image" xsi:type="string">catalog_product</item>
+                    <item name="small_image_label" xsi:type="string">catalog_product</item>
+                    <item name="special_from_date" xsi:type="string">catalog_product</item>
+                    <item name="special_price" xsi:type="string">catalog_product</item>
+                    <item name="special_to_date" xsi:type="string">catalog_product</item>
+                    <item name="status" xsi:type="string">catalog_product</item>
+                    <item name="thumbnail" xsi:type="string">catalog_product</item>
+                    <item name="thumbnail_label" xsi:type="string">catalog_product</item>
+                    <item name="tier_price" xsi:type="string">catalog_product</item>
+                    <item name="updated_at" xsi:type="string">catalog_product</item>
+                    <item name="visibility" xsi:type="string">catalog_product</item>
+                    <item name="weight" xsi:type="string">catalog_product</item>
+                </item>
+                <item name="catalog_category" xsi:type="array">
+                    <item name="all_children" xsi:type="string">catalog_category</item>
+                    <item name="available_sort_by" xsi:type="string">catalog_category</item>
+                    <item name="children" xsi:type="string">catalog_category</item>
+                    <item name="children_count" xsi:type="string">catalog_category</item>
+                    <item name="custom_apply_to_products" xsi:type="string">catalog_category</item>
+                    <item name="custom_design" xsi:type="string">catalog_category</item>
+                    <item name="custom_design_from" xsi:type="string">catalog_category</item>
+                    <item name="custom_design_to" xsi:type="string">catalog_category</item>
+                    <item name="custom_layout_update" xsi:type="string">catalog_category</item>
+                    <item name="custom_use_parent_settings" xsi:type="string">catalog_category</item>
+                    <item name="default_sort_by" xsi:type="string">catalog_category</item>
+                    <item name="description" xsi:type="string">catalog_category</item>
+                    <item name="display_mode" xsi:type="string">catalog_category</item>
+                    <item name="filter_price_range" xsi:type="string">catalog_category</item>
+                    <item name="image" xsi:type="string">catalog_category</item>
+                    <item name="include_in_menu" xsi:type="string">catalog_category</item>
+                    <item name="is_active" xsi:type="string">catalog_category</item>
+                    <item name="is_anchor" xsi:type="string">catalog_category</item>
+                    <item name="landing_page" xsi:type="string">catalog_category</item>
+                    <item name="level" xsi:type="string">catalog_category</item>
+                    <item name="meta_description" xsi:type="string">catalog_category</item>
+                    <item name="meta_keywords" xsi:type="string">catalog_category</item>
+                    <item name="meta_title" xsi:type="string">catalog_category</item>
+                    <item name="name" xsi:type="string">catalog_category</item>
+                    <item name="page_layout" xsi:type="string">catalog_category</item>
+                    <item name="path" xsi:type="string">catalog_category</item>
+                    <item name="path_in_store" xsi:type="string">catalog_category</item>
+                    <item name="position" xsi:type="string">catalog_category</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

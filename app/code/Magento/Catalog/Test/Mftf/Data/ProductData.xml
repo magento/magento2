@@ -1328,4 +1328,9 @@
     <entity name="SimpleProductUpdatePrice16" type="product2">
         <data key="price">16.00</data>
     </entity>
+    <entity name="ProductWithTwoTextFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
+    </entity>
 </entities>

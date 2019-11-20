@@ -302,7 +302,7 @@ QUERY;
             ],
             'missed_cart_id' => [
                 'shipping_addresses: {}',
-                'Required parameter "cart_id" is missing'
+                'Field SetShippingAddressesOnCartInput.cart_id of required type String! was not provided.'
             ]
         ];
     }

@@ -9,6 +9,7 @@ use Magento\Store\Model\StoreRepository;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
@@ -23,7 +24,9 @@ $quoteRepository = $objectManager->get(QuoteRepository::class);
 /** @var  StoreRepository $storeRepository */
 $storeRepository = $objectManager->get(StoreRepository::class);
 
+/** @var Store $defaultStore */
 $defaultStore = $storeRepository->getActiveStoreByCode('default');
+/** @var Store $secondStore */
 $secondStore = $storeRepository->getActiveStoreByCode('fixture_second_store');
 
 $quotes = [
