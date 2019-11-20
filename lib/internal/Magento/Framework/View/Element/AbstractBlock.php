@@ -822,7 +822,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $showTime = false,
         $timezone = null
     ) {
-        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
+        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date ?? 'now');
         return $this->_localeDate->formatDateTime(
             $date,
             $format,
@@ -845,7 +845,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $format = \IntlDateFormatter::SHORT,
         $showDate = false
     ) {
-        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time);
+        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time ?? 'now');
         return $this->_localeDate->formatDateTime(
             $time,
             $showDate ? $format : \IntlDateFormatter::NONE,
