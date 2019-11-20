@@ -3062,6 +3062,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param int $nextLinkId
      * @param array $positionAttrId
      * @return void
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processLinkBunches(
         array $bunch,
@@ -3072,6 +3074,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $productIds = [];
         $linkRows = [];
         $positionRows = [];
+        $linksToDelete = [];
 
         $bunch = array_filter($bunch, [$this, 'isRowAllowedToImport'], ARRAY_FILTER_USE_BOTH);
         foreach ($bunch as $rowData) {
@@ -3088,10 +3091,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
             foreach ($linkNameToId as $linkName => $linkId) {
                 $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+                //process empty value
+                if (!empty($linkSkus[0]) && $linkSkus[0] === $this->getEmptyAttributeValueConstant()) {
+                    $linksToDelete[$linkId][] = $productId;
+                    continue;
+                }
+
                 $linkPositions = !empty($rowData[$linkName . 'position'])
                     ? explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
                     : [];
-
                 $linkSkus = array_filter(
                     $linkSkus,
                     function ($linkedSku) use ($sku) {
@@ -3100,6 +3108,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             && strcasecmp($linkedSku, $sku) !== 0;
                     }
                 );
+
                 foreach ($linkSkus as $linkedKey => $linkedSku) {
                     $linkedId = $this->getProductLinkedId($linkedSku);
                     if ($linkedId == null) {
@@ -3131,7 +3140,32 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
         }
+        $this->deleteProductsLinks($resource, $linksToDelete);
         $this->saveLinksData($resource, $productIds, $linkRows, $positionRows);
+    }
+
+    /**
+     * Delete links
+     *
+     * @param Link $resource
+     * @param array $linksToDelete
+     * @return void
+     * @throws LocalizedException
+     */
+    private function deleteProductsLinks(Link $resource, array $linksToDelete)
+    {
+        if (!empty($linksToDelete) && Import::BEHAVIOR_APPEND === $this->getBehavior()) {
+            foreach ($linksToDelete as $linkTypeId => $productIds) {
+                if (!empty($productIds)) {
+                    $whereLinkId = $this->_connection->quoteInto('link_type_id', $linkTypeId);
+                    $whereProductId =  $this->_connection->quoteInto('product_id IN (?)', array_unique($productIds));
+                    $this->_connection->delete(
+                        $resource->getMainTable(),
+                        $whereLinkId . ' AND ' . $whereProductId
+                    );
+                }
+            }
+        }
     }
 
     /**
