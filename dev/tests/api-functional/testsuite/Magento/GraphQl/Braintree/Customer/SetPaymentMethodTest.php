@@ -270,35 +270,6 @@ class SetPaymentMethodTest extends GraphQlAbstract
         $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
     }
 
-    /**
-     * @magentoConfigFixture default_store carriers/flatrate/active 1
-     * @magentoConfigFixture default_store payment/braintree/active 1
-     * @magentoConfigFixture default_store payment/braintree_cc_vault/active 1
-     * @magentoConfigFixture default_store payment/braintree/environment sandbox
-     * @magentoConfigFixture default_store payment/braintree/merchant_id def_merchant_id
-     * @magentoConfigFixture default_store payment/braintree/public_key def_public_key
-     * @magentoConfigFixture default_store payment/braintree/private_key def_private_key
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @expectedException \Exception
-     */
-    public function testSetPaymentMethodWithoutRequiredPaymentMethodInput()
-    {
-        $reservedOrderId = 'test_quote';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
-
-        $setPaymentQuery = $this->getSetPaymentBraintreeQueryInvalidPaymentMethodInput($maskedQuoteId);
-        $this->expectExceptionMessage(
-            'Field BraintreeInput.is_active_payment_token_enabler of required type Boolean! was not provided.'
-        );
-        $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
-    }
-
     public function dataProviderTestSetPaymentMethodInvalidInput(): array
     {
         return [
