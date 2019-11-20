@@ -24,21 +24,18 @@ $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
 $currentStoreId = $storeManager->getStore()->getId();
 
-try {
-    $storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-    $category = $categoryFactory->create();
-    $category->isObjectNew(true);
-    $category->setName('Category 999')
-        ->setParentId(2)
-        ->setLevel(2)
-        ->setAvailableSortBy('name')
-        ->setDefaultSortBy('name')
-        ->setIsActive(true)
-        ->setPosition(1);
-    $category = $categoryRepository->save($category);
-} finally {
-    $storeManager->setCurrentStore($currentStoreId);
-}
+$storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+$category = $categoryFactory->create();
+$category->isObjectNew(true);
+$category->setName('Category 999')
+    ->setParentId(2)
+    ->setLevel(2)
+    ->setAvailableSortBy('name')
+    ->setDefaultSortBy('name')
+    ->setIsActive(true)
+    ->setPosition(1);
+$category = $categoryRepository->save($category);
+$storeManager->setCurrentStore($currentStoreId);
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
