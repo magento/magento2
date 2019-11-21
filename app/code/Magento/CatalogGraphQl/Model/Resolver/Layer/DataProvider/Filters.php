@@ -93,7 +93,7 @@ class Filters
                 if (array_key_exists($name, $this->mappings)) {
                     $result = in_array($this->mappings[$name], $attributesToFilter);
                 } else {
-                    $result = false;
+                    $result = true;
                 }
             }
         }
