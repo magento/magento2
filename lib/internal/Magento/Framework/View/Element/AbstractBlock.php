@@ -874,6 +874,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public static function extractModuleName($className)
     {
+        if (!$className) {
+            return '';
+        }
+
         $namespace = substr(
             $className,
             0,
