@@ -816,7 +816,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param float $itemWeight
      * @param float $maxWeight
      */
-    private function pushDecimalItems(array &$decimalItems, float $itemWeight, float $maxWeight): void
+    private function pushDecimalItems(array &$decimalItems, float $itemWeight, float $maxWeight)
     {
         $qtyItem = floor($itemWeight / $maxWeight);
         $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];

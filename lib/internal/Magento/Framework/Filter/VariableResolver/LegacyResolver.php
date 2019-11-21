@@ -103,7 +103,7 @@ class LegacyResolver implements VariableResolverInterface
      * @param int $i
      * @param array $stackArgs
      */
-    private function handlePropertyAccess(int $i, array &$stackArgs): void
+    private function handlePropertyAccess(int $i, array &$stackArgs)
     {
         if (is_array($stackArgs[$i - 1]['variable'])) {
             $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable'][$stackArgs[$i]['name']];
@@ -131,7 +131,7 @@ class LegacyResolver implements VariableResolverInterface
         array $templateVariables,
         int $i,
         array &$stackArgs
-    ): void {
+    ) {
         if (method_exists($stackArgs[$i - 1]['variable'], $stackArgs[$i]['name'])
             || substr($stackArgs[$i]['name'], 0, 3) == 'get'
         ) {
@@ -156,7 +156,7 @@ class LegacyResolver implements VariableResolverInterface
      * @param int $i
      * @param array $stackArgs
      */
-    private function handleObjectMethod(Template $filter, array $templateVariables, int $i, array &$stackArgs): void
+    private function handleObjectMethod(Template $filter, array $templateVariables, int $i, array &$stackArgs)
     {
         $object = $stackArgs[$i - 1]['variable'];
         $method = $stackArgs[$i]['name'];
@@ -204,7 +204,7 @@ class LegacyResolver implements VariableResolverInterface
      * @param array $templateVariables
      * @param array $stackArgs
      */
-    private function handleDataAccess(int $i, Template $filter, array $templateVariables, array &$stackArgs): void
+    private function handleDataAccess(int $i, Template $filter, array $templateVariables, array &$stackArgs)
     {
         // If data object calling methods or getting properties
         if ($stackArgs[$i]['type'] == 'property') {

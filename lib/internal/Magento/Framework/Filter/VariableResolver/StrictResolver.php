@@ -75,7 +75,7 @@ class StrictResolver implements VariableResolverInterface
      * @param array $templateVariables
      * @param array $stackArgs
      */
-    private function handleDataAccess(int $i, Template $filter, array $templateVariables, array &$stackArgs): void
+    private function handleDataAccess(int $i, Template $filter, array $templateVariables, array &$stackArgs)
     {
         // If data object calling methods or getting properties
         if ($stackArgs[$i]['type'] == 'property') {
@@ -99,7 +99,7 @@ class StrictResolver implements VariableResolverInterface
      * @param array $templateVariables
      * @param array $stackArgs
      */
-    private function handleGetterMethod(int $i, Template $filter, array $templateVariables, array &$stackArgs): void
+    private function handleGetterMethod(int $i, Template $filter, array $templateVariables, array &$stackArgs)
     {
         if ($stackArgs[$i]['name'] === 'getUrl'
             && $stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
