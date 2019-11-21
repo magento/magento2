@@ -923,64 +923,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-<<<<<<< HEAD
-     * Get user context.
-     *
-     * @return UserContextInterface
-     */
-    private function getUserContext(): UserContextInterface
-    {
-        if (!$this->userContext) {
-            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
-        }
-
-        return $this->userContext;
-    }
-
-    /**
-     * Get authorization service.
-     *
-     * @return AuthorizationInterface
-     */
-    private function getAuthorization(): AuthorizationInterface
-    {
-        if (!$this->authorization) {
-            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        }
-
-        return $this->authorization;
-    }
-
-    /**
-     * @inheritDoc
-     * @since 103.0.2
-     */
-    public function beforeSave()
-    {
-        //Validate changing of design.
-        $userType = $this->getUserContext()->getUserType();
-        if ((
-                $userType === UserContextInterface::USER_TYPE_ADMIN
-                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
-            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_category_design')
-        ) {
-            foreach ($this->_designAttributes as $attributeCode) {
-                $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
-                if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])
-                    && array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
-                    //In case custom attribute were used to update the entity.
-                    $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
-                }
-            }
-        }
-
-        return parent::beforeSave();
-    }
-
-    /**
-=======
->>>>>>> 2.3.4-develop
      * Retrieve anchors above
      *
      * @return array
