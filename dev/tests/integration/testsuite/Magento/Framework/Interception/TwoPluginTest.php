@@ -45,7 +45,7 @@ class TwoPluginTest extends AbstractPlugin
     public function testPluginAfterWins()
     {
         $subject = $this->_objectManager->create(\Magento\Framework\Interception\Fixture\Intercepted::class);
-        $this->assertEquals('<P:aZ/>', $subject->Z('test'));
+        $this->assertEquals('<F:aZ/>', $subject->Z('test'));
     }
 
     public function testPluginBeforeAroundWins()

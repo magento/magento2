@@ -192,7 +192,14 @@ class PluginList extends Scoped implements InterceptionPluginList
                             $this->_processed[$currentKey][DefinitionInterface::LISTENER_BEFORE][] = $key;
                         }
                         if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
+                            if (!isset($this->_processed[$currentKey][DefinitionInterface::LISTENER_AFTER])) {
+                                $this->_processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
+                            } else {
+                                array_unshift(
+                                    $this->_processed[$currentKey][DefinitionInterface::LISTENER_AFTER],
+                                    $key
+                                );
+                            }
                         }
                     }
                 }
