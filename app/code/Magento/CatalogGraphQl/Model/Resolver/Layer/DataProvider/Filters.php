@@ -22,6 +22,11 @@ class Filters
     private $filtersProvider;
 
     /**
+     * @var array
+     */
+    private $mappings;
+
+    /**
      * Filters constructor.
      * @param FiltersProvider $filtersProvider
      */
@@ -29,6 +34,9 @@ class Filters
         FiltersProvider $filtersProvider
     ) {
         $this->filtersProvider = $filtersProvider;
+        $this->mappings = [
+            'Category' => 'category'
+        ];
     }
 
     /**
@@ -70,6 +78,7 @@ class Filters
      * @param AbstractFilter $filter
      * @param array $attributesToFilter
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function isNeedToAddFilter(AbstractFilter $filter, array $attributesToFilter): bool
     {
@@ -79,6 +88,8 @@ class Filters
             if ($filter->hasAttributeModel()) {
                 $filterAttribute = $filter->getAttributeModel();
                 $result = in_array($filterAttribute->getAttributeCode(), $attributesToFilter);
+            } elseif (!empty($this->mappings[$filter->getName()])) {
+                $result = in_array($this->mappings[$filter->getName()], $attributesToFilter);
             } else {
                 $result = false;
             }
