@@ -176,14 +176,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getAttribute',
-                'getId',
-                'setQuoteItemQty',
-                'setQuoteItemPrice',
-                'getTypeId',
-                'hasData',
-            ])
+            ->setMethods(
+                [
+                    'getAttribute',
+                    'getId',
+                    'setQuoteItemQty',
+                    'setQuoteItemPrice',
+                    'getTypeId',
+                    'hasData',
+                ]
+            )
             ->getMock();
         $productMock
             ->expects($this->any())
