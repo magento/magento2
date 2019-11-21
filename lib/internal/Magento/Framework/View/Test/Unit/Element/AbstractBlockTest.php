@@ -99,12 +99,14 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $contextMock->expects($this->once())
             ->method('getEscaper')
             ->willReturn($this->escaperMock);
+        $contextMock->expects($this->once())
+            ->method('getLockGuardedCacheLoader')
+            ->willReturn($this->lockQuery);
         $this->block = $this->getMockForAbstractClass(
             AbstractBlock::class,
             [
                 'context' => $contextMock,
                 'data' => [],
-                'lockQuery' => $this->lockQuery
             ]
         );
     }
@@ -321,6 +323,32 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
                 'expectsDispatchEvent' => $this->exactly(2),
                 'expectedResult' => '',
             ],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testExtractModuleName()
+    {
+        $blockClassNames = $this->getPossibleBlockClassNames();
+
+        foreach ($blockClassNames as $expectedModuleName => $className) {
+            $extractedModuleName = $this->block->extractModuleName($className);
+            $this->assertSame($expectedModuleName, $extractedModuleName);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    private function getPossibleBlockClassNames()
+    {
+        return [
+            'Vendor_Module' => 'Vendor\Module\Block\Class',
+            'Vendor_ModuleBlock' => 'Vendor\ModuleBlock\Block\Class',
+            'Vendor_BlockModule' => 'Vendor\BlockModule\Block\Class',
+            'Vendor_CustomBlockModule' => 'Vendor\CustomBlockModule\Block\Class',
         ];
     }
 }

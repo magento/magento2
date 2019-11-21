@@ -362,7 +362,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
                     PHP_EOL .
                     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
-                    ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
                     ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
                     PHP_EOL,
                 self::CLOSE_TAG_KEY => '</urlset>',
@@ -550,10 +549,10 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $row .= '<lastmod>' . $this->_getFormattedLastmodDate($lastmod) . '</lastmod>';
         }
         if ($changefreq) {
-            $row .= '<changefreq>' . $changefreq . '</changefreq>';
+            $row .= '<changefreq>' . $this->_escaper->escapeHtml($changefreq) . '</changefreq>';
         }
         if ($priority) {
-            $row .= sprintf('<priority>%.1f</priority>', $priority);
+            $row .= sprintf('<priority>%.1f</priority>', $this->_escaper->escapeHtml($priority));
         }
         if ($images) {
             // Add Images to sitemap
@@ -746,7 +745,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');
         $baseDir = trim(str_replace('\\', '/', $this->_getBaseDir()), '/');
 
-        if (strpos($baseDir, $documentRoot) === 0) {
+        if (strpos($baseDir, (string) $documentRoot) === 0) {
             //case when basedir is in document root
             $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
@@ -802,7 +801,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             $content = $this->_directory->readFile($filename);
         }
 
-        if (strpos($content, $robotsSitemapLine) === false) {
+        if (strpos($content, (string) $robotsSitemapLine) === false) {
             if (!empty($content)) {
                 $content .= $this->_findNewLinesDelimiter($content);
             }
@@ -821,7 +820,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private function _findNewLinesDelimiter($text)
     {
         foreach ($this->_crlf as $delimiter) {
-            if (strpos($text, $delimiter) !== false) {
+            if (strpos($text, (string) $delimiter) !== false) {
                 return $delimiter;
             }
         }

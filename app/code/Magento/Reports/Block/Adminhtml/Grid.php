@@ -135,8 +135,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $data = $this->parameters->toArray();
 
             if (!isset($data['report_from'])) {
-                // getting all reports from 2001 year
-                $date = (new \DateTime())->setTimestamp(mktime(0, 0, 0, 1, 1, 2001));
+                // Get records for the past month
+                $date = new \DateTime('-1 month');
                 $data['report_from'] = $this->_localeDate->formatDateTime(
                     $date,
                     \IntlDateFormatter::SHORT,
@@ -145,7 +145,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             }
 
             if (!isset($data['report_to'])) {
-                // getting all reports from 2001 year
                 $date = new \DateTime();
                 $data['report_to'] = $this->_localeDate->formatDateTime(
                     $date,
@@ -171,9 +170,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                  * Validate from and to date
                  */
                 try {
-                    $from = $this->_localeDate->date($this->getFilter('report_from'), null, false, false);
-                    $to = $this->_localeDate->date($this->getFilter('report_to'), null, false, false);
-
+                    $from = $this->_localeDate->date($this->getFilter('report_from'), null, true, false);
+                    $to = $this->_localeDate->date($this->getFilter('report_to'), null, true, false);
                     $collection->setInterval($from, $to);
                 } catch (\Exception $e) {
                     $this->_errors[] = __('Invalid date specified');

@@ -11,6 +11,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
  * Fixture generator for Order entities with configurable number of different types of order items.
+ *
  * Optionally generates inactive quotes for generated orders.
  *
  * Support the following format:
@@ -323,6 +324,7 @@ class OrdersFixture extends Fixture
         $entityId++;
         while ($entityId <= $requestedOrders) {
             $batchNumber++;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $productCount = [
                 Type::TYPE_SIMPLE => mt_rand($orderSimpleCountFrom, $orderSimpleCountTo),
                 Configurable::TYPE_CODE => mt_rand($orderConfigurableCountFrom, $orderConfigurableCountTo),
@@ -473,6 +475,7 @@ class OrdersFixture extends Fixture
     private function prepareQueryTemplates()
     {
         $fileName = __DIR__ . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . "orders_fixture_data.json";
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $templateData = json_decode(file_get_contents(realpath($fileName)), true);
         foreach ($templateData as $table => $template) {
             if (isset($template['_table'])) {
@@ -511,6 +514,7 @@ class OrdersFixture extends Fixture
                 $connection->beginTransaction();
             }
 
+            // phpcs:ignore Magento2.SQL.RawQuery
             $this->queryTemplates[$table] = "INSERT INTO `{$tableName}` ({$fields}) VALUES ({$values}){$querySuffix};";
             $this->resourceConnections[$table] = $connection;
         }
@@ -523,7 +527,7 @@ class OrdersFixture extends Fixture
      * DB connection (if setup). Additionally filters out quote-related queries, if appropriate flag is set.
      *
      * @param string $table
-     * @param array ...$replacements
+     * @param array $replacements
      * @return void
      */
     protected function query($table, ... $replacements)
@@ -560,6 +564,7 @@ class OrdersFixture extends Fixture
         /** @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb $resource */
         $resource = $this->fixtureModel->getObjectManager()->get($resourceName);
         $connection = $resource->getConnection();
+        // phpcs:ignore Magento2.SQL.RawQuery
         return (int)$connection->query("SELECT MAX(`{$column}`) FROM `{$tableName}`;")->fetchColumn(0);
     }
 
@@ -570,7 +575,7 @@ class OrdersFixture extends Fixture
      * @param string $typeId
      * @param int $limit
      * @return array
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     private function getProductIds(\Magento\Store\Api\Data\StoreInterface $store, $typeId, $limit = null)
     {
@@ -590,7 +595,7 @@ class OrdersFixture extends Fixture
         }
         $ids = $productCollection->getAllIds($limit);
         if ($limit && count($ids) < $limit) {
-            throw new \Exception('Not enough products of type: ' . $typeId);
+            throw new \RuntimeException('Not enough products of type: ' . $typeId);
         }
         return $ids;
     }
@@ -718,7 +723,7 @@ class OrdersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -726,7 +731,7 @@ class OrdersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -737,6 +742,7 @@ class OrdersFixture extends Fixture
 
     /**
      * Get real table name for db table, validated by db adapter.
+     *
      * In case prefix or other features mutating default table names are used.
      *
      * @param string $tableName

@@ -11,16 +11,16 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Check "Manufacturer's Suggested Retail Price" field on "Advanced pricing" page.
+ * Check "Minimum Advertised Price" field on "Advanced pricing" page.
  */
 class AssertProductEditPageAdvancedPricingFields extends AbstractConstraint
 {
     /**
-     * Title of "Manufacturer's Suggested Retail Price" field.
+     * Title of "Minimum Advertised Price" field.
      *
      * @var string
      */
-    private $manufacturerFieldTitle = 'Manufacturer\'s Suggested Retail Price';
+    private $manufacturerFieldTitle = 'Minimum Advertised Price';
 
     /**
      * @param CatalogProductEdit $catalogProductEdit
@@ -35,7 +35,7 @@ class AssertProductEditPageAdvancedPricingFields extends AbstractConstraint
 
         \PHPUnit\Framework\Assert::assertTrue(
             $advancedPricing->checkField($this->manufacturerFieldTitle),
-            '"Manufacturer\'s Suggested Retail Price" field is not correct.'
+            '"Minimum Advertised Price" field is not correct.'
         );
     }
 
@@ -46,6 +46,6 @@ class AssertProductEditPageAdvancedPricingFields extends AbstractConstraint
      */
     public function toString()
     {
-        return '"Manufacturer\'s Suggested Retail Price" field is correct.';
+        return '"Minimum Advertised Price" field is correct.';
     }
 }

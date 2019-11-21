@@ -200,6 +200,7 @@
     <type name="Magento\CatalogSearch\Model\Search\ItemCollectionProvider">
         <arguments>
             <argument name="factories" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory</item>
                 <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory</item>
             </argument>
         </arguments>
@@ -207,6 +208,7 @@
     <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
         <arguments>
             <argument name="strategies" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
                 <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
             </argument>
         </arguments>
@@ -279,6 +281,7 @@
             <argument name="defaultGenerator" xsi:type="object">\Magento\CatalogSearch\Model\Search\RequestGenerator\General</argument>
             <argument name="generators" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal</item>
+                <item name="price" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Price</item>
             </argument>
         </arguments>
     </type>
@@ -370,5 +373,8 @@
                 <item name="catalog_search" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Setup\PropertyMapper</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="stockedProductsFilterPlugin" type="Magento\CatalogSearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
     </type>
 </config>

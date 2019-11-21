@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17181"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -99,6 +96,10 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{virtualProductBigQty.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
+
+        <!--Run full reindex and clear caches -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Verify customer see created virtual product with tier price(from above step) on storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>

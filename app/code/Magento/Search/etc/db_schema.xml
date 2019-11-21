@@ -46,15 +46,19 @@
         <index referenceId="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
             <column name="is_processed"/>
         </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID_POPULARITY" indexType="btree">
+            <column name="store_id"/>
+            <column name="popularity"/>
+        </index>
     </table>
     <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">
         <column xsi:type="bigint" name="group_id" padding="20" unsigned="true" nullable="false" identity="true"
-                comment="Synonyms Group Id"/>
+                comment="Synonyms Group ID"/>
         <column xsi:type="text" name="synonyms" nullable="false" comment="list of synonyms making up this group"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id - identifies the store view these synonyms belong to"/>
+                default="0" comment="Store ID - identifies the store view these synonyms belong to"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Website Id - identifies the website id these synonyms belong to"/>
+                default="0" comment="Website ID - identifies the website ID these synonyms belong to"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="group_id"/>
         </constraint>

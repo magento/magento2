@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckElementColorActionGroup">
+        <annotations>
+            <description>Checks element color on storefront.</description>
+        </annotations>
+        <arguments>
+            <argument name="selector" type="string"/>
+            <argument name="property" type="string"/>
+            <argument name="color" type="string"/>
+        </arguments>
+
+        <executeJS function="return window.getComputedStyle(document.querySelector('{{selector}}')).getPropertyValue('{{property}}')" stepKey="getElementColor"/>
+        <assertEquals expected="{{color}}" expectedType="string" actualType="variable" actual="getElementColor" message="pass" stepKey="assertElementColor"/>
+    </actionGroup>
+</actionGroups>

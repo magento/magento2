@@ -3,11 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Create handler for catalog product gallery
@@ -75,6 +80,16 @@ class CreateHandler implements ExtensionInterface
     private $mediaAttributeCodes;
 
     /**
+     * @var array
+     */
+    private $imagesGallery;
+
+    /**
+     * @var  \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
@@ -82,6 +97,8 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
@@ -90,7 +107,8 @@ class CreateHandler implements ExtensionInterface
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
@@ -99,6 +117,7 @@ class CreateHandler implements ExtensionInterface
         $this->mediaConfig = $mediaConfig;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fileStorageDb = $fileStorageDb;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -137,6 +156,10 @@ class CreateHandler implements ExtensionInterface
 
         if ($product->getIsDuplicate() != true) {
             foreach ($value['images'] as &$image) {
+                if (!empty($image['removed']) && !$this->canRemoveImage($product, $image['file'])) {
+                    $image['removed'] = '';
+                }
+
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id'])) {
@@ -152,6 +175,10 @@ class CreateHandler implements ExtensionInterface
             // For duplicating we need copy original images.
             $duplicate = [];
             foreach ($value['images'] as &$image) {
+                if (!empty($image['removed']) && !$this->canRemoveImage($product, $image['file'])) {
+                    $image['removed'] = '';
+                }
+
                 if (empty($image['value_id']) || !empty($image['removed'])) {
                     continue;
                 }
@@ -537,5 +564,47 @@ class CreateHandler implements ExtensionInterface
                 $product->getStoreId()
             );
         }
+    }
+
+    /**
+     * Get product images for all stores
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function getImagesForAllStores(ProductInterface $product)
+    {
+        if ($this->imagesGallery ===  null) {
+            $storeIds = array_keys($this->storeManager->getStores());
+            $storeIds[] = 0;
+
+            $this->imagesGallery = $this->resourceModel->getProductImages($product, $storeIds);
+        }
+
+        return $this->imagesGallery;
+    }
+
+    /**
+     * Check possibility to remove image
+     *
+     * @param ProductInterface $product
+     * @param string $imageFile
+     * @return bool
+     */
+    private function canRemoveImage(ProductInterface $product, string $imageFile) :bool
+    {
+        $canRemoveImage = true;
+        $gallery = $this->getImagesForAllStores($product);
+        $storeId = $product->getStoreId();
+
+        if (!empty($gallery)) {
+            foreach ($gallery as $image) {
+                if ($image['filepath'] === $imageFile && (int) $image['store_id'] !== $storeId) {
+                    $canRemoveImage = false;
+                }
+            }
+        }
+
+        return $canRemoveImage;
     }
 }

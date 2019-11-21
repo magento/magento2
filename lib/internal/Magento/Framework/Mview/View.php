@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview;
 
 use InvalidArgumentException;
@@ -238,7 +240,7 @@ class View extends DataObject implements ViewInterface
      */
     public function update()
     {
-        if ($this->getState()->getStatus() !== View\StateInterface::STATUS_IDLE) {
+        if (!$this->isIdle() || !$this->isEnabled()) {
             return;
         }
 
@@ -254,36 +256,57 @@ class View extends DataObject implements ViewInterface
         try {
             $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
-            $versionBatchSize = self::$maxVersionQueryBatch;
-            $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
-                ? $this->changelogBatchSize[$this->getChangelog()->getViewId()]
-                : self::DEFAULT_BATCH_SIZE;
-
-            for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
-                // Don't go past the current version for atomicy.
-                $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-                $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
-
-                // We run the actual indexer in batches.
-                // Chunked AFTER loading to avoid duplicates in separate chunks.
-                $chunks = array_chunk($ids, $batchSize);
-                foreach ($chunks as $ids) {
-                    $action->execute($ids);
-                }
-            }
+            $this->executeAction($action, $lastVersionId, $currentVersionId);
 
             $this->getState()->loadByView($this->getId());
             $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
                 ? View\StateInterface::STATUS_SUSPENDED
                 : View\StateInterface::STATUS_IDLE;
             $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->getState()->loadByView($this->getId());
             $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
                 ? View\StateInterface::STATUS_SUSPENDED
                 : View\StateInterface::STATUS_IDLE;
             $this->getState()->setStatus($statusToRestore)->save();
+            if (!$exception instanceof \Exception) {
+                $exception = new \RuntimeException(
+                    'Error when updating an mview',
+                    0,
+                    $exception
+                );
+            }
             throw $exception;
+        }
+    }
+
+    /**
+     * Execute action from last version to current version, by batches
+     *
+     * @param ActionInterface $action
+     * @param int $lastVersionId
+     * @param int $currentVersionId
+     * @return void
+     * @throws \Exception
+     */
+    private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
+    {
+        $versionBatchSize = self::$maxVersionQueryBatch;
+        $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
+            ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+            : self::DEFAULT_BATCH_SIZE;
+
+        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
+            // Don't go past the current version for atomicity.
+            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
+            $ids = $this->getChangelog()->getList($vsFrom, $versionTo);
+
+            // We run the actual indexer in batches.
+            // Chunked AFTER loading to avoid duplicates in separate chunks.
+            $chunks = array_chunk($ids, $batchSize);
+            foreach ($chunks as $ids) {
+                $action->execute($ids);
+            }
         }
     }
 

@@ -18,6 +18,9 @@
             <testCaseId value="MC-11146"/>
             <group value="catalog"/>
             <group value="indexer"/>
+            <skip>
+                <issueId value="MC-20392"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>

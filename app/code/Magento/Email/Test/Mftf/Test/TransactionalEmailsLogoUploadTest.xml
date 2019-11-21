@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13908"/>
             <group value="LogoUpload"/>
+            <skip>
+                <issueId value="MC-18496"/>
+            </skip>
         </annotations>
         <!--Login to Admin Area-->
         <before>

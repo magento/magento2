@@ -21,4 +21,7 @@
             <argument name="storage" xsi:type="object">Magento\Wishlist\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="cleanups_wishlist_item_after_product_delete" type="Magento\Wishlist\Plugin\Model\ResourceModel\Product" />
+    </type>
 </config>
