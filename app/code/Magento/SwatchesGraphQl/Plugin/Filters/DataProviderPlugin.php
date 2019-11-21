@@ -53,12 +53,17 @@ class DataProviderPlugin
      * @param Filters $subject
      * @param \Closure $proceed
      * @param string $layerType
+     * @param array $attributesToFilter
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function aroundGetData(Filters $subject, \Closure $proceed, string $layerType) : array
-    {
+    public function aroundGetData(
+        Filters $subject,
+        \Closure $proceed,
+        string $layerType,
+        array $attributesToFilter = null
+    ) : array {
         $swatchFilters = [];
         /** @var AbstractFilter $filter */
         foreach ($this->filtersProvider->getFilters($layerType) as $filter) {
@@ -69,7 +74,7 @@ class DataProviderPlugin
             }
         }
 
-        $filtersData = $proceed($layerType);
+        $filtersData = $proceed($layerType, $attributesToFilter);
 
         foreach ($filtersData as $groupKey => $filterGroup) {
             /** @var AbstractFilter $swatchFilter */

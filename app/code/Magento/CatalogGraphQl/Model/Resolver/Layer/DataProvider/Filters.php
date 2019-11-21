@@ -34,14 +34,16 @@ class Filters
      * Get layered navigation filters data
      *
      * @param string $layerType
+     * @param array|null $attributesToFilter
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getData(string $layerType) : array
+    public function getData(string $layerType, array $attributesToFilter = null) : array
     {
         $filtersData = [];
         /** @var AbstractFilter $filter */
         foreach ($this->filtersProvider->getFilters($layerType) as $filter) {
-            if ($filter->getItemsCount()) {
+            if ($this->isNeedToAddFilter($filter, $attributesToFilter)) {
                 $filterGroup = [
                     'name' => (string)$filter->getName(),
                     'filter_items_count' => $filter->getItemsCount(),
@@ -59,5 +61,20 @@ class Filters
             }
         }
         return $filtersData;
+    }
+
+    private function isNeedToAddFilter(AbstractFilter $filter, array $attributesToFilter): bool
+    {
+        if ($attributesToFilter === null) {
+            $result = (bool)$filter->getItemsCount();
+        } else {
+            try {
+                $filterAttribute = $filter->getAttributeModel();
+                $result = in_array($filterAttribute->getAttributeCode(), $attributesToFilter);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $result = false;
+            }
+        }
+        return $result;
     }
 }
