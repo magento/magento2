@@ -7,54 +7,79 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductRepository as ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\Search\Document as SearchDocument;
-use Magento\Framework\Search\AdapterInterface as AdapterInterface;
 use Magento\Framework\Search\Request\Builder as SearchRequestBuilder;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Search\Model\AdapterFactory as AdapterFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends TestCase
 {
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var SearchRequestConfig
+     */
+    private $searchRequestConfig;
+
+    /**
+     * @var SearchRequestBuilder
+     */
+    private $requestBuilder;
+
+    /**
+     * @var AdapterFactory
+     */
+    private $adapterFactory;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->searchRequestConfig = $this->objectManager->create(SearchRequestConfig::class);
+        $this->requestBuilder = $this->objectManager->create(
+            SearchRequestBuilder::class,
+            ['config' => $this->searchRequestConfig]
+        );
+        $this->adapterFactory = $this->objectManager->get(AdapterFactory::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        parent::setUp();
+    }
+
+    /**
+     * Search product by custom attribute value.
+     *
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoDbIsolation disabled
      * @return void
      */
     public function testSearchProductByAttribute(): void
     {
-        /** @var ObjectManager $objectManager */
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var SearchRequestConfig $config */
-        $config = $objectManager->create(SearchRequestConfig::class);
-
-        /** @var SearchRequestBuilder $requestBuilder */
-        $requestBuilder = $objectManager->create(
-            SearchRequestBuilder::class,
-            ['config' => $config]
-        );
-
-        $requestBuilder->bind('search_term', 'Option 1');
-        $requestBuilder->setRequestName('quick_search_container');
-        $queryRequest = $requestBuilder->create();
-
-        /** @var AdapterInterface $adapter */
-        $adapterFactory = $objectManager->create(AdapterFactory::class);
-        $adapter = $adapterFactory->create();
+        $this->requestBuilder->bind('search_term', 'Option 1');
+        $this->requestBuilder->setRequestName('quick_search_container');
+        $queryRequest = $this->requestBuilder->create();
+        $adapter = $this->adapterFactory->create();
         $queryResponse = $adapter->query($queryRequest);
         $actualIds = [];
-
+        /** @var SearchDocument $document */
         foreach ($queryResponse as $document) {
-            /** @var SearchDocument $document */
             $actualIds[] = $document->getId();
         }
-
-        /** @var Product $product */
-        $product = $objectManager->create(ProductRepository::class)->get('simple_for_search');
+        $product = $this->productRepository->get('simple_for_search');
         $this->assertContains($product->getId(), $actualIds, 'Product not found by searchable attribute.');
     }
 }

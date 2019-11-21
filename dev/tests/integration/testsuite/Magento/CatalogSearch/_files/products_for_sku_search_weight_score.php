@@ -8,23 +8,18 @@ declare(strict_types=1);
 require 'searchable_attribute.php';
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Action;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Store\Model\StoreManager;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
-/** @var StoreManager $storeManager */
-$storeManager = $objectManager->get(StoreManager::class);
-/** @var Action $productAction */
-$productAction = $objectManager->create(Action::class);
-/** @var Product $product */
-$product = $objectManager->create(Product::class);
+/** @var ProductFactory $productFactory */
+$productFactory = $objectManager->get(ProductFactory::class);
+$product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -44,7 +39,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     );
 $productRepository->save($product);
 
-$product = $objectManager->create(Product::class);
+$product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -64,7 +59,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     );
 $productRepository->save($product);
 
-$product = $objectManager->create(Product::class);
+$product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -85,7 +80,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     );
 $productRepository->save($product);
 
-$product = $objectManager->create(Product::class);
+$product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
@@ -95,6 +90,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setTaxClassId(0)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
+    ->setTestSearchableAttribute($attribute->getSource()->getOptionId('Option 1'))
     ->setStockData(
         [
             'use_config_manage_stock' => 1,
@@ -104,12 +100,3 @@ $product->setTypeId(Type::TYPE_SIMPLE)
         ]
     );
 $productRepository->save($product);
-
-$productWithAttribute = $productRepository->get('product_with_attribute');
-$storeManager->setIsSingleStoreModeAllowed(false);
-$store = $storeManager->getStore('default');
-$productAction->updateAttributes(
-    [$productWithAttribute->getId()],
-    ['test_searchable_attribute' => $attribute->getSource()->getOptionId('Simple')],
-    $store->getId()
-);

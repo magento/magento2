@@ -10,13 +10,11 @@ require 'searchable_attribute.php';
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Action;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Model\Entity\Type as EntityType;
-use Magento\Store\Model\StoreManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
@@ -25,14 +23,11 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var EntityType $entityType */
 $entityType = $objectManager->create(EntityType::class);
 $entityType = $entityType->loadByCode(ProductAttributeInterface::ENTITY_TYPE_CODE);
-/** @var Action $productAction */
-$productAction = $objectManager->create(Action::class);
-/** @var StoreManager $storeManager */
-$storeManager = $objectManager->get(StoreManager::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-/** @var Product $product */
-$product = $objectManager->create(Product::class);
+/** @var ProductFactory $productFactory */
+$productFactory = $objectManager->get(ProductFactory::class);
+$product = $productFactory->create();
 $product->isObjectNew(true);
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($entityType->getEntityTypeId())
@@ -49,6 +44,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setMetaDescription('meta description')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
+    ->setTestSearchableAttribute($attribute->getSource()->getOptionId('Option 1'))
     ->setStockData(
         [
             'use_config_manage_stock' => 1,
@@ -58,11 +54,3 @@ $product->setTypeId(Type::TYPE_SIMPLE)
         ]
     );
 $productRepository->save($product);
-$storeManager->setIsSingleStoreModeAllowed(false);
-$store = $storeManager->getStore('default');
-$product = $productRepository->get('simple_for_search');
-$productAction->updateAttributes(
-    [$product->getId()],
-    ['test_searchable_attribute' => $attribute->getSource()->getOptionId('Option 1')],
-    $store->getId()
-);
