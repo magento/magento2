@@ -36,6 +36,7 @@ class DataProviderPlugin
      *
      * @param FiltersProvider $filtersProvider
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param \Magento\Swatches\Block\LayeredNavigation\RenderLayered $renderLayered
      */
     public function __construct(
         FiltersProvider $filtersProvider,
