@@ -236,12 +236,12 @@ define([
             var element = $(this.options.qtyInfo);
 
             if (!(element.validation() && element.validation('isValid'))) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    return;
-            }
-        },
+                event.preventDefault();
+                event.stopPropagation();
 
+                return;
+            }
+        }
     });
 
     return $.mage.addToWishlist;
