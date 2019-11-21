@@ -9,9 +9,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository as ProductRepository;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Api\Search\Document as SearchDocument;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Search\AdapterInterface as AdapterInterface;
 use Magento\Framework\Search\Request\Builder as SearchRequestBuilder;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
@@ -22,26 +20,11 @@ use Magento\TestFramework\ObjectManager;
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass()
-    {
-        /*
-         * Due to insufficient search engine isolation for Elasticsearch, this class must explicitly perform
-         * a fulltext reindex prior to running its tests.
-         *
-         * This should be removed upon completing MC-19455.
-         */
-        $indexRegistry = Bootstrap::getObjectManager()->get(IndexerRegistry::class);
-        $fulltextIndexer = $indexRegistry->get(Fulltext::INDEXER_ID);
-        $fulltextIndexer->reindexAll();
-    }
-
-    /**
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDbIsolation disabled
+     * @return void
      */
-    public function testSearchProductByAttribute()
+    public function testSearchProductByAttribute(): void
     {
         /** @var ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
@@ -55,7 +38,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
             ['config' => $config]
         );
 
-        $requestBuilder->bind('search_term', 'VALUE1');
+        $requestBuilder->bind('search_term', 'Option 1');
         $requestBuilder->setRequestName('quick_search_container');
         $queryRequest = $requestBuilder->create();
 
@@ -71,7 +54,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
         }
 
         /** @var Product $product */
-        $product = $objectManager->create(ProductRepository::class)->get('simple');
+        $product = $objectManager->create(ProductRepository::class)->get('simple_for_search');
         $this->assertContains($product->getId(), $actualIds, 'Product not found by searchable attribute.');
     }
 }
