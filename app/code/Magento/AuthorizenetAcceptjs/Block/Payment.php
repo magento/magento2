@@ -19,6 +19,8 @@ use Magento\Framework\View\Element\Template\Context;
  *
  * @api
  * @since 100.3.0
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class Payment extends Template
 {
