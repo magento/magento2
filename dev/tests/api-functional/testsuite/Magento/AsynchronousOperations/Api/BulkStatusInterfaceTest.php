@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\AsynchronousOperations\Api;
+
+use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Bulk\OperationInterface;
+
+class BulkStatusInterfaceTest extends WebapiAbstract
+{
+    const RESOURCE_PATH = '/V1/bulk/';
+    const SERVICE_NAME = 'asynchronousOperationsBulkStatusV1';
+    const TEST_UUID = "bulk-uuid-searchable-6";
+
+    /**
+     * @magentoApiDataFixture Magento/AsynchronousOperations/_files/operation_searchable.php
+     */
+    public function testGetListByBulkStartTime()
+    {
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . self::TEST_UUID . "/operation-status/" . OperationInterface::STATUS_TYPE_OPEN,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+        $qty = $this->_webApiCall($serviceInfo);
+        $this->assertEquals(2, $qty);
+    }
+}
