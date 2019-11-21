@@ -88,10 +88,13 @@ class Filters
             if ($filter->hasAttributeModel()) {
                 $filterAttribute = $filter->getAttributeModel();
                 $result = in_array($filterAttribute->getAttributeCode(), $attributesToFilter);
-            } elseif (!empty($this->mappings[$filter->getName()])) {
-                $result = in_array($this->mappings[$filter->getName()], $attributesToFilter);
             } else {
-                $result = false;
+                $name = (string)$filter->getName();
+                if (array_key_exists($name, $this->mappings)) {
+                    $result = in_array($this->mappings[$name], $attributesToFilter);
+                } else {
+                    $result = false;
+                }
             }
         }
         return $result;

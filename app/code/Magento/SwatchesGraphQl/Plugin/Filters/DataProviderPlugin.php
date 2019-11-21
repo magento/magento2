@@ -61,7 +61,7 @@ class DataProviderPlugin
      * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function aroundGetData(
-        Flters $subject,
+        Filters $subject,
         \Closure $proceed,
         string $layerType,
         $attributesToFilter = null
