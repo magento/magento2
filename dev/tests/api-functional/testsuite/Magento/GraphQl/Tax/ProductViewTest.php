@@ -9,7 +9,6 @@ namespace Magento\GraphQl\Tax;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Model\StoreManagerInterface;
@@ -208,11 +207,6 @@ QUERY;
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($productSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getIdentifierField())
-        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
