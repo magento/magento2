@@ -904,9 +904,6 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        if (!$model->hasData($this->getAttribute())) {
-            $model->load($model->getId());
-        }
         $attributeValue = $model->getData($this->getAttribute());
 
         return $this->validateAttribute($attributeValue);
