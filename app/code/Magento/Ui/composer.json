@@ -6,16 +6,16 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-authorization": "100.3.*",
-        "magento/module-backend": "101.0.*",
-        "magento/module-eav": "102.0.*",
-        "magento/module-store": "101.0.*",
-        "magento/module-user": "101.1.*",
-        "magento/module-cms": "103.0.*"
+        "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
+        "magento/module-eav": "*",
+        "magento/module-store": "*",
+        "magento/module-user": "*",
+        "magento/module-cms": "*"
     },
     "suggest": {
-        "magento/module-config": "101.1.*"
+        "magento/module-config": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -29,6 +29,5 @@
         "psr-4": {
             "Magento\\Ui\\": ""
         }
-    },
-    "version": "101.1.3"
+    }
 }

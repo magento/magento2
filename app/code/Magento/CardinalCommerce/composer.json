@@ -6,10 +6,10 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-checkout": "100.3.*",
-        "magento/module-payment": "100.3.*",
-        "magento/module-store": "101.0.*"
+        "magento/framework": "*",
+        "magento/module-checkout": "*",
+        "magento/module-payment": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -23,6 +23,5 @@
         "psr-4": {
             "Magento\\CardinalCommerce\\": ""
         }
-    },
-    "version": "100.3.0"
+    }
 }

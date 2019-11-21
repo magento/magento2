@@ -6,8 +6,8 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/theme-frontend-blank": "100.3.*"
+        "magento/framework": "*",
+        "magento/theme-frontend-blank": "*"
     },
     "type": "magento2-theme",
     "license": [
@@ -18,6 +18,5 @@
         "files": [
             "registration.php"
         ]
-    },
-    "version": "100.3.3"
+    }
 }

@@ -6,16 +6,16 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-catalog": "103.0.*",
-        "magento/module-downloadable": "100.3.*",
-        "magento/module-eav": "102.0.*",
-        "magento/module-store": "101.0.*",
-        "magento/module-tax": "100.3.*"
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-downloadable": "*",
+        "magento/module-eav": "*",
+        "magento/module-store": "*",
+        "magento/module-tax": "*"
     },
     "suggest": {
-        "magento/module-bundle": "100.3.*",
-        "magento/module-msrp-sample-data": "Sample Data version: 100.3.*"
+        "magento/module-bundle": "*",
+        "magento/module-msrp-sample-data": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -29,6 +29,5 @@
         "psr-4": {
             "Magento\\Msrp\\": ""
         }
-    },
-    "version": "100.3.3"
+    }
 }

@@ -6,13 +6,13 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-bundle": "100.3.*",
-        "magento/module-store": "101.0.*",
-        "magento/module-catalog": "103.0.*",
-        "magento/module-catalog-import-export": "101.0.*",
-        "magento/module-eav": "102.0.*",
-        "magento/module-import-export": "100.3.*"
+        "magento/framework": "*",
+        "magento/module-bundle": "*",
+        "magento/module-store": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-import-export": "*",
+        "magento/module-eav": "*",
+        "magento/module-import-export": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -26,6 +26,5 @@
         "psr-4": {
             "Magento\\BundleImportExport\\": ""
         }
-    },
-    "version": "100.3.3"
+    }
 }

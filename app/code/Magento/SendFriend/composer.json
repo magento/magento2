@@ -6,12 +6,12 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-catalog": "103.0.*",
-        "magento/module-customer": "102.0.*",
-        "magento/module-store": "101.0.*",
-        "magento/module-captcha": "100.3.*",
-        "magento/module-authorization": "100.3.*"
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-customer": "*",
+        "magento/module-store": "*",
+        "magento/module-captcha": "*",
+        "magento/module-authorization": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -25,6 +25,5 @@
         "psr-4": {
             "Magento\\SendFriend\\": ""
         }
-    },
-    "version": "100.3.3"
+    }
 }

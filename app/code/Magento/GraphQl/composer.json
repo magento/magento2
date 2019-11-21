@@ -4,12 +4,12 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/module-eav": "102.0.*",
-        "magento/framework": "102.0.*"
+        "magento/module-eav": "*",
+        "magento/framework": "*"
     },
     "suggest": {
-        "magento/module-webapi": "100.3.*",
-        "magento/module-graph-ql-cache": "100.3.*"
+        "magento/module-webapi": "*",
+        "magento/module-graph-ql-cache": "*"
     },
     "license": [
         "OSL-3.0",
@@ -22,6 +22,5 @@
         "psr-4": {
             "Magento\\GraphQl\\": ""
         }
-    },
-    "version": "100.3.3"
+    }
 }
