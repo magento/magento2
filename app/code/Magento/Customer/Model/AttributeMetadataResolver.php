@@ -16,6 +16,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
+use Magento\Customer\Model\FileUploaderDataResolver;
 
 /**
  * Class to build meta data of the customer or customer address attribute
@@ -77,14 +78,14 @@ class AttributeMetadataResolver
     /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
-     * @param \Magento\Customer\Model\FileUploaderDataResolver $fileUploaderDataResolver
+     * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
         EavValidationRules $eavValidationRules,
-        fileUploaderDataResolver $fileUploaderDataResolver,
+        FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
         ShareConfig $shareConfig
     ) {

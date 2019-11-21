@@ -303,7 +303,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Load attribute options.
+     * Load related options' data.
+     *
+     * @return void
      */
     protected function loadOptions()
     {

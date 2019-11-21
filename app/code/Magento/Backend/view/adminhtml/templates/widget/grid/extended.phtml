@@ -23,7 +23,7 @@ $numColumns = count($block->getColumns());
 <?php if ($block->getCollection()) : ?>
     <?php if ($block->canDisplayContainer()) : ?>
 
-    <div id="<?= $block->escapeHtml($block->getId()) ?>" data-grid-id="<?= $block->escapeHtml($block->getId()) ?>">
+    <div id="<?= $block->escapeHtmlAttr($block->getId()) ?>" data-grid-id="<?= $block->escapeHtmlAttr($block->getId()) ?>">
     <?php else : ?>
         <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
@@ -38,8 +38,8 @@ $numColumns = count($block->getColumns());
                 <div class="admin__data-grid-export">
                     <label
                         class="admin__control-support-text"
-                        for="<?= $block->escapeHtml($block->getId()) ?>_export"><?= $block->escapeHtml(__('Export to:')) ?></label>
-                    <select name="<?= $block->escapeHtml($block->getId()) ?>_export" id="<?= $block->escapeHtml($block->getId()) ?>_export"
+                        for="<?= $block->escapeHtmlAttr($block->getId()) ?>_export"><?= $block->escapeHtml(__('Export to:')) ?></label>
+                    <select name="<?= $block->escapeHtmlAttr($block->getId()) ?>_export" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_export"
                             class="admin__control-select">
                         <?php foreach ($block->getExportTypes() as $_type) : ?>
                             <option value="<?= $block->escapeHtmlAttr($_type->getUrl()) ?>"><?= $block->escapeHtml($_type->getLabel()) ?></option>
@@ -58,18 +58,18 @@ $numColumns = count($block->getColumns());
                 <?php endif; ?>
                 <?php $countRecords = $block->getCollection()->getSize(); ?>
                 <div class="admin__control-support-text">
-                        <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
+                        <span id="<?= /* @noEscape */ $block->getHtmlId() ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
                         </span>
                     <?= $block->escapeHtml(__('records found')) ?>
-                    <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
+                    <span id="<?= /* @noEscape */ $block->getHtmlId() ?>_massaction-count"
                           class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?= $block->escapeHtml(__('selected')) ?></span></span>
                 </div>
 
             <?php if ($block->getPagerVisibility()) : ?>
                 <div class="admin__data-grid-pager-wrap">
                     <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
-                            id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                            id="<?= /* @noEscape */ $block->getHtmlId() ?>_page-limit"
                             onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)"
                             class="admin__control-select">
                         <option value="20"<?php if ($block->getCollection()->getPageSize() == 20) : ?>
@@ -88,7 +88,7 @@ $numColumns = count($block->getColumns());
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
-                    <label for="<?= $block->escapeHtml($block->getHtmlId()) ?><?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                    <label for="<?= /* @noEscape */ $block->getHtmlId() ?><?= /* @noEscape */ $block->getHtmlId() ?>_page-limit"
                         class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
 
                     <div class="admin__data-grid-pager">
@@ -104,12 +104,12 @@ $numColumns = count($block->getColumns());
                             <button type="button" class="action-previous disabled"><span><?= $block->escapeHtml(__('Previous page')) ?></span></button>
                         <?php endif; ?>
                         <input type="text"
-                               id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
+                               id="<?= /* @noEscape */ $block->getHtmlId() ?>_page-current"
                                name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
                                value="<?= $block->escapeHtmlAttr($_curPage) ?>"
                                class="admin__control-text"
                                onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @noEscape */ $_lastPage ?>')" <?= /* @noEscape */ $block->getUiId('current-page') ?> />
-                        <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current">
+                        <label class="admin__control-support-text" for="<?= /* @noEscape */ $block->getHtmlId() ?>_page-current">
                             <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                         </label>
                         <?php if ($_curPage < $_lastPage) : ?>
@@ -130,7 +130,7 @@ $numColumns = count($block->getColumns());
     <?php endif; ?>
 
     <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
-        <table class="data-grid" id="<?= $block->escapeHtml($block->getId()) ?>_table">
+        <table class="data-grid" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_table">
             <?php
             /* This part is commented to remove all <col> tags from the code. */
             /* foreach ($block->getColumns() as $_column): ?>
@@ -271,6 +271,9 @@ $numColumns = count($block->getColumns());
         <?php endif; ?>
         <?php if ($block->getCheckboxCheckCallback()) : ?>
             <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
+        <?php endif; ?>
+        <?php if ($block->getFilterKeyPressCallback()) : ?>
+            <?= $block->escapeJs($block->getJsObjectName()) ?>.filterKeyPressCallback = <?= /* @noEscape */ $block->getFilterKeyPressCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getRowInitCallback()) : ?>
             <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;

@@ -95,7 +95,6 @@ class Escaper
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
-                    // phpcs:disable Magento2.Exceptions.ThrowCatch
                 } catch (\Exception $e) {
                     restore_error_handler();
                     $this->getLogger()->critical($e);
@@ -360,8 +359,16 @@ class Escaper
      */
     private function escapeScriptIdentifiers(string $data): string
     {
-        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data) ?: '';
-        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData) ?: '';
+        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
+        if ($filteredData === false || $filteredData === '') {
+            return '';
+        }
+
+        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData);
+        if ($filteredData === false) {
+            return '';
+        }
+
         if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
             $filteredData = $this->escapeScriptIdentifiers($filteredData);
         }

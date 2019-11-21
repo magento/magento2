@@ -364,7 +364,6 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
                     PHP_EOL .
                     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
-                    ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
                     ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
                     PHP_EOL,
                 self::CLOSE_TAG_KEY => '</urlset>',

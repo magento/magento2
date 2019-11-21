@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddSimpleProductToCart">
+        <annotations>
+            <description>Navigates to the Storefront Product page. Then adds the Product to the Cart. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product" defaultValue="product"/>
         </arguments>
+
         <amOnPage url="{{StorefrontProductPage.url(product.custom_attributes[url_key])}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>

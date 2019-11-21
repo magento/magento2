@@ -115,7 +115,7 @@
                         <td class="col-qty">
                             <input name="item[<?= (int) $_item->getId() ?>][qty]"
                                    class="input-text item-qty admin__control-text"
-                                   value="<?= (int) $_item->getQty() ?>"
+                                   value="<?= (float) $_item->getQty() ?>"
                                    maxlength="12" />
                         </td>
                         <td class="col-subtotal col-price">
@@ -151,7 +151,7 @@
                                         <?php if (count($wishlists) <= 1) : ?>
                                             <option value="wishlist"><?= $block->escapeHtml(__('Move to Wish List')) ?></option>
                                         <?php else : ?>
-                                            <optgroup label="<?= $block->escapeHtml(__('Move to Wish List')) ?>">
+                                            <optgroup label="<?= $block->escapeHtmlAttr(__('Move to Wish List')) ?>">
                                                 <?php foreach ($wishlists as $wishlist) :?>
                                                     <option value="wishlist_<?= (int) $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
                                                 <?php endforeach;?>

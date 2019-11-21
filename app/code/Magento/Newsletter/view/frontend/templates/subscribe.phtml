@@ -22,7 +22,7 @@
                             <?= $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
                         </span>
                         <input name="email" type="email" id="newsletter"
-                               placeholder="<?= $block->escapeHtml(__('Enter your email address')) ?>"
+                               placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>"
                                data-mage-init='{"mage/trim-input":{}}'
                                data-validate="{required:true, 'validate-email':true}"
                         />
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="actions">
-                <button class="action subscribe primary sr-only"
+                <button class="action subscribe primary"
                         title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
                         type="submit"
                         aria-label="Subscribe">

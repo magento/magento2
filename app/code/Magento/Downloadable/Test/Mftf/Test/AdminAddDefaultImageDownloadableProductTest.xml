@@ -23,6 +23,9 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>

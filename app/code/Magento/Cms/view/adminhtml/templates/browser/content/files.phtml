@@ -21,7 +21,7 @@ $_height = $block->getImagesHeight();
     >
         <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;">
         <?php if ($block->getFileThumbUrl($file)) : ?>
-            <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
+            <img src="<?= $block->escapeUrl($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)) : ?>

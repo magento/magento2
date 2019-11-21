@@ -47,6 +47,7 @@
     <preference for="Magento\Framework\App\RequestSafetyInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Setup\Module\Setup" />
     <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Setup\Module\DataSetup" />
+    <preference for="Magento\Framework\App\ExceptionHandlerInterface" type="Magento\Framework\App\ExceptionHandler" />
     <type name="Magento\Store\Model\Store">
         <arguments>
             <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
@@ -1794,4 +1795,9 @@
                 type="Magento\Framework\Mail\MimeMessage" />
     <preference for="Magento\Framework\Mail\MimePartInterface"
                 type="Magento\Framework\Mail\MimePart" />
+    <type name="Magento\Framework\DB\Adapter\AdapterInterface">
+        <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
+    </type>
+    <preference for="Magento\Framework\GraphQl\Query\ErrorHandlerInterface" type="Magento\Framework\GraphQl\Query\ErrorHandler"/>
+    <preference for="Magento\Framework\Filter\VariableResolverInterface" type="Magento\Framework\Filter\VariableResolver\StrategyResolver"/>
 </config>

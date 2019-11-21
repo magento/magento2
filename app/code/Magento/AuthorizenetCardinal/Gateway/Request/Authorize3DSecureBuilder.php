@@ -16,6 +16,9 @@ use Magento\Sales\Model\Order\Payment;
 
 /**
  * Adds the cardholder authentication information to the request
+ *
+ * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * official payment integration available on the marketplace
  */
 class Authorize3DSecureBuilder implements BuilderInterface
 {

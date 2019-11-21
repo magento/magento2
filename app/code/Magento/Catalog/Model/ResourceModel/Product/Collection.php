@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -22,6 +23,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Category;
 
 /**
  * Product collection
@@ -303,6 +305,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $urlFinder;
 
     /**
+     * @var Category
+     */
+    private $categoryResourceModel;
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -330,6 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param TableMaintainer|null $tableMaintainer
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
+     * @param Category|null $categoryResourceModel
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -358,7 +366,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         MetadataPool $metadataPool = null,
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
-        DimensionFactory $dimensionFactory = null
+        DimensionFactory $dimensionFactory = null,
+        Category $categoryResourceModel = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -392,6 +401,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
+        $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()
+            ->get(Category::class);
     }
 
     /**
@@ -1585,6 +1596,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         } else {
             return parent::addAttributeToFilter($attribute, $condition, $joinType);
         }
+
+        return $this;
     }
 
     /**
@@ -1674,7 +1687,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function setVisibility($visibility)
     {
         $this->_productLimitationFilters['visibility'] = $visibility;
-        $this->_applyProductLimitations();
+        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
+            $this->addAttributeToFilter('visibility', $visibility);
+        } else {
+            $this->_applyProductLimitations();
+        }
 
         return $this;
     }
@@ -2054,12 +2071,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _applyZeroStoreProductLimitations()
     {
         $filters = $this->_productLimitationFilters;
+        $categories = $this->getChildrenCategories((int)$filters['category_id']);
 
         $conditions = [
             'cat_pro.product_id=e.entity_id',
             $this->getConnection()->quoteInto(
-                'cat_pro.category_id=?',
-                $filters['category_id']
+                'cat_pro.category_id IN (?)',
+                $categories
             ),
         ];
         $joinCond = join(' AND ', $conditions);
@@ -2078,6 +2096,40 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'position'];
 
         return $this;
+    }
+
+    /**
+     * Get children categories.
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    private function getChildrenCategories(int $categoryId): array
+    {
+        $categoryIds[] = $categoryId;
+        $anchorCategory = [];
+
+        $categories = $this->categoryResourceModel->getCategoryWithChildren($categoryId);
+        if (empty($categories)) {
+            return $categoryIds;
+        }
+
+        $firstCategory = array_shift($categories);
+        if ($firstCategory['is_anchor'] == 1) {
+            $linkField = $this->getProductEntityMetadata()->getLinkField();
+            $anchorCategory[] = (int)$firstCategory[$linkField];
+            foreach ($categories as $category) {
+                if (in_array($category['parent_id'], $categoryIds)
+                    && in_array($category['parent_id'], $anchorCategory)) {
+                    $categoryIds[] = (int)$category[$linkField];
+                    if ($category['is_anchor'] == 1) {
+                        $anchorCategory[] = (int)$category[$linkField];
+                    }
+                }
+            }
+        }
+
+        return $categoryIds;
     }
 
     /**
@@ -2469,10 +2521,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Add is_saleable attribute to filter
      *
-     * @param array|null $condition
+     * @param mixed $condition
      * @return $this
      */
-    private function addIsSaleableAttributeToFilter(?array $condition): self
+    private function addIsSaleableAttributeToFilter($condition): self
     {
         $columns = $this->getSelect()->getPart(Select::COLUMNS);
         foreach ($columns as $columnEntry) {
@@ -2500,10 +2552,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add tier price attribute to filter
      *
      * @param string $attribute
-     * @param array|null $condition
+     * @param mixed $condition
      * @return $this
      */
-    private function addTierPriceAttributeToFilter(string $attribute, ?array $condition): self
+    private function addTierPriceAttributeToFilter(string $attribute, $condition): self
     {
         $attrCode = $attribute;
         $connection = $this->getConnection();

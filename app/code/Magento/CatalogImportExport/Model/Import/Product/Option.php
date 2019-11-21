@@ -684,7 +684,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ksort($outerTitles);
                             ksort($innerTitles);
                             if ($outerTitles === $innerTitles) {
-                                $errorRows = array_merge($errorRows, $innerData['rows'], $outerData['rows']);
+                                foreach ($innerData['rows'] as $innerDataRow) {
+                                    $errorRows[] = $innerDataRow;
+                                }
+                                foreach ($outerData['rows'] as $outerDataRow) {
+                                    $errorRows[] = $outerDataRow;
+                                }
                             }
                         }
                     }
@@ -719,7 +724,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         }
                     }
                     if ($optionsCount > 1) {
-                        $errorRows = array_merge($errorRows, $outerData['rows']);
+                        foreach ($outerData['rows'] as $dataRow) {
+                            $errorRows[] = $dataRow;
+                        }
                     }
                 }
             }
@@ -747,7 +754,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ksort($outerTitles);
                             ksort($innerTitles);
                             if ($outerTitles === $innerTitles && $outerData['type'] != $innerData['type']) {
-                                $errorRows = array_merge($errorRows, $outerData['rows']);
+                                foreach ($outerData['rows'] as $dataRow) {
+                                    $errorRows[] = $dataRow;
+                                }
                             }
                         }
                     }
@@ -959,8 +968,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $multiRowData = $this->_getMultiRowFormat($rowData);
 
-        foreach ($multiRowData as $optionData) {
-            $combinedData = array_merge($rowData, $optionData);
+        foreach ($multiRowData as $combinedData) {
+            foreach ($rowData as $key => $field) {
+                $combinedData[$key] = $field;
+            }
 
             if ($this->_isRowWithCustomOption($combinedData)) {
                 if ($this->_isMainOptionRow($combinedData)) {
@@ -1109,15 +1120,15 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
             foreach ($customOption as $rowOrder => $optionRow) {
-                $row = array_merge(
-                    [
-                        self::COLUMN_STORE => '',
-                        self::COLUMN_TITLE => $name,
-                        self::COLUMN_SORT_ORDER => $i,
-                        self::COLUMN_ROW_SORT => $rowOrder
-                    ],
-                    $this->processOptionRow($name, $optionRow)
-                );
+                $row = [
+                    self::COLUMN_STORE => '',
+                    self::COLUMN_TITLE => $name,
+                    self::COLUMN_SORT_ORDER => $i,
+                    self::COLUMN_ROW_SORT => $rowOrder
+                ];
+                foreach ($this->processOptionRow($name, $optionRow) as $key => $value) {
+                    $row[$key] = $value;
+                }
                 $name = '';
                 $multiRow[] = $row;
             }
@@ -1215,6 +1226,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return boolean
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _importData()
     {
@@ -1256,9 +1269,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $optionsToRemove[] = $this->_rowProductId;
                     }
                 }
-                foreach ($multiRowData as $optionData) {
-                    $combinedData = array_merge($rowData, $optionData);
 
+                foreach ($multiRowData as $combinedData) {
+                    foreach ($rowData as $key => $field) {
+                        $combinedData[$key] = $field;
+                    }
                     if (!$this->isRowAllowedToImport($combinedData, $rowNumber)
                         || !$this->_parseRequiredData($combinedData)
                     ) {
@@ -1441,7 +1456,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!$this->_isRowHasSpecificType($this->_rowType)
                 && ($priceData = $this->_getPriceData($rowData, $nextOptionId, $this->_rowType))
             ) {
-                $prices[$nextOptionId] = $priceData;
+                if ($this->_isPriceGlobal) {
+                    $prices[$nextOptionId][Store::DEFAULT_STORE_ID] = $priceData;
+                } else {
+                    $prices[$nextOptionId][$this->_rowStoreId] = $priceData;
+                }
             }
 
             if (!isset($products[$this->_rowProductId])) {
@@ -1547,6 +1566,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array &$prices
      * @param array &$typeValues
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _compareOptionsWithExisting(array &$options, array &$titles, array &$prices, array &$typeValues)
     {
@@ -1557,7 +1577,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $titles[$optionId] = $titles[$newOptionId];
                 unset($titles[$newOptionId]);
                 if (isset($prices[$newOptionId])) {
-                    $prices[$newOptionId]['option_id'] = $optionId;
+                    foreach ($prices[$newOptionId] as $storeId => $priceStoreData) {
+                        $prices[$newOptionId][$storeId]['option_id'] = $optionId;
+                    }
                 }
                 if (isset($typeValues[$newOptionId])) {
                     $typeValues[$optionId] = $typeValues[$newOptionId];
@@ -1590,8 +1612,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $optionType['option_type_id'] = $existingTypeId;
                         $typeTitles[$existingTypeId] = $typeTitles[$optionTypeId];
                         unset($typeTitles[$optionTypeId]);
-                        $typePrices[$existingTypeId] = $typePrices[$optionTypeId];
-                        unset($typePrices[$optionTypeId]);
+                        if (isset($typePrices[$optionTypeId])) {
+                            $typePrices[$existingTypeId] = $typePrices[$optionTypeId];
+                            unset($typePrices[$optionTypeId]);
+                        }
                         // If option type titles match at least in one store, consider current option type as existing
                         break;
                     }
@@ -1651,7 +1675,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!isset($this->_storeCodeToId[$rowData[self::COLUMN_STORE]])) {
                 return false;
             }
-            $this->_rowStoreId = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            $this->_rowStoreId = (int)$this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
         } else {
             $this->_rowStoreId = Store::DEFAULT_STORE_ID;
         }
@@ -1671,7 +1695,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_rowIsMain = false;
         }
 
-        return [$this->_rowProductId, $this->_rowStoreId, $this->_rowType, $this->_rowIsMain];
+        return true;
     }
 
     /**
@@ -1767,7 +1791,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ) {
             $priceData = [
                 'option_id' => $optionId,
-                'store_id' => Store::DEFAULT_STORE_ID,
+                'store_id' => $this->_rowStoreId,
                 'price_type' => 'fixed',
             ];
 
@@ -1901,11 +1925,19 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _savePrices(array $prices)
     {
         if ($prices) {
-            $this->_connection->insertOnDuplicate(
-                $this->_tables['catalog_product_option_price'],
-                $prices,
-                ['price', 'price_type']
-            );
+            $optionPriceRows = [];
+            foreach ($prices as $storesData) {
+                foreach ($storesData as $row) {
+                    $optionPriceRows[] = $row;
+                }
+            }
+            if ($optionPriceRows) {
+                $this->_connection->insertOnDuplicate(
+                    $this->_tables['catalog_product_option_price'],
+                    $optionPriceRows,
+                    ['price', 'price_type']
+                );
+            }
         }
 
         return $this;

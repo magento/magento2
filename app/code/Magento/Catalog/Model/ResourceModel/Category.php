@@ -9,13 +9,17 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Catalog\Model\Category as CategoryEntity;
+use Magento\Catalog\Setup\CategorySetup;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Resource model for category entity
@@ -92,6 +96,12 @@ class Category extends AbstractResource
      * @var Processor
      */
     private $indexerProcessor;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
     /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -103,6 +113,7 @@ class Category extends AbstractResource
      * @param Processor $indexerProcessor
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param MetadataPool|null $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -114,7 +125,8 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         Processor $indexerProcessor,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        MetadataPool $metadataPool = null
     ) {
         parent::__construct(
             $context,
@@ -129,6 +141,7 @@ class Category extends AbstractResource
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -271,11 +284,14 @@ class Category extends AbstractResource
         $object->setAttributeSetId(
             $object->getAttributeSetId() ?: $this->getEntityType()->getDefaultAttributeSetId()
         );
+
+        $this->castPathIdsToInt($object);
+
         if ($object->isObjectNew()) {
             if ($object->getPosition() === null) {
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
-            $path = explode('/', $object->getPath());
+            $path = explode('/', (string)$object->getPath());
             $level = count($path)  - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
@@ -314,7 +330,7 @@ class Category extends AbstractResource
         /**
          * Add identifier for new category
          */
-        if (substr($object->getPath(), -1) == '/') {
+        if (substr((string)$object->getPath(), -1) == '/') {
             $object->setPath($object->getPath() . $object->getId());
             $this->_savePath($object);
         }
@@ -352,7 +368,7 @@ class Category extends AbstractResource
     {
         $connection = $this->getConnection();
         $positionField = $connection->quoteIdentifier('position');
-        $level = count(explode('/', $path));
+        $level = count(explode('/', (string)$path));
         $bind = ['c_level' => $level, 'c_path' => $path . '/%'];
         $select = $connection->select()->from(
             $this->getTable('catalog_category_entity'),
@@ -717,7 +733,7 @@ class Category extends AbstractResource
      */
     public function getParentCategories($category)
     {
-        $pathIds = array_reverse(explode(',', $category->getPathInStore()));
+        $pathIds = array_reverse(explode(',', (string)$category->getPathInStore()));
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categories */
         $categories = $this->_categoryCollectionFactory->create();
         return $categories->setStore(
@@ -758,6 +774,8 @@ class Category extends AbstractResource
             'custom_layout_update'
         )->addAttributeToSelect(
             'custom_apply_to_products'
+        )->addAttributeToSelect(
+            'custom_layout_update_file'
         )->addFieldToFilter(
             'entity_id',
             ['in' => $pathIds]
@@ -1133,5 +1151,67 @@ class Category extends AbstractResource
                 ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;
+    }
+
+    /**
+     * Get category with children.
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    public function getCategoryWithChildren(int $categoryId): array
+    {
+        $connection = $this->getConnection();
+
+        $selectAttributeCode = $connection->select()
+            ->from(
+                ['eav_attribute' => $this->getTable('eav_attribute')],
+                ['attribute_id']
+            )->where('entity_type_id = ?', CategorySetup::CATEGORY_ENTITY_TYPE_ID)
+            ->where('attribute_code = ?', 'is_anchor')
+            ->limit(1);
+        $isAnchorAttributeCode = $connection->fetchOne($selectAttributeCode);
+        if (empty($isAnchorAttributeCode) || (int)$isAnchorAttributeCode <= 0) {
+            return [];
+        }
+
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $select = $connection->select()
+            ->from(
+                ['cce' => $this->getTable('catalog_category_entity')],
+                [$linkField, 'parent_id', 'path']
+            )->join(
+                ['cce_int' => $this->getTable('catalog_category_entity_int')],
+                'cce.' . $linkField . ' = cce_int.' . $linkField,
+                ['is_anchor' => 'cce_int.value']
+            )->where(
+                'cce_int.attribute_id = ?',
+                $isAnchorAttributeCode
+            )->where(
+                "cce.path LIKE '%/{$categoryId}' OR cce.path LIKE '%/{$categoryId}/%'"
+            )->order('path');
+
+        return $connection->fetchAll($select);
+    }
+
+    /**
+     * Cast category path ids to int.
+     *
+     * @param DataObject $object
+     * @return void
+     */
+    private function castPathIdsToInt(DataObject $object): void
+    {
+        if (is_string($object->getPath())) {
+            $pathIds = explode('/', $object->getPath());
+
+            array_walk(
+                $pathIds,
+                function (&$pathId) {
+                    $pathId = (int)$pathId;
+                }
+            );
+            $object->setPath(implode('/', $pathIds));
+        }
     }
 }

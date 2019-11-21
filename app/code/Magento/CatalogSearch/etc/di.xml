@@ -281,6 +281,7 @@
             <argument name="defaultGenerator" xsi:type="object">\Magento\CatalogSearch\Model\Search\RequestGenerator\General</argument>
             <argument name="generators" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal</item>
+                <item name="price" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Price</item>
             </argument>
         </arguments>
     </type>

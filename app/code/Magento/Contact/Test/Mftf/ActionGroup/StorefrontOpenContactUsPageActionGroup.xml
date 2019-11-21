@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontOpenContactUsPageActionGroup">
+        <annotations>
+            <description>Goes to the Storefront 'Contact Us' page.</description>
+        </annotations>
+        
         <amOnPage url="{{StorefrontContactUsPage.url}}" stepKey="amOnContactUpPage"/>
         <waitForPageLoad stepKey="waitForContactUpPageLoad"/>
     </actionGroup>

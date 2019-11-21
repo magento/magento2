@@ -255,7 +255,7 @@
 				vspace : data.vspace,
 				src : self.editor.theme.url + '/img/trans.gif',
 				'class' : 'mceItemMedia mceItem' + self.getType(data.type).name,
-				'data-mce-json' : JSON.serialize(data, "'")
+				'data-mce-json' : JSON.serialize(data)
 			});
 
 			img.width = data.width || (data.type == 'audio' ? "300" : "320");
@@ -880,7 +880,7 @@
 				vspace : vspace,
 				align : align,
 				bgcolor : bgcolor,
-				"data-mce-json" : JSON.serialize(data, "'")
+				"data-mce-json" : JSON.serialize(data)
 			});
 		}
 	});

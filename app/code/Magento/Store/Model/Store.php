@@ -53,7 +53,7 @@ class Store extends AbstractExtensibleModel implements
     const ENTITY = 'store';
 
     /**
-     * Custom entry point param
+     * Parameter used to determine app context.
      */
     const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
 
@@ -104,7 +104,7 @@ class Store extends AbstractExtensibleModel implements
     const ADMIN_CODE = 'admin';
 
     /**
-     * Cache tag
+     * Tag to use to cache stores.
      */
     const CACHE_TAG = 'store';
 
@@ -912,7 +912,7 @@ class Store extends AbstractExtensibleModel implements
             $defaultCode = ($this->_storeManager->getStore() !== null)
                 ? $this->_storeManager->getStore()->getDefaultCurrency()->getCode()
                 : $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
-            
+
             $this->_httpContext->setValue(Context::CONTEXT_CURRENCY, $code, $defaultCode);
         }
         return $this;
@@ -1281,7 +1281,20 @@ class Store extends AbstractExtensibleModel implements
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(ScopeInterface::SCOPE_STORES, $this->getId());
-        return parent::beforeDelete();
+        parent::beforeDelete();
+        if ($this->getId() === $this->getGroup()->getDefaultStoreId()) {
+            $ids = $this->getGroup()->getStoreIds();
+            if (!empty($ids) && count($ids) > 1) {
+                unset($ids[$this->getId()]);
+                $defaultId = current($ids);
+            } else {
+                $defaultId = null;
+            }
+            $this->getGroup()->setDefaultStoreId($defaultId);
+            $this->getGroup()->save();
+        }
+
+        return $this;
     }
 
     /**
@@ -1301,18 +1314,6 @@ class Store extends AbstractExtensibleModel implements
         );
         parent::afterDelete();
         $this->_configCacheType->clean();
-
-        if ($this->getId() === $this->getGroup()->getDefaultStoreId()) {
-            $ids = $this->getGroup()->getStoreIds();
-            if (!empty($ids) && count($ids) > 1) {
-                unset($ids[$this->getId()]);
-                $defaultId = current($ids);
-            } else {
-                $defaultId = null;
-            }
-            $this->getGroup()->setDefaultStoreId($defaultId);
-            $this->getGroup()->save();
-        }
 
         return $this;
     }

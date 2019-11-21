@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -15,7 +14,6 @@ use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
@@ -355,16 +353,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var FilterProductCustomAttribute|null
      */
     private $filterCustomAttribute;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -834,14 +822,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
-                if ($this->_storeManager->isSingleStoreMode()) {
+                if (!$this->isObjectNew() && $this->_storeManager->isSingleStoreMode()) {
                     $websiteIds = array_keys($websiteIds);
                 }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $storeIds = array_merge($storeIds, $websiteStores);
+                    $storeIds[] = $websiteStores;
                 }
+            }
+            if ($storeIds) {
+                $storeIds = array_merge(...$storeIds);
             }
             $this->setStoreIds($storeIds);
         }
@@ -876,34 +866,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get user context.
-     *
-     * @return UserContextInterface
-     */
-    private function getUserContext(): UserContextInterface
-    {
-        if (!$this->userContext) {
-            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
-        }
-
-        return $this->userContext;
-    }
-
-    /**
-     * Get authorization service.
-     *
-     * @return AuthorizationInterface
-     */
-    private function getAuthorization(): AuthorizationInterface
-    {
-        if (!$this->authorization) {
-            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        }
-
-        return $this->authorization;
-    }
-
-    /**
      * Check product options and type options and save them, too
      *
      * @return void
@@ -919,22 +881,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->setRequiredOptions(false);
 
         $this->getTypeInstance()->beforeSave($this);
-
-        //Validate changing of design.
-        $userType = $this->getUserContext()->getUserType();
-        if ((
-                $userType === UserContextInterface::USER_TYPE_ADMIN
-                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
-            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_product_design')
-        ) {
-            $this->setData('custom_design', $this->getOrigData('custom_design'));
-            $this->setData('page_layout', $this->getOrigData('page_layout'));
-            $this->setData('options_container', $this->getOrigData('options_container'));
-            $this->setData('custom_layout_update', $this->getOrigData('custom_layout_update'));
-            $this->setData('custom_design_from', $this->getOrigData('custom_design_from'));
-            $this->setData('custom_design_to', $this->getOrigData('custom_design_to'));
-        }
 
         $hasOptions = false;
         $hasRequiredOptions = false;
@@ -1328,12 +1274,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getRelatedProducts()
     {
         if (!$this->hasRelatedProducts()) {
-            $products = [];
-            $collection = $this->getRelatedProductCollection();
-            foreach ($collection as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasRelatedProducts()) {
+                $this->setRelatedProducts([]);
             }
-            $this->setRelatedProducts($products);
         }
         return $this->getData('related_products');
     }
@@ -1390,12 +1335,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getUpSellProducts()
     {
         if (!$this->hasUpSellProducts()) {
-            $products = [];
-            foreach ($this->getUpSellProductCollection() as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasUpSellProducts()) {
+                $this->setUpSellProducts([]);
             }
-            $this->setUpSellProducts($products);
         }
+
         return $this->getData('up_sell_products');
     }
 
@@ -1451,12 +1397,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getCrossSellProducts()
     {
         if (!$this->hasCrossSellProducts()) {
-            $products = [];
-            foreach ($this->getCrossSellProductCollection() as $product) {
-                $products[] = $product;
+            //Loading all linked products.
+            $this->getProductLinks();
+            if (!$this->hasCrossSellProducts()) {
+                $this->setCrossSellProducts([]);
             }
-            $this->setCrossSellProducts($products);
         }
+
         return $this->getData('cross_sell_products');
     }
 
@@ -1512,7 +1459,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getProductLinks()
     {
         if ($this->_links === null) {
-            $this->_links = $this->getLinkRepository()->getList($this);
+            if ($this->getSku() && $this->getId()) {
+                $this->_links = $this->getLinkRepository()->getList($this);
+            } else {
+                $this->_links = [];
+            }
         }
         return $this->_links;
     }

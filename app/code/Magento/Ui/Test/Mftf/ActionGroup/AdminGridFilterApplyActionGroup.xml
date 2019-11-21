@@ -9,7 +9,11 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminGridFilterApplyActionGroup">
-        <click selector="{{AdminDataGridFilterSection.apply}}" stepKey="applyFilters" />
-        <waitForPageLoad stepKey="waitForFiltersReset" />
+        <annotations>
+            <description>Clicks on 'Apply Filters' in the 'Filters' section of an Admin Grid page.</description>
+        </annotations>
+
+        <click selector="{{AdminDataGridFilterSection.apply}}" stepKey="applyFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersReset"/>
     </actionGroup>
 </actionGroups>

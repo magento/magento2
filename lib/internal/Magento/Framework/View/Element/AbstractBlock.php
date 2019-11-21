@@ -16,6 +16,7 @@ use Magento\Framework\DataObject\IdentityInterface;
  *
  * Marked as public API because it is actively used now.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -245,6 +246,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Please override this one instead of overriding real __construct constructor
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
@@ -440,9 +442,9 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function unsetCallChild($alias, $callback, $result, $params)
     {
+        $args = func_get_args();
         $child = $this->getChildBlock($alias);
         if ($child) {
-            $args = func_get_args();
             $alias = array_shift($args);
             $callback = array_shift($args);
             $result = (string)array_shift($args);
@@ -875,7 +877,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $namespace = substr(
             $className,
             0,
-            strpos($className, '\\' . 'Block')
+            strpos($className, '\\' . 'Block' . '\\')
         );
         return str_replace('\\', '_', $namespace);
     }

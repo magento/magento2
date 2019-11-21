@@ -9,7 +9,7 @@
 /** @var \Magento\Sales\Block\Order\Items $block */
 ?>
 <div class="table-wrapper order-items">
-    <table class="data table table-order-items" id="my-orders-table" summary="<?= $block->escapeHtml(__('Items Ordered')) ?>">
+    <table class="data table table-order-items" id="my-orders-table" summary="<?= $block->escapeHtmlAttr(__('Items Ordered')) ?>">
         <caption class="table-caption"><?= $block->escapeHtml(__('Items Ordered')) ?></caption>
         <thead>
             <?php if ($block->isPagerDisplayed()) : ?>
@@ -29,12 +29,12 @@
         </thead>
         <?php $items = $block->getItems(); ?>
         <?php $giftMessage = ''?>
-        <tbody>
         <?php foreach ($items as $item) :
             if ($item->getParentItem()) :
                 continue;
             endif;
             ?>
+            <tbody>
                 <?= $block->getItemHtml($item) ?>
                 <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()) : ?>
                     <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
@@ -50,7 +50,7 @@
                             <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
                             <div class="order-gift-message" id="order-item-gift-message-<?= (int) $item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
                                 <a href="#"
-                                   title="<?= $block->escapeHtml(__('Close')) ?>"
+                                   title="<?= $block->escapeHtmlAttr(__('Close')) ?>"
                                    aria-controls="order-item-gift-message-<?= (int) $item->getId() ?>"
                                    data-item-id="<?= (int) $item->getId() ?>"
                                    class="action close">
@@ -65,8 +65,8 @@
                         </td>
                     </tr>
                 <?php endif ?>
+            </tbody>
         <?php endforeach; ?>
-        </tbody>
         <tfoot>
             <?php if ($block->isPagerDisplayed()) : ?>
                 <tr>
