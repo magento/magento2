@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
+use Magento\Catalog\Model\Layer\Filter\Item;
 
 /**
  * Layered navigation filters data provider.
@@ -49,7 +50,7 @@ class Filters
                     'filter_items_count' => $filter->getItemsCount(),
                     'request_var' => $filter->getRequestVar(),
                 ];
-                /** @var \Magento\Catalog\Model\Layer\Filter\Item $filterItem */
+                /** @var Item $filterItem */
                 foreach ($filter->getItems() as $filterItem) {
                     $filterGroup['filter_items'][] = [
                         'label' => (string)$filterItem->getLabel(),
@@ -63,15 +64,22 @@ class Filters
         return $filtersData;
     }
 
+    /**
+     * Check for adding filter to the list
+     *
+     * @param AbstractFilter $filter
+     * @param array $attributesToFilter
+     * @return bool
+     */
     private function isNeedToAddFilter(AbstractFilter $filter, array $attributesToFilter): bool
     {
         if ($attributesToFilter === null) {
             $result = (bool)$filter->getItemsCount();
         } else {
-            try {
+            if ($filter->hasAttributeModel()) {
                 $filterAttribute = $filter->getAttributeModel();
                 $result = in_array($filterAttribute->getAttributeCode(), $attributesToFilter);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } else {
                 $result = false;
             }
         }

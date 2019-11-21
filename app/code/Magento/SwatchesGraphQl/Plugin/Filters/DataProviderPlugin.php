@@ -53,10 +53,12 @@ class DataProviderPlugin
      * @param Filters $subject
      * @param \Closure $proceed
      * @param string $layerType
-     * @param array $attributesToFilter
+     * @param array|null $attributesToFilter
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function aroundGetData(
         Filters $subject,
@@ -97,4 +99,5 @@ class DataProviderPlugin
 
         return $filtersData;
     }
+    //phpcs:enable
 }
