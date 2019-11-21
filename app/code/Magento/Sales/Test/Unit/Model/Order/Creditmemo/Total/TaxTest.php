@@ -100,16 +100,18 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will($this->returnCallback(
-                function ($price, $type) use (&$roundingDelta) {
-                    if (!isset($roundingDelta[$type])) {
-                        $roundingDelta[$type] = 0;
+            ->will(
+                $this->returnCallback(
+                    function ($price, $type) use (&$roundingDelta) {
+                        if (!isset($roundingDelta[$type])) {
+                            $roundingDelta[$type] = 0;
+                        }
+                        $roundedPrice = round($price + $roundingDelta[$type], 2);
+                        $roundingDelta[$type] = $price - $roundedPrice;
+                        return $roundedPrice;
                     }
-                    $roundedPrice = round($price + $roundingDelta[$type], 2);
-                    $roundingDelta[$type] = $price - $roundedPrice;
-                    return $roundedPrice;
-                }
-            ));
+                )
+            );
 
         $this->model->collect($this->creditmemo);
 
