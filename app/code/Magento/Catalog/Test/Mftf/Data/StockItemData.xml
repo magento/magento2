@@ -40,4 +40,8 @@
         <data key="qty">777</data>
         <data key="is_in_stock">true</data>
     </entity>
+    <entity name="Qty_25" type="stock_item">
+        <data key="qty">25</data>
+        <data key="is_in_stock">true</data>
+    </entity>
 </entities>

@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Async\CallbackDeferred;
-use Magento\Framework\Async\ProxyDeferredFactory;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
@@ -21,6 +20,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Dhl\Model\Validator\XmlValidator;
 
@@ -389,16 +389,17 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         //Saving $result to use proper result with the callback
         $this->_result = $result = $this->_getQuotes();
         //After quotes are loaded parsing the response.
-        return $this->proxyDeferredFactory->createFor(
-            Result::class,
-            new CallbackDeferred(
-                function () use ($request, $result) {
-                    $this->_result = $result;
-                    $this->_updateFreeMethodQuote($request);
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($request, $result) {
+                        $this->_result = $result;
+                        $this->_updateFreeMethodQuote($request);
 
-                    return $this->_result;
-                }
-            )
+                        return $this->_result;
+                    }
+                )
+            ]
         );
     }
 
@@ -818,16 +819,16 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
             if (!empty($decimalItems)) {
                 foreach ($decimalItems as $decimalItem) {
-                    $fullItems = array_merge(
-                        $fullItems,
-                        array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight'])
-                    );
+                    $fullItems[] = array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight']);
                 }
             } else {
-                $fullItems = array_merge($fullItems, array_fill(0, $qty, $this->_getWeight($itemWeight)));
+                $fullItems[] = array_fill(0, $qty, $this->_getWeight($itemWeight));
             }
         }
-        sort($fullItems);
+        if ($fullItems) {
+            $fullItems = array_merge(...$fullItems);
+            sort($fullItems);
+        }
 
         return $fullItems;
     }
@@ -1057,23 +1058,24 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             }
         }
 
-        return $this->proxyDeferredFactory->createFor(
-            Result::class,
-            new CallbackDeferred(
-                function () use ($deferredResponses, $responseBodies) {
-                    //Loading rates not found in cache
-                    foreach ($deferredResponses as $deferredResponseData) {
-                        $responseBodies[] = [
-                            'body' => $deferredResponseData['deferred']->get()->getBody(),
-                            'date' => $deferredResponseData['date'],
-                            'request' => $deferredResponseData['request'],
-                            'from_cache' => false
-                        ];
-                    }
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($deferredResponses, $responseBodies) {
+                        //Loading rates not found in cache
+                        foreach ($deferredResponses as $deferredResponseData) {
+                            $responseBodies[] = [
+                                'body' => $deferredResponseData['deferred']->get()->getBody(),
+                                'date' => $deferredResponseData['date'],
+                                'request' => $deferredResponseData['request'],
+                                'from_cache' => false
+                            ];
+                        }
 
-                    return $this->processQuotesResponses($responseBodies);
-                }
-            )
+                        return $this->processQuotesResponses($responseBodies);
+                    }
+                )
+            ]
         );
     }
 

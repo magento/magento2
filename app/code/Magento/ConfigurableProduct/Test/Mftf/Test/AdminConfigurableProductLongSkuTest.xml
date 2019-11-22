@@ -87,6 +87,9 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductSku2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
 
+        <!--Run re-index task-->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
          <!--Assert storefront category list page-->
         <amOnPage url="/" stepKey="amOnStorefront"/>
         <waitForPageLoad stepKey="waitForStorefrontLoad"/>

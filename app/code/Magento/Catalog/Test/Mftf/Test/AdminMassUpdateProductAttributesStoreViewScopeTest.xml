@@ -18,6 +18,85 @@
             <testCaseId value="MC-128"/>
             <group value="Catalog"/>
             <group value="Product Attributes"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
+            <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
+            <createData entity="ApiProductNameWithNoSpaces" stepKey="createProductThree"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createProductThree" stepKey="deleteProductThree"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Search and select products -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+            <argument name="keyword" value="api-simple-product"/>
+        </actionGroup>
+        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <!-- Mass update attributes -->
+        <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
+        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+        <seeInCurrentUrl stepKey="seeInUrl" url="catalog/product_action_attribute/edit/"/>
+        <!-- Switch store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
+        <!-- Update attribute -->
+        <click selector="{{AdminEditProductAttributesSection.ChangeAttributeDescriptionToggle}}" stepKey="toggleToChangeDescription"/>
+        <fillField selector="{{AdminEditProductAttributesSection.AttributeDescription}}" userInput="Updated $$createProductOne.custom_attributes[description]$$" stepKey="fillAttributeDescriptionField"/>
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+
+
+        <!-- Assert on storefront default view with partial word of product name -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault">
+            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="description" value="$$createProductOne.custom_attributes[description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
+        <see userInput="2 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault"/>
+
+        <!-- Assert on storefront custom view with partial word of product name  -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameCustom">
+            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="description" value="Updated $$createProductOne.custom_attributes[description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
+        <see userInput="2 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInCustom"/>
+
+        <!-- Assert Storefront default view with exact product name -->
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault1"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndDescriptionActionGroup" stepKey="searchByNameDefault1">
+            <argument name="name" value="$$createProductThree.name$$"/>
+            <argument name="description" value="$$createProductThree.custom_attributes[description]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault1"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="seeInDefault1"/>
+    </test>
+    <test name="AdminMassUpdateProductAttributesStoreViewScopeMysqlTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product attributes"/>
+            <title value="Admin should be able to mass update product attributes in store view scope using the Mysql search engine"/>
+            <description value="Admin should be able to mass update product attributes in store view scope using the Mysql search engine"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-20467"/>
+            <group value="Catalog"/>
+            <group value="Product Attributes"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

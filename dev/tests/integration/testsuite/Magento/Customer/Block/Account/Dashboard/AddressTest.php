@@ -69,7 +69,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCustomerMissingCustomer()
     {
-        $moduleManager = $this->objectManager->get(\Magento\Framework\Module\ModuleManagerInterface::class);
+        $moduleManager = $this->objectManager->get(\Magento\Framework\Module\Manager::class);
         if ($moduleManager->isEnabled('Magento_PageCache')) {
             $customerDataFactory = $this->objectManager->create(
                 \Magento\Customer\Api\Data\CustomerInterfaceFactory::class

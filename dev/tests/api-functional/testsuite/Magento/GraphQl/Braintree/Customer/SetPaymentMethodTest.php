@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Braintree\Customer;
 
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -258,6 +259,43 @@ class SetPaymentMethodTest extends GraphQlAbstract
             $methodCode
         );
         $this->expectExceptionMessage("for \"$methodCode\" is missing.");
+        $expectedExceptionMessages = [
+            'braintree' =>
+                'Field BraintreeInput.is_active_payment_token_enabler of required type Boolean! was not provided.',
+            'braintree_cc_vault' =>
+                'Field BraintreeCcVaultInput.public_hash of required type String! was not provided.'
+        ];
+
+        $this->expectExceptionMessage($expectedExceptionMessages[$methodCode]);
+        $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store payment/braintree/active 1
+     * @magentoConfigFixture default_store payment/braintree_cc_vault/active 1
+     * @magentoConfigFixture default_store payment/braintree/environment sandbox
+     * @magentoConfigFixture default_store payment/braintree/merchant_id def_merchant_id
+     * @magentoConfigFixture default_store payment/braintree/public_key def_public_key
+     * @magentoConfigFixture default_store payment/braintree/private_key def_private_key
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @expectedException \Exception
+     */
+    public function testSetPaymentMethodWithoutRequiredPaymentMethodInput()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $setPaymentQuery = $this->getSetPaymentBraintreeQueryInvalidPaymentMethodInput($maskedQuoteId);
+        $this->expectExceptionMessage(
+            'Field BraintreeInput.is_active_payment_token_enabler of required type Boolean! was not provided.'
+        );
         $this->graphQlMutation($setPaymentQuery, [], '', $this->getHeaderMap());
     }
 
@@ -373,6 +411,33 @@ QUERY;
 
     /**
      * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getSetPaymentBraintreeQueryInvalidPaymentMethodInput(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"braintree"
+      braintree:{
+        payment_method_nonce:"fake-valid-nonce"
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string
      */
@@ -437,7 +502,7 @@ QUERY;
      * @param string $username
      * @param string $password
      * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
     private function getHeaderMap(string $username = 'customer@example.com', string $password = 'password'): array
     {

@@ -429,7 +429,7 @@ class Installer
         $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
-            if ((isset($currentModules[$module]) && !$currentModules[$module])) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
                 $result[$module] = 0;
             } else {
                 $result[$module] = 1;
@@ -925,7 +925,7 @@ class Installer
      */
     private function handleDBSchemaData($setup, $type, array $request)
     {
-        if (!(($type === 'schema') || ($type === 'data'))) {
+        if (!($type === 'schema' || $type === 'data')) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);

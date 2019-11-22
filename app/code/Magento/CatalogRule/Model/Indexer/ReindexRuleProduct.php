@@ -101,9 +101,7 @@ class ReindexRuleProduct
             $scopeTz = new \DateTimeZone(
                 $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
             );
-            $fromTime = $rule->getFromDate()
-                ? (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp()
-                : 0;
+            $fromTime = (new \DateTime($rule->getFromDate(), $scopeTz))->getTimestamp();
             $toTime = $rule->getToDate()
                 ? (new \DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
                 : 0;
