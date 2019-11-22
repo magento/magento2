@@ -123,15 +123,10 @@ QUERY;
         usort($expectedFilters, [$this, 'compareFilterNames']);
         usort($actualFilters, [$this, 'compareFilterNames']);
 
-        $errMsg = print_r($expectedFilters, true);
-        $errMsg .= '---';
-        $errMsg .= print_r($actualFilters, true);
-
         $this->assertFilters(
             ['products' => ['filters' => $actualFilters]],
             $expectedFilters,
-            //'Returned filters data set does not match the expected value'
-            $errMsg
+            'Returned filters data set does not match the expected value'
         );
     }
 
