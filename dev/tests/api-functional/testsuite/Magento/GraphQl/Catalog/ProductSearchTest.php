@@ -72,6 +72,7 @@ QUERY;
      */
     public function testFilterLn()
     {
+        $this->reIndexAndCleanCache();
         $query = <<<QUERY
 {
     products (
