@@ -24,6 +24,9 @@
         <testsuite name="PHP Coding Standard Verification">
             <file>testsuite/Magento/Test/Php/LiveCodeTest.php</file>
         </testsuite>
+        <testsuite name="GraphQL Static Code Analysis">
+            <file>testsuite/Magento/Test/GraphQl/LiveCodeTest.php</file>
+        </testsuite>
         <testsuite name="Code Integrity Tests">
             <directory>testsuite/Magento/Test/Integrity</directory>
         </testsuite>
