@@ -23,7 +23,10 @@ class BulkStatusInterfaceTest extends WebapiAbstract
      */
     public function testGetListByBulkStartTime()
     {
-        $resourcePath = self::RESOURCE_PATH . self::TEST_UUID . "/operation-status/" . OperationInterface::STATUS_TYPE_OPEN;
+        $resourcePath = self::RESOURCE_PATH 
+            . self::TEST_UUID
+            . "/operation-status/"
+            . OperationInterface::STATUS_TYPE_OPEN;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => $resourcePath,
