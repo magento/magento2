@@ -21,7 +21,7 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $productFactory = $objectManager->get(ProductFactory::class);
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple')
     ->setSku('1-2-3-4')
@@ -41,7 +41,7 @@ $productRepository->save($product);
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('1-2-3-4')
     ->setSku('Simple')
@@ -61,7 +61,7 @@ $productRepository->save($product);
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Product with description')
     ->setSku('product_with_description')
@@ -82,7 +82,7 @@ $productRepository->save($product);
 
 $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Product with attribute')
     ->setSku('product_with_attribute')
@@ -90,7 +90,7 @@ $product->setTypeId(Type::TYPE_SIMPLE)
     ->setTaxClassId(0)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setTestSearchableAttribute($attribute->getSource()->getOptionId('Option 1'))
+    ->setTestSearchableAttribute($attribute->getSource()->getOptionId('Simple'))
     ->setStockData(
         [
             'use_config_manage_stock' => 1,

@@ -8,21 +8,16 @@ declare(strict_types=1);
 
 require 'searchable_attribute.php';
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-/** @var EntityType $entityType */
-$entityType = $objectManager->create(EntityType::class);
-$entityType = $entityType->loadByCode(ProductAttributeInterface::ENTITY_TYPE_CODE);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */
@@ -30,7 +25,7 @@ $productFactory = $objectManager->get(ProductFactory::class);
 $product = $productFactory->create();
 $product->isObjectNew(true);
 $product->setTypeId(Type::TYPE_SIMPLE)
-    ->setAttributeSetId($entityType->getEntityTypeId())
+    ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
     ->setName('Simple product name')
     ->setSku('simple_for_search')

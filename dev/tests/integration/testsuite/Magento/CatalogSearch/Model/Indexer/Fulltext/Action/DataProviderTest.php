@@ -16,6 +16,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Search products by attribute value using mysql search engine.
+ */
 class DataProviderTest extends TestCase
 {
     /**
@@ -65,6 +68,7 @@ class DataProviderTest extends TestCase
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @magentoDbIsolation disabled
+     *
      * @return void
      */
     public function testSearchProductByAttribute(): void

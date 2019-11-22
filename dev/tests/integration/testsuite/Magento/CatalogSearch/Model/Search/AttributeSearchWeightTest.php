@@ -24,10 +24,9 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test founded products order after quick search with changed attribute search weight.
+ * Test founded products order after quick search with changed attribute search weight using mysql search engine.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  */
 class AttributeSearchWeightTest extends TestCase
 {
@@ -83,9 +82,9 @@ class AttributeSearchWeightTest extends TestCase
     /**
      * Perform search by word and check founded product order in different cases.
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
      * @dataProvider attributeSearchWeightDataProvider
+     * @magentoDbIsolation disabled
      *
      * @param string $searchQuery
      * @param array $attributeWeights
@@ -97,7 +96,7 @@ class AttributeSearchWeightTest extends TestCase
         array $attributeWeights,
         array $expectedProductNames
     ): void {
-        $this->markTestSkipped('Skipped in connection with bug MC-29017');
+        $this->markTestSkipped('Skipped in connection with bug MC-29076');
         $this->updateAttributesWeight($attributeWeights);
         $this->reindex();
         $products = $this->findProducts($searchQuery);
