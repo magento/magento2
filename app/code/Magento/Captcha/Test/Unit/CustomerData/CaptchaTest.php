@@ -23,17 +23,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CaptchaTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CaptchaHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var CaptchaHelper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $helper;
 
     /**
-     * @var CustomerSession | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerSession;
 
     /**
-     * @var CustomerData | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerData|\PHPUnit_Framework_MockObject_MockObject
      */
     private $customerData;
 
@@ -76,7 +76,7 @@ class CaptchaTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getSectionData() when user is login and require captcha
      */
-    public function testGetSectionData()
+    public function testGetSectionDataWhenLoginAndRequireCaptcha()
     {
         $emailLogin = 'test@localhost.com';
 
