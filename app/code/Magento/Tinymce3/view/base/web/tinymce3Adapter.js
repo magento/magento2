@@ -78,6 +78,8 @@ define([
             }
 
             tinyMCE3.init(this.getSettings(mode));
+            varienGlobalEvents.clearEventHandlers("open_browser_callback");
+            varienGlobalEvents.attachEventHandler("open_browser_callback", tinyMceEditors.get(this.id).openFileBrowser);
         },
 
         /**
