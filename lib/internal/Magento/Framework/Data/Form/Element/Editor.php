@@ -309,11 +309,11 @@ class Editor extends Textarea
                         $configStyle = '';
                         if (isset($buttonOptions['style'])) {
                             $configStyle = $buttonOptions['style'];
-			}
+                        }
                         // phpcs:disable Magento2.Performance.ForeachArrayMerge
                         $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
-		       // phpcs:enable
-		    }
+                        // phpcs:enable
+                    }
                     $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
                 }
             }
@@ -411,7 +411,7 @@ class Editor extends Textarea
     protected function _wrapIntoContainer($html)
     {
         if (!$this->getConfig('use_container')) {
-            return '<div class="admin__control-wysiwig">' .$html . '</div>';
+            return '<div class="admin__control-wysiwig">' . $html . '</div>';
         }
 
         $html = '<div id="editor' . $this->getHtmlId() . '"'
