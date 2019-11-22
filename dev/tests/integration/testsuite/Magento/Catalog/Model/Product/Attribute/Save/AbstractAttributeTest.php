@@ -55,7 +55,7 @@ abstract class AbstractAttributeTest extends TestCase
      * @param $productSku
      * @return void
      */
-    public function testSaveText(string $productSku): void
+    public function testSaveAttribute(string $productSku): void
     {
         $product = $this->setAttributeValueAndValidate($productSku, $this->getDefaultAttributeValue());
         $product = $this->productRepository->save($product);
