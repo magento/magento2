@@ -533,10 +533,6 @@ class Editor extends Textarea
             $jsSetupObject .
             '));
                     varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
-                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
-            $jsSetupObject .
-            '.openFileBrowser);
                 //]]>
                 });
                 </script>';
