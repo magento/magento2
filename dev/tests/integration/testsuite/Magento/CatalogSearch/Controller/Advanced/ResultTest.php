@@ -37,6 +37,7 @@ class ResultTest extends AbstractController
     /**
      * Advanced search test by difference product attributes.
      *
+     * @magentoConfigFixture default/catalog/search/engine mysql
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
