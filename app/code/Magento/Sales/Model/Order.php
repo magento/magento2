@@ -51,7 +51,6 @@ use Magento\Store\Model\ScopeInterface;
  * @method bool hasCustomerNoteNotify()
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
- * @method \Magento\Customer\Model\Customer getCustomer()
  * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -367,6 +366,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
@@ -380,6 +380,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_orderConfig = $orderConfig;
         $this->productRepository = $productRepository;
         $this->productListFactory = $productListFactory;
+        $this->customerFactory = $customerFactory;
         $this->timezone = $timezone;
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
@@ -438,6 +439,20 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setItems(null);
         }
         return $this;
+    }
+
+    /**
+     * Get customer object
+     * 
+     * @return \Magento\Customer\Model\Customer
+     */
+    public function getCustomer() {
+        $customerId = $this->getCustomerId();
+        $customer = $this->customerFactory->create()->load($customerId);
+        if (!$customer->getId()) {
+            throw new LocalizedException(__('No customer associated with this order.'));
+        }
+        return $customer;
     }
 
     /**
