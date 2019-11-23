@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\Service;
 
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
@@ -17,11 +18,14 @@ use Magento\Quote\Api\Data\CartInterface as Quote;
 use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Service is responsible for handling failed payment transactions.
  *
  * It depends on Stores > Configuration > Sales > Checkout > Payment Failed Emails configuration.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentFailuresService implements PaymentFailuresInterface
 {
@@ -53,24 +57,32 @@ class PaymentFailuresService implements PaymentFailuresInterface
     private $cartRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param StateInterface $inlineTranslation
      * @param TransportBuilder $transportBuilder
      * @param TimezoneInterface $localeDate
      * @param CartRepositoryInterface $cartRepository
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         StateInterface $inlineTranslation,
         TransportBuilder $transportBuilder,
         TimezoneInterface $localeDate,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        LoggerInterface $logger = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->inlineTranslation = $inlineTranslation;
         $this->transportBuilder = $transportBuilder;
         $this->localeDate = $localeDate;
         $this->cartRepository = $cartRepository;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -118,17 +130,23 @@ class PaymentFailuresService implements PaymentFailuresInterface
         foreach ($sendTo as $recipient) {
             $transport = $this->transportBuilder
                 ->setTemplateIdentifier($template)
-                ->setTemplateOptions([
-                    'area' => FrontNameResolver::AREA_CODE,
-                    'store' => Store::DEFAULT_STORE_ID,
-                ])
+                ->setTemplateOptions(
+                    [
+                        'area' => FrontNameResolver::AREA_CODE,
+                        'store' => Store::DEFAULT_STORE_ID,
+                    ]
+                )
                 ->setTemplateVars($this->getTemplateVars($quote, $message, $checkoutType))
                 ->setFrom($this->getSendFrom($quote))
                 ->addTo($recipient['email'], $recipient['name'])
                 ->addBcc($bcc)
                 ->getTransport();
 
-            $transport->sendMessage();
+            try {
+                $transport->sendMessage();
+            } catch (\Exception $e) {
+                $this->logger->critical($e->getMessage());
+            }
         }
 
         $this->inlineTranslation->resume();
@@ -154,6 +172,8 @@ class PaymentFailuresService implements PaymentFailuresInterface
             'customerEmail' => $quote->getBillingAddress()->getEmail(),
             'billingAddress' => $quote->getBillingAddress(),
             'shippingAddress' => $quote->getShippingAddress(),
+            'billingAddressHtml' => $quote->getBillingAddress()->format('html'),
+            'shippingAddressHtml' => $quote->getShippingAddress()->format('html'),
             'shippingMethod' => $this->getConfigValue(
                 'carriers/' . $this->getShippingMethod($quote) . '/title',
                 $quote

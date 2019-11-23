@@ -27,11 +27,6 @@ class CountryTest extends \PHPUnit\Framework\TestCase
      */
     private $allowedCountriesReaderMock;
 
-    /**
-     * @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $shareConfigMock;
-
     protected function setUp()
     {
         $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
@@ -40,16 +35,17 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             \Magento\Directory\Model\AllowedCountries::class,
             ['getAllowedCountries']
         );
-        $this->shareConfigMock = $this->createPartialMock(
-            \Magento\Customer\Model\Config\Share::class,
-            ['isGlobalScope']
+
+        $escaper = $this->objectManager->getObject(
+            \Magento\Framework\Escaper::class
         );
+
         $this->model = $this->objectManager->getObject(
             \Magento\Customer\Model\Address\Validator\Country::class,
             [
                 'directoryData' => $this->directoryDataMock,
                 'allowedCountriesReader' => $this->allowedCountriesReaderMock,
-                'shareConfig' => $this->shareConfigMock,
+                'escaper' => $escaper
             ]
         );
     }
@@ -81,10 +77,9 @@ class CountryTest extends \PHPUnit\Framework\TestCase
             ->method('isRegionRequired')
             ->willReturn($data['regionRequired']);
 
-        $this->shareConfigMock->method('isGlobalScope')->willReturn(false);
         $this->allowedCountriesReaderMock
             ->method('getAllowedCountries')
-            ->with(ScopeInterface::SCOPE_WEBSITE, null)
+            ->with(ScopeInterface::SCOPE_STORE, null)
             ->willReturn($countryIds);
 
         $addressMock->method('getCountryId')->willReturn($data['country_id']);

@@ -168,6 +168,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         } catch (\Exception $e) {
             return;
         }
-        $this->fail("Generic \Exception was not throwed");
+        $this->fail("Generic \Exception was not thrown");
     }
 }

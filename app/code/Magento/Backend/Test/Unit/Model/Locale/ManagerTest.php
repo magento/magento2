@@ -12,41 +12,44 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \Magento\Backend\Model\Locale\Manager
      */
-    protected $_model;
+    private $_model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface
      */
-    protected $_translator;
+    private $_translator;
 
     /**
      * @var \Magento\Backend\Model\Session
      */
-    protected $_session;
+    private $_session;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session
      */
-    protected $_authSession;
-    
+    private $_authSession;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\ConfigInterface
      */
-    protected $_backendConfig;
+    private $_backendConfig;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->_session = $this->createMock(\Magento\Backend\Model\Session::class);
 
         $this->_authSession = $this->createPartialMock(\Magento\Backend\Model\Auth\Session::class, ['getUser']);
-        
+
         $this->_backendConfig = $this->getMockForAbstractClass(
             \Magento\Backend\App\ConfigInterface::class,
             [],
             '',
             false
         );
-        
+
         $userMock = new \Magento\Framework\DataObject();
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));

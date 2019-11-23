@@ -7,12 +7,13 @@ define([
     'jquery',
     'ko',
     'uiComponent',
+    'underscore',
     'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/shipping-address/form-popup-state',
     'Magento_Checkout/js/checkout-data',
     'Magento_Customer/js/customer-data'
-], function ($, ko, Component, selectShippingAddressAction, quote, formPopUpState, checkoutData, customerData) {
+], function ($, ko, Component, _, selectShippingAddressAction, quote, formPopUpState, checkoutData, customerData) {
     'use strict';
 
     var countryData = customerData.get('directory-data');
@@ -45,6 +46,30 @@ define([
          */
         getCountryName: function (countryId) {
             return countryData()[countryId] != undefined ? countryData()[countryId].name : ''; //eslint-disable-line
+        },
+
+        /**
+         * Get customer attribute label
+         *
+         * @param {*} attribute
+         * @returns {*}
+         */
+        getCustomAttributeLabel: function (attribute) {
+            var resultAttribute;
+
+            if (typeof attribute === 'string') {
+                return attribute;
+            }
+
+            if (attribute.label) {
+                return attribute.label;
+            }
+
+            resultAttribute = _.findWhere(this.source.get('customAttributes')[attribute['attribute_code']], {
+                value: attribute.value
+            });
+
+            return resultAttribute && resultAttribute.label || attribute.value;
         },
 
         /** Set selected customer shipping address  */

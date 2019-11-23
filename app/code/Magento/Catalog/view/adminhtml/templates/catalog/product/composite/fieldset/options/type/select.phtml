@@ -3,21 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Select */ ?>
 <?php $_option = $block->getOption(); ?>
-<div class="admin__field field<?php if ($_option->getIsRequire()) echo ' required _required' ?>">
+<div class="admin__field field<?= $_option->getIsRequire() ? ' required _required' : '' ?>">
     <label class="label admin__field-label">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control admin__field-control">
         <?= $block->getValuesHtml() ?>
-        <?php if ($_option->getIsRequire()): ?>
-            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX): ?>
-                <span id="options-<?= /* @escapeNotVerified */ $_option->getId() ?>-container"></span>
+        <?php if ($_option->getIsRequire()) :?>
+            <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO || $_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_CHECKBOX) :?>
+                <span id="options-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></span>
             <?php endif; ?>
         <?php endif;?>
     </div>

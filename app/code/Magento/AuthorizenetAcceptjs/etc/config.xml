@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <dev>
+            <js>
+                <minify_exclude>
+                    <authorizenet_acceptjs>\.authorize\.net/v1/Accept</authorizenet_acceptjs>
+                </minify_exclude>
+            </js>
+        </dev>
+        <payment>
+            <authorizenet_acceptjs>
+                <active>0</active>
+                <cctypes>AE,VI,MC,DI,JCB,DN</cctypes>
+                <debug>0</debug>
+                <can_use_checkout>1</can_use_checkout>
+                <can_use_internal>1</can_use_internal>
+                <can_capture_partial>0</can_capture_partial>
+                <can_authorize>1</can_authorize>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_capture>1</can_capture>
+                <can_void>1</can_void>
+                <can_accept_payment>1</can_accept_payment>
+                <can_deny_payment>1</can_deny_payment>
+                <can_cancel>1</can_cancel>
+                <can_review_payment>1</can_review_payment>
+                <can_edit>1</can_edit>
+                <can_fetch_transaction_info>1</can_fetch_transaction_info>
+                <can_fetch_transaction_information>1</can_fetch_transaction_information>
+                <model>AuthorizenetAcceptjsFacade</model>
+                <email_customer>0</email_customer>
+                <login backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <order_status>processing</order_status>
+                <payment_action>authorize</payment_action>
+                <title>Credit Card (Authorize.Net)</title>
+                <cvv_enabled>1</cvv_enabled>
+                <public_client_key/>
+                <trans_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <trans_md5 backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <trans_signature_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <allowspecific>0</allowspecific>
+                <currency>USD</currency>
+                <environment>production</environment>
+                <privateInfoKeys>authCode,avsResultCode,cvvResultCode,cavvResultCode</privateInfoKeys>
+                <paymentInfoKeys>accountType,ccLast4,authCode,avsResultCode,cvvResultCode,cavvResultCode</paymentInfoKeys>
+                <transactionSyncKeys>transactionStatus,responseCode,responseReasonCode,authCode,AVSResponse,cardCodeResponse,CAVVResponse</transactionSyncKeys>
+            </authorizenet_acceptjs>
+        </payment>
+    </default>
+</config>

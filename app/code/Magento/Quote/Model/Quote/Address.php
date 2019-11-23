@@ -28,8 +28,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method Address setAddressType(string $value)
  * @method int getFreeShipping()
  * @method Address setFreeShipping(int $value)
- * @method int getCollectShippingRates()
- * @method Address setCollectShippingRates(int $value)
+ * @method bool getCollectShippingRates()
+ * @method Address setCollectShippingRates(bool $value)
  * @method Address setShippingMethod(string $value)
  * @method string getShippingDescription()
  * @method Address setShippingDescription(string $value)
@@ -425,9 +425,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     protected function _isSameAsBilling()
     {
+        $quoteSameAsBilling = $this->getSameAsBilling();
+
         return $this->getAddressType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING &&
-            ($this->_isNotRegisteredCustomer() ||
-            $this->_isDefaultShippingNullOrSameAsBillingAddress());
+            ($this->_isNotRegisteredCustomer() || $this->_isDefaultShippingNullOrSameAsBillingAddress()) &&
+            ($quoteSameAsBilling || $quoteSameAsBilling === 0 || $quoteSameAsBilling === null);
     }
 
     /**
@@ -471,7 +473,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Declare address quote model object
      *
-     * @param   \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
@@ -691,7 +693,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function hasItems()
     {
-        return sizeof($this->getAllItems()) > 0;
+        return count($this->getAllItems()) > 0;
     }
 
     /**
@@ -965,6 +967,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
     /**
      * Request shipping rates for entire address or specified address item
+     *
      * Returns true if current selected shipping method code corresponds to one of the found rates
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
@@ -1002,8 +1005,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         /**
          * Store and website identifiers specified from StoreManager
          */
-        $request->setStoreId($this->storeManager->getStore()->getId());
-        $request->setWebsiteId($this->storeManager->getWebsite()->getId());
+        if ($this->getQuote()->getStoreId()) {
+            $storeId = $this->getQuote()->getStoreId();
+            $request->setStoreId($storeId);
+            $request->setWebsiteId($this->storeManager->getStore($storeId)->getWebsiteId());
+        } else {
+            $request->setStoreId($this->storeManager->getStore()->getId());
+            $request->setWebsiteId($this->storeManager->getWebsite()->getId());
+        }
         $request->setFreeShipping($this->getFreeShipping());
         /**
          * Currencies need to convert in free shipping
@@ -1142,6 +1151,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             return true;
         }
 
+        $includeDiscount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/include_discount_amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         $amount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -1152,9 +1166,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
+
         $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
 
-        return ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount);
+        return $includeDiscount ?
+            ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
+            ($this->getBaseSubtotal() + $taxes >= $amount);
     }
 
     /**
@@ -1210,8 +1227,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Set total amount value
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function setTotalAmount($code, $amount)
@@ -1228,8 +1245,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Set total amount value in base store currency
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function setBaseTotalAmount($code, $amount)
@@ -1246,8 +1263,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Add amount total amount value
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function addTotalAmount($code, $amount)
@@ -1261,8 +1278,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Add amount total amount value in base store currency
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function addBaseTotalAmount($code, $amount)
@@ -1348,7 +1365,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /******************************* End Total Collector Interface *******************************************/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -1356,7 +1373,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCountryId()
     {
@@ -1364,7 +1381,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCountryId($countryId)
     {
@@ -1372,7 +1389,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getStreet()
     {
@@ -1381,7 +1398,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStreet($street)
     {
@@ -1389,7 +1406,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCompany()
     {
@@ -1397,7 +1414,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCompany($company)
     {
@@ -1405,7 +1422,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTelephone()
     {
@@ -1413,7 +1430,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setTelephone($telephone)
     {
@@ -1421,7 +1438,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFax()
     {
@@ -1429,7 +1446,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFax($fax)
     {
@@ -1437,7 +1454,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPostcode()
     {
@@ -1445,7 +1462,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPostcode($postcode)
     {
@@ -1453,7 +1470,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCity()
     {
@@ -1461,7 +1478,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCity($city)
     {
@@ -1469,7 +1486,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFirstname()
     {
@@ -1477,7 +1494,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setFirstname($firstname)
     {
@@ -1485,7 +1502,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLastname()
     {
@@ -1493,7 +1510,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setLastname($lastname)
     {
@@ -1501,7 +1518,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMiddlename()
     {
@@ -1509,7 +1526,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setMiddlename($middlename)
     {
@@ -1517,7 +1534,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPrefix()
     {
@@ -1525,7 +1542,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrefix($prefix)
     {
@@ -1533,7 +1550,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSuffix()
     {
@@ -1541,7 +1558,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSuffix($suffix)
     {
@@ -1549,7 +1566,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getVatId()
     {
@@ -1557,7 +1574,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVatId($vatId)
     {
@@ -1565,7 +1582,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerId()
     {
@@ -1573,7 +1590,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerId($customerId)
     {
@@ -1581,7 +1598,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getEmail()
     {
@@ -1594,7 +1611,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEmail($email)
     {
@@ -1602,7 +1619,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegion($region)
     {
@@ -1610,7 +1627,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegionId($regionId)
     {
@@ -1618,7 +1635,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRegionCode($regionCode)
     {
@@ -1626,7 +1643,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSameAsBilling()
     {
@@ -1634,7 +1651,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSameAsBilling($sameAsBilling)
     {
@@ -1642,7 +1659,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerAddressId()
     {
@@ -1650,7 +1667,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerAddressId($customerAddressId)
     {
@@ -1681,7 +1698,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     //@codeCoverageIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Quote\Api\Data\AddressExtensionInterface|null
      */
@@ -1691,7 +1708,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes
      * @return $this
@@ -1712,7 +1729,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getCustomAttributesCodes()
     {

@@ -1,18 +1,22 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Service\InvoiceService;
 
-class NewAction extends \Magento\Backend\App\Action
+/**
+ * Create new invoice action.
+ */
+class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -37,21 +41,31 @@ class NewAction extends \Magento\Backend\App\Action
     private $invoiceService;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
      * @param InvoiceService $invoiceService
+     * @param OrderRepositoryInterface|null $orderRepository
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
         PageFactory $resultPageFactory,
-        InvoiceService $invoiceService
+        InvoiceService $invoiceService,
+        OrderRepositoryInterface $orderRepository = null
     ) {
+        parent::__construct($context);
+
         $this->registry = $registry;
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
         $this->invoiceService = $invoiceService;
+        $this->orderRepository = $orderRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(OrderRepositoryInterface::class);
     }
 
     /**
@@ -77,14 +91,11 @@ class NewAction extends \Magento\Backend\App\Action
     {
         $orderId = $this->getRequest()->getParam('order_id');
         $invoiceData = $this->getRequest()->getParam('invoice', []);
-        $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
+        $invoiceItems = $invoiceData['items'] ?? [];
 
         try {
             /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
-            if (!$order->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
-            }
+            $order = $this->orderRepository->get($orderId);
 
             if (!$order->canInvoice()) {
                 throw new \Magento\Framework\Exception\LocalizedException(

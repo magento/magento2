@@ -15,8 +15,7 @@ define([
 ], function (ko, $, _, Element) {
     'use strict';
 
-    var transformProp,
-        isTouchDevice = typeof document.ontouchstart !== 'undefined';
+    var transformProp;
 
     /**
      * Get element context
@@ -110,11 +109,7 @@ define([
          * @param {Object} data - element data
          */
         initListeners: function (elem, data) {
-            if (isTouchDevice) {
-                $(elem).on('touchstart', this.mousedownHandler.bind(this, data, elem));
-            } else {
-                $(elem).on('mousedown', this.mousedownHandler.bind(this, data, elem));
-            }
+            $(elem).on('mousedown touchstart', this.mousedownHandler.bind(this, data, elem));
         },
 
         /**
@@ -131,26 +126,20 @@ define([
                 $table = $(elem).parents('table').eq(0),
                 $tableWrapper = $table.parent();
 
+            this.disableScroll();
             $(recordNode).addClass(this.draggableElementClass);
             $(originRecord).addClass(this.draggableElementClass);
             this.step = this.step === 'auto' ? originRecord.height() / 2 : this.step;
             drEl.originRow = originRecord;
             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
             drEl.instanceCtx = this.getRecord(originRecord[0]);
-            drEl.eventMousedownY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY;
+            drEl.eventMousedownY = this.getPageY(event);
             drEl.minYpos =
                 $table.offset().top - originRecord.offset().top + $table.children('thead').outerHeight();
             drEl.maxYpos = drEl.minYpos + $table.children('tbody').outerHeight() - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
-
-            if (isTouchDevice) {
-                this.body.bind('touchmove', this.mousemoveHandler);
-                this.body.bind('touchend', this.mouseupHandler);
-            } else {
-                this.body.bind('mousemove', this.mousemoveHandler);
-                this.body.bind('mouseup', this.mouseupHandler);
-            }
-
+            this.body.bind('mousemove touchmove', this.mousemoveHandler);
+            this.body.bind('mouseup touchend', this.mouseupHandler);
         },
 
         /**
@@ -160,15 +149,12 @@ define([
          */
         mousemoveHandler: function (event) {
             var depEl = this.draggableElement,
-                pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
+                pageY = this.getPageY(event),
                 positionY = pageY - depEl.eventMousedownY,
                 processingPositionY = positionY + 'px',
                 processingMaxYpos = depEl.maxYpos + 'px',
                 processingMinYpos = depEl.minYpos + 'px',
                 depElement = this.getDepElement(depEl.instance, positionY, depEl.originRow);
-
-            event.stopPropagation();
-            event.preventDefault();
 
             if (depElement) {
                 depEl.depElement ? depEl.depElement.elem.removeClass(depEl.depElement.className) : false;
@@ -194,9 +180,10 @@ define([
         mouseupHandler: function (event) {
             var depElementCtx,
                 drEl = this.draggableElement,
-                pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
+                pageY = this.getPageY(event),
                 positionY = pageY - drEl.eventMousedownY;
 
+            this.enableScroll();
             drEl.depElement = this.getDepElement(drEl.instance, positionY, this.draggableElement.originRow);
 
             drEl.instance.remove();
@@ -212,13 +199,8 @@ define([
 
             drEl.originRow.removeClass(this.draggableElementClass);
 
-            if (isTouchDevice) {
-                this.body.unbind('touchmove', this.mousemoveHandler);
-                this.body.unbind('touchend', this.mouseupHandler);
-            } else {
-                this.body.unbind('mousemove', this.mousemoveHandler);
-                this.body.unbind('mouseup', this.mouseupHandler);
-            }
+            this.body.unbind('mousemove touchmove', this.mousemoveHandler);
+            this.body.unbind('mouseup touchend', this.mouseupHandler);
 
             this.draggableElement = {};
         },
@@ -402,6 +384,55 @@ define([
                 index = _.isFunction(ctx.$index) ? ctx.$index() : ctx.$index;
 
             return this.recordsCache()[index];
+        },
+
+        /**
+         * Get correct page Y
+         *
+         * @param {Object} event - current event
+         * @returns {integer}
+         */
+        getPageY: function (event) {
+            var pageY;
+
+            if (event.type.indexOf('touch') >= 0) {
+                if (event.originalEvent.touches[0]) {
+                    pageY = event.originalEvent.touches[0].pageY;
+                } else {
+                    pageY = event.originalEvent.changedTouches[0].pageY;
+                }
+            } else {
+                pageY = event.pageY;
+            }
+
+            return pageY;
+        },
+
+        /**
+         * Disable page scrolling
+         */
+        disableScroll: function () {
+            document.body.addEventListener('touchmove', this.preventDefault, {
+                passive: false
+            });
+        },
+
+        /**
+         * Enable page scrolling
+         */
+        enableScroll: function () {
+            document.body.removeEventListener('touchmove', this.preventDefault, {
+                passive: false
+            });
+        },
+
+        /**
+         * Prevent default function
+         *
+         * @param {Object} event - event object
+         */
+        preventDefault: function (event) {
+            event.preventDefault();
         }
 
     });

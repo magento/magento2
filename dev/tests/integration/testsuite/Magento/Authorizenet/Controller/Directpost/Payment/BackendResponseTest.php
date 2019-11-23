@@ -23,7 +23,7 @@ class BackendResponseTest extends AbstractController
         $data = [
             'x_response_code' => 1,
             'x_response_reason_code' => 1,
-            'x_invoice_num' => 1,
+            'x_invoice_num' => '1',
             'x_amount' => 16,
             'x_trans_id' => '32iiw5ve',
             'x_card_type' => 'American Express',
@@ -48,7 +48,7 @@ class BackendResponseTest extends AbstractController
         $data = [
             'x_response_code' => 1,
             'x_response_reason_code' => 1,
-            'x_invoice_num' => 1,
+            'x_invoice_num' => '1',
             'x_amount' => 16,
             'x_trans_id' => '32iiw5ve',
             'x_card_type' => 'American Express',

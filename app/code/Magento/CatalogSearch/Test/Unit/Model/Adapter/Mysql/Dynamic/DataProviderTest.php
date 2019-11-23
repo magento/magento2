@@ -19,8 +19,9 @@ use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Store\Model\StoreManager;
 
 /**
- * Class DataProviderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @see \Magento\ElasticSearch
  */
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {

@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rule grid page. Adds the provided Rule. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{ruleName.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{ruleName.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{ruleName.apply}}" stepKey="selectActionType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{ruleName.discountAmount}}" stepKey="fillDiscountAmount"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleAndStayOnEditActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Clicks on Save and Continue.</description>
+        </annotations>
+
+        <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveButton"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithCouponCode" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'selectActionType' and 'fillDiscountAmount'. Adds the provided Coupon Code to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="couponCode"  defaultValue="_defaultCoupon.code"/>
+        </arguments>
+
+        <remove keyForRemoval="selectActionType"/>
+        <remove keyForRemoval="fillDiscountAmount"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType" after="fillRuleName"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForElementVisible" after="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{couponCode}}" stepKey="fillCouponCode" after="waitForElementVisible"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon" after="fillCouponCode"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionTypeToFixed" after="clickToExpandActions"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1" stepKey="fillDiscountAmount" after="selectActionTypeToFixed"/>
+    </actionGroup>
+
+    <!--Delete Cart price Rule for Retailer customer-->
+    <actionGroup name="AdminDeleteCartPriceRuleForRetailerActionGroup">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rules grid page. Removes the 1st Cart Price Rule in the Grid.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="goToCartPriceRules"/>
+        <waitForPageLoad stepKey="waitForCartPriceRules"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{SimpleSalesRule.name}}" stepKey="filterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
+        <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
+        <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
+        <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithConditions" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'fillDiscountAmount'. Adds the 2 provided Conditions (Name, Rule, Rule to Change and Category Name) to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="condition1" type="string" defaultValue="Products subselection"/>
+            <argument name="condition2" type="string" defaultValue="Category"/>
+            <argument name="ruleToChange1" type="string" defaultValue="is"/>
+            <argument name="rule1" type="string" defaultValue="equals or greater than"/>
+            <argument name="ruleToChange2" type="string" defaultValue="..."/>
+            <argument name="rule2" type="string" defaultValue="2"/>
+            <argument name="categoryName" type="string" defaultValue="_defaultCategory.name"/>
+        </arguments>
+
+        <remove keyForRemoval="fillDiscountAmount"/>
+
+        <!--Go to Conditions section-->
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="openConditionsSection" after="selectActionType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" stepKey="addFirstCondition" after="openConditionsSection"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1')}}" userInput="{{condition1}}" stepKey="selectRule" after="addFirstCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange1)}}" stepKey="waitForFirstRuleElement" after="selectRule"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange1)}}" stepKey="clickToChangeRule" after="waitForFirstRuleElement"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleParameterSelect('1--1')}}" userInput="{{rule1}}" stepKey="selectRule1" after="clickToChangeRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="waitForSecondRuleElement" after="selectRule1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="clickToChangeRule1" after="waitForSecondRuleElement"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleParameterInput('1--1')}}" userInput="{{rule2}}" stepKey="fillRule" after="clickToChangeRule1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1--1')}}" stepKey="addSecondCondition" after="fillRule"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1--1')}}" userInput="{{condition2}}" stepKey="selectSecondCondition" after="addSecondCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="waitForThirdRuleElement" after="selectSecondCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="addThirdCondition" after="waitForThirdRuleElement"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="waitForForthRuleElement" after="addThirdCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="openChooser" after="waitForForthRuleElement"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="waitForCategoryVisible" after="openChooser"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="checkCategoryName" after="waitForCategoryVisible"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateCartPriceRuleActionsWithSubtotalActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'fillDiscountAmount'. Adds sub total conditions for free shipping to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <remove keyForRemoval="fillDiscountAmount"/>
+        <!-- Expand the conditions section -->
+        <grabTextFrom selector="{{AdminCartPriceRulesFormSection.ruleName}}" after="fillRuleName" stepKey="getSubtotalRule"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="openConditionsSection" after="selectActionType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" after="openConditionsSection" stepKey="addFirstCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="{{ruleName.condition1}}" after="addFirstCondition" stepKey="selectCondition1"/>
+        <waitForPageLoad after="selectCondition1" stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition(ruleName.ruleToChange1)}}" after="waitForConditionLoad" stepKey="clickToChooseOption"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionsOperator}}" userInput="{{ruleName.rule1}}" after="clickToChooseOption" stepKey="setOperatorType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" after="setOperatorType" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{ruleName.subtotal}}" after="clickEllipsis" stepKey="fillSubtotalParameter"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addNewCondition('1')}}" after="fillSubtotalParameter" stepKey="clickOnTheAddNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelectDropdown('1')}}" userInput="{{ruleName.condition2}}" after="clickOnTheAddNewCondition" stepKey="selectSecondCondition"/>
+        <waitForPageLoad after="selectSecondCondition" stepKey="waitForConditionLoad2"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" after="waitForConditionLoad2" stepKey="clickEllipsis2"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--2')}}" userInput="{{ruleName.shippingMethod}}" after="clickEllipsis2" stepKey="selectShippingMethod"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyToShippingAmount}}" after="selectShippingMethod" stepKey="clickApplyToShipping"/>
+        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" after="clickApplyToShipping" stepKey="clickDiscardSubsequentRules"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{ruleName.simple_free_shipping}}" after="clickDiscardSubsequentRules" stepKey="selectForMatchingItemsOnly"/>
+    </actionGroup>
+    <actionGroup name="AdminCreateMultiWebsiteCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'clickSaveButton' for the next data changing. Assign cart price rule to 2 websites instead of 1.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <remove keyForRemoval="clickSaveButton"/>
+        <remove keyForRemoval="seeSuccessMessage"/>
+        <remove keyForRemoval="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsites" after="fillRuleName"/>
+    </actionGroup>
+    <actionGroup name="CreateCartPriceRuleSecondWebsiteActionGroup">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rule grid page. Clicks on Add New Rule. Fills the provided Rule (Name). Selects 'Second Website' from the 'Websites' menu.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Second Website" stepKey="selectWebsites"/>
+    </actionGroup>
+
+    <actionGroup name="AdminInactiveCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Clicks on 'Active'.</description>
+        </annotations>
+
+        <click selector="{{AdminCartPriceRulesFormSection.active}}" stepKey="clickActiveToDisable" after="fillRuleName"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Sets the provide Condition (Actions Aggregator/Value, Child Attribute and Action Value) for Actions on the Admin Cart Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="actionsAggregator" type="string" defaultValue="ANY"/>
+            <argument name="actionsValue" type="string" defaultValue="FALSE"/>
+            <argument name="childAttribute" type="string" defaultValue="Category"/>
+            <argument name="actionValue" type="string" defaultValue="2"/>
+        </arguments>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" after="fillDiscountAmount" stepKey="clickOnActionTab"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('ALL')}}" after="clickOnActionTab" stepKey="clickToChooseFirstRuleConditionValue"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsAggregator}}" userInput="{{actionsAggregator}}" after="clickToChooseFirstRuleConditionValue" stepKey="changeFirstRuleConditionValue"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('TRUE')}}" after="changeFirstRuleConditionValue" stepKey="clickToChooseSecondRuleConditionValue"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsValue}}" userInput="{{actionsValue}}" after="clickToChooseSecondRuleConditionValue" stepKey="changeSecondRuleConditionValue"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" after="changeSecondRuleConditionValue" stepKey="clickConditionDropDownMenu"/>
+        <waitForPageLoad stepKey="waitForDropDownOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="{{childAttribute}}" after="clickConditionDropDownMenu" stepKey="selectConditionAttributeIsCategory"/>
+        <waitForPageLoad after="selectConditionAttributeIsCategory" stepKey="waitForOperatorOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" after="waitForOperatorOpened" stepKey="clickToChooserIcon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{actionValue}}" after="clickToChooserIcon" stepKey="choseNeededCategoryFromCategoryGrid"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" after="choseNeededCategoryFromCategoryGrid" stepKey="applyAction"/>
+    </actionGroup>
+</actionGroups>

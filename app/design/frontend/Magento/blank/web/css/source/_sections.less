@@ -31,8 +31,19 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .product.data.items {
         .lib-data-accordion();
+
         .data.item {
             display: block;
+        }
+
+        .item.title {
+            > .switch {
+                padding: 1px 15px 1px;
+            }
+        }
+
+        > .item.content {
+            padding: 10px 15px 30px;
         }
     }
 }

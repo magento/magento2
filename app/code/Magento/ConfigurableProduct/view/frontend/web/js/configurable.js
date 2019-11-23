@@ -12,7 +12,7 @@ define([
     'mage/translate',
     'priceUtils',
     'priceBox',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'jquery/jquery.parsequery'
 ], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
@@ -123,6 +123,8 @@ define([
             if (this.options.spConfig.inputsInitialized) {
                 this._setValuesByAttribute();
             }
+
+            this._setInitialOptionsLabels();
         },
 
         /**
@@ -155,6 +157,18 @@ define([
                     attributeId = element.id.replace(/[a-z]*/, '');
                     this.options.values[attributeId] = element.value;
                 }
+            }, this));
+        },
+
+        /**
+         * Set additional field with initial label to be used when switching between options with different prices.
+         * @private
+         */
+        _setInitialOptionsLabels: function () {
+            $.each(this.options.spConfig.attributes, $.proxy(function (index, element) {
+                $.each(element.options, $.proxy(function (optIndex, optElement) {
+                    this.options.spConfig.attributes[index].options[optIndex].initialLabel = optElement.label;
+                }, this));
             }, this));
         },
 
@@ -291,6 +305,8 @@ define([
             images = this.options.spConfig.images[this.simpleProduct];
 
             if (images) {
+                images = this._sortImages(images);
+
                 if (this.options.gallerySwitchStrategy === 'prepend') {
                     images = images.concat(initialImages);
                 }
@@ -309,7 +325,17 @@ define([
                 $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
             }
 
-            galleryObject.first();
+        },
+
+        /**
+         * Sorting images array
+         *
+         * @private
+         */
+        _sortImages: function (images) {
+            return _.sortBy(images, function (image) {
+                return image.position;
+            });
         },
 
         /**
@@ -359,8 +385,18 @@ define([
                 prevConfig,
                 index = 1,
                 allowedProducts,
+                allowedProductsByOption,
+                allowedProductsAll,
                 i,
-                j;
+                j,
+                finalPrice = parseFloat(this.options.spConfig.prices.finalPrice.amount),
+                optionFinalPrice,
+                optionPriceDiff,
+                optionPrices = this.options.spConfig.optionPrices,
+                allowedOptions = [],
+                indexKey,
+                allowedProductMinPrice,
+                allowedProductsAllMinPrice;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -372,29 +408,74 @@ define([
             }
 
             if (options) {
-                for (i = 0; i < options.length; i++) {
-                    allowedProducts = [];
-
+                for (indexKey in this.options.spConfig.index) {
                     /* eslint-disable max-depth */
-                    if (prevConfig) {
+                    if (this.options.spConfig.index.hasOwnProperty(indexKey)) {
+                        allowedOptions = allowedOptions.concat(_.values(this.options.spConfig.index[indexKey]));
+                    }
+                }
+
+                if (prevConfig) {
+                    allowedProductsByOption = {};
+                    allowedProductsAll = [];
+
+                    for (i = 0; i < options.length; i++) {
+                        /* eslint-disable max-depth */
                         for (j = 0; j < options[i].products.length; j++) {
                             // prevConfig.config can be undefined
                             if (prevConfig.config &&
                                 prevConfig.config.allowedProducts &&
                                 prevConfig.config.allowedProducts.indexOf(options[i].products[j]) > -1) {
-                                allowedProducts.push(options[i].products[j]);
+                                if (!allowedProductsByOption[i]) {
+                                    allowedProductsByOption[i] = [];
+                                }
+                                allowedProductsByOption[i].push(options[i].products[j]);
+                                allowedProductsAll.push(options[i].products[j]);
                             }
                         }
-                    } else {
-                        allowedProducts = options[i].products.slice(0);
                     }
 
-                    if (allowedProducts.length > 0) {
+                    if (typeof allowedProductsAll[0] !== 'undefined' &&
+                        typeof optionPrices[allowedProductsAll[0]] !== 'undefined') {
+                        allowedProductsAllMinPrice = this._getAllowedProductWithMinPrice(allowedProductsAll);
+                        finalPrice = parseFloat(optionPrices[allowedProductsAllMinPrice].finalPrice.amount);
+                    }
+                }
+
+                for (i = 0; i < options.length; i++) {
+                    if (prevConfig && typeof allowedProductsByOption[i] === 'undefined') {
+                        continue; //jscs:ignore disallowKeywords
+                    }
+
+                    allowedProducts = prevConfig ? allowedProductsByOption[i] : options[i].products.slice(0);
+                    optionPriceDiff = 0;
+
+                    if (typeof allowedProducts[0] !== 'undefined' &&
+                        typeof optionPrices[allowedProducts[0]] !== 'undefined') {
+                        allowedProductMinPrice = this._getAllowedProductWithMinPrice(allowedProducts);
+                        optionFinalPrice = parseFloat(optionPrices[allowedProductMinPrice].finalPrice.amount);
+                        optionPriceDiff = optionFinalPrice - finalPrice;
+                        options[i].label = options[i].initialLabel;
+
+                        if (optionPriceDiff !== 0) {
+                            options[i].label += ' ' + priceUtils.formatPrice(
+                                optionPriceDiff,
+                                this.options.priceFormat,
+                                true
+                            );
+                        }
+                    }
+
+                    if (allowedProducts.length > 0 || _.include(allowedOptions, options[i].id)) {
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
                         if (typeof options[i].price !== 'undefined') {
-                            element.options[index].setAttribute('price', options[i].prices);
+                            element.options[index].setAttribute('price', options[i].price);
+                        }
+
+                        if (allowedProducts.length === 0) {
+                            element.options[index].disabled = true;
                         }
 
                         element.options[index].config = options[i];
@@ -458,22 +539,54 @@ define([
         _getPrices: function () {
             var prices = {},
                 elements = _.toArray(this.options.settings),
-                hasProductPrice = false;
+                allowedProduct;
 
             _.each(elements, function (element) {
                 var selected = element.options[element.selectedIndex],
                     config = selected && selected.config,
                     priceValue = {};
 
-                if (config && config.allowedProducts.length === 1 && !hasProductPrice) {
+                if (config && config.allowedProducts.length === 1) {
                     priceValue = this._calculatePrice(config);
-                    hasProductPrice = true;
+                } else if (element.value) {
+                    allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
+                    priceValue = this._calculatePrice({
+                        'allowedProducts': [
+                            allowedProduct
+                        ]
+                    });
                 }
 
-                prices[element.attributeId] = priceValue;
+                if (!_.isEmpty(priceValue)) {
+                    prices.prices = priceValue;
+                }
             }, this);
 
             return prices;
+        },
+
+        /**
+         * Get product with minimum price from selected options.
+         *
+         * @param {Array} allowedProducts
+         * @returns {String}
+         * @private
+         */
+        _getAllowedProductWithMinPrice: function (allowedProducts) {
+            var optionPrices = this.options.spConfig.optionPrices,
+                product = {},
+                optionMinPrice, optionFinalPrice;
+
+            _.each(allowedProducts, function (allowedProduct) {
+                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
+
+                if (_.isEmpty(product) || optionFinalPrice < optionMinPrice) {
+                    optionMinPrice = optionFinalPrice;
+                    product = allowedProduct;
+                }
+            }, this);
+
+            return product;
         },
 
         /**
@@ -545,6 +658,13 @@ define([
             } else {
                 $(this.options.slyOldPriceSelector).hide();
             }
+
+            $(document).trigger('updateMsrpPriceBlock',
+                [
+                    optionId,
+                    this.options.spConfig.optionPrices
+                ]
+            );
         },
 
         /**

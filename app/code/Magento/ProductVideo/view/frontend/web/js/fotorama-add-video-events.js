@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'catalogGallery',
     'loadPlayer'
 ], function ($) {
@@ -177,12 +177,14 @@ define([
          * @private
          */
         clearEvents: function () {
-            this.fotoramaItem.off(
-                'fotorama:show.' + this.PV +
-                ' fotorama:showend.' + this.PV +
-                ' fotorama:fullscreenenter.' + this.PV +
-                ' fotorama:fullscreenexit.' + this.PV
-            );
+            if (this.fotoramaItem !== undefined) {
+                this.fotoramaItem.off(
+                    'fotorama:show.' + this.PV +
+                    ' fotorama:showend.' + this.PV +
+                    ' fotorama:fullscreenenter.' + this.PV +
+                    ' fotorama:fullscreenexit.' + this.PV
+                );
+            }
         },
 
         /**
@@ -448,7 +450,7 @@ define([
                 scriptTag = document.getElementsByTagName('script')[0];
 
             element.async = true;
-            element.src = 'https://secure-a.vimeocdn.com/js/froogaloop2.min.js';
+            element.src = 'https://f.vimeocdn.com/js/froogaloop2.min.js';
 
             /**
              * Vimeo js framework on load callback.

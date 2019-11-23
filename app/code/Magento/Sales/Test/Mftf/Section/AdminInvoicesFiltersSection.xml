@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminInvoicesFiltersSection">
         <element name="orderNum" type="input" selector="input[name='order_increment_id']"/>
+        <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
     </section>
 </sections>

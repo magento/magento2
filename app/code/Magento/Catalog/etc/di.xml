@@ -36,16 +36,16 @@
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults" />
+    <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults" />
+    <preference for="Magento\Catalog\Api\Data\ProductSearchResultsInterface" type="Magento\Catalog\Model\ProductSearchResults" />
     <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
     <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
     <preference for="Magento\Catalog\Api\CategoryListInterface" type="Magento\Catalog\Model\CategoryList" />
-    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Catalog\Api\Data\CategorySearchResultsInterface" type="Magento\Catalog\Model\CategorySearchResults" />
     <preference for="Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface" type="Magento\Catalog\Model\Config\Source\Product\Options\Price"/>
     <preference for="Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterface" type="Magento\Catalog\Model\Indexer\Product\Flat\Table\Builder"/>
     <preference for="Magento\Catalog\Api\ProductRenderListInterface" type="Magento\Catalog\Model\ProductRenderList"/>
@@ -72,8 +72,13 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
+    <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
+    </type>
+    <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
     </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu" />
@@ -219,6 +224,12 @@
                 <item name="jpeg" xsi:type="string">jpeg</item>
                 <item name="gif" xsi:type="string">gif</item>
                 <item name="png" xsi:type="string">png</item>
+            </argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="jpg" xsi:type="string">image/jpg</item>
+                <item name="jpeg" xsi:type="string">image/jpeg</item>
+                <item name="gif" xsi:type="string">image/gif</item>
+                <item name="png" xsi:type="string">image/png</item>
             </argument>
         </arguments>
     </virtualType>
@@ -370,11 +381,11 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+    <type name="Magento\Catalog\Pricing\Price\Collection">
         <arguments>
             <argument name="pool" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\Pricing\PriceInfo\Factory">
         <arguments>
             <argument name="types" xsi:type="array">
@@ -392,12 +403,37 @@
                 <item name="upsell" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Upsell</item>
                 <item name="related" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Related</item>
             </argument>
+            <argument name="mapProviders" xsi:type="array">
+                <item name="linked" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\LinkedMapProvider</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ProductLink\Converter\ConverterPool">
         <arguments>
             <argument name="converters" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Model\ProductLink\Converter\DefaultConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option">
+        <arguments>
+            <argument name="optionGroups" xsi:type="array">
+                <item name="date" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Date</item>
+                <item name="file" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\File</item>
+                <item name="select" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Select</item>
+                <item name="text" xsi:type="string">Magento\Catalog\Model\Product\Option\Type\Text</item>
+            </argument>
+            <argument name="optionTypesToGroups" xsi:type="array">
+                <item name="field" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="area" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_TEXT</item>
+                <item name="file" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_FILE</item>
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="checkbox" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="multiple" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT</item>
+                <item name="date" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="date_time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
+                <item name="time" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE</item>
             </argument>
         </arguments>
     </type>
@@ -596,6 +632,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\ProductOption">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -657,12 +700,14 @@
                         <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
+                        <item name="tierPriceCreator" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
                         <item name="optionUpdater" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
                         <item name="mediaGalleryUpdate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\UpdateHandler</item>
                         <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
                         <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
+                        <item name="tierPriceUpdater" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler</item>
                     </item>
                 </item>
             </argument>
@@ -848,7 +893,7 @@
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
                 <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Catalog\Model\Product\Hydrator</item>
             </argument>
         </arguments>
     </type>
@@ -1146,6 +1191,134 @@
         <arguments>
             <argument name="indexers" xsi:type="array">
                 <item name="catalog_product_price" xsi:type="string">catalog_product_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\Select">
+        <arguments>
+            <argument name="singleSelectionTypes" xsi:type="array">
+                <item name="drop_down" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN</item>
+                <item name="radio" xsi:type="const">Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductLink\Repository">
+        <arguments>
+            <argument name="entityCollectionProvider" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Proxy</argument>
+            <argument name="linkInitializer" xsi:type="object">Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductLink\ProductLinkQuery">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magento\Catalog\Model\ProductLink\CollectionProvider\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager">
+        <arguments>
+            <argument name="themeFactory" xsi:type="object">Magento\Framework\View\Design\Theme\FlyweightFactory\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Source\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Source\LayoutUpdate">
+        <arguments>
+            <argument name="manager" xsi:type="object">Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="category_ids" xsi:type="string">catalog_product</item>
+                    <item name="country_of_manufacture" xsi:type="string">catalog_product</item>
+                    <item name="created_at" xsi:type="string">catalog_product</item>
+                    <item name="custom_design" xsi:type="string">catalog_product</item>
+                    <item name="custom_design_from" xsi:type="string">catalog_product</item>
+                    <item name="custom_design_to" xsi:type="string">catalog_product</item>
+                    <item name="custom_layout" xsi:type="string">catalog_product</item>
+                    <item name="custom_layout_update" xsi:type="string">catalog_product</item>
+                    <item name="description" xsi:type="string">catalog_product</item>
+                    <item name="gallery" xsi:type="string">catalog_product</item>
+                    <item name="has_options" xsi:type="string">catalog_product</item>
+                    <item name="image" xsi:type="string">catalog_product</item>
+                    <item name="image_label" xsi:type="string">catalog_product</item>
+                    <item name="media_gallery" xsi:type="string">catalog_product</item>
+                    <item name="meta_description" xsi:type="string">catalog_product</item>
+                    <item name="meta_keyword" xsi:type="string">catalog_product</item>
+                    <item name="meta_title" xsi:type="string">catalog_product</item>
+                    <item name="minimal_price" xsi:type="string">catalog_product</item>
+                    <item name="name" xsi:type="string">catalog_product</item>
+                    <item name="news_from_date" xsi:type="string">catalog_product</item>
+                    <item name="news_to_date" xsi:type="string">catalog_product</item>
+                    <item name="old_id" xsi:type="string">catalog_product</item>
+                    <item name="options_container" xsi:type="string">catalog_product</item>
+                    <item name="page_layout" xsi:type="string">catalog_product</item>
+                    <item name="price" xsi:type="string">catalog_product</item>
+                    <item name="quantity_and_stock_status" xsi:type="string">catalog_product</item>
+                    <item name="required_options" xsi:type="string">catalog_product</item>
+                    <item name="short_description" xsi:type="string">catalog_product</item>
+                    <item name="sku" xsi:type="string">catalog_product</item>
+                    <item name="small_image" xsi:type="string">catalog_product</item>
+                    <item name="small_image_label" xsi:type="string">catalog_product</item>
+                    <item name="special_from_date" xsi:type="string">catalog_product</item>
+                    <item name="special_price" xsi:type="string">catalog_product</item>
+                    <item name="special_to_date" xsi:type="string">catalog_product</item>
+                    <item name="status" xsi:type="string">catalog_product</item>
+                    <item name="thumbnail" xsi:type="string">catalog_product</item>
+                    <item name="thumbnail_label" xsi:type="string">catalog_product</item>
+                    <item name="tier_price" xsi:type="string">catalog_product</item>
+                    <item name="updated_at" xsi:type="string">catalog_product</item>
+                    <item name="visibility" xsi:type="string">catalog_product</item>
+                    <item name="weight" xsi:type="string">catalog_product</item>
+                </item>
+                <item name="catalog_category" xsi:type="array">
+                    <item name="all_children" xsi:type="string">catalog_category</item>
+                    <item name="available_sort_by" xsi:type="string">catalog_category</item>
+                    <item name="children" xsi:type="string">catalog_category</item>
+                    <item name="children_count" xsi:type="string">catalog_category</item>
+                    <item name="custom_apply_to_products" xsi:type="string">catalog_category</item>
+                    <item name="custom_design" xsi:type="string">catalog_category</item>
+                    <item name="custom_design_from" xsi:type="string">catalog_category</item>
+                    <item name="custom_design_to" xsi:type="string">catalog_category</item>
+                    <item name="custom_layout_update" xsi:type="string">catalog_category</item>
+                    <item name="custom_use_parent_settings" xsi:type="string">catalog_category</item>
+                    <item name="default_sort_by" xsi:type="string">catalog_category</item>
+                    <item name="description" xsi:type="string">catalog_category</item>
+                    <item name="display_mode" xsi:type="string">catalog_category</item>
+                    <item name="filter_price_range" xsi:type="string">catalog_category</item>
+                    <item name="image" xsi:type="string">catalog_category</item>
+                    <item name="include_in_menu" xsi:type="string">catalog_category</item>
+                    <item name="is_active" xsi:type="string">catalog_category</item>
+                    <item name="is_anchor" xsi:type="string">catalog_category</item>
+                    <item name="landing_page" xsi:type="string">catalog_category</item>
+                    <item name="level" xsi:type="string">catalog_category</item>
+                    <item name="meta_description" xsi:type="string">catalog_category</item>
+                    <item name="meta_keywords" xsi:type="string">catalog_category</item>
+                    <item name="meta_title" xsi:type="string">catalog_category</item>
+                    <item name="name" xsi:type="string">catalog_category</item>
+                    <item name="page_layout" xsi:type="string">catalog_category</item>
+                    <item name="path" xsi:type="string">catalog_category</item>
+                    <item name="path_in_store" xsi:type="string">catalog_category</item>
+                    <item name="position" xsi:type="string">catalog_category</item>
+                </item>
             </argument>
         </arguments>
     </type>

@@ -23,11 +23,6 @@ use Magento\Store\Model\StoreResolver;
 class Robots extends AbstractBlock implements IdentityInterface
 {
     /**
-     * @var StoreResolver
-     */
-    private $storeResolver;
-
-    /**
      * @var CollectionFactory
      */
     private $sitemapCollectionFactory;
@@ -49,6 +44,8 @@ class Robots extends AbstractBlock implements IdentityInterface
      * @param SitemapHelper $sitemapHelper
      * @param StoreManagerInterface $storeManager
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -58,7 +55,6 @@ class Robots extends AbstractBlock implements IdentityInterface
         StoreManagerInterface $storeManager,
         array $data = []
     ) {
-        $this->storeResolver = $storeResolver;
         $this->sitemapCollectionFactory = $sitemapCollectionFactory;
         $this->sitemapHelper = $sitemapHelper;
         $this->storeManager = $storeManager;
@@ -78,8 +74,7 @@ class Robots extends AbstractBlock implements IdentityInterface
      */
     protected function _toHtml()
     {
-        $defaultStoreId = $this->storeResolver->getCurrentStoreId();
-        $defaultStore = $this->storeManager->getStore($defaultStoreId);
+        $defaultStore = $this->storeManager->getDefaultStoreView();
 
         /** @var \Magento\Store\Model\Website $website */
         $website = $this->storeManager->getWebsite($defaultStore->getWebsiteId());
@@ -138,7 +133,7 @@ class Robots extends AbstractBlock implements IdentityInterface
     public function getIdentities()
     {
         return [
-            Value::CACHE_TAG . '_' . $this->storeResolver->getCurrentStoreId(),
+            Value::CACHE_TAG . '_' . $this->storeManager->getDefaultStoreView()->getId(),
         ];
     }
 }

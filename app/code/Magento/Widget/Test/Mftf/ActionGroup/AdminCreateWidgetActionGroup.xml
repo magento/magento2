@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+   <actionGroup name="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>Goes to the Admin Widget creation page. Creates the provided Widget.</description>
+       </annotations>
+       <arguments>
+           <argument name="widget"/>
+       </arguments>
+
+       <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="amOnAdminNewWidgetPage"/>
+       <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+       <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
+       <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+       <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+       <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
+       <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+       <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
+       <waitForAjaxLoad stepKey="waitForLoad"/>
+       <selectOption selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+       <waitForAjaxLoad stepKey="waitForPageLoad"/>
+       <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+       <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
+   </actionGroup>
+    <actionGroup name="AdminFillSpecificPageWidgetMainFieldsActionGroup">
+        <annotations>
+            <description>Fill widget main fields and widget layout by index for specified page DisplayOn option</description>
+        </annotations>
+        <arguments>
+            <argument name="widget" type="entity" defaultValue="ProductsListWidget"/>
+            <argument name="index" type="string" defaultValue="0"/>
+        </arguments>
+        <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
+        <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" parameterArray="{{widget.store_ids}}" stepKey="setWidgetStoreIds"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetSortOrder}}" userInput="{{widget.sort_order}}" stepKey="fillSortOrder"/>
+        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="waitForSelectElement"/>
+        <selectOption selector="{{AdminNewWidgetSection.displayOnByIndex(index)}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
+        <waitForPageLoad stepKey="waitForDisplayOnChangesApplied"/>
+        <selectOption selector="{{AdminNewWidgetSection.layoutByIndex(index)}}" userInput="{{widget.page}}" stepKey="selectPage"/>
+        <selectOption selector="{{AdminNewWidgetSection.templateByIndex(index)}}" userInput="{{widget.template}}" stepKey="selectTemplate"/>
+        <scrollTo selector="{{AdminNewWidgetSection.containerByIndex(index)}}" stepKey="scrollToSelectContainerElement"/>
+        <waitForPageLoad stepKey="waitForScroll"/>
+        <selectOption selector="{{AdminNewWidgetSection.containerByIndex(index)}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+        <waitForPageLoad stepKey="waitForContainerChangesApplied"/>
+    </actionGroup>
+   <!--Create Product List Widget-->
+   <actionGroup name="AdminCreateProductsListWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget. Validates that the Success Message is present and correct.</description>
+       </annotations>
+
+       <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
+       <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}" stepKey="selectCondition"/>
+       <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
+       <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
+       <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
+       <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+       <click selector="{{AdminNewWidgetSection.selectAll}}" stepKey="clickSelectAll"/>
+       <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
+       <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
+       <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+   </actionGroup>
+
+   <!--Create Dynamic Block Rotate Widget-->
+   <actionGroup name="AdminCreateDynamicBlocksRotatorWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+       <annotations>
+           <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Dynamic Block Rotate Widget.</description>
+       </annotations>
+
+       <selectOption selector="{{AdminNewWidgetSection.displayMode}}" userInput="{{widget.display_mode}}" stepKey="selectDisplayMode"/>
+       <selectOption selector="{{AdminNewWidgetSection.restrictTypes}}" userInput="{{widget.restrict_type}}" stepKey="selectRestrictType"/>
+       <click selector="{{AdminNewWidgetSection.saveAndContinue}}" stepKey="clickSaveWidget"/>
+       <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+   </actionGroup>
+
+   <actionGroup name="AdminDeleteWidgetActionGroup">
+       <annotations>
+           <description>Goes to the Admin Widget grid page. Deletes the provided Widget. Validates that the Success Message is present and correct.</description>
+       </annotations>
+       <arguments>
+           <argument name="widget"/>
+       </arguments>
+
+       <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin"/>
+       <waitForPageLoad stepKey="waitWidgetsLoad"/>
+       <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+       <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+       <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
+       <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>
+       <waitForPageLoad stepKey="waitForResultLoad"/>
+       <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDelete"/>
+       <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+       <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+       <waitForPageLoad stepKey="waitForDeleteLoad"/>
+       <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been deleted" stepKey="seeSuccess"/>
+   </actionGroup>
+
+    <actionGroup name="AdminCreateProductLinkWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget using the provided Product. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <selectOption selector="{{AdminNewWidgetSection.selectTemplate}}" userInput="{{widget.template}}" after="waitForPageLoad" stepKey="setTemplate"/>
+        <waitForAjaxLoad after="setTemplate" stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminNewWidgetSection.selectProduct}}" after="clickWidgetOptions" stepKey="clickSelectProduct"/>
+        <fillField selector="{{AdminNewWidgetSelectProductPopupSection.filterBySku}}" userInput="{{product.sku}}" after="clickSelectProduct" stepKey="fillProductNameInFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" after="fillProductNameInFilter" stepKey="applyFilter"/>
+        <click selector="{{AdminNewWidgetSelectProductPopupSection.firstRow}}" after="applyFilter" stepKey="selectProduct"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

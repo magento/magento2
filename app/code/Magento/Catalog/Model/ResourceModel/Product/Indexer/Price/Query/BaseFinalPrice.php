@@ -16,6 +16,7 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * Prepare base select for Product Price index limited by specified dimensions: website and customer group
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BaseFinalPrice
@@ -66,10 +67,11 @@ class BaseFinalPrice
     private $metadataPool;
 
     /**
-     * BaseFinalPrice constructor.
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -89,6 +91,8 @@ class BaseFinalPrice
     }
 
     /**
+     * Build query for base final price.
+     *
      * @param Dimension[] $dimensions
      * @param string $productType
      * @param array $entityIds
@@ -196,11 +200,13 @@ class BaseFinalPrice
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
-        $finalPrice = $connection->getLeastSql([
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -217,11 +223,8 @@ class BaseFinalPrice
         $select->where("e.type_id = ?", $productType);
 
         if ($entityIds !== null) {
-            if (count($entityIds) > 1) {
-                $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
-            } else {
-                $select->where('e.entity_id = ?', $entityIds);
-            }
+            $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
+            $select->where('e.entity_id IN(?)', $entityIds);
         }
 
         /**
@@ -261,7 +264,8 @@ class BaseFinalPrice
                 ]
             ),
             'NULL',
-            $this->getConnection()->getLeastSql([
+            $this->getConnection()->getLeastSql(
+                [
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -278,14 +282,15 @@ class BaseFinalPrice
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
-            ])
+                ]
+            )
         );
     }
 
     /**
      * Get tier price expression for table
      *
-     * @param $tableAlias
+     * @param string $tableAlias
      * @param \Zend_Db_Expr $priceExpression
      * @return \Zend_Db_Expr
      */
@@ -305,7 +310,7 @@ class BaseFinalPrice
     /**
      * Get connection
      *
-     * return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      * @throws \DomainException
      */
     private function getConnection(): \Magento\Framework\DB\Adapter\AdapterInterface

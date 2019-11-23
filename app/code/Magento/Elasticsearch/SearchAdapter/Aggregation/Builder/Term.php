@@ -8,10 +8,13 @@ namespace Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 
+/**
+ * Builder for term buckets.
+ */
 class Term implements BucketBuilderInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         RequestBucketInterface $bucket,
@@ -19,13 +22,15 @@ class Term implements BucketBuilderInterface
         array $queryResult,
         DataProviderInterface $dataProvider
     ) {
+        $buckets = $queryResult['aggregations'][$bucket->getName()]['buckets'] ?? [];
         $values = [];
-        foreach ($queryResult['aggregations'][$bucket->getName()]['buckets'] as $resultBucket) {
+        foreach ($buckets as $resultBucket) {
             $values[$resultBucket['key']] = [
                 'value' => $resultBucket['key'],
                 'count' => $resultBucket['doc_count'],
             ];
         }
+
         return $values;
     }
 }

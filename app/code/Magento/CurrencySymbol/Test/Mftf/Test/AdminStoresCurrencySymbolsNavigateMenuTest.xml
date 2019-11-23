@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStoresCurrencySymbolsNavigateMenuTest">
+        <annotations>
+            <features value="CurrencySymbol"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin stores currency symbols navigate menu test"/>
+            <description value="Admin should be able to navigate to Stores > Currency Symbols"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14151"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresCurrencySymbolsPage">
+            <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuStoresCurrencyCurrencySymbols.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuStoresCurrencyCurrencySymbols.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>

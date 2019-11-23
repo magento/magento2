@@ -150,7 +150,7 @@ class IndexNameResolver
             $alias = $this->client->getAlias($namespace);
             $indices = array_keys($alias);
             foreach ($indices as $index) {
-                if (strpos($index, $indexPattern) === 0) {
+                if (strpos($index, (string) $indexPattern) === 0) {
                     $storeIndex = $index;
                     break;
                 }

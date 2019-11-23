@@ -38,7 +38,8 @@
         <!--Admin creates order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrder"/>
         <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="navigateToNewOrderPage"/>
-
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectFirstStoreViewIfAppears"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappearedAfterStoreSelected"/>
         <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
@@ -54,6 +55,9 @@
         </actionGroup>
 
         <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethod" stepKey="selectCheckMoneyPayment"/>
 
         <!--Verify totals on Order page-->
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal"/>

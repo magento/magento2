@@ -17,5 +17,6 @@
         <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
         <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
         <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
+        <element name="blockName" type="checkbox" selector="//*[text()='{{var}}']//*[@class='jstree-checkbox']" parameterized="true"/>
     </section>
 </sections>

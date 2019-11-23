@@ -31,7 +31,7 @@ class ClassReflector
      * Reflect methods in given class and set retrieved data into reader.
      *
      * @param string $className
-     * @param array $methods
+     * @param string[]|array $methods List of methods of methods' metadata.
      * @return array <pre>array(
      *     $firstMethod => array(
      *         'documentation' => $methodDocumentation,
@@ -68,7 +68,7 @@ class ClassReflector
         /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
         foreach ($classReflection->getMethods() as $methodReflection) {
             $methodName = $methodReflection->getName();
-            if (array_key_exists($methodName, $methods)) {
+            if (in_array($methodName, $methods) || array_key_exists($methodName, $methods)) {
                 $data[$methodName] = $this->extractMethodData($methodReflection);
             }
         }
@@ -129,8 +129,8 @@ class ClassReflector
         $docBlock = $methodReflection->getDocBlock();
         if (!$docBlock) {
             throw new \LogicException(
-                'The docBlock of the method '.
-                $method->getDeclaringClass()->getName() . '::' .  $method->getName() . ' is empty.'
+                'The docBlock of the method ' .
+                $method->getDeclaringClass()->getName() . '::' . $method->getName() . ' is empty.'
             );
         }
         return $this->_typeProcessor->getDescription($docBlock);

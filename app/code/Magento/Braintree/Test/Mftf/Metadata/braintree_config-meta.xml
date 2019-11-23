@@ -42,4 +42,22 @@
             </object>
         </object>
     </operation>
+    <operation name="CustomBraintreeConfigState" dataType="custom_braintree_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="custom_braintree_config_state">
+            <object key="braintree_section" dataType="custom_braintree_config_state">
+                <object key="groups" dataType="custom_braintree_config_state">
+                    <object key="braintree" dataType="custom_braintree_config_state">
+                        <object key="fields" dataType="custom_braintree_config_state">
+                            <object key="braintree_cc_vault_active" dataType="braintree_cc_vault_active">
+                                <field key="value">integer</field>
+                            </object>
+                            <object key="active" dataType="active">
+                                <field key="value">string</field>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
 </operations>

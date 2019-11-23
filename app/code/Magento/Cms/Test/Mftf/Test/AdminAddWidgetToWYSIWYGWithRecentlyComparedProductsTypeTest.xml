@@ -17,8 +17,6 @@
             <description value="Admin should be able to create a CMS page with widget type: Recently Compared Products"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-83792"/>
-            <!--Skip test due to MC-1284-->
-            <group value="skip"/>
         </annotations>
         <!--Main test-->
         <before>
@@ -43,7 +41,7 @@
         <waitForPageLoad stepKey="wait2"/>
         <!--see Insert Widget button disabled-->
         <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
-        <!--see Cancel button enabed-->
+        <!--see Cancel button enabled-->
         <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
         <!--Select "Widget Type"-->
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Recently Compared Products" stepKey="selectRecentlyComparedProducts" />

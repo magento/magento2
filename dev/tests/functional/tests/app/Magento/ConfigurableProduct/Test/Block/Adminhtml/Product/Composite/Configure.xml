@@ -7,9 +7,8 @@
 -->
 <mapping strict="0">
     <fields>
-        <qty />
         <attribute>
-            <selector>//div[@class="product-options"]//label[.="%s"]//following-sibling::*//select</selector>
+            <selector>//div[contains(@class, "product-options")]//div//label[.="%s"]//following-sibling::*//select</selector>
             <strategy>xpath</strategy>
             <input>select</input>
         </attribute>

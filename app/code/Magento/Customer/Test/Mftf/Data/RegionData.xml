@@ -15,7 +15,7 @@
     <entity name="RegionTX" type="region">
         <data key="region">Texas</data>
         <data key="region_code">TX</data>
-        <data key="region_id">1</data>
+        <data key="region_id">57</data>
     </entity>
     <entity name="RegionCA" type="region">
         <data key="region">California</data>
@@ -26,5 +26,15 @@
         <data key="region">New York</data>
         <data key="region_code">NY</data>
         <data key="region_id">43</data>
+    </entity>
+    <entity name="RegionUT" type="region">
+        <data key="region">Utah</data>
+        <data key="region_code">UT</data>
+        <data key="region_id">58</data>
+    </entity>
+    <entity name="RegionAE" type="region">
+        <data key="region">Armed Forces Europe</data>
+        <data key="region_code">AFE</data>
+        <data key="region_id">9</data>
     </entity>
 </entities>

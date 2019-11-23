@@ -8,18 +8,21 @@
  * Environment initialization
  */
 error_reporting(E_ALL);
+if (in_array('phar', \stream_get_wrappers())) {
+    stream_wrapper_unregister('phar');
+}
 #ini_set('display_errors', 1);
 
 /* PHP version validation */
-if (!defined('PHP_VERSION_ID') || !(PHP_VERSION_ID === 70002 || PHP_VERSION_ID === 70004 || PHP_VERSION_ID >= 70006)) {
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 70103) {
     if (PHP_SAPI == 'cli') {
-        echo 'Magento supports 7.0.2, 7.0.4, and 7.0.6 or later. ' .
-            'Please read http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements.html';
+        echo 'Magento supports PHP 7.1.3 or later. ' .
+            'Please read https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements-tech.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 7.0.2, 7.0.4, and 7.0.6 or later. Please read
-    <a target="_blank" href="http://devdocs.magento.com/guides/v2.2/install-gde/system-requirements.html">
+    <p>Magento supports PHP 7.1.3 or later. Please read
+    <a target="_blank" href="https://devdocs.magento.com/guides/v2.3/install-gde/system-requirements-tech.html">
     Magento System Requirements</a>.
 </div>
 HTML;
@@ -30,8 +33,6 @@ HTML;
 require_once __DIR__ . '/autoload.php';
 // Sets default autoload mappings, may be overridden in Bootstrap::create
 \Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
-
-require_once BP . '/app/functions.php';
 
 /* Custom umask value may be provided in optional mage_umask file in root */
 $umaskFile = BP . '/magento_umask';

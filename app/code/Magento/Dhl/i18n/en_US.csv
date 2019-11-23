@@ -61,6 +61,7 @@ Title,Title
 Password,Password
 "Account Number","Account Number"
 "Content Type","Content Type"
+"Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)","Whether to use Documents or NonDocuments service for non domestic shipments. (Shipments within the EU are classed as domestic)"
 "Calculate Handling Fee","Calculate Handling Fee"
 "Handling Applied","Handling Applied"
 """Per Order"" allows a single handling fee for the entire order. ""Per Package"" allows an individual handling fee for each package.","""Per Order"" allows a single handling fee for the entire order. ""Per Package"" allows an individual handling fee for each package."

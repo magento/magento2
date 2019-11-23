@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework;
 
@@ -59,7 +60,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_viewDesign;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface $cache
+     * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_cache;
 
@@ -277,6 +278,7 @@ class Translate implements \Magento\Framework\TranslateInterface
 
     /**
      * Retrieve name of the current module
+     *
      * @return mixed
      */
     protected function getControllerModuleName()
@@ -339,16 +341,21 @@ class Translate implements \Magento\Framework\TranslateInterface
     }
 
     /**
-     * Load current theme translation
+     * Load current theme translation according to fallback
      *
      * @return $this
      */
     protected function _loadThemeTranslation()
     {
-        $file = $this->_getThemeTranslationFile($this->getLocale());
-        if ($file) {
-            $this->_addData($this->_getFileData($file));
+        $themeFiles = $this->getThemeTranslationFilesList($this->getLocale());
+
+        /** @var string $file */
+        foreach ($themeFiles as $file) {
+            if ($file) {
+                $this->_addData($this->_getFileData($file));
+            }
         }
+
         return $this;
     }
 
@@ -390,10 +397,73 @@ class Translate implements \Magento\Framework\TranslateInterface
     }
 
     /**
+     * Get theme translation locale file name
+     *
+     * @param string|null $locale
+     * @param array $config
+     * @return string|null
+     */
+    private function getThemeTranslationFileName(?string $locale, array $config): ?string
+    {
+        $fileName = $this->_viewFileSystem->getLocaleFileName(
+            'i18n' . '/' . $locale . '.csv',
+            $config
+        );
+
+        return $fileName ? $fileName : null;
+    }
+
+    /**
+     * Get parent themes for the current theme in fallback order
+     *
+     * @return array
+     */
+    private function getParentThemesList(): array
+    {
+        $themes = [];
+
+        $parentTheme = $this->_viewDesign->getDesignTheme()->getParentTheme();
+        while ($parentTheme) {
+            $themes[] = $parentTheme;
+            $parentTheme = $parentTheme->getParentTheme();
+        }
+        $themes = array_reverse($themes);
+
+        return $themes;
+    }
+
+    /**
+     * Retrieve translation files for themes according to fallback
+     *
+     * @param string $locale
+     *
+     * @return array
+     */
+    private function getThemeTranslationFilesList($locale): array
+    {
+        $translationFiles = [];
+
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+        foreach ($this->getParentThemesList() as $theme) {
+            $config = $this->_config;
+            $config['theme'] = $theme->getCode();
+            $translationFiles[] = $this->getThemeTranslationFileName($locale, $config);
+        }
+
+        $translationFiles[] = $this->getThemeTranslationFileName($locale, $this->_config);
+
+        return $translationFiles;
+    }
+
+    /**
      * Retrieve translation file for theme
      *
      * @param string $locale
      * @return string
+     *
+     * @deprecated
+     *
+     * @see \Magento\Framework\Translate::getThemeTranslationFilesList
      */
     protected function _getThemeTranslationFile($locale)
     {

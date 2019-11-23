@@ -7,6 +7,7 @@
 
 namespace Magento\Contact\Controller\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
@@ -17,7 +18,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 
-class Post extends \Magento\Contact\Controller\Index
+class Post extends \Magento\Contact\Controller\Index implements HttpPostActionInterface
 {
     /**
      * @var DataPersistorInterface

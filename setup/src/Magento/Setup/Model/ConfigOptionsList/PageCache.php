@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Model\ConfigOptionsList;
 
-use Magento\Framework\Setup\ConfigOptionsListInterface;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\RedisConnectionValidator;
@@ -26,15 +26,19 @@ class PageCache implements ConfigOptionsListInterface
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER = 'page-cache-redis-server';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE = 'page-cache-redis-db';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT = 'page-cache-redis-port';
-    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
     const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD = 'page-cache-redis-password';
+    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'page-cache-redis-compress-data';
+    const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'page-cache-redis-compression-lib';
+    const INPUT_KEY_PAGE_CACHE_ID_PREFIX = 'page-cache-id-prefix';
 
     const CONFIG_PATH_PAGE_CACHE_BACKEND = 'cache/frontend/page_cache/backend';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER = 'cache/frontend/page_cache/backend_options/server';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE = 'cache/frontend/page_cache/backend_options/database';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_PORT = 'cache/frontend/page_cache/backend_options/port';
-    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/page_cache/backend_options/compress_data';
     const CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD = 'cache/frontend/page_cache/backend_options/password';
+    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/page_cache/backend_options/compress_data';
+    const CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/page_cache/backend_options/compression_lib';
+    const CONFIG_PATH_PAGE_CACHE_ID_PREFIX = 'cache/frontend/page_cache/id_prefix';
 
     /**
      * @var array
@@ -43,8 +47,9 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER => '127.0.0.1',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE => '1',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => '6379',
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => '',
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => '0',
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => ''
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
     ];
 
     /**
@@ -61,8 +66,10 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE => self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
     ];
 
     /**
@@ -81,7 +88,7 @@ class PageCache implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
@@ -112,17 +119,29 @@ class PageCache implements ConfigOptionsListInterface
                 'Redis server listen port'
             ),
             new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+                'Redis server password'
+            ),
+            new TextConfigOption(
                 self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
                 'Set to 1 to compress the full page cache (use 0 to disable)'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD,
+                self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
-                'Redis server password'
-            )
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
+                'Compression library to use [snappy,lzf,l4z,zstd,gzip] (leave blank to determine automatically)'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_PAGE_CACHE_ID_PREFIX,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX,
+                'ID prefix for cache keys'
+            ),
         ];
     }
 
@@ -132,6 +151,11 @@ class PageCache implements ConfigOptionsListInterface
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        if (isset($options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX])) {
+            $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $options[self::INPUT_KEY_PAGE_CACHE_ID_PREFIX]);
+        } else {
+            $configData->set(self::CONFIG_PATH_PAGE_CACHE_ID_PREFIX, $this->generateCachePrefix());
+        }
 
         if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])) {
             if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_REDIS) {
@@ -211,7 +235,7 @@ class PageCache implements ConfigOptionsListInterface
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE)
             );
-        
+
         $config['password'] = isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD])
             ? $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD]
             : $deploymentConfig->get(
@@ -251,5 +275,15 @@ class PageCache implements ConfigOptionsListInterface
         } else {
             return '';
         }
+    }
+
+    /**
+     * Generate default cache ID prefix based on installation dir
+     *
+     * @return string
+     */
+    private function generateCachePrefix(): string
+    {
+        return substr(\md5(dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }

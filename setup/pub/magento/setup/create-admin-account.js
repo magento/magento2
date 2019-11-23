@@ -51,14 +51,14 @@ angular.module('create-admin-account', ['ngStorage'])
             $scope.validate();
             if ($scope.valid) {
                 $http.post('index.php/validate-admin-credentials', data)
-                    .success(function (data) {
-                        $scope.validateCredentials.result = data;
+                    .then(function successCallback(resp) {
+                        $scope.validateCredentials.result = resp.data;
+
                         if ($scope.validateCredentials.result.success) {
                             $scope.nextState();
                         }
-                    })
-                    .error(function (data) {
-                        $scope.validateCredentials.failed = data;
+                    }, function errorCallback(resp) {
+                        $scope.validateCredentials.failed = resp.data;
                     });
             }
         };

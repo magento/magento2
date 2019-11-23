@@ -98,16 +98,15 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
          */
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore();
-        $unsecure = strpos($url, $store->getBaseUrl()) === 0;
-        $secure = strpos($url, $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)) === 0;
+        $unsecure = strpos($url, (string) $store->getBaseUrl()) === 0;
+        $secure = strpos($url, (string) $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, true)) === 0;
         return $unsecure || $secure;
     }
 
     /**
      * Get resolved back url
      *
-     * @param null $defaultUrl
-     *
+     * @param string|null $defaultUrl
      * @return mixed|null|string
      */
     protected function getBackUrl($defaultUrl = null)
@@ -118,12 +117,7 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
             return $returnUrl;
         }
 
-        $shouldRedirectToCart = $this->_scopeConfig->getValue(
-            'checkout/cart/redirect_to_cart',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
-        if ($shouldRedirectToCart || $this->getRequest()->getParam('in_cart')) {
+        if ($this->shouldRedirectToCart() || $this->getRequest()->getParam('in_cart')) {
             if ($this->getRequest()->getActionName() == 'add' && !$this->getRequest()->getParam('in_cart')) {
                 $this->_checkoutSession->setContinueShoppingUrl($this->_redirect->getRefererUrl());
             }
@@ -131,5 +125,18 @@ abstract class Cart extends \Magento\Framework\App\Action\Action implements View
         }
 
         return $defaultUrl;
+    }
+
+    /**
+     * Is redirect should be performed after the product was added to cart.
+     *
+     * @return bool
+     */
+    private function shouldRedirectToCart()
+    {
+        return $this->_scopeConfig->isSetFlag(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

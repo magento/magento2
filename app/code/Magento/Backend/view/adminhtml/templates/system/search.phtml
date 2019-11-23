@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Backend\Block\GlobalSearch */
 ?>
 <div class="search-global" data-mage-init='{"globalSearch": {}}'>
@@ -17,32 +15,34 @@
                     class="search-global-input"
                     id="search-global"
                     name="query"
-                    data-mage-init='<?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWidgetInitOptions()) ?>'>
+                    <?php //phpcs:disable ?>
+                    data-mage-init='<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getWidgetInitOptions()) ?>'>
+                    <?php //phpcs:enable ?>
             <button
                 type="submit"
                 class="search-global-action"
-                title="<?= /* @escapeNotVerified */ __('Search') ?>"
+                title="<?= $block->escapeHtmlAttr(__('Search')) ?>"
                 ></button>
         </div>
     </form>
     <script data-template="search-suggest" type="text/x-magento-template">
         <ul class="search-global-menu">
         <li class="item">
-            <a id="searchPreviewProducts" href="<?= /* @escapeNotVerified */ $block->getUrl('catalog/product/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
+            <a id="searchPreviewProducts" href="<?= $block->escapeUrl($block->getUrl('catalog/product/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Products</a>
         </li>
         <li class="item">
-            <a id="searchPreviewOrders" href="<?= /* @escapeNotVerified */ $block->getUrl('sales/order/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
+            <a id="searchPreviewOrders" href="<?= $block->escapeUrl($block->getUrl('sales/order/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Orders</a>
         </li>
         <li class="item">
-            <a id="searchPreviewCustomers" href="<?= /* @escapeNotVerified */ $block->getUrl('customer/index/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
+            <a id="searchPreviewCustomers" href="<?= $block->escapeUrl($block->getUrl('customer/index/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Customers</a>
         </li>
         <li class="item">
-            <a id="searchPreviewPages" href="<?= /* @escapeNotVerified */ $block->getUrl('cms/page/index/') ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
+            <a id="searchPreviewPages" href="<?= $block->escapeUrl($block->getUrl('cms/page/index/')) ?>?search=<%- data.term%>" class="title">"<%- data.term%>" in Pages</a>
         </li>
             <% if (data.items.length) { %>
             <% _.each(data.items, function(value){ %>
             <li class="item"
-                <%- data.optionData(value) %>
+                <%= data.optionData(value) %>
                 >
                 <a href="<%- value.url %>" class="title"><%- value.name %></a>
                 <span class="type"><%- value.type %></span>
@@ -52,7 +52,7 @@
         <% } else { %>
             <li>
                 <span class="mage-suggest-no-records">
-                    <?= /* @escapeNotVerified */ __('No records found.') ?>
+                    <?= $block->escapeHtml(__('No records found.')) ?>
                 </span>
             </li>
         <% } %>

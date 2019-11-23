@@ -11,8 +11,10 @@ use Magento\Framework\App\RequestSafetyInterface;
 
 /**
  * Class Visitor
+ *
  * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Visitor extends \Magento\Framework\Model\AbstractModel
 {
@@ -86,6 +88,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
+     * @param RequestSafetyInterface|null $requestSafety
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -170,6 +173,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         if ($this->requestSafety->isSafeMethod()) {
             return $this;
         }
+        
         if (!$this->getId()) {
             $this->setSessionId($this->session->getSessionId());
             $this->save();
@@ -261,7 +265,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * Create binding of checkout quote
      *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteCreate($observer)
     {
@@ -277,8 +281,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Destroy binding of checkout quote
+     *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return  \Magento\Customer\Model\Visitor
+     * @return \Magento\Customer\Model\Visitor
      */
     public function bindQuoteDestroy($observer)
     {
@@ -320,11 +325,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function getOnlineInterval()
     {
-        $configValue = intval(
-            $this->scopeConfig->getValue(
-                static::XML_PATH_ONLINE_INTERVAL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+        $configValue = (int)$this->scopeConfig->getValue(
+            static::XML_PATH_ONLINE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }

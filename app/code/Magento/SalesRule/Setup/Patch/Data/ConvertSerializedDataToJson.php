@@ -6,12 +6,12 @@
 
 namespace Magento\SalesRule\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class ConvertSerializedDataToJson
+ *
  * @package Magento\SalesRule\Setup\Patch
  */
 class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInterface
@@ -59,7 +59,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -69,7 +69,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -77,7 +77,7 @@ class ConvertSerializedDataToJson implements DataPatchInterface, PatchVersionInt
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

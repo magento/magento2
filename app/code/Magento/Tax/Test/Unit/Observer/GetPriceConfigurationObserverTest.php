@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Tax\Test\Unit\Observer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -118,7 +119,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->createPartialMock(
             \Magento\Bundle\Model\Product\Type::class,
-            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection']
+            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection', 'getId']
         );
         $product->expects($this->any())
             ->method('getTypeInstance')

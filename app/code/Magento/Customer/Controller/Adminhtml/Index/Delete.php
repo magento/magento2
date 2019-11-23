@@ -5,10 +5,21 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Delete extends \Magento\Customer\Controller\Adminhtml\Index
+/**
+ * Delete customer action.
+ */
+class Delete extends \Magento\Customer\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::delete';
+
     /**
      * Delete customer action
      *

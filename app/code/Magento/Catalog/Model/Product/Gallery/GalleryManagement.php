@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,13 +7,16 @@
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductInterface as Product;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 
 /**
+ * Class GalleryManagement
+ *
+ * Provides implementation of api interface ProductAttributeMediaGalleryManagementInterface
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
@@ -44,7 +46,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
@@ -54,7 +56,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         if (!$this->contentValidator->isValid($entryContent)) {
             throw new InputException(__('The image content is invalid. Verify the content and try again.'));
         }
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
 
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         $existingEntryIds = [];
@@ -84,11 +86,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         if ($existingMediaGalleryEntries == null) {
             throw new NoSuchEntityException(
@@ -103,7 +105,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
 
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
-                if ($entry->getFile()) {
+
+                $file = $entry->getContent();
+
+                if ($file && $file->getBase64EncodedData() || $entry->getFile()) {
                     $entry->setId(null);
                 }
                 $existingMediaGalleryEntries[$key] = $entry;
@@ -125,11 +130,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($sku, $entryId)
     {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         if ($existingMediaGalleryEntries == null) {
             throw new NoSuchEntityException(
@@ -155,7 +160,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($sku, $entryId)
     {
@@ -176,7 +181,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku)
     {

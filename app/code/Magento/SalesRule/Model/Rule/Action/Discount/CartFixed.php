@@ -5,7 +5,6 @@
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\SalesRule\Model\DeltaPriceRound;
 use Magento\SalesRule\Model\Validator;
@@ -50,6 +49,8 @@ class CartFixed extends AbstractDiscount
     }
 
     /**
+     * Fixed discount for cart calculation
+     *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty

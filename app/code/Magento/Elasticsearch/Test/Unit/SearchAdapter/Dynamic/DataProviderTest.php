@@ -320,6 +320,17 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->clientMock->expects($this->once())
             ->method('query')
+            ->with($this->callback(function ($query) {
+                $histogramParams = $query['body']['aggregations']['prices']['histogram'];
+                // Assert the interval is queried as a float. See MAGETWO-95471
+                if ($histogramParams['interval'] !== 10.0) {
+                    return false;
+                }
+                if (!isset($histogramParams['min_doc_count']) || $histogramParams['min_doc_count'] !== 1) {
+                    return false;
+                }
+                return true;
+            }))
             ->willReturn([
                 'aggregations' => [
                     'prices' => [

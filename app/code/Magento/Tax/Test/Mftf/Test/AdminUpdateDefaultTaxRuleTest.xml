@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateDefaultTaxRuleTest">
+        <annotations>
+            <stories value="Update tax rule"/>
+            <title value="Update tax rule, tax rule default"/>
+            <description value="Test log in to Update tax rule and Update default tax rule"/>
+            <testCaseId value="MC-5819"/>
+            <severity value="CRITICAL"/>
+            <group value="tax"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+            <before>
+                <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
+                <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+                <createData entity="customerTaxClass" stepKey="createCustomerTaxClass"/>
+                <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
+                <getData entity="customerTaxClass" stepKey="customerTaxClass">
+                    <requiredEntity createDataKey="createCustomerTaxClass"/>
+                </getData>
+                <getData entity="productTaxClass" stepKey="productTaxClass">
+                    <requiredEntity createDataKey="createProductTaxClass"/>
+                </getData>
+                <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            </before>
+            <after>
+                <deleteData stepKey="deleteTaxRule" createDataKey="initialTaxRule" />
+                <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+                <deleteData stepKey="deleteCustomerTaxClass" createDataKey="createCustomerTaxClass"/>
+                <deleteData stepKey="deleteProductTaxClass" createDataKey="createProductTaxClass"/>
+            </after>
+
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
+        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch1"/>
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
+
+        <!-- Update tax rule with default -->
+        <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForSearch" time="5" />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$initialTaxRate.code$$)}}" stepKey="clickSelectNeededItem"/>
+        <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings"/>
+        <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings"/>
+        <wait stepKey="waitForAdditionalSettings" time="5" />
+        <conditionalClick selector="{{AdminTaxRuleFormSection.customerTaxClassOption(retailCustomerTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.customerTaxClassSelected(retailCustomerTaxClass.class_name)}}" visible="false" stepKey="checkRetailCustomerTaxClass" />
+        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxableGoodsTaxClass.class_name)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxableGoodsTaxClass.class_name)}}" visible="false" stepKey="checkTaxableGoodsTaxClass" />
+        <click selector="{{AdminTaxRuleFormSection.customerTaxClassOption($$customerTaxClass.class_name$$)}}" stepKey="clickSelectCustomerTaxClass"/>
+        <click selector="{{AdminTaxRuleFormSection.productTaxClassOption($$productTaxClass.class_name$$)}}" stepKey="clickSelectProductTaxClass"/>
+        <fillField selector="{{AdminTaxRuleFormSection.priority}}" userInput="{{taxRuleWithUpdatePriorityPosition.priority}}" stepKey="fillPriority"/>
+        <fillField selector="{{AdminTaxRuleFormSection.sortOrder}}" userInput="{{taxRuleWithUpdatePriorityPosition.position}}" stepKey="fillPosition"/>
+        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="clickSaveTaxRule"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+        <!-- Verify we see success message -->
+        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="seeAssertTaxRuleSuccessMessage"/>
+
+        <!-- Verify we see updated tax rule with default(from the above step) on the tax rule grid page -->
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode2"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
+
+        <!-- Verify we see updated tax rule with default on the tax rule form page -->
+        <seeInField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="seeInTaxRuleCode"/>
+        <seeElement selector="{{AdminTaxRuleFormSection.taxRateSelected($$initialTaxRate.code$$)}}" stepKey="seeTaxRateSelected"/>
+        <click selector="{{AdminTaxRuleFormSection.additionalSettings}}" stepKey="clickAdditionalSettings1"/>
+        <scrollTo selector="{{AdminTaxRuleFormSection.additionalSettings}}" x="0" y="-80" stepKey="scrollToAdvancedSettings1"/>
+        <seeElement selector="{{AdminTaxRuleFormSection.customerTaxClassSelected($$customerTaxClass.class_name$$)}}" stepKey="seeCustomerTaxClass"/>
+        <seeElement selector="{{AdminTaxRuleFormSection.productTaxClassSelected($$productTaxClass.class_name$$)}}" stepKey="seeProductTaxClass"/>
+        <seeInField selector="{{AdminTaxRuleFormSection.priority}}" userInput="{{taxRuleWithUpdatePriorityPosition.priority}}" stepKey="seePriority"/>
+        <seeInField selector="{{AdminTaxRuleFormSection.sortOrder}}" userInput="{{taxRuleWithUpdatePriorityPosition.position}}" stepKey="seePosition"/>
+    </test>
+</tests>

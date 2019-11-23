@@ -87,7 +87,7 @@ define([
                     '',
                     $t('Shipping'),
                     this.visible, _.bind(this.navigate, this),
-                    10
+                    this.sortOrder
                 );
             }
             checkoutDataResolver.resolveShippingAddress();
@@ -247,6 +247,18 @@ define([
          */
         setShippingInformation: function () {
             if (this.validateShippingInformation()) {
+                quote.billingAddress(null);
+                checkoutDataResolver.resolveBillingAddress();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var shippingAddressData = checkoutData.getShippingAddressFromData();
+
+                    if (shippingAddressData) {
+                        checkoutProvider.set(
+                            'shippingAddress',
+                            $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        );
+                    }
+                });
                 setShippingInformationAction().done(
                     function () {
                         stepNavigator.next();
@@ -263,7 +275,11 @@ define([
                 addressData,
                 loginFormSelector = 'form[data-role=email-with-possible-login]',
                 emailValidationResult = customer.isLoggedIn(),
-                field;
+                field,
+                country = registry.get(this.parentName + '.shippingAddress.shipping-address-fieldset.country_id'),
+                countryIndexedOptions = country.indexedOptions,
+                option = countryIndexedOptions[quote.shippingAddress().countryId],
+                messageContainer = registry.get('checkout.errors').messageContainer;
 
             if (!quote.shippingMethod()) {
                 this.errorValidationMessage(
@@ -316,6 +332,16 @@ define([
                     shippingAddress['save_in_address_book'] = 1;
                 }
                 selectShippingAddress(shippingAddress);
+            } else if (customer.isLoggedIn() &&
+                option &&
+                option['is_region_required'] &&
+                !quote.shippingAddress().region
+            ) {
+                messageContainer.addErrorMessage({
+                    message: $t('Please specify a regionId in shipping address.')
+                });
+
+                return false;
             }
 
             if (!emailValidationResult) {

@@ -4,36 +4,36 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate
 
 /** @var $block \Magento\Weee\Block\Item\Price\Renderer */
 
 $_item = $block->getItem();
 /** @var $_weeeHelper \Magento\Weee\Helper\Data */
-$_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
+$_weeeHelper = $this->helper(\Magento\Weee\Helper\Data::class);
 ?>
 <?php $_incl = $_item->getRowTotalInclTax(); ?>
-<?php if ($block->displayPriceWithWeeeDetails()): ?>
-    <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#subtotal-item-tax-details<?= /* @escapeNotVerified */ $_item->getId() ?>"}}'>
-<?php else: ?>
+<?php if ($block->displayPriceWithWeeeDetails()) : ?>
+    <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#subtotal-item-tax-details<?= (int) $_item->getId() ?>"}}'>
+<?php else : ?>
     <span class="cart-price">
 <?php endif; ?>
-<?= /* @escapeNotVerified */ $block->formatPrice($block->getRowDisplayPriceInclTax()) ?>
+<?= /* @noEscape */ $block->formatPrice($block->getRowDisplayPriceInclTax()) ?>
     </span>
 
-<?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
-    <span class="cart-tax-info" id="subtotal-item-tax-details<?= /* @escapeNotVerified */ $_item->getId() ?>" style="display: none;">
-        <?php if ($block->displayPriceWithWeeeDetails()): ?>
-            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                <span class="weee" data-label="<?= /* @escapeNotVerified */ $tax['title'] ?>"><?= /* @escapeNotVerified */ $block->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span>
+<?php if ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($_item)) : ?>
+    <span class="cart-tax-info" id="subtotal-item-tax-details<?= (int) $_item->getId() ?>" style="display: none;">
+        <?php if ($block->displayPriceWithWeeeDetails()) : ?>
+            <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($_item) as $tax) : ?>
+                <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>"><?= /* @noEscape */ $block->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span>
             <?php endforeach; ?>
         <?php endif; ?>
     </span>
 
-    <?php if ($block->displayFinalPrice()): ?>
-        <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#subtotal-item-tax-details<?= /* @escapeNotVerified */ $_item->getId() ?>"}}'>
-            <span class="weee" data-label="<?= /* @escapeNotVerified */ __('Total Incl. Tax') ?>">
-                <?= /* @escapeNotVerified */ $block->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?>
+    <?php if ($block->displayFinalPrice()) : ?>
+        <span class="cart-tax-total" data-mage-init='{"taxToggle": {"itemTaxId" : "#subtotal-item-tax-details<?= (int) $_item->getId() ?>"}}'>
+            <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total Incl. Tax')) ?>">
+                <?= /* @noEscape */ $block->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?>
             </span>
         </span>
     <?php endif; ?>

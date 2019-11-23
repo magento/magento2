@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateAndEditSimpleProductSettingsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create/Edit simple product in Admin"/>
+            <title value="Admin should be able to set/edit other product information when creating/editing a simple product"/>
+            <description value="Admin should be able to set/edit product information when creating/editing a simple product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-3241"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+
+            <!-- Create related products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstRelatedProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondRelatedProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createThirdRelatedProduct"/>
+        </before>
+        <after>
+            <!-- Delete related products -->
+            <deleteData createDataKey="createFirstRelatedProduct" stepKey="deleteFirstRelatedProduct"/>
+            <deleteData createDataKey="createSecondRelatedProduct" stepKey="deleteSecondRelatedProduct"/>
+            <deleteData createDataKey="createThirdRelatedProduct" stepKey="deleteThirdRelatedProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!-- Create new simple product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createSimpleProduct"/>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="fillMainProductForm" stepKey="fillAllNecessaryFields"/>
+
+        <!-- Add two related products -->
+        <actionGroup ref="addRelatedProductBySku" stepKey="addFirstRelatedProduct">
+            <argument name="sku" value="$$createFirstRelatedProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="addRelatedProductBySku" stepKey="addSecondRelatedProduct">
+            <argument name="sku" value="$$createSecondRelatedProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Set Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings"/>
+
+        <!-- Set Gift Options settings for the product -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="enableGiftMessageSettings">
+            <argument name="status" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert related products at the storefront -->
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createFirstRelatedProduct.name$$)}}" stepKey="seeFirstRelatedProductInStorefront"/>
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProductInStorefront"/>
+
+        <!-- Assert product design settings "left bar is present at product page with 2 columns" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutTwoColumnsLeft}}" stepKey="seeDesignChanges"/>
+
+        <!-- Assert Gift Option product settings is present -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
+        <actionGroup ref="StorefrontAssertGiftMessageFieldsActionGroup" stepKey="assertGiftMessageFieldsArePresent"/>
+
+        <!-- Open created product -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+
+        <!-- Edit product Search Engine Optimization settings -->
+        <actionGroup ref="AdminChangeProductSEOSettingsActionGroup" stepKey="editProductSEOSettings">
+            <argument name="productName" value="SimpleProduct.name"/>
+        </actionGroup>
+
+        <!-- Edit related products -->
+        <actionGroup ref="addRelatedProductBySku" stepKey="addThirdRelatedProduct">
+            <argument name="sku" value="$$createThirdRelatedProduct.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeRelatedProduct($$createFirstRelatedProduct.sku$$)}}" stepKey="removeFirstRelatedProduct"/>
+
+        <!-- Edit Design settings for the product -->
+        <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="editProductDesignSettings">
+            <argument name="designSettings" value="simpleLumaDesignEmpty"/>
+        </actionGroup>
+
+        <!-- Edit Gift Option product settings -->
+        <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+
+        <!-- Verify Url Key after changing -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Assert related products at the storefront -->
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createSecondRelatedProduct.name$$)}}" stepKey="seeSecondRelatedProduct"/>
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$createThirdRelatedProduct.name$$)}}" stepKey="seeThirdRelatedProduct"/>
+
+        <!-- Assert product design settings "Layout empty" -->
+        <seeElement selector="{{StorefrontProductPageDesignSection.layoutEmpty}}" stepKey="seeNewDesignChanges"/>
+
+        <!-- Assert Gift Option product settings  -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <dontSeeElement selector="{{StorefrontProductCartGiftOptionSection.giftOptions}}" stepKey="dontSeeGiftOptionBtn"/>
+
+        <!-- Delete created simple product -->
+        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+    </test>
+</tests>

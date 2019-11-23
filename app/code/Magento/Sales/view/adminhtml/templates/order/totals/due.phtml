@@ -3,13 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
-<?php if ($block->getCanDisplayTotalDue()): ?>
+<?php if ($block->getCanDisplayTotalDue()) : ?>
 <tr>
-    <td class="label"><big><strong><?= /* @escapeNotVerified */ __('Total Due') ?></strong></big></td>
-    <td class="emph"><big><?= /* @escapeNotVerified */ $block->displayPriceAttribute('total_due', true) ?></big></td>
+    <td class="label"><strong style="font-size: larger"><?= $block->escapeHtml(__('Total Due')) ?></strong></td>
+    <td class="emph" style="font-size: larger"><?= /* @noEscape */ $block->displayPriceAttribute('total_due', true) ?></td>
 </tr>
 <?php endif; ?>

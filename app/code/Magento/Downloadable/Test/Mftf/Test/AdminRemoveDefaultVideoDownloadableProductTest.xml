@@ -17,10 +17,13 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-207"/>
             <group value="Downloadable"/>
-            <skip>
-                <issueId value="MAGETWO-94795"/>
-            </skip>
         </annotations>
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="enableAdminAccountSharing"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="setStoreDefaultConfig"/>
+        </after>
 
         <!-- Create a downloadable product -->
         <!-- Replacing steps in base AdminRemoveDefaultVideoSimpleProductTest -->

@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Controller\Product;
 
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
@@ -23,33 +24,35 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     protected $productRepository;
 
     /**
-     * Test setup
+     * @var \Magento\Framework\Data\Form\FormKey
+     */
+    private $formKey;
+
+    /**
+     * @inheritDoc
      */
     protected function setUp()
     {
         parent::setUp();
-
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $this->productRepository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
+        $this->formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+        $this->productRepository = $this->_objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
     }
 
     /**
+     * Test adding product to compare list.
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testAddAction()
     {
         $this->_requireVisitorWithNoProducts();
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
-        $formKey = $objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
         $product = $this->productRepository->get('simple_product_1');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch(
             sprintf(
                 'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
                 $product->getEntityId(),
-                $formKey->getFormKey()
+                $this->formKey->getFormKey()
             )
         );
 
@@ -69,6 +72,33 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test adding disabled product to compare list.
+     *
+     * @return void
+     */
+    public function testAddActionForDisabledProduct(): void
+    {
+        $this->_requireVisitorWithNoProducts();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->setProductDisabled('simple_product_1');
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch(
+            sprintf(
+                'catalog/product_compare/add/product/%s/form_key/%s?nocookie=1',
+                $product->getEntityId(),
+                $this->formKey->getFormKey()
+            )
+        );
+
+        $this->assertRedirect();
+
+        $this->_assertCompareListEquals([]);
+    }
+
+    /**
+     * Test comparing a product.
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testIndexActionAddProducts()
@@ -83,12 +113,15 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test removing a product from compare list.
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveAction()
     {
         $this->_requireVisitorWithTwoProducts();
         $product = $this->productRepository->get('simple_product_2');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
 
         $this->assertSessionMessages(
@@ -102,12 +135,33 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test removing a disabled product from compare list.
+     *
+     * @return void
+     */
+    public function testRemoveActionForDisabledProduct(): void
+    {
+        $this->_requireVisitorWithTwoProducts();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->setProductDisabled('simple_product_1');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
+
+        $this->assertRedirect();
+        $restProduct = $this->productRepository->get('simple_product_2');
+        $this->_assertCompareListEquals([$product->getEntityId(), $restProduct->getEntityId()]);
+    }
+
+    /**
+     * Test removing a product from compare list of a registered customer.
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveActionWithSession()
     {
         $this->_requireCustomerWithTwoProducts();
         $product = $this->productRepository->get('simple_product_1');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
         $secondProduct = $this->productRepository->get('simple_product_2');
 
@@ -122,7 +176,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * testIndexActionDisplay
+     * Test getting a list of compared product.
      */
     public function testIndexActionDisplay()
     {
@@ -151,12 +205,13 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * testClearAction
+     * Test clearing a list of compared products.
      */
     public function testClearAction()
     {
         $this->_requireVisitorWithTwoProducts();
 
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/clear');
 
         $this->assertSessionMessages(
@@ -170,12 +225,15 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Test escaping a session message.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_xss.php
      */
     public function testRemoveActionProductNameXss()
     {
         $this->_prepareCompareListWithProductNameXss();
         $product = $this->productRepository->get('product-with-xss');
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId() . '?nocookie=1');
 
         $this->assertSessionMessages(
@@ -187,6 +245,24 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Set product status disabled.
+     *
+     * @param string $sku
+     * @return \Magento\Catalog\Api\Data\ProductInterface
+     */
+    private function setProductDisabled(string $sku): \Magento\Catalog\Api\Data\ProductInterface
+    {
+        $product = $this->productRepository->get($sku);
+        $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)
+            ->save();
+
+        return $product;
+    }
+
+    /**
+     * Preparing compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _prepareCompareListWithProductNameXss()
@@ -195,6 +271,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Model\Visitor::class);
         /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
+        // phpcs:ignore
         $visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
@@ -212,7 +289,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * _requireVisitorWithNoProducts
+     * Preparing compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _requireVisitorWithNoProducts()
     {
@@ -220,6 +299,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Model\Visitor::class);
 
+        // phpcs:ignore
         $visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
@@ -234,6 +314,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Preparing compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _requireVisitorWithTwoProducts()
@@ -241,6 +324,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $visitor \Magento\Customer\Model\Visitor */
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Model\Visitor::class);
+        // phpcs:ignore
         $visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();
@@ -269,6 +353,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * Preparing a compare list.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function _requireCustomerWithTwoProducts()
@@ -301,6 +388,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $visitor \Magento\Customer\Model\Visitor */
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Customer\Model\Visitor::class);
+        // phpcs:ignore
         $visitor->setSessionId(md5(time()) . md5(microtime()))
             ->setLastVisitAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT))
             ->save();

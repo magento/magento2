@@ -6,13 +6,16 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\DataObject;
+
 /**
- * Test for \Magento\Catalog\Model\Product\Option\Type\Date
+ * Test for customizable product option with "Date" type
  */
 class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Type\Date
+     * @var Date
      */
     protected $model;
 
@@ -28,12 +31,13 @@ class DateTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
-            \Magento\Catalog\Model\Product\Option\Type\Date::class
+            Date::class
         );
     }
 
     /**
-     * @covers       \Magento\Catalog\Model\Product\Option\Type\Date::prepareOptionValueForRequest()
+     * Check if option value for request is the same as expected
+     *
      * @dataProvider prepareOptionValueForRequestDataProvider
      * @param array $optionValue
      * @param array $infoBuyRequest
@@ -54,10 +58,10 @@ class DateTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Quote\Model\Quote\Item $item */
         $item = $this->objectManager->create(\Magento\Quote\Model\Quote\Item::class);
         $item->addOption($option);
-        /** @var \Magento\Catalog\Model\Product\Option|null $productOption */
+        /** @var Option|null $productOption */
         $productOption = $productOptionData
             ? $this->objectManager->create(
-                \Magento\Catalog\Model\Product\Option::class,
+                Option::class,
                 ['data' => $productOptionData]
             )
             : null;
@@ -69,6 +73,8 @@ class DateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider for testPrepareOptionValueForRequest
+     *
      * @return array
      */
     public function prepareOptionValueForRequestDataProvider()
@@ -107,6 +113,78 @@ class DateTest extends \PHPUnit\Framework\TestCase
                 // $expectedOptionValueForRequest
                 ['date_internal' => ['field1' => 'value1', 'field2' => 'value2']]
             ],
+        ];
+    }
+
+    /**
+     * Check date in prepareForCart method with javascript calendar and Asia/Singapore timezone
+     *
+     * @dataProvider testPrepareForCartDataProvider
+     * @param array $dateData
+     * @param array $productOptionData
+     * @param array $requestData
+     * @param string $expectedOptionValueForRequest
+     * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
+     * @magentoConfigFixture current_store general/locale/timezone Asia/Singapore
+     */
+    public function testPrepareForCart(
+        array $dateData,
+        array $productOptionData,
+        array $requestData,
+        string $expectedOptionValueForRequest
+    ) {
+        $this->model->setData($dateData);
+        /** @var Option|null $productOption */
+        $productOption = $productOptionData
+            ? $this->objectManager->create(
+                Option::class,
+                ['data' => $productOptionData]
+            )
+            : null;
+        $this->model->setOption($productOption);
+        $request = new DataObject();
+        $request->setData($requestData);
+        $this->model->setRequest($request);
+        $actualOptionValueForRequest = $this->model->prepareForCart();
+        $this->assertSame($expectedOptionValueForRequest, $actualOptionValueForRequest);
+    }
+
+    /**
+     * Data provider for testPrepareForCart
+     *
+     * @return array
+     */
+    public function testPrepareForCartDataProvider()
+    {
+        return [
+            [
+                // $dateData
+                [
+                    'is_valid' => true,
+                    'user_value' => [
+                        'date' => '09/30/2019',
+                        'year' => 0,
+                        'month' => 0,
+                        'day' => 0,
+                        'hour' => 0,
+                        'minute' => 0,
+                        'day_part' => '',
+                        'date_internal' => ''
+                    ]
+                ],
+                // $productOptionData
+                ['id' => '11', 'value' => '{"qty":12}', 'type' => 'date'],
+                // $requestData
+                [
+                    'options' => [
+                        [
+                            'date' => '09/30/2019'
+                        ]
+                    ]
+                ],
+                // $expectedOptionValueForRequest
+                '2019-09-30 00:00:00'
+            ]
         ];
     }
 }

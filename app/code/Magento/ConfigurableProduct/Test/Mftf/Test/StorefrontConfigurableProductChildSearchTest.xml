@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
+            <group value="SearchEngineMysql"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -131,7 +132,7 @@
         </before>
 
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="logout"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
@@ -144,18 +145,15 @@
         <!-- Quick search the storefront for the first attribute option -->
         <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <fillField stepKey="searchStorefront1" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
-        <click stepKey="clickSearch1" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$]" stepKey="searchStorefront1" />
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the second attribute option -->
-        <fillField stepKey="searchStorefront2" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$"/>
-        <click stepKey="clickSearch2" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeOption1Multiselect.option[store_labels][0][label]$$]" stepKey="searchStorefront2" />
         <seeElement stepKey="seeProduct2" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 
         <!-- Quick search the storefront for the first product description -->
-        <fillField stepKey="searchStorefront3" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="'$$createConfigChildProduct1.custom_attributes[short_description]$$'"/>
-        <click stepKey="clickSearch3" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigChildProduct1.custom_attributes[short_description]$$]" stepKey="searchStorefront3" />
         <seeElement stepKey="seeProduct3" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
     </test>
 </tests>

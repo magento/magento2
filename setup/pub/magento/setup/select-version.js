@@ -28,7 +28,9 @@ angular.module('select-version', ['ngStorage'])
         };
 
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
-            .success(function (data) {
+            .then(function successCallback(resp) {
+                var data = resp.data;
+
                 if (data.responseType != 'error') {
                     $scope.upgradeProcessError = true;
 
@@ -70,8 +72,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.upgradeProcessErrorMessage = $sce.trustAsHtml(data.error);
                 }
                 $scope.upgradeProcessed = true;
-            })
-            .error(function (data) {
+            }, function errorCallback() {
                 $scope.upgradeProcessError = true;
             });
 
@@ -104,14 +105,16 @@ angular.module('select-version', ['ngStorage'])
                 if (!$scope.componentsProcessed && !$scope.componentsProcessError) {
                     $scope.componentsReadyForNext = false;
                     $http.get('index.php/other-components-grid/components', {'responseType': 'json'}).
-                        success(function (data) {
+                        then(function successCallback(resp) {
+                            var data = resp.data;
+
                             if (data.responseType != 'error') {
                                 $scope.components = data.components;
                                 $scope.displayComponents = data.components;
                                 $scope.totalForGrid = data.total;
                                 $scope.total = data.total;
                                 $scope.currentPage = 1;
-                                $scope.rowLimit = 20;
+                                $scope.rowLimit = '20';
                                 $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
                                 for (var i = 0; i < $scope.totalForGrid; i++) {
                                     $scope.packages.push({
@@ -124,8 +127,7 @@ angular.module('select-version', ['ngStorage'])
                                 $scope.componentsProcessError = true;
                             }
                             $scope.componentsProcessed = true;
-                        })
-                        .error(function (data) {
+                        }, function errorCallback() {
                             $scope.componentsProcessError = true;
                         });
                 }

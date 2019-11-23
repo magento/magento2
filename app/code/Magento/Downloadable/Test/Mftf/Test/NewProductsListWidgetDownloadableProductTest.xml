@@ -18,10 +18,14 @@
             <testCaseId value="MC-124"/>
             <group value="Downloadable"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MQE-1187"/>
-            </skip>
         </annotations>
+
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="logout"/>
+        </after>
 
         <!-- A Cms page containing the New Products Widget gets created here via extends -->
 

@@ -49,6 +49,7 @@ define([
             injector.clean();
             injector.remove();
         } catch (e) {}
+        window.localStorage.clear();
     });
 
     describe('Magento_Catalog/js/product/storage/data-storage', function () {
@@ -88,18 +89,20 @@ define([
                 };
             });
 
+            afterEach(function () {
+                window.localStorage.clear();
+            });
+
             it('check calls "dataHandler" method with data', function () {
                 var data = {
                     property: 'value'
                 };
 
                 obj.dataHandler(data);
-                expect(obj.localStorage.set).toHaveBeenCalledWith(data);
-                expect(obj.localStorage.removeAll).not.toHaveBeenCalled();
+                expect(window.localStorage.getItem(obj.namespace)).toBe(JSON.stringify(data));
             });
             it('check calls "dataHandler" method with empty data', function () {
                 obj.dataHandler({});
-                expect(obj.localStorage.set).not.toHaveBeenCalled();
                 expect(obj.localStorage.removeAll).toHaveBeenCalled();
             });
         });

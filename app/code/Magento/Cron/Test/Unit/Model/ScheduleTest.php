@@ -6,6 +6,9 @@
 namespace Magento\Cron\Test\Unit\Model;
 
 use Magento\Cron\Model\Schedule;
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
@@ -18,11 +21,27 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
+    /**
+     * @var \Magento\Cron\Model\ResourceModel\Schedule
+     */
     protected $resourceJobMock;
 
+    /**
+     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $timezoneConverter;
+
+    /**
+     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFactory;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helper = new ObjectManager($this);
 
         $this->resourceJobMock = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
             ->disableOriginalConstructor()
@@ -32,18 +51,30 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->resourceJobMock->expects($this->any())
             ->method('getIdFieldName')
             ->will($this->returnValue('id'));
+
+        $this->timezoneConverter = $this->getMockBuilder(TimezoneInterface::class)
+            ->setMethods(['date'])
+            ->getMockForAbstractClass();
+
+        $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
+            ->setMethods(['create'])
+            ->getMock();
     }
 
     /**
+     * Test for SetCronExpr
+     *
      * @param string $cronExpression
      * @param array $expected
+     *
+     * @return void
      * @dataProvider setCronExprDataProvider
      */
-    public function testSetCronExpr($cronExpression, $expected)
+    public function testSetCronExpr($cronExpression, $expected): void
     {
         // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
+        /** @var Schedule $model */
+        $model = $this->helper->getObject(Schedule::class);
 
         // 2. Run tested method
         $model->setCronExpr($cronExpression);
@@ -61,7 +92,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function setCronExprDataProvider()
+    public function setCronExprDataProvider(): array
     {
         return [
             ['1 2 3 4 5', [1, 2, 3, 4, 5]],
@@ -121,27 +152,33 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for SetCronExprException
+     *
      * @param string $cronExpression
+     *
+     * @return void
      * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider setCronExprExceptionDataProvider
      */
-    public function testSetCronExprException($cronExpression)
+    public function testSetCronExprException($cronExpression): void
     {
         // 1. Create mocks
-        /** @var \Magento\Cron\Model\Schedule $model */
-        $model = $this->helper->getObject(\Magento\Cron\Model\Schedule::class);
+        /** @var Schedule $model */
+        $model = $this->helper->getObject(Schedule::class);
 
         // 2. Run tested method
         $model->setCronExpr($cronExpression);
     }
 
     /**
+     * Data provider
+     *
      * Here is a list of allowed characters and values for Cron expression
      * http://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
      *
      * @return array
      */
-    public function setCronExprExceptionDataProvider()
+    public function setCronExprExceptionDataProvider(): array
     {
         return [
             [''],
@@ -153,17 +190,31 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for trySchedule
+     *
      * @param int $scheduledAt
      * @param array $cronExprArr
      * @param $expected
+     *
+     * @return void
      * @dataProvider tryScheduleDataProvider
      */
-    public function testTrySchedule($scheduledAt, $cronExprArr, $expected)
+    public function testTrySchedule($scheduledAt, $cronExprArr, $expected): void
     {
         // 1. Create mocks
+        $this->timezoneConverter->method('getConfigTimezone')
+            ->willReturn('UTC');
+
+        $this->dateTimeFactory->method('create')
+            ->willReturn(new \DateTime());
+
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
-            \Magento\Cron\Model\Schedule::class
+            \Magento\Cron\Model\Schedule::class,
+            [
+                'timezoneConverter' => $this->timezoneConverter,
+                'dateTimeFactory' => $this->dateTimeFactory,
+            ]
         );
 
         // 2. Set fixtures
@@ -177,22 +228,29 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTryScheduleWithConversionToAdminStoreTime()
+    /**
+     * Test for tryScheduleWithConversionToAdminStoreTime
+     *
+     * @return void
+     */
+    public function testTryScheduleWithConversionToAdminStoreTime(): void
     {
         $scheduledAt = '2011-12-13 14:15:16';
         $cronExprArr = ['*', '*', '*', '*', '*'];
 
-        // 1. Create mocks
-        $timezoneConverter = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $timezoneConverter->expects($this->once())
-            ->method('date')
-            ->with($scheduledAt)
-            ->willReturn(new \DateTime($scheduledAt));
+        $this->timezoneConverter->method('getConfigTimezone')
+            ->willReturn('UTC');
+
+        $this->dateTimeFactory->method('create')
+            ->willReturn(new \DateTime());
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
             \Magento\Cron\Model\Schedule::class,
-            ['timezoneConverter' => $timezoneConverter]
+            [
+                'timezoneConverter' => $this->timezoneConverter,
+                'dateTimeFactory' => $this->dateTimeFactory,
+            ]
         );
 
         // 2. Set fixtures
@@ -207,11 +265,15 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider
+     *
      * @return array
      */
-    public function tryScheduleDataProvider()
+    public function tryScheduleDataProvider(): array
     {
         $date = '2011-12-13 14:15:16';
+        $timestamp = (new \DateTime($date))->getTimestamp();
+        $day = 'Monday';
         return [
             [$date, [], false],
             [$date, null, false],
@@ -219,22 +281,26 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             [$date, [], false],
             [$date, null, false],
             [$date, false, false],
-            [strtotime($date), ['*', '*', '*', '*', '*'], true],
-            [strtotime($date), ['15', '*', '*', '*', '*'], true],
-            [strtotime($date), ['*', '14', '*', '*', '*'], true],
-            [strtotime($date), ['*', '*', '13', '*', '*'], true],
-            [strtotime($date), ['*', '*', '*', '12', '*'], true],
-            [strtotime('Monday'), ['*', '*', '*', '*', '1'], true],
+            [$timestamp, ['*', '*', '*', '*', '*'], true],
+            [$timestamp, ['15', '*', '*', '*', '*'], true],
+            [$timestamp, ['*', '14', '*', '*', '*'], true],
+            [$timestamp, ['*', '*', '13', '*', '*'], true],
+            [$timestamp, ['*', '*', '*', '12', '*'], true],
+            [(new \DateTime($day))->getTimestamp(), ['*', '*', '*', '*', '1'], true],
         ];
     }
 
     /**
+     * Test for matchCronExpression
+     *
      * @param string $cronExpressionPart
      * @param int $dateTimePart
      * @param bool $expectedResult
+     *
+     * @return void
      * @dataProvider matchCronExpressionDataProvider
      */
-    public function testMatchCronExpression($cronExpressionPart, $dateTimePart, $expectedResult)
+    public function testMatchCronExpression($cronExpressionPart, $dateTimePart, $expectedResult): void
     {
         // 1. Create mocks
         /** @var \Magento\Cron\Model\Schedule $model */
@@ -248,9 +314,11 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider
+     *
      * @return array
      */
-    public function matchCronExpressionDataProvider()
+    public function matchCronExpressionDataProvider(): array
     {
         return [
             ['*', 0, true],
@@ -287,11 +355,15 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for matchCronExpressionException
+     *
      * @param string $cronExpressionPart
+     *
+     * @return void
      * @expectedException \Magento\Framework\Exception\CronException
      * @dataProvider matchCronExpressionExceptionDataProvider
      */
-    public function testMatchCronExpressionException($cronExpressionPart)
+    public function testMatchCronExpressionException($cronExpressionPart): void
     {
         $dateTimePart = 10;
 
@@ -304,24 +376,30 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider
+     *
      * @return array
      */
-    public function matchCronExpressionExceptionDataProvider()
+    public function matchCronExpressionExceptionDataProvider(): array
     {
         return [
             ['1/2/3'],    //Invalid cron expression, expecting 'match/modulus': 1/2/3
             ['1/'],       //Invalid cron expression, expecting numeric modulus: 1/
-            ['-'],        //The "-" cron expression is invalid. Verify and try again.
+            ['-'],        //Invalid cron expression
             ['1-2-3'],    //Invalid cron expression, expecting 'from-to' structure: 1-2-3
         ];
     }
 
     /**
+     * Test for GetNumeric
+     *
      * @param mixed $param
      * @param int $expectedResult
+     *
+     * @return void
      * @dataProvider getNumericDataProvider
      */
-    public function testGetNumeric($param, $expectedResult)
+    public function testGetNumeric($param, $expectedResult): void
     {
         // 1. Create mocks
         /** @var \Magento\Cron\Model\Schedule $model */
@@ -335,9 +413,11 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Data provider
+     *
      * @return array
      */
-    public function getNumericDataProvider()
+    public function getNumericDataProvider(): array
     {
         return [
             [null, false],
@@ -362,7 +442,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testTryLockJobSuccess()
+    /**
+     * Test for tryLockJobSuccess
+     *
+     * @return void
+     */
+    public function testTryLockJobSuccess(): void
     {
         $scheduleId = 1;
 
@@ -386,7 +471,12 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(Schedule::STATUS_RUNNING, $model->getStatus());
     }
 
-    public function testTryLockJobFailure()
+    /**
+     * Test for tryLockJobFailure
+     *
+     * @return void
+     */
+    public function testTryLockJobFailure(): void
     {
         $scheduleId = 1;
 

@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="tag_tag_product_collection_load_after">
-        <observer name="review" instance="Magento\Review\Observer\TagProductCollectionLoadAfterObserver" shared="false" />
-    </event>
     <event name="catalog_block_product_list_collection">
-        <observer name="review" instance="Magento\Review\Observer\CatalogBlockProductCollectionBeforeToHtmlObserver" shared="false" />
+        <observer name="review" instance="Magento\Review\Observer\CatalogProductListCollectionAppendSummaryFieldsObserver" shared="false" />
+    </event>
+    <event name="controller_action_predispatch_review">
+        <observer name="catalog_review_enabled" instance="Magento\Review\Observer\PredispatchReviewObserver" />
     </event>
 </config>

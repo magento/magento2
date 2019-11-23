@@ -14,6 +14,10 @@ use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Tax\Helper\Data;
 
+/**
+ * Customer logged in observer
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CustomerLoggedInObserver implements ObserverInterface
 {
     /**
@@ -77,6 +81,8 @@ class CustomerLoggedInObserver implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
