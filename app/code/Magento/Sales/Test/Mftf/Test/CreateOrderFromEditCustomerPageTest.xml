@@ -87,6 +87,8 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerIndexPage"/>
+            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
@@ -98,6 +100,7 @@
         <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickOnCreateOrderButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
 
         <!--Add configurable product to order-->
         <actionGroup ref="addConfigurableProductToOrderFromAdmin" stepKey="addConfigurableProductToOrder">

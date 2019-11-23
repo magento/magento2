@@ -292,11 +292,8 @@ QUERY;
             'Filter category',
             $responseObject->getData('products/items/0/categories/1/name')
         );
-        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
-            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
-            $responseObject->getData('products/items/0/canonical_url')
-        );
+        //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
+        self::assertNull($responseObject->getData('products/items/0/canonical_url'));
     }
 
     /**
