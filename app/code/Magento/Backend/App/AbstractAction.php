@@ -323,8 +323,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Set redirect into response
      *
      * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
-     * @param   string $path
-     * @param   array $arguments
+     * @param string $path
+     * @param array $arguments
      * @return \Magento\Framework\App\ResponseInterface
      */
     protected function _redirect($path, $arguments = [])

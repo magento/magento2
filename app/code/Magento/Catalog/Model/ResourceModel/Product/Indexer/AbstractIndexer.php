@@ -66,12 +66,12 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * If $condition is not empty apply limitation for select
      *
      * @param \Magento\Framework\DB\Select $select
-     * @param string $attrCode              the attribute code
-     * @param string|\Zend_Db_Expr $entity   the entity field or expression for condition
-     * @param string|\Zend_Db_Expr $store    the store field or expression for condition
-     * @param \Zend_Db_Expr $condition       the limitation condition
-     * @param bool $required                if required or has condition used INNER join, else - LEFT
-     * @return \Zend_Db_Expr                 the attribute value expression
+     * @param string $attrCode the attribute code
+     * @param string|\Zend_Db_Expr $entity the entity field or expression for condition
+     * @param string|\Zend_Db_Expr $store the store field or expression for condition
+     * @param \Zend_Db_Expr $condition the limitation condition
+     * @param bool $required if required or has condition used INNER join, else - LEFT
+     * @return \Zend_Db_Expr the attribute value expression
      */
     protected function _addAttributeToSelect($select, $attrCode, $entity, $store, $condition = null, $required = false)
     {

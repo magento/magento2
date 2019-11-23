@@ -120,7 +120,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     /**
      * Set address which can be used inside totals calculation
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
     protected function _setAddress(\Magento\Quote\Model\Quote\Address $address)
@@ -132,8 +132,8 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     /**
      * Get quote address object
      *
-     * @return  \Magento\Quote\Model\Quote\Address
-     * @throws   \Magento\Framework\Exception\LocalizedException if address not declared
+     * @return \Magento\Quote\Model\Quote\Address
+     * @throws \Magento\Framework\Exception\LocalizedException if address not declared
      */
     protected function _getAddress()
     {
@@ -173,7 +173,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     /**
      * Set total model amount value to address
      *
-     * @param   float $amount
+     * @param float $amount
      * @return $this
      */
     protected function _setAmount($amount)
@@ -202,7 +202,7 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     /**
      * Add total model amount value to address
      *
-     * @param   float $amount
+     * @param float $amount
      * @return $this
      */
     protected function _addAmount($amount)

@@ -55,7 +55,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * Renders grid column
      *
      * @param DataObject $row
-     * @return  string
+     * @return string
      */
     public function render(DataObject $row)
     {

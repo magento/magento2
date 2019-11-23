@@ -363,9 +363,9 @@ abstract class AbstractFilter extends \Magento\Framework\DataObject implements F
     /**
      * Get option text from frontend model by option id
      *
-     * @param   int $optionId
+     * @param int $optionId
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return  string|bool
+     * @return string|bool
      */
     protected function getOptionText($optionId)
     {
