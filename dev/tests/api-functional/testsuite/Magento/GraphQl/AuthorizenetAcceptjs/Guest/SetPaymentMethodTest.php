@@ -113,8 +113,8 @@ class SetPaymentMethodTest extends GraphQlAbstract
     {
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
     }
 
     private function assertSetPaymentMethodResponse(array $response, string $methodCode): void
@@ -171,7 +171,7 @@ QUERY;
 mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="widget" resource="default" engine="innodb" comment="Preconfigured Widgets">
         <column xsi:type="int" name="widget_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Widget Id"/>
+                comment="Widget ID"/>
         <column xsi:type="varchar" name="widget_code" nullable="true" length="255"
                 comment="Widget code for template directive"/>
         <column xsi:type="varchar" name="widget_type" nullable="true" length="255" comment="Widget Type"/>
@@ -23,10 +23,10 @@
     </table>
     <table name="widget_instance" resource="default" engine="innodb" comment="Instances of Widget for Package Theme">
         <column xsi:type="int" name="instance_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Instance Id"/>
+                comment="Instance ID"/>
         <column xsi:type="varchar" name="instance_type" nullable="true" length="255" comment="Instance Type"/>
         <column xsi:type="int" name="theme_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Theme id"/>
+                comment="Theme ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Widget Title"/>
         <column xsi:type="varchar" name="store_ids" nullable="false" length="255" default="0" comment="Store ids"/>
         <column xsi:type="text" name="widget_parameters" nullable="true" comment="Widget parameters"/>
@@ -40,9 +40,9 @@
     </table>
     <table name="widget_instance_page" resource="default" engine="innodb" comment="Instance of Widget on Page">
         <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Page Id"/>
+                comment="Page ID"/>
         <column xsi:type="int" name="instance_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Instance Id"/>
+                default="0" comment="Instance ID"/>
         <column xsi:type="varchar" name="page_group" nullable="true" length="25" comment="Block Group Type"/>
         <column xsi:type="varchar" name="layout_handle" nullable="true" length="255" comment="Layout Handle"/>
         <column xsi:type="varchar" name="block_reference" nullable="true" length="255" comment="Container"/>
@@ -61,9 +61,9 @@
     </table>
     <table name="widget_instance_page_layout" resource="default" engine="innodb" comment="Layout updates">
         <column xsi:type="int" name="page_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
-                comment="Page Id"/>
+                comment="Page ID"/>
         <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Layout Update Id"/>
+                default="0" comment="Layout Update ID"/>
         <constraint xsi:type="foreign" referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID"
                     table="widget_instance_page_layout" column="page_id" referenceTable="widget_instance_page"
                     referenceColumn="page_id" onDelete="CASCADE"/>
@@ -80,7 +80,7 @@
     </table>
     <table name="layout_update" resource="default" engine="innodb" comment="Layout Updates">
         <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Layout Update Id"/>
+                comment="Layout Update ID"/>
         <column xsi:type="varchar" name="handle" nullable="true" length="255" comment="Handle"/>
         <column xsi:type="text" name="xml" nullable="true" comment="Xml"/>
         <column xsi:type="smallint" name="sort_order" padding="6" unsigned="false" nullable="false" identity="false"
@@ -96,13 +96,13 @@
     </table>
     <table name="layout_link" resource="default" engine="innodb" comment="Layout Link">
         <column xsi:type="int" name="layout_link_id" padding="10" unsigned="true" nullable="false" identity="true"
-                comment="Link Id"/>
+                comment="Link ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Store Id"/>
+                default="0" comment="Store ID"/>
         <column xsi:type="int" name="theme_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Theme id"/>
+                comment="Theme ID"/>
         <column xsi:type="int" name="layout_update_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Layout Update Id"/>
+                default="0" comment="Layout Update ID"/>
         <column xsi:type="boolean" name="is_temporary" nullable="false" default="false"
                 comment="Defines whether Layout Update is Temporary"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

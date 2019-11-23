@@ -15,7 +15,7 @@
         <column xsi:type="varchar" name="email" nullable="true" length="255" comment="Email"/>
         <column xsi:type="smallint" name="group_id" padding="5" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Group ID"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
+        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Store ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -78,7 +78,7 @@
     <table name="customer_address_entity" resource="default" engine="innodb" comment="Customer Address Entity">
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
-        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment Id"/>
+        <column xsi:type="varchar" name="increment_id" nullable="true" length="50" comment="Increment ID"/>
         <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Parent ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
@@ -124,9 +124,9 @@
     <table name="customer_address_entity_datetime" resource="default" engine="innodb"
            comment="Customer Address Entity Datetime">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="datetime" name="value" on_update="false" nullable="true" comment="Value"/>
@@ -155,9 +155,9 @@
     <table name="customer_address_entity_decimal" resource="default" engine="innodb"
            comment="Customer Address Entity Decimal">
         <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
-                comment="Value Id"/>
+                comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Attribute Id"/>
+                default="0" comment="Attribute ID"/>
         <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
@@ -424,14 +424,14 @@
         <column xsi:type="varchar" name="customer_group_code" nullable="false" length="32"
                 comment="Customer Group Code"/>
         <column xsi:type="int" name="tax_class_id" padding="10" unsigned="true" nullable="false" identity="false"
-                default="0" comment="Tax Class Id"/>
+                default="0" comment="Tax Class ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="customer_group_id"/>
         </constraint>
     </table>
     <table name="customer_eav_attribute" resource="default" engine="innodb" comment="Customer Eav Attribute">
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <column xsi:type="smallint" name="is_visible" padding="5" unsigned="true" nullable="false" identity="false"
                 default="1" comment="Is Visible"/>
         <column xsi:type="varchar" name="input_filter" nullable="true" length="255" comment="Input Filter"/>
@@ -461,7 +461,7 @@
     <table name="customer_form_attribute" resource="default" engine="innodb" comment="Customer Form Attribute">
         <column xsi:type="varchar" name="form_code" nullable="false" length="32" comment="Form Code"/>
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="form_code"/>
             <column name="attribute_id"/>
@@ -476,9 +476,9 @@
     <table name="customer_eav_attribute_website" resource="default" engine="innodb"
            comment="Customer Eav Attribute Website">
         <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Attribute Id"/>
+                comment="Attribute ID"/>
         <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
-                comment="Website Id"/>
+                comment="Website ID"/>
         <column xsi:type="smallint" name="is_visible" padding="5" unsigned="true" nullable="true" identity="false"
                 comment="Is Visible"/>
         <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="true" identity="false"
@@ -504,7 +504,7 @@
         <column xsi:type="bigint" name="visitor_id" padding="20" unsigned="true" nullable="false" identity="true"
                 comment="Visitor ID"/>
         <column xsi:type="int" name="customer_id" padding="11" unsigned="false" nullable="true" identity="false"
-                comment="Customer Id"/>
+                comment="Customer ID"/>
         <column xsi:type="varchar" name="session_id" nullable="true" length="64" comment="Session ID"/>
         <column xsi:type="timestamp" name="last_visit_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Last Visit Time"/>

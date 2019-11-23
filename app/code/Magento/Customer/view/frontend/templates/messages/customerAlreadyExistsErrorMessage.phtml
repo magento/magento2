@@ -1,0 +1,9 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<?= $block->escapeHtml(__('There is already an account with this email address. If you are sure that it is your email address, <a href="%1">click here</a> to get your password and access your account.', $block->getData('url')), ['a']);

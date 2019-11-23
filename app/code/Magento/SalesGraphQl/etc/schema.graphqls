@@ -7,7 +7,8 @@ type Query {
 
 type CustomerOrder @doc(description: "Order mapping fields") {
     id: Int
-    increment_id: String
+    increment_id: String @deprecated(reason: "Use the order_number instead.")
+    order_number: String! @doc(description: "The order number")
     created_at: String
     grand_total: Float
     status: String

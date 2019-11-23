@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductTypeSwitchingToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
+            <title value="Simple product type switching on editing to configurable product"/>
+            <description value="Simple product type switching on editing to configurable product"/>
+            <testCaseId value="MAGETWO-29633"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <comment userInput="Create product" stepKey="commentCreateProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!--Create attribute with options-->
+            <comment userInput="Create attribute with options" stepKey="commentCreateAttributeWithOptions"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete product-->
+            <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Add configurations to product-->
+        <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurations">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="saveConfiguredProduct" stepKey="saveConfigProductForm"/>
+        <!--Assert configurable product on Admin product page grid-->
+        <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigProductOnAdmin"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySku">
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('2', 'Name')}}" userInput="$$createProduct.name$$-option1" stepKey="seeProductNameInGrid1"/>
+        <see selector="{{AdminProductGridSection.productGridCell('3', 'Name')}}" userInput="$$createProduct.name$$-option2" stepKey="seeProductNameInGrid2"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <!--Assert configurable product on storefront-->
+        <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickAttributeDropDown"/>
+        <see userInput="option1" stepKey="verifyOption1Exists"/>
+        <see userInput="option2" stepKey="verifyOption2Exists"/>
+    </test>
+    <test name="AdminConfigurableProductTypeSwitchingToVirtualProductTest" extends="AdminSimpleProductTypeSwitchingToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
+            <title value="Configurable product type switching on editing to virtual product"/>
+            <description value="Configurable product type switching on editing to virtual product"/>
+            <testCaseId value="MC-17952"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <!--Delete product configurations-->
+        <comment userInput="Delete product configuration" stepKey="commentDeleteConfigs"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToConfigProductPage"/>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
+        <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption1Actions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption2Actions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption2"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct2.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleProduct2.quantity}}" stepKey="fillProductQty"/>
+        <clearField selector="{{AdminProductFormSection.productWeight}}" stepKey="clearWeightField"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeight"/>
+        <actionGroup ref="saveProductForm" stepKey="saveVirtualProductForm"/>
+        <!--Assert virtual product on Admin product page grid-->
+        <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForVirtual"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySkuForVirtual">
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeVirtualProductNameInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Virtual Product" stepKey="seeVirtualProductTypeInGrid"/>
+        <!--Assert virtual product on storefront-->
+        <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openVirtualProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontVirtualProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertVirtualProductInStock"/>
+    </test>
+    <test name="AdminVirtualProductTypeSwitchingToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
+            <title value="Virtual product type switching on editing to configurable product"/>
+            <description value="Virtual product type switching on editing to configurable product"/>
+            <testCaseId value="MC-17953"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <comment userInput="Create product" stepKey="commentCreateProduct"/>
+            <createData entity="VirtualProduct" stepKey="createProduct"/>
+            <!--Create attribute with options-->
+            <comment userInput="Create attribute with options" stepKey="commentCreateAttributeWithOptions"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete product-->
+            <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+        <!--Add configurations to product-->
+        <comment userInput="Add configurations to product" stepKey="commentAddConfigurations"/>
+        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToConfigProductPage"/>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForConfigurableProduct"/>
+        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurationsForProduct">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="saveConfiguredProduct" stepKey="saveNewConfigurableProductForm"/>
+        <!--Assert configurable product on Admin product page grid-->
+        <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigurableProductOnAdmin"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForConfigurable"/>
+        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySkuForConfigurable">
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeConfigurableProductNameInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Configurable Product" stepKey="seeConfigurableProductTypeInGrid"/>
+        <see selector="{{AdminProductGridSection.productGridCell('2', 'Name')}}" userInput="$$createProduct.name$$-option1" stepKey="seeConfigurableProductNameInGrid1"/>
+        <see selector="{{AdminProductGridSection.productGridCell('3', 'Name')}}" userInput="$$createProduct.name$$-option2" stepKey="seeConfigurableProductNameInGrid2"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearConfigurableProductFilters"/>
+        <!--Assert configurable product on storefront-->
+        <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigurableProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontConfigurableProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertConfigurableProductInStock"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickConfigurableAttributeDropDown"/>
+        <see userInput="option1" stepKey="verifyConfigurableProductOption1Exists"/>
+        <see userInput="option2" stepKey="verifyConfigurableProductOption2Exists"/>
+    </test>
+</tests>

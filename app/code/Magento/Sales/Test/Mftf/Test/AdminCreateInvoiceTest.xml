@@ -25,7 +25,7 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="logout" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct" stepKey="deleteCategory1"/>
         </after>
