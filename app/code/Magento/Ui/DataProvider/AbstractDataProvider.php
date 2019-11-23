@@ -208,7 +208,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
-     * self::setOrder() alias
+     * Self::setOrder() alias
      *
      * @param string $field
      * @param string $direction

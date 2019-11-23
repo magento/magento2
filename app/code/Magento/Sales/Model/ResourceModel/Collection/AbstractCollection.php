@@ -38,7 +38,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     }
 
     /**
-     * get select count sql
+     * Get select count sql
      *
      * @return \Magento\Framework\DB\Select
      */
