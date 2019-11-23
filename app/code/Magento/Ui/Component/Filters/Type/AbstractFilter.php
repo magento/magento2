@@ -86,7 +86,7 @@ abstract class AbstractFilter extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function prepare()
     {

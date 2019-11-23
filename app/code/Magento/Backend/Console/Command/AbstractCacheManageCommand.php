@@ -24,7 +24,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
     const INPUT_KEY_TYPES = 'types';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

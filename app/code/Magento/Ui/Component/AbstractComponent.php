@@ -281,7 +281,7 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataSourceData()
     {

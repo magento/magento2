@@ -37,7 +37,7 @@ abstract class AbstractRepository implements RepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     abstract protected function buildSearchCriteria();
 
