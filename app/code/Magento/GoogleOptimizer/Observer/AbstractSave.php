@@ -11,6 +11,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
+ * Abstract Save
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
@@ -186,6 +188,8 @@ abstract class AbstractSave implements ObserverInterface
     }
 
     /**
+     * Is request data available
+     *
      * @return bool
      */
     private function isDataAvailable()
@@ -195,6 +199,8 @@ abstract class AbstractSave implements ObserverInterface
     }
 
     /**
+     * Request parameter google_experiment
+     *
      * @return mixed
      */
     private function getRequestData()

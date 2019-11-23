@@ -52,6 +52,8 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     }
 
     /**
+     * Resolve date
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $dateIdentifier
      * @return void

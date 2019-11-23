@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
+ * Abstract Type
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * Abstract model for product type implementation
@@ -1093,6 +1095,8 @@ abstract class AbstractType
     }
 
     /**
+     * Get associated products
+     *
      * @param \Magento\Catalog\Model\Product\Type\AbstractType $product
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

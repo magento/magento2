@@ -102,6 +102,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Check current user permission on resource and privilege
+     *
      * @return bool
      */
     protected function _isAllowed()
@@ -120,6 +122,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get message manager
+     *
      * @return \Magento\Framework\Message\ManagerInterface
      */
     protected function getMessageManager()
@@ -147,6 +151,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Add breadcrumb
+     *
      * @param string $label
      * @param string $title
      * @param string|null $link
@@ -159,6 +165,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Add block to content container
+     *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
@@ -168,6 +176,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Add block to left container
+     *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
@@ -177,6 +187,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Add block to js container
+     *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
@@ -201,6 +213,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Dispatch request
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */

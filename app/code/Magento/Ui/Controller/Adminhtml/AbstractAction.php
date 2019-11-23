@@ -65,6 +65,8 @@ abstract class AbstractAction extends Action implements UiActionInterface
     }
 
     /**
+     * Check current user permission on resource and privilege
+     *
      * @return bool
      */
     protected function _isAllowed()

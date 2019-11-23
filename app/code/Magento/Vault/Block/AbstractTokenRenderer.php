@@ -43,6 +43,8 @@ abstract class AbstractTokenRenderer extends Template implements TokenRendererIn
     }
 
     /**
+     * Get token
+     *
      * @return PaymentTokenInterface|null
      * @since 100.2.0
      */
@@ -52,6 +54,8 @@ abstract class AbstractTokenRenderer extends Template implements TokenRendererIn
     }
 
     /**
+     * Get token details
+     *
      * @return array|null
      * @since 100.2.0
      */

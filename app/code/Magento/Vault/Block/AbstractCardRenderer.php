@@ -39,6 +39,8 @@ abstract class AbstractCardRenderer extends AbstractTokenRenderer implements Car
     }
 
     /**
+     * Get icon for type
+     *
      * @param string $type
      * @return array
      * @since 100.1.0

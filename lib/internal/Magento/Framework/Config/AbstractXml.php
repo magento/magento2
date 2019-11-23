@@ -10,6 +10,8 @@
 namespace Magento\Framework\Config;
 
 /**
+ * Abstract Xml
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  */

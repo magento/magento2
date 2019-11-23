@@ -105,6 +105,8 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
+     * Get custom amount
+     *
      * @param float $amount
      * @param null|bool|string|array $exclude
      * @param null|array $context
@@ -131,6 +133,8 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
+     * Get product
+     *
      * @return SaleableInterface
      */
     public function getProduct()
@@ -139,6 +143,8 @@ abstract class AbstractPrice implements PriceInterface
     }
 
     /**
+     * Get quantity
+     *
      * @return float
      */
     public function getQuantity()

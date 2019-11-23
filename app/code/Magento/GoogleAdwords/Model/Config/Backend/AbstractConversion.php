@@ -8,6 +8,8 @@
 namespace Magento\GoogleAdwords\Model\Config\Backend;
 
 /**
+ * Abstract Conversion
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api

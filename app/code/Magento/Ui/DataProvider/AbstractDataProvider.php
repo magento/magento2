@@ -9,6 +9,8 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
+ * Abstract Data Provider
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
@@ -75,6 +77,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Get collection
+     *
      * @return AbstractCollection
      */
     public function getCollection()
@@ -113,6 +117,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Get meta
+     *
      * @return array
      */
     public function getMeta()
@@ -132,6 +138,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Get fields meta info
+     *
      * @param string $fieldSetName
      * @return array
      */
@@ -141,6 +149,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     }
 
     /**
+     * Get field meta info
+     *
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array

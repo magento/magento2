@@ -10,6 +10,8 @@
 namespace Magento\Directory\Model\Currency\Import;
 
 /**
+ * Abstract Import
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
@@ -92,6 +94,8 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
     }
 
     /**
+     * Fetch rates
+     *
      * @return array
      */
     public function fetchRates()
@@ -122,6 +126,8 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
     }
 
     /**
+     * Number format
+     *
      * @param float|int $number
      * @return float|int
      */
@@ -131,6 +137,8 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
     }
 
     /**
+     * Get messages
+     *
      * @return array
      */
     public function getMessages()

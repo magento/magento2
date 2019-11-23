@@ -336,6 +336,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Get error aggregator
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()
@@ -653,7 +655,9 @@ abstract class AbstractEntity
     }
 
     /**
-     * @return string the master attribute code to use in an import
+     * Get the master attribute code to use in an import
+     *
+     * @return string
      */
     public function getMasterAttributeCode()
     {

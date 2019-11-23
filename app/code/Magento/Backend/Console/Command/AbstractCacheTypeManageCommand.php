@@ -12,6 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\Cache\Manager;
 
 /**
+ * Abstract Cache Type Manage Command
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2

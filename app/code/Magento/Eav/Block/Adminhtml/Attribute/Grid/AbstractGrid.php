@@ -24,6 +24,8 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_module = 'adminhtml';
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return void
      */
     protected function _construct()

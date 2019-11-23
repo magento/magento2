@@ -6,6 +6,8 @@
 namespace Magento\AdminNotification\Model\System\Message\Media;
 
 /**
+ * Abstract Synchronization
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2

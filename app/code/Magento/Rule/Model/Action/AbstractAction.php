@@ -64,6 +64,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get form
+     *
      * @return Form
      */
     public function getForm()
@@ -72,6 +74,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Array
+     *
      * @param array $arrAttributes
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -88,6 +92,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Xml
+     *
      * @return string
      */
     public function asXml()
@@ -108,6 +114,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Load array
+     *
      * @param array $arr
      * @return $this
      */
@@ -128,6 +136,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Load attribute options
+     *
      * @return $this
      */
     public function loadAttributeOptions()
@@ -137,6 +147,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get attribute select options
+     *
      * @return array
      */
     public function getAttributeSelectOptions()
@@ -149,6 +161,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get Attribute name
+     *
      * @return string
      */
     public function getAttributeName()
@@ -157,6 +171,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Load operator options
+     *
      * @return $this
      */
     public function loadOperatorOptions()
@@ -166,6 +182,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get operator select options
+     *
      * @return array
      */
     public function getOperatorSelectOptions()
@@ -178,6 +196,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get operator name
+     *
      * @return string
      */
     public function getOperatorName()
@@ -186,6 +206,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Load value options
+     *
      * @return $this
      */
     public function loadValueOptions()
@@ -195,6 +217,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get value select options
+     *
      * @return array
      */
     public function getValueSelectOptions()
@@ -207,6 +231,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get value name
+     *
      * @return string
      */
     public function getValueName()
@@ -216,6 +242,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get new child select options
+     *
      * @return array
      */
     public function getNewChildSelectOptions()
@@ -224,6 +252,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get new child name
+     *
      * @return string
      */
     public function getNewChildName()
@@ -232,6 +262,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Html
+     *
      * @return string
      */
     public function asHtml()
@@ -240,6 +272,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Html recursive
+     *
      * @return string
      */
     public function asHtmlRecursive()
@@ -249,6 +283,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get type element
+     *
      * @return AbstractElement
      */
     public function getTypeElement()
@@ -265,6 +301,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get attribute element
+     *
      * @return $this
      */
     public function getAttributeElement()
@@ -284,6 +322,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get operator element
+     *
      * @return $this
      */
     public function getOperatorElement()
@@ -303,6 +343,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get value element
+     *
      * @return $this
      */
     public function getValueElement()
@@ -321,6 +363,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get add link html
+     *
      * @return string
      */
     public function getAddLinkHtml()
@@ -331,6 +375,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Get remove link html
+     *
      * @return string
      */
     public function getRemoveLinkHtml()
@@ -343,6 +389,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * String
+     *
      * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -353,6 +401,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * String recursive
+     *
      * @param int $level
      * @return string
      */
@@ -363,6 +413,8 @@ abstract class AbstractAction extends \Magento\Framework\DataObject implements A
     }
 
     /**
+     * Process
+     *
      * @return $this
      */
     public function process()

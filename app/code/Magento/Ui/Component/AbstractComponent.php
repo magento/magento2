@@ -174,6 +174,8 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
     }
 
     /**
+     * Get component
+     *
      * @param string $name
      * @return UiComponentInterface
      */

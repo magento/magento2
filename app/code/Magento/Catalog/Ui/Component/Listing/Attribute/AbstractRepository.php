@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
 /**
+ * Abstract Repository
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
@@ -40,6 +42,8 @@ abstract class AbstractRepository implements RepositoryInterface
     abstract protected function buildSearchCriteria();
 
     /**
+     * Get attributes list
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */
     public function getList()

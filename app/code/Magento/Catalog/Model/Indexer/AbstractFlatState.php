@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\Indexer;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Abstract Flat State
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2

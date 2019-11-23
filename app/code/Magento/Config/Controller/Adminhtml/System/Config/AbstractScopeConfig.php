@@ -9,6 +9,8 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 
 /**
+ * Abstract Scope Config
+ *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
