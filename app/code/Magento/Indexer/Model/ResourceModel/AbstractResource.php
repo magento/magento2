@@ -121,8 +121,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     }
 
     /**
-     * Insert data from select statement of read adapter to
-     * destination table related with index adapter
+     * Insert data from select statement of read adapter to destination table related with index adapter
      *
      * @param Select $select
      * @param string $destTable

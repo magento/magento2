@@ -301,8 +301,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Set session locale,
-     * process force locale set through url params
+     * Set session locale, process force locale set through url params
      *
      * @return $this
      */

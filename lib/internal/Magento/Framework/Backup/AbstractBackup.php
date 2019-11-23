@@ -166,6 +166,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
 
     /**
      * Get Magento's root directory
+     *
      * @return string
      */
     public function getRootDir()

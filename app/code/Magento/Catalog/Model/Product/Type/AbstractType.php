@@ -646,8 +646,7 @@ abstract class AbstractType
     }
 
     /**
-     * Prepare additional options/information for order item which will be
-     * created from this product
+     * Prepare additional options/information for order item which will be created from this product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array

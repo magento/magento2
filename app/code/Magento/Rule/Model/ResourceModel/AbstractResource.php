@@ -231,8 +231,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
     }
 
     /**
-     * Retrieve correspondent entity information (associations table name, columns names)
-     * of rule's associated entity by specified entity type
+     * Retrieve correspondent entity information of rule's associated entity by specified entity type
      *
      * @param string $entityType
      * @return array
