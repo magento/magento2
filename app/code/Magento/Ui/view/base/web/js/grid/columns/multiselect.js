@@ -241,6 +241,7 @@ define([
             if (this.isPageSelected() && selected !== total) {
                 return this.selectPage();
             }
+            
             return this.isPageSelected() ? this.deselectPage() : this.selectPage();
         },
 
