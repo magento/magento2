@@ -156,10 +156,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param $directive
      * @param $translations
      * @param $expectedResult
+     * @param array $variables
      * @internal param $translatorData
      * @dataProvider transDirectiveDataProvider
      */
-    public function testTransDirective($directive, $translations, $expectedResult)
+    public function testTransDirective($directive, $translations, $expectedResult, $variables = [])
     {
         $renderer = Phrase::getRenderer();
 
@@ -168,9 +169,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getData'])
             ->getMock();
 
-        $translator->expects($this->atLeastOnce())
-            ->method('getData')
-            ->will($this->returnValue($translations));
+        $translator->method('getData')
+            ->willReturn($translations);
+
+        if (!empty($variables)) {
+            $this->model->setVariables($variables);
+        }
 
         $this->objectManager->addSharedInstance($translator, \Magento\Framework\Translate::class);
         $this->objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
@@ -196,7 +200,65 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 '{{trans "foobar"}}',
                 ['foobar' => 'barfoo'],
                 'barfoo',
-            ]
+            ],
+            'empty directive' => [
+                '{{trans}}',
+                [],
+                '',
+            ],
+            'empty string' => [
+                '{{trans ""}}',
+                [],
+                '',
+            ],
+            'no padding' => [
+                '{{trans"Hello cruel coder..."}}',
+                [],
+                'Hello cruel coder...',
+            ],
+            'multi-line padding' => [
+                "{{trans \t\n\r'Hello cruel coder...' \t\n\r}}",
+                [],
+                'Hello cruel coder...',
+            ],
+            'capture escaped double-quotes inside text' => [
+                '{{trans "Hello \"tested\" world!"}}',
+                [],
+                'Hello &quot;tested&quot; world!',
+            ],
+            'capture escaped single-quotes inside text' => [
+                "{{trans 'Hello \\'tested\\' world!'|escape}}",
+                [],
+                "Hello &#039;tested&#039; world!",
+            ],
+            'filter with params' => [
+                "{{trans 'Hello \\'tested\\' world!'|escape:html}}",
+                [],
+                "Hello &#039;tested&#039; world!",
+            ],
+            'basic var' => [
+                '{{trans "Hello %adjective world!" adjective="tested"}}',
+                [],
+                'Hello tested world!',
+            ],
+            'auto-escaped output' => [
+                '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"}}',
+                [],
+                'Hello &lt;em&gt;bad&lt;/em&gt; &lt;strong&gt;world&lt;/strong&gt;!',
+            ],
+            'unescaped modifier' => [
+                '{{trans "Hello %adjective <strong>world</strong>!" adjective="<em>bad</em>"|raw}}',
+                [],
+                'Hello <em>bad</em> <strong>world</strong>!',
+            ],
+            'variable replacement' => [
+                '{{trans "Hello %adjective world!" adjective="$mood"}}',
+                [],
+                'Hello happy world!',
+                [
+                    'mood' => 'happy'
+                ],
+            ],
         ];
     }
 

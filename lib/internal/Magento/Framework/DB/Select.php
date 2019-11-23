@@ -513,9 +513,6 @@ class Select extends \Zend_Db_Select
      *
      * @return string[]
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -535,9 +532,6 @@ class Select extends \Zend_Db_Select
      *
      * @return void
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

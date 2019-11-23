@@ -22,20 +22,18 @@
         </arguments>
 
         <amOnPage url="{{AdminUrlRewriteEditPage.url}}" stepKey="openUrlRewriteEditPage"/>
-        <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
-        <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="clickOnCustonUrlRewrite"/>
-        <click selector="{{AdminUrlRewriteEditSection.createCustomUrlRewriteValue('customUrlRewriteValue')}}" stepKey="selectForCategory"/>
-        <waitForPageLoad stepKey="waitForCategoryEditSectionToLoad"/>
-        <click selector="{{AdminUrlRewriteEditSection.categoryInTree($$category.name$$)}}"  stepKey="selectCategoryInTree"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminUrlRewriteEditSection.store}}" stepKey="clickOnStore"/>
-        <click selector="{{AdminUrlRewriteEditSection.storeValue('storeValue')}}" stepKey="clickOnStoreValue"/>
-        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPath"/>
-        <click selector="{{AdminUrlRewriteEditSection.redirectType}}" stepKey="selectRedirectType"/>
-        <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="clickOnRedirectTypeValue"/>
-        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
-        <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" stepKey="waitForCreateUrlRewriteVisible"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.createCustomUrlRewrite}}" userInput="{{customUrlRewriteValue}}" stepKey="selectUrlRewriteTypeOption"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="waitForCategoryInTreeVisible"/>
+        <click selector="{{AdminUrlRewriteEditSection.categoryInTree(category)}}" stepKey="clickOnCategoryInTree"/>
+        <waitForElementVisible selector="{{AdminUrlRewriteEditSection.store}}" stepKey="waitForStoreSelectVisible"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.store}}" userInput="{{storeValue}}" stepKey="selectStoreOption"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.requestPath}}" userInput="{{requestPath}}" stepKey="fillRequestPathField"/>
+        <selectOption selector="{{AdminUrlRewriteEditSection.redirectType}}" userInput="{{redirectTypeValue}}" stepKey="selectRedirectType"/>
+        <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescriptionField"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The URL Rewrite has been saved." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <actionGroup name="AdminAddUrlRewriteForProduct">

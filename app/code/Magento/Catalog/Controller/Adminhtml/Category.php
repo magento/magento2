@@ -82,7 +82,7 @@ abstract class Category extends \Magento\Backend\App\Action
     }
 
     /**
-     * Initialize requested category and put it into registry
+     * Initialize requested category and put it into registry.
      *
      * Root category can be returned, if inappropriate store/category is specified
      *
@@ -111,6 +111,8 @@ abstract class Category extends \Magento\Backend\App\Action
             }
         }
 
+        $this->registry->unregister('category');
+        $this->registry->unregister('current_category');
         $this->registry->register('category', $category);
         $this->registry->register('current_category', $category);
         $this->wysiwigConfig->setStoreId($storeId);
