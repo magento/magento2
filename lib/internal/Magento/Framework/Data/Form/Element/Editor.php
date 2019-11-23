@@ -310,9 +310,7 @@ class Editor extends Textarea
                         if (isset($buttonOptions['style'])) {
                             $configStyle = $buttonOptions['style'];
                         }
-                        // phpcs:disable Magento2.Performance.ForeachArrayMerge
-                        $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
-                        // phpcs:enable
+                        $buttonOptions['style'] = 'display:none; ' . $configStyle;
                     }
                     $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
                 }
