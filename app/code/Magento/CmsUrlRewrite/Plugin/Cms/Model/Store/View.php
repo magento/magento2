@@ -67,7 +67,7 @@ class View
      * @param ResourceStore $object
      * @param ResourceStore $result
      * @param ResourceStore $store
-     * @return void
+     * @return ResourceStore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(ResourceStore $object, ResourceStore $result, AbstractModel $store): void
@@ -77,6 +77,7 @@ class View
                 $this->generateCmsPagesUrls((int)$store->getId())
             );
         }
+        return $result;
     }
 
     /**
