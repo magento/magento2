@@ -239,6 +239,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->addPageLayoutHandles(['type' => $parentPageType], null, false);
             }
             $page->addPageLayoutHandles(['type' => $pageType], null, false);
+            $page->addPageLayoutHandles(['displaymode' => strtolower($category->getDisplayMode())], null, false);
             $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded
