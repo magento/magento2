@@ -139,7 +139,12 @@ define([
             });
 
             $.each(queryParams, $.proxy(function (key, value) {
-                this.options.values[key] = value;
+                if (this.options.spConfig.attributes[key] !== undefined
+                    && this.options.spConfig.attributes[key].options.find(function(element) {
+                        return element.id===value;
+                    })) {
+                    this.options.values[key] = value;
+                }
             }, this));
         },
 
@@ -155,7 +160,13 @@ define([
 
                 if (element.value) {
                     attributeId = element.id.replace(/[a-z]*/, '');
-                    this.options.values[attributeId] = element.value;
+
+                    if (this.options.spConfig.attributes[attributeId] !== undefined
+                        && this.options.spConfig.attributes[attributeId].options.find(function(optionElement) {
+                            return optionElement.id===element.value;
+                        })) {
+                        this.options.values[attributeId] = element.value;
+                    }
                 }
             }, this));
         },
