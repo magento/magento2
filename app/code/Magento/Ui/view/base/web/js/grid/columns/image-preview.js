@@ -30,7 +30,8 @@ define([
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide'
+                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.paging': 'hide'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
