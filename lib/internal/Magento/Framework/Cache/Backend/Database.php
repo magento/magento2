@@ -240,7 +240,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * Remove a cache record
      *
      * @param  string $id Cache id
-     * @return boolean True if no problem
+     * @return int|boolean Number of affected rows or false on failure
      */
     public function remove($id)
     {
