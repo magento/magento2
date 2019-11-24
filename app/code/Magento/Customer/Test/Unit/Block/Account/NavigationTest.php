@@ -63,29 +63,29 @@ class NavigationTest extends TestCase
      */
     public function testGetLinksWithCustomerAndWishList()
     {
-        $wishListLink = $this->getMockBuilder(WishListLink::class)
+        $wishListLinkMock = $this->getMockBuilder(WishListLink::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSortOrder'])
             ->getMock();
 
-        $customerAccountLink = $this->getMockBuilder(CustomerAccountLink::class)
+        $customerAccountLinkMock = $this->getMockBuilder(CustomerAccountLink::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSortOrder'])
             ->getMock();
 
-        $wishListLink->expects($this->any())
+        $wishListLinkMock->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(100);
 
-        $customerAccountLink->expects($this->any())
+        $customerAccountLinkMock->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(20);
 
         $nameInLayout = 'top.links';
 
         $blockChildren = [
-            'wishListLink' => $wishListLink,
-            'customerAccountLink' => $customerAccountLink
+            'wishListLink' => $wishListLinkMock,
+            'customerAccountLink' => $customerAccountLinkMock
         ];
 
         $this->navigation->setNameInLayout($nameInLayout);
@@ -97,8 +97,8 @@ class NavigationTest extends TestCase
         /* Assertion */
         $this->assertEquals(
             [
-                0 => $wishListLink,
-                1 => $customerAccountLink
+                0 => $wishListLinkMock,
+                1 => $customerAccountLinkMock
             ],
             $this->navigation->getLinks()
         );
