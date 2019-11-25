@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Model;
 
-use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
@@ -18,6 +17,9 @@ use Magento\TestFramework\Request;
 use Zend\Stdlib\Parameters;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for Sitemap
+ */
 class SitemapTest extends TestCase
 {
     /**
@@ -31,12 +33,18 @@ class SitemapTest extends TestCase
     private $objectManager;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(Sitemap::class);
+        $this->filesystem = $this->objectManager->get(Filesystem::class);
     }
 
     /**
@@ -46,14 +54,9 @@ class SitemapTest extends TestCase
      */
     public function testGetSitemapUrlFromParentRootDirectoryPath(): void
     {
-        /** @var Value $configValue */
-        $configValue = $this->objectManager->get(Value::class);
-        $configValue->load('web/unsecure/base_url', 'path');
-        $baseUrl = $configValue->getValue() ?: 'http://localhost/';
+        $baseUrl = 'http://localhost/';
 
-        /** @var Filesystem $filesystem */
-        $filesystem = $this->objectManager->create(Filesystem::class);
-        $rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT)
+        $rootDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)
             ->getAbsolutePath();
         $requestPath = dirname($rootDir);
 
