@@ -103,7 +103,7 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMaximalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMaximalFinalPrice($product)->getValue();
-        $maxPriceArray = $this->formatPrice($regularPrice, $finalPrice, $store);
+        $maxPriceArray = $this->formatPrice((float) $regularPrice, (float) $finalPrice, $store);
         $maxPriceArray['model'] = $product;
         return $maxPriceArray;
     }
