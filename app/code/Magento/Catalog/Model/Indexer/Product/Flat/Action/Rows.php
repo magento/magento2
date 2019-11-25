@@ -67,6 +67,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             foreach ($idsBatches as $changedIds) {
                 if ($tableExists) {
                     $this->flatItemEraser->removeDeletedProducts($changedIds, $store->getId());
+                    $this->flatItemEraser->removeDisabledProducts($changedIds, $store->getId());
                 }
                 if (!empty($changedIds)) {
                     $this->_reindex($store->getId(), $changedIds);
