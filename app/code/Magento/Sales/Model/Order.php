@@ -449,10 +449,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * Get customer object
-     * 
+     *
      * @return \Magento\Customer\Model\Customer
      */
-    public function getCustomer() 
+    public function getCustomer()
     {
         $customerId = $this->getCustomerId();
         $customer = $this->customerFactory->create()->load($customerId);
