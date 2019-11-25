@@ -85,13 +85,45 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function sliceItems(array $items, int $size, int $currentPage): array
     {
         if ($size !== 0) {
-            $offset = ($currentPage - 1) * $size;
-            if ($offset < 0) {
+            $offset = $this->getOffset($currentPage, $size);
+            $itemsCount = count($items);
+            if ($this->isOffsetOutOfRange($offset, $size, $itemsCount)) {
                 $offset = 0;
+            }
+            $maxAllowedPageNumber = ceil($itemsCount/$size);
+            if ($currentPage > $maxAllowedPageNumber) {
+                $offset = $this->getOffset($maxAllowedPageNumber, $size);
             }
             $items = array_slice($items, $offset, $this->size);
         }
 
         return $items;
+    }
+
+
+
+    /**
+     * Check that offset could be applied for search result items.
+     *
+     * @param int $offset
+     * @param int $size
+     * @param int $itemsCount
+     * @return bool
+     */
+    private function isOffsetOutOfRange(int $offset, int $size, int $itemsCount): bool
+    {
+        return $offset < 0 || $itemsCount <= $size;
+    }
+
+    /**
+     * Check that given page is available in search results.
+     *
+     * @param int $pageNumber
+     * @param int $pageSize
+     * @return int
+     */
+    private function getOffset(int $pageNumber, int $pageSize): int
+    {
+        return ($pageNumber - 1) * $pageSize;
     }
 }
