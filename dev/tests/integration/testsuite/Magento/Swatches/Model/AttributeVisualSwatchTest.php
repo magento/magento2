@@ -5,7 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product\Attribute\Save;
+namespace Magento\Swatches\Model;
+
+use Magento\Catalog\Model\Product\Attribute\Save\AbstractAttributeTest;
 
 /**
  * @magentoDbIsolation enabled
@@ -27,14 +29,14 @@ class AttributeVisualSwatchTest extends AbstractAttributeTest
      */
     protected function getDefaultAttributeValue(): string
     {
-        return $this->attribute->getSource()->getOptionId('option 2');
+        return $this->getAttribute()->getSource()->getOptionId('option 2');
     }
 
     /**
      * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueTestProvider
+     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
@@ -58,7 +60,7 @@ class AttributeVisualSwatchTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueTestProvider(): array
+    public function uniqueAttributeValueProvider(): array
     {
         return [
             [

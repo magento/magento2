@@ -20,12 +20,12 @@ class AttributePriceTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueTestProvider
+     * @dataProvider uniqueAttributeValueProvider
      * @inheritdoc
      */
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
-        $this->markTestSkipped('Test is blocked by issue MC-29019');
+        $this->markTestSkipped('Test is blocked by issue MC-29018');
         parent::testUniqueAttribute($firstSku, $secondSku);
     }
 
@@ -65,7 +65,7 @@ class AttributePriceTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueTestProvider(): array
+    public function uniqueAttributeValueProvider(): array
     {
         return [
             [

@@ -21,10 +21,10 @@ use PHPUnit\Framework\TestCase;
 class AttributeFixedProductTaxTest extends TestCase
 {
     /** @var ObjectManagerInterface */
-    protected $objectManager;
+    private $objectManager;
 
     /** @var ProductRepositoryInterface */
-    protected $productRepository;
+    private $productRepository;
 
     /** @var string */
     private $attributeCode;
@@ -42,7 +42,7 @@ class AttributeFixedProductTaxTest extends TestCase
     }
 
     /**
-     * @dataProvider FPTProvider
+     * @dataProvider fPTProvider
      * @param array $data
      * @param array $expectedData
      * @return void
@@ -58,7 +58,7 @@ class AttributeFixedProductTaxTest extends TestCase
     /**
      * @return array
      */
-    public function FPTProvider(): array
+    public function fPTProvider(): array
     {
         return [
             [

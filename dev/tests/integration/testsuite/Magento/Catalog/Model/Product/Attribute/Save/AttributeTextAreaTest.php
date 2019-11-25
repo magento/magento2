@@ -34,7 +34,7 @@ class AttributeTextAreaTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueTestProvider
+     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
@@ -58,7 +58,7 @@ class AttributeTextAreaTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueTestProvider(): array
+    public function uniqueAttributeValueProvider(): array
     {
         return [
             [

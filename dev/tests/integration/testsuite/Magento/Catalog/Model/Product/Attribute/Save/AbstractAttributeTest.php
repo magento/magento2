@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Save;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\Exception;
 use Magento\Framework\ObjectManagerInterface;
@@ -31,7 +30,7 @@ abstract class AbstractAttributeTest extends TestCase
     /** @var ProductRepositoryInterface */
     protected $productRepository;
 
-    /** @var Attribute */
+    /** @var ProductAttributeInterface */
     protected $attribute;
 
     /**
@@ -44,10 +43,6 @@ abstract class AbstractAttributeTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         $this->attributeRepository = $this->objectManager->create(AttributeRepositoryInterface::class);
-        $this->attribute = $this->attributeRepository->get(
-            ProductAttributeInterface::ENTITY_TYPE_CODE,
-            $this->getAttributeCode()
-        );
     }
 
     /**
@@ -71,7 +66,9 @@ abstract class AbstractAttributeTest extends TestCase
     {
         $this->expectException(Exception::class);
         $messageFormat = 'The "%s" attribute value is empty. Set the attribute and try again.';
-        $this->expectExceptionMessage((string)__(sprintf($messageFormat, $this->attribute->getDefaultFrontendLabel())));
+        $this->expectExceptionMessage(
+            (string)__(sprintf($messageFormat, $this->getAttribute()->getDefaultFrontendLabel()))
+        );
         $this->prepareAttribute(['is_required' => true]);
         $this->unsetAttributeValueAndValidate($productSku);
     }
@@ -90,7 +87,7 @@ abstract class AbstractAttributeTest extends TestCase
     }
 
     /**
-     * @dataProvider uniqueTestProvider
+     * @dataProvider uniqueAttributeValueProvider
      * @param string $firstSku
      * @param string $secondSku
      * @return void
@@ -99,11 +96,30 @@ abstract class AbstractAttributeTest extends TestCase
     {
         $this->expectException(Exception::class);
         $messageFormat = 'The value of the "%s" attribute isn\'t unique. Set a unique value and try again.';
-        $this->expectExceptionMessage((string)__(sprintf($messageFormat, $this->attribute->getDefaultFrontendLabel())));
+        $this->expectExceptionMessage(
+            (string)__(sprintf($messageFormat, $this->getAttribute()->getDefaultFrontendLabel()))
+        );
         $this->prepareAttribute(['is_unique' => 1]);
         $product = $this->setAttributeValueAndValidate($firstSku, $this->getDefaultAttributeValue());
         $this->productRepository->save($product);
         $this->setAttributeValueAndValidate($secondSku, $this->getDefaultAttributeValue());
+    }
+
+    /**
+     * Get attribute
+     *
+     * @return ProductAttributeInterface
+     */
+    protected function getAttribute(): ProductAttributeInterface
+    {
+        if ($this->attribute === null) {
+            $this->attribute = $this->attributeRepository->get(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $this->getAttributeCode()
+            );
+        }
+
+        return $this->attribute;
     }
 
     /**
@@ -145,10 +161,7 @@ abstract class AbstractAttributeTest extends TestCase
      */
     private function prepareAttribute(array $data): void
     {
-        $attribute = $this->attributeRepository->get(
-            ProductAttributeInterface::ENTITY_TYPE_CODE,
-            $this->getAttributeCode()
-        );
+        $attribute = $this->getAttribute();
         $attribute->addData($data);
         $this->attributeRepository->save($attribute);
     }
@@ -179,5 +192,5 @@ abstract class AbstractAttributeTest extends TestCase
      *
      * @return array
      */
-    abstract public function uniqueTestProvider(): array;
+    abstract public function uniqueAttributeValueProvider(): array;
 }
