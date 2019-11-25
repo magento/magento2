@@ -308,6 +308,9 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <!-- Perform reindex and flush cache -->
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>

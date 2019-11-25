@@ -9,7 +9,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
-use Magento\Newsletter\Model\SubscriberFactory;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
@@ -25,27 +25,27 @@ class MassUnsubscribe extends AbstractMassAction implements HttpPostActionInterf
     protected $customerRepository;
 
     /**
-     * @var SubscriberFactory
+     * @var SubscriptionManagerInterface
      */
-    protected $subscriberFactory;
+    private $subscriptionManager;
 
     /**
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param CustomerRepositoryInterface $customerRepository
-     * @param SubscriberFactory $subscriberFactory
+     * @param SubscriptionManagerInterface $subscriptionManager
      */
     public function __construct(
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory,
         CustomerRepositoryInterface $customerRepository,
-        SubscriberFactory $subscriberFactory
+        SubscriptionManagerInterface $subscriptionManager
     ) {
         parent::__construct($context, $filter, $collectionFactory);
         $this->customerRepository = $customerRepository;
-        $this->subscriberFactory = $subscriberFactory;
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     /**
@@ -59,8 +59,9 @@ class MassUnsubscribe extends AbstractMassAction implements HttpPostActionInterf
         $customersUpdated = 0;
         foreach ($collection->getAllIds() as $customerId) {
             // Verify customer exists
-            $this->customerRepository->getById($customerId);
-            $this->subscriberFactory->create()->unsubscribeCustomerById($customerId);
+            $customer = $this->customerRepository->getById($customerId);
+            $storeId = (int)$customer->getStoreId();
+            $this->subscriptionManager->unsubscribeCustomer($customerId, $storeId);
             $customersUpdated++;
         }
 

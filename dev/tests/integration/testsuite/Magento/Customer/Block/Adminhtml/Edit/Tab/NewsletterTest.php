@@ -61,12 +61,13 @@ class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testRenderingNewsletterBlock()
     {
+        $websiteId = 1;
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/edit');
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('\u003Cspan\u003ENewsletter Information\u003C\/span\u003E', $body);
-        $this->assertContains('\u003Cinput id=\"_newslettersubscription\"', $body);
+        $this->assertContains('\u003Cinput id=\"_newslettersubscription_status_' . $websiteId . '\"', $body);
         $this->assertNotContains('checked="checked"', $body);
         $this->assertContains('\u003Cspan\u003ESubscribed to Newsletter\u003C\/span\u003E', $body);
         $this->assertContains('\u003ENo Newsletter Found\u003C', $body);
