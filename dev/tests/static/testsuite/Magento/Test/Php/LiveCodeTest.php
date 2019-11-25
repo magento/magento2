@@ -482,6 +482,17 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
 
         $fileList = self::getWhitelist(['php']);
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/phpstan/blacklist/*.txt');
+        if ($blackList) {
+            $blackListPattern = sprintf('#(%s)#i', implode('|', $blackList));
+            $fileList = array_filter(
+                $fileList,
+                function ($path) use ($blackListPattern) {
+                    return !preg_match($blackListPattern, $path);
+                }
+            );
+        }
+
         $phpStan = new PhpStan($confFile, $reportFile);
         $exitCode = $phpStan->run($fileList);
         $report = file_get_contents($reportFile);
