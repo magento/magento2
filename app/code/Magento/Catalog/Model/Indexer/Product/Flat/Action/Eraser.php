@@ -99,7 +99,7 @@ class Eraser
             ['status_global_attr' => $statusAttribute->getBackendTable()],
             ' status_global_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
             . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID
-            . ' AND status_global_attr.' . $statusAttribute->getEntityIdField() . '='
+            . ' AND status_global_attr.' .  $metadata->getLinkField() . '='
             . 'product_table.' . $metadata->getLinkField(),
             []
         );
@@ -107,7 +107,7 @@ class Eraser
             ['status_attr' => $statusAttribute->getBackendTable()],
             ' status_attr.attribute_id = ' . (int)$statusAttribute->getAttributeId()
             . ' AND status_attr.store_id = ' . $storeId
-            . ' AND status_attr.' . $statusAttribute->getEntityIdField() . '='
+            . ' AND status_attr.' .  $metadata->getLinkField() . '='
             . 'product_table.' . $metadata->getLinkField(),
             []
         );
