@@ -110,7 +110,6 @@ class QuantityValidator
         /* @var $quoteItem Item */
         $quoteItem = $observer->getEvent()->getItem();
         if (!$quoteItem ||
-            !$quoteItem->getId() ||
             !$quoteItem->getProductId() ||
             !$quoteItem->getQuote()
         ) {
