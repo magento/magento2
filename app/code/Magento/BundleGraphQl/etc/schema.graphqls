@@ -87,4 +87,4 @@ enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bun
     SEPARATELY
 }
 
-type invalidCamelCaseType {}
+type invalidCamelCaseType {} #test static check

@@ -39,8 +39,7 @@ class LiveCodeTest extends TestCase
     public function testCodeStyle(): void
     {
         $reportFile = self::$reportDir . '/graphql_phpcs_report.txt';
-        $codeSniffer = new CodeSniffer('Magento',
-            $reportFile, new Wrapper());
+        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $codeSniffer->setExtensions([CodeSniffer\GraphQlWrapper::FILE_EXTENSION]);
         $result = $codeSniffer->run(PHPCodeTest::getWhitelist([CodeSniffer\GraphQlWrapper::FILE_EXTENSION]));
         $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
