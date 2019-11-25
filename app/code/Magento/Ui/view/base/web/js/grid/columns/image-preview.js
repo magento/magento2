@@ -107,6 +107,12 @@ define([
         show: function (record) {
             var img;
 
+            if (record._rowIndex === this.visibleRecord()) {
+                this.hide();
+
+                return;
+            }
+
             this.hide();
             this.displayedRecord(record);
             this._selectRow(record.rowNumber || null);
