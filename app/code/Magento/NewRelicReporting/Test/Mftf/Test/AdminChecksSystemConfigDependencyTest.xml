@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChecksSystemConfigDependencyTest">
+        <annotations>
+            <features value="NewRelicReporting"/>
+            <stories value="Admin is able to see the configuration fields only after enabling the feature"/>
+            <title value="Admin can see the configuration fields only after enabling the feature"/>
+            <description value="The system configs should be available only after enabling the New Relic feature."/>
+            <severity value="CRITICAL"/>
+            <group value="NewRelicReporting"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminNewRelicConfigPage.url}}" stepKey="navigateToNewRelicConfigurationPage"/>
+        </before>
+        <after>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="AssertAdminDoesntSeeConfigFieldActionGroup" stepKey="checkIfApiUrlIsNotVisible">
+            <argument name="config" value="{{AdminNewRelicConfigSystemSection.apiUrl}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminUnchecksUseSystemValueActionGroup" stepKey="uncheckUseSystemValue"/>
+        <actionGroup ref="AdminTogglesEnabledConfigActionGroup" stepKey="enableNewRelic">
+            <argument name="state" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSeesConfigFieldActionGroup" stepKey="checkIfApiUrlIsVisible">
+            <argument name="config" value="{{AdminNewRelicConfigSystemSection.apiUrl}}"/>
+        </actionGroup>
+    </test>
+</tests>
