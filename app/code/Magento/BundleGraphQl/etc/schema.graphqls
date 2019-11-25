@@ -3,7 +3,6 @@
 
 type Mutation {
     addBundleProductsToCart(input: AddBundleProductsToCartInput): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
-    testStatic(invalid_argument): invalid_output
 }
 
 input AddBundleProductsToCartInput {
@@ -87,3 +86,5 @@ enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bun
     TOGETHER
     SEPARATELY
 }
+
+type invalidCamelCaseType {}
