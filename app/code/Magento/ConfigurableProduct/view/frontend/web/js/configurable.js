@@ -139,9 +139,9 @@ define([
             });
 
             $.each(queryParams, $.proxy(function (key, value) {
-                if (this.options.spConfig.attributes[key] !== undefined
-                    && this.options.spConfig.attributes[key].options.find(function(element) {
-                        return element.id===value;
+                if (this.options.spConfig.attributes[key] !== undefined &&
+                    this.options.spConfig.attributes[key].options.find(function (element) {
+                        return element.id === value;
                     })) {
                     this.options.values[key] = value;
                 }
@@ -161,9 +161,9 @@ define([
                 if (element.value) {
                     attributeId = element.id.replace(/[a-z]*/, '');
 
-                    if (this.options.spConfig.attributes[attributeId] !== undefined
-                        && this.options.spConfig.attributes[attributeId].options.find(function(optionElement) {
-                            return optionElement.id===element.value;
+                    if (this.options.spConfig.attributes[attributeId] !== undefined &&
+                        this.options.spConfig.attributes[attributeId].options.find(function (optionElement) {
+                            return optionElement.id === element.value;
                         })) {
                         this.options.values[attributeId] = element.value;
                     }
