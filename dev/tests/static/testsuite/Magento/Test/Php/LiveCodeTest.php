@@ -13,6 +13,7 @@ use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use Magento\TestFramework\CodingStandard\Tool\PhpCompatibility;
+use Magento\TestFramework\CodingStandard\Tool\PhpStan;
 use PHPMD\TextUI\Command;
 
 /**
@@ -464,5 +465,29 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             $result,
             'PHP Compatibility detected violation(s):' . PHP_EOL . $report
         );
+    }
+
+    /**
+     * Test code quality using PHPStan
+     *
+     * @throws \Exception
+     */
+    public function testPhpStan()
+    {
+        $reportFile = self::$reportDir . '/phpstan_report.txt';
+        $confFile = __DIR__ . '/_files/phpstan/phpstan.neon';
+
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
+
+        $fileList = self::getWhitelist(['php']);
+        $phpStan = new PhpStan($confFile, $reportFile);
+        $exitCode = $phpStan->run($fileList);
+        $report = file_get_contents($reportFile);
+
+        $errorMessage = empty($report) ?
+            'PHPStan command run failed.' : 'PHPStan detected violation(s):' . PHP_EOL . $report;
+        $this->assertEquals(0, $exitCode, $errorMessage);
     }
 }
