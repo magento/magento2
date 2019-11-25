@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LayeredNavigation\Block\Navigation\Search;
+namespace Magento\SwatchesLayeredNavigation\Block\Navigation\Search;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
