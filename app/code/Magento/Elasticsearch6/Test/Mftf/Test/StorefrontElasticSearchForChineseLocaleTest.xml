@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontElasticSearch6ForChineseLocaleTest">
+        <annotations>
+            <features value="Elasticsearch6"/>
+            <stories value="Elasticsearch6 for Chinese"/>
+            <title value="Elastic search for Chinese locale"/>
+            <description value="Elastic search for Chinese locale"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6310"/>
+            <useCaseId value="MAGETWO-91625"/>
+            <group value="elasticsearch"/>
+        </annotations>
+        <before>
+            <!-- Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront -->
+            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForChina.scope}} --scope-code={{GeneralLocalCodeConfigsForChina.scope_code}} {{GeneralLocalCodeConfigsForChina.path}} {{GeneralLocalCodeConfigsForChina.value}}" stepKey="setLocaleToChina"/>
+            <magentoCLI command="config:set {{EnableElasticSearch6Config.path}} {{EnableElasticSearch6Config.value}}" stepKey="enableElasticsearch6"/>
+            <actionGroup ref="AdminElasticConnectionTestActionGroup" stepKey="checkConnection"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        </before>
+        <after>
+            <!-- Delete created data and reset initial configuration -->
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForUS.scope}} --scope-code={{GeneralLocalCodeConfigsForUS.scope_code}} {{GeneralLocalCodeConfigsForUS.path}} {{GeneralLocalCodeConfigsForUS.value}}" stepKey="setLocaleToUS"/>
+            <magentoCLI command="config:set {{SetDefaultSearchEngineConfig.path}} {{SetDefaultSearchEngineConfig.value}}" stepKey="resetSearchEnginePreviousState"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Search for product by name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!-- Check if searched product is displayed -->
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInCategoryPage"/>
+    </test>
+</tests>

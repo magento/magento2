@@ -98,7 +98,7 @@
         <element name="couponQty" type="input" selector="#coupons_qty"/>
         <element name="generateCouponsButton" type="button" selector="#coupons_generate_button" timeout="30"/>
         <element name="generatedCouponByIndex" type="text" selector="#couponCodesGrid_table > tbody > tr:nth-child({{var}}) > td.col-code" parameterized="true"/>
-
+        <element name="couponGridUsedHeader" type="text" selector="#couponCodesGrid thead th[data-sort='used']"/>
         <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
     </section>
 </sections>

@@ -374,4 +374,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="stockedProductsFilterPlugin" type="Magento\CatalogSearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
+    </type>
 </config>

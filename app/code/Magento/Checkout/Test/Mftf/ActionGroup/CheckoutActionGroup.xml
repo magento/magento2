@@ -171,6 +171,15 @@
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 
+    <!-- Submit Shipping Address on Checkout Shipping page -->
+    <actionGroup name="StorefrontCheckoutForwardFromShippingStep">
+        <annotations>
+            <description>Clicks next on Checkout Shipping step</description>
+        </annotations>
+        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+    </actionGroup>
+
     <!-- Logged in user checkout filling shipping section -->
     <actionGroup name="LoggedInUserCheckoutAddNewShippingSectionWithoutRegionActionGroup">
         <annotations>

@@ -112,11 +112,14 @@ define([
          * @private
          */
         _create: function () {
-            var formKey = $.mage.cookies.get('form_key');
+            var formKey = $.mage.cookies.get('form_key'),
+                options = {
+                    secure: window.cookiesConfig ? window.cookiesConfig.secure : false
+                };
 
             if (!formKey) {
                 formKey = generateRandomString(this.options.allowedCharacters, this.options.length);
-                $.mage.cookies.set('form_key', formKey);
+                $.mage.cookies.set('form_key', formKey, options);
             }
             $(this.options.inputSelector).val(formKey);
         }
