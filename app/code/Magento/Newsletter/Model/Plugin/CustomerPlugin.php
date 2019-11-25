@@ -21,6 +21,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Newsletter Plugin for customer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerPlugin
 {
