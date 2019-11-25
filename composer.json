@@ -92,6 +92,7 @@
         "pdepend/pdepend": "2.5.2",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "@stable",
+        "phpstan/phpstan": "^0.11.19",
         "phpunit/phpunit": "~6.5.0",
         "sebastian/phpcpd": "~3.0.0",
         "squizlabs/php_codesniffer": "~3.4.0"
@@ -340,7 +341,8 @@
             "Magento\\Tools\\": "dev/tools/Magento/Tools/",
             "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
             "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
-            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
+            "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
     "prefer-stable": true

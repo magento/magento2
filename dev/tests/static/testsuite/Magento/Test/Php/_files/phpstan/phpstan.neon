@@ -1,0 +1,22 @@
+parameters:
+	reportUnmatchedIgnoredErrors: false
+	excludes_analyse:
+		- %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
+		- %rootDir%/../../../dev/tests/functional/*
+		- %rootDir%/../../../dev/tests/api-functional/_files/*
+		- %rootDir%/../../../dev/tests/integration/*/_files/*
+		- %rootDir%/../../../dev/tests/integration/*/Fixtures/*
+		- %rootDir%/../../../dev/tests/integration/tmp/*
+		- %rootDir%/../../../dev/tests/unit/tmp/*
+	autoload_directories:
+		- %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
+		- %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
+	autoload_files:
+			- %rootDir%/../../../dev/tests/static/framework/autoload.php
+			- %rootDir%/../../../dev/tests/integration/framework/autoload.php
+			- %rootDir%/../../../dev/tests/api-functional/framework/autoload.php
+	ignoreErrors:
+	    # Ignore PHPStan\Rules\Classes\UnusedConstructorParametersRule
+		- '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
+		# Ignore setCustomErrorHandler function not found in bootstrap files
+		- '#Function setCustomErrorHandler not found#'
