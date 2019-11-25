@@ -43,14 +43,12 @@ class Redis implements \SessionHandlerInterface
      * @param ConfigInterface $config
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
-     * @throws SessionException
      */
     public function __construct(ConfigInterface $config, LoggerInterface $logger, Filesystem $filesystem)
     {
         $this->config = $config;
         $this->logger = $logger;
         $this->filesystem = $filesystem;
-        $this->getConnection();
     }
 
     /**
