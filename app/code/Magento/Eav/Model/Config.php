@@ -747,14 +747,16 @@ class Config
      */
     public function getEntityAttributes($entityType, $object = null)
     {
-        $metricData = json_encode($entityType->getData()) . '\r\n' . json_encode($object->getData());
-        $label = 'Magento_Eav_Model_Config_getEntityAttributes_' . $_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'] . '.log';
-        $magentoLogDir = BP . '/var/log/';
-        file_put_contents(
-            $magentoLogDir . $label,
-            $metricData . PHP_EOL . '___________________',
-            FILE_APPEND
-        );
+        if (isset($_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'])) {
+            $metricData = json_encode($entityType->getData()) . '\r\n' . json_encode($object->getData());
+            $label = 'Magento_Eav_Model_Config_getEntityAttributes_' . $_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'] . '.log';
+            $magentoLogDir = BP . '/var/log/';
+            file_put_contents(
+                $magentoLogDir . $label,
+                $metricData . PHP_EOL . '___________________',
+                FILE_APPEND
+            );
+        }
 
         $entityType = $this->getEntityType($entityType);
         $attributeSetId = 0;
