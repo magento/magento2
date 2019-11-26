@@ -26,7 +26,7 @@
     <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite">
         <arguments>
             <argument name="allowedEntityTypes" xsi:type="array">
-                <item name="catalog_product" xsi:type="string">Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE</item>
+                <item name="catalog_product" xsi:type="const">Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE</item>
             </argument>
         </arguments>
     </type>
