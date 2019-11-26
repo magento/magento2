@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SaveAssetKeywords
@@ -34,21 +35,33 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     private $saveAssetLinks;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * SaveAssetKeywords constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param SaveAssetLinks $saveAssetLinks
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        SaveAssetLinks $saveAssetLinks
+        SaveAssetLinks $saveAssetLinks,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->saveAssetLinks = $saveAssetLinks;
+        $this->logger = $logger;
     }
 
     /**
-     * @inheritdoc
+     * Save asset keywords.
+     *
+     * @param KeywordInterface[] $keywords
+     * @param int $assetId
+     * @throws CouldNotSaveException
      */
     public function execute(array $keywords, int $assetId): void
     {
@@ -72,6 +85,7 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
                 $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
             }
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }
