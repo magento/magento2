@@ -113,7 +113,7 @@
 
         .page-main & {
             .block {
-                margin-bottom: @indent__base;
+                margin-bottom: 0;
             }
         }
 
@@ -563,6 +563,9 @@
 
         .widget {
             float: left;
+            &.block {
+                margin-bottom: @indent__base;
+            }
         }
     }
 
