@@ -11,11 +11,10 @@ define([
     'underscore',
     'mage/template',
     'text!ui/template/modal/modal-prompt-content.html',
-    'Magento_Ui/js/lib/key-codes',
     'jquery-ui-modules/widget',
     'Magento_Ui/js/modal/modal',
     'mage/translate'
-], function ($, _, template, promptContentTmpl, keyCodes) {
+], function ($, _, template, promptContentTmpl) {
     'use strict';
 
     $.widget('mage.prompt', $.mage.modal, {
