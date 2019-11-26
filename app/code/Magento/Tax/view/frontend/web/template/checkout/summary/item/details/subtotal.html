@@ -5,13 +5,13 @@
  */
 -->
 <div class="subtotal">
-    <!-- ko if: isPriceInclTaxDisplayed() && !getRegion('row_incl_tax') -->
+    <!-- ko if: isPriceInclTaxDisplayed() && !getRegion('row_incl_tax').length -->
     <span class="price-including-tax"
           data-bind ="text: getValueInclTax($parents[1]), attr:{'data-label': $t('Incl. Tax')}">
     </span>
     <!-- /ko -->
 
-    <!-- ko if: isPriceInclTaxDisplayed() && getRegion('row_incl_tax') -->
+    <!-- ko if: isPriceInclTaxDisplayed() && getRegion('row_incl_tax').length -->
     <span class="price-including-tax" data-bind ="attr:{'data-label': $t('Incl. Tax')}">
             <!-- ko foreach: getRegion('row_incl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
@@ -19,12 +19,12 @@
     </span>
     <!-- /ko -->
 
-    <!-- ko if: isPriceExclTaxDisplayed() && !getRegion('row_excl_tax') -->
+    <!-- ko if: isPriceExclTaxDisplayed() && !getRegion('row_excl_tax').length -->
     <span class="price-excluding-tax"
           data-bind ="text: getValueExclTax($parents[1]), attr:{'data-label': $t('Excl. Tax')}">
     </span>
     <!-- /ko -->
-    <!-- ko if: isPriceExclTaxDisplayed() && getRegion('row_excl_tax') -->
+    <!-- ko if: isPriceExclTaxDisplayed() && getRegion('row_excl_tax').length -->
     <span class="price-excluding-tax" data-bind ="attr:{'data-label': $t('Excl. Tax')}">
             <!-- ko foreach: getRegion('row_excl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
