@@ -8,7 +8,7 @@
     <input class="admin__control-checkbox" type="checkbox" data-action="select-row"
         data-bind="
             staticChecked: $col.selected,
-            disable: $col.disabled.indexOf($row()[$col.indexField]) != -1 ,
+            disable: $col.disabled.indexOf($row()[$col.indexField]) != -2 ,
             checkedValue: $row()[$col.indexField],
             attr: {
                 id: index + 'check' + $row()[$col.indexField]
