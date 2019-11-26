@@ -65,11 +65,13 @@ QUERY;
             $entityTypeCode = 'product';
         }
 
-        $rewritesCollection = $urlFinder->findAllByData([
-            UrlRewriteDTO::ENTITY_ID => $product->getId(),
-            UrlRewriteDTO::ENTITY_TYPE => $entityTypeCode,
-            UrlRewriteDTO::STORE_ID => $storeId
-        ]);
+        $rewritesCollection = $urlFinder->findAllByData(
+            [
+                UrlRewriteDTO::ENTITY_ID => $product->getId(),
+                UrlRewriteDTO::ENTITY_TYPE => $entityTypeCode,
+                UrlRewriteDTO::STORE_ID => $storeId
+            ]
+        );
 
         /* There should be only one rewrite */
         /** @var UrlRewriteDTO $urlRewrite */
@@ -132,11 +134,13 @@ QUERY;
             $entityTypeCode = 'product';
         }
 
-        $rewritesCollection = $urlFinder->findAllByData([
-            UrlRewriteDTO::ENTITY_ID => $product->getId(),
-            UrlRewriteDTO::ENTITY_TYPE => $entityTypeCode,
-            UrlRewriteDTO::STORE_ID => $storeId
-        ]);
+        $rewritesCollection = $urlFinder->findAllByData(
+            [
+                UrlRewriteDTO::ENTITY_ID => $product->getId(),
+                UrlRewriteDTO::ENTITY_TYPE => $entityTypeCode,
+                UrlRewriteDTO::STORE_ID => $storeId
+            ]
+        );
 
         $rewritesCount = count($rewritesCollection);
         $this->assertArrayHasKey('url_rewrites', $response['products']['items'][0]);
@@ -165,8 +169,8 @@ QUERY;
     {
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
-
-        for ($i = 3; ($i < sizeof($targetPathParts) - 1); $i += 2) {
+        //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($i = 3; ($i < count($targetPathParts) - 1); $i += 2) {
             $urlParameters[] = [
                 'name' => $targetPathParts[$i],
                 'value' => $targetPathParts[$i + 1]
