@@ -44,6 +44,8 @@
         <element name="actionsTab" type="block" selector="[data-index='actions']"/>
         <element name="actionsTabTitle" type="block" selector="[data-index='actions'] .fieldset-wrapper-title"/>
         <element name="actionsTabBody" type="block" selector="[data-index='actions'] .admin__fieldset-wrapper-content"/>
+
+        <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
     </section>
 
     <section name="AdminNewCatalogPriceRuleActions">
