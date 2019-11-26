@@ -766,6 +766,7 @@ class Config
             }
             $metricData = $entityTypeData . '\r\n' . $objectData;
             $label = 'Magento_Eav_Model_Config_getEntityAttributes_' . $_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'] . '.log';
+            $label = str_replace('/', '-', $label);
             $magentoLogDir = BP . '/var/log/';
             file_put_contents(
                 $magentoLogDir . $label,
