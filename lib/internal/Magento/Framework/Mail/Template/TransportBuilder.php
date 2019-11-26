@@ -350,8 +350,8 @@ class TransportBuilder
     {
         $this->messageData = [];
         $this->templateIdentifier = null;
-        $this->templateVars = null;
-        $this->templateOptions = null;
+        $this->templateVars = [];
+        $this->templateOptions = [];
         return $this;
     }
 
