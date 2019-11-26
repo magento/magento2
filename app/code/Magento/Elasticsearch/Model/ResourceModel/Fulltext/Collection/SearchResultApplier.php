@@ -86,32 +86,20 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function sliceItems(array $items, int $size, int $currentPage): array
     {
         if ($size !== 0) {
-            $offset = $this->getOffset($currentPage, $size);
             $itemsCount = count($items);
-            if ($this->isOffsetOutOfRange($offset, $size, $itemsCount)) {
-                $offset = 0;
-            }
             $maxAllowedPageNumber = ceil($itemsCount/$size);
-            if ($currentPage > $maxAllowedPageNumber) {
-                $offset = $this->getOffset($maxAllowedPageNumber, $size);
+            if ($currentPage < 1) {
+                $currentPage = 1;
             }
-            $items = array_slice($items, $offset, $this->size);
+            if ($currentPage > $maxAllowedPageNumber) {
+                $currentPage = $maxAllowedPageNumber;
+            }
+
+            $offset = $this->getOffset($currentPage, $size);
+            $items = array_slice($items, $offset, $size);
         }
 
         return $items;
-    }
-
-    /**
-     * Check that offset could be applied for search result items.
-     *
-     * @param int $offset
-     * @param int $size
-     * @param int $itemsCount
-     * @return bool
-     */
-    private function isOffsetOutOfRange(int $offset, int $size, int $itemsCount): bool
-    {
-        return $offset < 0 || $itemsCount <= $size;
     }
 
     /**
