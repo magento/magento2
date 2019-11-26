@@ -456,9 +456,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $customerId = $this->getCustomerId();
         $customer = $this->customerFactory->create()->load($customerId);
-        if (!$customer->getId()) {
-            throw new LocalizedException(__('No customer associated with this order.'));
-        }
         return $customer;
     }
 
