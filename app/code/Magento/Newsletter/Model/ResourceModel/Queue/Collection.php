@@ -5,6 +5,8 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel\Queue;
 
+use Magento\Newsletter\Model\Subscriber;
+
 /**
  * Newsletter queue collection.
  *
@@ -214,7 +216,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param int $customerId
      * @return $this
      */
-    public function addCustomerFilter(int $customerId): self
+    public function addCustomerFilter(int $customerId): Collection
     {
         $this->getSelect()
             ->join(
