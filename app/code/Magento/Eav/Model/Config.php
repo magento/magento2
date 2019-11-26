@@ -748,7 +748,23 @@ class Config
     public function getEntityAttributes($entityType, $object = null)
     {
         if (isset($_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'])) {
-            $metricData = json_encode($entityType->getData()) . '\r\n' . json_encode($object->getData());
+            $entityTypeData = '';
+            if (is_object($entityType)) {
+                $entityTypeData = json_encode($entityType->getData());
+            } elseif (is_string($entityType)) {
+                $entityTypeData = $entityType;
+            } elseif ($entityType === null) {
+                $entityTypeData = 'NULL';
+            }
+            $objectData = '';
+            if (is_object($object)) {
+                $objectData = json_encode($object->getData());
+            } elseif (is_string($object)) {
+                $objectData = $object;
+            } elseif ($object === null) {
+                $objectData = 'NULL';
+            }
+            $metricData = $entityTypeData . '\r\n' . $objectData;
             $label = 'Magento_Eav_Model_Config_getEntityAttributes_' . $_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'] . '.log';
             $magentoLogDir = BP . '/var/log/';
             file_put_contents(
