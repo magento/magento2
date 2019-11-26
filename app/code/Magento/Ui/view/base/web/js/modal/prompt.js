@@ -65,30 +65,13 @@ define([
                 click: function () {
                     this.closeModal(true);
                 }
-            }],
-            keyEventHandlers: {
-
-                /**
-                 * Escape key press handler,
-                 * close modal window
-                 */
-                escapeKey: function () {
-                    if (this.modal.find(document.activeElement).length ||
-                        this.modal[0] === document.activeElement) {
-                        this.closeModal();
-                    }
-                }
-            }
+            }]
         },
 
         /**
          * Create widget.
          */
         _create: function () {
-            _.bindAll(
-                this,
-                'keyEventSwitcher'
-            );
             this.options.focus = this.options.promptField;
             this.options.validation = this.options.validation && this.options.validationRules.length;
             this._super();
@@ -134,18 +117,6 @@ define([
             }));
 
             return formTemplate;
-        },
-
-        /**
-         * Listener key events.
-         * Call handler function if it exists
-         */
-        keyEventSwitcher: function (event) {
-            var key = keyCodes[event.keyCode];
-
-            if (this.options.keyEventHandlers.hasOwnProperty(key)) {
-                this.options.keyEventHandlers[key].apply(this, arguments);
-            }
         },
 
         /**
