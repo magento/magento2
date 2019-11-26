@@ -60,6 +60,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         if (empty($this->searchResult->getItems())) {
             $this->collection->getSelect()->where('NULL');
+
             return;
         }
 
@@ -99,8 +100,6 @@ class SearchResultApplier implements SearchResultApplierInterface
 
         return $items;
     }
-
-
 
     /**
      * Check that offset could be applied for search result items.
