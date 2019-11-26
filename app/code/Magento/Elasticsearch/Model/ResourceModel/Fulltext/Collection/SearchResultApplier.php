@@ -115,7 +115,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     }
 
     /**
-     * Check that given page is available in search results.
+     * Get offset for given page.
      *
      * @param int $pageNumber
      * @param int $pageSize
