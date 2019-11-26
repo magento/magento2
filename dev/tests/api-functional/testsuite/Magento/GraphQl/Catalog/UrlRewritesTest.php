@@ -12,6 +12,8 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Test of getting URL rewrites data from products
@@ -54,9 +56,20 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get('virtual-product', false, null, true);
 
+        $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $urlFinder = ObjectManager::getInstance()->get(UrlFinderInterface::class);
+        $entityType = ObjectManager::getInstance()->create(EavConfig::class)->getEntityType('catalog_product');
 
-        $rewritesCollection = $urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $product->getId()]);
+        $entityTypeCode = $entityType->getEntityTypeCode();
+        if ($entityTypeCode === 'catalog_product') {
+            $entityTypeCode = 'product';
+        }
+
+        $rewritesCollection = $urlFinder->findAllByData([
+            UrlRewriteDTO::ENTITY_ID => $product->getId(),
+            UrlRewriteDTO::ENTITY_TYPE => $entityTypeCode,
+            UrlRewriteDTO::STORE_ID => $storeId
+        ]);
 
         /* There should be only one rewrite */
         /** @var UrlRewriteDTO $urlRewrite */
@@ -110,12 +123,24 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get('simple', false, null, true);
 
+        $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $urlFinder = ObjectManager::getInstance()->get(UrlFinderInterface::class);
+        $entityType = ObjectManager::getInstance()->create(EavConfig::class)->getEntityType('catalog_product');
 
-        $rewritesCollection = $urlFinder->findAllByData([UrlRewriteDTO::ENTITY_ID => $product->getId()]);
+        $entityTypeCode = $entityType->getEntityTypeCode();
+        if ($entityTypeCode === 'catalog_product') {
+            $entityTypeCode = 'product';
+        }
+
+        $rewritesCollection = $urlFinder->findAllByData([
+            UrlRewriteDTO::ENTITY_ID => $product->getId(),
+            UrlRewriteDTO::ENTITY_TYPE => $entityTypeCode,
+            UrlRewriteDTO::STORE_ID => $storeId
+        ]);
+
         $rewritesCount = count($rewritesCollection);
-
         $this->assertArrayHasKey('url_rewrites', $response['products']['items'][0]);
+        $this->assertCount(1, $response['products']['items'][0]['url_rewrites']);
         $this->assertCount($rewritesCount, $response['products']['items'][0]['url_rewrites']);
 
         for ($i = 0; $i < $rewritesCount; $i++) {
@@ -140,9 +165,8 @@ QUERY;
     {
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
-        $count = count($targetPathParts) - 1;
 
-        for ($i = 3; $i < $count; $i += 2) {
+        for ($i = 3; ($i < sizeof($targetPathParts) - 1); $i += 2) {
             $urlParameters[] = [
                 'name' => $targetPathParts[$i],
                 'value' => $targetPathParts[$i + 1]
