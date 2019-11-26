@@ -5,8 +5,6 @@
  */
 namespace Magento\Newsletter\Model\ResourceModel\Queue;
 
-use Magento\Newsletter\Model\Subscriber;
-
 /**
  * Newsletter queue collection.
  *
