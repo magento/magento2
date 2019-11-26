@@ -1,16 +1,14 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
 
 /**
- * Add configurable sub products to catalog rule indexer on full reindex
+ * Add configurable sub products to catalog rule indexer on reindex
  */
 class ConfigurableProductHandler
 {
@@ -42,9 +40,12 @@ class ConfigurableProductHandler
     }
 
     /**
+     * Add configurable products during setting product ids for filtering
+     *
      * @param \Magento\CatalogRule\Model\Rule $rule
      * @param int|array $productIds
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSetProductsFilter(\Magento\CatalogRule\Model\Rule $rule, $productIds)
     {
@@ -62,6 +63,8 @@ class ConfigurableProductHandler
     }
 
     /**
+     * Add configurable products for matched products
+     *
      * @param \Magento\CatalogRule\Model\Rule $rule
      * @param array $productIds
      * @return array

@@ -292,23 +292,8 @@ class IndexBuilder
 
         /** @var Rule[] $activeRules */
         $activeRules = $this->getActiveRules()->getItems();
-        foreach ($activeRules as $activeRule) {
-            $rule = clone $activeRule;
-            $rule->setProductsFilter($ids);
-            $matchedProductIds = $rule->getMatchingProductIds();
-            if (empty($matchedProductIds)) {
-                continue;
-            }
-
-            $matchedProductIds = array_intersect_key($matchedProductIds, array_flip($ids));
-            foreach ($matchedProductIds as $matchedProductId => $validationByWebsite) {
-                $websiteIds = array_keys(array_filter($validationByWebsite));
-                if (empty($websiteIds)) {
-                    continue;
-                }
-
-                $this->assignProductToRule($rule, $matchedProductId, $websiteIds);
-            }
+        foreach ($activeRules as $rule) {
+            $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
         foreach ($ids as $productId) {
