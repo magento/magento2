@@ -30,7 +30,7 @@ class UrlRewrite implements ResolverInterface
     /**
      * @var array
      */
-    private $allowedEntityTypes;
+    private $entityTypeMapping;
 
     /**
      * @var MetadataPool
@@ -46,18 +46,18 @@ class UrlRewrite implements ResolverInterface
      * @param UrlFinderInterface $urlFinder
      * @param TypeResolver $typeResolver
      * @param MetadataPool $metadataPool
-     * @param array $allowedEntityTypes
+     * @param array $entityTypeMapping
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
         TypeResolver $typeResolver,
         MetadataPool $metadataPool,
-        array $allowedEntityTypes = []
+        array $entityTypeMapping = []
     ) {
         $this->urlFinder = $urlFinder;
         $this->typeResolver = $typeResolver;
         $this->metadataPool = $metadataPool;
-        $this->allowedEntityTypes = $allowedEntityTypes;
+        $this->entityTypeMapping = $entityTypeMapping;
     }
 
     /**
@@ -140,7 +140,7 @@ class UrlRewrite implements ResolverInterface
     {
         $entityType = '';
         if ($entityTypeMetadata) {
-            $entityType = $this->allowedEntityTypes[$entityTypeMetadata];
+            $entityType = $this->entityTypeMapping[$entityTypeMetadata];
         }
         return $entityType;
     }
