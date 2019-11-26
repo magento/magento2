@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewRelicConfigSystemSection">
+        <element name="tab" type="button" selector="#newrelicreporting_{{tab}}-head" parameterized="true"/>
         <element name="status" type="select" selector="#row_newrelicreporting_general_enable [data-ui-id='select-groups-general-fields-enable-value']"/>
         <element name="useSystemValueForEnabled" type="checkbox" selector="#newrelicreporting_general_enable_inherit"/>
         <element name="apiUrl" type="select" selector="input#newrelicreporting_general_api_url"/>

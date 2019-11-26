@@ -19,12 +19,15 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <amOnPage url="{{AdminNewRelicConfigPage.url}}" stepKey="navigateToNewRelicConfigurationPage"/>
+            <actionGroup ref="AdminNavigateToNewRelicConfigurationActionGroup" stepKey="goToConfigPage"/>
+            <actionGroup ref="AdminExpandNewRelicConfigTabActionGroup" stepKey="expandGeneralTab">
+                <argument name="tabName" value="general"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="AssertAdminDoesntSeeConfigFieldActionGroup" stepKey="checkIfApiUrlIsNotVisible">
+        <actionGroup ref="AssertAdminDontSeeConfigFieldActionGroup" stepKey="checkIfApiUrlIsNotVisible">
             <argument name="config" value="{{AdminNewRelicConfigSystemSection.apiUrl}}"/>
         </actionGroup>
         <actionGroup ref="AdminUnchecksUseSystemValueActionGroup" stepKey="uncheckUseSystemValue"/>
