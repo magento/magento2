@@ -119,11 +119,12 @@ class UrlRewrite implements ResolverInterface
     {
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
+        $count = count($targetPathParts) - 1;
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($i = 3; ($i < count($targetPathParts) - 1); $i += 2) {
+        for ($index = 3; $index < $count; $index += 2) {
             $urlParameters[] = [
-                'name' => $targetPathParts[$i],
-                'value' => $targetPathParts[$i + 1]
+                'name' => $targetPathParts[$index],
+                'value' => $targetPathParts[$index + 1]
             ];
         }
         return $urlParameters;
@@ -139,11 +140,7 @@ class UrlRewrite implements ResolverInterface
     {
         $entityType = '';
         if ($entityTypeMetadata) {
-            switch ($entityTypeMetadata) {
-                case 'catalog_product':
-                    $entityType = $this->allowedEntityTypes['catalog_product'];
-                    break;
-            }
+            $entityType = $this->allowedEntityTypes[$entityTypeMetadata];
         }
         return $entityType;
     }

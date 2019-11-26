@@ -147,10 +147,10 @@ QUERY;
         $this->assertCount(1, $response['products']['items'][0]['url_rewrites']);
         $this->assertCount($rewritesCount, $response['products']['items'][0]['url_rewrites']);
 
-        for ($i = 0; $i < $rewritesCount; $i++) {
-            $urlRewrite = $rewritesCollection[$i];
+        for ($index = 0; $index < $rewritesCount; $index++) {
+            $urlRewrite = $rewritesCollection[$index];
             $this->assertResponseFields(
-                $response['products']['items'][0]['url_rewrites'][$i],
+                $response['products']['items'][0]['url_rewrites'][$index],
                 [
                     "url" => $urlRewrite->getRequestPath(),
                     "parameters" => $this->getUrlParameters($urlRewrite->getTargetPath())
@@ -169,11 +169,12 @@ QUERY;
     {
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
+        $count = count($targetPathParts) - 1;
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($i = 3; ($i < count($targetPathParts) - 1); $i += 2) {
+        for ($index = 3; $index < $count; $index += 2) {
             $urlParameters[] = [
-                'name' => $targetPathParts[$i],
-                'value' => $targetPathParts[$i + 1]
+                'name' => $targetPathParts[$index],
+                'value' => $targetPathParts[$index + 1]
             ];
         }
 
