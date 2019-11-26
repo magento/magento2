@@ -176,11 +176,11 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
         } elseif ($method == \Zend_Http_Client::GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
-        }elseif ($method == \Zend_Http_Client::DELETE) {
+        } elseif ($method == \Zend_Http_Client::DELETE) {
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, "DELETE");
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         }
-        
+
 
         if ($http_ver === \Zend_Http_Client::HTTP_1) {
             curl_setopt($this->_getResource(), CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
