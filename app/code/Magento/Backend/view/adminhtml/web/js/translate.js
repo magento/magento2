@@ -34,13 +34,12 @@ define([
                  * @param {String} text
                  * @return {String}
                  */
-
                 this.translate = function (text) {
                     if (_data[text] && typeof _data[text] === 'string') {
                         return _data[text];
-                    } else {
-                        return text;
                     }
+
+                    return text;
                 };
 
                 return this;
