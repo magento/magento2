@@ -27,21 +27,24 @@
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
-            <actionGroup ref="DeleteTerm" stepKey="deleteTerm">
+            <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
                 <argument name="term" value="activeHtmlTerm"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="CreateNewTerm" stepKey="createTerm">
+        <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
             <argument name="term" value="activeHtmlTerm"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertTermInGrid" stepKey="assertTermInGrid">
+        <actionGroup ref="AdminAssertTermInGridActionGroup" stepKey="assertTermInGrid">
             <argument name="termName" value="{{activeHtmlTerm.name}}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertTermInCheckout" stepKey="assertTermInCheckout">
-            <argument name="termCheckboxText" value="{{activeHtmlTerm.checkboxText}}"/>
+        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToTheCart">
             <argument name="product" value="$$createdProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
+        <actionGroup ref="StorefrontAssertTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeHtmlTerm.checkboxText}}"/>
         </actionGroup>
     </test>
 </tests>

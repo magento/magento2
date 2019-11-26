@@ -10,7 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewTermFormSection">
         <element name="save" type="button" selector=".page-main-actions #save"/>
-
         <element name="conditionName" type="input" selector="#name"/>
         <element name="isActive" type="select" selector="#is_active"/>
         <element name="isHtml" type="select" selector="#is_html"/>

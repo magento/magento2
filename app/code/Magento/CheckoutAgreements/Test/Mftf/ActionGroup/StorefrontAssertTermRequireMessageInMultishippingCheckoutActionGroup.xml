@@ -8,47 +8,23 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertTermRequireMessageInMultishippingCheckout">
+    <actionGroup name="StorefrontAssertTermRequireMessageInMultishippingCheckoutActionGroup">
         <arguments>
             <argument name="termCheckboxText" type="string"/>
-            <argument name="product1" defaultValue="SimpleTwo"/>
-            <argument name="product2" defaultValue="SimpleTwo"/>
         </arguments>
-
-        <!--Add product1 to cart-->
-        <amOnPage url="{{StorefrontProductPage.url(product1.custom_attributes[url_key])}}" stepKey="goToProduct1Page"/>
-        <waitForPageLoad stepKey="waitForProduct1Page"/>
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart1"/>
-        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButton1TitleIsAdding"/>
-        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButton1TitleIsAdded"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButton1TitleIsAddToCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProduct1AddedMessage"/>
-        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product1.name}} to your shopping cart." stepKey="seeAddToCart1SuccessMessage"/>
-
-        <!--Add product2 to cart-->
-        <amOnPage url="{{StorefrontProductPage.url(product2.custom_attributes[url_key])}}" stepKey="goToProduct2Page"/>
-        <waitForPageLoad stepKey="waitForProduct2Page"/>
-        <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart2"/>
-        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButton2TitleIsAdding"/>
-        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButton2TitleIsAdded"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButton2TitleIsAddToCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProduct2AddedMessage"/>
-        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product2.name}} to your shopping cart." stepKey="seeAddToCart2SuccessMessage"/>
 
         <!--Go to Checkout Cart and proceed with multiple addresses-->
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
         <click selector="{{MultishippingSection.checkoutWithMultipleAddresses}}" stepKey="proceedMultishipping"/>
 
         <!--Procees do overview page-->
         <click selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.goToShippingInformation}}" stepKey="clickGoToShippingInformation"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <waitForPageLoad stepKey="waitForCheckoutAddressToolbarPageLoad"/>
         <click selector="{{StorefrontMultishippingCheckoutShippingToolbarSection.continueToBilling}}" stepKey="clickContinueToBilling"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <waitForPageLoad stepKey="waitForCheckoutShippingToolbarPageLoad"/>
         <click selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="clickGoToReviewOrder"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <waitForPageLoad stepKey="waitForCheckoutBillingToolbarPageLoad"/>
 
         <!--Check if agreement is present on checkout and select it-->
         <scrollTo selector="{{StorefrontMultishippingCheckoutOverviewReviewSection.placeOrder}}" stepKey="scrollToButtonPlaceOrder"/>

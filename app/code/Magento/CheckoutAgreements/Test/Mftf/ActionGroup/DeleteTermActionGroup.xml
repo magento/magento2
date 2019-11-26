@@ -8,19 +8,19 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="DeleteTerm">
+    <actionGroup name="DeleteTermActionGroup">
         <arguments>
             <argument name="term" />
         </arguments>
         <amOnPage url="{{AdminTermsPage.url}}" stepKey="onTermGridPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForAdminTermsGridPageLoad"/>
         <fillField selector="{{AdminTermGridSection.filterByTermName}}" userInput="{{term.name}}" stepKey="fillTermNameFilter"/>
         <click selector="{{AdminTermGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminTermGridSection.firstRowConditionId}}" stepKey="clickFirstRow"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForEditTermPageLoad"/>
         <click selector="{{AdminEditTermFormSection.delete}}" stepKey="clickDeleteButton"/>
         <click selector="{{AdminEditTermFormSection.acceptPopupButton}}" stepKey="clickDeleteOkButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <waitForPageLoad stepKey="waitForAdminTermsGridPageLoad2"/>
         <see selector="{{AdminTermFormMessagesSection.successMessage}}" userInput="You deleted the condition." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
