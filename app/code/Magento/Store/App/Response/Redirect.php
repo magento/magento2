@@ -108,7 +108,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             }
         }
 
-        if (!$this->_isUrlInternal($refererUrl)) {
+        if ($this->_isUrlInternal($refererUrl)) {
             $refererUrl = $this->_storeManager->getStore()->getBaseUrl();
         } else {
             $refererUrl = $this->normalizeRefererUrl($refererUrl);
@@ -217,8 +217,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
             $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
             $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
-            return (strpos($url, (string) $unsecureBaseUrl) === false) ||
-                (strpos($url, (string) $secureBaseUrl) === false);
+            return (strpos($url, (string) $unsecureBaseUrl) === 0) || (strpos($url, (string) $secureBaseUrl) === 0);
         }
         return false;
     }
