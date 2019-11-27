@@ -118,7 +118,7 @@ class CustomerPlugin
          * and customer is already confirmed registration
          * than need to subscribe customer
          */
-        if ($subscriber->getStatus() === Subscriber::STATUS_UNCONFIRMED && empty($result->getConfirmation())) {
+        if ((int)$subscriber->getStatus() === Subscriber::STATUS_UNCONFIRMED && empty($result->getConfirmation())) {
             $needToUpdate = true;
             $subscribeStatus = true;
         }
