@@ -7,6 +7,8 @@ namespace Magento\Framework\Setup\Patch;
 
 /**
  * For backward compatibility with versioned style module installation.
+ * The interface should be used for migration from the legacy installation approach to the declarative installation
+ * mechanism. The usage of this interface prohibited for the new data or schema patches.
  *
  */
 interface PatchVersionInterface
