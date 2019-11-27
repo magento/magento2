@@ -300,6 +300,7 @@ class TopMenuTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function menuStructureProvider(): array
     {
