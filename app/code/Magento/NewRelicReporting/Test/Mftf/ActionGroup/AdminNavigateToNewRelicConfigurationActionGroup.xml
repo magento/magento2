@@ -8,10 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminTogglesEnabledConfigActionGroup">
-        <arguments>
-            <argument name="state" type="string"/>
-        </arguments>
-        <selectOption selector="{{AdminNewRelicConfigSystemSection.status}}" userInput="{{state}}" stepKey="switchActiveState"/>
+    <actionGroup name="AdminNavigateToNewRelicConfigurationActionGroup">
+        <amOnPage url="{{AdminNewRelicConfigPage.url}}" stepKey="navigateToNewRelicConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

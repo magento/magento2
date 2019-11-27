@@ -8,10 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminSeesConfigFieldActionGroup">
+    <actionGroup name="AssertAdminNewRelicConfigFieldIsNotVisibleActionGroup">
         <arguments>
             <argument name="config" type="string"/>
         </arguments>
-        <seeElement selector="{{config}}" stepKey="seeConfigField"/>
+        <dontSeeElement selector="{{config}}" stepKey="dontSeeConfigField"/>
     </actionGroup>
 </actionGroups>
