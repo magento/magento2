@@ -69,7 +69,6 @@ class CategoryProductIndexerTest extends \PHPUnit\Framework\TestCase
     {
         $this->getProductIdsWithEnabledElasticSearch();
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(true);
-        $this->processorMock->expects($this->once())->method('markIndexerAsInvalid');
         $this->observer->execute($this->observerMock);
     }
 
