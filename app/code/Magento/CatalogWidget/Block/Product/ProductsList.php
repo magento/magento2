@@ -194,11 +194,14 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             ->addColumnCountLayoutDepend('2columns-right', 4)
             ->addColumnCountLayoutDepend('3columns', 3);
 
-        $this->addData([
-            'cache_lifetime' => 86400,
-            'cache_tags' => [
-                Product::CACHE_TAG,
-            ], ]);
+        $this->addData(
+            [
+                'cache_lifetime' => 86400,
+                'cache_tags' => [
+                    Product::CACHE_TAG,
+                ],
+            ]
+        );
     }
 
     /**
@@ -220,7 +223,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
-            (int) $this->getRequest()->getParam($this->getData('page_var_name'), 1),
+            (int)$this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
             $this->getProductsCount(),
             $conditions,
@@ -364,12 +367,12 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $categoryId = $condition['value'];
 
         try {
-            $category = $this->categoryRepository->get($categoryId);
+            $category = $this->categoryRepository->get($categoryId, $this->_storeManager->getStore()->getId());
         } catch (NoSuchEntityException $e) {
             return $condition;
         }
 
-        if ($category->getIsAnchor()) {
+        if ($category->getIsAnchor() && $category->getChildren()) {
             $children = explode(',', $category->getChildren());
 
             $condition['operator'] = "()";
@@ -505,7 +508,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         if ($this->getProductCollection()) {
             foreach ($this->getProductCollection() as $product) {
                 if ($product instanceof IdentityInterface) {
-                    $identities = array_merge($identities, $product->getIdentities());
+                    $identities += $product->getIdentities();
                 }
             }
         }
