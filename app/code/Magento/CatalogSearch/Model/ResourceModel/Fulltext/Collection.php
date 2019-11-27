@@ -85,7 +85,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @deprecated There must be no dependencies on specific adapter in generic search implementation
+     * @deprecated 101.0.0 There must be no dependencies on specific adapter in generic search implementation
      */
     private $temporaryStorageFactory;
 
@@ -467,6 +467,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 101.0.2
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -593,6 +594,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 100.2.3
      */
     protected function _beforeLoad()
     {

@@ -16,7 +16,7 @@ use Magento\Framework\HTTP\ZendClientFactory;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 2.3.1 Authorize.net is removing all support for this payment method
+ * @deprecated 100.3.1 Authorize.net is removing all support for this payment method
  */
 abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 {

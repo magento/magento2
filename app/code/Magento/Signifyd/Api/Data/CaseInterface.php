@@ -12,7 +12,7 @@ use Magento\Signifyd\Model\SignifydGateway\Gateway;
  *
  * @api
  * @see https://www.signifyd.com/docs/api/#/reference/cases/retrieve-a-case/get-a-case
- * @since 100.2.0
+ * @since 100.2.1
  */
 interface CaseInterface
 {
@@ -49,7 +49,7 @@ interface CaseInterface
      * Returns local case entity identifier.
      *
      * @return int
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getEntityId();
 
@@ -58,7 +58,7 @@ interface CaseInterface
      *
      * @param int $id
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setEntityId($id);
 
@@ -66,7 +66,7 @@ interface CaseInterface
      * Returns Signifyd case identifier.
      *
      * @return int
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getCaseId();
 
@@ -75,7 +75,7 @@ interface CaseInterface
      *
      * @param int $id
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setCaseId($id);
 
@@ -84,7 +84,7 @@ interface CaseInterface
      * Returns null if state of guarantee eligible does not set yet.
      *
      * @return boolean|null
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function isGuaranteeEligible();
 
@@ -93,7 +93,7 @@ interface CaseInterface
      *
      * @param bool $guaranteeEligible
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setGuaranteeEligible($guaranteeEligible);
 
@@ -101,7 +101,7 @@ interface CaseInterface
      * Returns decision state of the guarantee.
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getGuaranteeDisposition();
 
@@ -110,7 +110,7 @@ interface CaseInterface
      *
      * @param string $disposition
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setGuaranteeDisposition($disposition);
 
@@ -118,7 +118,7 @@ interface CaseInterface
      * Returns case status.
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getStatus();
 
@@ -127,7 +127,7 @@ interface CaseInterface
      *
      * @param string $status
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setStatus($status);
 
@@ -135,7 +135,7 @@ interface CaseInterface
      * Returns value, which indicates the likelihood that the order is fraud.
      *
      * @return int
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getScore();
 
@@ -144,7 +144,7 @@ interface CaseInterface
      *
      * @param int $score
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setScore($score);
 
@@ -152,7 +152,7 @@ interface CaseInterface
      * Get order id for a case.
      *
      * @return int
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getOrderId();
 
@@ -161,7 +161,7 @@ interface CaseInterface
      *
      * @param int $orderId
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setOrderId($orderId);
 
@@ -169,7 +169,7 @@ interface CaseInterface
      * Returns data about a team associated with a case.
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getAssociatedTeam();
 
@@ -178,7 +178,7 @@ interface CaseInterface
      *
      * @param array $team
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setAssociatedTeam(array $team);
 
@@ -186,7 +186,7 @@ interface CaseInterface
      * Returns disposition of an agent's opinion after reviewing the case.
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getReviewDisposition();
 
@@ -195,7 +195,7 @@ interface CaseInterface
      *
      * @param string $disposition
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setReviewDisposition($disposition);
 
@@ -203,7 +203,7 @@ interface CaseInterface
      * Returns creation datetime for a case.
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getCreatedAt();
 
@@ -212,7 +212,7 @@ interface CaseInterface
      *
      * @param string $datetime in DATE_ATOM format
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setCreatedAt($datetime);
 
@@ -220,7 +220,7 @@ interface CaseInterface
      * Returns updating datetime for a case.
      *
      * @return string
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function getUpdatedAt();
 
@@ -229,7 +229,7 @@ interface CaseInterface
      *
      * @param string $datetime in DATE_ATOM format
      * @return $this
-     * @since 100.2.0
+     * @since 100.2.1
      */
     public function setUpdatedAt($datetime);
 }

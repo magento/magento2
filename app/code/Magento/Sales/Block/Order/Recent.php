@@ -81,6 +81,7 @@ class Recent extends \Magento\Framework\View\Element\Template
 
     /**
      * Get recently placed orders. By default they will be limited by 5.
+     * @since 101.0.4
      */
     private function getRecentOrders()
     {
@@ -120,7 +121,7 @@ class Recent extends \Magento\Framework\View\Element\Template
      *
      * @param object $order
      * @return string
-     * @deprecated Action does not exist
+     * @deprecated 102.0.3 Action does not exist
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)

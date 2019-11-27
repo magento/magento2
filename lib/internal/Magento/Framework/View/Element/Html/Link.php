@@ -13,6 +13,7 @@ namespace Magento\Framework\View\Element\Html;
  * @method string getTitle()
  *
  * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
