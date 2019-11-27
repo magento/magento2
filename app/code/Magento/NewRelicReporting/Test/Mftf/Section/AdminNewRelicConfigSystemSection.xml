@@ -9,8 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewRelicConfigSystemSection">
-        <element name="statusRowId" type="text" selector="#row_newrelicreporting_general_enable"/>
         <element name="status" type="select" selector="#row_newrelicreporting_general_enable [data-ui-id='select-groups-general-fields-enable-value']"/>
-        <element name="apiUrl" type="select" selector="input#newrelicreporting_general_api_url"/>
+        <element name="apiUrl" type="input" selector="input#newrelicreporting_general_api_url"/>
     </section>
 </sections>
