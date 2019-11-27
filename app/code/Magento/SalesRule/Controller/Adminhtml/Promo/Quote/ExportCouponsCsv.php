@@ -4,30 +4,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
+use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid;
+use Magento\Framework\View\Result\Layout;
+use Magento\Framework\App\ResponseInterface;
 
-class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
+class ExportCouponsCsv extends Quote
 {
     /**
      * Export coupon codes as CSV file
      *
-     * @return \Magento\Framework\App\ResponseInterface|null
+     * @return ResponseInterface|null
      */
     public function execute()
     {
         $this->_initRule();
-        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
-        if ($rule->getId()) {
-            $fileName = 'coupon_codes.csv';
-            $content = $this->_view->getLayout()->createBlock(
-                \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid::class
-            )->getCsvFile();
-            return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
-        } else {
-            $this->_redirect('sales_rule/*/detail', ['_current' => true]);
-            return;
-        }
+        $fileName = 'coupon_codes.csv';
+        /** @var Layout $resultLayout */
+        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
+        $content = $resultLayout->getLayout()->createBlock(Grid::class)->getCsvFile();
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }
