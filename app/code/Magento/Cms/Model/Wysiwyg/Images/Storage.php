@@ -592,7 +592,7 @@ class Storage extends \Magento\Framework\DataObject
         $mediaRootDir = $this->_cmsWysiwygImages->getStorageRoot();
 
         if (strpos($filePath, (string) $mediaRootDir) === 0) {
-            $thumbSuffix = self::THUMBS_DIRECTORY_NAME . substr($filePath, strlen($mediaRootDir));
+            $thumbSuffix = self::THUMBS_DIRECTORY_NAME . '/' . substr($filePath, strlen($mediaRootDir));
             if (!$checkFile || $this->_directory->isExist(
                 $this->_directory->getRelativePath($mediaRootDir . '/' . $thumbSuffix)
             )
