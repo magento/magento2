@@ -96,7 +96,7 @@ class Attributes implements ResolverInterface
      * @param string $code
      * @return array
      */
-    private function getOptionsArray(array $optionValue, string $code)
+    private function getOptionsArray(array $optionValue, string $code): array
     {
         return [
             'label' => $optionValue['label'] ??  null,
