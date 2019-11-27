@@ -96,34 +96,52 @@ class Search
         $searchCriteria->setCurrentPage(0);
         // log $searchCriteria
         if (isset($_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'])) {
-            $searchCriteriaData = '';
+            $searchCriteriaOutput= '';
+            $searchCriteriaData = [];
             if (is_object($searchCriteria)) {
-                $searchCriteriaData = json_encode((array)$searchCriteria);
+                foreach ($searchCriteria->getFilterGroups() as $key => $filterGroup) {
+                    foreach ($filterGroup->getFilters() as $k => $filter) {
+                        $searchCriteriaData['filter_groups'][$key]['filters'][$k]['field'] = $filter->getField();
+                        $searchCriteriaData['filter_groups'][$key]['filters'][$k]['value'] = $filter->getValue();
+                        $searchCriteriaData['filter_groups'][$key]['filters'][$k]['condition_type'] = $filter->getConditionType();
+                    }
+                }
+                $searchCriteriaData['request_name'] = $searchCriteria->getRequestName();
+                $searchCriteriaData['current_page'] = $searchCriteria->getCurrentPage();
+                $searchCriteriaData['page_size'] = $searchCriteria->getPageSize();
+                foreach ($searchCriteria->getSortOrders() as $key => $sortOrder) {
+                    $searchCriteriaData['sort_orders'][$key]['field'] = $sortOrder->getField();
+                    $searchCriteriaData['sort_orders'][$key]['direction'] = $sortOrder->getDirection();
+                }
+                $searchCriteriaOutput = json_encode($searchCriteriaData);
             }
-
             $label = 'CatalogGraphQL_Search_SearchCriteria_' . $_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'] . '.log';
             $label = str_replace('/', '-', $label);
             $magentoLogDir = BP . '/var/log/';
             file_put_contents(
                 $magentoLogDir . $label,
-                $searchCriteriaData . PHP_EOL . '___________________' . PHP_EOL,
+                $searchCriteriaOutput . PHP_EOL . '___________________' . PHP_EOL,
                 FILE_APPEND
             );
         }
         $itemsResults = $this->search->search($searchCriteria);
         // log $itemsResults
         if (isset($_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'])) {
-            $itemsResultsData = '';
+            $itemsResultsOutPut = '';
+            $itemsResultsData = [];
             if (is_object($itemsResults)) {
-                $itemsResultsData = json_encode((array)$itemsResults);
+                foreach ($itemsResults->getItems() as $key => $item) {
+                    $itemsResultsData['items'][$key]['id'] = $item->getId();
+                }
+                $itemsResultsData['total_count'] = $itemsResults->getTotalCount();
+                $itemsResultsOutPut = json_encode($itemsResultsData);
             }
-
             $label = 'CatalogGraphQL_Search_ItemsResults_' . $_SERVER['HTTP_PERFORMANCE_METRICS_TEST_LABEL'] . '.log';
             $label = str_replace('/', '-', $label);
             $magentoLogDir = BP . '/var/log/';
             file_put_contents(
                 $magentoLogDir . $label,
-                $itemsResultsData . PHP_EOL . '___________________' . PHP_EOL,
+                $itemsResultsOutPut . PHP_EOL . '___________________' . PHP_EOL,
                 FILE_APPEND
             );
         }
