@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,8 +14,14 @@ use Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid;
 use Magento\Framework\View\Result\Layout;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
-class ExportCouponsCsv extends Quote
+/**
+ * Export Coupons to csv file
+ *
+ * Class \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsCsv
+ */
+class ExportCouponsCsv extends Quote implements HttpGetActionInterface
 {
     /**
      * Export coupon codes as CSV file
