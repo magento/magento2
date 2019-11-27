@@ -36,6 +36,11 @@ class SaveHandler implements SaveHandlerInterface
     private $defaultHandler;
 
     /**
+     * @var string
+     */
+    private $saveHandler;
+
+    /**
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param ConfigInterface $sessionConfig
      * @param string $default
@@ -48,20 +53,7 @@ class SaveHandler implements SaveHandlerInterface
         $this->saveHandlerFactory = $saveHandlerFactory;
         $this->sessionConfig = $sessionConfig;
         $this->defaultHandler = $default;
-
-        /**
-         * Session handler
-         *
-         * Save handler may be set to custom value in deployment config, which will override everything else.
-         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
-         */
-        $saveMethod = $this->sessionConfig->getOption('session.save_handler') ?: $this->defaultHandler;
-
-        try {
-            $this->saveHandlerAdapter = $this->saveHandlerFactory->create($saveMethod);
-        } catch (SessionException $e) {
-            $this->saveHandlerAdapter = $this->saveHandlerFactory->create($this->defaultHandler);
-        }
+        $this->saveHandler = $this->sessionConfig->getOption('session.save_handler') ?: $this->defaultHandler;
     }
 
     /**
@@ -145,6 +137,9 @@ class SaveHandler implements SaveHandlerInterface
     private function callSafely(string $method, ...$arguments)
     {
         try {
+            if ($this->saveHandlerAdapter === null) {
+                $this->saveHandlerAdapter = $this->saveHandlerFactory->create($this->saveHandler);
+            }
             return $this->saveHandlerAdapter->{$method}(...$arguments);
         } catch (SessionException $exception) {
             $this->saveHandlerAdapter = $this->saveHandlerFactory->create($this->defaultHandler);
