@@ -770,7 +770,7 @@ class Config
             $magentoLogDir = BP . '/var/log/';
             file_put_contents(
                 $magentoLogDir . $label,
-                $metricData . PHP_EOL . '___________________',
+                $metricData . PHP_EOL . '___________________' . PHP_EOL,
                 FILE_APPEND
             );
         }
