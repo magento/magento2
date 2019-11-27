@@ -31,7 +31,7 @@ class PhpStan implements ToolInterface
      *
      * @see https://github.com/phpstan/phpstan#existing-error-formatters-to-be-used
      */
-    private const ERROR_FORMAT = 'raw';
+    private const ERROR_FORMAT = 'filtered';
 
     /**
      * Report file.

@@ -20,3 +20,7 @@ parameters:
 		- '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
 		# Ignore setCustomErrorHandler function not found in bootstrap files
 		- '#Function setCustomErrorHandler not found#'
+
+services:
+	errorFormatter.filtered:
+		class: Magento\PhpStan\Formatters\FilteredErrorFormatter
