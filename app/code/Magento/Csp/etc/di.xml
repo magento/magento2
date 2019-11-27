@@ -20,6 +20,8 @@
             <argument name="collectors" xsi:type="array">
                 <item name="config" xsi:type="object">Magento\Csp\Model\Collector\ConfigCollector</item>
                 <item name="csp_whitelist" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXmlCollector</item>
+                <item name="dynamic" xsi:type="object">Magento\Csp\Model\Collector\DynamicCollector</item>
+                <item name="controller" xsi:type="object">Magento\Csp\Model\Collector\ControllerCollector</item>
             </argument>
             <argument name="mergers" xsi:type="array">
                 <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\FetchPolicyMerger</item>
@@ -47,4 +49,11 @@
             <argument name="fileName" xsi:type="string">csp_whitelist.xml</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\TemplateEngine\Php">
+        <plugin name="csp_helper_plugin" type="Magento\Csp\Plugin\PhtmlRenderingPlugin" />
+    </type>
+    <type name="Magento\Framework\App\RouterInterface">
+        <plugin name="csp_aware_plugin" type="Magento\Csp\Plugin\CspAwareControllerPlugin" />
+    </type>
+    <preference for="Magento\Csp\Api\InlineUtilInterface" type="Magento\Csp\Helper\InlineUtil" />
 </config>
