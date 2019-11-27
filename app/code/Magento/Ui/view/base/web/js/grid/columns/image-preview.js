@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/grid/columns/column'
-], function ($, Column) {
+    'Magento_Ui/js/grid/columns/column',
+    'Magento_Ui/js/lib/key-codes'
+], function ($, Column, keyCodes) {
     'use strict';
 
     return Column.extend({
@@ -30,11 +31,24 @@ define([
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide'
+                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.paging': 'hide'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
             }
+        },
+
+        /**
+         * Initialize image preview component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            $(document).on('keydown', this.handleKeyDown.bind(this));
+
+            return this;
         },
 
         /**
@@ -59,8 +73,13 @@ define([
          * @param {Object} record
          */
         next: function (record) {
-            var recordToShow = this.getRecord(record._rowIndex + 1);
+            var recordToShow;
 
+            if (record._rowIndex + 1 === this.masonry().rows().length) {
+                return;
+            }
+
+            recordToShow = this.getRecord(record._rowIndex + 1);
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -71,7 +90,12 @@ define([
          * @param {Object} record
          */
         prev: function (record) {
-            var recordToShow = this.getRecord(record._rowIndex - 1);
+            var recordToShow;
+
+            if (record._rowIndex === 0) {
+                return;
+            }
+            recordToShow = this.getRecord(record._rowIndex - 1);
 
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
@@ -205,6 +229,23 @@ define([
                 block: 'center',
                 inline: 'nearest'
             });
+        },
+
+        /**
+         * Handle keyboard navigation for image preview
+         *
+         * @param {Object} e
+         */
+        handleKeyDown: function (e) {
+            var key = keyCodes[e.keyCode];
+
+            if (this.visibleRecord() !== null) {
+                if (key === 'pageLeftKey') {
+                    this.prev(this.displayedRecord());
+                } else if (key === 'pageRightKey') {
+                    this.next(this.displayedRecord());
+                }
+            }
         }
     });
 });
