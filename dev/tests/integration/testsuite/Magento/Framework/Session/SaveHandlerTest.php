@@ -58,6 +58,38 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testRedisSaveHandler(): void
+    {
+        $this->deploymentConfigMock->method('get')
+            ->willReturnMap(
+                [
+                    [Config::PARAM_SESSION_SAVE_METHOD, null, 'redis'],
+                    [Config::PARAM_SESSION_SAVE_PATH, null, 'explicit_save_path'],
+                ]
+            );
+
+        $redisHandlerMock = $this->getMockBuilder(SaveHandler\Redis::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $redisHandlerMock->method('open')
+            ->with('explicit_save_path', 'test_session_id')
+            ->willReturn(true);
+
+        $this->saveHandlerFactoryMock->expects($this->exactly(1))
+            ->method('create')
+            ->with('redis')
+            ->willReturn($redisHandlerMock);
+
+        $sessionConfig = $this->objectManager->create(ConfigInterface::class);
+        /** @var SaveHandler $saveHandler */
+        $saveHandler = $this->objectManager->create(SaveHandler::class, ['sessionConfig' => $sessionConfig]);
+        $result = $saveHandler->open('explicit_save_path', 'test_session_id');
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @return void
+     */
     public function testRedisSaveHandlerFallbackToDefaultOnSessionException(): void
     {
         $this->deploymentConfigMock->method('get')
