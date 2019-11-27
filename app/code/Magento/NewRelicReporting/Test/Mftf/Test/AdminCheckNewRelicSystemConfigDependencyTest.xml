@@ -8,20 +8,20 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminChecksSystemConfigDependencyTest">
+    <test name="AdminCheckNewRelicSystemConfigDependencyTest">
         <annotations>
             <features value="NewRelicReporting"/>
             <stories value="Admin is able to see the configuration fields only after enabling the feature"/>
             <title value="Admin can see the configuration fields only after enabling the feature"/>
             <description value="The system configs should be available only after enabling the New Relic feature."/>
-            <severity value="CRITICAL"/>
+            <severity value="MINOR"/>
             <group value="NewRelicReporting"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminNavigateToNewRelicConfigurationActionGroup" stepKey="goToConfigPage"/>
-            <actionGroup ref="AdminExpandNewRelicConfigTabActionGroup" stepKey="expandingGeneralTab">
-                <argument name="tabName" value="general"/>
+            <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandingGeneralSection">
+                <argument name="sectionName" value="General"/>
             </actionGroup>
         </before>
         <after>
@@ -30,7 +30,9 @@
         <actionGroup ref="AssertAdminNewRelicConfigFieldIsNotVisibleActionGroup" stepKey="checkingIfApiUrlIsNotVisible">
             <argument name="config" value="{{AdminNewRelicConfigSystemSection.apiUrl}}"/>
         </actionGroup>
-        <actionGroup ref="AdminUncheckNewRelicUseSystemValueActionGroup" stepKey="uncheckUseSystemValue"/>
+        <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+            <argument name="rowId" value="row_newrelicreporting_general_enable"/>
+        </actionGroup>
         <actionGroup ref="AdminToggleNewRelicReportingEnabledActionGroup" stepKey="enablingNewRelicReporting">
             <argument name="state" value="Yes"/>
         </actionGroup>
