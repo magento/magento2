@@ -120,6 +120,9 @@ class UrlRewrite implements ResolverInterface
         $urlParameters = [];
         $targetPathParts = explode('/', trim($targetPath, '/'));
         $count = count($targetPathParts) - 1;
+
+        /** $index starts from 3 to eliminate catalog/product/view/ part and fetch only name,
+         value data from from target path */
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($index = 3; $index < $count; $index += 2) {
             $urlParameters[] = [
