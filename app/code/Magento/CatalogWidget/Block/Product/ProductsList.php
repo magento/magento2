@@ -364,19 +364,21 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     private function updateAnchorCategoryConditions(array $condition): array
     {
-        $categoryId = $condition['value'];
+        if (array_key_exists('value', $condition)) {
+            $categoryId = $condition['value'];
 
-        try {
-            $category = $this->categoryRepository->get($categoryId, $this->_storeManager->getStore()->getId());
-        } catch (NoSuchEntityException $e) {
-            return $condition;
-        }
+            try {
+                $category = $this->categoryRepository->get($categoryId, $this->_storeManager->getStore()->getId());
+            } catch (NoSuchEntityException $e) {
+                return $condition;
+            }
 
-        if ($category->getIsAnchor() && $category->getChildren()) {
-            $children = explode(',', $category->getChildren());
+            if ($category->getIsAnchor() && $category->getChildren()) {
+                $children = explode(',', $category->getChildren());
 
-            $condition['operator'] = "()";
-            $condition['value'] = array_merge([$categoryId], $children);
+                $condition['operator'] = "()";
+                $condition['value'] = array_merge([$categoryId], $children);
+            }
         }
 
         return $condition;
