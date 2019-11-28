@@ -18,7 +18,7 @@ use Zend\Stdlib\Parameters;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Sitemap
+ * Tests \Magento\Sitemap\Model\Sitemap functionality.
  */
 class SitemapTest extends TestCase
 {
@@ -54,8 +54,6 @@ class SitemapTest extends TestCase
      */
     public function testGetSitemapUrlFromParentRootDirectoryPath(): void
     {
-        $baseUrl = 'http://localhost/';
-
         $rootDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)
             ->getAbsolutePath();
         $requestPath = dirname($rootDir);
@@ -67,6 +65,6 @@ class SitemapTest extends TestCase
 
         $sitemapUrl = $this->model->getSitemapUrl('/', 'sitemap.xml');
 
-        $this->assertEquals($baseUrl.'sitemap.xml', $sitemapUrl);
+        $this->assertEquals('http://localhost/sitemap.xml', $sitemapUrl);
     }
 }
