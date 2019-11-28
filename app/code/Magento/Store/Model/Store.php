@@ -208,7 +208,7 @@ class Store extends AbstractExtensibleModel implements
      * Flag that shows that backend URLs are secure
      *
      * @var boolean|null
-     * @deprecated unused protected property
+     * @deprecated 101.0.0 unused protected property
      */
     protected $_isAdminSecure = null;
 
@@ -1133,6 +1133,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 101.0.0
      */
     public function getIsActive()
     {
@@ -1141,6 +1142,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 101.0.0
      */
     public function setIsActive($isActive)
     {
@@ -1395,6 +1397,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -1403,6 +1406,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

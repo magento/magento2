@@ -54,7 +54,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
 
     /**
      * @var DecoderInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $jsonDecoder;
 

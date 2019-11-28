@@ -18,6 +18,7 @@ use Magento\Payment\Model\Config as PaymentConfig;
  * Block for representing the payment form
  *
  * @api
+ * @since 100.3.0
  * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
  * official payment integration available on the marketplace
  */
@@ -56,6 +57,7 @@ class Form extends Cc
      * Check if cvv validation is available
      *
      * @return boolean
+     * @since 100.3.0
      */
     public function isCvvEnabled(): bool
     {

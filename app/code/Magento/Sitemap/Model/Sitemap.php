@@ -159,7 +159,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     /**
      * @inheritdoc
      *
-     * @since 100.2.0
+     * @since 100.1.5
      */
     protected $_cacheTag = [Value::CACHE_TAG];
 
@@ -285,8 +285,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param DataObject $sitemapItem
      * @return $this
-     * @deprecated 100.2.0
+     * @deprecated 100.3.0
      * @see ItemProviderInterface
+     * @since 100.2.0
      */
     public function addSitemapItem(DataObject $sitemapItem)
     {
@@ -299,8 +300,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Collect all sitemap items
      *
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 100.3.0
      * @see ItemProviderInterface
+     * @since 100.2.0
      */
     public function collectSitemapItems()
     {
@@ -697,7 +699,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $url
      * @return string
-     * @deprecated No longer used, as we're generating product image URLs inside collection instead
+     * @deprecated 100.2.0 No longer used, as we're generating product image URLs inside collection instead
      * @see \Magento\Sitemap\Model\ResourceModel\Catalog\Product::_loadProductImages()
      */
     protected function _getMediaUrl($url)
@@ -774,7 +776,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Check is enabled submission to robots.txt
      *
      * @return bool
-     * @deprecated Because the robots.txt file is not generated anymore,
+     * @deprecated 100.1.5 Because the robots.txt file is not generated anymore,
      *             this method is not needed and will be removed in major release.
      */
     protected function _isEnabledSubmissionRobots()
@@ -788,7 +790,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      *
      * @param string $sitemapFileName
      * @return void
-     * @deprecated Because the robots.txt file is not generated anymore,
+     * @deprecated 100.1.5 Because the robots.txt file is not generated anymore,
      *             this method is not needed and will be removed in major release.
      */
     protected function _addSitemapToRobotsTxt($sitemapFileName)
@@ -858,7 +860,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * Get unique page cache identities
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.5
      */
     public function getIdentities()
     {

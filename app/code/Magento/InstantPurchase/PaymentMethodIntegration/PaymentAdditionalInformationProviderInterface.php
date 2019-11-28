@@ -14,6 +14,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * instant_purchase/additionalInformation configuration option in vault payment config.
  *
  * @api
+ * @since 100.2.0
  */
 interface PaymentAdditionalInformationProviderInterface
 {
@@ -22,6 +23,7 @@ interface PaymentAdditionalInformationProviderInterface
      *
      * @param PaymentTokenInterface $paymentToken
      * @return array
+     * @since 100.2.0
      */
     public function getAdditionalInformation(PaymentTokenInterface $paymentToken): array;
 }

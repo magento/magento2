@@ -10,6 +10,7 @@ use Magento\Framework\Phrase;
 
 /**
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractAggregateException extends LocalizedException implements AggregateExceptionInterface
 {
@@ -81,6 +82,7 @@ abstract class AbstractAggregateException extends LocalizedException implements 
     /**
      * @param LocalizedException $exception
      * @return $this
+     * @since 101.0.6
      */
     public function addException(LocalizedException $exception)
     {
