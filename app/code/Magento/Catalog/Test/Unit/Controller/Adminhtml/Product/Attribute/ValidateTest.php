@@ -440,6 +440,127 @@ class ValidateTest extends AttributeTest
     }
 
     /**
+     * Check that admin scope labels which only contain spaces will trigger error.
+     *
+     * @dataProvider provideWhitespaceOption
+     * @param array $options
+     * @param $result
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testWhitespaceOption(array $options, $result)
+    {
+        $serializedOptions = '{"key":"value"}';
+        $this->requestMock->expects($this->any())
+                          ->method('getParam')
+                          ->willReturnMap([
+                              ['frontend_label', null, null],
+                              ['frontend_input', 'select', 'multipleselect'],
+                              ['attribute_code', null, "test_attribute_code"],
+                              ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                              ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                              ['serialized_options', '[]', $serializedOptions],
+                          ]);
+
+        $this->formDataSerializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willReturn($options);
+
+        $this->objectManagerMock->expects($this->once())
+                                ->method('create')
+                                ->willReturn($this->attributeMock);
+
+        $this->attributeMock->expects($this->once())
+                            ->method('loadByCode')
+                            ->willReturnSelf();
+
+        $this->attributeCodeValidatorMock->expects($this->once())
+                                         ->method('isValid')
+                                         ->with('test_attribute_code')
+                                         ->willReturn(true);
+
+        $this->resultJsonFactoryMock->expects($this->once())
+                                    ->method('create')
+                                    ->willReturn($this->resultJson);
+
+        $this->resultJson->expects($this->once())
+                         ->method('setJsonData')
+                         ->willReturnArgument(0);
+
+        $response = $this->getModel()->execute();
+        $responseObject = json_decode($response);
+        $this->assertEquals($responseObject, $result);
+    }
+
+    /**
+     * Dataprovider for testWhitespaceOption.
+     *
+     * @return array
+     */
+    public function provideWhitespaceOption()
+    {
+        return [
+            'whitespace admin scope options' => [
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => [' '],
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'The value of Admin scope can\'t be empty.',
+                ]
+            ],
+            'not empty admin scope options' => [
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => ['asdads'],
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => false,
+                ]
+            ],
+            'whitespace admin scope options and deleted' => [
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => [' '],
+                        ],
+                        'delete' => [
+                            'option_0' => '1',
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => false,
+                ],
+            ],
+            'whitespace admin scope options and not deleted' => [
+                [
+                    'option' => [
+                        'value' => [
+                            "option_0" => [' '],
+                        ],
+                        'delete' => [
+                            'option_0' => '0',
+                        ],
+                    ],
+                ],
+                (object) [
+                    'error' => true,
+                    'message' => 'The value of Admin scope can\'t be empty.',
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteWithOptionsDataError()
