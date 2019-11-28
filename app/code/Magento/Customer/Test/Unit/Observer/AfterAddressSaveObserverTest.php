@@ -575,7 +575,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         if ($resultValidMessage) {
             $this->messageManager->expects($this->once())
-                ->method('addSuccessMessage')
+                ->method('addSuccess')
                 ->with($resultValidMessage)
                 ->willReturnSelf();
         }
@@ -585,7 +585,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
                 ->with($vatId)
                 ->willReturn($vatId);
             $this->messageManager->expects($this->once())
-                ->method('addErrorMessage')
+                ->method('addError')
                 ->with($resultInvalidMessage)
                 ->willReturnSelf();
         }
@@ -595,7 +595,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
                 ->with('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE)
                 ->willReturn('admin@example.com');
             $this->messageManager->expects($this->once())
-                ->method('addErrorMessage')
+                ->method('addError')
                 ->with($resultErrorMessage)
                 ->willReturnSelf();
         }

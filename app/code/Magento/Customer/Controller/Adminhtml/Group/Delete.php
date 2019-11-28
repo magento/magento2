@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +8,9 @@ namespace Magento\Customer\Controller\Adminhtml\Group;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class Delete
+ */
 class Delete extends \Magento\Customer\Controller\Adminhtml\Group implements HttpPostActionInterface
 {
     /**
