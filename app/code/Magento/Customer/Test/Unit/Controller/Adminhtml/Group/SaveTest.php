@@ -87,10 +87,6 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
-            ->getMock();
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMockForAbstractClass();
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
@@ -133,8 +129,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             $this->groupInterfaceFactoryMock,
             $this->forwardFactoryMock,
             $this->pageFactoryMock,
-            $this->dataObjectProcessorMock,
-            $this->escaper
+            $this->dataObjectProcessorMock
         );
     }
 

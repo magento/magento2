@@ -21,11 +21,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
     protected $dataObjectProcessor;
 
     /**
-     * @var \Magento\Framework\Escaper
-     */
-    protected $escaper;
-
-    /**
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -34,7 +29,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -43,11 +37,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
         GroupInterfaceFactory $groupDataFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->escaper = $escaper;
         parent::__construct(
             $context,
             $coreRegistry,
@@ -104,7 +96,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 $this->messageManager->addSuccessMessage(__('You saved the customer group.'));
                 $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+                $this->messageManager->addErrorMessage($e->getMessage());
                 if ($customerGroup != null) {
                     $this->storeCustomerGroupDataToSession(
                         $this->dataObjectProcessor->buildOutputDataArray(
