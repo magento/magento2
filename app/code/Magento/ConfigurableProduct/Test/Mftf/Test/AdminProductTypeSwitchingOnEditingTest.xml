@@ -49,10 +49,10 @@
         <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurations">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveConfigProductForm"/>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveConfigProductForm"/>
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
@@ -154,10 +154,10 @@
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="gotToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForConfigurableProduct"/>
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurationsForProduct">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurationsForProduct">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveNewConfigurableProductForm"/>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveNewConfigurableProductForm"/>
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigurableProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForConfigurable"/>

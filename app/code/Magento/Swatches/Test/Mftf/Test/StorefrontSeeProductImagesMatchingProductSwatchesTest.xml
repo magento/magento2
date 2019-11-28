@@ -76,23 +76,23 @@
         </actionGroup>
 
         <!-- Create configurations based off the visual swatch we created earlier -->
-        <actionGroup ref="StartCreateConfigurationsForAttribute" stepKey="createConfigurations">
+        <actionGroup ref="StartCreateConfigurationsForAttributeActionGroup" stepKey="createConfigurations">
             <argument name="attributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
         </actionGroup>
 
         <!--Add images to configurable product attribute options-->
-        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionOne">
             <argument name="image" value="TestImageAdobe"/>
             <argument name="frontend_label" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             <argument name="label" value="{{visualSwatchOption1.default_label}}"/>
         </actionGroup>
-        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwo">
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionTwo">
             <argument name="image" value="ImageUpload3"/>
             <argument name="frontend_label" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             <argument name="label" value="{{visualSwatchOption2.default_label}}"/>
         </actionGroup>
 
-        <actionGroup ref="GenerateAndSaveConfiguredProductAfterSettingOptions" stepKey="saveProductForm"/>
+        <actionGroup ref="GenerateAndSaveConfiguredProductAfterSettingOptionsActionGroup" stepKey="saveProductForm"/>
 
         <!-- Go to the category page -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

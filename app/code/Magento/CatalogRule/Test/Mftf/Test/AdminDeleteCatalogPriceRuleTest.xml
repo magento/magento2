@@ -28,7 +28,7 @@
             <!-- Login to Admin page -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
-            <actionGroup ref="createConfigurableProduct" stepKey="createConfigurableProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>

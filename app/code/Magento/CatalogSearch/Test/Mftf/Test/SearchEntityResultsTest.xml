@@ -366,7 +366,7 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-            <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
             </actionGroup>
@@ -391,7 +391,7 @@
             <argument name="productName" value="{{_defaultProduct.name}}"/>
             <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
         </actionGroup>
-        <actionGroup ref="SelectSingleAttributeAndAddToCart" stepKey="addProductToCart">
+        <actionGroup ref="SelectSingleAttributeAndAddToCartActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="{{_defaultProduct.name}}"/>
             <argument name="attributeCode" value="{{colorProductAttribute.default_label}}"/>
             <argument name="optionName" value="{{colorProductAttribute1.name}}"/>

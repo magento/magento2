@@ -52,7 +52,7 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
         <!--Create new attribute with two option -->
-        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>

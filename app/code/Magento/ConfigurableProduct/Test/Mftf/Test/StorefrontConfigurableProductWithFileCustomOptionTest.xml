@@ -31,14 +31,14 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFile" stepKey="addCustomOptionToProduct"/>
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        
+
         <!--Go to storefront-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>

@@ -63,7 +63,7 @@
         <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" time="30" stepKey="waitForAttributeSetConfirmation" after="clickSaveConfigurableProduct"/>
         <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet" after="waitForAttributeSetConfirmation"/>
         <see selector="You saved the product" stepKey="seeConfigurableSaveConfirmation" after="clickConfirmAttributeSet"/>
-        <actionGroup ref="viewConfigurableProductInAdminGrid" stepKey="viewConfigurableProductInGrid" after="seeConfigurableSaveConfirmation">
+        <actionGroup ref="ViewConfigurableProductInAdminGridActionGroup" stepKey="viewConfigurableProductInGrid" after="seeConfigurableSaveConfirmation">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
