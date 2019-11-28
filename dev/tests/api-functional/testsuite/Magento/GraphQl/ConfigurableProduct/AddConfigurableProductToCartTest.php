@@ -273,7 +273,6 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_disable_first_child.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
@@ -300,7 +299,6 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_zero_qty_first_child.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
