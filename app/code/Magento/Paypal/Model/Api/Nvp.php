@@ -1178,7 +1178,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
         try {
             $http = $this->_curlFactory->create();
-            $config = ['timeout' => 60, 'verifypeer' => $this->_config->getValue('verifyPeer')];
+            $config = ['timeout' => 60, 'verifypeer' => $this->_config->getValue('verifyPeer'), 'header' => false];
             if ($this->getUseProxy()) {
                 $config['proxy'] = $this->getProxyHost() . ':' . $this->getProxyPort();
             }
@@ -1200,8 +1200,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             throw $e;
         }
 
-        $response = preg_split('/^\r?$/m', $response, 2);
-        $response = trim($response[1]);
         $response = $this->_deformatNVP($response);
 
         $debugData['response'] = $response;
@@ -1425,8 +1423,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     {
         $intial = 0;
         $nvpArray = [];
-
-        $nvpstr = strpos($nvpstr, "\r\n\r\n") !== false ? substr($nvpstr, strpos($nvpstr, "\r\n\r\n") + 4) : $nvpstr;
 
         while (strlen($nvpstr)) {
             //position of Key

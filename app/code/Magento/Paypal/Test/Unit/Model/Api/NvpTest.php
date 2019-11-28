@@ -163,21 +163,21 @@ class NvpTest extends \PHPUnit\Framework\TestCase
         return [
             ['', [], null],
             [
-                "\r\n" . 'ACK=Failure&L_ERRORCODE0=10417&L_SHORTMESSAGE0=Message.&L_LONGMESSAGE0=Long%20Message.',
+                'ACK=Failure&L_ERRORCODE0=10417&L_SHORTMESSAGE0=Message.&L_LONGMESSAGE0=Long%20Message.',
                 [],
                 LocalizedException::class,
                 'PayPal gateway has rejected request. Long Message (#10417: Message).',
                 0
             ],
             [
-                "\r\n" . 'ACK=Failure&L_ERRORCODE0=10417&L_SHORTMESSAGE0=Message.&L_LONGMESSAGE0=Long%20Message.',
+                'ACK=Failure&L_ERRORCODE0=10417&L_SHORTMESSAGE0=Message.&L_LONGMESSAGE0=Long%20Message.',
                 [10417, 10422],
                 \Magento\Paypal\Model\Api\ProcessableException::class,
                 'PayPal gateway has rejected request. Long Message (#10417: Message).',
                 10417
             ],
             [
-                "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10417'
+                'ACK[7]=Failure&L_ERRORCODE0[5]=10417'
                     . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.',
                 [10417, 10422],
                 \Magento\Paypal\Model\Api\ProcessableException::class,
@@ -185,7 +185,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
                 10417
             ],
             [
-                "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10417&L_SHORTMESSAGE0[8]=Message.',
+                'ACK[7]=Failure&L_ERRORCODE0[5]=10417&L_SHORTMESSAGE0[8]=Message.',
                 [10417, 10422],
                 \Magento\Paypal\Model\Api\ProcessableException::class,
                 'PayPal gateway has rejected request. #10417: Message.',
@@ -226,7 +226,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                "\r\n" . 'ACK=Success&SHIPTONAME=Jane%20Doe'
+                'ACK=Success&SHIPTONAME=Jane%20Doe'
                 . '&SHIPTOSTREET=testStreet'
                 . '&SHIPTOSTREET2=testApartment'
                 . '&BUSINESS=testCompany'
@@ -298,7 +298,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
      */
     public function testCallTransactionHasBeenCompleted()
     {
-        $response =    "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
+        $response =    'ACK[7]=Failure&L_ERRORCODE0[5]=10415'
             . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.';
         $processableErrors =[10415];
         $this->curl->expects($this->once())
