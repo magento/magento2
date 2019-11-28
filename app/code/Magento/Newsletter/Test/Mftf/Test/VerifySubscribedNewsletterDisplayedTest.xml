@@ -37,13 +37,13 @@
                 <argument name="StoreGroup" value="staticStoreGroup"/>
                 <argument name="customStore" value="staticStore"/>
             </actionGroup>
-            <actionGroup ref="EnableWebUrlOptions" stepKey="addStoreCodeToUrls"/>
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         </before>
         <after>
             <!--Delete created data and set Default Configuration-->
-            <actionGroup ref="ResetWebUrlOptions" stepKey="resetUrlOption"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="Second"/>
             </actionGroup>

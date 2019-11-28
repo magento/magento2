@@ -26,7 +26,7 @@
 
             <!-- Admin Login-->
             <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>

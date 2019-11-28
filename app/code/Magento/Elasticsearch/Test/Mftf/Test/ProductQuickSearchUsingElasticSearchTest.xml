@@ -28,7 +28,7 @@
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="categoryFirst" stepKey="deleteCategory"/>
-            <actionGroup ref="ResetSearchEngineConfiguration" stepKey="resetCatalogSearchConfiguration"/>
+            <actionGroup ref="ResetSearchEngineConfigurationActionGroup" stepKey="resetCatalogSearchConfiguration"/>
             <actionGroup ref="updateIndexerOnSave" stepKey="resetIndexerBackToOriginalState">
                 <argument name="indexerName" value="catalogsearch_fulltext"/>
             </actionGroup>
@@ -37,7 +37,7 @@
 
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <comment userInput="Change Catalog search engine option to Elastic Search 5.0+" stepKey="chooseElasticSearch5"/>
-        <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+        <actionGroup ref="ChooseElasticSearchAsSearchEngineActionGroup" stepKey="chooseES5"/>
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
         <actionGroup ref="updateIndexerBySchedule" stepKey="updateAnIndexerBySchedule">
             <argument name="indexerName" value="catalogsearch_fulltext"/>
