@@ -52,7 +52,7 @@ class TaxClass extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
-        if ((!isset($data['dataset']) && !isset($data['tax_product_class']))) {
+        if (!isset($data['dataset']) && !isset($data['tax_product_class'])) {
             $this->data = $data;
             return;
         }

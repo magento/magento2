@@ -11,6 +11,7 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Directory\Model\Currency;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderFactory;
 use Magento\Quote\Model\Quote\Address;
@@ -44,6 +45,7 @@ use Magento\Quote\Model\Shipping;
 use Magento\Quote\Model\ShippingAssignment;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject;
 use \PHPUnit\Framework\TestCase;
@@ -453,7 +455,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         ];
         $quoteItemId = 1;
         $paymentProviderCode = 'checkmo';
-
+        $shippingPrice = '0.00';
+        $currencyCode = 'USD';
         $simpleProductTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Simple::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrderOptions'])
@@ -467,6 +470,17 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             $this->getQuoteAddressesMock($quoteAddressItemMock, $addressTotal);
         $this->setQuoteMockData($paymentProviderCode, $shippingAddressMock, $billingAddressMock);
 
+        $currencyMock = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->setMethods([ 'convert' ])
+            ->getMock();
+        $currencyMock->method('convert')->willReturn($shippingPrice);
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getBaseCurrency','getCurrentCurrencyCode' ])
+            ->getMock();
+        $storeMock->method('getBaseCurrency')->willReturn($currencyMock);
+        $storeMock->method('getCurrentCurrencyCode')->willReturn($currencyCode);
         $orderAddressMock = $this->createSimpleMock(\Magento\Sales\Api\Data\OrderAddressInterface::class);
         $orderPaymentMock = $this->createSimpleMock(\Magento\Sales\Api\Data\OrderPaymentInterface::class);
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
@@ -476,6 +490,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $orderItemMock->method('getQuoteItemId')->willReturn($quoteItemId);
         $orderMock = $this->getOrderMock($orderAddressMock, $orderPaymentMock, $orderItemMock);
 
+        $orderMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $orderMock->expects($this->once())->method('setBaseShippingAmount')->with($shippingPrice)->willReturnSelf();
+        $orderMock->expects($this->once())->method('setShippingAmount')->with($shippingPrice)->willReturnSelf();
         $this->orderFactoryMock->expects($this->once())->method('create')->willReturn($orderMock);
         $this->dataObjectHelperMock->expects($this->once())->method('mergeDataObjects')
             ->with(
@@ -608,11 +625,17 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             )->getMock();
         $shippingAddressMock->method('validate')->willReturn(true);
         $shippingAddressMock->method('getShippingMethod')->willReturn('carrier');
-        $shippingAddressMock->method('getShippingRateByCode')->willReturn('code');
         $shippingAddressMock->method('getCountryId')->willReturn('EN');
         $shippingAddressMock->method('getAllItems')->willReturn([$quoteAddressItemMock]);
         $shippingAddressMock->method('getAddressType')->willReturn('shipping');
         $shippingAddressMock->method('getGrandTotal')->willReturn($addressTotal);
+
+        $shippingRateMock = $this->getMockBuilder(Address\Rate::class)
+            ->disableOriginalConstructor()
+            ->setMethods([ 'getPrice' ])
+            ->getMock();
+        $shippingRateMock->method('getPrice')->willReturn('0.00');
+        $shippingAddressMock->method('getShippingRateByCode')->willReturn($shippingRateMock);
 
         $billingAddressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
@@ -673,6 +696,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
                     'getCanSendNewEmailFlag',
                     'getItems',
                     'setShippingMethod',
+                    'getStore',
+                    'setShippingAmount',
+                    'setBaseShippingAmount'
                 ]
             )->getMock();
         $orderMock->method('setQuote')->with($this->quoteMock);

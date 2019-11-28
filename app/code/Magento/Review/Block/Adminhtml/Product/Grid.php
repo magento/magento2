@@ -29,7 +29,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websitesFactory
      * @param array $data
      *
@@ -44,7 +44,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Store\Model\ResourceModel\Website\CollectionFactory $websitesFactory,
         array $data = []
     ) {

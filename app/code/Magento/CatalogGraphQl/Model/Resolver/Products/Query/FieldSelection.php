@@ -60,9 +60,9 @@ class FieldSelection
                 $fieldNames[] = $this->collectProductFieldNames($selection, $fieldNames);
             }
         }
-
-        $fieldNames = array_merge(...$fieldNames);
-
+        if (!empty($fieldNames)) {
+            $fieldNames = array_merge(...$fieldNames);
+        }
         return $fieldNames;
     }
 
