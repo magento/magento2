@@ -327,6 +327,7 @@ class TypeProcessor
             if (is_array($throwsTypes)) {
                 /** @var $throwsType \Zend\Code\Reflection\DocBlock\Tag\ThrowsTag */
                 foreach ($throwsTypes as $throwsType) {
+                    // phpcs:ignore
                     $exceptions = array_merge($exceptions, $throwsType->getTypes());
                 }
             }
@@ -528,13 +529,15 @@ class TypeProcessor
     {
         $type = $param->detectType();
         if ($type === 'null') {
-            throw new \LogicException(sprintf(
-                '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
-                . ' First declared type should not be null. E.g. string|null',
-                $param->getName(),
-                $param->getDeclaringClass()->getName(),
-                $param->getDeclaringFunction()->name
-            ));
+            throw new \LogicException(
+                sprintf(
+                    '@param annotation is incorrect for the parameter "%s" in the method "%s:%s".'
+                    . ' First declared type should not be null. E.g. string|null',
+                    $param->getName(),
+                    $param->getDeclaringClass()->getName(),
+                    $param->getDeclaringFunction()->name
+                )
+            );
         }
         if ($type === 'array') {
             // try to determine class, if it's array of objects
