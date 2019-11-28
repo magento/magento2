@@ -62,7 +62,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
         <!-- Click 'Check Out with Multiple Addresses' -->
         <waitForPageLoad stepKey="waitForSecondPageLoad"/>
-        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddresses" stepKey="goCheckoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
         <!-- Select different addresses and click 'Go to Shipping Information' -->
         <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddresses">
             <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
