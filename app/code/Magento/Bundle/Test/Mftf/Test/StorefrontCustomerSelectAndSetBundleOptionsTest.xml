@@ -44,7 +44,7 @@
         </actionGroup>
 
         <!-- Add Option One, a "Drop-down" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts1">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts1">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -56,7 +56,7 @@
         <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOption0Product1"/>
 
         <!-- Add Option Two, a "Radio Buttons" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts2">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -68,7 +68,7 @@
         <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('1', '1')}}" stepKey="userDefinedQuantitiyOption1Product1"/>
 
         <!-- Add Option Three, a "Checkbox" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts3">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts3">
             <argument name="x" value="2"/>
             <argument name="n" value="3"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -78,7 +78,7 @@
         </actionGroup>
 
         <!-- Add Option Four, a "Multi Select" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts4">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts4">
             <argument name="x" value="3"/>
             <argument name="n" value="4"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>

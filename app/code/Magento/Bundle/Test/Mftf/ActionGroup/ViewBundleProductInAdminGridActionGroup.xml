@@ -7,36 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Fill main fields in create product form-->
-    <actionGroup name="fillMainBundleProductForm">
-        <annotations>
-            <description>Fills the Name, SKU and Stock Status fields.</description>
-        </annotations>
-        <arguments>
-            <argument name="product" defaultValue="BundleProduct"/>
-        </arguments>
-
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
-        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
-    </actionGroup>
-
-    <!--Check that required fields are actually required-->
-    <actionGroup name="checkRequiredFieldsInBundleProductForm">
-        <annotations>
-            <description>Clears the Name and SKU fields when adding a Product and then verifies that they are required after attempting to Save.</description>
-        </annotations>
-
-        <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
-        <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeStillOnEditPage"/>
-        <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
-        <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
-    </actionGroup>
-
-    <!--Filter product grid and see expected product-->
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="viewBundleProductInAdminGrid">
         <annotations>
             <description>Clears the Grid Filters on the Catalog Grid page and applies Filter by Name and Sku. Then checks to see if the Product exists in the 1st row. Then clears the Grid Filters again for future Tests.</description>

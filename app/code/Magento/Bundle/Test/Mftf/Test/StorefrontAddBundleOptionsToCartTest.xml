@@ -62,7 +62,7 @@
         </actionGroup>
 
         <!-- Add Option One, a "Checkbox" type option, with tree products -->
-        <actionGroup ref="addBundleOptionWithTreeProducts" stepKey="addBundleOptionWithTreeProducts">
+        <actionGroup ref="AddBundleOptionWithThreeProductsActionGroup" stepKey="addBundleOptionWithTreeProducts">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -73,7 +73,7 @@
         </actionGroup>
 
         <!-- Add Option Two, a "Radio Buttons" type option, with one product -->
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOptionWithOneProduct">
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithOneProduct">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$simpleProduct4.sku$$"/>
@@ -83,7 +83,7 @@
         </actionGroup>
 
         <!-- Add Option Tree, a "Checkbox" type option, with six products -->
-        <actionGroup ref="addBundleOptionWithSixProducts" stepKey="addBundleOptionWithSixProducts">
+        <actionGroup ref="AddBundleOptionWithSixProductsActionGroup" stepKey="addBundleOptionWithSixProducts">
             <argument name="x" value="2"/>
             <argument name="n" value="3"/>
             <argument name="prodOneSku" value="$$simpleProduct5.sku$$"/>
