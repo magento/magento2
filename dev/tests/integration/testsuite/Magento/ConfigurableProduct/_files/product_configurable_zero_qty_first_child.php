@@ -10,7 +10,12 @@ require __DIR__ . '/product_configurable_sku.php';
 $childSku = 'simple_10';
 try {
     $childProduct = $productRepository->get($childSku);
-    $childProduct->setStockData(['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]);
+    $childProduct->setStockData([
+        'use_config_manage_stock' => 1,
+        'qty' => 0,
+        'is_qty_decimal' => 0,
+        'is_in_stock' => 0
+    ]);
     $productRepository->save($childProduct);
 } catch (Exception $e) {
     // Nothing to remove
