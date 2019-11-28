@@ -107,7 +107,7 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->httpClient->method('read')
-            ->willReturn("HTTP/1.1 200 OK\r\nConnection: close\r\n\r\nRESULT=0&RESPMSG=Approved");
+            ->willReturn("RESULT=0&RESPMSG=Approved");
 
         $this->nvpApi->setAmount($quote->getBaseGrandTotal());
         $this->nvpApi->setPaypalCart($cart);
