@@ -35,11 +35,7 @@ define([
                  * @return {String}
                  */
                 this.translate = function (text) {
-                    if (_data[text] && typeof _data[text] === 'string') {
-                        return _data[text];
-                    }
-
-                    return text;
+                    return (typeof _data[text] === 'string') ? _data[text]: text
                 };
 
                 return this;
