@@ -86,6 +86,8 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function sliceItems(array $items, int $size, int $currentPage): array
     {
         if ($size !== 0) {
+            // Check that current page is in a range of allowed page numbers, based on items count and items per page,
+            // than calculate offset for slicing items array.
             $itemsCount = count($items);
             $maxAllowedPageNumber = ceil($itemsCount/$size);
             if ($currentPage < 1) {
