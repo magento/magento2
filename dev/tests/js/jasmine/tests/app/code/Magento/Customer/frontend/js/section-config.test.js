@@ -128,6 +128,21 @@ define(['squire'], function (Squire) {
 
                 expect(obj.getAffectedSections('http://localhost.com/path')).toEqual(['all']);
             });
+
+            it('Ignores capitalization in parts of URL.', function () {
+                obj['Magento_Customer/js/section-config']({
+                    sections: {
+                        'path': [
+                            'section'
+                        ]
+                    },
+                    baseUrls: [
+                        'http://localhost.com/'
+                    ]
+                });
+
+                expect(obj.getAffectedSections('http://localhost.com/PaTh')).toEqual(['section']);
+            });
         });
 
         describe('"filterClientSideSections" method', function () {
