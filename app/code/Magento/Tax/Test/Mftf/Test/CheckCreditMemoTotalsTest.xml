@@ -102,7 +102,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Create new order-->
-        <actionGroup stepKey="CreateNewOrder" ref="navigateToNewOrderPageExistingCustomer">
+        <actionGroup stepKey="CreateNewOrder" ref="NavigateToNewOrderPageExistingCustomerActionGroup">
             <argument name="customer" value="Simple_US_Customer_NY"/>
         </actionGroup>
         <!--Add product to order-->
@@ -112,7 +112,7 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <!--Set shipping method-->
-        <actionGroup stepKey="orderSelectFlatRateShipping" ref="orderSelectFlatRateShipping"/>
+        <actionGroup stepKey="orderSelectFlatRateShipping" ref="OrderSelectFlatRateShippingActionGroup"/>
         <!--Submit order-->
         <click stepKey="SubmitOrder" selector="{{AdminOrderFormActionSection.SubmitOrder}}"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
@@ -120,7 +120,7 @@
         <!--Open new created order-->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <!--Create order invoice-->

@@ -52,12 +52,12 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="navigateToNewOrderPageNewCustomerSingleStore" stepKey="gotoNewOrderCreationPage"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerSingleStoreActionGroup" stepKey="gotoNewOrderCreationPage"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$createProduct$$"></argument>
         </actionGroup>
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillEmailField"/>
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>

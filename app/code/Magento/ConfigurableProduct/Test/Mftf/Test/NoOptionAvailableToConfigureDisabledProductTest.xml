@@ -118,7 +118,7 @@
         <actionGroup ref="saveProductForm" stepKey="saveSecondProductForm"/>
         <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
@@ -133,7 +133,7 @@
         <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" stepKey="dontSeeOption1"/>
         <!-- Go to created customer page again -->
         <comment userInput="Go to created customer page again" stepKey="goToCreatedCustomerPageAgain"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrderAgain">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderAgain">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProductAgain"/>

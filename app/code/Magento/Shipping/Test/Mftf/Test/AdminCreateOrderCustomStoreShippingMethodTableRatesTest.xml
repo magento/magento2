@@ -86,14 +86,14 @@
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <!--Create order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="storeView" value="customStore"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerInfo">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>

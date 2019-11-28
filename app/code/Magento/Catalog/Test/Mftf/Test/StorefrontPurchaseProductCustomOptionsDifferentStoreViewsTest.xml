@@ -196,7 +196,7 @@
 
         <!-- Open Order -->
 
-        <actionGroup ref="filterOrderGridById" stepKey="openOrdersGrid">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="openOrdersGrid">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>

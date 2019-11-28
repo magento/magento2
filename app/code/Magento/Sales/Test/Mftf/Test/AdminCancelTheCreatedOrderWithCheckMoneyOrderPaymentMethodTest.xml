@@ -111,30 +111,30 @@
         </after>
         <!-- Create new customer order -->
         <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <!-- Add bundle product to order and check product price in grid -->
         <comment userInput="Add bundle product to order and check product price in grid" stepKey="addBundleProductToOrderComment"/>
-        <actionGroup ref="addBundleProductToOrder" stepKey="addBundleProductToOrder">
+        <actionGroup ref="AddBundleProductToOrderActionGroup" stepKey="addBundleProductToOrder">
             <argument name="product" value="$$createBundleProduct$$"/>
             <argument name="quantity" value="1"/>
         </actionGroup>
         <!-- Add configurable product to order -->
         <comment userInput="Add configurable product to order" stepKey="addConfigurableProductToOrderComment"/>
-        <actionGroup ref="newAddConfigurableProductToOrder" stepKey="addConfigurableProductToOrder">
+        <actionGroup ref="NewAddConfigurableProductToOrderActionGroup" stepKey="addConfigurableProductToOrder">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="attribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption1$$"/>
         </actionGroup>
         <!-- Add Simple product to order -->
         <comment userInput="Add Simple product to order" stepKey="addSimpleProductToOrderComment"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <!-- Add Virtual product to order -->
         <comment userInput="Add Virtual product to order" stepKey="addVirtualProductToOrderComment"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addVirtualProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addVirtualProductToTheOrder">
             <argument name="product" value="$$virtualProduct$$"/>
         </actionGroup>
         <!-- Select FlatRate shipping method -->
@@ -145,11 +145,11 @@
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
         <!-- Verify order information -->
         <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
         <!-- Cancel the Order -->
         <comment userInput="Cancel the Order" stepKey="cancelTheOrder"/>
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
         <!-- Assert Simple Product Quantity in backend after order Canceled -->
         <comment userInput="Assert Simple Product Quantity in backend after order Canceled" stepKey="assertSimpleProductQuantityAfterOrderCanceledComment"/>
         <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
@@ -216,7 +216,7 @@
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <!-- Filter order using orderId -->
         <comment userInput="Filter order using orderId" stepKey="filterOrderUsingOrderIdComment"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderId" stepKey="seeOrderIdInGrid"/>

@@ -59,23 +59,23 @@
         <waitForPageLoad stepKey="waitForLogin" time="3"/>
 
         <!--Create New Order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
 
         <!--Add Product to Order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProduct">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
         <!--Fill Order Customer Information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!--Select Shipping-->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"/>
         <waitForPageLoad stepKey="waitForShippingToFinish"/>
 
         <!--Pay with Braintree -->

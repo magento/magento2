@@ -64,7 +64,7 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!--Open order and check rates display in one line-->
-        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="EUR / USD rate" stepKey="seeEURandUSDRate"/>

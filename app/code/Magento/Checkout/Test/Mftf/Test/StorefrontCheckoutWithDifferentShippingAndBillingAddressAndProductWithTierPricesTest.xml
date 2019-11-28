@@ -111,7 +111,7 @@
         <waitForPageLoad stepKey="waitForOrderIndexPageToLoad"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
