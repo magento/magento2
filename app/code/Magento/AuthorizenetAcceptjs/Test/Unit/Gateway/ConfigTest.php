@@ -81,6 +81,9 @@ class ConfigTest extends TestCase
         $this->assertEquals($expectedSolution, $this->model->getSolutionId(123));
     }
 
+    /**
+     * @return array
+     */
     public function configMapProvider()
     {
         return [
@@ -97,6 +100,10 @@ class ConfigTest extends TestCase
             ['getTransactionInfoSyncKeys', 'transactionSyncKeys', 'a,b,c', ['a', 'b', 'c']],
         ];
     }
+
+    /**
+     * @return array
+     */
     public function environmentUrlProvider()
     {
         return [
@@ -105,6 +112,9 @@ class ConfigTest extends TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function environmentSolutionProvider()
     {
         return [

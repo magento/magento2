@@ -53,4 +53,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="msrp" xsi:type="string">catalog_product</item>
+                    <item name="msrp_display_actual_price_type" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

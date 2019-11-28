@@ -27,8 +27,8 @@
         <click selector="{{AdminEmailTemplateEditSection.loadTemplateButton}}" stepKey="clickLoadTemplateButton"/>
         <fillField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{EmailTemplate.templateName}}" stepKey="fillTemplateNameField"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveTemplateButton"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <!--Create New Custom Template -->
@@ -63,8 +63,8 @@
         <click selector="{{AdminEmailTemplateEditSection.deleteTemplateButton}}" after="checkTemplateName" stepKey="deleteTemplate"/>
         <waitForElementVisible selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="deleteTemplate" stepKey="waitForConfirmButton"/>
         <click selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="waitForConfirmButton" stepKey="acceptPopup"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
     </actionGroup>
 
     <actionGroup name="PreviewEmailTemplate" extends="FindAndOpenEmailTemplate">
