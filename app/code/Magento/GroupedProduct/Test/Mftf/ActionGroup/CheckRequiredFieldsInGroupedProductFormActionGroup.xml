@@ -21,17 +21,4 @@
         <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
         <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
     </actionGroup>
-
-    <!--Fill main fields in grouped product form-->
-
-
-    <!--Filter product grid and see expected grouped product-->
-
-
-    <!--Fill product min quantity in group products grid-->
-
-
-    <!-- Assign Specified Product To Grouped Product -->
-    <!-- Assumes web client is on grouped product edit page -->
-
 </actionGroups>

@@ -42,7 +42,7 @@
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillMainProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <!-- Add two simple products to grouped product -->
