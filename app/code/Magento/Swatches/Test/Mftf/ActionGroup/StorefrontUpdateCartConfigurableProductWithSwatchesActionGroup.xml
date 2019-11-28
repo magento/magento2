@@ -7,20 +7,8 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Add Configurable Product with Swatch attribute to the cart -->
-    <actionGroup name="StorefrontAddProductWithSwatchesToTheCartActionGroup" extends="StorefrontAddProductToCartWithQtyActionGroup">
-        <arguments>
-            <argument name="product"/>
-            <argument name="productOption" type="string"/>
-        </arguments>
-        <remove keyForRemoval="seeSuccessSaveMessage"/>
-        <click selector="{{StorefrontProductInfoMainSection.visualSwatchOption(productOption)}}" after="waitForStorefrontProductPageLoad" stepKey="clickSelectOption"/>
-        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." after="waitForSuccessMessage" stepKey="seeAddToCartSuccessMessage"/>
-    </actionGroup>
-
-    <!-- Update Configurable Product with Swatch attribute in the cart -->
-    <actionGroup name="StorefrontUpdateCartConfigurableProductWithSwatches">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontUpdateCartConfigurableProductWithSwatchesActionGroup">
         <arguments>
             <argument name="product"/>
             <argument name="productOption" type="string"/>
