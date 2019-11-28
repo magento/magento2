@@ -51,16 +51,16 @@
         </after>
         <!--Create user role-->
         <comment userInput="Create user role" stepKey="commentCreateUserRole"/>
-        <actionGroup ref="AdminFillUserRoleRequiredData" stepKey="fillUserRoleRequiredData">
+        <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Stores"/>
         </actionGroup>
         <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
-        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleStores">
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleStores">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Stores"/>
         </actionGroup>
-        <actionGroup ref="AdminAddRestrictedRole" stepKey="addRestrictedRoleProducts">
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRoleProducts">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Products"/>
         </actionGroup>
