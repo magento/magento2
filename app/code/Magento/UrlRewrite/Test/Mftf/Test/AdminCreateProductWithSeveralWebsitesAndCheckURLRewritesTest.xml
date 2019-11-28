@@ -90,7 +90,7 @@
         </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed category Id -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchPath">
             <argument name="redirectPath" value="$$category.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
@@ -104,7 +104,7 @@
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed product Id -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchPath1">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchPath1">
             <argument name="redirectPath" value="$$createProduct.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>

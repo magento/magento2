@@ -27,7 +27,7 @@
         </after>
 
         <!--Open Url Rewrite Index Page and update the Custom Url Rewrite, Store, Request Path, Redirect Type and Description -->
-        <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewrite">
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewrite">
             <argument name="category" value="$$category.name$$"/>
             <argument name="customUrlRewriteValue" value="For Category"/>
             <argument name="storeValue" value="Default Store View"/>
@@ -43,7 +43,7 @@
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
             <argument name="redirectPath" value="newrequestpath.html" />
             <argument name="redirectType" value="No" />
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
