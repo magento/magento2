@@ -106,7 +106,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     /**
      * Retrieve cookie manager
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private function getCookieManager()
@@ -122,7 +122,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
     /**
      * Retrieve cookie metadata factory
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private function getCookieMetadataFactory()

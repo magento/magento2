@@ -197,6 +197,7 @@ class Attribute extends AbstractDb
      * @param AbstractModel $attribute
      * @return AbstractDb
      * @throws CouldNotDeleteException
+     * @since 102.0.3
      */
     protected function _beforeDelete(AbstractModel $attribute)
     {

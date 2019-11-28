@@ -22,6 +22,7 @@ use Magento\Framework\Stdlib\StringUtils;
  * Template filter
  *
  * @api
+ * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template implements \Zend_Filter_Interface

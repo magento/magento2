@@ -36,11 +36,6 @@ class SaveHandler implements SaveHandlerInterface
     private $defaultHandler;
 
     /**
-     * @var string
-     */
-    private $saveHandler;
-
-    /**
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param ConfigInterface $sessionConfig
      * @param string $default
@@ -53,7 +48,6 @@ class SaveHandler implements SaveHandlerInterface
         $this->saveHandlerFactory = $saveHandlerFactory;
         $this->sessionConfig = $sessionConfig;
         $this->defaultHandler = $default;
-        $this->saveHandler = $this->sessionConfig->getOption('session.save_handler') ?: $this->defaultHandler;
     }
 
     /**
@@ -138,7 +132,8 @@ class SaveHandler implements SaveHandlerInterface
     {
         try {
             if ($this->saveHandlerAdapter === null) {
-                $this->saveHandlerAdapter = $this->saveHandlerFactory->create($this->saveHandler);
+                $saveMethod = $this->sessionConfig->getOption('session.save_handler') ?: $this->defaultHandler;
+                $this->saveHandlerAdapter = $this->saveHandlerFactory->create($saveMethod);
             }
             return $this->saveHandlerAdapter->{$method}(...$arguments);
         } catch (SessionException $exception) {

@@ -66,6 +66,7 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
 
     /**
      * @inheritdoc
+     * @since 102.0.1
      */
     public function getItemPrice(Product $product)
     {
