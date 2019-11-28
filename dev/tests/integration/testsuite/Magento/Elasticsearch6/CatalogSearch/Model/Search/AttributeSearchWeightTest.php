@@ -22,6 +22,7 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
      *
      * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @dataProvider attributeSearchWeightDataProvider
      * @magentoDbIsolation enabled
      *
@@ -37,7 +38,70 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
         array $attributeWeights,
         array $expectedProductNames
     ): void {
-        $this->markTestSkipped('Skipped in connection with bug MC-29017');
+        $this->markTestSkipped('This test need stabilization. MC-29260');
         parent::testAttributeSearchWeight($searchQuery, $attributeWeights, $expectedProductNames);
+    }
+
+    /**
+     * Data provider with word for quick search, attributes weight and expected products name order.
+     *
+     * @return array
+     */
+    public function attributeSearchWeightDataProvider(): array
+    {
+        return [
+            'sku_order_more_than_name' => [
+                '1234-1234-1234-1234',
+                [
+                    'sku' => 6,
+                    'name' => 5,
+                ],
+                [
+                    '1234-1234-1234-1234',
+                    'Simple',
+                ],
+            ],
+            'name_order_more_than_sku' => [
+                '1234-1234-1234-1234',
+                [
+                    'name' => 6,
+                    'sku' => 5,
+                ],
+                [
+                    '1234-1234-1234-1234',
+                    'Simple',
+                ],
+            ],
+            'search_by_word_from_description' => [
+                'Simple',
+                [
+                    'name' => 10,
+                    'test_searchable_attribute' => 9,
+                    'sku' => 2,
+                    'description' => 1,
+                ],
+                [
+                    'Simple',
+                    'Product with attribute',
+                    '1234-1234-1234-1234',
+                    'Product with description',
+                ],
+            ],
+            'search_by_attribute_option' => [
+                'Simple',
+                [
+                    'name' => 10,
+                    'description' => 9,
+                    'test_searchable_attribute' => 7,
+                    'sku' => 2,
+                ],
+                [
+                    'Simple',
+                    'Product with description',
+                    'Product with attribute',
+                    '1234-1234-1234-1234',
+                ],
+            ],
+        ];
     }
 }
