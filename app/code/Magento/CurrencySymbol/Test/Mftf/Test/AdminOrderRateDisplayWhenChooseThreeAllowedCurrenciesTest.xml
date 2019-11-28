@@ -45,7 +45,7 @@
         <!--Open created product on Storefront and place for order-->
         <amOnPage url="{{StorefrontProductPage.url($$createNewProduct.custom_attributes[url_key]$$)}}" stepKey="goToNewProductPage"/>
         <waitForPageLoad stepKey="waitForNewProductPagePageLoad"/>
-        <actionGroup ref="StorefrontSwitchCurrency" stepKey="switchCurrency">
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchCurrency">
             <argument name="currency" value="RUB"/>
         </actionGroup>
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontNewProductPage">

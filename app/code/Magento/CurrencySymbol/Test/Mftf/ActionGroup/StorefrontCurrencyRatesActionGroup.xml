@@ -17,13 +17,4 @@
         <click selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="chooseCurrency"/>
         <see selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" userInput="{{currency}}" stepKey="seeSelectedCurrency"/>
     </actionGroup>
-    <actionGroup name="StorefrontSwitchCurrency">
-        <arguments>
-            <argument name="currency" type="string" defaultValue="EUR"/>
-        </arguments>
-        <click selector="{{StorefrontSwitchCurrencyRatesSection.currencyTrigger}}" stepKey="openTrigger"/>
-        <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="waitForCurrency"/>
-        <click selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="chooseCurrency"/>
-        <see selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" userInput="{{currency}}" stepKey="seeSelectedCurrency"/>
-    </actionGroup>
 </actionGroups>
