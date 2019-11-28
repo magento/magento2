@@ -21,8 +21,6 @@
                 <issueId value="MQE-1576"/>
             </skip>
         </annotations>
-
-
         <before>
             <!--Login As Admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -39,7 +37,7 @@
 
 
         <!--Configure Braintree-->
-        <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
+        <actionGroup ref="ConfigureBraintreeActionGroup" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
         <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoToUserRoles"/>
@@ -49,7 +47,10 @@
         <!--Create new admin user-->
         <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoToAllUsers"/>
         <waitForPageLoad stepKey="waitForUsers" time="15"/>
-        <actionGroup ref="AdminCreateUserActionGroup" stepKey="AdminCreateNewUser"/>
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="AdminCreateNewUser">
+            <argument name="role" value="role"/>
+            <argument name="User" value="NewAdmin"/>
+        </actionGroup>
 
         <!--SignOut-->
         <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
