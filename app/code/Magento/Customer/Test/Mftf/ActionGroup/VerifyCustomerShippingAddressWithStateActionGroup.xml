@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyCustomerShippingAddressWithStateActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Customer Dashboard Address area. Validates that the provided Customer Shipping Address, including the State, is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="address"/>
+        </arguments>
+
+        <amOnPage url="customer/address/index/" stepKey="goToAddressPage"/>
+        <waitForPageLoad stepKey="waitForAddressPageLoad"/>
+
+        <!--Verify customer default shipping address-->
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.firstname}} {{address.lastname}}" stepKey="seeAssertCustomerDefaultShippingAddressFirstnameAndLastname"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.company}}" stepKey="seeAssertCustomerDefaultShippingAddressCompany"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.street[0]}}" stepKey="seeAssertCustomerDefaultShippingAddressStreet"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.street[1]}}" stepKey="seeAssertCustomerDefaultShippingAddressStreet1"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.city}}, {{address.state}}, {{address.postcode}}" stepKey="seeAssertCustomerDefaultShippingAddressCityAndPostcode"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.country}}" stepKey="seeAssertCustomerDefaultShippingAddressCountry"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="{{address.telephone}}" stepKey="seeAssertCustomerDefaultShippingAddressTelephone"/>
+    </actionGroup>
+</actionGroups>

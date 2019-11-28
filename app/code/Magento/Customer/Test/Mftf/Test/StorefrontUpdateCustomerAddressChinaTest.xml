@@ -32,19 +32,19 @@
         </after>
 
         <!--Update customer address in storefront-->
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddress">
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddress">
             <argument name="Address" value="updateCustomerChinaAddress"/>
         </actionGroup>
         <!--Verify customer address save success message-->
         <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeAssertCustomerAddressSuccessSaveMessage"/>
 
         <!--Verify customer default billing address-->
-        <actionGroup ref="VerifyCustomerBillingAddressWithState" stepKey="verifyBillingAddress">
+        <actionGroup ref="VerifyCustomerBillingAddressWithStateActionGroup" stepKey="verifyBillingAddress">
             <argument name="address" value="updateCustomerChinaAddress"/>
         </actionGroup>
 
         <!--Verify customer default shipping address-->
-        <actionGroup ref="VerifyCustomerShippingAddressWithState" stepKey="verifyShippingAddress">
+        <actionGroup ref="VerifyCustomerShippingAddressWithStateActionGroup" stepKey="verifyShippingAddress">
             <argument name="address" value="updateCustomerChinaAddress"/>
         </actionGroup>
     </test>

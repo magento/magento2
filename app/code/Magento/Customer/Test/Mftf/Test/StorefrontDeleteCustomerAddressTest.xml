@@ -27,7 +27,7 @@
         <fillField  stepKey="fillEmail" userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
         <fillField  stepKey="fillPassword" userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
         <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <see userInput="You saved the address." stepKey="verifyAddressCreated"/>

@@ -8,12 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontOpenCustomerAccountCreatePageActionGroup">
+    <actionGroup name="EnterCustomerAddressInfoFillStateActionGroup" extends="EnterCustomerAddressInfoActionGroup">
         <annotations>
-            <description>Goes to the Storefront Customer Create page.</description>
+            <description>EXTENDS: EnterCustomerAddressInfo. Fills the State field.</description>
         </annotations>
 
-        <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="goToCustomerAccountCreatePage"/>
-        <waitForPageLoad stepKey="waitForPageLoaded"/>
+        <fillField stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvinceFill}}" userInput="{{Address.state}}"/>
     </actionGroup>
 </actionGroups>
