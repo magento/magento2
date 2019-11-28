@@ -35,6 +35,10 @@ class JsonSerializer implements \Magento\Framework\View\Element\Block\ArgumentIn
      */
     public function serialize(array $data): string
     {
-        return $this->serializer->serialize($data);
+        $result = json_encode($data, JSON_HEX_APOS);
+        if (false === $result) {
+            throw new \InvalidArgumentException("Unable to serialize value. Error: " . json_last_error_msg());
+        }
+        return $result;
     }
 }
