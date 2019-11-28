@@ -5,24 +5,13 @@
  */
 declare(strict_types=1);
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product as ProductModel;
-use Magento\TestFramework\Helper\Bootstrap;
+require __DIR__ . '/product_configurable_sku.php';
 
-/** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
-
+$childSku = 'simple_10';
 try {
-    $configurableProduct = $productRepository->get('configurable');
-    $productTypeInstance = $configurableProduct->getTypeInstance();
-
-    /** @var ProductModel $child */
-    foreach ($productTypeInstance->getUsedProducts($configurableProduct) as $child) {
-        $childProduct = $productRepository->getById($child->getId());
-        $childProduct->setStockData(['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]);
-        $productRepository->save($childProduct);
-        break;
-    }
+    $childProduct = $productRepository->get($childSku);
+    $childProduct->setStockData(['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]);
+    $productRepository->save($childProduct);
 } catch (Exception $e) {
     // Nothing to remove
 }
