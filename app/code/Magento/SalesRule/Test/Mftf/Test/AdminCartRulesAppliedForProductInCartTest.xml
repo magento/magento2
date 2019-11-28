@@ -86,7 +86,7 @@
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
 
         <!--Create cart price rule-->
-        <actionGroup ref="AdminCreateCartPriceRuleWithConditions" stepKey="createRule">
+        <actionGroup ref="AdminCreateCartPriceRuleWithConditionsActionGroup" stepKey="createRule">
             <argument name="ruleName" value="PriceRuleWithCondition"/>
             <argument name="condition1" value="Products subselection"/>
             <argument name="condition2" value="Category"/>

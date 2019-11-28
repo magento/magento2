@@ -129,7 +129,7 @@
         <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createFirstPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createFirstCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeFirstOption.option[store_labels][1][label]$$"/>
@@ -143,7 +143,7 @@
         <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createSecondPriceRule">
             <argument name="catalogRule" value="_defaultCatalogRule"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createSecondCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeSecondOption.option[store_labels][1][label]$$"/>
@@ -157,7 +157,7 @@
         <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createThirdPriceRule">
             <argument name="catalogRule" value="CatalogRuleWithoutDiscount"/>
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
         <actionGroup ref="CreateCatalogPriceRuleConditionWithAttributeAndOptionActionGroup" stepKey="createThirdCatalogPriceRuleCondition">
             <argument name="attributeName" value="$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="targetSelectValue" value="$$createConfigProductAttributeThirdOption.option[store_labels][1][label]$$"/>

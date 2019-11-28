@@ -136,7 +136,7 @@
             <argument name="catalogRule" value="CatalogRuleByPercentWith96Amount" />
             <argument name="productSku" value="$$createConfigChildProduct3.sku$$" />
         </actionGroup>
-        <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
 
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>

@@ -55,7 +55,7 @@
         </actionGroup>
 
         <!-- Spot check the storefront -->
-        <actionGroup ref="VerifyDiscountAmount" stepKey="verifyStorefront">
+        <actionGroup ref="VerifyDiscountAmountActionGroup" stepKey="verifyStorefront">
             <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
             <argument name="quantity" value="2"/>
             <argument name="expectedDiscount" value="-$19.99"/>
