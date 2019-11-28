@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Block\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -52,10 +55,10 @@ class TopMenuTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->categoryFactory = $this->objectManager->create(CategoryFactory::class);
+        $this->categoryFactory = $this->objectManager->get(CategoryFactory::class);
         $this->categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Topmenu::class);
+        $this->block = $this->layout->createBlock(Topmenu::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
@@ -144,14 +147,13 @@ class TopMenuTest extends TestCase
             'add_in_tree_visible' => [
                 'categories' => [
                     [
+                        'parent_name' => 'Category 1.1.1',
                         Category::KEY_NAME => 'Sub Category 1',
-                        Category::KEY_PARENT_ID => 402,
                         Category::KEY_IS_ACTIVE => true,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'is_contains' => true,
                         'name' => '>Sub Category 1<',
                     ],
                 ],
@@ -159,22 +161,20 @@ class TopMenuTest extends TestCase
             'child_visible_in_tree' => [
                 'categories' => [
                     [
+                        'parent_name' => 'Category 1.1',
                         Category::KEY_NAME => 'Sub Category 1',
-                        Category::KEY_PARENT_ID => 401,
                         Category::KEY_IS_ACTIVE => true,
                     ],
                     [
-                        'id' => 401,
+                        'category_name' => 'Category 1.1',
                         Category::KEY_IS_ACTIVE => false,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'is_contains' => true,
                         'name' => '>Sub Category 1<',
                     ],
                     [
-                        'is_contains' => true,
                         'name' => '>Category 1.1.1<',
                     ],
                 ],
@@ -214,15 +214,14 @@ class TopMenuTest extends TestCase
             'add_in_tree_category_disable' => [
                 'categories' => [
                     [
+                        'parent_name' => 'Category 1.1.1',
                         Category::KEY_NAME => 'Sub Category 1',
-                        Category::KEY_PARENT_ID => 402,
                         Category::KEY_IS_ACTIVE => false,
                         Category::KEY_INCLUDE_IN_MENU => true,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'is_contains' => false,
                         'name' => '>Sub Category 1<',
                     ],
                 ],
@@ -230,15 +229,14 @@ class TopMenuTest extends TestCase
             'add_in_tree_include_in_menu_disable' => [
                 'categories' => [
                     [
+                        'parent_name' => 'Category 1.1.1',
                         Category::KEY_NAME => 'Sub Category 1',
-                        Category::KEY_PARENT_ID => 402,
                         Category::KEY_IS_ACTIVE => true,
                         Category::KEY_INCLUDE_IN_MENU => false,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'is_contains' => false,
                         'name' => '>Sub Category 1<',
                     ],
                 ],
@@ -246,22 +244,20 @@ class TopMenuTest extends TestCase
             'child_invisible_in_tree' => [
                 'categories' => [
                     [
+                        'parent_name' => 'Default Category',
                         Category::KEY_NAME => 'Sub Category 1',
-                        Category::KEY_PARENT_ID => 2,
                         Category::KEY_IS_ACTIVE => true,
                     ],
                     [
-                        'id' => 400,
+                        'category_name' => 'Category 1',
                         Category::KEY_IS_ACTIVE => false,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'is_contains' => false,
                         'name' => '>Category 1.1<',
                     ],
                     [
-                        'is_contains' => false,
                         'name' => '>Category 1.1.1<',
                     ],
                 ],
@@ -275,7 +271,6 @@ class TopMenuTest extends TestCase
      * @dataProvider menuStructureProvider
      * @magentoDataFixture Magento/Catalog/_files/categories_no_products_with_two_tree.php
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation disabled
      * @param array $moveCategory
      * @param array $expectedMenuTree
      * @return void
@@ -283,8 +278,11 @@ class TopMenuTest extends TestCase
     public function testMenuStructure(array $moveCategory, array $expectedMenuTree): void
     {
         /** @var Category $category */
-        $category = $this->categoryRepository->get($moveCategory['id']);
-        $category->move($moveCategory['parent_id'], $moveCategory['after_category_id']);
+        $category = $this->categoryRepository->get($this->getCategoryIdByName($moveCategory['name']));
+        $category->move(
+            $this->getCategoryIdByName($moveCategory['parent_name']),
+            $this->getCategoryIdByName($moveCategory['after_category_name'])
+        );
 
         $this->block->getHtml('level-top', 'submenu', 0);
 
@@ -307,101 +305,101 @@ class TopMenuTest extends TestCase
         return [
             'move_to_default' => [
                 'moveCategory' => [
-                    'id' => 5,
-                    'parent_id' => 2,
-                    'after_category_id' => null,
+                    'name' => 'Category 1.1.1',
+                    'parent_name' => 'Default Category',
+                    'after_category_name' => '',
                 ],
                 'expectedMenuTree' => [
-                    5 => ['position' => '1'],
-                    3 => [
+                    'Category 1.1.1' => ['position' => '1'],
+                    'Category 1' => [
                         'position' => '2',
-                        4 => ['position' => '2-1'],
+                        'Category 1.1' => ['position' => '2-1'],
                     ],
                 ],
             ],
             'move_to_not_default' => [
                 'moveCategory' => [
-                    'id' => 11,
-                    'parent_id' => 10,
-                    'after_category_id' => null,
+                    'name' => 'Movable Position 3',
+                    'parent_name' => 'Movable Position 2',
+                    'after_category_name' => '',
                 ],
                 'expectedMenuTree' => [
-                    10 => [
+                    'Movable Position 2' => [
                         'position' => '5',
-                        11 => ['position' => '5-1'],
+                        'Movable Position 3' => ['position' => '5-1'],
                     ],
-                    12 => ['position' => '6'],
+                    'Category 12' => ['position' => '6'],
                 ],
             ],
             'move_tree_to_default' => [
                 'moveCategory' => [
-                    'id' => 4,
-                    'parent_id' => 2,
-                    'after_category_id' => null,
+                    'name' => 'Category 1.1',
+                    'parent_name' => 'Default Category',
+                    'after_category_name' => '',
                 ],
                 'expectedMenuTree' => [
-                    4 => [
+                    'Category 1.1' => [
                         'position' => '1',
-                        5 => ['position' => '1-1'],
+                        'Category 1.1.1' => ['position' => '1-1'],
                     ],
-                    3 => ['position' => '2'],
+                    'Category 1' => ['position' => '2'],
                 ],
             ],
             'move_tree_to_other_tree' => [
                 'moveCategory' => [
-                    'id' => 14,
-                    'parent_id' => 4,
-                    'after_category_id' => 5,
+                    'name' => 'Category 2.2',
+                    'parent_name' => 'Category 1.1',
+                    'after_category_name' => 'Category 1.1.1',
                 ],
                 'expectedMenuTree' => [
-                    3 => [
+                    'Category 1' => [
                         'position' => '1',
-                        4 => [
+                        'Category 1.1' => [
                             'position' => '1-1',
-                            5 => ['position' => '1-1-1'],
-                            14 => [
+                            'Category 1.1.1' => ['position' => '1-1-1'],
+                            'Category 2.2' => [
                                 'position' => '1-1-2',
-                                15 => ['position' => '1-1-2-1'],
+                                'Category 2.2.1' => ['position' => '1-1-2-1'],
                             ],
                         ],
                     ],
-                    6 => [
+                    'Category 2' => [
                         'position' => '2',
-                        13 => ['position' => '2-1'],
+                        'Category 2.1' => ['position' => '2-1'],
                     ],
                 ],
             ],
             'position_of_categories_in_default' => [
                 'moveCategory' => [
-                    'id' => 12,
-                    'parent_id' => 2,
-                    'after_category_id' => 7,
+                    'name' => 'Category 12',
+                    'parent_name' => 'Default Category',
+                    'after_category_name' => 'Movable',
                 ],
                 'expectedMenuTree' => [
-                    7 => ['position' => '3'],
-                    12 => ['position' => '4'],
-                    9 => ['position' => '5'],
-                    10 => ['position' => '6'],
-                    11 => ['position' => '7'],
+                    'Movable' => ['position' => '3'],
+                    'Category 12' => ['position' => '4'],
+                    'Movable Position 1' => ['position' => '5'],
+                    'Movable Position 2' => ['position' => '6'],
+                    'Movable Position 3' => ['position' => '7'],
                 ],
             ],
             'position_of_categories_in_tree' => [
                 'moveCategory' => [
-                    'id' => 7,
-                    'parent_id' => 6,
-                    'after_category_id' => 13,
+                    'name' => 'Movable',
+                    'parent_name' => 'Category 2',
+                    'after_category_name' => 'Category 2.1',
                 ],
                 'expectedMenuTree' => [
-                    6 => [
+                    'Category 2' => [
                         'position' => '2',
-                        13 => ['position' => '2-1'],
-                        7 => ['position' => '2-2'],
-                        14 => [
+                        'Category 2.1' => ['position' => '2-1'],
+                        'Movable' => ['position' => '2-2'],
+                        'Category 2.2' => [
                             'position' => '2-3',
-                            15 => ['position' => '2-3-1'],
+                            'Category 2.2.1' => ['position' => '2-3-1'],
                         ],
                     ],
-                    9 => ['position' => '3'],
+                    'Movable Position 1' => ['position' => '3'],
                 ],
             ],
         ];
@@ -416,7 +414,6 @@ class TopMenuTest extends TestCase
      * @param string $storeCode
      * @param string $expectedCategory
      * @param string $notExpectedCategory
-     * @magentoDbIsolation disabled
      * @return void
      */
     public function testMultipleWebsitesCategoryDisplay(
@@ -468,10 +465,12 @@ class TopMenuTest extends TestCase
     private function updateCategories(array $categories): void
     {
         foreach ($categories as $categoryData) {
-            if (isset($categoryData['id'])) {
-                $category = $this->categoryRepository->get($categoryData['id']);
-                unset($categoryData['id']);
+            if (isset($categoryData['category_name'])) {
+                $category = $this->categoryRepository->get($this->getCategoryIdByName($categoryData['category_name']));
+                unset($categoryData['category_name']);
             } else {
+                $categoryData[Category::KEY_PARENT_ID] = $this->getCategoryIdByName($categoryData['parent_name']);
+                unset($categoryData['parent_name']);
                 $category = $this->categoryFactory->create();
             }
             $category->addData($categoryData);
@@ -494,10 +493,28 @@ class TopMenuTest extends TestCase
         $childrenNodes = $node->getChildren()->getNodes();
         /** @var Node $childNode */
         foreach ($childrenNodes as $childNode) {
-            $id = str_replace('category-node-', '', $childNode->getId());
-            $nodes[$id] = $this->getMenuTree($childNode);
+            $name = $childNode->getName();
+            $nodes[$name] = $this->getMenuTree($childNode);
         }
 
         return $nodes;
+    }
+
+    /**
+     * @param string $name
+     * @return int|null
+     */
+    private function getCategoryIdByName(string $name): ?string
+    {
+        $categoryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
+        /** @var Collection $categoryCollection */
+        $categoryCollection = $categoryCollectionFactory->create();
+        /** @var $category Category */
+        $category = $categoryCollection
+            ->addAttributeToFilter(CategoryInterface::KEY_NAME, $name)
+            ->setPageSize(1)
+            ->getFirstItem();
+
+        return $category->getId();
     }
 }

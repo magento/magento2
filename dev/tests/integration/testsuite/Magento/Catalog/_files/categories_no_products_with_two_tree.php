@@ -5,50 +5,59 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 require __DIR__ . '/categories_no_products.php';
 
 $categoryFactory = $objectManager->create(CategoryFactory::class);
 $categoryResource = $objectManager->create(CategoryResource::class);
+$categoryCollectionFactory = $objectManager->get(CollectionFactory::class);
+/** @var Collection $categoryCollection */
+$categoryCollection = $categoryCollectionFactory->create();
 
-/** @var $category \Magento\Catalog\Model\Category */
-$category = $categoryFactory->create();
-$category->isObjectNew(true);
-$category->setId(13)
-    ->setName('Category 2.1')
-    ->setParentId(6)
-    ->setPath('1/2/6/13')
-    ->setLevel(3)
+/** @var $category2 Category */
+$category2 = $categoryCollection
+    ->addAttributeToFilter(CategoryInterface::KEY_NAME, 'Category 2')
+    ->setPageSize(1)
+    ->getFirstItem();
+
+/** @var $category21 Category */
+$category21 = $categoryFactory->create();
+$category21->isObjectNew(true);
+$category21->setName('Category 2.1')
+    ->setParentId($category2->getId())
+    ->setPath($category2->getPath())
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setIsActive(true)
     ->setPosition(1);
-$categoryResource->save($category);
+$categoryResource->save($category21);
 
-$category = $categoryFactory->create();
-$category->isObjectNew(true);
-$category->setId(14)
-    ->setName('Category 2.2')
-    ->setParentId(6)
-    ->setPath('1/2/6/14')
-    ->setLevel(3)
+/** @var $category22 Category */
+$category22 = $categoryFactory->create();
+$category22->isObjectNew(true);
+$category22->setName('Category 2.2')
+    ->setParentId($category2->getId())
+    ->setPath($category2->getPath())
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setIsActive(true)
     ->setPosition(2);
-$categoryResource->save($category);
+$categoryResource->save($category22);
 
-$category = $categoryFactory->create();
-$category->isObjectNew(true);
-$category->setId(15)
-    ->setName('Category 2.2.1')
-    ->setParentId(14)
-    ->setPath('1/2/6/14/15')
-    ->setLevel(4)
+/** @var $category221 Category */
+$category221 = $categoryFactory->create();
+$category221->isObjectNew(true);
+$category221->setName('Category 2.2.1')
+    ->setParentId($category22->getId())
+    ->setPath($category22->getPath())
     ->setAvailableSortBy('name')
     ->setDefaultSortBy('name')
     ->setIsActive(true)
     ->setPosition(1);
-$categoryResource->save($category);
+$categoryResource->save($category221);

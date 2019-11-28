@@ -19,6 +19,7 @@ use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -38,7 +39,7 @@ $categoryRepository = $objectManager->create(CategoryRepositoryInterface::class)
 $rootCategory = $categoryFactory->create();
 $rootCategory->isObjectNew(true);
 $rootCategory->setName('Second Root Category')
-    ->setParentId(1)
+    ->setParentId(Category::TREE_ROOT_ID)
     ->setIsActive(true)
     ->setPosition(2);
 $rootCategory = $categoryRepository->save($rootCategory);
@@ -68,4 +69,4 @@ $store->setCode('test_store_1')
 $storeResource->save($store);
 
 /* Refresh stores memory cache */
-$objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
+$objectManager->get(StoreManagerInterface::class)->reinitStores();
