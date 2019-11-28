@@ -5,8 +5,26 @@
  */
 namespace Magento\Framework\Acl\AclResource;
 
+use \Magento\Framework\Escaper;
+
 class TreeBuilder
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+    * Class constructor
+    *
+    * @param Escaper $escaper
+    */
+    public function __construct(
+        Escaper $escaper
+    ) {
+        $this->escaper = $escaper;
+    }
+
     /**
      * Transform resource list into sorted resource tree that includes only active resources
      *
@@ -21,6 +39,9 @@ class TreeBuilder
                 continue;
             }
             unset($resource['disabled']);
+            if (isset($resource['title']) && !empty($resource['title'])) {
+                $resource['title'] = $this->escaper->escapeQuote($resource['title']);
+            }
             $resource['children'] = $this->build($resource['children']);
             $result[] = $resource;
         }
