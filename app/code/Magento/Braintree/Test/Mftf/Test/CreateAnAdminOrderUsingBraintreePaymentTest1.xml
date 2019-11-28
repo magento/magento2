@@ -42,14 +42,14 @@
         <actionGroup ref="ConfigureBraintree" stepKey="configureBraintree"/>
 
         <!--Create New Role-->
-        <actionGroup ref="GoToUserRoles" stepKey="GoToUserRoles"/>
+        <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoToUserRoles"/>
         <waitForPageLoad stepKey="waitForAllRoles" time="15"/>
-        <actionGroup ref="AdminCreateNewRole" stepKey="AdminCreateNewRole"/>
+        <actionGroup ref="AdminCreateNewRoleActionGroup" stepKey="AdminCreateNewRole"/>
 
         <!--Create new admin user-->
-        <actionGroup ref="GoToAllUsers" stepKey="GoToAllUsers"/>
+        <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoToAllUsers"/>
         <waitForPageLoad stepKey="waitForUsers" time="15"/>
-        <actionGroup ref="AdminCreateUserAction" stepKey="AdminCreateNewUser"/>
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="AdminCreateNewUser"/>
 
         <!--SignOut-->
         <actionGroup ref="logout" stepKey="signOutFromAdmin"/>
@@ -88,7 +88,7 @@
 
         <after>
             <!-- Disable BrainTree -->
-            <actionGroup ref="DisableBrainTree" stepKey="disableBrainTree"/>
+            <actionGroup ref="DisableBraintreeActionGroup" stepKey="disableBrainTree"/>
 
             <!--SignOut-->
             <actionGroup ref="SignOut" stepKey="signOutFromNewUser"/>
@@ -101,11 +101,11 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete User -->
-            <actionGroup ref="GoToAllUsers" stepKey="GoBackToAllUsers"/>
+            <actionGroup ref="GoToAllUsersActionGroup" stepKey="GoBackToAllUsers"/>
             <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="AdminDeleteUserActionGroup"/>
 
             <!--Delete Role-->
-            <actionGroup ref="GoToUserRoles" stepKey="GoBackToUserRoles"/>
+            <actionGroup ref="GoToUserRolesActionGroup" stepKey="GoBackToUserRoles"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="AdminDeleteRoleActionGroup"/>
         </after>
     </test>

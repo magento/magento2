@@ -7,20 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Go to all users-->
-    <actionGroup name="GoToAllUsers">
-        <annotations>
-            <description>Navigate to the Users page via Backend Admin Side Menu. PLEASE NOTE: Use the amOnPage action instead.</description>
-        </annotations>
-
-        <click selector="{{AdminCreateUserSection.system}}" stepKey="clickOnSystemIcon"/>
-        <waitForPageLoad stepKey="waitForSystemsPageToOpen"/>
-        <click selector="{{AdminCreateUserSection.allUsers}}" stepKey="clickToSelectUserRoles"/>
-        <waitForPageLoad stepKey="waitForUserRolesPageToOpen"/>
-    </actionGroup>
-
-    <!--Create new user with specified role-->
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateUserAction">
         <annotations>
             <description>Creates a User using the NewAdmin User Entity and User Role Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
