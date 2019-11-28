@@ -286,7 +286,22 @@ class TypeProcessor
     {
         $returnAnnotation = $this->getMethodReturnAnnotation($methodReflection);
         $types = $returnAnnotation->getTypes();
-        $returnType = current($types);
+        $returnType = null;
+        foreach ($types as $type) {
+            if ($type != 'null') {
+                $returnType = $type;
+                break;
+            }
+        }
+        if (!$returnType) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'No valid return type for %s::%s() specified. Verify the return type and try again.',
+                    $methodReflection->getDeclaringClass()->getName(),
+                    $methodReflection->getName()
+                )
+            );
+        }
         $nullable = in_array('null', $types);
 
         return [

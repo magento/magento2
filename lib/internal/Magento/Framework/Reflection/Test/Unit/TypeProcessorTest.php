@@ -365,6 +365,39 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Checks a case when method return annotation has a null-type at first position,
+     * and a valid type at second.
+     */
+    public function testGetReturnTypeNullAtFirstPos()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => false,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getWithNull');
+
+        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    /**
+     * Checks a case when method return annotation has a null-type at first position,
+     * and no other valid return type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage No valid return type for Magento\Framework\Reflection\Test\Unit\Fixture\TSample::getOnlyNull() specified. Verify the return type and try again.
+     */
+    public function testGetReturnTypeNullAtFirstPosNoValidType()
+    {
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getOnlyNull');
+        $this->typeProcessor->getGetterReturnType($methodReflection);
+    }
+
+    /**
      * Simple and complex data provider
      *
      * @return array
