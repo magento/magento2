@@ -53,14 +53,14 @@
         </after>
 
         <!--Go to store front (default) and click Create an Account.-->
-        <actionGroup ref="StorefrontCreateNewAccountNewsletterChecked" stepKey="SignUpNewUser">
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterCheckedActionGroup" stepKey="SignUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!--Sign Out-->
         <amOnPage url="customer/account/logout/" stepKey="customerOnLogoutPage"/>
         <waitForPageLoad stepKey="waitLogoutCustomer"/>
         <!--Create new Account with the same email address. (unchecked Sign Up for Newsletter checkbox)-->
-        <actionGroup ref="StorefrontCreateNewAccountNewsletterUnchecked" stepKey="createNewAccountNewsletterUnchecked">
+        <actionGroup ref="StorefrontCreateNewAccountNewsletterUncheckedActionGroup" stepKey="createNewAccountNewsletterUnchecked">
             <argument name="Customer" value="CustomerEntityOne"/>
             <argument name="Store" value="staticStore"/>
         </actionGroup>
