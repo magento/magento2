@@ -29,11 +29,11 @@
             <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="VisualSwatchProductAttribute"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductAttributeGridFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributeGridFilter"/>
             <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllChildrenProducts">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

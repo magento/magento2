@@ -34,7 +34,7 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
@@ -79,7 +79,7 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
@@ -124,7 +124,7 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
@@ -166,7 +166,7 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 
@@ -218,7 +218,7 @@
             </actionGroup>
             <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
             <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
 

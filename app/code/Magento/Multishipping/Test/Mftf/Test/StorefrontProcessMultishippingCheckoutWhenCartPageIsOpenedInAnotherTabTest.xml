@@ -105,11 +105,11 @@
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <!-- Go to Admin > Sales > Orders -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchFirstOrder">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstOrder">
             <argument name="keyword" value="$grabFirstOrderId"/>
         </actionGroup>
         <seeElement selector="{{AdminOrdersGridSection.orderId({$grabFirstOrderId})}}" stepKey="seeAdminFirstOrder"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchSecondOrder">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondOrder">
             <argument name="keyword" value="$grabSecondOrderId"/>
         </actionGroup>
         <seeElement selector="{{AdminOrdersGridSection.orderId({$grabSecondOrderId})}}" stepKey="seeAdminSecondOrder"/>

@@ -27,7 +27,7 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteVirtualProduct">
                 <argument name="sku" value="{{virtualProductCustomImportOptions.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetOrderFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetOrderFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
