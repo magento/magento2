@@ -54,10 +54,10 @@
         <!--Remove product from the Wishlist using the sidebar from the second category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.name$$)}}" stepKey="navigateToCategorySecondPage"/>
         <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct1InWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProduct1InWishlistSidebar">
             <argument name="productVar" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebar" stepKey="removeProduct1FromWishlistUsingSidebar">
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeProduct1FromWishlistUsingSidebar">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <!--Check that a customer on the same page as before-->
