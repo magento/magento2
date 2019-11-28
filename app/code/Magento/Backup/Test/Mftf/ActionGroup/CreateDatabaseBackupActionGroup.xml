@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="createDatabaseBackup">
+    <actionGroup name="CreateDatabaseBackupActionGroup">
         <annotations>
             <description>Creates a Database Backup using provided Backup Entity.</description>
         </annotations>
