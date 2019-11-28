@@ -11,6 +11,37 @@
     .checkout-agreements-block {
         .checkout-agreements {
             margin-bottom: @indent__base;
+
+            .checkout-agreement {
+                display: flex;
+
+                &.required > .label {
+                    &:after {
+                        content: '';
+                    }
+
+                    .action.action-show {
+                        &:hover,
+                        &:active {
+                            &:after {
+                                display: inline-block;
+                                text-decoration: none;
+                            }
+                        }
+
+                        &:after {
+                            color: @form-field-label-asterisk__color;
+                            content: '*';
+                            font-size: .lib-font-size(@form-field-label-asterisk__font-size);
+                            margin: @form-field-label-asterisk__margin;
+                        }
+                    }
+                }
+
+                button.action.action-show {
+                    text-align: left;
+                }
+            }
         }
 
         .action-show {
