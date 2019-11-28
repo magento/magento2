@@ -14,7 +14,7 @@
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainDownloadableProductForm" stepKey="fillMainProductFormDownloadable" after="goToCreateDownloadableProduct">
+        <actionGroup ref="FillMainDownloadableProductFormActionGroup" stepKey="fillMainProductFormDownloadable" after="goToCreateDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
@@ -25,22 +25,22 @@
         <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle" after="checkLinksPurchasedSeparately"/>
 
         <!--  Link 1 -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads" after="fillDownloadableSampleTitle">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableLinkWithMaxDownloads" after="fillDownloadableSampleTitle">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
         <!--  Link 2 -->
-        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink" after="addDownloadableLinkWithMaxDownloads">
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addDownloadableLink" after="addDownloadableLinkWithMaxDownloads">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
         <!--  Sample 1 -->
-        <actionGroup ref="addDownloadableSampleFile" stepKey="addDownloadSampleFile" after="addDownloadableLink">
+        <actionGroup ref="AddDownloadableSampleFileActionGroup" stepKey="addDownloadSampleFile" after="addDownloadableLink">
             <argument name="sample" value="downloadableSampleFile"/>
         </actionGroup>
 
         <!--  Sample 2 -->
-        <actionGroup ref="addDownloadableSampleUrl" stepKey="addDownloadableSampleUrl" after="addDownloadSampleFile">
+        <actionGroup ref="AddDownloadableSampleUrlActionGroup" stepKey="addDownloadableSampleUrl" after="addDownloadSampleFile">
             <argument name="sample" value="downloadableSampleUrl"/>
         </actionGroup>
 
