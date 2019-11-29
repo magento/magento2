@@ -63,7 +63,7 @@
                         <field id="engine">elasticsearch</field>
                     </depends>
                 </field>
-                <!-- Elasticsearch 5.0+ -->
+                <!-- Elasticsearch 5.x -->
                 <field id="elasticsearch5_server_hostname" translate="label" type="text" sortOrder="61" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Elasticsearch Server Hostname</label>
                     <depends>
