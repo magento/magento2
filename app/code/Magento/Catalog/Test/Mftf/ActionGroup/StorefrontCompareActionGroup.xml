@@ -32,6 +32,8 @@
             <argument name="productVar"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToCompare}}"
+                               stepKey="seeAddToCompareLink"/>
         <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickAddToCompare"/>
         <waitForElement selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForAddProductToCompareSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added product {{productVar.name}} to the comparison list." stepKey="assertAddProductToCompareSuccessMessage"/>
