@@ -175,21 +175,7 @@ class DataExtractorTest extends TestCase
                         'method' => 'getKeyword',
                     ],
                 ],
-            ],
-            'Test case keyword 2' => [
-                Keyword::class,
-                KeywordInterface::class,
-                [
-                    'id' => [
-                        'value' => 3,
-                        'method' => 'getId',
-                    ],
-                    'keyword' => [
-                        'value' => 'keyword2',
-                        'method' => 'getKeyword',
-                    ],
-                ],
-            ],
+            ]
         ];
     }
 }
