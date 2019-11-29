@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 
 /**
  * Class ValidateCustomerData
@@ -22,13 +23,21 @@ class ValidateCustomerData
     private $getAllowedCustomerAttributes;
 
     /**
+     * @var EmailAddressValidator
+     */
+    private $emailAddressValidator;
+
+    /**
      * ValidateCustomerData constructor.
      *
      * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
      */
-    public function __construct(GetAllowedCustomerAttributes $getAllowedCustomerAttributes)
-    {
+    public function __construct(
+        GetAllowedCustomerAttributes $getAllowedCustomerAttributes,
+        EmailAddressValidator $emailAddressValidator
+    ) {
         $this->getAllowedCustomerAttributes = $getAllowedCustomerAttributes;
+        $this->emailAddressValidator = $emailAddressValidator;
     }
 
     /**
@@ -42,6 +51,12 @@ class ValidateCustomerData
      */
     public function execute(array $customerData): void
     {
+        if (!$this->emailIsValid($customerData['email'])) {
+            throw new GraphQlInputException(
+                __('"%1" is not a valid email address.', $customerData['email'])
+            );
+        }
+
         $attributes = $this->getAllowedCustomerAttributes->execute(array_keys($customerData));
         $errorInput = [];
 
@@ -59,5 +74,25 @@ class ValidateCustomerData
                 __('Required parameters are missing: %1', [implode(', ', $errorInput)])
             );
         }
+    }
+
+    /*
+     * Validate if email address is valid
+     *
+     * In order to work the same as in admin panel, the patter for validation was selected from 'validate-email'
+     * function in app/code/Magento/Ui/view/base/web/js/lib/validation/rules.js
+     *
+     * @param string $email
+     *
+     * @return bool
+     */
+    private function emailIsValid(string $email): bool
+    {
+        if (empty($email)) {
+            return false;
+        }
+
+        $regex = "/^([a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*@([a-z0-9-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*\.(([a-z]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}]){2,})$/iu";
+        return preg_match($regex, $email) && $this->emailAddressValidator->isValid($email);
     }
 }
