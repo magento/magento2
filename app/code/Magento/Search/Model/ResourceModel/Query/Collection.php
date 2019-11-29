@@ -150,6 +150,36 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Determines whether a Search Term belongs to the top results for given storeId
+     *
+     * @param string $term
+     * @param int $storeId
+     * @param int $maxCountCacheableSearchTerms
+     * @return bool
+     */
+    public function isTopSearchResult(string $term, int $storeId, int $maxCountCacheableSearchTerms):bool
+    {
+        $select = $this->getSelect();
+        $select->reset(\Magento\Framework\DB\Select::FROM);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->distinct(true);
+        $select->from(['main_table' => $this->getTable('search_query')], ['query_text']);
+        $select->where('main_table.store_id IN (?)', $storeId);
+        $select->where('num_results > 0');
+        $select->order(['popularity desc']);
+
+        $select->limit($maxCountCacheableSearchTerms);
+
+        $subQuery = new \Zend_Db_Expr('(' . $select->assemble() . ')');
+
+        $select->reset();
+        $select->from(['result' =>  $subQuery ], []);
+        $select->where('result.query_text = ?', $term);
+
+        return $this->getSize() > 0;
+    }
+    
+    /**
      * Set Recent Queries Order
      *
      * @return $this
