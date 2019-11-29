@@ -42,7 +42,7 @@
         </before>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage1">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -85,7 +85,7 @@
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="seeElementByPrice100"/>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage2">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage2">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -105,7 +105,7 @@
         <dontSeeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="dontSeeElementByPrice100"/>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage3">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage3">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -125,7 +125,7 @@
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="seeElementByPrice100s"/>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage4">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage4">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 

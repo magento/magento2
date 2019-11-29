@@ -110,7 +110,7 @@
         <see userInput="You duplicated the page." stepKey="seeDuplicatedPageMsg"/>
         <!--Verify duplicated CMS Page-->
         <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
-        <actionGroup ref="AssertCMSPageContent" stepKey="assertContent"/>
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="assertContent"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn3" />
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
         <see userInput="You saved the page." stepKey="seeSavedCMSPageMsgOnGrid"/>
