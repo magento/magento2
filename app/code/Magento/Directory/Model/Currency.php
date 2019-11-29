@@ -209,7 +209,7 @@ class Currency extends AbstractModel
      * @param Currency|string $toCurrency
      * @return float
      */
-    public function getAnyRate($toCurrency)
+    public function getAnyRate($toCurrency): float
     {
         $code = $this->getCustomCurrencyCode($toCurrency);
         $rates = $this->getRates();
