@@ -92,7 +92,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForSecondSearchTerm">
             <argument name="phrase" value="?;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForSecondSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
             <argument name="phrase" value="?{{ProductWithSpecialSymbols.name}};"/>
         </actionGroup>
@@ -104,10 +104,10 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
             <argument name="phrase" value="?anythingcangobetween;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForThirdSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForThirdSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForForthSearchTerm">
             <argument name="phrase" value="? anything at all ;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForForthSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForForthSearchTerm"/>
     </test>
 </tests>
