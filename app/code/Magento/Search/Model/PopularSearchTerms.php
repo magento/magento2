@@ -48,13 +48,8 @@ class PopularSearchTerms
      */
     public function isCacheable(string $term, int $storeId)
     {
-        $terms = $this->queryCollection
-            ->setPopularQueryFilter($storeId)
-            ->setPageSize($this->getMaxCountCacheableSearchTerms($storeId))
-            ->load()
-            ->getColumnValues('query_text');
-
-        return in_array($term, $terms);
+        $maxCountCacheableSearchTerms = $this->getMaxCountCacheableSearchTerms($storeId);
+        return $this->queryCollection->isTopSearchResult($term, $storeId, $maxCountCacheableSearchTerms);
     }
 
     /**
