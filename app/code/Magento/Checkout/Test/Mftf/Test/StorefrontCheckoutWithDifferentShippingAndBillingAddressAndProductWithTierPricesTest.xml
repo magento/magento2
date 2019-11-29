@@ -23,10 +23,10 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">50.00</field>
             </createData>
-            <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
                 <argument name="productSku" value="$$simpleProduct.sku$$"/>
             </actionGroup>
-            <actionGroup ref="ProductSetAdvancedTierFixedPricing" stepKey="setTierPrice">
+            <actionGroup ref="ProductSetAdvancedTierFixedPricingActionGroup" stepKey="setTierPrice">
                 <argument name="website" value=""/>
                 <argument name="group" value=""/>
                 <argument name="quantity" value="3"/>
@@ -49,7 +49,7 @@
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 

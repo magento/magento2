@@ -109,13 +109,13 @@
         <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToEditPage"/>
         <waitForPageLoad stepKey="waitForChildProductPageLoad"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <!-- Set the second product out of stock -->
         <comment userInput="Set the second product out of stock" stepKey="outOfStockChildProduct"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToSecondProductEditPage"/>
         <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="outOfStockStatus"/>
-        <actionGroup ref="saveProductForm" stepKey="saveSecondProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
         <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
         <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="createNewOrder">

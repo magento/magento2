@@ -37,10 +37,10 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProductEditPage">
+            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProductEditPage">
                 <argument name="productId" value="$$createProduct.id$$"/>
             </actionGroup>
-            <actionGroup ref="ProductSetWebsite" stepKey="assignProductToSecondWebsite">
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
                 <argument name="website" value="{{customWebsite.name}}"/>
             </actionGroup>
         </before>

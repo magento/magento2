@@ -61,7 +61,7 @@
         <waitForPageLoad stepKey="waitForPageloadSuccess2"/>
         <!--Delete Image: will be in both root and favicon-->
         <comment userInput="Delete Image" stepKey="deleteImageComment"/>
-        <actionGroup ref="navigateToMediaGallery" stepKey="navigateToMediaGallery"/>
+        <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
         <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder2">
             <argument name="FolderName" value="Storage Root"/>
         </actionGroup>

@@ -36,13 +36,13 @@
         </after>
 
         <!-- Add Simple Product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <!-- Add virtual Product to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.name$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 

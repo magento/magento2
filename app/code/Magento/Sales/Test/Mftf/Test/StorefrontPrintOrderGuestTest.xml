@@ -36,7 +36,7 @@
             </createData>
 
             <!-- Check Links can be purchased separately for Downloadable Product -->
-            <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToDownloadableProduct">
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProduct">
                 <argument name="product" value="$$downloadableProduct$$"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -112,7 +112,7 @@
             </createData>
 
             <!-- Grab attribute name for Configurable Product -->
-            <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToConfigurableProduct">
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToConfigurableProduct">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
@@ -145,7 +145,7 @@
             </createData>
 
             <!-- Grab bundle option name for Bundle Product -->
-            <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToBundleProduct">
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
                 <argument name="product" value="$$createBundleProduct$$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>

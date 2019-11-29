@@ -150,7 +150,7 @@
             <deleteData createDataKey="createExportImportCategory" stepKey="deleteExportImportCategory"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <!-- Admin logout-->
             <actionGroup ref="logout" stepKey="adminLogout"/>
         </after>
@@ -174,7 +174,7 @@
         </actionGroup>
 
         <!-- Go to Catalog > Products. Find ConfProd and delete it -->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteConfigurableProductBySku">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductBySku">
             <argument name="sku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
@@ -187,7 +187,7 @@
         </actionGroup>
 
         <!-- Go to Catalog > Products: Configurable product exists -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="openConfigurableProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigurableProduct">
             <argument name="productSku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
@@ -204,7 +204,7 @@
 
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToProductGalleryTab"/>
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertProductImageAdminProductPage">
+        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
@@ -214,7 +214,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToChildProductGalleryTab"/>
-        <actionGroup ref="assertProductImageAdminProductPage" stepKey="assertChildProductImageAdminProductPage">
+        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <closeTab stepKey="closeConfigChildProductPage"/>

@@ -26,11 +26,11 @@
 
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="VisualSwatchProductAttribute"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductAttributeGridFilter"/>
-            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllChildrenProducts">
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllChildrenProducts">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductGridFilter"/>
@@ -63,15 +63,15 @@
         </actionGroup>
 
         <!-- Edit configurable product -->
-        <actionGroup ref="goToProductPageViaID" stepKey="openProductEditPage">
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
 
         <!-- Add images to configurable product -->
-        <actionGroup ref="addProductImage" stepKey="addFirstImageForProductConfigurable">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageForProductConfigurable">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <actionGroup ref="addProductImage" stepKey="addSecondImageForProductConfigurable">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageForProductConfigurable">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
 
@@ -97,15 +97,15 @@
         <!-- Go to the category page -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
 
-        <actionGroup ref="StorefrontAssertActiveProductImage" stepKey="StorefrontAssertActiveProductImage"/>
+        <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="StorefrontAssertActiveProductImage"/>
 
          <!--Click a swatch and expect to see the image from the swatch from the configurable product -->
         <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImage" stepKey="clickSwatchOption">
             <argument name="optionName" value="{{visualSwatchOption1.default_label}}"/>
             <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeFirstImageBaseProductInSwatchOption"/>
-        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeSecondImageBaseProductInSwatchOption">
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeFirstImageBaseProductInSwatchOption"/>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeSecondImageBaseProductInSwatchOption">
             <argument name="fileName" value="{{TestImageNew.filename}}"/>
         </actionGroup>
 
@@ -113,8 +113,8 @@
             <argument name="optionName" value="{{visualSwatchOption2.default_label}}"/>
             <argument name="fileName" value="{{ImageUpload3.filename}}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeFirstImageBaseProductInSwatchOption2"/>
-        <actionGroup ref="StorefrontAssertFotoramaImageAvailablity" stepKey="seeSecondImageBaseProductInSwatchOption2">
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeFirstImageBaseProductInSwatchOption2"/>
+        <actionGroup ref="StorefrontAssertFotoramaImageAvailabilityActionGroup" stepKey="seeSecondImageBaseProductInSwatchOption2">
             <argument name="fileName" value="{{TestImageNew.filename}}"/>
         </actionGroup>
     </test>

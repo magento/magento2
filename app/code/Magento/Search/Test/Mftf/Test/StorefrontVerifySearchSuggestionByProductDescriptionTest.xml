@@ -28,7 +28,7 @@
             <!-- Delete all search terms -->
             <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
             <actionGroup ref="DeleteAllSearchTerms" stepKey="deleteAllSearchTerms"/>
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!-- Create product with description -->
             <comment userInput="Create product with description" stepKey="createProductWithDescriptionComment"/>
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>

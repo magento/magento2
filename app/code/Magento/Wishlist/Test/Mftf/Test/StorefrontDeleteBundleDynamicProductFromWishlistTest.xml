@@ -48,12 +48,12 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProduct">
+            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct">
                 <argument name="productId" value="$$createBundleProduct.id$$"/>
             </actionGroup>
             <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
             <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
         <after>
             <!-- Delete data -->
@@ -74,7 +74,7 @@
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        
+
         <!--  Add created product to Wishlist according to dataset and assert add product to wishlist success message -->
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
             <argument name="productVar" value="$$createBundleProduct$$"/>

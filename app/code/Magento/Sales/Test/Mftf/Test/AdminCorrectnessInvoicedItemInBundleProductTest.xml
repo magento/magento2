@@ -53,7 +53,7 @@
 
         <!--Complete Bundle product creation-->
         <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Run re-index task-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>

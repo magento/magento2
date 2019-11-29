@@ -72,11 +72,11 @@
         <!--Open Created products. In Tax Class select new created Product Tax classes.-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$firstProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openFirstProductForEdit"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openFirstProductForEdit"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" stepKey="selectTexClassForFirstProduct" userInput="TaxClasses1"/>
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveFirstProduct"/>
@@ -84,11 +84,11 @@
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="againGoToProductIndex"/>
         <waitForPageLoad stepKey="wait2"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetSecondProductGrid"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterSecondProductGridBySku">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSecondProductGrid"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterSecondProductGridBySku">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openSecondProductForEdit"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openSecondProductForEdit"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" stepKey="selectTexClassForSecondProduct" userInput="TaxClasses2"/>
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveSecondProduct"/>

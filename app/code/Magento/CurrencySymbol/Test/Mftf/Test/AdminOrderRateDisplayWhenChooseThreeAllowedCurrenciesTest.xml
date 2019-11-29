@@ -48,7 +48,7 @@
         <actionGroup ref="StorefrontSwitchCurrency" stepKey="switchCurrency">
             <argument name="currency" value="RUB"/>
         </actionGroup>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontNewProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontNewProductPage">
             <argument name="productName" value="$$createNewProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutNewProductFromMinicart" />

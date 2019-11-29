@@ -73,8 +73,8 @@
         </actionGroup>
 
         <!-- Upload Image English -->
-        <actionGroup ref="addProductImage" stepKey="uploadImageEnglish"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="uploadImageEnglish"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
         <!-- Switch to the French store view -->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewFrenchProduct">
@@ -82,19 +82,19 @@
         </actionGroup>
 
         <!-- Upload Image French -->
-        <actionGroup ref="addProductImage" stepKey="uploadImageFrench">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="uploadImageFrench">
             <argument name="image" value="Magento3"/>
         </actionGroup>
         <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRole1">
             <argument name="image" value="Magento3"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
 
         <!-- Switch to the All store view -->
         <actionGroup ref="AdminSwitchToAllStoreViewActionGroup" stepKey="switchAllStoreViewProduct"/>
 
         <!-- Upload Image All Store View -->
-        <actionGroup ref="addProductImage" stepKey="uploadImageAllStoreView">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="uploadImageAllStoreView">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRole">
@@ -105,7 +105,7 @@
         <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openDescriptionDropDown"/>
         <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="This is the long description" stepKey="fillLongDescription"/>
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="This is the short description" stepKey="fillShortDescription"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Go to Product Page and see Default Store View-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToDefaultStorefrontProductPage"/>

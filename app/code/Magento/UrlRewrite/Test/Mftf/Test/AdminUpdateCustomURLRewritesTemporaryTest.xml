@@ -32,7 +32,7 @@
         </after>
 
         <!--Filter Product in product page and get the Product ID -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
             <argument name="productSku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>

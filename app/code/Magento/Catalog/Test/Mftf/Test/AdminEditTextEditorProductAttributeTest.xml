@@ -26,7 +26,7 @@
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>
         </before>
-        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
             <argument name="ProductAttribute" value="productAttributeWysiwyg"/>
         </actionGroup>
         <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor" stepKey="seeTextEditorSelected" />

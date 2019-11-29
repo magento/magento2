@@ -30,12 +30,12 @@
             <!-- Create downloadable product -->
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
             <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-            <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createProduct">
+            <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
                 <argument name="productType" value="downloadable"/>
             </actionGroup>
 
             <!-- Fill downloadable product values -->
-            <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillDownloadableProductForm">
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
 
@@ -61,7 +61,7 @@
             </actionGroup>
 
             <!-- Save product -->
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
         <after>
             <!-- Remove downloadable domains -->
@@ -71,7 +71,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete created downloadable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
 

@@ -11,11 +11,11 @@
         <!--Create configurable product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageConfigurable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadConfigurable" after="visitAdminProductPageConfigurable"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct" after="waitForProductPageLoadConfigurable">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct" after="waitForProductPageLoadConfigurable">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="checkRequiredFieldsInProductForm" stepKey="checkRequiredFieldsProductConfigurable" after="goToCreateConfigurableProduct"/>
-        <actionGroup ref="fillMainProductForm" stepKey="fillConfigurableProductMain" after="checkRequiredFieldsProductConfigurable">
+        <actionGroup ref="CheckRequiredFieldsInProductFormActionGroup" stepKey="checkRequiredFieldsProductConfigurable" after="goToCreateConfigurableProduct"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductMain" after="checkRequiredFieldsProductConfigurable">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <!--Create product configurations-->
@@ -69,7 +69,7 @@
 
         <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
         <comment userInput="Clean up configurable product" stepKey="cleanUpConfigurableProduct" after="deleteSimpleProduct"/>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct" after="cleanUpConfigurableProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct" after="cleanUpConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
     </test>

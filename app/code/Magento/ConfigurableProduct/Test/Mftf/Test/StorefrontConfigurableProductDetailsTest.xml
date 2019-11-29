@@ -31,7 +31,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
@@ -76,7 +76,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
@@ -121,7 +121,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
@@ -163,7 +163,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
@@ -213,7 +213,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
             </actionGroup>
             <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
@@ -223,16 +223,16 @@
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="navigateToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="navigateToCreateProductPage">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
-        <actionGroup ref="SetCategoryByName" stepKey="addCategoryToProduct">
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToProduct">
             <argument name="categoryName" value="$createCategory.name$"/>
         </actionGroup>
-        <actionGroup ref="SetProductUrlKeyByString" stepKey="fillUrlKey">
+        <actionGroup ref="SetProductUrlKeyByStringActionGroup" stepKey="fillUrlKey">
             <argument name="urlKey" value="{{BaseConfigurableProduct.urlKey}}"/>
         </actionGroup>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>

@@ -152,7 +152,7 @@
         <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
         <!-- Assert Simple Product Quantity in backend after order Canceled -->
         <comment userInput="Assert Simple Product Quantity in backend after order Canceled" stepKey="assertSimpleProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
@@ -167,7 +167,7 @@
         </actionGroup>
         <!-- Assert Virtual Product Quantity in backend after order canceled -->
         <comment userInput="Assert Virtual Product Quantity in backend after order canceled" stepKey="assertVirtualProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheVirtualProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheVirtualProduct">
             <argument name="productSku" value="$$virtualProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad1"/>
@@ -182,7 +182,7 @@
         </actionGroup>
         <!-- Assert Bundle Product Quantity in backend after order canceled -->
         <comment userInput="Assert Bundle Product Quantity in backend after order canceled" stepKey="assertBundleProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheBundleProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheBundleProduct">
             <argument name="productSku" value="$$simpleProduct1.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad2"/>
@@ -197,7 +197,7 @@
         </actionGroup>
         <!-- Assert Configurable Product Quantity in backend after order canceled -->
         <comment userInput="Assert Configurable Product quantity in backend after order canceled" stepKey="assertConfigurableProductQuantityAfterOrderCanceledComment"/>
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheConfigProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheConfigProduct">
             <argument name="productSku" value="$$createConfigChildProduct1.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad3"/>

@@ -203,47 +203,47 @@
 
 
             <!-- Create and Assign Attribute to product1-->
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProduct1">
+            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct1">
                 <argument name="productId" value="$product1.id$"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateAttributeWithSearchWeight" stepKey="createProduct1Attribute">
+            <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct1Attribute">
                 <argument name="attributeType" value="Text Field"/>
                 <argument name="attributeName" value="$product1.name$"/>
                 <argument name="attributeSetName" value="$product1.name$"/>
                 <argument name="weight" value="1"/>
                 <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminProductPageSelectAttributeSet" stepKey="selectAttributeSet1">
+            <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet1">
                 <argument name="attributeSetName" value="$product1.name$"/>
             </actionGroup>
             <!--fill in default-->
-            <actionGroup ref="saveProductForm" stepKey="saveProduct1a"/>
-            <actionGroup ref="AdminProductPageFillTextAttributeValueByName" stepKey="fillDefault1">
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1a"/>
+            <actionGroup ref="AdminProductPageFillTextAttributeValueByNameActionGroup" stepKey="fillDefault1">
                 <argument name="attributeName" value="$product1.name$"/>
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct1b"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1b"/>
             <!-- Create and Assign Attribute to product2-->
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProduct2">
+            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct2">
                 <argument name="productId" value="$product2.id$"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateAttributeWithSearchWeight" stepKey="createProduct2Attribute">
+            <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct2Attribute">
                 <argument name="attributeType" value="Text Field"/>
                 <argument name="attributeName" value="$product2.name$"/>
                 <argument name="attributeSetName" value="$product2.name$"/>
                 <argument name="weight" value="1"/>
                 <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminProductPageSelectAttributeSet" stepKey="selectAttributeSet2">
+            <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet2">
                 <argument name="attributeSetName" value="$product2.name$"/>
             </actionGroup>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct2a"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2a"/>
             <!--fill in default-->
-            <actionGroup ref="AdminProductPageFillTextAttributeValueByName" stepKey="fillDefault2">
+            <actionGroup ref="AdminProductPageFillTextAttributeValueByNameActionGroup" stepKey="fillDefault2">
                 <argument name="attributeName" value="$product2.name$"/>
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct2b"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2b"/>
         </before>
         <after>
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
@@ -275,7 +275,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminCreateAttributeWithSearchWeight" stepKey="createProduct1Attribute">
+            <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct1Attribute">
                 <argument name="attributeType" value="Text Field"/>
                 <argument name="attributeName" value="$product1.name$"/>
                 <argument name="attributeSetName" value="$product1.name$"/>
@@ -377,7 +377,7 @@
         </before>
         <after>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
@@ -446,7 +446,7 @@
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="simple1"/>
             <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
             <createData entity="OneSimpleProductLink" stepKey="addProductOne">
@@ -503,7 +503,7 @@
             <!--Finish bundle creation-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
             <!-- Perform reindex and flush cache -->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -570,7 +570,7 @@
             <!--Finish bundle creation-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="goToProductEditPage"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
             <!-- Perform reindex and flush cache -->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
@@ -629,14 +629,14 @@
             <!-- Assign attribute to set -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
             <actionGroup ref="goToAttributeGridPage" stepKey="goToPage"/>
-            <actionGroup ref="goToAttributeSetByName" stepKey="goToSet">
+            <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="goToSet">
                 <argument name="name" value="$attributeSet.attribute_set_name$"/>
             </actionGroup>
-            <actionGroup ref="AssignAttributeToGroup" stepKey="assignToAttributeSetAndGroup">
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignToAttributeSetAndGroup">
                 <argument name="group" value="Product Details"/>
                 <argument name="attribute" value="$createConfigProductAttribute.attribute_code$"/>
             </actionGroup>
-            <actionGroup ref="SaveAttributeSet" stepKey="savePage"/>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="savePage"/>
 
             <!-- Get the first option of the attribute we created -->
             <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
@@ -682,11 +682,11 @@
         </actionGroup>
 
         <!-- Disable Child Product -->
-        <actionGroup ref="goToProductPageViaID" stepKey="goToChildProduct">
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToChildProduct">
             <argument name="productId" value="$createConfigChildProduct1.id$"/>
         </actionGroup>
-        <actionGroup ref="toggleProductEnabled" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPageAgain"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefrontAgain">

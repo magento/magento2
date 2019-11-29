@@ -45,18 +45,18 @@
         </after>
 
         <!-- On the categories editing page change store view to created additional view -->
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchStoreView">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="Store" value="customStore.name"/>
             <argument name="CatName" value="$$createFirstCategory.name$$"/>
         </actionGroup>
 
         <!-- Change url key for category for first category; save -->
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeUrlKey">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeUrlKey">
             <argument name="value" value="{{SimpleRootSubCategory.url_key}}"/>
         </actionGroup>
 
         <!-- Change store view to "All store views" for first category -->
-        <actionGroup ref="switchCategoryToAllStoreView" stepKey="switchToAllStoreViewProduct">
+        <actionGroup ref="SwitchCategoryToAllStoreViewActionGroup" stepKey="switchToAllStoreViewProduct">
             <argument name="CatName" value="$$createFirstCategory.name$$"/>
         </actionGroup>
 

@@ -104,7 +104,7 @@
         <click selector="{{ConfigurableProductSection.generateConfigure}}" stepKey="clickGenerateConfigure"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Go to frontend and check image and price-->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>

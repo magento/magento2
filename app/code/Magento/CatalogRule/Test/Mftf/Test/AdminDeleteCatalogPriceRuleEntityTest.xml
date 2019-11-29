@@ -78,7 +78,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createProduct1.price$$" stepKey="seeTrueProductPrice1"/>
 
         <!-- Assert that the rule isn't present in the Shopping Cart -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToShoppingCart1">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToShoppingCart1">
             <argument name="productName" value="$$createProduct1.name$$"/>
         </actionGroup>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>

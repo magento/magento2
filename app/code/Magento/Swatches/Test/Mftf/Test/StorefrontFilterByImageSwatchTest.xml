@@ -81,18 +81,18 @@
         <!-- Create a configurable product to verify the storefront with -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <!-- Add image to configurable product -->
-        <actionGroup ref="addProductImage" stepKey="addFirstImageForProductConfigurable">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addFirstImageForProductConfigurable">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <!-- Add image to configurable product -->
-        <actionGroup ref="addProductImage" stepKey="addSecondImageForProductConfigurable">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addSecondImageForProductConfigurable">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
@@ -130,18 +130,18 @@
         <dontSee selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" userInput="$$createSimpleProduct.name$$" stepKey="dontSeeSimpleProduct"/>
 
         <!-- Assert configurable product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPage">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
         <!-- Assert configurable product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductImageStorefrontProductPage">
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductImageStorefrontProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
         <!-- Assert configurable product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertProductSecondImageStorefrontProductPage">
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductSecondImageStorefrontProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
@@ -150,7 +150,7 @@
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('adobe-thumb')}}" stepKey="clickSwatchOption"/>
 
         <!-- Assert swatch option image for configurable product image in storefront product page -->
-        <actionGroup ref="assertProductImageStorefrontProductPage" stepKey="assertSwatchImageStorefrontProductPage">
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertSwatchImageStorefrontProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="image" value="TestImageAdobe"/>
         </actionGroup>

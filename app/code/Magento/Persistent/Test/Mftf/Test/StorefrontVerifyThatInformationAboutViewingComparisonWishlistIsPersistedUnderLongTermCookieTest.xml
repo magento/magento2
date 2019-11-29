@@ -70,10 +70,10 @@
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessage"/>
 
         <!--Open the details page of Simple Product 1, Simple Product 2 and add to cart, get to the category-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSimpleProductProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addSecondSimpleProductProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart">
             <argument name="product" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageAfterAddedProductToCart"/>
