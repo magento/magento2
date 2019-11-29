@@ -78,49 +78,7 @@ class DataExtractorTest extends TestCase
     public function assetProvider()
     {
         return [
-            'Test case asset 1' => [
-                Asset::class,
-                null,
-                [
-                    'id' => [
-                        'value' => 1,
-                        'method' => 'getId',
-                    ],
-                    'path' => [
-                        'value' => 'path',
-                        'method' => 'getPath',
-                    ],
-                    'title' => [
-                        'value' => 'title',
-                        'method' => 'getTitle',
-                    ],
-                    'source' => [
-                        'value' => 'source',
-                        'method' => 'getSource',
-                    ],
-                    'content_type' => [
-                        'value' => 'content_type',
-                        'method' => 'getContentType',
-                    ],
-                    'width' => [
-                        'value' => 1,
-                        'method' => 'getWidth',
-                    ],
-                    'height' => [
-                        'value' => 2,
-                        'method' => 'getHeight',
-                    ],
-                    'created_at' => [
-                        'value' => '2019-11-28 10:40:09',
-                        'method' => 'getCreatedAt',
-                    ],
-                    'updated_at' => [
-                        'value' => '2019-11-28 10:41:08',
-                        'method' => 'getUpdatedAt',
-                    ],
-                ],
-            ],
-            'Test case asset 2' => [
+            'Asset conversion with interface' => [
                 Asset::class,
                 AssetInterface::class,
                 [
@@ -162,7 +120,7 @@ class DataExtractorTest extends TestCase
                     ],
                 ],
             ],
-            'Test case keyword 1' => [
+            'Keyword conversion without interface' => [
                 Keyword::class,
                 null,
                 [
