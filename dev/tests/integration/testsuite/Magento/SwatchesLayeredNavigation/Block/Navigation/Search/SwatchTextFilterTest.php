@@ -66,7 +66,7 @@ class SwatchTextFilterTest extends CategorySwatchTextFilterTest
                 ],
             ]
         );
-        //TODO uncomment after fix
+        //TODO uncomment after fix MC-29227
         //unset($dataProvider['used_in_navigation_without_results']['expectation'][0]);
 
         return $dataProvider;

@@ -66,7 +66,7 @@ class MultiselectFilterTest extends CategoryMultiselectFilterTest
                 ],
             ]
         );
-        //TODO uncomment after fix
+        //TODO uncomment after fix MC-29227
         //unset($dataProvider['used_in_navigation_without_results']['expectation'][1]);
         //unset($dataProvider['used_in_navigation_without_results']['expectation'][2]);
         //unset($dataProvider['used_in_navigation_without_results']['expectation'][3]);

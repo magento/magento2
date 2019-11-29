@@ -54,7 +54,6 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
                 ],
                 'used_in_navigation_with_results' => [
                     'attribute_data' => [
-                        'is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
                         'is_filterable_in_search' => 1,
                     ],
                 ],
@@ -66,7 +65,7 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
                 ],
             ]
         );
-        //TODO uncomment after fix
+        //TODO uncomment after fix MC-29227
         //unset($dataProvider['used_in_navigation_without_results']['expectation'][1]);
 
         return $dataProvider;
