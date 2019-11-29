@@ -5,9 +5,10 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol as CurrencysymbolController;
-use Magento\CurrencySymbol\Model\System\Currencysymbol;
+use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Filter\FilterManager;
@@ -17,6 +18,31 @@ use Magento\Framework\Filter\FilterManager;
  */
 class Save extends CurrencysymbolController implements HttpPostActionInterface
 {
+    /**
+     * @var FilterManager
+     */
+    private $filterManager;
+
+    /**
+     * @var CurrencysymbolFactory
+     */
+    private $currencySymbolFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param FilterManager $filterManager
+     * @param CurrencysymbolFactory $currencySymbolFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        FilterManager $filterManager,
+        CurrencysymbolFactory $currencySymbolFactory
+    ) {
+        parent::__construct($context);
+        $this->filterManager = $filterManager;
+        $this->currencySymbolFactory = $currencySymbolFactory;
+    }
+
     /**
      * Save custom Currency symbol
      *
@@ -29,15 +55,13 @@ class Save extends CurrencysymbolController implements HttpPostActionInterface
         $symbolsDataArray = $this->getRequest()->getParam('custom_currency_symbol', null);
         if (is_array($symbolsDataArray)) {
             foreach ($symbolsDataArray as &$symbolsData) {
-                /** @var $filterManager FilterManager */
-                $filterManager = $this->_objectManager->get(FilterManager::class);
-                $symbolsData = $filterManager->stripTags($symbolsData);
+                $symbolsData = $this->filterManager->stripTags($symbolsData);
             }
         }
 
         try {
-            $this->_objectManager->create(Currencysymbol::class)
-                ->setCurrencySymbolsData($symbolsDataArray);
+            $currencySymbol = $this->currencySymbolFactory->create();
+            $currencySymbol->setCurrencySymbolsData($symbolsDataArray);
             $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());

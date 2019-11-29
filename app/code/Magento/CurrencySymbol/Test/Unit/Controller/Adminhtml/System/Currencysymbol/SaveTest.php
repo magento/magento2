@@ -10,12 +10,12 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Save;
 use Magento\CurrencySymbol\Model\System\Currencysymbol;
+use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,16 +46,6 @@ class SaveTest extends TestCase
     protected $responseMock;
 
     /**
-     * @var ObjectManagerInterface|MockObject
-     */
-    protected $objectManagerMock;
-
-    /**
-     * @var Currencysymbol|MockObject
-     */
-    protected $currencySymbolMock;
-
-    /**
      * @var ManagerInterface|MockObject
      */
     protected $messageManagerMock;
@@ -73,7 +63,12 @@ class SaveTest extends TestCase
     /**
      * @var FilterManager|MockObject
      */
-    protected $filterManagerMock;
+    private $filterManager;
+
+    /**
+     * @var CurrencysymbolFactory|MockObject
+     */
+    private $currencySymbolFactory;
 
     /**
      * @inheritdoc
@@ -88,25 +83,25 @@ class SaveTest extends TestCase
             ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
-        $this->currencySymbolMock = $this->createMock(Currencysymbol::class);
-        $this->filterManagerMock = $this->createPartialMock(
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
+        $this->filterManager = $this->createPartialMock(
             FilterManager::class,
             ['stripTags']
         );
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
+        $this->currencySymbolFactory = $this->createMock(CurrencysymbolFactory::class);
 
         $this->action = $objectManager->getObject(
             Save::class,
             [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
-                'objectManager' => $this->objectManagerMock,
                 'redirect' => $this->redirectMock,
                 'helper' => $this->helperMock,
                 'messageManager' => $this->messageManagerMock,
                 'resultRedirectFactory' => $this->resultRedirectFactory,
+                'filterManager' => $this->filterManager,
+                'currencySymbolFactory' => $this->currencySymbolFactory,
             ]
         );
     }
@@ -124,22 +119,13 @@ class SaveTest extends TestCase
             ->with('custom_currency_symbol')
             ->willReturn($symbolsDataArray);
 
-        $this->currencySymbolMock->expects($this->once())->method('setCurrencySymbolsData')->with($symbolsDataArray);
-
-        $this->filterManagerMock->expects($this->once())
+        $currencySymbol = $this->createMock(Currencysymbol::class);
+        $currencySymbol->expects($this->once())->method('setCurrencySymbolsData')->with($symbolsDataArray);
+        $this->currencySymbolFactory->method('create')->willReturn($currencySymbol);
+        $this->filterManager->expects($this->once())
             ->method('stripTags')
             ->with($firstElement)
             ->willReturn($firstElement);
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(Currencysymbol::class)
-            ->willReturn($this->currencySymbolMock);
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(FilterManager::class)
-            ->willReturn($this->filterManagerMock);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
