@@ -67,7 +67,7 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             )->willReturn($pageSize);
-        $this->queryCollectionMock->expects($this->once())->method('isTopSearchResult')->with($term, $storeId, $pageSize)
+        $this->queryCollectionMock->expects($this->exact(2))->method('isTopSearchResult')->with($term, $storeId, $pageSize)
             ->willReturn(true, false);
 
         $this->assertTrue($this->popularSearchTerms->isCacheable($term, $storeId));
