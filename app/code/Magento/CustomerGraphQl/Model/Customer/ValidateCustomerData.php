@@ -30,6 +30,7 @@ class ValidateCustomerData
     /**
      * ValidateCustomerData constructor.
      *
+     * @param EmailAddressValidator $emailAddressValidator
      * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
      */
     public function __construct(
