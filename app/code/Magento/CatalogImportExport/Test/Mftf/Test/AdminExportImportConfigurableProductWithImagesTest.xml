@@ -128,7 +128,7 @@
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
     </before>
         <after>
             <!-- Remove downloadable domains -->
@@ -159,7 +159,7 @@
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
 
         <!-- Set Export Settings: Entity Type > Products, SKU > ConfProd's sku and press "Continue" -->
-        <actionGroup ref="exportProductsFilterByAttribute" stepKey="exportProductBySku">
+        <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
             <argument name="attribute" value="sku"/>
             <argument name="attributeData" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
@@ -169,7 +169,7 @@
         <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
 
         <!-- Save exported file: file successfully downloaded -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
+        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
             <argument name="rowIndex" value="0"/>
         </actionGroup>
 
