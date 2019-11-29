@@ -293,15 +293,7 @@ class TypeProcessor
                 break;
             }
         }
-        if (!$returnType) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'No valid return type for %s::%s() specified. Verify the return type and try again.',
-                    $methodReflection->getDeclaringClass()->getName(),
-                    $methodReflection->getName()
-                )
-            );
-        }
+
         $nullable = in_array('null', $types);
 
         return [
