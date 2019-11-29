@@ -34,10 +34,11 @@
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForPreviewButton"/>
         <click selector="{{BasicFieldNewsletterSection.preview}}" stepKey="clickPreview"/>
         <switchToNextTab stepKey="switchToPreviewTab"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.previewIframe}}" stepKey="waitForIframeVisible"/>
         <executeJS function="document.getElementById('preview_iframe').sandbox.add('allow-scripts')" stepKey="addSandboxValue"/>
         <switchToIFrame userInput="preview_iframe" stepKey="switchToIframe"/>
+        <waitForPageLoad time="30" stepKey="waitIframeLoaded"/>
         <waitForElementVisible selector="body" stepKey="waitForIframeLoad"/>
     </actionGroup>
 
