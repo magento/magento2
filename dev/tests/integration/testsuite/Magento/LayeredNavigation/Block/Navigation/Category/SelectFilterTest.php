@@ -21,7 +21,7 @@ use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 class SelectFilterTest extends AbstractFiltersTest
 {
     /**
-     * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_dropdown_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
      * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
