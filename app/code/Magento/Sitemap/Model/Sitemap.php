@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -689,7 +690,11 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getUrl($url, $type = UrlInterface::URL_TYPE_LINK)
     {
-        return $this->_getStoreBaseUrl($type) . ltrim($url, '/');
+        if ($url !== $this->_getStoreBaseUrl()) {
+            return $this->_getStoreBaseUrl($type) . ltrim($url, '/');
+        } else {
+            return $url;
+        }
     }
 
     /**
