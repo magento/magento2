@@ -132,7 +132,7 @@
         <see selector="{{StorefrontCategoryMainSection.lineProductName('3')}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct"/>
 
         <!--Create and apply catalog price rule-->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsSKU" stepKey="createCatalogPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsSKUActionGroup" stepKey="createCatalogPriceRule">
             <argument name="catalogRule" value="CatalogRuleByPercentWith96Amount" />
             <argument name="productSku" value="$$createConfigChildProduct3.sku$$" />
         </actionGroup>
