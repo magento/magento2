@@ -88,7 +88,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
 	    <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        
+
         <!-- Create the rule -->
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForRulesPage"/>
@@ -131,7 +131,7 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
 
         <!--View and edit cart-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickViewAndEditCartFromMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickViewAndEditCartFromMiniCart"/>
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="ABCD" stepKey="fillCouponCode" />
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>

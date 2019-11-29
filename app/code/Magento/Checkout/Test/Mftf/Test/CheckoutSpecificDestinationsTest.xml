@@ -51,7 +51,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
 
         <!--Verify country options in checkout top destination section-->
-        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry">
+        <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry">
             <argument name="country" value="Bahamas"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>
@@ -71,7 +71,7 @@
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
 
         <!--Verify country options is shown by default-->
-        <actionGroup ref="VerifyTopDestinationsCountry" stepKey="verifyTopDestinationsCountry2">
+        <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry2">
             <argument name="country" value="Afghanistan"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>

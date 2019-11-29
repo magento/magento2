@@ -33,7 +33,7 @@
 
         <!--Check simple product1 in minicart-->
         <comment userInput="Check simple product 1 in minicart" stepKey="commentCheckSimpleProduct1InMinicart" after="addToCartFromStorefrontProductPage1"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertProduct1NameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProduct1NameInMiniCart">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
         </actionGroup>
 
@@ -53,13 +53,13 @@
 
         <!--Check simple product1 in minicart-->
         <comment userInput="Check hidden simple product 1 in minicart" stepKey="commentCheckHiddenSimpleProduct1InMinicart" after="addToCartFromStorefrontProductPage2"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertHiddenProduct1NameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertHiddenProduct1NameInMiniCart">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
         </actionGroup>
 
         <!--Check simple product2 in minicart-->
         <comment userInput="Check hidden simple product 2 in minicart" stepKey="commentCheckSimpleProduct2InMinicart" after="addToCartFromStorefrontProductPage2"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertProduct2NameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProduct2NameInMiniCart">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
         </actionGroup>
 

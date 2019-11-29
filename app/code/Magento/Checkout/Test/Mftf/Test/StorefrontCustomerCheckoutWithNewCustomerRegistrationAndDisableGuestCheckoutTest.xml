@@ -49,7 +49,7 @@
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
@@ -83,7 +83,7 @@
         <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
 
         <!-- Open Edit and View  from cart -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openViewAndEditOption"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openViewAndEditOption"/>
 
         <!-- Proceed to checkout -->
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>

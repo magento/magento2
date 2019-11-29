@@ -37,7 +37,7 @@
         </actionGroup>
 
         <!--Go to Shopping cart and check Qty-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCart"/>
         <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabQtyShoppingCart"/>
         <assertEquals expected="1" actual="$grabQtyShoppingCart" stepKey="assertQtyShoppingCart"/>
 

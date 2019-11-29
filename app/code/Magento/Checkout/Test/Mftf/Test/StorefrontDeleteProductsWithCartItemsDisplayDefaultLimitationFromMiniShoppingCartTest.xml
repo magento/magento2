@@ -237,40 +237,40 @@
         </actionGroup>
 
         <!--Remove products from minicart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct1FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct1FromMiniCart">
             <argument name="productName" value="$$simpleProduct10.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct2FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct2FromMiniCart">
             <argument name="productName" value="$$simpleProduct9.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct3FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct3FromMiniCart">
             <argument name="productName" value="$$simpleProduct8.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct4FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct4FromMiniCart">
             <argument name="productName" value="$$simpleProduct7.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct5FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct5FromMiniCart">
             <argument name="productName" value="$$simpleProduct6.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct6FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct6FromMiniCart">
             <argument name="productName" value="$$simpleProduct5.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct7FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct7FromMiniCart">
             <argument name="productName" value="$$simpleProduct4.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct8FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct8FromMiniCart">
             <argument name="productName" value="$$simpleProduct3.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct9FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct9FromMiniCart">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct10FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct10FromMiniCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify EmptyCartMessage and AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct1.name$$)}}" stepKey="verifyAssertProduct1AbsentInMiniShoppingCart"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct2.name$$)}}" stepKey="verifyAssertProduct2AbsentInMiniShoppingCart"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct3.name$$)}}" stepKey="verifyAssertProduct3AbsentInMiniShoppingCart"/>

@@ -64,24 +64,24 @@
         </actionGroup>
 
         <!-- Select mini Cart and verify Simple and Virtual products names in cart-->
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeSimpleProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="seeVirtualProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeVirtualProductInMiniCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
 
         <!--Remove Simple and Virtual products from mini cart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeVirtualProductFromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeVirtualProductFromMiniCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify EmptyCartMessage and AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct.name$$)}}" stepKey="verifyAssertSimpleProductAbsentInMiniShoppingCart"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$virtualProduct.name$$)}}" stepKey="verifyAssertVirtualProductAbsentInMiniShoppingCart"/>
     </test>

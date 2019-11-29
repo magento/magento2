@@ -103,7 +103,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsNotApplied(Shopping cart subtotal equals to grand total - price rule has not been applied)-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
