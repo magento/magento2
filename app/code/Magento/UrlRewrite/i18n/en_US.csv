@@ -59,3 +59,4 @@ No,No
 "Select Category","Select Category"
 Action,Action
 Edit,Edit
+'The request path and the target path should differ to prevent an infinite redirecion loop.','The request path and the target path should differ to prevent an infinite redirecion loop.'

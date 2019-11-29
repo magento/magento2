@@ -7,6 +7,7 @@
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Magento\Backend\Model\Session;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -59,8 +60,9 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
      * Override urlrewrite data, basing on current category and product
      *
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _handleCatalogUrlRewrite($model)
     {
@@ -82,8 +84,9 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
      * Get Target Path
      *
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function getTargetPath($model)
     {
@@ -148,8 +151,8 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
-            /** @var $session \Magento\Backend\Model\Session */
-            $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+            /** @var $session Session */
+            $session = $this->_objectManager->get(Session::class);
             try {
                 $model = $this->_getUrlRewrite();
 
@@ -158,9 +161,16 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                     \Magento\UrlRewrite\Helper\UrlRewrite::class
                 )->validateRequestPath($requestPath);
 
+                $targetPath = $this->getRequest()->getParam('target_path', $model->getTargetPath());
+                if ($requestPath === $targetPath) {
+                    throw new LocalizedException(
+                        __('The request path and the target path should differ to prevent an infinite redirecion loop.')
+                    );
+                }
+
                 $model->setEntityType($this->getRequest()->getParam('entity_type') ?: self::ENTITY_TYPE_CUSTOM)
                     ->setRequestPath($requestPath)
-                    ->setTargetPath($this->getRequest()->getParam('target_path', $model->getTargetPath()))
+                    ->setTargetPath($targetPath)
                     ->setRedirectType($this->getRequest()->getParam('redirect_type'))
                     ->setStoreId($this->getRequest()->getParam('store_id', 0))
                     ->setDescription($this->getRequest()->getParam('description'));
