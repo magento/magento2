@@ -49,10 +49,6 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
     /**
      * Test isCacheableDataProvider method
      *
-     * @param string $term
-     * @param array $terms
-     * @param $expected $terms
-     *
      * @return void
      */
     public function testIsCacheable()
@@ -60,14 +56,16 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
         $term = 'test1';
         $storeId = 1;
         $pageSize = 35;
-        
+
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(
                 PopularSearchTerms::XML_PATH_MAX_COUNT_CACHEABLE_SEARCH_TERMS,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             )->willReturn($pageSize);
-        $this->queryCollectionMock->expects($this->exact(2))->method('isTopSearchResult')->with($term, $storeId, $pageSize)
+        $this->queryCollectionMock->expects($this->exactly(2))
+            ->method('isTopSearchResult')
+            ->with($term, $storeId, $pageSize)
             ->willReturn(true, false);
 
         $this->assertTrue($this->popularSearchTerms->isCacheable($term, $storeId));
