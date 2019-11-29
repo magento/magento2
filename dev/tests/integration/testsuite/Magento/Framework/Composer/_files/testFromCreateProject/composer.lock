@@ -2375,8 +2375,7 @@
                     "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
                     "components/jquery": [
                         "lib/web/jquery.js",
-                        "lib/web/jquery/jquery.min.js",
-                        "lib/web/jquery/jquery-migrate.js"
+                        "lib/web/jquery/jquery.min.js"
                     ],
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": "lib/web/jquery/jquery-ui.js",

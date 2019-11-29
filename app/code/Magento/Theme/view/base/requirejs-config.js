@@ -14,7 +14,6 @@ var config = {
         }
     },
     'shim': {
-        'jquery/jquery-migrate': ['jquery'],
         'jquery/jstree/jquery.hotkeys': ['jquery'],
         'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
@@ -40,9 +39,6 @@ var config = {
         'tinycolor': 'jquery/spectrum/tinycolor',
         'jquery-ui-modules': 'jquery/ui-modules'
     },
-    'deps': [
-        'jquery/jquery-migrate'
-    ],
     'config': {
         'mixins': {
             'jquery/jstree/jquery.jstree': {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d90898f5936c9a12214a556055caf8bc",
+    "content-hash": "106a41c00f4b455d1f468ff614d1e56a",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -530,6 +530,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
