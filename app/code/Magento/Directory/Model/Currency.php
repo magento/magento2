@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +7,23 @@
 
 namespace Magento\Directory\Model;
 
+use Exception;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\Currency\FilterFactory;
+use Magento\Directory\Model\ResourceModel\Currency as CurrencyResourceModel;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManagerInterface;
+use Zend_Currency_Exception;
 
 /**
  * Currency model
@@ -18,15 +33,13 @@ use Magento\Directory\Model\Currency\Filter;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Currency extends \Magento\Framework\Model\AbstractModel
+class Currency extends AbstractModel
 {
     /**
      * CONFIG path constants
      */
     const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
-
     const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
-
     const XML_PATH_CURRENCY_BASE = 'currency/options/base';
 
     /**
@@ -42,27 +55,27 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     protected $_rates;
 
     /**
-     * @var \Magento\Framework\Locale\FormatInterface
+     * @var FormatInterface
      */
     protected $_localeFormat;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Directory\Helper\Data
+     * @var Data
      */
     protected $_directoryHelper;
 
     /**
-     * @var \Magento\Directory\Model\Currency\FilterFactory
+     * @var FilterFactory
      */
     protected $_currencyFilterFactory;
 
     /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
+     * @var CurrencyInterface
      */
     protected $_localeCurrency;
 
@@ -72,39 +85,33 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $currencyConfig;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormatInterface $localeFormat
+     * @param StoreManagerInterface $storeManager
+     * @param Data $directoryHelper
      * @param Currency\FilterFactory $currencyFilterFactory
-     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param CurrencyInterface $localeCurrency
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param CurrencyConfig $currencyConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Locale\FormatInterface $localeFormat,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Helper\Data $directoryHelper,
-        \Magento\Directory\Model\Currency\FilterFactory $currencyFilterFactory,
-        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        FormatInterface $localeFormat,
+        StoreManagerInterface $storeManager,
+        Data $directoryHelper,
+        FilterFactory $currencyFilterFactory,
+        CurrencyInterface $localeCurrency,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
         CurrencyConfig $currencyConfig = null
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_localeFormat = $localeFormat;
         $this->_storeManager = $storeManager;
         $this->_directoryHelper = $directoryHelper;
@@ -116,9 +123,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
-        $this->_init(\Magento\Directory\Model\ResourceModel\Currency::class);
+        $this->_init(CurrencyResourceModel::class);
     }
 
     /**
@@ -126,7 +133,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->_getData('currency_code');
     }
@@ -136,7 +143,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCurrencyCode()
+    public function getCurrencyCode(): string
     {
         return $this->_getData('currency_code');
     }
@@ -146,7 +153,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getRates()
+    public function getRates(): array
     {
         return $this->_rates;
     }
@@ -157,7 +164,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param array $rates Currency Rates
      * @return $this
      */
-    public function setRates(array $rates)
+    public function setRates(array $rates): Currency
     {
         $this->_rates = $rates;
         return $this;
@@ -166,90 +173,91 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Loading currency data
      *
-     * @param   string $id
-     * @param   string $field
+     * @param string $currencyCode
+     * @param string $field
      * @return  $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function load($id, $field = null)
+    public function load($currencyCode, $field = null): Currency
     {
         $this->unsRate();
-        $this->setData('currency_code', $id);
+        $this->setData('currency_code', $currencyCode);
         return $this;
     }
 
     /**
      * Get currency rate (only base => allowed)
      *
-     * @param mixed $toCurrency
+     * @param Currency|string $toCurrency
      * @return float
      */
-    public function getRate($toCurrency)
+    public function getRate($toCurrency): float
     {
-        $code = $this->getCurrencyCodeFromToCurrency($toCurrency);
+        $code = $this->getCustomCurrencyCode($toCurrency);
         $rates = $this->getRates();
         if (!isset($rates[$code])) {
             $rates[$code] = $this->_getResource()->getRate($this->getCode(), $toCurrency);
             $this->setRates($rates);
         }
+
         return $rates[$code];
     }
 
     /**
      * Get currency rate (base=>allowed or allowed=>base)
      *
-     * @param mixed $toCurrency
+     * @param Currency|string $toCurrency
      * @return float
      */
     public function getAnyRate($toCurrency)
     {
-        $code = $this->getCurrencyCodeFromToCurrency($toCurrency);
+        $code = $this->getCustomCurrencyCode($toCurrency);
         $rates = $this->getRates();
         if (!isset($rates[$code])) {
             $rates[$code] = $this->_getResource()->getAnyRate($this->getCode(), $toCurrency);
             $this->setRates($rates);
         }
+
         return $rates[$code];
     }
 
     /**
      * Convert price to currency format
      *
-     * @param   float $price
-     * @param   mixed $toCurrency
-     * @return  float
-     * @throws \Exception
+     * @param float $price
+     * @param Currency|string|null $toCurrency
+     * @return float
+     * @throws Exception
      */
-    public function convert($price, $toCurrency = null)
+    public function convert($price, $toCurrency = null): float
     {
         if ($toCurrency === null) {
             return $price;
         } elseif ($rate = $this->getRate($toCurrency)) {
-            return (float)$price * (float)$rate;
+            return (float)bcmul($price, (string)$rate);
         }
 
-        throw new \Exception(__(
+        throw new Exception(__(
             'Undefined rate from "%1-%2".',
             $this->getCode(),
-            $this->getCurrencyCodeFromToCurrency($toCurrency)
+            $this->getCustomCurrencyCode($toCurrency)
         ));
     }
 
     /**
-     * @param mixed $toCurrency
+     * @param Currency|string $currency
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
-    private function getCurrencyCodeFromToCurrency($toCurrency)
+    private function getCustomCurrencyCode($currency): string
     {
-        if (is_string($toCurrency)) {
-            $code = $toCurrency;
-        } elseif ($toCurrency instanceof \Magento\Directory\Model\Currency) {
-            $code = $toCurrency->getCurrencyCode();
-        } else {
-            throw new InputException(__('Please correct the target currency.'));
+        if (is_string($currency)) {
+            return $currency;
+        } elseif ($currency instanceof Currency) {
+            return $currency->getCurrencyCode();
         }
-        return $code;
+
+        throw new InputException(__('Please correct the target currency.'));
     }
 
     /**
@@ -257,7 +265,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return Filter
      */
-    public function getFilter()
+    public function getFilter(): Filter
     {
         if (!$this->_filter) {
             $this->_filter = $this->_currencyFilterFactory->create(['code' => $this->getCode()]);
@@ -275,7 +283,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param bool $addBrackets
      * @return string
      */
-    public function format($price, $options = [], $includeContainer = true, $addBrackets = false)
+    public function format($price, $options = [], $includeContainer = true, $addBrackets = false): string
     {
         return $this->formatPrecision($price, 2, $options, $includeContainer, $addBrackets);
     }
@@ -283,11 +291,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Apply currency format to number with specific rounding precision
      *
-     * @param   float $price
-     * @param   int $precision
-     * @param   array $options
-     * @param   bool $includeContainer
-     * @param   bool $addBrackets
+     * @param float $price
+     * @param int $precision
+     * @param array $options
+     * @param bool $includeContainer
+     * @param bool $addBrackets
      * @return  string
      */
     public function formatPrecision(
@@ -296,16 +304,18 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $options = [],
         $includeContainer = true,
         $addBrackets = false
-    ) {
+    ): string {
         if (!isset($options['precision'])) {
             $options['precision'] = $precision;
         }
+
         if ($includeContainer) {
-            return '<span class="price">' . ($addBrackets ? '[' : '') . $this->formatTxt(
-                $price,
-                $options
-            ) . ($addBrackets ? ']' : '') . '</span>';
+            return '<span class="price">' . ($addBrackets ? '[' : '')
+                . $this->formatTxt($price, $options)
+                . ($addBrackets ? ']' : '')
+                . '</span>';
         }
+
         return $this->formatTxt($price, $options);
     }
 
@@ -313,8 +323,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param float $price
      * @param array $options
      * @return string
+     * @throws Zend_Currency_Exception
      */
-    public function formatTxt($price, $options = [])
+    public function formatTxt($price, array $options = []): string
     {
         if (!is_numeric($price)) {
             $price = $this->_localeFormat->getNumber($price);
@@ -334,7 +345,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCurrencySymbol()
+    public function getCurrencySymbol(): string
     {
         return $this->_localeCurrency->getCurrency($this->getCode())->getSymbol();
     }
@@ -342,7 +353,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * @return string
      */
-    public function getOutputFormat()
+    public function getOutputFormat(): string
     {
         $formatted = $this->formatTxt(0);
         $number = $this->formatTxt(0, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
@@ -354,7 +365,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getConfigAllowCurrencies()
+    public function getConfigAllowCurrencies(): array
     {
         $allowedCurrencies = $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_ALLOW);
         $appBaseCurrencyCode = $this->_directoryHelper->getBaseCurrencyCode();
@@ -376,7 +387,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getConfigDefaultCurrencies()
+    public function getConfigDefaultCurrencies(): array
     {
         return $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_DEFAULT);
     }
@@ -384,7 +395,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * @return array
      */
-    public function getConfigBaseCurrencies()
+    public function getConfigBaseCurrencies(): array
     {
         return $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_BASE);
     }
@@ -392,13 +403,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve currency rates to other currencies
      *
-     * @param string $currency
+     * @param string|array|Currency $currency
      * @param array|null $toCurrencies
      * @return array
      */
-    public function getCurrencyRates($currency, $toCurrencies = null)
+    public function getCurrencyRates($currency, $toCurrencies = null): array
     {
-        if ($currency instanceof \Magento\Directory\Model\Currency) {
+        if ($currency instanceof Currency) {
             $currency = $currency->getCode();
         }
         $data = $this->_getResource()->getCurrencyRates($currency, $toCurrencies);
@@ -410,8 +421,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $rates
      * @return $this
+     * @throws LocalizedException
      */
-    public function saveRates($rates)
+    public function saveRates(array $rates): Currency
     {
         $this->_getResource()->saveRates($rates);
         return $this;
@@ -421,13 +433,14 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * This method removes LRM and RLM marks from string
      *
      * @param string $string
-     * @return $this
+     * @return string
      */
-    private function trimUnicodeDirectionMark($string)
+    private function trimUnicodeDirectionMark(string $string): string
     {
         if (preg_match('/^(\x{200E}|\x{200F})/u', $string, $match)) {
-            $string = preg_replace('/^'.$match[1].'/u', '', $string);
+            $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
+
         return $string;
     }
 }
