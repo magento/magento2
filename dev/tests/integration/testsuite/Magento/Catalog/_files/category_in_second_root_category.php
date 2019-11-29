@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../Store/_files/store_with_second_root_category.php';
-
 use Magento\Catalog\Model\Category;
+
+require __DIR__ . '/../../Store/_files/store_with_second_root_category.php';
 
 /** @var Category $category */
 $category = $categoryFactory->create();

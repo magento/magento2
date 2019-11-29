@@ -147,6 +147,7 @@ class TopMenuTest extends TestCase
             'add_in_tree_visible' => [
                 'categories' => [
                     [
+                        'is_new_category' => true,
                         'parent_name' => 'Category 1.1.1',
                         Category::KEY_NAME => 'Sub Category 1',
                         Category::KEY_IS_ACTIVE => true,
@@ -154,28 +155,30 @@ class TopMenuTest extends TestCase
                 ],
                 'expectedCategories' => [
                     [
-                        'name' => '>Sub Category 1<',
+                        'name' => 'Sub Category 1',
                     ],
                 ],
             ],
             'child_visible_in_tree' => [
                 'categories' => [
                     [
+                        'is_new_category' => true,
                         'parent_name' => 'Category 1.1',
                         Category::KEY_NAME => 'Sub Category 1',
                         Category::KEY_IS_ACTIVE => true,
                     ],
                     [
+                        'is_new_category' => false,
                         'category_name' => 'Category 1.1',
                         Category::KEY_IS_ACTIVE => false,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'name' => '>Sub Category 1<',
+                        'name' => 'Sub Category 1',
                     ],
                     [
-                        'name' => '>Category 1.1.1<',
+                        'name' => 'Category 1.1.1',
                     ],
                 ],
             ],
@@ -214,6 +217,7 @@ class TopMenuTest extends TestCase
             'add_in_tree_category_disable' => [
                 'categories' => [
                     [
+                        'is_new_category' => true,
                         'parent_name' => 'Category 1.1.1',
                         Category::KEY_NAME => 'Sub Category 1',
                         Category::KEY_IS_ACTIVE => false,
@@ -222,13 +226,14 @@ class TopMenuTest extends TestCase
                 ],
                 'expectedCategories' => [
                     [
-                        'name' => '>Sub Category 1<',
+                        'name' => 'Sub Category 1',
                     ],
                 ],
             ],
             'add_in_tree_include_in_menu_disable' => [
                 'categories' => [
                     [
+                        'is_new_category' => true,
                         'parent_name' => 'Category 1.1.1',
                         Category::KEY_NAME => 'Sub Category 1',
                         Category::KEY_IS_ACTIVE => true,
@@ -237,28 +242,30 @@ class TopMenuTest extends TestCase
                 ],
                 'expectedCategories' => [
                     [
-                        'name' => '>Sub Category 1<',
+                        'name' => 'Sub Category 1',
                     ],
                 ],
             ],
             'child_invisible_in_tree' => [
                 'categories' => [
                     [
+                        'is_new_category' => true,
                         'parent_name' => 'Default Category',
                         Category::KEY_NAME => 'Sub Category 1',
                         Category::KEY_IS_ACTIVE => true,
                     ],
                     [
+                        'is_new_category' => false,
                         'category_name' => 'Category 1',
                         Category::KEY_IS_ACTIVE => false,
                     ],
                 ],
                 'expectedCategories' => [
                     [
-                        'name' => '>Category 1.1<',
+                        'name' => 'Category 1.1',
                     ],
                     [
-                        'name' => '>Category 1.1.1<',
+                        'name' => 'Category 1.1.1',
                     ],
                 ],
             ],
@@ -465,7 +472,7 @@ class TopMenuTest extends TestCase
     private function updateCategories(array $categories): void
     {
         foreach ($categories as $categoryData) {
-            if (isset($categoryData['category_name'])) {
+            if (!$categoryData['is_new_category']) {
                 $category = $this->categoryRepository->get($this->getCategoryIdByName($categoryData['category_name']));
                 unset($categoryData['category_name']);
             } else {
@@ -473,6 +480,7 @@ class TopMenuTest extends TestCase
                 unset($categoryData['parent_name']);
                 $category = $this->categoryFactory->create();
             }
+            unset($categoryData['is_new_category']);
             $category->addData($categoryData);
             $this->categoryRepository->save($category);
         }
@@ -502,7 +510,7 @@ class TopMenuTest extends TestCase
 
     /**
      * @param string $name
-     * @return int|null
+     * @return string|null
      */
     private function getCategoryIdByName(string $name): ?string
     {

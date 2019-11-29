@@ -14,7 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 require __DIR__ . '/categories_no_products.php';
 
-$categoryFactory = $objectManager->create(CategoryFactory::class);
+$categoryFactory = $objectManager->get(CategoryFactory::class);
 $categoryResource = $objectManager->create(CategoryResource::class);
 $categoryCollectionFactory = $objectManager->get(CollectionFactory::class);
 /** @var Collection $categoryCollection */

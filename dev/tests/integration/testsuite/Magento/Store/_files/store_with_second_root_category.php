@@ -32,7 +32,7 @@ $rootCategory = $categoryCollection
     ->setPageSize(1)
     ->getFirstItem();
 
-$categoryFactory = $objectManager->create(CategoryFactory::class);
+$categoryFactory = $objectManager->get(CategoryFactory::class);
 $categoryRepository = $objectManager->create(CategoryRepositoryInterface::class);
 
 /** @var Category $rootCategory */
@@ -44,7 +44,7 @@ $rootCategory->setName('Second Root Category')
     ->setPosition(2);
 $rootCategory = $categoryRepository->save($rootCategory);
 
-$groupFactory = $objectManager->create(GroupFactory::class);
+$groupFactory = $objectManager->get(GroupFactory::class);
 /** @var GroupResource $groupResource */
 $groupResource = $objectManager->create(GroupResource::class);
 /** @var Group $storeGroup */
@@ -55,7 +55,7 @@ $storeGroup->setCode('test_store_group_1')
     ->setWebsite($website);
 $groupResource->save($storeGroup);
 
-$storeFactory = $objectManager->create(StoreFactory::class);
+$storeFactory = $objectManager->get(StoreFactory::class);
 /** @var StoreResource $storeResource */
 $storeResource = $objectManager->create(StoreResource::class);
 /** @var Store $store */
