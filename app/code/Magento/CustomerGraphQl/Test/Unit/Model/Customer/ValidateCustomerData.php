@@ -4,12 +4,19 @@ namespace Magento\CustomerGraphQl\Test\Unit\Model\Customer;
 
 use Magento\CustomerGraphQl\Model\Customer\GetAllowedCustomerAttributes;
 use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData as ValidateCustomerDataClass;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 
 class ValidateCustomerData extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider validEmailAddressDataProvider
+     *
+     * @param string $email
+     *
+     * @return void
+     *
+     * @throws GraphQlInputException
      */
     public function testExecuteWithValidEmailAddresses($email)
     {
@@ -29,6 +36,12 @@ class ValidateCustomerData extends \PHPUnit\Framework\TestCase
     }
     /**
      * @dataProvider invalidEmailAddressDataProvider
+     *
+     * @param string $email
+     *
+     * @return void
+     *
+     * @throws GraphQlInputException
      */
     public function testExecuteWithInvalidEmailAddresses($email)
     {
@@ -48,6 +61,9 @@ class ValidateCustomerData extends \PHPUnit\Framework\TestCase
         $validateCustomerData->execute(['email' => $email]);
     }
 
+    /**
+     * @return array
+     */
     public function validEmailAddressDataProvider(): array
     {
         return [
@@ -66,6 +82,9 @@ class ValidateCustomerData extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function invalidEmailAddressDataProvider(): array
     {
         return [
