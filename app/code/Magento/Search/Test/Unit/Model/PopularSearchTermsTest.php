@@ -49,47 +49,28 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
     /**
      * Test isCacheableDataProvider method
      *
-     * @dataProvider isCacheableDataProvider
-     *
      * @param string $term
      * @param array $terms
      * @param $expected $terms
      *
      * @return void
      */
-    public function testIsCacheable($term, $terms, $expected)
+    public function testIsCacheable()
     {
-        $storeId = 7;
-        $pageSize = 25;
-
+        $term = 'test1';
+        $storeId = 1;
+        $pageSize = 35;
+        
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(
                 PopularSearchTerms::XML_PATH_MAX_COUNT_CACHEABLE_SEARCH_TERMS,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             )->willReturn($pageSize);
-        $this->queryCollectionMock->expects($this->once())->method('setPopularQueryFilter')->with($storeId)
-            ->willReturnSelf();
-        $this->queryCollectionMock->expects($this->once())->method('setPageSize')->with($pageSize)
-            ->willReturnSelf();
-        $this->queryCollectionMock->expects($this->once())->method('load')->willReturnSelf();
-        $this->queryCollectionMock->expects($this->once())->method('getColumnValues')->with('query_text')
-            ->willReturn($terms);
+        $this->queryCollectionMock->expects($this->once())->method('isTopSearchResult')->with($term, $storeId, $pageSize)
+            ->willReturn(true, false);
 
-        $actual = $this->popularSearchTerms->isCacheable($term, $storeId);
-        self::assertEquals($expected, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public function isCacheableDataProvider()
-    {
-        return [
-            ['test01', [], false],
-            ['test02', ['test01', 'test02'], true],
-            ['test03', ['test01', 'test02'], false],
-            ['test04', ['test04'], true],
-        ];
+        $this->assertTrue($this->popularSearchTerms->isCacheable($term, $storeId));
+        $this->assertFalse($this->popularSearchTerms->isCacheable($term, $storeId));
     }
 }
