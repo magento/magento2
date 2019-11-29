@@ -5,37 +5,44 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol as CurrencysymbolController;
+use Magento\CurrencySymbol\Model\System\Currencysymbol;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Filter\FilterManager;
 
 /**
  * Class Save
  */
-class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol implements HttpPostActionInterface
+class Save extends CurrencysymbolController implements HttpPostActionInterface
 {
     /**
      * Save custom Currency symbol
      *
-     * @return void
+     * @return ResultInterface
      */
     public function execute()
     {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         $symbolsDataArray = $this->getRequest()->getParam('custom_currency_symbol', null);
         if (is_array($symbolsDataArray)) {
             foreach ($symbolsDataArray as &$symbolsData) {
-                /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-                $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
+                /** @var $filterManager FilterManager */
+                $filterManager = $this->_objectManager->get(FilterManager::class);
                 $symbolsData = $filterManager->stripTags($symbolsData);
             }
         }
 
         try {
-            $this->_objectManager->create(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
+            $this->_objectManager->create(Currencysymbol::class)
                 ->setCurrencySymbolsData($symbolsDataArray);
             $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
+        return $resultRedirect->setPath('*');
     }
 }
