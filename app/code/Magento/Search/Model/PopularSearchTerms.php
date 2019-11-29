@@ -29,7 +29,7 @@ class PopularSearchTerms
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Search\Model\ResourceModel\Query\Collection
+     * @param \Magento\Search\Model\ResourceModel\Query\Collection $queryCollection
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
