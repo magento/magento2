@@ -40,7 +40,7 @@
         </before>
         <after>
             <!-- Don't display out of stock product -->
-            <actionGroup ref="noDisplayOutOfStockProduct" stepKey="revertDisplayOutOfStockProduct"/>
+            <actionGroup ref="NoDisplayOutOfStockProductActionGroup" stepKey="revertDisplayOutOfStockProduct"/>
 
             <!-- Delete configurable product -->
             <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
@@ -105,7 +105,7 @@
         <see userInput="$$createSimpleProduct.name$$" selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" stepKey="seeProductNameInConfigurations"/>
 
         <!-- Display out of stock product -->
-        <actionGroup ref="displayOutOfStockProduct" stepKey="displayOutOfStockProduct"/>
+        <actionGroup ref="DisplayOutOfStockProductActionGroup" stepKey="displayOutOfStockProduct"/>
 
         <!-- Flash cache -->
         <magentoCLI command="cache:flush" stepKey="flushCache"/>

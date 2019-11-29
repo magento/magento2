@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminProductSetMaxQtyAllowedInShoppingCart">
+    <actionGroup name="AdminProductSetMaxQtyAllowedInShoppingCartActionGroup">
         <arguments>
             <argument name="qty" type="string"/>
         </arguments>
@@ -19,13 +19,5 @@
         <click selector="{{AdminSlideOutDialogSection.doneButton}}" stepKey="clickDone"/>
     </actionGroup>
 
-    <actionGroup name="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" extends="AdminProductSetMaxQtyAllowedInShoppingCart">
-        <arguments>
-            <argument name="qty" type="string"/>
-            <argument name="errorMessage" type="string"/>
-        </arguments>
 
-        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" after="clickDone" stepKey="waitProductValidationErrorMessageAppears"/>
-        <see selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCartError}}" userInput="{{errorMessage}}" after="waitProductValidationErrorMessageAppears" stepKey="checkProductValidationErrorMessage"/>
-    </actionGroup>
 </actionGroups>
