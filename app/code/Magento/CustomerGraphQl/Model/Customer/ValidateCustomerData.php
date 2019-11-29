@@ -89,7 +89,10 @@ class ValidateCustomerData
      */
     private function emailIsValid(string $email): bool
     {
-        $regex = "/^([a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*@([a-z0-9-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*\.(([a-z]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}]){2,})$/iu";
+        $regex = "/^([a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.(["
+            . "a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*@([a-z0-9-"
+            . "]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDC"
+            . "F}\x{FDF0}-\x{FFEF}])+)*\.(([a-z]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}]){2,})$/iu";
 
         return !empty($email)
             && preg_match($regex, $email)
