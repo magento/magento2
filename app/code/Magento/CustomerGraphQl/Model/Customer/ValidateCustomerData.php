@@ -30,8 +30,8 @@ class ValidateCustomerData
     /**
      * ValidateCustomerData constructor.
      *
-     * @param EmailAddressValidator $emailAddressValidator
      * @param GetAllowedCustomerAttributes $getAllowedCustomerAttributes
+     * @param EmailAddressValidator $emailAddressValidator
      */
     public function __construct(
         GetAllowedCustomerAttributes $getAllowedCustomerAttributes,
@@ -77,7 +77,7 @@ class ValidateCustomerData
         }
     }
 
-    /*
+    /**
      * Validate if email address is valid
      *
      * In order to work the same as in admin panel, the patter for validation was selected from 'validate-email'
