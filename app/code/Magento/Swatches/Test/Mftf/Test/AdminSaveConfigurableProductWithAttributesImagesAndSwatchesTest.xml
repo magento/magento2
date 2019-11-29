@@ -62,6 +62,7 @@
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
                 <argument name="ProductAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearAttributesGridFilter"/>
             <!--Clear products grid filter-->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>

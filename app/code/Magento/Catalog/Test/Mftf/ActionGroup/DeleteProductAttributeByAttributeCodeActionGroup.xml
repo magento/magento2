@@ -25,6 +25,5 @@
         <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
 </actionGroups>

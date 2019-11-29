@@ -104,6 +104,7 @@
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteSecondProductAttributeByAttributeCode">
                 <argument name="ProductAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
             </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <!-- Clear filters -->
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductAttributesFilter"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>

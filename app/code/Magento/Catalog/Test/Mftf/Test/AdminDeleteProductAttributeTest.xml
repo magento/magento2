@@ -27,6 +27,7 @@
         <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
             <argument name="ProductAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
         </actionGroup>
+        <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
         <!-- Assert the product attribute is not in the grid by Attribute code -->
         <actionGroup ref="FilterProductAttributeByAttributeCodeActionGroup" stepKey="filterByAttributeCode">
             <argument name="ProductAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
