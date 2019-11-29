@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- Media Gallery Asset -->
+    <route url="/V1/media-gallery/asset/:mediaAssetId" method="GET">
+        <service class="Magento\MediaGalleryApi\Model\Asset\Command\GetByIdInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+    <route url="/V1/media-gallery/asset/path/:mediaFilePath" method="GET">
+        <service class="Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+    <route url="/V1/media-gallery/asset" method="POST">
+        <service class="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+    <route url="/V1/media-gallery/asset/:mediaAsset" method="PUT">
+        <service class="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+    <route url="/V1/media-gallery/asset/:mediaAssetPath" method="DELETE">
+        <service class="Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+
+    <!-- Media Gallery Keyword -->
+    <route url="/V1/media-gallery/keyword/:assetId" method="GET">
+        <service class="Magento\MediaGalleryApi\Model\Keyword\Command\GetAssetKeywordsInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+    <route url="/V1/media-gallery/keyword/:assetId" method="PUT">
+        <service class="Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_Cms::media_gallery"/>
+        </resources>
+    </route>
+</routes>

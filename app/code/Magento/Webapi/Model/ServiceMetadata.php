@@ -212,7 +212,7 @@ class ServiceMetadata
     public function getServiceName($interfaceName, $version, $preserveVersion = true)
     {
         if (!preg_match(\Magento\Webapi\Model\Config::SERVICE_CLASS_PATTERN, $interfaceName, $matches)) {
-            $apiClassPattern = "#^(.+?)\\\\(.+?)\\\\Api\\\\(.+?)(Interface)?$#";
+            $apiClassPattern = "#^(.+?)\\\\(.+?)\\\\(.+?)(Interface)?$#";
             preg_match($apiClassPattern, $interfaceName, $matches);
         }
 
