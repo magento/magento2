@@ -40,15 +40,6 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * @inheritDoc
-     */
-    public function tearDown()
-    {
-        parent::tearDown();
-        //$this->session->unsCustomerGroupData();
-    }
-
-    /**
      * Test new group form.
      */
     public function testNewActionNoCustomerGroupDataInSession()
