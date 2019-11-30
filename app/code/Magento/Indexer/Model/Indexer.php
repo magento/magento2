@@ -291,6 +291,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             $this->getView()->subscribe();
         } else {
             $this->getView()->unsubscribe();
+            $this->invalidate();
         }
         $this->getState()->save();
     }
