@@ -74,7 +74,7 @@ class ScheduleStatus extends AbstractRenderer
                 $class = 'grid-severity-notice';
             }
 
-            if ($state->getStatus() !== 'idle') {
+            if ($state->getStatus() !== $state::STATUS_IDLE) {
                 $class = 'grid-severity-minor';
             }
 
