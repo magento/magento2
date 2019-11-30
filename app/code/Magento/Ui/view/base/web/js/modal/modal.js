@@ -105,10 +105,10 @@ define([
                  * Escape key press handler,
                  * close modal window
                  */
-                escapeKey: function () {
+                escapeKey: function (event) {
                     if (this.options.isOpen && this.modal.find(document.activeElement).length ||
                         this.options.isOpen && this.modal[0] === document.activeElement) {
-                        this.closeModal();
+                        this.closeModal(event);
                     }
                 }
             }
@@ -177,7 +177,7 @@ define([
             var key = keyCodes[event.keyCode];
 
             if (this.options.keyEventHandlers.hasOwnProperty(key)) {
-                this.options.keyEventHandlers[key].apply(this, arguments);
+                this.options.keyEventHandlers[key].apply(this, arguments, event);
             }
         },
 
