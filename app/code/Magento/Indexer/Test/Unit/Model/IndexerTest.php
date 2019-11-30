@@ -406,6 +406,11 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
         $this->viewMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->viewMock->expects($this->once())->method($method)->will($this->returnValue(true));
         $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
+        if (!$scheduled) {
+            $stateMock->expects($this->once())->method('setStatus')->with(StateInterface::STATUS_INVALID)->will(
+                $this->returnSelf()
+            );
+        }
         $this->model->setScheduled($scheduled);
     }
 
