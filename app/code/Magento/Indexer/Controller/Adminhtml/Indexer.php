@@ -19,6 +19,7 @@ abstract class Indexer extends \Magento\Backend\App\Action
                 return $this->_authorization->isAllowed('Magento_Indexer::index');
             case 'massOnTheFly':
             case 'massChangelog':
+            case 'massInvalidate':
                 return $this->_authorization->isAllowed('Magento_Indexer::changeMode');
         }
         return false;
