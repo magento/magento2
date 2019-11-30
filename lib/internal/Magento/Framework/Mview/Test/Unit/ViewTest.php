@@ -205,7 +205,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('setMode')
             ->with(\Magento\Framework\Mview\View\StateInterface::MODE_DISABLED)
             ->will($this->returnSelf());
-        $this->changelogMock->expects($this->never())
+        $this->changelogMock->expects($this->once())
             ->method('drop');
         $subscriptionMock = $this->createPartialMock(\Magento\Framework\Mview\View\Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))->method('remove');

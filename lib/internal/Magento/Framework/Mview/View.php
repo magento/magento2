@@ -225,6 +225,15 @@ class View extends DataObject implements ViewInterface
                 $this->initSubscriptionInstance($subscriptionConfig)->remove();
             }
 
+            try {
+                // Remove changelog table
+                $this->getChangelog()->drop();
+                // Reset version_id
+                $this->getState()->setVersionId(0);
+            } catch (ChangelogTableNotExistsException $e) {
+                // Silently ignore this error
+            }
+
             // Update view state
             $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
         }
