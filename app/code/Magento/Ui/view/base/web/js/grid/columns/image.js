@@ -81,6 +81,15 @@ define([
         },
 
         /**
+         * Get is active record
+         *
+         * @param {Object} record - Data to be preprocessed.
+         */
+        getIsActive: function (record) {
+            return this.previewComponent().visibleRecord() === record._rowIndex || false;
+        },
+
+        /**
          * Expand image preview
          */
         expandPreview: function (record) {
