@@ -19,7 +19,8 @@ class Minqty extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         parent::beforeSave();
-        $minQty = (int) $this->getValue() >= 0 ? (int) $this->getValue() : (int) $this->getOldValue();
+        $value = (int) $this->getValue();
+        $minQty = !empty($value) ? $value : 0;
         $this->setValue((string) $minQty);
         return $this;
     }
