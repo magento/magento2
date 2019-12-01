@@ -27,6 +27,15 @@
             margin: @admin__masonry_grid_image__space/2;
             overflow: hidden;
 
+            .masonry-image-block {
+                &.active {
+                    img {
+                        border: 2px #558dd6 solid;
+                        padding: 1px;
+                    }
+                }
+            }
+
             img {
                 cursor: pointer;
                 height: 100%;
