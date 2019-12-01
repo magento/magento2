@@ -9,7 +9,8 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
-class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
+class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface,
+    \Magento\Catalog\Api\CategoryListRepositoryAdditionalInterface
 {
     /**
      * @var CategoryRepository
@@ -80,11 +81,43 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
      */
     public function deleteByIds($categoryId, $sku)
     {
-        if (!is_array($sku)) {
-            $sku = [$sku];
-        }
         $category = $this->categoryRepository->get($categoryId);
-        $products = $this->productResource->getProductsIdsBySkus($sku);
+        $product = $this->productRepository->get($sku);
+        $productPositions = $category->getProductsPosition();
+
+        $productID = $product->getId();
+        if (!isset($productPositions[$productID])) {
+            throw new InputException(__("The category doesn't contain the specified product."));
+        }
+        $backupPosition = $productPositions[$productID];
+        unset($productPositions[$productID]);
+
+        $category->setPostedProducts($productPositions);
+        try {
+            $category->save();
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save product "%product" with position %position to category %category',
+                    [
+                        "product" => $product->getId(),
+                        "position" => $backupPosition,
+                        "category" => $category->getId()
+                    ]
+                ),
+                $e
+            );
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteBySkus($categoryId, array $productSkuList)
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        $products = $this->productResource->getProductsIdsBySkus($productSkuList);
 
         if (!$products) {
             throw new InputException(__("The category doesn't contain the specified products."));
@@ -99,6 +132,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         }
 
         $category->setPostedProducts($productPositions);
+
         try {
             $category->save();
         } catch (\Exception $e) {
@@ -106,13 +140,14 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
                 __(
                     'Could not save products "%products" to category %category',
                     [
-                        "products" => implode(',', $sku),
+                        "products" => implode(',', $productSkuList),
                         "category" => $category->getId()
                     ]
                 ),
                 $e
             );
         }
+
         return true;
     }
 }
