@@ -262,9 +262,9 @@ class ServiceMetadataTest extends TestCase
 
         $result = $this->unit->getRoutesConfig();
         $assertedRoute = $result['customerCustomerRepositoryV1']['routes']['/V1/customers/me'];
-        $this->assertArrayHasKey('PUT', $assertedRoute);
-        $this->assertEquals('saveSelf', $assertedRoute['PUT']['method']);
-        $this->assertArrayHasKey('GET', $assertedRoute);
-        $this->assertEquals('getSelf', $assertedRoute['GET']['method']);
+        self::assertArrayHasKey('PUT', $assertedRoute);
+        self::assertEquals('saveSelf', $assertedRoute['PUT']['method']);
+        self::assertArrayHasKey('GET', $assertedRoute);
+        self::assertEquals('getSelf', $assertedRoute['GET']['method']);
     }
 }
