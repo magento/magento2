@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Model\Config;
+
 use PHPUnit\Framework\TestCase;
 use Magento\Captcha\Helper\Data as HelperData;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
