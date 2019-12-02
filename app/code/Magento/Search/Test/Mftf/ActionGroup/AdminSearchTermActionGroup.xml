@@ -36,4 +36,12 @@
         <click selector="{{AdminCatalogSearchTermIndexSection.okButton}}" stepKey="clickOkButton"/>
         <waitForElementVisible selector="{{AdminCatalogSearchTermMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
     </actionGroup>
+
+    <!-- Delete all existing search terms -->
+    <actionGroup name="DeleteAllSearchTerms">
+        <selectOption userInput="selectAll" selector="{{AdminCatalogSearchTermIndexSection.selectMassActionCheckbox}}" stepKey="checkAllSearchTerms"/>
+        <selectOption selector="{{AdminCatalogSearchTermIndexSection.massActions}}" userInput="delete" stepKey="selectDeleteOption"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.submit}}" stepKey="clickSubmitButton"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.okButton}}" stepKey="clickOkButton"/>
+    </actionGroup>
 </actionGroups>

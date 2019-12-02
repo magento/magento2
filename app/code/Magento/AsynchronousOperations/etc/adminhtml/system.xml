@@ -13,6 +13,7 @@
                 <label>Bulk Actions</label>
                 <field id="lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Days Saved in Log</label>
+                     <validate>validate-zero-or-greater validate-digits</validate>
                 </field>
             </group>
         </section>

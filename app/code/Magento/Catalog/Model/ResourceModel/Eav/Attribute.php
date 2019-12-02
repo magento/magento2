@@ -193,7 +193,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
             if ($this->_data[self::KEY_IS_GLOBAL] != $this->_origData[self::KEY_IS_GLOBAL]) {
                 try {
                     $this->attrLockValidator->validate($this);
-                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                 } catch (\Magento\Framework\Exception\LocalizedException $exception) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('Do not change the scope. %1', $exception->getMessage())
@@ -237,7 +236,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
-        
+
         $this->_source = null;
 
         return parent::afterSave();

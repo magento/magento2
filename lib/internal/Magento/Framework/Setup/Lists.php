@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup;
 
@@ -12,6 +13,9 @@ use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Locale\Resolver;
 
+/**
+ * Retrieves lists of allowed locales and currencies
+ */
 class Lists
 {
     /**
@@ -92,17 +96,22 @@ class Lists
         $languages = (new LanguageBundle())->get(Resolver::DEFAULT_LOCALE)['Languages'];
         $countries = (new RegionBundle())->get(Resolver::DEFAULT_LOCALE)['Countries'];
         $locales = \ResourceBundle::getLocales('') ?: [];
+        $allowedLocales = array_flip($this->allowedLocales);
         $list = [];
         foreach ($locales as $locale) {
-            if (!in_array($locale, $this->allowedLocales)) {
+            if (!isset($allowedLocales[$locale])) {
                 continue;
             }
             $language = \Locale::getPrimaryLanguage($locale);
             $country = \Locale::getRegion($locale);
+            $script = \Locale::getScript($locale);
             if (!$languages[$language] || !$countries[$country]) {
                 continue;
             }
-            $list[$locale] = $languages[$language] . ' (' . $countries[$country] . ')';
+            if ($script !== '') {
+                $script = \Locale::getDisplayScript($locale) . ', ';
+            }
+            $list[$locale] = $languages[$language] . ' (' . $script . $countries[$country] . ')';
         }
         asort($list);
         return $list;

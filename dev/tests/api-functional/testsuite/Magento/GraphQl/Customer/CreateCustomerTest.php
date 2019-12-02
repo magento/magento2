@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for create customer functionallity
+ * Test for create customer functionality
  */
 class CreateCustomerTest extends GraphQlAbstract
 {
@@ -27,7 +27,7 @@ class CreateCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -68,6 +68,7 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query);
 
+        $this->assertEquals(null, $response['createCustomer']['customer']['id']);
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
         $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
@@ -139,7 +140,7 @@ QUERY;
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: Email
+     * @expectedExceptionMessage  Required parameters are missing: Email
      */
     public function testCreateCustomerIfEmailMissed()
     {
@@ -251,7 +252,6 @@ QUERY;
         $newFirstname = '';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
-
         $query = <<<QUERY
 mutation {
     createCustomer(
@@ -276,7 +276,72 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    public function tearDown()
+    /**
+     * @magentoConfigFixture default_store newsletter/general/active 0
+     */
+    public function testCreateCustomerSubscribed()
+    {
+        $newFirstname = 'Richard';
+        $newLastname = 'Rowe';
+        $newEmail = 'new_customer@example.com';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            firstname: "{$newFirstname}"
+            lastname: "{$newLastname}"
+            email: "{$newEmail}"
+            is_subscribed: true
+        }
+    ) {
+        customer {
+            email
+            is_subscribed
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+
+        $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage A customer with the same email address already exists in an associated website.
+     */
+    public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists()
+    {
+        $existedEmail = 'customer@example.com';
+        $password = 'test123#';
+        $firstname = 'John';
+        $lastname = 'Smith';
+
+        $query = <<<QUERY
+mutation {
+    createCustomer(
+        input: {
+            email: "{$existedEmail}"
+            password: "{$password}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
+        }
+    ) {
+        customer {
+            firstname
+            lastname
+            email
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query);
+    }
+
+    public function tearDown(): void
     {
         $newEmail = 'new_customer@example.com';
         try {

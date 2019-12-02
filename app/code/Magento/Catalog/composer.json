@@ -31,8 +31,7 @@
         "magento/module-ui": "*",
         "magento/module-url-rewrite": "*",
         "magento/module-widget": "*",
-        "magento/module-wishlist": "*",
-        "magento/module-authorization": "*"
+        "magento/module-wishlist": "*"
     },
     "suggest": {
         "magento/module-cookie": "*",

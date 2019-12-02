@@ -429,7 +429,7 @@ class Installer
         $disable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
-            if ((isset($currentModules[$module]) && !$currentModules[$module])) {
+            if (isset($currentModules[$module]) && !$currentModules[$module]) {
                 $result[$module] = 0;
             } else {
                 $result[$module] = 1;
@@ -756,9 +756,10 @@ class Installer
         SchemaSetupInterface $setup,
         AdapterInterface $connection
     ) {
-        if (!$connection->isTableExists($setup->getTable('flag'))) {
+        $tableName = $setup->getTable('flag');
+        if (!$connection->isTableExists($tableName)) {
             $table = $connection->newTable(
-                $setup->getTable('flag')
+                $tableName
             )->addColumn(
                 'flag_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -797,7 +798,7 @@ class Installer
             );
             $connection->createTable($table);
         } else {
-            $this->updateColumnType($connection, 'flag', 'flag_data', 'mediumtext');
+            $this->updateColumnType($connection, $tableName, 'flag_data', 'mediumtext');
         }
     }
 
@@ -924,7 +925,7 @@ class Installer
      */
     private function handleDBSchemaData($setup, $type, array $request)
     {
-        if (!(($type === 'schema') || ($type === 'data'))) {
+        if (!($type === 'schema' || $type === 'data')) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);

@@ -109,12 +109,208 @@ class SetPaymentMethodTest extends GraphQlAbstract
         ];
     }
 
+    /**
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/environment sandbox
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/login def_login
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_key def_trans_key
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/public_client_key def_public_client_key
+     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/trans_signature_key def_trans_signature_key
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @dataProvider dataProviderSetPaymentInvalidInput
+     * @param \Closure $getMutationClosure
+     * @param array $expectedMessages
+     * @expectedException \Exception
+     */
+    public function testSetPaymentInvalidInput(\Closure $getMutationClosure, array $expectedMessages)
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $setPaymentMutation = $getMutationClosure($maskedQuoteId);
+
+        foreach ($expectedMessages as $expectedMessage) {
+            $this->expectExceptionMessage($expectedMessage);
+        }
+        $this->graphQlMutation($setPaymentMutation, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * Data provider for testSetPaymentInvalidInput
+     *
+     * @return array
+     */
+    public function dataProviderSetPaymentInvalidInput(): array
+    {
+        return [
+            [
+                function (string $maskedQuoteId) {
+                    return $this->getInvalidSetPaymentMutation($maskedQuoteId);
+                },
+                [
+                    'Required parameter "authorizenet_acceptjs" for "payment_method" is missing.'
+                ]
+            ],
+            [
+                function (string $maskedQuoteId) {
+                    return $this->getEmptyAcceptJsInput($maskedQuoteId);
+                },
+                [
+                    'Field AuthorizenetInput.cc_last_4 of required type Int! was not provided.',
+                    'Field AuthorizenetInput.opaque_data_descriptor of required type String! was not provided.',
+                    'Field AuthorizenetInput.opaque_data_value of required type String! was not provided.'
+                ]
+
+            ],
+            [
+                function (string $maskedQuoteId) {
+                    return $this->getMissingCcLastFourAcceptJsInput(
+                        $maskedQuoteId,
+                        static::VALID_DESCRIPTOR,
+                        static::VALID_NONCE
+                    );
+                },
+                [
+                    'Field AuthorizenetInput.cc_last_4 of required type Int! was not provided',
+                ]
+            ],
+            [
+                function (string $maskedQuoteId) {
+                    return $this->getMissingOpaqueDataValueAcceptJsInput($maskedQuoteId, static::VALID_DESCRIPTOR);
+                },
+                [
+                    'Field AuthorizenetInput.opaque_data_value of required type String! was not provided',
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Get setPaymentMethodOnCart missing additional data property
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getInvalidSetPaymentMutation(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"authorizenet_acceptjs"
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get setPaymentMethodOnCart missing required additional data properties
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getEmptyAcceptJsInput(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"authorizenet_acceptjs"
+      authorizenet_acceptjs: {}
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get setPaymentMethodOnCart missing required additional data properties
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getMissingCcLastFourAcceptJsInput(string $maskedQuoteId, string $descriptor, string $nonce): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"authorizenet_acceptjs"
+      authorizenet_acceptjs:{
+        opaque_data_descriptor: "{$descriptor}"
+        opaque_data_value: "{$nonce}"
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Get setPaymentMethodOnCart missing required additional data properties
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getMissingOpaqueDataValueAcceptJsInput(string $maskedQuoteId, string $descriptor): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    payment_method:{
+      code:"authorizenet_acceptjs"
+      authorizenet_acceptjs:{
+        opaque_data_descriptor: "{$descriptor}"
+        cc_last_4: 1111
+      }
+    }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+    
     private function assertPlaceOrderResponse(array $response, string $reservedOrderId): void
     {
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
     }
 
     private function assertSetPaymentMethodResponse(array $response, string $methodCode): void
@@ -171,7 +367,7 @@ QUERY;
 mutation {
   placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
     order {
-      order_id
+      order_number
     }
   }
 }

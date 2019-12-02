@@ -33,6 +33,9 @@ class KeyValidatorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->keyValidator->isValid($key));
     }
 
+    /**
+     * @return array
+     */
     public function isValidDataProvider() : array
     {
         return [

@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -178,7 +175,7 @@ class AdvancedInventory extends AbstractModifier
     }
 
     /**
-     * Prepare Meta
+     * Modify UI Quantity and Stock status attribute meta.
      *
      * @return void
      */
@@ -188,10 +185,6 @@ class AdvancedInventory extends AbstractModifier
         $pathField = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
 
         if ($pathField) {
-            $labelField = $this->arrayManager->get(
-                $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/label',
-                $this->meta
-            );
             $fieldsetPath = $this->arrayManager->slicePath($pathField, 0, -4);
 
             $this->meta = $this->arrayManager->merge(
@@ -219,10 +212,9 @@ class AdvancedInventory extends AbstractModifier
                 'formElement' => 'container',
                 'componentType' => 'container',
                 'component' => "Magento_Ui/js/form/components/group",
-                'label' => $labelField,
+                'label' => false,
                 'breakLine' => false,
                 'dataScope' => $fieldCode,
-                'scopeLabel' => '[GLOBAL]',
                 'source' => 'product_details',
                 'sortOrder' => (int) $this->arrayManager->get(
                     $this->arrayManager->slicePath($pathField, 0, -2) . '/arguments/data/config/sortOrder',
@@ -230,86 +222,55 @@ class AdvancedInventory extends AbstractModifier
                 ) - 1,
                 'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
             ];
+            $qty['arguments']['data']['config'] = [
+                'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
+                'group' => 'quantity_and_stock_status_qty',
+                'dataType' => 'number',
+                'formElement' => 'input',
+                'componentType' => 'field',
+                'visible' => '1',
+                'require' => '0',
+                'additionalClasses' => 'admin__field-small',
+                'label' => __('Quantity'),
+                'scopeLabel' => '[GLOBAL]',
+                'dataScope' => 'qty',
+                'validation' => [
+                    'validate-number' => true,
+                    'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
+                ],
+                'imports' => [
+                    'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
+                ],
+                'sortOrder' => 10,
+            ];
+            $advancedInventoryButton['arguments']['data']['config'] = [
+                'displayAsLink' => true,
+                'formElement' => 'container',
+                'componentType' => 'container',
+                'component' => 'Magento_Ui/js/form/components/button',
+                'template' => 'ui/form/components/button/container',
+                'actions' => [
+                    [
+                        'targetName' => 'product_form.product_form.advanced_inventory_modal',
+                        'actionName' => 'toggleModal',
+                    ],
+                ],
+                'title' => __('Advanced Inventory'),
+                'provider' => false,
+                'additionalForGroup' => true,
+                'source' => 'product_details',
+                'sortOrder' => 20,
+            ];
             $container['children'] = [
-                'qty' => $this->getQtyMetaStructure(),
-                'advanced_inventory_button' => $this->getAdvancedInventoryButtonMetaStructure(),
+                'qty' => $qty,
+                'advanced_inventory_button' => $advancedInventoryButton,
             ];
 
             $this->meta = $this->arrayManager->merge(
                 $fieldsetPath . '/children',
                 $this->meta,
-                ['container_quantity_and_stock_status_qty' => $container]
+                ['quantity_and_stock_status_qty' => $container]
             );
         }
-    }
-
-    /**
-     * Get Qty meta structure
-     *
-     * @return array
-     */
-    private function getQtyMetaStructure()
-    {
-        return  [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'component' => 'Magento_CatalogInventory/js/components/qty-validator-changer',
-                        'group' => 'quantity_and_stock_status_qty',
-                        'dataType' => 'number',
-                        'formElement' => 'input',
-                        'componentType' => 'field',
-                        'visible' => '1',
-                        'require' => '0',
-                        'additionalClasses' => 'admin__field-small',
-                        'label' => __('Quantity'),
-                        'scopeLabel' => '[GLOBAL]',
-                        'dataScope' => 'qty',
-                        'validation' => [
-                            'validate-number' => true,
-                            'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
-                        ],
-                        'imports' => [
-                            'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
-                        ],
-                        'sortOrder' => 10,
-                        'disabled' => $this->locator->getProduct()->isLockedAttribute('quantity_and_stock_status'),
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * Get advances inventory button meta structure
-     *
-     * @return array
-     */
-    private function getAdvancedInventoryButtonMetaStructure()
-    {
-        return  [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'displayAsLink' => true,
-                        'formElement' => 'container',
-                        'componentType' => 'container',
-                        'component' => 'Magento_Ui/js/form/components/button',
-                        'template' => 'ui/form/components/button/container',
-                        'actions' => [
-                            [
-                                'targetName' => 'product_form.product_form.advanced_inventory_modal',
-                                'actionName' => 'toggleModal',
-                            ],
-                        ],
-                        'title' => __('Advanced Inventory'),
-                        'provider' => false,
-                        'additionalForGroup' => true,
-                        'source' => 'product_details',
-                        'sortOrder' => 20,
-                    ]
-                ]
-            ]
-        ];
     }
 }

@@ -16,9 +16,10 @@
             <span><?= $block->escapeHtml(__('Reorder')) ?></span>
         </a>
     <?php endif ?>
-    <a class="action print"
-       href="<?= $block->escapeUrl($block->getPrintUrl($_order)) ?>"
-       onclick="this.target='_blank';">
+    <a href="<?= $block->escapeUrl($block->getPrintUrl($_order)) ?>"
+       class="action print"
+       target="_blank"
+       rel="noopener">
         <span><?= $block->escapeHtml(__('Print Order')) ?></span>
     </a>
     <?= $block->getChildHtml() ?>

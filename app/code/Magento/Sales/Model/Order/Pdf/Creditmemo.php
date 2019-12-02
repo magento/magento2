@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Sales Order Creditmemo PDF model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Creditmemo extends AbstractPdf
@@ -180,11 +184,11 @@ class Creditmemo extends AbstractPdf
             }
             /* Add totals */
             $this->insertTotals($page, $creditmemo);
+            if ($creditmemo->getStoreId()) {
+                $this->_localeResolver->revert();
+            }
         }
         $this->_afterGetPdf();
-        if ($creditmemo->getStoreId()) {
-            $this->_localeResolver->revert();
-        }
         return $pdf;
     }
 

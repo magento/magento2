@@ -21,14 +21,14 @@
         <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateToEmailTemplatePage"/>
         <!--Click "Add New Template" button-->
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickAddNewTemplateButton"/>
-        <!--Select value for "Template" drop-down menu in "Load default template" tab-->
+        <!--Select value for "Template" drop-down menu in "Load Default Template" tab-->
         <selectOption selector="{{AdminEmailTemplateEditSection.templateDropDown}}" userInput="Registry Update" stepKey="selectValueFromTemplateDropDown"/>
         <!--Fill in required fields in "Template Information" tab and click "Save Template" button-->
         <click selector="{{AdminEmailTemplateEditSection.loadTemplateButton}}" stepKey="clickLoadTemplateButton"/>
         <fillField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{EmailTemplate.templateName}}" stepKey="fillTemplateNameField"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveTemplateButton"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
     <!--Create New Custom Template -->
@@ -61,9 +61,10 @@
             <description>Clicks on Delete Template. Accepts the Popup. Validates that the Email Template is NOT present in the Email Templates Grid.</description>
         </annotations>
         <click selector="{{AdminEmailTemplateEditSection.deleteTemplateButton}}" after="checkTemplateName" stepKey="deleteTemplate"/>
-        <acceptPopup after="deleteTemplate" stepKey="acceptPopup"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
+        <waitForElementVisible selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="deleteTemplate" stepKey="waitForConfirmButton"/>
+        <click selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="waitForConfirmButton" stepKey="acceptPopup"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" after="acceptPopup" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
     </actionGroup>
 
     <actionGroup name="PreviewEmailTemplate" extends="FindAndOpenEmailTemplate">
