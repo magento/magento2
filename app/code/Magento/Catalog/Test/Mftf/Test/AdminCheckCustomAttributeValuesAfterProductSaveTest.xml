@@ -33,6 +33,7 @@
             </createData>
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexCatalogSearch"/>
             <!-- Login to Admin page -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         </before>
@@ -42,6 +43,7 @@
             <deleteData createDataKey="createMultiSelectProductAttribute" stepKey="deleteMultiSelectProductAttribute"/>
             <!-- Clear products grid filters -->
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsGridFilters"/>
+            <waitForPageLoad stepKey="waitForCleanProductsFilters"/>
             <!-- Logout from Admin page -->
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
