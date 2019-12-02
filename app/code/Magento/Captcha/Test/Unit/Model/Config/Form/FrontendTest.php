@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Model\Config\Form;
+
 use Magento\Captcha\Model\Config\Form\Frontend;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Config\ScopeConfigInterface;
