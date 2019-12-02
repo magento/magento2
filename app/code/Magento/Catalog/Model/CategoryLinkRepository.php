@@ -10,7 +10,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface,
-    \Magento\Catalog\Api\CategoryListRepositoryAdditionalInterface
+    \Magento\Catalog\Api\CategoryListDeleteBySkuInterface
 {
     /**
      * @var CategoryRepository
