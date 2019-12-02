@@ -24,6 +24,7 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
 use Zend_Filter_Input;
+use Magento\Catalog\Model\Product\Authorization as ProductAuthorization;
 
 /**
  * Product helper
@@ -104,6 +105,11 @@ class Helper
     private $attributeFilter;
 
     /**
+     * @var ProductAuthorization
+     */
+    private $productAuthorization;
+
+    /**
      * @var FormatInterface
      */
     private $localeFormat;
@@ -123,6 +129,7 @@ class Helper
      * @param LinkTypeProvider|null $linkTypeProvider
      * @param AttributeFilter|null $attributeFilter
      * @param FormatInterface|null $localeFormat
+     * @param ProductAuthorization|null $productAuthorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -137,7 +144,8 @@ class Helper
         ProductRepositoryInterface $productRepository = null,
         LinkTypeProvider $linkTypeProvider = null,
         AttributeFilter $attributeFilter = null,
-        FormatInterface $localeFormat = null
+        FormatInterface $localeFormat = null,
+        ?ProductAuthorization $productAuthorization = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -153,6 +161,7 @@ class Helper
         $this->linkTypeProvider = $linkTypeProvider ?: $objectManager->get(LinkTypeProvider::class);
         $this->attributeFilter = $attributeFilter ?: $objectManager->get(AttributeFilter::class);
         $this->localeFormat = $localeFormat ?: $objectManager->get(FormatInterface::class);
+        $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
     }
 
     /**
@@ -243,8 +252,10 @@ class Helper
     public function initialize(Product $product)
     {
         $productData = $this->request->getPost('product', []);
+        $product = $this->initializeFromData($product, $productData);
+        $this->productAuthorization->authorizeSavingOf($product);
 
-        return $this->initializeFromData($product, $productData);
+        return $product;
     }
 
     /**
