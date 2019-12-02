@@ -165,7 +165,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dateTimeFilterMock = $this->createMock(\Magento\Catalog\Model\Product\DateTime::class);
+        $this->dateTimeFilterMock = $this->createMock(Product\Filter\DateTime::class);
 
         $this->helper = $this->objectManager->getObject(
             Helper::class,

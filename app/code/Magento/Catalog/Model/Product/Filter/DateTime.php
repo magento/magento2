@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Model\Product;
+namespace Magento\Catalog\Model\Product\Filter;
 
 use Magento\Framework\Stdlib\DateTime as StdlibDateTime;
 use Magento\Framework\Stdlib\DateTime\Filter\DateTime as StdlibDateTimeFilter;

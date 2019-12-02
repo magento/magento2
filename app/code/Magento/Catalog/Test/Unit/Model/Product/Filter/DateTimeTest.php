@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Test\Unit\Model\Product;
+namespace Magento\Catalog\Test\Unit\Model\Product\Filter;
 
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
@@ -23,7 +23,7 @@ class DateTimeTest extends TestCase
      */
     private $locale;
     /**
-     * @var \Magento\Catalog\Model\Product\DateTime
+     * @var \Magento\Catalog\Model\Product\Filter\DateTime
      */
     private $model;
 
@@ -52,7 +52,7 @@ class DateTimeTest extends TestCase
             ['localeDate' => $timezone]
         );
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\DateTime::class,
+            \Magento\Catalog\Model\Product\Filter\DateTime::class,
             [
                 'stdlibDateTimeFilter' => $stdlibDateTimeFilter
             ]

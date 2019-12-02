@@ -15,7 +15,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Authorization as ProductAuthorization;
-use Magento\Catalog\Model\Product\DateTime as DateTimeFilter;
+use Magento\Catalog\Model\Product\Filter\DateTime as DateTimeFilter;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
@@ -89,11 +89,6 @@ class Helper
      * @var LinkResolver
      */
     private $linkResolver;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     */
-    private $stdlibDateTimeFilter;
 
     /**
      * @var LinkTypeProvider
@@ -414,23 +409,6 @@ class Helper
         }
 
         return $this->linkResolver;
-    }
-
-    /**
-     * Get DateTimeFilter instance
-     *
-     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated 101.0.0
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function getDateTimeFilter()
-    {
-        if ($this->stdlibDateTimeFilter === null) {
-            $this->stdlibDateTimeFilter = ObjectManager::getInstance()
-                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
-        }
-
-        return $this->stdlibDateTimeFilter;
     }
 
     /**
