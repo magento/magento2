@@ -54,9 +54,9 @@ class Config
      * GUID used to identify the specific API Key.
      *
      * @param int|null $storeId
-     * @return string
+     * @return string|null
      */
-    public function getApiIdentifier(?int $storeId = null): string
+    public function getApiIdentifier(?int $storeId = null): ?string
     {
         $apiIdentifier = $this->scopeConfig->getValue(
             'three_d_secure/cardinal/api_identifier',
