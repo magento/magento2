@@ -142,7 +142,7 @@ class DeployStaticOptions
     /**
      * Key for languages parameter
      */
-    const DELETE_PREVIOUS_FILES = 'delete-previous-files';
+    private const DELETE_PREVIOUS_FILES = 'delete-previous-files';
 
     /**
      * Key for refresh content version only mode
@@ -337,5 +337,15 @@ class DeployStaticOptions
                 'Do not minify HTML files.'
             )
         ];
+    }
+
+    /**
+     * Getter for DELETE_PREVIOUS_FILES constant value.
+     *
+     * @return string
+     */
+    public function getDeletePreviousFilesKey(): string
+    {
+        return self::DELETE_PREVIOUS_FILES;
     }
 }
