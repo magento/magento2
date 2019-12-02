@@ -67,206 +67,92 @@ class ServiceMetadataTest extends TestCase
             );
 
         $this->config->method('getServices')
-            ->willReturn(
-                [
-                    'routes' =>
-                        [
-                            '/V1/customers/:customerId' =>
-                                [
-                                    'GET' =>
-                                        [
-                                            'service' =>
-                                                [
-                                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
-                                                    'method' => 'getById',
-                                                ],
-                                            'resources' =>
-                                                [
-                                                    'Magento_Customer::customer' => true,
-                                                ],
-                                            'parameters' =>
-                                                [],
-                                        ],
-                                    'PUT' =>
-                                        [
-                                            'service' =>
-                                                [
-                                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
-                                                    'method' => 'save',
-                                                ],
-                                            'resources' =>
-                                                [
-                                                    'Magento_Customer::manage' => true,
-                                                ],
-                                            'parameters' =>
-                                                [],
-                                        ],
-                                    'DELETE' =>
-                                        [
-                                            'service' =>
-                                                [
-                                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
-                                                    'method' => 'deleteById',
-                                                ],
-                                            'resources' =>
-                                                [
-                                                    'Magento_Customer::manage' => true,
-                                                ],
-                                            'parameters' =>
-                                                [],
-                                        ],
-                                ],
-                            '/V1/customers/me' =>
-                                [
-                                    'PUT' =>
-                                        [
-                                            'service' =>
-                                                [
-                                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
-                                                    'method' => 'save',
-                                                ],
-                                            'resources' =>
-                                                [
-                                                    'self' => true,
-                                                ],
-                                            'parameters' =>
-                                                [
-                                                    'customer.id' =>
-                                                        [
-                                                            'force' => true,
-                                                            'value' => '%customer_id%',
-                                                        ],
-                                                ],
-                                        ],
-                                    'GET' =>
-                                        [
-                                            'service' =>
-                                                [
-                                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
-                                                    'method' => 'getById',
-                                                ],
-                                            'resources' =>
-                                                [
-                                                    'self' => true,
-                                                ],
-                                            'parameters' =>
-                                                [
-                                                    'customerId' =>
-                                                        [
-                                                            'force' => true,
-                                                            'value' => '%customer_id%',
-                                                        ],
-                                                ],
-                                        ],
-                                ],
-                            '/V1/customers/search' =>
-                                [
-                                    'GET' =>
-                                        [
-                                            'service' =>
-                                                [
-                                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
-                                                    'method' => 'getList',
-                                                ],
-                                            'resources' =>
-                                                [
-                                                    'Magento_Customer::customer' => true,
-                                                ],
-                                            'parameters' =>
-                                                [],
-                                        ],
-                                ],
+            ->willReturn([
+                    'routes' => ['/V1/customers/:customerId' => ['GET' => [
+                        'service' => [
+                            'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface', 'method' => 'getById',],
+                        'resources' => ['Magento_Customer::customer' => true,], 'parameters' => [],
+                    ], 'PUT' => [
+                        'service' => [
+                            'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface', 'method' => 'save',
                         ],
-                    'services' =>
-                        [
-                            'Magento\\Customer\\Api\\CustomerRepositoryInterface' =>
-                                [
-                                    'V1' =>
-                                        [
-                                            'methods' =>
-                                                [
-                                                    'getById' =>
-                                                        [
-                                                            'resources' =>
-                                                                [
-                                                                    0 => 'Magento_Customer::customer',
-                                                                ],
-                                                            'realMethod' => 'getById',
-                                                            'secure' => false,
-                                                            'parameters' =>
-                                                                [],
-                                                        ],
-                                                    'save' =>
-                                                        [
-                                                            'resources' =>
-                                                                [
-                                                                    0 => 'Magento_Customer::manage',
-                                                                ],
-                                                            'realMethod' => 'save',
-                                                            'secure' => false,
-                                                            'parameters' =>
-                                                                [],
-                                                        ],
-                                                    'saveSelf' =>
-                                                        [
-                                                            'resources' =>
-                                                                [
-                                                                    0 => 'self',
-                                                                ],
-                                                            'realMethod' => 'save',
-                                                            'secure' => false,
-                                                            'parameters' =>
-                                                                [
-                                                                    'customer.id' =>
-                                                                        [
-                                                                            'force' => true,
-                                                                            'value' => '%customer_id%',
-                                                                        ],
-                                                                ],
-                                                        ],
-                                                    'getSelf' =>
-                                                        [
-                                                            'resources' =>
-                                                                [
-                                                                    0 => 'self',
-                                                                ],
-                                                            'realMethod' => 'getById',
-                                                            'secure' => false,
-                                                            'parameters' =>
-                                                                [
-                                                                    'customerId' =>
-                                                                        [
-                                                                            'force' => true,
-                                                                            'value' => '%customer_id%',
-                                                                        ],
-                                                                ],
-                                                        ],
-                                                    'getList' =>
-                                                        [
-                                                            'resources' =>
-                                                                [
-                                                                    0 => 'Magento_Customer::customer',
-                                                                ],
-                                                            'realMethod' => 'getList',
-                                                            'secure' => false,
-                                                            'parameters' =>
-                                                                [],
-                                                        ],
-                                                    'deleteById' =>
-                                                        [
-                                                            'resources' =>
-                                                                [
-                                                                    0 => 'Magento_Customer::manage',
-                                                                ],
-                                                            'realMethod' => 'deleteById',
-                                                            'secure' => false,
-                                                            'parameters' =>
-                                                                [],
-                                                        ],
-                                                ],
-                                        ],
-                                ],
+                        'resources' => ['Magento_Customer::manage' => true,], 'parameters' => [],
+                    ], 'DELETE' => [
+                        'service' => [
+                            'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
+                            'method' => 'deleteById',
                         ],
+                        'resources' => ['Magento_Customer::manage' => true,], 'parameters' => [],
+                    ],
+                    ],
+                        '/V1/customers/me' => [
+                            'PUT' => [
+                                'service' => [
+                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
+                                    'method' => 'save',
+                                ],
+                                'resources' => ['self' => true,],
+                                'parameters' => [
+                                    'customer.id' => ['force' => true, 'value' => '%customer_id%',],
+                                ],
+                            ],
+                            'GET' => [
+                                'service' => [
+                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
+                                    'method' => 'getById',
+                                ],
+                                'resources' => ['self' => true,],
+                                'parameters' => [
+                                    'customerId' => ['force' => true, 'value' => '%customer_id%',],
+                                ],
+                            ],
+                        ],
+                        '/V1/customers/search' => [
+                            'GET' => [
+                                'service' => [
+                                    'class' => 'Magento\\Customer\\Api\\CustomerRepositoryInterface',
+                                    'method' => 'getList',
+                                ],
+                                'resources' => ['Magento_Customer::customer' => true,], 'parameters' => [],
+                            ],
+                        ],
+                    ],
+                    'services' => [
+                        'Magento\\Customer\\Api\\CustomerRepositoryInterface' => [
+                            'V1' => [
+                                'methods' => [
+                                    'getById' => [
+                                        'resources' => [0 => 'Magento_Customer::customer',],
+                                        'realMethod' => 'getById', 'secure' => false, 'parameters' => [],
+                                    ],
+                                    'save' => [
+                                        'resources' => [0 => 'Magento_Customer::manage',],
+                                        'realMethod' => 'save', 'secure' => false, 'parameters' => [],
+                                    ],
+                                    'saveSelf' => [
+                                        'resources' => [0 => 'self',], 'realMethod' => 'save', 'secure' => false,
+                                        'parameters' => [
+                                            'customer.id' => ['force' => true, 'value' => '%customer_id%',],
+                                        ],
+                                    ],
+                                    'getSelf' => [
+                                        'resources' => [0 => 'self',],
+                                        'realMethod' => 'getById', 'secure' => false, 'parameters' => [
+                                            'customerId' => ['force' => true, 'value' => '%customer_id%',],
+                                        ],
+                                    ],
+                                    'getList' => [
+                                        'resources' => [0 => 'Magento_Customer::customer',],
+                                        'realMethod' => 'getList', 'secure' => false, 'parameters' => [],
+                                    ],
+                                    'deleteById' => [
+                                        'resources' => [0 => 'Magento_Customer::manage',],
+                                        'realMethod' => 'deleteById', 'secure' => false, 'parameters' => [],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ]
             );
 
