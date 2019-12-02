@@ -305,12 +305,27 @@ class ServiceMetadata
     protected function initRoutesMetadata()
     {
         $routes = $this->getServicesConfig();
-        foreach ($this->config->getServices()[Converter::KEY_ROUTES] as $url => $routeData) {
+        $services = $this->config->getServices();
+        foreach ($services[Converter::KEY_ROUTES] as $url => $routeData) {
             foreach ($routeData as $method => $data) {
                 $serviceClass = $data[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
                 $version = explode('/', ltrim($url, '/'))[0];
                 $serviceName = $this->getServiceName($serviceClass, $version);
+                $methods = $services[Converter::KEY_SERVICES][$serviceClass][$version][Converter::KEY_METHODS];
                 $methodName = $data[Converter::KEY_SERVICE][Converter::KEY_METHOD];
+                if (
+                    count(array_column($methods, Converter::KEY_REAL_SERVICE_METHOD)) !==
+                    count(array_unique(array_column($methods, Converter::KEY_REAL_SERVICE_METHOD)))
+                ) {
+                    foreach ($methods as $serviceMethod => $details) {
+                        if(
+                            $details['realMethod'] == $methodName && $details['resources'][0] ==
+                            array_search(true, $data['resources'])
+                        ) {
+                            $methodName = $serviceMethod;
+                        }
+                    }
+                }
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_METHOD] = $methodName;
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_PARAMS]
                     = $data[Converter::KEY_DATA_PARAMETERS];
