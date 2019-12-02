@@ -96,6 +96,7 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
     {
         // phpcs:disable Magento2.Files.LineLength.MaxExceeded
         $errorMessage = 'Method Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation::testMethod() invoked with 2 parameters, 1 required.';
+        // phpcs:enable Magento2.Files.LineLength.MaxExceeded
 
         return [
             [
@@ -136,17 +137,17 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
                         21
                     ),
                 ],
-                ' ------ -------------------------------------------------------------------------
+                // phpcs:disable Magento2.Files.LineLength.MaxExceeded
+                ' ------ ---------------------------------------------------------------------------------------------------------------------------
   Line   ClassWithoutIgnoreAnnotation.php
- ------ -------------------------------------------------------------------------
-  21     Method
-         Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation::testMeth
-         od() invoked with 2 parameters, 1 required.
- ------ -------------------------------------------------------------------------
+ ------ ---------------------------------------------------------------------------------------------------------------------------
+  21     Method Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation::testMethod() invoked with 2 parameters, 1 required.
+ ------ ---------------------------------------------------------------------------------------------------------------------------
 
  [ERROR] Found 1 error
 
 ',
+                // phpcs:enable Magento2.Files.LineLength.MaxExceeded
             ]
         ];
     }
