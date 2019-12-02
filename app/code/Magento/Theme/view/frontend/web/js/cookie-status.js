@@ -6,6 +6,20 @@ define([
     'use strict';
 
     $.widget('mage.cookieStatus', {
+        options: {
+            type: 'popup',
+            responsive: true,
+            innerScroll: true,
+            autoOpen: true,
+            buttons: [{
+                text: $.mage.__('Close'),
+                class: 'cookie-status',
+                click: function () {
+                    this.closeModal();
+                }
+            }]
+        },
+
         /**
          * Init object
          * @private
@@ -13,21 +27,7 @@ define([
         _init: function () {
 
             if(!navigator.cookieEnabled) {
-                const options = {
-                    type: 'popup',
-                    responsive: true,
-                    innerScroll: true,
-                    autoOpen: true,
-                    buttons: [{
-                        text: $.mage.__('Close'),
-                        class: 'cookie-status',
-                        click: function () {
-                            this.closeModal();
-                        }
-                    }]
-                };
-
-                modal(options, $('#cookie-status'));
+                modal(this.options, $('#cookie-status'));
             }
         }
     });
