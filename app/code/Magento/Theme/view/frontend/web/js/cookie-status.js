@@ -1,8 +1,8 @@
 define([
     'jquery',
+    'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'Magento_Ui/js/modal/modal'
-], function($, $tr, modal){
+], function($, modal){
     'use strict';
 
     $.widget('mage.cookieStatus', {
