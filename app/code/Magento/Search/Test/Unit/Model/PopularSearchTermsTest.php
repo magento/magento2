@@ -57,7 +57,8 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $pageSize = 35;
 
-        $this->scopeConfigMock->expects($this->once())->method('getValue')
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
             ->with(
                 PopularSearchTerms::XML_PATH_MAX_COUNT_CACHEABLE_SEARCH_TERMS,
                 ScopeInterface::SCOPE_STORE,
