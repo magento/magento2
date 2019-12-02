@@ -8,7 +8,11 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 
 /**
  * Catalog product copier.
@@ -35,9 +39,10 @@ class Copier
     protected $productFactory;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     protected $metadataPool;
+
     /**
      * @var ScopeOverriddenValue
      */
@@ -47,30 +52,38 @@ class Copier
      * @param CopyConstructorInterface $copyConstructor
      * @param ProductFactory $productFactory
      * @param ScopeOverriddenValue $scopeOverriddenValue
+     * @param OptionRepository|null $optionRepository
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
         ProductFactory $productFactory,
-        ScopeOverriddenValue $scopeOverriddenValue
+        ScopeOverriddenValue $scopeOverriddenValue,
+        OptionRepository $optionRepository = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
+        $this->optionRepository = $optionRepository ?: ObjectManager::getInstance()->get(OptionRepository::class);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
      * Create product duplicate
      *
      * @param \Magento\Catalog\Model\Product $product
+     *
      * @return \Magento\Catalog\Model\Product
+     *
+     * @throws \Exception
      */
     public function copy(Product $product)
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
-        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
-        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
         /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
@@ -88,7 +101,7 @@ class Copier
         $this->copyConstructor->build($product, $duplicate);
         $this->setDefaultUrl($product, $duplicate);
         $this->setStoresUrl($product, $duplicate);
-        $this->getOptionRepository()->duplicate($product, $duplicate);
+        $this->optionRepository->duplicate($product, $duplicate);
         $product->getResource()->duplicate(
             $product->getData($metadata->getLinkField()),
             $duplicate->getData($metadata->getLinkField())
@@ -123,13 +136,16 @@ class Copier
      *
      * @param Product $product
      * @param Product $duplicate
+     *
      * @return void
+     * @throws UrlAlreadyExistsException
      */
     private function setStoresUrl(Product $product, Product $duplicate) : void
     {
         $storeIds = $duplicate->getStoreIds();
         $productId = $product->getId();
         $productResource = $product->getResource();
+        $attribute = $productResource->getAttribute('url_key');
         $duplicate->setData('save_rewrites_history', false);
         foreach ($storeIds as $storeId) {
             $useDefault = !$this->scopeOverriddenValue->containsValue(
@@ -141,20 +157,23 @@ class Copier
             if ($useDefault) {
                 continue;
             }
-            $isDuplicateSaved = false;
+
             $duplicate->setStoreId($storeId);
             $urlKey = $productResource->getAttributeRawValue($productId, 'url_key', $storeId);
+            $iteration = 0;
+
             do {
+                if ($iteration === 10) {
+                    throw new UrlAlreadyExistsException();
+                }
+
                 $urlKey = $this->modifyUrl($urlKey);
                 $duplicate->setUrlKey($urlKey);
-                $duplicate->setData('url_path', null);
-                try {
-                    $duplicate->save();
-                    $isDuplicateSaved = true;
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-                } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-                }
-            } while (!$isDuplicateSaved);
+                $iteration++;
+            } while (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $duplicate));
+            $duplicate->setData('url_path', null);
+            $productResource->saveAttribute($duplicate, 'url_path');
+            $productResource->saveAttribute($duplicate, 'url_key');
         }
         $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
     }
@@ -168,38 +187,8 @@ class Copier
     private function modifyUrl(string $urlKey) : string
     {
         return preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
-                    ? $matches[1] . '-' . ($matches[2] + 1)
-                    : $urlKey . '-1';
-    }
-
-    /**
-     * Returns product option repository.
-     *
-     * @return Option\Repository
-     * @deprecated 101.0.0
-     */
-    private function getOptionRepository()
-    {
-        if (null === $this->optionRepository) {
-            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
-        }
-        return $this->optionRepository;
-    }
-
-    /**
-     * Returns metadata pool.
-     *
-     * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 101.0.0
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
-        return $this->metadataPool;
+            ? $matches[1] . '-' . ($matches[2] + 1)
+            : $urlKey . '-1';
     }
 
     /**
