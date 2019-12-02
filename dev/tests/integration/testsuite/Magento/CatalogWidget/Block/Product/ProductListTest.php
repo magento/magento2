@@ -92,50 +92,6 @@ class ProductListTest extends TestCase
     }
 
     /**
-     * Make sure CatalogWidget would display anchor category products recursively from children categories.
-     *
-     * 1. Create an anchor root category and a sub category inside it
-     * 2. Create 2 new products and assign them to the sub categories
-     * 3. Create product list widget condition to display products from the anchor root category
-     * 4. Load collection for product list widget and make sure that number of loaded products is correct
-     *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
-     */
-    public function testCreateAnchorCollection()
-    {
-        // Reindex EAV attributes to enable products filtration by created multiselect attribute
-        /** @var Processor $eavIndexerProcessor */
-        $eavIndexerProcessor = $this->objectManager->get(
-            Processor::class
-        );
-        $eavIndexerProcessor->reindexAll();
-
-        $this->categoryCollection->addNameToResult()->load();
-        $rootCategoryId =  $this
-            ->categoryCollection
-            ->getItemByColumnValue('name', 'Default Category')
-            ->getId();
-
-        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,
-        `aggregator`:`all`,`value`:`1`,`new_child`:``^],
-        `1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,
-        `attribute`:`category_ids`,
-        `operator`:`==`,`value`:`' . $rootCategoryId . '`^]^]';
-
-        $this->block->setData('conditions_encoded', $encodedConditions);
-
-        $productCollection = $this->block->createCollection();
-        $productCollection->load();
-
-        $this->assertEquals(
-            2,
-            $productCollection->count(),
-            "Anchor root category does not contain products of it's children."
-        );
-    }
-
-    /**
      * Test product list widget can process condition with dropdown type of attribute
      *
      * @magentoDbIsolation disabled
@@ -254,6 +210,50 @@ class ProductListTest extends TestCase
             1,
             $productCollection->count(),
             "Product collection was not filtered according to the widget condition."
+        );
+    }
+
+    /**
+     * Make sure CatalogWidget would display anchor category products recursively from children categories.
+     *
+     * 1. Create an anchor root category and a sub category inside it
+     * 2. Create 2 new products and assign them to the sub categories
+     * 3. Create product list widget condition to display products from the anchor root category
+     * 4. Load collection for product list widget and make sure that number of loaded products is correct
+     *
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
+     */
+    public function testCreateAnchorCollection()
+    {
+        // Reindex EAV attributes to enable products filtration by created multiselect attribute
+        /** @var Processor $eavIndexerProcessor */
+        $eavIndexerProcessor = $this->objectManager->get(
+            Processor::class
+        );
+        $eavIndexerProcessor->reindexAll();
+
+        $this->categoryCollection->addNameToResult()->load();
+        $rootCategoryId =  $this
+            ->categoryCollection
+            ->getItemByColumnValue('name', 'Default Category')
+            ->getId();
+
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,
+        `aggregator`:`all`,`value`:`1`,`new_child`:``^],
+        `1--1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,
+        `attribute`:`category_ids`,
+        `operator`:`==`,`value`:`' . $rootCategoryId . '`^]^]';
+
+        $this->block->setData('conditions_encoded', $encodedConditions);
+
+        $productCollection = $this->block->createCollection();
+        $productCollection->load();
+
+        $this->assertEquals(
+            2,
+            $productCollection->count(),
+            "Anchor root category does not contain products of it's children."
         );
     }
 }
