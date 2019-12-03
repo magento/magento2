@@ -86,38 +86,38 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @dataProvider productListSortOrderDataProvider
-     * @param string $sort
+     * @param string $sortBy
      * @param string $direction
      * @param array $expectation
      * @return void
      */
-    public function testProductListSortOrder(string $sort, string $direction, array $expectation): void
+    public function testProductListSortOrder(string $sortBy, string $direction, array $expectation): void
     {
-        $category = $this->updateCategorySortBy('Category 1', $sort, Store::DEFAULT_STORE_ID);
-        $this->callBlock($direction, $category);
-        $this->assertBlockSorting($sort, $expectation);
+        $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $sortBy);
+        $this->renderBlock($category, $direction);
+        $this->assertBlockSorting($sortBy, $expectation);
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @dataProvider productListSortOrderDataProvider
-     * @param string $sort
+     * @param string $sortBy
      * @param string $direction
      * @param array $expectation
      * @return void
      */
-    public function testProductListSortOrderWithConfig(string $sort, string $direction, array $expectation): void
+    public function testProductListSortOrderWithConfig(string $sortBy, string $direction, array $expectation): void
     {
         $this->objectManager->removeSharedInstance(Config::class);
         $this->scopeConfig->setValue(
             Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            $sort,
+            $sortBy,
             ScopeInterface::SCOPE_STORE,
             Store::DEFAULT_STORE_ID
         );
-        $category = $this->updateCategorySortBy('Category 1', null, Store::DEFAULT_STORE_ID);
-        $this->callBlock($direction, $category);
-        $this->assertBlockSorting($sort, $expectation);
+        $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, null);
+        $this->renderBlock($category, $direction);
+        $this->assertBlockSorting($sortBy, $expectation);
     }
 
     /**
@@ -173,59 +173,59 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @dataProvider productListSortOrderDataProviderOnStoreView
-     * @param string $sort
+     * @param string $sortBy
      * @param string $direction
      * @param array $expectation
-     * @param string $defaultSort
+     * @param string $defaultSortBy
      * @return void
      */
     public function testProductListSortOrderOnStoreView(
-        string $sort,
+        string $sortBy,
         string $direction,
         array $expectation,
-        string $defaultSort
+        string $defaultSortBy
     ): void {
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
-        $this->updateCategorySortBy('Category 1', $defaultSort, Store::DEFAULT_STORE_ID);
-        $category = $this->updateCategorySortBy('Category 1', $sort, $secondStoreId);
-        $this->callBlock($direction, $category);
-        $this->assertBlockSorting($sort, $expectation);
+        $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $defaultSortBy);
+        $category = $this->updateCategorySortBy('Category 1', $secondStoreId, $sortBy);
+        $this->renderBlock($category, $direction);
+        $this->assertBlockSorting($sortBy, $expectation);
     }
 
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @dataProvider productListSortOrderDataProviderOnStoreView
-     * @param string $sort
+     * @param string $sortBy
      * @param string $direction
      * @param array $expectation
-     * @param string $defaultSort
+     * @param string $defaultSortBy
      * @return void
      */
     public function testProductListSortOrderWithConfigOnStoreView(
-        string $sort,
+        string $sortBy,
         string $direction,
         array $expectation,
-        string $defaultSort
+        string $defaultSortBy
     ): void {
         $this->objectManager->removeSharedInstance(Config::class);
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->scopeConfig->setValue(
             Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            $defaultSort,
+            $defaultSortBy,
             ScopeInterface::SCOPE_STORE,
             Store::DEFAULT_STORE_ID
         );
         $this->scopeConfig->setValue(
             Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            $sort,
+            $sortBy,
             ScopeInterface::SCOPE_STORE,
             'fixture_second_store'
         );
-        $this->updateCategorySortBy('Category 1', null, Store::DEFAULT_STORE_ID);
-        $category = $this->updateCategorySortBy('Category 1', null, $secondStoreId);
-        $this->callBlock($direction, $category);
-        $this->assertBlockSorting($sort, $expectation);
+        $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, null);
+        $category = $this->updateCategorySortBy('Category 1', $secondStoreId, null);
+        $this->renderBlock($category, $direction);
+        $this->assertBlockSorting($sortBy, $expectation);
     }
 
     /**
@@ -251,11 +251,11 @@ class SortingTest extends TestCase
     /**
      * Renders block to apply sorting.
      *
-     * @param string $direction
      * @param CategoryInterface $category
+     * @param string $direction
      * @return void
      */
-    private function callBlock(string $direction, CategoryInterface $category): void
+    private function renderBlock(CategoryInterface $category, string $direction): void
     {
         $this->block->getLayer()->setCurrentCategory($category);
         $this->block->setDefaultDirection($direction);
@@ -265,14 +265,14 @@ class SortingTest extends TestCase
     /**
      * Checks product list block correct sorting.
      *
-     * @param string $sort
+     * @param string $sortBy
      * @param array $expectation
      * @return void
      */
-    private function assertBlockSorting(string $sort, array $expectation): void
+    private function assertBlockSorting(string $sortBy, array $expectation): void
     {
-        $this->assertArrayHasKey($sort, $this->block->getAvailableOrders());
-        $this->assertEquals($sort, $this->block->getSortBy());
+        $this->assertArrayHasKey($sortBy, $this->block->getAvailableOrders());
+        $this->assertEquals($sortBy, $this->block->getSortBy());
         $this->assertEquals($expectation, $this->block->getLoadedProductCollection()->getColumnValues('sku'));
     }
 
@@ -287,27 +287,27 @@ class SortingTest extends TestCase
     {
         /** @var Collection $categoryCollection */
         $categoryCollection = $this->categoryCollectionFactory->create();
-        /** @var CategoryInterface $category */
-        $categoryIds = $categoryCollection->setStoreId($storeId)
+        $categoryId = $categoryCollection->setStoreId($storeId)
             ->addAttributeToFilter(CategoryInterface::KEY_NAME, $categoryName)
             ->setPageSize(1)
-            ->getAllIds();
+            ->getFirstItem()
+            ->getId();
 
-        return $this->categoryRepository->get(reset($categoryIds), $storeId);
+        return $this->categoryRepository->get($categoryId, $storeId);
     }
 
     /**
      * Updates category default sort by field.
      *
      * @param string $categoryName
-     * @param string|null $sortBy
      * @param int $storeId
+     * @param string|null $sortBy
      * @return CategoryInterface
      */
     private function updateCategorySortBy(
         string $categoryName,
-        ?string $sortBy,
-        int $storeId
+        int $storeId,
+        ?string $sortBy
     ): CategoryInterface {
         $oldStoreId = $this->storeManager->getStore()->getId();
         $this->storeManager->setCurrentStore($storeId);
