@@ -376,11 +376,11 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveActionWithMarginalSpace()
     {
         $postData = [
-            'title' => '"><img src=y onerror=prompt(document.domain)>;',
+            'title' => 'unique_title_123',
             'identifier' => '  unique_title_123',
             'stores' => ['0'],
             'is_active' => true,
-            'content' => '"><script>alert("cookie: "+document.cookie)</script>',
+            'content' => '',
             'back' => 'continue'
         ];
 
