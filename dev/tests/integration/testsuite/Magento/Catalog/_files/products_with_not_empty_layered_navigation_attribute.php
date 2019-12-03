@@ -42,7 +42,7 @@ $productRepository->save($thirdProduct);
 $oldStoreId = $storeManager->getStore()->getId();
 $storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
 $category->addData(['available_sort_by' => 'position,name,price,test_configurable']);
-try{
+try {
     $categoryRepository->save($category);
 } finally {
     $storeManager->setCurrentStore($oldStoreId);
