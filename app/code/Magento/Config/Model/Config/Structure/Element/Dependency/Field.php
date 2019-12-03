@@ -6,6 +6,8 @@
 namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
+ * Field
+ *
  * @api
  * @since 100.0.2
  */
