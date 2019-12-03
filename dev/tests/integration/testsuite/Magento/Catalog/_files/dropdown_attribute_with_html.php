@@ -12,18 +12,21 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var $installer CategorySetup */
+$installer = $objectManager->create(CategorySetup::class);
 /** @var AttributeFactory $attributeFactory */
 $attributeFactory = $objectManager->get(AttributeFactory::class);
 /** @var Attribute $attribute */
 $attribute = $attributeFactory->create();
+$entityTypeId = $installer->getEntityTypeId(ProductAttributeInterface::ENTITY_TYPE_CODE);
 
-if (!$attribute->loadByCode(4, 'dropdown_attribute_with_html')->getId()) {
+if (!$attribute->loadByCode($entityTypeId, 'dropdown_attribute_with_html')->getId()) {
     /** @var $installer CategorySetup */
     $installer = $objectManager->create(CategorySetup::class);
     $attribute->setData(
         [
             'attribute_code' => 'dropdown_attribute_with_html',
-            'entity_type_id' => $installer->getEntityTypeId(ProductAttributeInterface::ENTITY_TYPE_CODE),
+            'entity_type_id' => $entityTypeId,
             'is_global' => 0,
             'is_user_defined' => 1,
             'frontend_input' => 'select',
@@ -58,7 +61,7 @@ if (!$attribute->loadByCode(4, 'dropdown_attribute_with_html')->getId()) {
     $attribute->save();
     /* Assign attribute to attribute set */
     $installer->addAttributeToGroup(
-        ProductAttributeInterface::ENTITY_TYPE_CODE,
+        $entityTypeId,
         'Default',
         'Attributes',
         $attribute->getId()

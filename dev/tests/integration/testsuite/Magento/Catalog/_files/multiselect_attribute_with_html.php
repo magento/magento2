@@ -19,12 +19,12 @@ $installer = $objectManager->create(CategorySetup::class);
 $attributeFactory = $objectManager->get(AttributeFactory::class);
 /** @var $attribute Attribute */
 $attribute = $attributeFactory->create();
-$entityType = $installer->getEntityTypeId(ProductAttributeInterface::ENTITY_TYPE_CODE);
-if (!$attribute->loadByCode($entityType, 'multiselect_attribute_with_html')->getAttributeId()) {
+$entityTypeId = $installer->getEntityTypeId(ProductAttributeInterface::ENTITY_TYPE_CODE);
+if (!$attribute->loadByCode($entityTypeId, 'multiselect_attribute_with_html')->getAttributeId()) {
     $attribute->setData(
         [
             'attribute_code' => 'multiselect_attribute_with_html',
-            'entity_type_id' => $entityType,
+            'entity_type_id' => $entityTypeId,
             'is_global' => 1,
             'is_user_defined' => 1,
             'frontend_input' => 'multiselect',
@@ -60,7 +60,7 @@ if (!$attribute->loadByCode($entityType, 'multiselect_attribute_with_html')->get
     $attribute->save();
     /* Assign attribute to attribute set */
     $installer->addAttributeToGroup(
-        ProductAttributeInterface::ENTITY_TYPE_CODE,
+        $entityTypeId,
         'Default',
         'General',
         $attribute->getId()
