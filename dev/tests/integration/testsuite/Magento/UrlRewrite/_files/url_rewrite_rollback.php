@@ -31,7 +31,21 @@ $urlRewriteCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManage
     ->create(\Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class);
 $collection = $urlRewriteCollection
     ->addFieldToFilter('entity_type', 'custom')
-    ->addFieldToFilter('target_path', ['page-a/', 'page-a', 'page-b', 'page-c', 'page-d?param1=1', 'page-e?param1=1'])
+    ->addFieldToFilter(
+        'target_path',
+        [
+            'page-a/',
+            'page-a',
+            'page-b',
+            'page-c',
+            'page-d?param1=1',
+            'page-e?param1=1',
+            'http://example.com/external',
+            'https://example.com/external2/',
+            'http://example.com/external?param1=value1',
+            'https://example.com/external2/?param2=value2'
+        ]
+    )
     ->load()
     ->walk('delete');
 

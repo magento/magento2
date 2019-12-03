@@ -155,3 +155,39 @@ $rewrite->setEntityType('custom')
     ->setStoreId($storeID)
     ->setDescription('From page-similar-query-param with trailing slash to page-e with query param');
 $rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('page-external1')
+    ->setTargetPath('http://example.com/external')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From page-external to external URL');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('page-external2/')
+    ->setTargetPath('https://example.com/external2/')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From page-external with trailing slash to external URL');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('page-external3')
+    ->setTargetPath('http://example.com/external?param1=value1')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From page-external to external URL');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('page-external4/')
+    ->setTargetPath('https://example.com/external2/?param2=value2')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From page-external with trailing slash to external URL');
+$rewriteResource->save($rewrite);
