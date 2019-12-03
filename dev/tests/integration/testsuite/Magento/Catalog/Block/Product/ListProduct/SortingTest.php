@@ -14,7 +14,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\App\MutableScopeConfig;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -45,12 +45,12 @@ class SortingTest extends TestCase
     /**
      * @var CollectionFactory
      */
-    protected $categoryCollectionFactory;
+    private $categoryCollectionFactory;
 
     /**
      * @var CategoryRepositoryInterface
      */
-    protected $categoryRepository;
+    private $categoryRepository;
 
     /**
      * @var StoreManagerInterface
@@ -63,7 +63,7 @@ class SortingTest extends TestCase
     private $layout;
 
     /**
-     * @var MutableScopeConfig
+     * @var MutableScopeConfigInterface
      */
     private $scopeConfig;
 
@@ -77,9 +77,9 @@ class SortingTest extends TestCase
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->layout->createBlock(Toolbar::class, 'product_list_toolbar');
         $this->block = $this->layout->createBlock(ListProduct::class)->setToolbarBlockName('product_list_toolbar');
-        $this->categoryCollectionFactory = $this->objectManager->create(CollectionFactory::class);
+        $this->categoryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
-        $this->scopeConfig = $this->objectManager->get(MutableScopeConfig::class);
+        $this->scopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
         parent::setUp();
     }
 
