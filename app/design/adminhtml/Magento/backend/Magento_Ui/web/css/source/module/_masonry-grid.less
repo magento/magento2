@@ -5,6 +5,7 @@
 @admin__masonry_grid_image__space: 20px;
 @admin__masonry_grid_background_color: #fff;
 @admin__masonry_overlay_background_color: #507dc8;
+@admin__masonry_grid_active_image_border_color: #558dd6;
 
 & when (@media-common = true) {
     .masonry-image {
@@ -30,7 +31,7 @@
             .masonry-image-block {
                 &.active {
                     img {
-                        border: 2px #558dd6 solid;
+                        border: 2px @admin__masonry_grid_active_image_border_color solid;
                         padding: 1px;
                     }
                 }

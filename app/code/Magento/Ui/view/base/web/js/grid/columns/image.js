@@ -84,6 +84,8 @@ define([
          * Get is active record
          *
          * @param {Object} record - Data to be preprocessed.
+         *
+         * @returns {Boolean}
          */
         getIsActive: function (record) {
             return this.previewComponent().visibleRecord() === record._rowIndex || false;
