@@ -373,6 +373,58 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
+    public function testSaveActionWithMarginalSpace()
+    {
+        $postData = [
+            'title' => '"><img src=y onerror=prompt(document.domain)>;',
+            'identifier' => '  unique_title_123',
+            'stores' => ['0'],
+            'is_active' => true,
+            'content' => '"><script>alert("cookie: "+document.cookie)</script>',
+            'back' => 'continue'
+        ];
+
+        $this->requestMock->expects($this->any())->method('getPostValue')->willReturn($postData);
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['block_id', null, 1],
+                    ['back', null, true],
+                ]
+            );
+
+        $this->blockFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->blockMock);
+
+            $this->blockRepository->expects($this->once())
+            ->method('getById')
+            ->with($this->blockId)
+            ->willReturn($this->blockMock);
+
+        $this->blockMock->expects($this->once())->method('setData');
+        $this->blockRepository->expects($this->once())->method('save')
+            ->with($this->blockMock)
+            ->willThrowException(new \Exception('No marginal white space please.'));
+
+        $this->messageManagerMock->expects($this->never())
+            ->method('addSuccessMessage');
+        $this->messageManagerMock->expects($this->once())
+            ->method('addExceptionMessage');
+
+        $this->dataPersistorMock->expects($this->any())
+            ->method('set')
+            ->with('cms_block', array_merge($postData, ['block_id' => null]));
+
+        $this->resultRedirect->expects($this->atLeastOnce())
+            ->method('setPath')
+            ->with('*/*/edit', ['block_id' => $this->blockId])
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirect, $this->saveController->execute());
+    }
+
     public function testSaveActionThrowsException()
     {
         $postData = [
