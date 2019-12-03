@@ -30,7 +30,8 @@ define([
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide'
+                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.paging': 'hide'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
@@ -105,6 +106,12 @@ define([
          */
         show: function (record) {
             var img;
+
+            if (record._rowIndex === this.visibleRecord()) {
+                this.hide();
+
+                return;
+            }
 
             this.hide();
             this.displayedRecord(record);
