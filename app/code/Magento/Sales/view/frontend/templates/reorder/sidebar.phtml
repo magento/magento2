@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Last ordered items sidebar
  *
@@ -15,27 +13,27 @@
 <div class="block block-reorder" data-bind="scope: 'lastOrderedItems'">
     <div class="block-title no-display"
          data-bind="css: {'no-display': !lastOrderedItems().items || lastOrderedItems().items.length === 0}">
-        <strong id="block-reorder-heading" role="heading" aria-level="2"><?= /* @escapeNotVerified */ __('Recently Ordered') ?></strong>
+        <strong id="block-reorder-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('Recently Ordered')) ?></strong>
     </div>
     <div class="block-content no-display"
          data-bind="css: {'no-display': !lastOrderedItems().items || lastOrderedItems().items.length === 0}"
          aria-labelledby="block-reorder-heading">
         <form method="post" class="form reorder"
-              action="<?= /* @escapeNotVerified */ $block->getFormActionUrl() ?>" id="reorder-validate-detail">
-            <strong class="subtitle"><?= /* @escapeNotVerified */ __('Last Ordered Items') ?></strong>
+              action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" id="reorder-validate-detail">
+            <strong class="subtitle"><?= $block->escapeHtml(__('Last Ordered Items')) ?></strong>
             <ol id="cart-sidebar-reorder" class="product-items product-items-names"
                 data-bind="foreach: lastOrderedItems().items">
                 <li class="product-item">
                     <div class="field item choice">
                         <label class="label" data-bind="attr: {'for': 'reorder-item-' + id}">
-                            <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                            <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                         </label>
                         <div class="control">
                             <input type="checkbox" name="order_items[]"
                                    data-bind="attr: {
                                         id: 'reorder-item-' + id,
                                         value: id,
-                                        title: is_saleable ? '<?= /* @escapeNotVerified */ __('Add to Cart') ?>' : '<?= /* @escapeNotVerified */ __('Product is not salable.') ?>'
+                                        title: is_saleable ? '<?= $block->escapeHtml(__('Add to Cart')) ?>' : '<?= $block->escapeHtml(__('Product is not salable.')) ?>'
                                    },
                                    disable: !is_saleable"
                                    class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
@@ -52,13 +50,13 @@
             <div class="actions-toolbar">
                 <div class="primary"
                      data-bind="visible: isShowAddToCart">
-                    <button type="submit" title="<?= /* @escapeNotVerified */ __('Add to Cart') ?>" class="action tocart primary">
-                        <span><?= /* @escapeNotVerified */ __('Add to Cart') ?></span>
+                    <button type="submit" title="<?= $block->escapeHtml(__('Add to Cart')) ?>" class="action tocart primary">
+                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                     </button>
                 </div>
                 <div class="secondary">
-                    <a class="action view" href="<?= /* @escapeNotVerified */ $block->getUrl('customer/account') ?>#my-orders-table">
-                        <span><?= /* @escapeNotVerified */ __('View All') ?></span>
+                    <a class="action view" href="<?= $block->escapeUrl($block->getUrl('customer/account')) ?>#my-orders-table">
+                        <span><?= $block->escapeHtml(__('View All')) ?></span>
                     </a>
                 </div>
             </div>

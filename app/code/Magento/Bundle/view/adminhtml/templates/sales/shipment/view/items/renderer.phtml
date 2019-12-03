@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php /** @var $block \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer */ ?>
 
@@ -17,74 +15,73 @@
 
 <?php $_prevOptionId = '' ?>
 
-<?php if ($block->getOrderOptions() || $_item->getDescription()): ?>
+<?php if ($block->getOrderOptions() || $_item->getDescription()) : ?>
     <?php $_showlastRow = true ?>
-<?php else: ?>
+<?php else : ?>
     <?php $_showlastRow = false ?>
 <?php endif; ?>
 
-<?php foreach ($items as $_item): ?>
+<?php foreach ($items as $_item) : ?>
     <?php $block->setPriceDataObject($_item) ?>
-    <?php if ($_item->getParentItem()): ?>
+    <?php if ($_item->getParentItem()) : ?>
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
-        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+        <?php if ($_prevOptionId != $attributes['option_id']) : ?>
         <tr>
-            <td class="col-product"><div class="option-label"><?= /* @escapeNotVerified */ $attributes['option_label'] ?></div></td>
+            <td class="col-product"><div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div></td>
             <td class="col-qty last">&nbsp;</td>
         </tr>
-        <?php $_prevOptionId = $attributes['option_id'] ?>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
     <tr<?= (++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
-        <?php if (!$_item->getParentItem()): ?>
+        <?php if (!$_item->getParentItem()) : ?>
         <td class="col-product">
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?= /* @escapeNotVerified */ __('SKU') ?>:</span>
-                <?= implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))) ?>
+                <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
+                <?= /* @noEscape */ implode('<br />', $this->helper(Magento\Catalog\Helper\Data::class)->splitSku($_item->getSku())) ?>
             </div>
         </td>
-        <?php else: ?>
+        <?php else : ?>
         <td class="col-product"><div class="option-value"><?= $block->getValueHtml($_item) ?></div></td>
         <?php endif; ?>
         <td class="col-qty last">
-            <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())): ?>
-                <?php if (isset($shipItems[$_item->getId()])): ?>
-                    <?= /* @escapeNotVerified */ $shipItems[$_item->getId()]->getQty()*1 ?>
-                <?php elseif ($_item->getIsVirtual()): ?>
-                    <?= /* @escapeNotVerified */ __('N/A') ?>
-                <?php else: ?>
+            <?php if (($block->isShipmentSeparately() && $_item->getParentItem()) || (!$block->isShipmentSeparately() && !$_item->getParentItem())) : ?>
+                <?php if (isset($shipItems[$_item->getId()])) : ?>
+                    <?= (float)$shipItems[$_item->getId()]->getQty() * 1 ?>
+                <?php elseif ($_item->getIsVirtual()) : ?>
+                    <?= $block->escapeHtml(__('N/A')) ?>
+                <?php else : ?>
                     0
                 <?php endif; ?>
-            <?php else: ?>
+            <?php else : ?>
                 &nbsp;
             <?php endif; ?>
         </td>
     </tr>
 <?php endforeach; ?>
-<?php if ($_showlastRow): ?>
+<?php if ($_showlastRow) : ?>
     <tr class="border">
         <td class="col-product">
-            <?php if ($block->getOrderOptions($_item->getOrderItem())): ?>
+            <?php if ($block->getOrderOptions($_item->getOrderItem())) : ?>
                 <dl class="item-options">
-                <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option): ?>
-                    <dt><?= /* @escapeNotVerified */ $option['label'] ?></dt>
+                <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option) : ?>
+                    <dt><?= $block->escapeHtml($option['label']) ?></dt>
                     <dd>
-                    <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
-                        <?= /* @escapeNotVerified */ $option['value'] ?>
-                    <?php else: ?>
-                        <?= $block->truncateString($option['value'], 55, '', $_remainder) ?>
-                        <?php if ($_remainder):?>
-                            ... <span id="<?= /* @escapeNotVerified */ $_id = 'id' . uniqid() ?>"><?= /* @escapeNotVerified */ $_remainder ?></span>
+                    <?php if (isset($option['custom_view']) && $option['custom_view']) : ?>
+                        <?= $block->escapeHtml($option['value']) ?>
+                    <?php else : ?>
+                        <?= $block->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
+                        <?php if ($_remainder) :?>
+                            ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
                             <script>
-require(['prototype'], function(){
-
-                            $('<?= /* @escapeNotVerified */ $_id ?>').hide();
-                            $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseover', function(){$('<?= /* @escapeNotVerified */ $_id ?>').show();});
-                            $('<?= /* @escapeNotVerified */ $_id ?>').up().observe('mouseout',  function(){$('<?= /* @escapeNotVerified */ $_id ?>').hide();});
-
-});
-</script>
+                                require(['prototype'], function(){
+                                    <?php $escapedId = $block->escapeJs($_id) ?>
+                                    $('<?= /* @noEscape */ $escapedId ?>').hide();
+                                    $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $escapedId ?>').show();});
+                                    $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseout',  function(){$('<?= /* @noEscape */ $escapedId ?>').hide();});
+                                });
+                            </script>
                         <?php endif;?>
                     <?php endif;?>
                     </dd>

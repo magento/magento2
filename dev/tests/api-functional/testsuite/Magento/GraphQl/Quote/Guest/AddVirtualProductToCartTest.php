@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -44,14 +45,120 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['addVirtualProductsToCart']);
+        self::assertArrayHasKey('id', $response['addVirtualProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addVirtualProductsToCart']['cart']['id']);
         self::assertEquals($quantity, $response['addVirtualProductsToCart']['cart']['items'][0]['quantity']);
         self::assertEquals($sku, $response['addVirtualProductsToCart']['cart']['items'][0]['product']['sku']);
     }
 
     /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Field AddSimpleProductsToCartInput.cart_id of required type String! was not provided.
+     */
+    public function testAddVirtualProductToCartIfCartIdIsMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     */
+    public function testAddVirtualProductToCartIfCartIdIsEmpty()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "",
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    public function testAddVirtualProductToCartIfCartItemsAreMissed()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "cart_id"
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Field AddSimpleProductsToCartInput.cart_items of required type [SimpleProductCartItemInput]!'
+            . ' was not provided.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Required parameter "cart_items" is missing
+     */
+    public function testAddVirtualProductToCartIfCartItemsAreEmpty()
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "cart_id",
+      cart_items: []
+    }
+  ) {
+    cart {
+      items {
+        id
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddVirtualToNonExistentCart()
@@ -67,7 +174,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
-     * @expectedException \Exception
+     * @expectedException Exception
      * @expectedExceptionMessage Could not find a product with SKU "virtual_product"
      */
     public function testNonExistentProductToCart()
@@ -124,6 +231,7 @@ mutation {
     }
   ) {
     cart {
+      id
       items {
         quantity
         product {

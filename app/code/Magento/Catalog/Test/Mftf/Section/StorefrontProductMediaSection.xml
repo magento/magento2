@@ -16,5 +16,6 @@
         <element name="closeFullscreenImage" type="button" selector="//*[@data-gallery-role='gallery' and contains(@class, 'fullscreen')]//*[@data-gallery-role='fotorama__fullscreen-icon']" />
         <element name="imageFile" type="text" selector="//*[@class='product media']//img[contains(@src, '{{filename}}')]" parameterized="true"/>
         <element name="productImageActive" type="text" selector=".product.media div[data-active=true] > img[src*='{{filename}}']" parameterized="true"/>
+        <element name="productImageInFotorama" type="file" selector=".fotorama__nav__shaft img[src*='{{imageName}}']" parameterized="true"/>
     </section>
 </sections>

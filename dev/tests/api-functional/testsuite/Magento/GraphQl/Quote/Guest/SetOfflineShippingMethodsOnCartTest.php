@@ -35,7 +35,9 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_shipping_methods.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
      * @magentoApiDataFixture Magento/OfflineShipping/_files/tablerates_weight.php
      *
      * @param string $carrierCode
@@ -43,7 +45,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $carrierTitle
      * @param string $methodTitle
      * @param array $amount
-     * @param array $baseAmount
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @dataProvider offlineShippingMethodDataProvider
      */
@@ -52,8 +53,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
         string $methodCode,
         string $carrierTitle,
         string $methodTitle,
-        array $amount,
-        array $baseAmount
+        array $amount
     ) {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -86,9 +86,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
         self::assertEquals($amount, $shippingAddress['selected_shipping_method']['amount']);
-
-        self::assertArrayHasKey('base_amount', $shippingAddress['selected_shipping_method']);
-        self::assertEquals($baseAmount, $shippingAddress['selected_shipping_method']['base_amount']);
     }
 
     /**
@@ -103,7 +100,6 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
                 'Flat Rate',
                 'Fixed',
                 ['value' => 10, 'currency' => 'USD'],
-                ['value' => 10, 'currency' => 'USD'],
             ],
             'tablerate_bestway' => [
                 'tablerate',
@@ -111,14 +107,12 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
                 'Best Way',
                 'Table Rate',
                 ['value' => 10, 'currency' => 'USD'],
-                ['value' => 10, 'currency' => 'USD'],
             ],
             'freeshipping_freeshipping' => [
                 'freeshipping',
                 'freeshipping',
                 'Free Shipping',
                 'Free',
-                ['value' => 0, 'currency' => 'USD'],
                 ['value' => 0, 'currency' => 'USD'],
             ],
         ];
@@ -153,10 +147,6 @@ mutation {
           carrier_title
           method_title
           amount {
-            value
-            currency
-          }
-          base_amount {
             value
             currency
           }

@@ -10,15 +10,24 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Search grid with keyword search-->
     <actionGroup name="AdminFilterCartPriceRuleActionGroup">
+        <annotations>
+            <description>Filters the Admin Cart Price Rule grid based on the provided Rule Name. Clicks on the 1st row in the grid.</description>
+        </annotations>
         <arguments>
             <argument name="ruleName"/>
         </arguments>
+        
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{ruleName}}" stepKey="filterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
         <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
     </actionGroup>
+    
     <actionGroup name="AdminCartPriceRuleNotInGridActionGroup" extends="AdminFilterCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminFilterCartPriceRuleActionGroup. Removes 'goToEditRulePage'. Validates that the Empty Grid message is present and correct.</description>
+        </annotations>
+
         <remove keyForRemoval="goToEditRulePage"/>
         <waitForPageLoad stepKey="waitForStoreToLoad"/>
         <see selector="{{AdminCartPriceRulesSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertCartPriceRuleIsNotPresentedInGrid"/>

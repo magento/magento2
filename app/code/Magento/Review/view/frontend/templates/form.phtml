@@ -4,31 +4,29 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Review\Block\Form $block */
 ?>
 <div class="block review-add">
     <div class="block-title"><strong><?= $block->escapeHtml(__('Write Your Own Review')) ?></strong></div>
 <div class="block-content">
-<?php if ($block->getAllowWriteReviewFlag()): ?>
+<?php if ($block->getAllowWriteReviewFlag()) : ?>
 <form action="<?= $block->escapeUrl($block->getAction()) ?>" class="review-form" method="post" id="review-form" data-role="product-review-form" data-bind="scope: 'review-form'">
     <?= $block->getBlockHtml('formkey') ?>
     <?= $block->getChildHtml('form_fields_before') ?>
     <fieldset class="fieldset review-fieldset" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
         <legend class="legend review-legend"><span><?= $block->escapeHtml(__("You're reviewing:")) ?></span><strong><?= $block->escapeHtml($block->getProductInfo()->getName()) ?></strong></legend><br />
-        <?php if ($block->getRatings() && $block->getRatings()->getSize()): ?>
+        <?php if ($block->getRatings() && $block->getRatings()->getSize()) : ?>
         <span id="input-message-box"></span>
         <fieldset class="field required review-field-ratings">
             <legend class="label"><span><?= $block->escapeHtml(__('Your Rating')) ?></span></legend><br/>
             <div class="control">
                 <div class="nested" id="product-review-table">
-                    <?php foreach ($block->getRatings() as $_rating): ?>
+                    <?php foreach ($block->getRatings() as $_rating) : ?>
                         <div class="field choice review-field-rating">
                             <label class="label" id="<?= $block->escapeHtml($_rating->getRatingCode()) ?>_rating_label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></label>
                             <div class="control review-control-vote">
                             <?php $options = $_rating->getOptions();?>
-                            <?php $iterator = 1; foreach ($options as $_option): ?>
+                            <?php $iterator = 1; foreach ($options as $_option) : ?>
                                 <input
                                     type="radio"
                                     name="ratings[<?= $block->escapeHtmlAttr($_rating->getId()) ?>]"
@@ -44,7 +42,7 @@
                                     id="<?= $block->escapeHtmlAttr($_rating->getRatingCode()) ?>_<?= $block->escapeHtmlAttr($_option->getValue()) ?>_label">
                                     <span><?= $block->escapeHtml(__('%1 %2', $iterator, $iterator > 1 ? __('stars') : __('star'))) ?></span>
                                 </label>
-                            <?php $iterator++; ?>
+                                <?php $iterator++; ?>
                             <?php endforeach; ?>
                             </div>
                         </div>
@@ -90,7 +88,7 @@
     }
 }
 </script>
-<?php else: ?>
+<?php else : ?>
     <div class="message info notlogged" id="review-form">
         <div>
             <?= $block->escapeHtml(__('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()), ['a']) ?>

@@ -55,6 +55,7 @@
                     </field>
                     <field id="search_suggestion_count" translate="label" type="text" sortOrder="91" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Search Suggestions Count</label>
+                        <validate>validate-digits validate-zero-or-greater</validate>
                         <depends>
                             <field id="search_suggestion_enabled">1</field>
                         </depends>

@@ -15,7 +15,7 @@
             <title value="Admin should be able to sell products with different variants of their own"/>
             <description value="Admin should be able to sell products with different variants of their own"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-58184"/>
+            <testCaseId value="MC-16476"/>
             <group value="product"/>
         </annotations>
 

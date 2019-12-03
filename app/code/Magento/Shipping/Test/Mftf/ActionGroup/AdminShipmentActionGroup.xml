@@ -8,14 +8,17 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-
     <actionGroup name="verifyBasicShipmentInformation">
+        <annotations>
+            <description>Validates that the provided Customer, Shipping Address, Billing Address and Customer Group are present and correct on the view Admin Order page.</description>
+        </annotations>
         <arguments>
             <argument name="customer" defaultValue=""/>
             <argument name="shippingAddress" defaultValue=""/>
             <argument name="billingAddress" defaultValue=""/>
             <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
         </arguments>
+        
         <see selector="{{AdminShipmentOrderInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>
         <see selector="{{AdminShipmentOrderInformationSection.customerEmail}}" userInput="{{customer.email}}" stepKey="seeCustomerEmail"/>
         <see selector="{{AdminShipmentOrderInformationSection.customerGroup}}" userInput="{{customerGroup.code}}" stepKey="seeCustomerGroup"/>
@@ -30,21 +33,53 @@
     </actionGroup>
 
     <actionGroup name="seeProductInShipmentItems">
+        <annotations>
+            <description>Validates that the provided Product is present and correct on the view Admin Order Shipment page under the 'Items Shipped' section.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
         </arguments>
+        
         <see selector="{{AdminShipmentItemsSection.skuColumn}}" userInput="{{product.sku}}" stepKey="seeProductSkuInGrid"/>
     </actionGroup>
 
     <actionGroup name="goToShipmentIntoOrder">
+        <annotations>
+            <description>Clicks on the 'Ship' button on the view Admin Order page. Validates that the URL and Page Title are present and correct.</description>
+        </annotations>
+        
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Shipment" stepKey="seePageNameNewInvoicePage"/>
     </actionGroup>
 
     <actionGroup name="submitShipmentIntoOrder">
+        <annotations>
+            <description>Clicks on the 'Submit Shipment' button on the view Admin Order Shipment page. Validates that the URL and Page Title are present and correct.</description>
+        </annotations>
+
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageShipping"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created." stepKey="seeShipmentCreateSuccess"/>
+    </actionGroup>
+    <actionGroup name="AdminShipmentCreateShippingLabelActionGroup">
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageMainSection.addProductsToPackage}}" stepKey="waitForAddProductElement"/>
+        <click selector="{{AdminShipmentCreatePackageMainSection.addProductsToPackage}}" stepKey="clickAddProducts"/>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('productName')}}" stepKey="waitForProductBeVisible"/>
+        <checkOption selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('productName')}}" stepKey="checkProductCheckbox"/>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageMainSection.addSelectedProductToPackage}}" stepKey="waitForAddSelectedProductElement"/>
+        <click selector="{{AdminShipmentCreatePackageMainSection.addSelectedProductToPackage}}" stepKey="clickAddSelectedProduct"/>
+        <waitForElementNotVisible selector="{{AdminShipmentCreatePackageMainSection.saveButtonDisabled}}" stepKey="waitForBeEnabled"/>
+        <click selector="{{AdminShipmentCreatePackageMainSection.save}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The shipment has been created. You created the shipping label." stepKey="seeShipmentCreateSuccess"/>
+    </actionGroup>
+    <actionGroup name="AdminGoToShipmentTabActionGroup">
+        <click selector="{{AdminOrderDetailsOrderViewSection.shipments}}" stepKey="clickOrderShipmentsTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForShipmentTabLoad" after="clickOrderShipmentsTab"/>
     </actionGroup>
 </actionGroups>

@@ -7,6 +7,9 @@ namespace Magento\Customer\Ui\Component;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
 
+/**
+ * Class FilterFactory. Responsible for generation filter object
+ */
 class FilterFactory
 {
     /**
@@ -34,6 +37,8 @@ class FilterFactory
     }
 
     /**
+     * Creates filter object
+     *
      * @param array $attributeData
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @return \Magento\Ui\Component\Listing\Columns\ColumnInterface
@@ -43,6 +48,7 @@ class FilterFactory
         $config = [
             'dataScope' => $attributeData[AttributeMetadata::ATTRIBUTE_CODE],
             'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
+            '__disableTmpl' => 'true'
         ];
         if ($attributeData[AttributeMetadata::OPTIONS]) {
             $config['options'] = $attributeData[AttributeMetadata::OPTIONS];
@@ -63,6 +69,8 @@ class FilterFactory
     }
 
     /**
+     * Returns filter type
+     *
      * @param string $frontendInput
      * @return string
      */

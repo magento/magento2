@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Info $block
  * @see \Magento\Payment\Block\Info
  */
 $specificInfo = $block->getSpecificInformation();
+$paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
+<?= $block->escapeHtml($paymentTitle) ?>
 
-<?php if ($specificInfo): ?>
+<?php if ($specificInfo) : ?>
     <table class="data-table admin__table-secondary">
-    <?php foreach ($specificInfo as $label => $value):?>
+    <?php foreach ($specificInfo as $label => $value) : ?>
         <tr>
             <th><?= $block->escapeHtml($label) ?>:</th>
             <td>

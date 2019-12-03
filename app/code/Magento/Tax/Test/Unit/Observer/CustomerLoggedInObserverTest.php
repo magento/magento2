@@ -8,6 +8,9 @@ namespace Magento\Tax\Test\Unit\Observer;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Customer logged in observer test
+ */
 class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -59,9 +62,11 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'getCustomerAddress', 'getData'
-            ])
+                ]
+            )
             ->getMock();
 
         $this->groupRepositoryMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\GroupRepository::class)
@@ -70,9 +75,11 @@ class CustomerLoggedInObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->setMethods(
+                [
                 'setCustomerTaxClassId', 'setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setWebsiteId'
-            ])
+                ]
+            )
             ->getMock();
 
         $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)

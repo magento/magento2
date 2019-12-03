@@ -31,7 +31,7 @@ SetHandler default-handler
     RewriteCond %{REQUEST_FILENAME} !-f
 
 ############################################
-## rewrite everything else to index.php
+## rewrite everything else to get.php
 
     RewriteRule .* ../get.php [L]
 </IfModule>

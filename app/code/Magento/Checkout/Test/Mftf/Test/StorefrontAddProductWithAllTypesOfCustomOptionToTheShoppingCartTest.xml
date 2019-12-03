@@ -100,7 +100,7 @@
         <!-- Assert Product Count in Mini Cart -->
         <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
             <argument name="productCount" value="2"/>
-            <argument name="productCountText" value="1 Item in Cart"/>
+            <argument name="productCountText" value="2 Item in Cart"/>
         </actionGroup>
 
         <!--Assert Product Items in Mini cart-->

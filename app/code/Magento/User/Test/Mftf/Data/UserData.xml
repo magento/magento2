@@ -33,6 +33,29 @@
             <item>1</item>
         </array>
     </entity>
+    <entity name="AdminUserWithUpdatedUserRoleToSales" extends="NewAdminUser">
+        <data key="password">123123qA</data>
+        <data key="password_confirmation">123123qA</data>
+        <data key="role">{{roleSales.rolename}}</data>
+    </entity>
+
+    <entity name="EditAdminUser" type="user">
+        <data key="username" unique="suffix">admin</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123QA</data>
+        <data key="password_confirmation">123123QA</data>
+        <data key="interface_local">en_US</data>
+        <data key="interface_local_label">English (United States)</data>
+        <data key="is_active">true</data>
+        <data key="is_active_label">Active</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
     <entity name="NewAdminUserWrongCurrentPassword" type="user">
         <data key="username" unique="suffix">admin</data>
         <data key="firstname">John</data>
@@ -40,6 +63,23 @@
         <data key="email" unique="prefix">admin@example.com</data>
         <data key="password">123123q</data>
         <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="interface_local_label">English (United States)</data>
+        <data key="is_active">true</data>
+        <data key="is_active_label">Active</data>
+        <data key="current_password" unique="suffix">password_</data>
+        <data key="role">Administrators</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
+    <entity name="EditAdminUserWrongCurrentPassword" type="user">
+        <data key="username" unique="suffix">admin</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123QA</data>
+        <data key="password_confirmation">123123QA</data>
         <data key="interface_local">en_US</data>
         <data key="interface_local_label">English (United States)</data>
         <data key="is_active">true</data>
@@ -74,4 +114,31 @@
             <item>1</item>
         </array>
     </entity>
+    <entity name="adminUserCorrectPassword" type="user">
+        <data key="username">admin_user_with_correct_password</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="email" unique="prefix">admin@example.com</data>
+        <data key="password">123123q</data>
+        <data key="password_confirmation">123123q</data>
+        <data key="interface_local">en_US</data>
+        <data key="interface_local_label">English (United States)</data>
+        <data key="is_active">true</data>
+        <data key="is_active_label">Active</data>
+        <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
+        <array key="roles">
+            <item>1</item>
+        </array>
+    </entity>
+    <entity name="adminUserIncorrectPassword" type="user">
+        <data key="username">admin_user_with_correct_password</data>
+        <data key="password">123123123q</data>
+    </entity>
+<!--
+    Since User delete action is performed via POST request we created this entity to be able to delete it.
+    Please use "AdminDeleteUserViaCurlActionGroup".
+    See how it works: app/code/Magento/User/Test/Mftf/ActionGroup/AdminDeleteUserViaCurlActionGroup.xml
+-->
+    <entity name="deleteUser" type="deleteUser" />
 </entities>

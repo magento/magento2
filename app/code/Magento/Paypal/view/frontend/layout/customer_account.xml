@@ -5,10 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="customer_account_navigation">
-            <block class="Magento\Customer\Block\Account\SortLinkInterface" name="customer-account-navigation-billing-agreements-link">
+            <block class="Magento\Customer\Block\Account\SortLinkInterface"
+                   name="customer-account-navigation-billing-agreements-link"
+                   ifconfig="payment/paypal_express/active"
+            >
                 <arguments>
                     <argument name="path" xsi:type="string">paypal/billing_agreement</argument>
                     <argument name="label" xsi:type="string" translate="true">Billing Agreements</argument>

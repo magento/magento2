@@ -5,33 +5,64 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateRoleActionGroup">
+        <annotations>
+            <description>Goes to the Admin Edit Role page. Fills in the provided User details. Add the provided Role. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="restrictedRole"/>
             <argument name="User"/>
         </arguments>
+
         <amOnPage url="{{AdminEditRolePage.url}}" stepKey="navigateToNewRole"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{User.name}}" stepKey="fillRoleName" />
-        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterPassword" />
-        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab" />
-        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.roleScopes}}"  stepKey="waitForScopeSelection" />
+        <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{User.name}}" stepKey="fillRoleName"/>
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterPassword"/>
+        <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab"/>
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.roleScopes}}"  stepKey="waitForScopeSelection"/>
         <selectOption selector="{{AdminEditRoleResourcesSection.resourceAccess}}" userInput="0" stepKey="selectResourceAccessCustom"/>
         <waitForElementVisible stepKey="waitForElementVisible" selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}" time="30"/>
         <click stepKey="clickContentBlockCheckbox" selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"/>
-        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
+
+    <actionGroup name="AdminFillUserRoleRequiredData" extends="AdminCreateRoleActionGroup">
+        <remove keyForRemoval="clickRoleResourcesTab"/>
+        <remove keyForRemoval="waitForScopeSelection"/>
+        <remove keyForRemoval="selectResourceAccessCustom"/>
+        <remove keyForRemoval="waitForElementVisible"/>
+        <remove keyForRemoval="clickContentBlockCheckbox"/>
+        <remove keyForRemoval="clickSaveRoleButton"/>
+        <remove keyForRemoval="waitForPageLoad2"/>
+    </actionGroup>
+    <actionGroup name="AdminAddRestrictedRole" extends="AdminCreateRoleActionGroup">
+        <remove keyForRemoval="navigateToNewRole"/>
+        <remove keyForRemoval="waitForPageLoad1"/>
+        <remove keyForRemoval="fillRoleName"/>
+        <remove keyForRemoval="enterPassword"/>
+        <remove keyForRemoval="clickRoleResourcesTab"/>
+        <remove keyForRemoval="waitForScopeSelection"/>
+        <remove keyForRemoval="clickSaveRoleButton"/>
+        <remove keyForRemoval="waitForPageLoad2"/>
+        <scrollTo selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"  x="0" y="-100" stepKey="scrollToResourceElement" after="selectResourceAccessCustom"/>
+    </actionGroup>
+
     <!--Create new role-->
     <actionGroup name="AdminCreateRole">
+        <annotations>
+            <description>Clicks on 'Add New Role'. Fills in the provided details (Role, Resource, Scope and Websites). Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="role" type="string" defaultValue=""/>
             <argument name="resource" type="string" defaultValue="All"/>
             <argument name="scope" type="string" defaultValue="Custom"/>
             <argument name="websites" type="string" defaultValue="Main Website"/>
         </arguments>
+
         <click selector="{{AdminCreateRoleSection.create}}" stepKey="clickToAddNewRole"/>
         <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{role.name}}" stepKey="setRoleName"/>
         <fillField stepKey="setPassword" selector="{{AdminCreateRoleSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
@@ -40,6 +71,6 @@
         <click stepKey="checkSales" selector="//a[text()='Sales']"/>
         <click selector="{{AdminCreateRoleSection.save}}" stepKey="clickToSaveRole"/>
         <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
-        <see userInput="You saved the role." stepKey="seeSuccessMessage" />
+        <see userInput="You saved the role." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

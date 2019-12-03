@@ -21,9 +21,9 @@ use Magento\Framework\Filesystem;
 class Download extends ExportController implements HttpGetActionInterface
 {
     /**
-     * url to this controller
+     * Url to this controller
      */
-    const URL = 'admin/export_file/download/';
+    const URL = 'adminhtml/export_file/download/';
 
     /**
      * @var FileFactory

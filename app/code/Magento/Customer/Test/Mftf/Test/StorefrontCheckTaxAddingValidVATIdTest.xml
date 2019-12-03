@@ -83,6 +83,7 @@
         <!--Add a product to the cart-->
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddProductToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <!--Proceed to checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="GoToCheckoutFromMinicartActionGroup"/>
         <!-- Click next button to open payment section -->

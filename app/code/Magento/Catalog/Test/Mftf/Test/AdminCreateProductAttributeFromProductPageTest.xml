@@ -90,6 +90,9 @@
         <waitForPageLoad stepKey="waitForProductToSave"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
+        <!--Run Re-Index task -->
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
         <!--Verify product attribute added in product form -->
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
         <waitForElementVisible selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributeToVisible"/>

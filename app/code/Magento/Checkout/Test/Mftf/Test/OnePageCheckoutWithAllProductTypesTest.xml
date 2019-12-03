@@ -14,12 +14,13 @@
             <stories value="OnePageCheckout within Offline Payment Methods"/>
             <title value="OnePageCheckout with all product types test"/>
             <description value="Checkout with all product types"/>
-            <severity value="CRITICAl"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="MC-14742"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -90,6 +91,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         </before>
         <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 

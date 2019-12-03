@@ -202,7 +202,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The most money available to refund is %1.',
-                    $creditmemo->getOrder()->formatPriceTxt($baseAvailableRefund)
+                    $creditmemo->getOrder()->getBaseCurrency()->formatTxt($baseAvailableRefund)
                 )
             );
         }
