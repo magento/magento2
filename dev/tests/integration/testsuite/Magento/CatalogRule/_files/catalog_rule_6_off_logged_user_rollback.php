@@ -8,6 +8,7 @@ declare(strict_types=1);
 use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
+use Magento\CatalogRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -19,8 +20,9 @@ $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
 $ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
 $ruleCollection = $ruleCollectionFactory->create();
 $ruleCollection->addFieldToFilter('name', ['eq' => 'Test Catalog Rule for logged user']);
+/** @var Rule $rule */
 $rule = $ruleCollection->getFirstItem();
-if ($rule) {
+if ($rule->getId()) {
     $ruleRepository->delete($rule);
 }
 $indexBuilder->reindexFull();
