@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCreateNewAccountNewsletterChecked" extends="SignUpNewUserFromStorefrontActionGroup">
+        <annotations>
+            <description>EXTENDS: SignUpNewUserFromStorefrontActionGroup. Clicks on 'Sign Up for Newsletter'. Validates that the Subscription Confirmation message is present and correct.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `StorefrontCreateNewAccountNewsletterCheckedActionGroup` instead -->
+        <click selector="{{StorefrontCustomerCreateFormSection.signUpForNewsletter}}" stepKey="selectSignUpForNewsletterCheckbox" after="fillLastName"/>
+        <see stepKey="seeDescriptionNewsletter" userInput='You are subscribed to "General Subscription".' selector="{{CustomerMyAccountPage.DescriptionNewsletter}}"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontCreateNewAccountNewsletterUnchecked" extends="SignUpNewUserFromStorefrontActionGroup">
+        <annotations>
+            <description>EXTENDS: SignUpNewUserFromStorefrontActionGroup. Validates that the you are NOT subscribed message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="Customer"/>
+            <argument name="Store"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `StorefrontCreateNewAccountNewsletterUncheckedActionGroup` instead -->
+        <amOnPage stepKey="amOnStorefrontPage" url="{{Store.code}}"/>
+        <see stepKey="seeDescriptionNewsletter" userInput="You aren't subscribed to our newsletter." selector="{{CustomerMyAccountPage.DescriptionNewsletter}}"/>
+        <see stepKey="seeThankYouMessage" userInput="Thank you for registering with NewStore."/>
+    </actionGroup>
+</actionGroups>
