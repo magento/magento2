@@ -30,9 +30,9 @@ interface InlineUtilInterface
     /**
      * Render event listener as an HTML attribute and whitelist it as trusted source.
      *
-     * Do not use user-provided as any of the parameters.
+     * Do not use user-provided values as any of the parameters.
      *
-     * @param string $eventName
+     * @param string $eventName Full attribute name like "onclick".
      * @param string $javascript
      * @return string
      */
