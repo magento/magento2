@@ -20,6 +20,7 @@ $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
 $ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
 $ruleCollection = $ruleCollectionFactory->create();
 $ruleCollection->addFieldToFilter('name', ['eq' => 'Test Catalog Rule for logged user']);
+$ruleCollection->setPageSize(1);
 /** @var Rule $rule */
 $rule = $ruleCollection->getFirstItem();
 if ($rule->getId()) {
