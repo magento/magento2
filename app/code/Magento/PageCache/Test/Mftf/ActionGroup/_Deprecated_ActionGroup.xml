@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="clearPageCache">
+        <annotations>
+            <description>Goes to the Admin Cache Management page. Selects 'Refresh'. Checks the 'Page Cache' row. Clicks on Submit.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `ClearPageCacheActionGroup` instead -->
+        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="amOnCacheManagementPage"/>
+        <waitForPageLoad stepKey="waitForCacheManagement"/>
+        <selectOption selector="{{AdminCacheManagementSection.massActionSelect}}" userInput="refresh" stepKey="selectRefresh"/>
+        <click selector="{{AdminCacheManagementSection.pageCacheCheckbox}}" stepKey="selectPageCache"/>
+        <click selector="{{AdminCacheManagementSection.massActionSubmit}}" stepKey="submitCacheForm"/>
+        <waitForPageLoad stepKey="waitForCacheFlush"/>
+    </actionGroup>
+</actionGroups>
