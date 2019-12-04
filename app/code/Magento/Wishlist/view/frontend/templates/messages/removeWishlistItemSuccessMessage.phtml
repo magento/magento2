@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable PSR2.Files.ClosingTag
+
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 
 <?= $block->escapeHtml(__('%1 has been removed from your Wish List.', $block->getData('product_name'))); ?>
-<?php
-
