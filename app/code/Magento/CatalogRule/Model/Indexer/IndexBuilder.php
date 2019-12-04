@@ -290,9 +290,9 @@ class IndexBuilder
     {
         $this->cleanProductIndex($ids);
 
-        /** @var Rule[] $activeRules */
-        $activeRules = $this->getActiveRules()->getItems();
-        foreach ($activeRules as $rule) {
+        $activeRules = $this->getActiveRules();
+        while ($rule = $activeRules->fetchItem()) {
+            /** @var Rule $rule */
             $rule->setProductsFilter($ids);
             $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
@@ -472,7 +472,8 @@ class IndexBuilder
      */
     private function applyRules(RuleCollection $ruleCollection, Product $product): void
     {
-        foreach ($ruleCollection as $rule) {
+        while ($rule = $ruleCollection->fetchItem()) {
+            /** @var Rule $rule */
             if (!$rule->validate($product)) {
                 continue;
             }
