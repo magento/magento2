@@ -25,7 +25,7 @@ $catalogRule = $catalogRuleFactory->create(
             RuleInterface::NAME => 'Test Catalog Rule for logged user',
             'customer_group_ids' => 1,
             RuleInterface::DISCOUNT_AMOUNT => 6,
-            'website_ids' => [0 => 1],
+            'website_ids' => [1],
             RuleInterface::SIMPLE_ACTION => 'by_fixed',
             RuleInterface::STOP_RULES_PROCESSING => false,
             RuleInterface::SORT_ORDER => 0,
