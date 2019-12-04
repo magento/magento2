@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="selectNotLoggedInCustomerGroup">
+        <annotations>
+            <description>Selects 'NOT LOGGED IN' from the 'Customer Groups' list (Magento 2 B2B). PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `SelectNotLoggedInCustomerGroupActionGroup` instead -->
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
+    </actionGroup>
+
+    <actionGroup name="selectRetailerCustomerGroup">
+        <annotations>
+            <description>Selects 'Retailer' from the 'Customer Groups' list (Magento 2 B2B). PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `SelectRetailerCustomerGroupActionGroup` instead -->
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="Retailer" stepKey="selectRetailerCustomerGroup"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithCouponCode" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'selectActionType' and 'fillDiscountAmount'. Adds the provided Coupon Code to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="couponCode"  defaultValue="_defaultCoupon.code"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminCreateCartPriceRuleWithCouponCodeActionGroup` instead -->
+        <remove keyForRemoval="selectActionType"/>
+        <remove keyForRemoval="fillDiscountAmount"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType" after="fillRuleName"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForElementVisible" after="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{couponCode}}" stepKey="fillCouponCode" after="waitForElementVisible"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="99" stepKey="fillUserPerCoupon" after="fillCouponCode"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionTypeToFixed" after="clickToExpandActions"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="1" stepKey="fillDiscountAmount" after="selectActionTypeToFixed"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateCartPriceRuleWithConditions" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'fillDiscountAmount'. Adds the 2 provided Conditions (Name, Rule, Rule to Change and Category Name) to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="condition1" type="string" defaultValue="Products subselection"/>
+            <argument name="condition2" type="string" defaultValue="Category"/>
+            <argument name="ruleToChange1" type="string" defaultValue="is"/>
+            <argument name="rule1" type="string" defaultValue="equals or greater than"/>
+            <argument name="ruleToChange2" type="string" defaultValue="..."/>
+            <argument name="rule2" type="string" defaultValue="2"/>
+            <argument name="categoryName" type="string" defaultValue="_defaultCategory.name"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminCreateCartPriceRuleWithConditionsActionGroup` instead -->
+        <remove keyForRemoval="fillDiscountAmount"/>
+
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="openConditionsSection" after="selectActionType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" stepKey="addFirstCondition" after="openConditionsSection"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1')}}" userInput="{{condition1}}" stepKey="selectRule" after="addFirstCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange1)}}" stepKey="waitForFirstRuleElement" after="selectRule"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange1)}}" stepKey="clickToChangeRule" after="waitForFirstRuleElement"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleParameterSelect('1--1')}}" userInput="{{rule1}}" stepKey="selectRule1" after="clickToChangeRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="waitForSecondRuleElement" after="selectRule1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="clickToChangeRule1" after="waitForSecondRuleElement"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleParameterInput('1--1')}}" userInput="{{rule2}}" stepKey="fillRule" after="clickToChangeRule1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1--1')}}" stepKey="addSecondCondition" after="fillRule"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1--1')}}" userInput="{{condition2}}" stepKey="selectSecondCondition" after="addSecondCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="waitForThirdRuleElement" after="selectSecondCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="addThirdCondition" after="waitForThirdRuleElement"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="waitForForthRuleElement" after="addThirdCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="openChooser" after="waitForForthRuleElement"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="waitForCategoryVisible" after="openChooser"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="checkCategoryName" after="waitForCategoryVisible"/>
+    </actionGroup>
+
+    <actionGroup name="VerifyDiscountAmount">
+        <annotations>
+            <description>Goes to the provided Storefront Product URL. Fills in provided Quantity. Clicks Add to Cart. Goes to Checkout. Validates that the provided Discount Amount is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="productUrl" type="string"/>
+            <argument name="quantity" type="string"/>
+            <argument name="expectedDiscount" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `VerifyDiscountAmountActionGroup` instead -->
+        <amOnPage url="{{productUrl}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
+        <waitForPageLoad stepKey="waitForAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="{{expectedDiscount}}" stepKey="seeDiscountTotal"/>
+    </actionGroup>
+</actionGroups>
