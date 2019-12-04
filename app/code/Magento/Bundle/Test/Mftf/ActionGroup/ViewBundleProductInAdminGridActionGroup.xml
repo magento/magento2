@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="viewBundleProductInAdminGrid">
+    <actionGroup name="ViewBundleProductInAdminGridActionGroup">
         <annotations>
             <description>Clears the Grid Filters on the Catalog Grid page and applies Filter by Name and Sku. Then checks to see if the Product exists in the 1st row. Then clears the Grid Filters again for future Tests.</description>
         </annotations>
