@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Category;
 
 /**
  * Product View block

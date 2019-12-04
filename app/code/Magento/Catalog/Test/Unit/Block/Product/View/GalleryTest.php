@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
-use Magento\Catalog\Block\Product\ImageBuilder;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
