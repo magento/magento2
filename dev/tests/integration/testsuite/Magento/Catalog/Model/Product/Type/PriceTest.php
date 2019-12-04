@@ -84,8 +84,7 @@ class PriceTest extends TestCase
     /**
      * Assert price for different customer groups.
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture Magento/Catalog/_files/add_to_simple_product_tier_price_for_logged_user.php
+     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_for_logged_user.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
      * @magentoAppIsolation enabled

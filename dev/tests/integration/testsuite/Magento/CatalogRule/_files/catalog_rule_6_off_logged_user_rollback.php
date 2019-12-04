@@ -7,28 +7,20 @@ declare(strict_types=1);
 
 use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder;
-use Magento\CatalogRule\Model\ResourceModel\Rule;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var IndexBuilder $indexBuilder */
 $indexBuilder = $objectManager->get(IndexBuilder::class);
-/** @var Rule $catalogRuleResource */
-$catalogRuleResource = $objectManager->create(Rule::class);
-$connection = $catalogRuleResource->getConnection();
 /** @var CatalogRuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->create(CatalogRuleRepositoryInterface::class);
-
-//Retrieve rule id by name
-$select = $connection->select();
-$select->from($catalogRuleResource->getMainTable(), 'rule_id');
-$select->where('name = ?', 'Test Catalog Rule for logged user');
-$ruleId = $connection->fetchOne($select);
-
-try {
-    $ruleRepository->deleteById($ruleId);
-} catch (NoSuchEntityException $e) {
-    //Rule already removed.
+/** @var CollectionFactory $ruleCollectionFactory */
+$ruleCollectionFactory = $objectManager->get(CollectionFactory::class);
+$ruleCollection = $ruleCollectionFactory->create();
+$ruleCollection->addFieldToFilter('name', ['eq' => 'Test Catalog Rule for logged user']);
+$rule = $ruleCollection->getFirstItem();
+if ($rule) {
+    $ruleRepository->delete($rule);
 }
 $indexBuilder->reindexFull();
