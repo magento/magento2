@@ -156,7 +156,7 @@ class HtmlDirectiveSniff implements Sniff
      * @param File $phpcsFile
      * @param string $body
      */
-    private function validateDirectiveBody(File $phpcsFile, string $body): void
+    private function validateDirectiveBody(File $phpcsFile, string $body)
     {
         $parameterTokenizer = new Template\Tokenizer\Parameter();
         $parameterTokenizer->setString($body);
@@ -175,7 +175,7 @@ class HtmlDirectiveSniff implements Sniff
      * @param File $phpcsFile
      * @param string $body
      */
-    private function validateVariableUsage(File $phpcsFile, string $body): void
+    private function validateVariableUsage(File $phpcsFile, string $body)
     {
         $this->usedVariables[] = 'var ' . trim($body);
         if (strpos($body, '|') !== false) {
@@ -208,7 +208,7 @@ class HtmlDirectiveSniff implements Sniff
      * @param File $phpcsFile
      * @param string $templateText
      */
-    private function validateDefinedVariables(File $phpcsFile, string $templateText): void
+    private function validateDefinedVariables(File $phpcsFile, string $templateText)
     {
         preg_match('/<!--@vars\s*((?:.)*?)\s*@-->/us', $templateText, $matches);
 

@@ -25,7 +25,7 @@ abstract class AbstractHtmlSniffTest extends TestCase
      * @return void
      * @dataProvider processDataProvider
      */
-    public function testProcess(string $fileUnderTest, string $expectedReportFile): void
+    public function testProcess(string $fileUnderTest, string $expectedReportFile)
     {
         $reportFile = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'phpcs_report.txt';
         $ruleSetDir = __DIR__ . DIRECTORY_SEPARATOR . '_files';
