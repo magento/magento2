@@ -331,7 +331,8 @@ class IndexBuilder
      */
     protected function doReindexFull()
     {
-        foreach ($this->getAllRules() as $rule) {
+        $collection = $this->getAllRules();
+        while ($rule = $collection->fetchItem()) {
             $this->reindexRuleProduct->execute($rule, $this->batchCount, true);
         }
 
