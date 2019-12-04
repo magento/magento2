@@ -1,4 +1,7 @@
 parameters:
+	featureToggles:
+		missingReturnRule: true
+	checkPhpDocMissingReturn: true
 	reportUnmatchedIgnoredErrors: false
 	excludes_analyse:
 		- %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
@@ -22,6 +25,8 @@ parameters:
 		- '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
 		# Ignore setCustomErrorHandler function not found in bootstrap files
 		- '#Function setCustomErrorHandler not found#'
+		# Ignore 'return statement is missing' error when 'void' is present in return type list
+		- '#Method (?:.*?) should return (?:.*?)void but return statement is missing.#'
 
 services:
 	errorFormatter.filtered:
