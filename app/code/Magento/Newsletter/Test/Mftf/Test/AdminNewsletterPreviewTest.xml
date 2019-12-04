@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-23058"/>
             <stories value="Newsletter Preview"/>
+            <skip>
+                <issueId value="MC-29326"/>
+            </skip>
         </annotations>
 
         <before>

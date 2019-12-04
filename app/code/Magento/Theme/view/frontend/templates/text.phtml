@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable PSR2.Files.ClosingTag
+
 $attributes = $block->getCssClass() ? ' class="' . $block->escapeHtmlAttr($block->getCssClass()) . '"' : '';
 $attr = $block->getAttributes();
 $textHtml = '<'
@@ -20,4 +22,3 @@ if (!empty($attr)) {
     }
 }
 echo /* @noEscape */ $textHtml; ?>
-<?php
