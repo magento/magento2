@@ -1,0 +1,7 @@
+<?php
+/** @var \Magento\Csp\Api\InlineUtilInterface $csp */
+?>
+<h1>Hello there!</h1>
+<?= $csp->renderTag('script', ['src' => 'http://my.magento.com/static/script.js']); ?>
+<?= $csp->renderTag('script', [], "\n    let myVar = 1;\n") ?>
+

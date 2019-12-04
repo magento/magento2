@@ -34,12 +34,12 @@ class CspAwareControllerPlugin
      * Register matched action instance.
      *
      * @param RouterInterface $router
-     * @param ActionInterface $matched
-     * @return ActionInterface
+     * @param ActionInterface|null $matched
+     * @return ActionInterface|null
      */
-    public function afterMatch(RouterInterface $router, ActionInterface $matched): ActionInterface
+    public function afterMatch(RouterInterface $router, ?ActionInterface $matched): ?ActionInterface
     {
-        if ($matched instanceof CspAwareActionInterface) {
+        if ($matched && $matched instanceof CspAwareActionInterface) {
             $this->collector->setCurrentActionInstance($matched);
         }
 

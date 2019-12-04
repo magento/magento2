@@ -53,7 +53,7 @@ class CompositePolicyCollector implements PolicyCollectorInterface
             if (array_key_exists($policy->getId(), $merged)) {
                 foreach ($this->mergers as $merger) {
                     if ($merger->canMerge($merged[$policy->getId()], $policy)) {
-                        $result[$policy->getId()] = $merger->merge($merged[$policy->getId()], $policy);
+                        $merged[$policy->getId()] = $merger->merge($merged[$policy->getId()], $policy);
                         continue 2;
                     }
                 }
