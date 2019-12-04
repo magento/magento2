@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomStore">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Clicks on 'Create Store'. Fills in the provided Details (Website, Store Group Name and Store Group Code). Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="store" type="string"/>
+            <argument name="rootCategory" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateCustomStoreActionGroup` instead -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
+        <selectOption userInput="{{website}}" selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" stepKey="selectMainWebsite"/>
+        <fillField userInput="{{store}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
+        <fillField userInput="{{store}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
+        <selectOption userInput="{{rootCategory}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
+        <click selector="{{AdminStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForStoreGridReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStoreGroupInGrid">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches for the provided Store Group Name. Validates that the provided Store Group Name is present in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeGroupName" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertStoreGroupInGridActionGroup` instead -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.nthRow('1')}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupInGridMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStoreGroupForm">
+        <annotations>
+            <description>Clicks on the 1st Store in the 'Stores' grid. Validates that the provided Details (Website, Store Group Name, Store Group Code and Root Category) are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="storeGroupName" type="string"/>
+            <argument name="storeGroupCode" type="string"/>
+            <argument name="rootCategory" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertStoreGroupFormActionGroup` instead -->
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitTillAdminSystemStoreGroupPage"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website}}" stepKey="seeAssertWebsite"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" userInput="{{storeGroupName}}" stepKey="seeAssertStoreGroupName"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" userInput="{{storeGroupCode}}" stepKey="seeAssertStoreGroupCode"/>
+        <seeInField selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="{{rootCategory}}" stepKey="seeAssertRootCategory"/>
+    </actionGroup>
+
+    <actionGroup name="AdminCreateStoreViewActionSaveGroup">
+        <annotations>
+            <description>Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminCreateStoreViewSaveActionGroup` instead -->
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload2"/>
+        <see userInput="You saved the store view." stepKey="seeSavedMessage"/>
+    </actionGroup>
+
+    <actionGroup name="navigateToAdminContentManagementPage">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Content Management'.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `NavigateToAdminContentManagementPageActionGroup` instead -->
+        <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+    </actionGroup>
+
+    <actionGroup name="saveStoreConfiguration">
+        <annotations>
+            <description>Clicks on the Save button.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `SaveStoreConfigurationActionGroup` instead -->
+        <comment userInput="saveStoreConfiguration" stepKey="comment"/>
+        <waitForElementVisible selector="{{StoreConfigSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+
+    <actionGroup name="saveStoreConfigurationAndValidateFieldError">
+        <annotations>
+            <description>Clicks on Save. Validates that the fields are required.</description>
+        </annotations>
+        <arguments>
+            <argument name="inputFieldError" type="string"/>
+            <argument name="errorMessageSelector" type="string"/>
+            <argument name="errorMessage" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `SaveStoreConfigurationAndValidateFieldErrorActionGroup` instead -->
+        <comment userInput="saveStoreConfigurationAndValidateFieldError" stepKey="comment"/>
+        <waitForElementVisible selector="{{StoreConfigSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{StoreConfigSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForElement selector="{{inputFieldError}}" stepKey="waitForErrorField"/>
+        <waitForElementVisible selector="{{errorMessageSelector}}" stepKey="waitForErrorMessage"/>
+        <see selector="{{errorMessageSelector}}" userInput="{{errorMessage}}" stepKey="seeErrorMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AssertWebsiteInGrid">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Website Name. Validates that the Website appears in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="websiteName" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertWebsiteInGridActionGroup` instead -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{websiteName}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <seeElement selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="seeAssertWebsiteInGrid"/>
+    </actionGroup>
+
+    <actionGroup name="AssertWebsiteForm">
+        <annotations>
+            <description>Clicks on the provided Website Name in the Admin Stores grid. Validates that the URL, Website Name/Code are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="websiteName" type="string"/>
+            <argument name="websiteCode" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertWebsiteFormActionGroup` instead -->
+        <click selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="clickWebsiteFirstRowInGrid"/>
+        <waitForPageLoad stepKey="waitTillWebsiteFormPageIsOpened"/>
+        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabWebsiteIdFromCurrentUrl"/>
+        <seeInCurrentUrl url="/system_store/editWebsite/website_id/{$grabWebsiteIdFromCurrentUrl}" stepKey="seeWebsiteId"/>
+        <seeInField selector="{{AdminNewWebsiteSection.name}}" userInput="{{websiteName}}" stepKey="seeAssertWebsiteName"/>
+        <seeInField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="seeAssertWebsiteCode"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStoreViewNotInGrid">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store View name. Validates that it does NOT appear in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertStoreViewNotInGridActionGroup` instead -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertStoreViewNotInGridMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AdminAddCustomWebSiteToStoreGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store Group. Edits the Store. Adds the provided Website to the Store. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeGroup" defaultValue="customStoreGroup"/>
+            <argument name="website" defaultValue="customWebsite"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminAddCustomWebSiteToStoreGroupActionGroup` instead -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeGroup.name}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <see userInput="{{storeGroup.name}}" selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="verifyThatCorrectStoreGroupFound"/>
+        <click selector="{{AdminStoresGridSection.storeGrpNameInFirstRow}}" stepKey="clickEditExistingStoreRow"/>
+        <waitForPageLoad stepKey="waitForStoreGroupPageLoad"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeGrpWebsiteDropdown}}" userInput="{{website.name}}" stepKey="selectWebsite"/>
+        <selectOption selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" userInput="Default Category" stepKey="chooseRootCategory"/>
+        <click selector="{{AdminNewStoreGroupActionsSection.saveButton}}" stepKey="clickSaveStoreGroup"/>
+        <conditionalClick selector="{{AdminNewStoreGroupSection.acceptNewStoreGroupCreation}}" dependentSelector="{{AdminNewStoreGroupSection.acceptNewStoreGroupCreation}}" visible="true" stepKey="clickAcceptNewStoreGroupCreationButton"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageReload"/>
+        <see userInput="You saved the store." stepKey="seeSavedMessage"/>
+    </actionGroup>
+
+    <actionGroup name="CreateStoreView">
+        <annotations>
+            <description>Goes to the Admin Store Views creation page. Fills in the provided Store View, Store Group Name and Store View Status. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeView" defaultValue="customStore"/>
+            <argument name="storeGroupName" defaultValue="_defaultStoreGroup.name"/>
+            <argument name="storeViewStatus" defaultValue="_defaultStore.is_active"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateStoreViewActionGroup` instead -->
+        <amOnPage  url="{{AdminSystemStoreViewPage.url}}" stepKey="amOnAdminSystemStoreViewPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <selectOption userInput="{{storeGroupName}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+        <fillField userInput="{{storeView.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+        <fillField userInput="{{storeView.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+        <selectOption userInput="{{storeViewStatus}}" selector="{{AdminNewStoreSection.statusDropdown}}" stepKey="selectStoreViewStatus"/>
+        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreViewButton"/>
+        <waitForElementVisible selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" stepKey="waitForAcceptNewStoreViewCreationButton"/>
+        <conditionalClick selector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" dependentSelector="{{AdminNewStoreSection.acceptNewStoreViewCreation}}" visible="true" stepKey="clickAcceptNewStoreViewCreationButton"/>
+        <see userInput="You saved the store view." stepKey="seeSavedMessage"/>
+    </actionGroup>
+
+    <actionGroup name="AssertStoreNotInGrid">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Validates that the provided Store Group Name is NOT present in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeGroupName" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertStoreNotInGridActionGroup` instead -->
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillSearchStoreGroupField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeAssertStoreGroupNotInGridMessage"/>
+    </actionGroup>
+</actionGroups>
