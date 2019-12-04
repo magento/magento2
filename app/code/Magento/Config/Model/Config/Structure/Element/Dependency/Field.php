@@ -6,6 +6,8 @@
 namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
+ * Field
+ *
  * @api
  * @since 100.0.2
  */
@@ -41,7 +43,7 @@ class Field
         if (isset($fieldData['separator'])) {
             $this->_values = explode($fieldData['separator'], $fieldData['value']);
         } else {
-            $this->_values = [$fieldData['value']];
+            $this->_values = [isset($fieldData['value']) ? $fieldData['value'] : ''];
         }
         $fieldId = $fieldPrefix . (isset(
             $fieldData['dependPath']
