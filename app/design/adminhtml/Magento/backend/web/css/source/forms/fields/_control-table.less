@@ -238,12 +238,20 @@
     }
 }
 
-.product_form_product_form_advanced_pricing_modal .admin__fieldset > .admin__field > .admin__field-control {
-    width: calc(~"(100%) * 0.57 - 30px");
+.product_form_product_form_advanced_pricing_modal .admin__fieldset > .admin__field > .admin__field-label, .product_form_product_form_advanced_pricing_modal [class*='admin__control-grouped'] > .admin__field:first-child > .admin__field-label {
+    margin-left: 0;
+}
+
+.product_form_product_form_advanced_pricing_modal .admin__control-table td,
+.product_form_product_form_advanced_pricing_modal .admin__control-table th {
+    padding: 1.3rem 0.7rem 1.3rem 0.3;
+    overflow-y: visible;
+}
+.product_form_product_form_advanced_pricing_modal .admin__fieldset {
+    margin: -40px;
 }
 
 .product_form_product_form_advanced_pricing_modal .admin__control-table-wrapper {
     overflow-x: visible;
     overflow-y: visible;
 }
-
