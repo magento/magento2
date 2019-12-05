@@ -85,7 +85,7 @@ class FilteredErrorFormatter extends TableErrorFormatter
                 continue;
             }
 
-            $line = $this->getLineWithMuteErrorAnnotation($error->getLine(), $fileName);
+            $line = $error->getLine() ? $this->getLineWithMuteErrorAnnotation($error->getLine(), $fileName) : null;
             if ($line === null) {
                 continue;
             }

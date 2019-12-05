@@ -6,7 +6,7 @@
 namespace Magento\Framework\EntityManager;
 
 /**
- * Class TypeResolver
+ * Resolves types.
  */
 class TypeResolver
 {
@@ -20,6 +20,7 @@ class TypeResolver
      */
     private $typeMapping = [
         \Magento\SalesRule\Model\Rule::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
+        // phpstan:ignore "Class Magento\SalesRule\Model\Rule\Interceptor not found."
         \Magento\SalesRule\Model\Rule\Interceptor::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
         // phpstan:ignore "Class Magento\SalesRule\Model\Rule\Proxy not found."
         \Magento\SalesRule\Model\Rule\Proxy::class => \Magento\SalesRule\Api\Data\RuleInterface::class

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * Class FilteredErrorFormatterTest
+ * Tests filter error formatter.
  */
 class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
 {
@@ -94,9 +94,9 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
      */
     public function dataFormatterOutputProvider(): array
     {
-        // phpcs:disable Magento2.Files.LineLength.MaxExceeded
+        // phpcs:disable Generic.Files.LineLength.TooLong
         $errorMessage = 'Method Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation::testMethod() invoked with 2 parameters, 1 required.';
-        // phpcs:enable Magento2.Files.LineLength.MaxExceeded
+        // phpcs:enable Generic.Files.LineLength.TooLong
 
         return [
             [
@@ -147,7 +147,7 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
                         21
                     ),
                 ],
-                // phpcs:disable Magento2.Files.LineLength.MaxExceeded
+                // phpcs:disable Generic.Files.LineLength.TooLong
                 ' ------ ---------------------------------------------------------------------------------------------------------------------------
   Line   ClassWithoutIgnoreAnnotation.php
  ------ ---------------------------------------------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
  [ERROR] Found 1 error
 
 ',
-                // phpcs:enable Magento2.Files.LineLength.MaxExceeded
+                // phpcs:enable Generic.Files.LineLength.TooLong
             ]
         ];
     }
