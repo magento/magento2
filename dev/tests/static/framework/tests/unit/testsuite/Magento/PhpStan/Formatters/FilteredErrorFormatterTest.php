@@ -110,19 +110,29 @@ class FilteredErrorFormatterTest extends \PHPUnit\Framework\TestCase
                 0,
                 [
                     new Error(
-                        $errorMessage,
+                        'Method level error',
                         self::DIRECTORY_PATH . '/ClassWithIgnoreAnnotation.php',
-                        24
+                        22
                     ),
                     new Error(
                         $errorMessage,
                         self::DIRECTORY_PATH . '/ClassWithIgnoreAnnotation.php',
-                        27
+                        25
                     ),
                     new Error(
                         $errorMessage,
                         self::DIRECTORY_PATH . '/ClassWithIgnoreAnnotation.php',
-                        30
+                        28
+                    ),
+                    new Error(
+                        $errorMessage,
+                        self::DIRECTORY_PATH . '/ClassWithIgnoreAnnotation.php',
+                        31
+                    ),
+                    new Error(
+                        $errorMessage,
+                        self::DIRECTORY_PATH . '/ClassWithIgnoreAnnotation.php',
+                        33
                     ),
                 ],
                 "\n [OK] No errors\n\n",

@@ -17,6 +17,7 @@ class ClassWithIgnoreAnnotation
 {
     /**
      * Test method.
+     * phpstan:ignore "Method level error"
      */
     public function getProductList()
     {
@@ -28,6 +29,8 @@ class ClassWithIgnoreAnnotation
 
         // phpstan:ignore
         $this->testMethod('test1', 'test2');
+
+        $this->testMethod('test1', 'test2'); // phpstan:ignore
     }
 
     /**

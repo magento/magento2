@@ -10,6 +10,7 @@ namespace Magento\PhpStan\Formatters\Fixtures;
 
 /**
  * Class ClassWithoutIgnoreAnnotation
+ * phpcs:ignoreFile
  */
 class ClassWithoutIgnoreAnnotation
 {

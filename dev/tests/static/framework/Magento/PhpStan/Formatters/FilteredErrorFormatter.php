@@ -30,7 +30,11 @@ use Symfony\Component\Console\Style\OutputStyle;
  *   // phpstan:ignore
  *   $this->testMethod(1);
  *
- * The error message, triggered by the line below annotation, will be suppressed.
+ * or
+ *
+ *   $this->testMethod(1); // phpstan:ignore
+ *
+ * The error message will be suppressed.
  *
  * @see \Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation
  */
@@ -39,27 +43,6 @@ class FilteredErrorFormatter extends TableErrorFormatter
     private const MUTE_ERROR_ANNOTATION = 'phpstan:ignore';
 
     private const NO_ERRORS = 0;
-
-    /**
-     * @param RelativePathHelper $relativePathHelper
-     * @param bool $showTipsOfTheDay
-     * @param bool $checkThisOnly
-     * @param bool $inferPrivatePropertyTypeFromConstructor
-     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
-     */
-    public function __construct(
-        RelativePathHelper $relativePathHelper,
-        bool $showTipsOfTheDay = false,
-        bool $checkThisOnly = false,
-        bool $inferPrivatePropertyTypeFromConstructor = true
-    ) {
-        parent::__construct(
-            $relativePathHelper,
-            $showTipsOfTheDay,
-            $checkThisOnly,
-            $inferPrivatePropertyTypeFromConstructor
-        );
-    }
 
     /**
      * @inheritdoc
@@ -102,17 +85,13 @@ class FilteredErrorFormatter extends TableErrorFormatter
                 continue;
             }
 
-            $file = new \SplFileObject($fileName);
-
-            // get the line above to the line that caused the error
-            $lineAboveError = $error->getLine() - 2;
-            $file->seek($lineAboveError > 0 ? $lineAboveError : 0);
-            $line = $file->current();
-
-            if (strpos($line, self::MUTE_ERROR_ANNOTATION) === false) {
+            $line = $this->getLineWithMuteErrorAnnotation($error->getLine(), $fileName);
+            if ($line === null) {
                 continue;
             }
-            $errorPattern = preg_match('@"(.*?)"@', $line, $matches) ? $this->getErrorPattern($matches[1]) : '';
+
+            $extractErrorPattern = '@' . self::MUTE_ERROR_ANNOTATION . '\s+"(.*?)"@';
+            $errorPattern = preg_match($extractErrorPattern, $line, $result) ? $this->preparePattern($result[1]) : '';
             if ($errorPattern && !preg_match('@' . $errorPattern . '@i', $error->getMessage())) {
                 continue;
             }
@@ -124,12 +103,39 @@ class FilteredErrorFormatter extends TableErrorFormatter
     }
 
     /**
-     * Returns error pattern.
+     * Returns context of the line with mute error annotation.
+     *
+     * @param int $errorLine
+     * @param string $fileName
+     * @return string|null
+     */
+    private function getLineWithMuteErrorAnnotation(int $errorLine, string $fileName): ?string
+    {
+        $file = new \SplFileObject($fileName);
+        $lineNumbersToCheck = [
+            $errorLine - 2, // the line above to the line that caused the error
+            $errorLine - 1, // the line that caused the error
+            $errorLine - 3, // the line two lines above to the line that caused the error
+        ];
+
+        foreach ($lineNumbersToCheck as $lineNumber) {
+            $file->seek($lineNumber > 0 ? $lineNumber : 0);
+            $line = $file->current();
+            if (strpos($line, self::MUTE_ERROR_ANNOTATION) !== false) {
+                return $line;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Prepares error pattern.
      *
      * @param string $errorDescription
      * @return string
      */
-    private function getErrorPattern(string $errorDescription)
+    private function preparePattern(string $errorDescription)
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return str_replace('*', '(?:.*?)', addcslashes(trim($errorDescription), '\()[]'));
