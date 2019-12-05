@@ -31,7 +31,6 @@
         <arguments>
             <argument name="productVar"/>
         </arguments>
-
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAddToCompare}}"
                                stepKey="seeAddToCompareLink"/>
         <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickAddToCompare"/>
@@ -93,5 +92,20 @@
         <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="clickClearOk"/>
         <waitForElement selector="{{StorefrontMessagesSection.message('You cleared the comparison list.')}}" time="30" stepKey="AssertMessageCleared"/>
         <waitForElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" time="30" stepKey="assertNoItems"/>
+    </actionGroup>
+
+    <!--  Check Product is present in the comparison list  -->
+    <actionGroup name="SeeProductInComparisonListActionGroup">
+        <annotations>
+            <description>Validate that the Product is present in the comparison list</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad"/>
+        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(productVar.name)}}"
+                    stepKey="seeProductInCompareList"/>
     </actionGroup>
 </actionGroups>

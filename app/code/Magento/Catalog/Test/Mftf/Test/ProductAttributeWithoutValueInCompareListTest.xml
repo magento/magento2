@@ -53,10 +53,9 @@
             <argument name="productVar" value="$$createProductDefault$$"/>
         </actionGroup>
         <!--See product in the comparison list-->
-        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductComparePageLoad"/>
-        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($createProductDefault.name$)}}"
-                    stepKey="seeProductInCompareList"/>
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductDefaultInComparisonListActionGroup">
+            <argument name="productVar" value="$$createProductDefault$$"/>
+        </actionGroup>
         <!--Open product with custom attribute page-->
         <amOnPage url="{{StorefrontProductPage.url($$createProductCustom.name$$)}}" stepKey="goToProductCustomPage"/>
         <waitForPageLoad stepKey="waitForProductCustomPage"/>
@@ -65,10 +64,9 @@
             <argument name="productVar" value="$$createProductCustom$$"/>
         </actionGroup>
         <!--See product with custom attribute in the comparison list-->
-        <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePageCustom"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductCustomComparePageLoad"/>
-        <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName($createProductCustom.name$)}}"
-                    stepKey="seeProductCustomInCompareList"/>
+        <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductCustomInComparisonListActionGroup">
+            <argument name="productVar" value="$$createProductCustom$$"/>
+        </actionGroup>
         <!--See attribute default value in the comparison list-->
         <see userInput="$createProductAttribute.defaultValue$"
              selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName(ProductAttributeFrontendLabel.label, $createProductCustom.name$)}}"
