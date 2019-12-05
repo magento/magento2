@@ -6,9 +6,12 @@
   */
 -->
 
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Create New Template -->
     <actionGroup name="CreateNewTemplate">
         <annotations>
             <description>Clicks on Add New Template. Fills the Template details. Clicks on Save. PLEASE NOTE: The values are Hardcoded.</description>
@@ -17,13 +20,10 @@
             <argument name="template" defaultValue="EmailTemplate"/>
         </arguments>
 
-        <!--Go to Marketing> Email Templates-->
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateNewTemplateActionGroup` instead -->
         <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateToEmailTemplatePage"/>
-        <!--Click "Add New Template" button-->
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickAddNewTemplateButton"/>
-        <!--Select value for "Template" drop-down menu in "Load Default Template" tab-->
         <selectOption selector="{{AdminEmailTemplateEditSection.templateDropDown}}" userInput="Registry Update" stepKey="selectValueFromTemplateDropDown"/>
-        <!--Fill in required fields in "Template Information" tab and click "Save Template" button-->
         <click selector="{{AdminEmailTemplateEditSection.loadTemplateButton}}" stepKey="clickLoadTemplateButton"/>
         <fillField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{EmailTemplate.templateName}}" stepKey="fillTemplateNameField"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveTemplateButton"/>
@@ -31,21 +31,21 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
     </actionGroup>
 
-    <!--Create New Custom Template -->
     <actionGroup name="CreateCustomTemplate" extends="CreateNewTemplate">
         <remove keyForRemoval="selectValueFromTemplateDropDown"/>
         <remove keyForRemoval="clickLoadTemplateButton"/>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateCustomTemplateActionGroup` instead -->
         <fillField selector="{{AdminEmailTemplateEditSection.templateSubject}}" userInput="{{template.templateSubject}}" after="fillTemplateNameField" stepKey="fillTemplateSubject"/>
         <fillField selector="{{AdminEmailTemplateEditSection.templateText}}" userInput="{{template.templateText}}" after="fillTemplateSubject" stepKey="fillTemplateText"/>
     </actionGroup>
 
-    <!-- Find and Open Email Template -->
     <actionGroup name="FindAndOpenEmailTemplate">
         <arguments>
             <argument name="template" defaultValue="EmailTemplate"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `FindAndOpenEmailTemplateActionGroup` instead -->
         <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateEmailTemplatePage" />
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
         <fillField selector="{{AdminEmailTemplateIndexSection.searchTemplateField}}" userInput="{{template.templateName}}" stepKey="findCreatedTemplate"/>
@@ -60,6 +60,8 @@
         <annotations>
             <description>Clicks on Delete Template. Accepts the Popup. Validates that the Email Template is NOT present in the Email Templates Grid.</description>
         </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `DeleteEmailTemplateActionGroup` instead -->
         <click selector="{{AdminEmailTemplateEditSection.deleteTemplateButton}}" after="checkTemplateName" stepKey="deleteTemplate"/>
         <waitForElementVisible selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="deleteTemplate" stepKey="waitForConfirmButton"/>
         <click selector="{{AdminEmailTemplateEditSection.acceptPopupButton}}" after="waitForConfirmButton" stepKey="acceptPopup"/>
@@ -67,7 +69,8 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the email template." after="waitForSuccessMessage" stepKey="seeSuccessfulMessage"/>
     </actionGroup>
 
-    <actionGroup name="PreviewEmailTemplate" extends="FindAndOpenEmailTemplate">
+    <actionGroup name="PreviewEmailTemplateActionGroup" extends="FindAndOpenEmailTemplate">
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateSystemBackupActionGroup` instead -->
         <click selector="{{AdminEmailTemplateEditSection.previewTemplateButton}}" after="checkTemplateName" stepKey="clickPreviewTemplate"/>
         <switchToNextTab after="clickPreviewTemplate" stepKey="switchToNewOpenedTab"/>
         <seeInCurrentUrl url="{{AdminEmailTemplatePreviewPage.url}}" after="switchToNewOpenedTab" stepKey="seeCurrentUrl"/>
@@ -81,6 +84,7 @@
             <argument name="expectedContent" type="string" defaultValue="{{EmailTemplate.templateText}}"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AssertEmailTemplateContentActionGroup` instead -->
         <see userInput="{{expectedContent}}" stepKey="checkTemplateContainText"/>
     </actionGroup>
 </actionGroups>
