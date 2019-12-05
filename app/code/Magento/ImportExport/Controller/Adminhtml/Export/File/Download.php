@@ -67,7 +67,7 @@ class Download extends ExportController implements HttpGetActionInterface
             $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
             if ($directory->isFile($path)) {
                 return $this->fileFactory->create(
-                    $path,
+                    $fileName,
                     $directory->readFile($path),
                     DirectoryList::VAR_DIR
                 );
