@@ -38,7 +38,7 @@ class CspAwareControllerPlugin
      * @return ActionInterface|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterMatch(RouterInterface $router, ?ActionInterface $matched): ?ActionInterface
+    public function afterMatch(RouterInterface $router, $matched)
     {
         if ($matched && $matched instanceof CspAwareActionInterface) {
             $this->collector->setCurrentActionInstance($matched);

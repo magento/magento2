@@ -109,10 +109,11 @@ class InlineUtil implements InlineUtilInterface
      * Extract remote hosts utilized.
      *
      * @param string $tag
+     * @param string[] $attributes
      * @param string|null $content
      * @return string[]
      */
-    private function extractRemoteHosts(string $tag, ?string $content): array
+    private function extractRemoteHosts(string $tag, array $attributes, ?string $content): array
     {
         /** @var string[] $remotes */
         $remotes = [];
@@ -163,7 +164,7 @@ class InlineUtil implements InlineUtilInterface
         }
         /** @var string $policyId */
         $policyId = self::$tagMeta[$tagName]['id'];
-        $remotes = $this->extractRemoteHosts($tagName, $content);
+        $remotes = $this->extractRemoteHosts($tagName, $attributes, $content);
         if (empty($remotes) && !$content) {
             throw new \InvalidArgumentException('Either remote URL or hashable content is required to whitelist');
         }
@@ -179,7 +180,6 @@ class InlineUtil implements InlineUtilInterface
                 new FetchPolicy($policyId, false, [], [], false, false, false, [], $this->generateHashValue($content))
             );
         }
-
 
         return $this->render($tagName, $attributes, $content);
     }
