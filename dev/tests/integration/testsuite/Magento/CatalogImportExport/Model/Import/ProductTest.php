@@ -16,6 +16,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -29,6 +31,7 @@ use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 
 /**
  * Class ProductTest
@@ -312,7 +315,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoAppIsolation enabled
-
      *
      * @return void
      */
@@ -1572,6 +1574,49 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductLinksWithEmptyValue()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv';
+        $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $objectManager = BootstrapHelper::getObjectManager();
+        $resource = $objectManager->get(ProductResource::class);
+        $productId = $resource->getIdBySku('simple');
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = BootstrapHelper::getObjectManager()->create(Product::class);
+        $product->load($productId);
+
+        $this->assertEmpty($product->getCrossSellProducts());
+        $this->assertEmpty($product->getUpSellProducts());
     }
 
     /**
