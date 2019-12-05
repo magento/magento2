@@ -2035,9 +2035,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getUploader()
     {
         if ($this->_fileUploader === null) {
-            $this->_fileUploader = $this->_uploaderFactory->create();
+            $fileUploader = $this->_uploaderFactory->create();
 
-            $this->_fileUploader->init();
+            $fileUploader->init();
 
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
@@ -2048,7 +2048,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
             }
 
-            if (!$this->_fileUploader->setTmpDir($tmpPath)) {
+            if (!$fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not readable.', $tmpPath)
                 );
@@ -2057,11 +2057,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $destinationPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationPath);
-            if (!$this->_fileUploader->setDestDir($destinationPath)) {
+            if (!$fileUploader->setDestDir($destinationPath)) {
                 throw new LocalizedException(
                     __('File directory \'%1\' is not writable.', $destinationPath)
                 );
             }
+
+            $this->_fileUploader = $fileUploader;
         }
         return $this->_fileUploader;
     }
