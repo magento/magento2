@@ -70,6 +70,7 @@ class InlineUtilTest extends TestCase
      * Test data for tag rendering test.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTags(): array
     {

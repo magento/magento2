@@ -75,9 +75,9 @@ class InlineUtil implements InlineUtilInterface
      */
     private function extractHost(string $url): ?string
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $urlData = parse_url($url);
-        if (
-            !$urlData
+        if (!$urlData
             || empty($urlData['scheme'])
             || ($urlData['scheme'] !== 'http' && $urlData['scheme'] !== 'https')
         ) {
@@ -106,31 +106,69 @@ class InlineUtil implements InlineUtilInterface
     }
 
     /**
-     * @inheritDoc
+     * Extract remote hosts utilized.
+     *
+     * @param string $tag
+     * @param string|null $content
+     * @return string[]
      */
-    public function renderTag(string $tagName, array $attributes, ?string $content = null): string
+    private function extractRemoteHosts(string $tag, ?string $content): array
     {
-        if (!array_key_exists($tagName, self::$tagMeta)) {
-            throw new \InvalidArgumentException('Unknown source type - ' .$tagName);
-        }
         /** @var string[] $remotes */
         $remotes = [];
-        foreach (self::$tagMeta[$tagName]['remote'] as $remoteAttr) {
+        foreach (self::$tagMeta[$tag]['remote'] as $remoteAttr) {
             if (!empty($attributes[$remoteAttr]) && $host = $this->extractHost($attributes[$remoteAttr])) {
                 $remotes[] = $host;
                 break;
             }
         }
-        /** @var string $policyId */
-        $policyId = self::$tagMeta[$tagName]['id'];
-        if ($tagName === 'style' && $content) {
+        if ($tag === 'style' && $content) {
             $remotes += $this->extractRemoteFonts($content);
         }
 
+        return $remotes;
+    }
+
+    /**
+     * Render tag.
+     *
+     * @param string $tag
+     * @param string[] $attributes
+     * @param string|null $content
+     * @return string
+     */
+    private function render(string $tag, array $attributes, ?string $content): string
+    {
+        $html = '<' .$tag;
+        foreach ($attributes as $attribute => $value) {
+            $html .= ' ' .$attribute .'="' .$value .'"';
+        }
+        if ($content) {
+            $html .= '>' .$content .'</' .$tag .'>';
+        } else {
+            $html .= ' />';
+        }
+
+        return $html;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function renderTag(string $tagName, array $attributes, ?string $content = null): string
+    {
+        //Processing tag data
+        if (!array_key_exists($tagName, self::$tagMeta)) {
+            throw new \InvalidArgumentException('Unknown source type - ' .$tagName);
+        }
+        /** @var string $policyId */
+        $policyId = self::$tagMeta[$tagName]['id'];
+        $remotes = $this->extractRemoteHosts($tagName, $content);
         if (empty($remotes) && !$content) {
             throw new \InvalidArgumentException('Either remote URL or hashable content is required to whitelist');
         }
 
+        //Adding required policies.
         if ($remotes) {
             $this->dynamicCollector->add(
                 new FetchPolicy($policyId, false, $remotes)
@@ -142,17 +180,8 @@ class InlineUtil implements InlineUtilInterface
             );
         }
 
-        $html = '<' .$tagName;
-        foreach ($attributes as $attribute => $value) {
-            $html .= ' ' .$attribute .'="' .$value .'"';
-        }
-        if ($content) {
-            $html .= '>' .$content .'</' .$tagName .'>';
-        } else {
-            $html .= ' />';
-        }
 
-        return $html;
+        return $this->render($tagName, $attributes, $content);
     }
 
     /**

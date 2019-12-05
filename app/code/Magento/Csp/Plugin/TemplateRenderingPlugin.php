@@ -12,9 +12,9 @@ use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\TemplateEngine\Php;
 
 /**
- * Plugin that adds CSP utility to .phtml templates context.
+ * Plugin that adds CSP utility to templates context.
  */
-class PhtmlRenderingPlugin
+class TemplateRenderingPlugin
 {
     /**
      * @var InlineUtilInterface
@@ -37,6 +37,7 @@ class PhtmlRenderingPlugin
      * @param string $fileName
      * @param array $dictionary
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeRender(Php $renderer, BlockInterface $block, $fileName, array $dictionary): array
     {

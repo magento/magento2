@@ -36,6 +36,7 @@ class CspAwareControllerPlugin
      * @param RouterInterface $router
      * @param ActionInterface|null $matched
      * @return ActionInterface|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterMatch(RouterInterface $router, ?ActionInterface $matched): ?ActionInterface
     {

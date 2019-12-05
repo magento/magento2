@@ -32,7 +32,9 @@ class Aware extends Action implements CspAwareActionInterface
     {
         $policies = [];
         foreach ($appliedPolicies as $policy) {
-            if ($policy instanceof FetchPolicy && in_array('http://controller.magento.com', $policy->getHostSources(), true)) {
+            if ($policy instanceof FetchPolicy
+                && in_array('http://controller.magento.com', $policy->getHostSources(), true)
+            ) {
                 $policies[] = new FetchPolicy(
                     'script-src',
                     false,

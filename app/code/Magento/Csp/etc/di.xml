@@ -50,7 +50,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\TemplateEngine\Php">
-        <plugin name="csp_helper_plugin" type="Magento\Csp\Plugin\PhtmlRenderingPlugin" />
+        <plugin name="csp_helper_plugin" type="Magento\Csp\Plugin\TemplateRenderingPlugin" />
     </type>
     <type name="Magento\Framework\App\RouterInterface">
         <plugin name="csp_aware_plugin" type="Magento\Csp\Plugin\CspAwareControllerPlugin" />
