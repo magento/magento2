@@ -21,21 +21,30 @@ class LayoutPlugin
     protected $response;
 
     /**
+     * @var \Magento\Framework\App\MaintenanceMode
+     */
+    private $maintenanceMode;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\ResponseInterface $response
-     * @param \Magento\PageCache\Model\Config $config
+     * @param \Magento\PageCache\Model\Config          $config
+     * @param \Magento\Framework\App\MaintenanceMode   $maintenanceMode
      */
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
-        \Magento\PageCache\Model\Config $config
+        \Magento\PageCache\Model\Config $config,
+        \Magento\Framework\App\MaintenanceMode $maintenanceMode
     ) {
         $this->response = $response;
         $this->config = $config;
+        $this->maintenanceMode = $maintenanceMode;
     }
 
     /**
      * Set appropriate Cache-Control headers
+     *
      * We have to set public headers in order to tell Varnish and Builtin app that page should be cached
      *
      * @param \Magento\Framework\View\Layout $subject
@@ -44,7 +53,7 @@ class LayoutPlugin
      */
     public function afterGenerateXml(\Magento\Framework\View\Layout $subject, $result)
     {
-        if ($subject->isCacheable() && $this->config->isEnabled()) {
+        if ($subject->isCacheable() && !$this->maintenanceMode->isOn() && $this->config->isEnabled()) {
             $this->response->setPublicHeaders($this->config->getTtl());
         }
         return $result;
@@ -68,6 +77,7 @@ class LayoutPlugin
                     if ($isVarnish && $isEsiBlock) {
                         continue;
                     }
+                    // phpcs:ignore
                     $tags = array_merge($tags, $block->getIdentities());
                 }
             }
