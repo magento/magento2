@@ -47,7 +47,7 @@
         </after>
 
         <!-- Create a catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createNewPriceRule"/>
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroup"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>

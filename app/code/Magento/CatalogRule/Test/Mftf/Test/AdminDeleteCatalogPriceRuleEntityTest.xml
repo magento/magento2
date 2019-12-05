@@ -31,7 +31,7 @@
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
                 <argument name="customerGroup" value="General"/>
                 <argument name="disregardRules" value="Yes"/>
@@ -163,7 +163,7 @@
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-            <actionGroup ref="CreateCatalogPriceRuleViaTheUi" stepKey="createCatalogPriceRuleViaTheUi1">
+            <actionGroup ref="CreateCatalogPriceRuleViaTheUiActionGroup" stepKey="createCatalogPriceRuleViaTheUi1">
                 <argument name="catalogRule" value="DeleteActiveCatalogPriceRuleWithConditions"/>
                 <argument name="customerGroup" value="General"/>
                 <argument name="disregardRules" value="Yes"/>
