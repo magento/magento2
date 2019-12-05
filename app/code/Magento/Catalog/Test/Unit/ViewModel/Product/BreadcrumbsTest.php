@@ -54,12 +54,14 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $escaper = $this->getObjectManager()->getObject(\Magento\Framework\Escaper::class);
+        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\JsonHexTag::class);
 
         $this->viewModel = $this->getObjectManager()->getObject(
             Breadcrumbs::class,
             [
                 'catalogData' => $this->catalogHelper,
                 'scopeConfig' => $this->scopeConfig,
+                'jsonSerializer' => $this->serializer,
                 'escaper' => $escaper
             ]
         );
@@ -140,6 +142,8 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with('catalog/seo/category_url_suffix', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->willReturn('."html');
+
+        $this->serializer->expects($this->once())->method('serialize')->willReturn($expectedJson);
 
         $this->assertEquals($expectedJson, $this->viewModel->getJsonConfiguration());
     }
