@@ -10,7 +10,7 @@ return [
         ' resource="Test_Value::value"/></menu></config>',
         [
             "Element 'add', attribute 'action': [facet 'pattern'] The value '' is not accepted by the " .
-            "pattern '[a-zA-Z0-9/_]{3,}'.\nLine: 1\n",
+            "pattern '[a-zA-Z0-9/_\-]{3,}'.\nLine: 1\n",
             "Element 'add', attribute 'action': '' is not a valid value of the atomic type 'typeAction'.\nLine: 1\n"
         ],
     ],
@@ -20,7 +20,7 @@ return [
         'resource="Test_Value::value"/></menu></config>',
         [
             "Element 'add', attribute 'action': [facet 'pattern'] The value 'ad' is not accepted by the " .
-            "pattern '[a-zA-Z0-9/_]{3,}'.\nLine: 1\n",
+            "pattern '[a-zA-Z0-9/_\-]{3,}'.\nLine: 1\n",
             "Element 'add', attribute 'action': 'ad' is not a valid value of the atomic type 'typeAction'.\nLine: 1\n"
         ],
     ],
@@ -31,7 +31,7 @@ return [
         '</menu></config>',
         [
             "Element 'add', attribute 'action': [facet 'pattern'] The value 'adm$#@inhtml/notification' is not " .
-            "accepted by the pattern '[a-zA-Z0-9/_]{3,}'.\nLine: 1\n",
+            "accepted by the pattern '[a-zA-Z0-9/_\-]{3,}'.\nLine: 1\n",
             "Element 'add', attribute 'action': 'adm$#@inhtml/notification' is not a valid value of the atomic " .
             "type 'typeAction'.\nLine: 1\n"
         ],
@@ -452,7 +452,7 @@ return [
         '<?xml version="1.0"?><config><menu><update action="" ' . 'id="Test_Value::some_value"/></menu></config>',
         [
             "Element 'update', attribute 'action': [facet 'pattern'] The value '' is not accepted by the " .
-            "pattern '[a-zA-Z0-9/_]{3,}'.\nLine: 1\n",
+            "pattern '[a-zA-Z0-9/_\-]{3,}'.\nLine: 1\n",
             "Element 'update', attribute 'action': '' is not a valid value of the atomic type 'typeAction'.\nLine: 1\n"
         ],
     ],
@@ -462,7 +462,7 @@ return [
         'resource="Test_Value::value"/></menu></config>',
         [
             "Element 'update', attribute 'action': [facet 'pattern'] The value 'v' is not accepted by the " .
-            "pattern '[a-zA-Z0-9/_]{3,}'.\nLine: 1\n",
+            "pattern '[a-zA-Z0-9/_\-]{3,}'.\nLine: 1\n",
             "Element 'update', attribute 'action': 'v' is not a valid value of the atomic type 'typeAction'.\nLine: 1\n"
         ],
     ],
@@ -471,7 +471,7 @@ return [
         'id="Test_Value::some_value"/></menu></config>',
         [
             "Element 'update', attribute 'action': [facet 'pattern'] The value '/@##gt;' is not " .
-            "accepted by the pattern '[a-zA-Z0-9/_]{3,}'.\nLine: 1\n",
+            "accepted by the pattern '[a-zA-Z0-9/_\-]{3,}'.\nLine: 1\n",
             "Element 'update', attribute 'action': '/@##gt;' is not a valid value of the atomic" .
             " type 'typeAction'.\nLine: 1\n"
         ],
