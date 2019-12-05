@@ -32,7 +32,7 @@
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
             <!-- Create second store -->
-            <actionGroup ref="CreateCustomStore" stepKey="createCustomStore">
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
                 <argument name="website" value="{{customWebsite.name}}"/>
                 <argument name="store" value="{{customStoreGroup.name}}"/>
                 <argument name="rootCategory" value="$$rootCategory.name$$"/>
