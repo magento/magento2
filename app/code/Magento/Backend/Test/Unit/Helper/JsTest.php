@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class JsTest
+ *
+ * Testing decoding serialized grid data
  */
 class JsTest extends TestCase
 {
