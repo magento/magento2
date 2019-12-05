@@ -10,7 +10,7 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\Escaper;
 
@@ -32,6 +32,11 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     private $scopeConfig;
 
     /**
+     * @var JsonHexTag
+     */
+    private $jsonSerializer;
+
+    /**
      * @var Escaper
      */
     private $escaper;
@@ -39,20 +44,21 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
     /**
      * @param Data $catalogData
      * @param ScopeConfigInterface $scopeConfig
-     * @param Json|null $json
+     * @param JsonHexTag $jsonSerializer
      * @param Escaper|null $escaper
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Data $catalogData,
         ScopeConfigInterface $scopeConfig,
-        Json $json = null,
+        JsonHexTag $jsonSerializer,
         Escaper $escaper = null
     ) {
         parent::__construct();
 
         $this->catalogData = $catalogData;
         $this->scopeConfig = $scopeConfig;
+        $this->jsonSerializer = $jsonSerializer;
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
@@ -101,15 +107,14 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      */
     public function getJsonConfigurationHtmlEscaped() : string
     {
-        return json_encode(
+        return $this->jsonSerializer->serialize(
             [
                 'breadcrumbs' => [
                     'categoryUrlSuffix' => $this->escaper->escapeHtml($this->getCategoryUrlSuffix()),
                     'useCategoryPathInUrl' => (int)$this->isCategoryUsedInProductUrl(),
                     'product' => $this->escaper->escapeHtml($this->getProductName())
                 ]
-            ],
-            JSON_HEX_TAG
+                ]
         );
     }
 
