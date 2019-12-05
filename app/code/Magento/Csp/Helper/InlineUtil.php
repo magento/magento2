@@ -10,7 +10,6 @@ namespace Magento\Csp\Helper;
 use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Csp\Model\Collector\DynamicCollector;
 use Magento\Csp\Model\Policy\FetchPolicy;
-use ParagonIE\Sodium\Core\Curve25519\Fe;
 
 /**
  * Helper for classes responsible for rendering and templates.
