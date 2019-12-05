@@ -30,7 +30,7 @@
         <!--Create the Category Url Rewrite-->
         <actionGroup ref="AdminAddUrlRewrite" stepKey="addUrlRewrite">
             <argument name="category" value="$$category.name$$"/>
-            <argument name="customUrlRewriteValue" value="For Category'"/>
+            <argument name="customUrlRewriteValue" value="For Category"/>
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="-"/>
             <argument name="redirectTypeValue" value="No"/>
