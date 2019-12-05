@@ -99,7 +99,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'label' => __('Your Password'),
                 'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
                 'title' => __('Your Password'),
-                'class' => 'input-text validate-current-password required-entry',
+                'class' => 'validate-current-password required-entry',
                 'required' => true
             ]
         );
