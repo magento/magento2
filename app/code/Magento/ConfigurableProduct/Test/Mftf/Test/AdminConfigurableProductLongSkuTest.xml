@@ -63,7 +63,7 @@
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="fillProductPrice"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
         <!--Setup configurations-->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurations">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
 

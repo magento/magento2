@@ -90,7 +90,7 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the visual watch we created earlier -->
-        <actionGroup ref="createConfigurationsForAttribute" stepKey="createConfigurations">
+        <actionGroup ref="CreateConfigurationsForAttributeActionGroup" stepKey="createConfigurations">
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
 

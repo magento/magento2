@@ -89,7 +89,7 @@
         </actionGroup>
 
         <!-- Create product configurations and add attribute and select all options -->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
 
@@ -97,17 +97,17 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillConfigurableProductValues"/>
 
         <!-- Add child products to configurations grid -->
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addFirstSimpleProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addFirstSimpleProduct">
             <argument name="sku" value="$$createFirstSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
         </actionGroup>
 
-       <actionGroup ref="addProductToConfigurationsGrid" stepKey="addSecondSimpleProduct">
+       <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addSecondSimpleProduct">
             <argument name="sku" value="$$createSecondSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
         </actionGroup>
 
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addOutOfStockProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addOutOfStockProduct">
             <argument name="sku" value="$$createSimpleOutOfStockProduct.sku$$"/>
             <argument name="name" value="$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
         </actionGroup>
@@ -121,7 +121,7 @@
         <!--Assert configurable product in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="assertConfigurableProductInCategory">
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="assertConfigurableProductInCategory">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="$$createFirstSimpleProduct$$"/>
         </actionGroup>

@@ -80,17 +80,17 @@
         </actionGroup>
 
         <!-- Create product configurations and add attribute and select all options -->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
 
          <!-- Add associated products to configurations grid -->
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addFirstSimpleProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addFirstSimpleProduct">
             <argument name="sku" value="$$createFirstSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
         </actionGroup>
 
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addSecondSimpleProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addSecondSimpleProduct">
             <argument name="sku" value="$$createSecondSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
         </actionGroup>

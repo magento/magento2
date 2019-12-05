@@ -32,7 +32,7 @@
 
         <!-- Create product -->
         <remove keyForRemoval="goToCreateProduct"/>
-        <actionGroup ref="createConfigurableProduct" stepKey="fillProductForm">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="fillProductForm">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>

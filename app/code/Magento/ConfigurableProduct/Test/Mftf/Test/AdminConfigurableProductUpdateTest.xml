@@ -284,7 +284,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
@@ -333,7 +333,7 @@
         </after>
 
         <!-- Create a configurable product via the UI -->
-        <actionGroup ref="createConfigurableProduct" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>

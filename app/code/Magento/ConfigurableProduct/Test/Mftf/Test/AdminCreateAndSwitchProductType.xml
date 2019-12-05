@@ -70,12 +70,12 @@
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="createConfiguration" after="fillProductForm">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createConfiguration" after="fillProductForm">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
         <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
-        <actionGroup ref="VerifyOptionInProductStorefront" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
         </actionGroup>
@@ -109,14 +109,14 @@
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="createConfiguration" after="fillProductForm">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createConfiguration" after="fillProductForm">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
         <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product"  stepKey="seeProductTypeInGrid"/>
         <!-- Verify product on store front -->
         <comment userInput="Verify product on store front" stepKey="commentVerifyProductGrid"/>
-        <actionGroup ref="VerifyOptionInProductStorefront" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
         </actionGroup>
@@ -169,10 +169,10 @@
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
         <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="createConfiguration">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createConfiguration">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
-        <actionGroup ref="saveConfiguredProduct" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
         <!-- Check that product was added with implicit type change -->
         <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
         <actionGroup ref="GoToProductCatalogPage" stepKey="goToProductCatalogPage"/>
@@ -184,7 +184,7 @@
         <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <actionGroup ref="VerifyOptionInProductStorefront" stepKey="verifyConfigurableOption">
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
         </actionGroup>

@@ -55,7 +55,7 @@
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab1"/>
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations1"/>
         <waitForPageLoad stepKey="waitForSelectAttributesPage1"/>
-        <actionGroup ref="selectCreatedAttributeAndCreateTwoOptions" stepKey="selectCreatedAttributeAndCreateOptions">
+        <actionGroup ref="SelectCreatedAttributeAndCreateTwoOptionsActionGroup" stepKey="selectCreatedAttributeAndCreateOptions">
             <argument name="attribute" value="dropdownProductAttribute"/>
             <argument name="firstOption" value="productAttributeOption1"/>
             <argument name="secondOption" value="productAttributeOption1"/>

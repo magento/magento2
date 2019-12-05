@@ -69,7 +69,7 @@
         </actionGroup>
 
         <!-- Create product configurations and add attribute and select all options -->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="generateConfigurationsByAttributeCode" after="fillConfigurableProductValues">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
 
@@ -77,7 +77,7 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillConfigurableProductValues"/>
 
         <!-- Add child product to configurations grid -->
-        <actionGroup ref="addProductToConfigurationsGrid" stepKey="addSimpleProduct">
+        <actionGroup ref="AddProductToConfigurationsGridActionGroup" stepKey="addSimpleProduct">
             <argument name="sku" value="$$createSimpleProduct.sku$$"/>
             <argument name="name" value="$$createConfigProductAttributeOption.option[store_labels][1][label]$$"/>
         </actionGroup>
@@ -95,7 +95,7 @@
         <!-- Assert configurable product on admin product page -->
         <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="assertConfigurableProductOnAdminProductPage" stepKey="assertConfigurableProductOnAdminProductPage">
+        <actionGroup ref="AssertConfigurableProductOnAdminProductPageActionGroup" stepKey="assertConfigurableProductOnAdminProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
