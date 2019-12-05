@@ -6,9 +6,12 @@
   */
 -->
 
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Fill main fields in product form-->
     <actionGroup name="fillMainDownloadableProductForm">
         <annotations>
             <description>Fills the Name, SKU, Price and Quantity on the Product creation/edit page.</description>
@@ -16,14 +19,14 @@
         <arguments>
             <argument name="product" defaultValue="DownloadableProduct"/>
         </arguments>
-        
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `FillMainDownloadableProductFormActionGroup` instead -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{product.price}}" stepKey="fillProductPrice"/>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{product.quantity}}" stepKey="fillProductQty"/>
     </actionGroup>
 
-    <!--Add a downloadable link that has max downloads-->
     <actionGroup name="addDownloadableProductLinkWithMaxDownloads">
         <annotations>
             <description>Clicks on 'Add Link'. Fills in the provided Link details including a Max Downloads limit.</description>
@@ -31,7 +34,8 @@
         <arguments>
             <argument name="link" defaultValue="downloadableLinkWithMaxDownloads"/>
         </arguments>
-        
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddDownloadableProductLinkWithMaxDownloadsActionGroup` instead -->
         <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="fillDownloadableLinkTitle"/>
@@ -44,7 +48,6 @@
         <fillField userInput="{{link.sample}}" selector="{{AdminProductDownloadableSection.addLinkSampleUrlInput('0')}}" stepKey="fillDownloadableLinkSampleUrl"/>
     </actionGroup>
 
-    <!--Add a downloadable link with unlimited downloads-->
     <actionGroup name="addDownloadableProductLink">
         <annotations>
             <description>Clicks on 'Add Link', under the 'Links' section. Fills in the provided Link details including Unlimited Downloads.</description>
@@ -53,7 +56,8 @@
             <argument name="link" defaultValue="downloadableLink"/>
             <argument name="index" type="string" defaultValue="1"/>
         </arguments>
-        
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddDownloadableProductLinkActionGroup` instead -->
         <click selector="{{AdminProductDownloadableSection.linksAddLinkButton}}" stepKey="clickLinkAddLinkButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{link.title}}" selector="{{AdminProductDownloadableSection.addLinkTitleInput(index)}}" stepKey="fillDownloadableLinkTitle"/>
@@ -67,7 +71,6 @@
         <waitForPageLoad stepKey="waitForPageLoadAfterFillingOutForm" />
     </actionGroup>
 
-    <!--Add a downloadable sample file-->
     <actionGroup name="addDownloadableSampleFile">
         <annotations>
             <description>Clicks on 'Add Link' under the 'Samples' section. Fills in the provided Downloadable Sample File details.</description>
@@ -75,7 +78,8 @@
         <arguments>
             <argument name="sample" defaultValue="downloadableSampleFile"/>
         </arguments>
-        
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddDownloadableSampleFileActionGroup` instead -->
         <click selector="{{AdminProductDownloadableSection.samplesAddLinkButton}}" stepKey="clickSampleAddLinkButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{sample.title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput('0')}}" stepKey="fillDownloadableSampleTitle"/>
@@ -84,7 +88,6 @@
         <waitForAjaxLoad stepKey="waitForSampleFileUpload"/>
     </actionGroup>
 
-    <!--Add a downloadable sample URL-->
     <actionGroup name="addDownloadableSampleUrl">
         <annotations>
             <description>Clicks on 'Add Link' under the 'Samples' section. Fills in the provided Downloadable Sample URL details.</description>
@@ -92,7 +95,8 @@
         <arguments>
             <argument name="sample" defaultValue="downloadableSampleUrl"/>
         </arguments>
-        
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddDownloadableSampleUrlActionGroup` instead -->
         <click selector="{{AdminProductDownloadableSection.samplesAddLinkButton}}" stepKey="clickSampleAddLinkButton2"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <fillField userInput="{{sample.title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput('1')}}" stepKey="fillDownloadableSampleTitle"/>
