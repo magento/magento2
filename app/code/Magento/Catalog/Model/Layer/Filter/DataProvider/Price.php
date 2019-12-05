@@ -310,7 +310,7 @@ class Price
             return false;
         }
         foreach ($filter as $v) {
-            if ($v !== '' && $v !== '0' && (double)$v <= 0 || is_infinite((double)$v)) {
+            if ($v !== '' && $v !== '0' && (!is_numeric($v) || (double)$v <= 0 || is_infinite((double)$v))) {
                 return false;
             }
         }
