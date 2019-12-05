@@ -22,8 +22,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 
 /**
  * Resizes product images according to theme view definitions.
- *
- * @package Magento\MediaStorage\Console\Command
  */
 class ImagesResizeCommand extends Command
 {
