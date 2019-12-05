@@ -29,6 +29,7 @@ class SwatchesAttributesControllerTest extends AbstractDeleteAttributeController
     public function testDeleteSwatchTextAttribute(): void
     {
         $this->dispatchDeleteAttribute('text_swatch_attribute');
+        $this->assertIsAttributeDeleted('text_swatch_attribute');
     }
 
     /**
@@ -42,5 +43,6 @@ class SwatchesAttributesControllerTest extends AbstractDeleteAttributeController
     public function testDeleteSwatchVisualAttribute(): void
     {
         $this->dispatchDeleteAttribute('color_swatch');
+        $this->assertIsAttributeDeleted('color_swatch');
     }
 }

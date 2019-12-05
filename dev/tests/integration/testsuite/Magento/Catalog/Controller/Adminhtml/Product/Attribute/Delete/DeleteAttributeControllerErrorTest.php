@@ -64,7 +64,7 @@ class DeleteAttributeControllerErrorTest extends AbstractBackendController
      *
      * @return void
      */
-    public function testDispatchWithCustomerAttributeId(): void
+    public function testDispatchWithNonProductAttribute(): void
     {
         $customerAttribute = $this->attributeRepository->get(
             AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS,

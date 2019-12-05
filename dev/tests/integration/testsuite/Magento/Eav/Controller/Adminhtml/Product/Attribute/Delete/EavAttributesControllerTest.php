@@ -29,6 +29,7 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteDateAttribute(): void
     {
         $this->dispatchDeleteAttribute('date_attribute');
+        $this->assertIsAttributeDeleted('date_attribute');
     }
 
     /**
@@ -42,6 +43,7 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteSelectAttribute(): void
     {
         $this->dispatchDeleteAttribute('dropdown_attribute');
+        $this->assertIsAttributeDeleted('dropdown_attribute');
     }
 
     /**
@@ -55,6 +57,7 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteMultiselectAttribute(): void
     {
         $this->dispatchDeleteAttribute('multiselect_attribute');
+        $this->assertIsAttributeDeleted('multiselect_attribute');
     }
 
     /**
@@ -68,6 +71,7 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteTextareaAttribute(): void
     {
         $this->dispatchDeleteAttribute('text_attribute');
+        $this->assertIsAttributeDeleted('text_attribute');
     }
 
     /**
@@ -81,6 +85,7 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteTextEditorAttribute(): void
     {
         $this->dispatchDeleteAttribute('text_editor_attribute');
+        $this->assertIsAttributeDeleted('text_editor_attribute');
     }
 
     /**
@@ -94,6 +99,7 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteTextAttribute(): void
     {
         $this->dispatchDeleteAttribute('varchar_attribute');
+        $this->assertIsAttributeDeleted('varchar_attribute');
     }
 
     /**
@@ -107,5 +113,6 @@ class EavAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteBooleanAttribute(): void
     {
         $this->dispatchDeleteAttribute('boolean_attribute');
+        $this->assertIsAttributeDeleted('boolean_attribute');
     }
 }

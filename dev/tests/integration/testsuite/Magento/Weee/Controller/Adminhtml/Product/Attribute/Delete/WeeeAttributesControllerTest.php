@@ -29,5 +29,6 @@ class WeeeAttributesControllerTest extends AbstractDeleteAttributeControllerTest
     public function testDeleteSwatchTextAttribute(): void
     {
         $this->dispatchDeleteAttribute('fixed_product_attribute');
+        $this->assertIsAttributeDeleted('fixed_product_attribute');
     }
 }

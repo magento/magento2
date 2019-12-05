@@ -27,6 +27,7 @@ class CatalogAttributesControllerTest extends AbstractDeleteAttributeControllerT
     public function testDeleteMediaImageAttribute(): void
     {
         $this->dispatchDeleteAttribute('image_attribute');
+        $this->assertIsAttributeDeleted('image_attribute');
     }
 
     /**
@@ -40,5 +41,6 @@ class CatalogAttributesControllerTest extends AbstractDeleteAttributeControllerT
     public function testDeletePriceAttribute(): void
     {
         $this->dispatchDeleteAttribute('decimal_attribute');
+        $this->assertIsAttributeDeleted('decimal_attribute');
     }
 }

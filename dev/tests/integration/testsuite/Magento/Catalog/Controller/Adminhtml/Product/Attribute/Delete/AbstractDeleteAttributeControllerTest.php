@@ -52,6 +52,16 @@ abstract class AbstractDeleteAttributeControllerTest extends AbstractBackendCont
             $this->equalTo([(string)__('You deleted the product attribute.')]),
             MessageInterface::TYPE_SUCCESS
         );
+    }
+
+    /**
+     * Assert that attribute is deleted from DB.
+     *
+     * @param string $attributeCode
+     * @return void
+     */
+    protected function assertIsAttributeDeleted(string $attributeCode): void
+    {
         $this->expectExceptionObject(
             new NoSuchEntityException(
                 __(
