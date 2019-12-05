@@ -35,6 +35,8 @@ class TypeResolver
     }
 
     /**
+     * Resolves type.
+     *
      * @param object $type
      * @return string
      * @throws \Exception
