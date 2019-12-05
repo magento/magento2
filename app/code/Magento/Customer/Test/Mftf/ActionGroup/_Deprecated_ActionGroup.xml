@@ -37,28 +37,6 @@ NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore
         <see stepKey="seeSuccessMessage" userInput="You saved the customer."/>
     </actionGroup>
 
-    <actionGroup name="AdminEditCustomerAddressSetDefaultShippingAndBilling" extends="AdminEditCustomerAddressesFrom">
-        <annotations>
-            <description>EXTENDS: AdminEditCustomerAddressesFrom. Clicks on 'Set Default' for Billing/Shipping.</description>
-        </annotations>
-
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminEditCustomerAddressSetDefaultShippingAndBillingActionGroup` instead -->
-        <click selector="{{AdminEditCustomerAddressesSection.defaultBillingAddressButton}}" stepKey="setDefaultBilling" before="setDefaultShipping"/>
-        <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
-    </actionGroup>
-
-    <actionGroup name="AdminEditCustomerAddressNoZipNoState" extends="AdminEditCustomerAddressesFrom">
-        <annotations>
-            <description>EXTENDS: AdminEditCustomerAddressesFrom. Removes 'selectState' and 'fillZipCode'. Clicks on 'Set Default' for Billing/Shipping.</description>
-        </annotations>
-
-        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminEditCustomerAddressNoZipNoStateActionGroup` instead -->
-        <remove keyForRemoval="selectState"/>
-        <remove keyForRemoval="fillZipCode"/>
-        <click selector="{{AdminEditCustomerAddressesSection.defaultBillingAddressButton}}" stepKey="setDefaultBilling" before="setDefaultShipping"/>
-        <click selector="{{AdminEditCustomerAddressesSection.defaultShippingAddressButton}}" stepKey="setDefaultShipping" before="fillPrefixName"/>
-    </actionGroup>
-
     <actionGroup name="AdminEditCustomerAddressNoZipNoState" extends="AdminEditCustomerAddressesFrom">
         <annotations>
             <description>EXTENDS: AdminEditCustomerAddressesFrom. Removes 'selectState' and 'fillZipCode'. Clicks on 'Set Default' for Billing/Shipping.</description>
