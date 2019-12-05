@@ -89,7 +89,7 @@
             <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
                 <argument name="label" value="mySet"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearAttributeSetsFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAttributeSetsFilter"/>
             <!-- Delete First attribute -->
             <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
                 <argument name="productAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
@@ -105,7 +105,7 @@
                 <argument name="productAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
             </actionGroup>
             <!-- Clear filters -->
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductAttributesFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributesFilter"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
             <!-- Log out -->
             <actionGroup ref="logout" stepKey="logout"/>

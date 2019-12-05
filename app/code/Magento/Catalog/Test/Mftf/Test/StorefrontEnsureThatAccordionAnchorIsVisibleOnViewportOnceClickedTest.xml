@@ -102,7 +102,7 @@
 
         <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
 
         <!-- Moderate first product reviews: change review status from pending to approved, save -->
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
@@ -110,7 +110,7 @@
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
 
         <!-- Moderate second product reviews: change review status from pending to approved, save -->
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilter"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openSecondCustomerReviews"/>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeSecondReviewStatus"/>
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedSecondReview"/>

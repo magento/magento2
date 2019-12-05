@@ -84,7 +84,7 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
          <!-- Show 100 attributes per page -->
-        <actionGroup ref="adminDataGridSelectPerPage" stepKey="selectNumberOfAttributesPerPage">
+        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfAttributesPerPage">
             <argument name="perPage" value="100"/>
         </actionGroup>
 

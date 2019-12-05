@@ -93,7 +93,7 @@
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductGridFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
         <!--Sort by custom attribute DESC using grabbed value-->
         <conditionalClick selector="{{AdminProductGridSection.columnHeader($$createDropdownAttribute.attribute[frontend_labels][0][label]$$)}}" dependentSelector="{{AdminProductGridSection.columnHeader($$createDropdownAttribute.attribute[frontend_labels][0][label]$$)}}" visible="true" stepKey="ascendSortByCustomAttribute"/>
         <waitForPageLoad stepKey="waitForProductGridLoad"/>

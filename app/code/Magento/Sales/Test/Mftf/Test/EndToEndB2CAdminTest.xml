@@ -168,10 +168,10 @@
 
         <!--Search order grid by name-->
         <comment userInput="Admin searches order grid by name" stepKey="searchOrderGridComment" after="waitForOrderGridPageLoad"/>
-        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="setOrderGridToDefaultViewForSearch" after="searchOrderGridComment"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="setOrderGridToDefaultViewForSearch" after="searchOrderGridComment"/>
         <!--@TODO use "Ship-to Name" when MQE-794 is fixed-->
         <see selector="{{AdminDataGridTableSection.column('Ship')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="seeNonFilterNameInShipNameColumn" after="setOrderGridToDefaultViewForSearch"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchOrderGridByNameKeyword" after="seeNonFilterNameInShipNameColumn">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrderGridByNameKeyword" after="seeNonFilterNameInShipNameColumn">
             <argument name="keyword" value="BillingAddressTX.fullname"/>
         </actionGroup>
         <dontSee selector="{{AdminDataGridTableSection.column('Ship')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="dontSeeNonFilterNameInShipNameColumn" after="searchOrderGridByNameKeyword"/>
@@ -180,7 +180,7 @@
         <!--Filter order grid-->
         <comment userInput="Admin filters order grid by 'Bill-to Name'" stepKey="filterOrderGridByNameComment" after="seeFilterNameInShipNameColumn"/>
         <!--Filter order grid by "Bill-to Name"-->
-        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetOrderGridForNameFilter" after="filterOrderGridByNameComment"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetOrderGridForNameFilter" after="filterOrderGridByNameComment"/>
         <!--@TODO use "Bill-to Name" when MQE-794 is fixed-->
         <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="seeNonFilterNameInColumn" after="resetOrderGridForNameFilter"/>
         <actionGroup ref="filterOrderGridByBillingName" stepKey="filterOrderGridByBillingName" after="seeNonFilterNameInColumn">
@@ -190,7 +190,7 @@
         <see selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{Simple_US_Customer.fullname}}" stepKey="seeFilterNameInColumn" after="dontSeeNonFilterNameInColumn"/>
         <!--Filter order grid by Grand Total (Base)-->
         <comment userInput="Admin filters order grid by 'Grand Total'" stepKey="filterOrderGridByTotalComment" after="seeFilterNameInColumn"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilterBeforeTotalFilter" after="filterOrderGridByTotalComment"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterBeforeTotalFilter" after="filterOrderGridByTotalComment"/>
         <see selector="{{AdminDataGridTableSection.column('Grand Total')}}" userInput="{{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeLowerTotalInGrid" after="clearFilterBeforeTotalFilter"/>
         <actionGroup ref="filterOrderGridByBaseTotalRange" stepKey="filterOrderGridByTotal" after="seeLowerTotalInGrid">
             <argument name="from" value="OrderGrandTotalFilterRange.from"/>
@@ -200,7 +200,7 @@
         <see selector="{{AdminDataGridTableSection.column('Grand Total')}}" userInput="{{AdminOrderSimpleConfigurableProduct.grandTotal}}" stepKey="seeExpectedTotalInGrid" after="dontSeeLowerTotalInGrid"/>
         <!--Filter order grid by purchase date-->
         <comment userInput="Admin filters order grid by 'Purchase Date'" stepKey="filterOrderGridByDateComment" after="seeExpectedTotalInGrid"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilterBeforeOrderDateFilter" after="filterOrderGridByDateComment"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterBeforeOrderDateFilter" after="filterOrderGridByDateComment"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderFilterForOrderDateFrom" after="clearFilterBeforeOrderDateFilter"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('created_at[from]')}}" userInput="01/01/2018" stepKey="fillOrderDateFromFilter" after="openOrderFilterForOrderDateFrom"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="applyFilterOrderDateFrom" after="fillOrderDateFromFilter"/>
@@ -216,7 +216,7 @@
         <dontSee selector="{{AdminDataGridTableSection.column('Bill')}}" userInput="{{BillingAddressTX.fullname}}" stepKey="dontSeeSecondOrderInGrid" after="dontSeeFirstOrderInGrid"/>
         <!--Filter order grid by status-->
         <comment userInput="Admin filters order grid by 'Status'" stepKey="filterOrderGridByStatusComment" after="dontSeeSecondOrderInGrid"/>
-        <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFilterBeforeStatusFilter" after="filterOrderGridByStatusComment"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterBeforeStatusFilter" after="filterOrderGridByStatusComment"/>
         <actionGroup ref="filterOrderGridByStatus" stepKey="filterOrderGridByPendingStatus" after="clearFilterBeforeStatusFilter">
             <argument name="status" value="OrderStatus.pending"/>
         </actionGroup>
@@ -229,7 +229,7 @@
         <dontSee selector="{{AdminDataGridTableSection.column('Status')}}" userInput="{{OrderStatus.pending}}" stepKey="dontSeePendingStatusInOrderGrid" after="seeClosedStatusInOrderGrid"/>
 
         <!--Sort order grid-->
-        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetOrderGridForSorting" after="dontSeePendingStatusInOrderGrid"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetOrderGridForSorting" after="dontSeePendingStatusInOrderGrid"/>
         <!--Sort order grid by status-->
         <comment userInput="Admin sorts order grid by status" stepKey="sortOrderGridByStatusComment" after="resetOrderGridForSorting"/>
         <click selector="{{AdminDataGridTableSection.columnHeader('Status')}}" stepKey="clickStatusToSortAsc" after="sortOrderGridByStatusComment"/>
@@ -239,9 +239,9 @@
         <!--@TODO improve sort assertion and check price and date column when MQE-690 is resolved-->
 
         <!--Use paging on order grid-->
-        <actionGroup ref="resetAdminDataGridToDefaultView" stepKey="resetAdminGridBeforePaging" after="checkStatusSortOrderAsc"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminGridBeforePaging" after="checkStatusSortOrderAsc"/>
         <comment userInput="Admin uses paging on order grid" stepKey="usePagingOrderGridComment" after="resetAdminGridBeforePaging"/>
-        <actionGroup ref="adminDataGridSelectCustomPerPage" stepKey="select1OrderPerPage" after="usePagingOrderGridComment">
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select1OrderPerPage" after="usePagingOrderGridComment">
             <!--@TODO Change this to scalar when MQE-498 is implemented-->
             <argument name="perPage" value="Const.one"/>
         </actionGroup>
@@ -250,7 +250,7 @@
         <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid" after="seeOnFirstPageOrderGrid"/>
         <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageOrderGrid" after="clickNextPageOrderGrid"/>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="see1RowOnSecondPage" after="seeOnSecondPageOrderGrid"/>
-        <actionGroup ref="adminDataGridSelectPerPage" stepKey="select50OrdersPerPage" after="see1RowOnSecondPage">
+        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="select50OrdersPerPage" after="see1RowOnSecondPage">
             <!--@TODO Change this to scalar when MQE-498 is implemented-->
             <argument name="perPage" value="Const.fifty"/>
         </actionGroup>
