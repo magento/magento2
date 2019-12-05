@@ -139,17 +139,17 @@ class InlineUtilTest extends TestCase
                 'style',
                 ['type' => 'text/css'],
                 "\n    @font-face {\n        font-family: \"MyCustomFont\";"
-                    ."\n        src: url(http://magento.com/static/font.ttf);\n    }\n"
+                    ."\n        src: url(\"http://magento.com/static/font.ttf\");\n    }\n"
                     ."    @font-face {\n        font-family: \"MyCustomFont2\";"
-                    ."\n        src: url(https://magento.com/static/font-2.ttf),"
+                    ."\n        src: url('https://magento.com/static/font-2.ttf'),"
                     ."\n             url(static/font.ttf),"
                     ."\n             url(https://devdocs.magento.com/static/another-font.woff),"
                     ."\n             url(http://devdocs.magento.com/static/font.woff);\n    }\n",
                 "<style type=\"text/css\">"
                     ."\n    @font-face {\n        font-family: \"MyCustomFont\";"
-                    ."\n        src: url(http://magento.com/static/font.ttf);\n    }\n"
+                    ."\n        src: url(\"http://magento.com/static/font.ttf\");\n    }\n"
                     ."    @font-face {\n        font-family: \"MyCustomFont2\";"
-                    ."\n        src: url(https://magento.com/static/font-2.ttf),"
+                    ."\n        src: url('https://magento.com/static/font-2.ttf'),"
                     ."\n             url(static/font.ttf),"
                     ."\n             url(https://devdocs.magento.com/static/another-font.woff),"
                     ."\n             url(http://devdocs.magento.com/static/font.woff);\n    }\n"
@@ -174,7 +174,7 @@ class InlineUtilTest extends TestCase
                         false,
                         false,
                         [],
-                        ['ha3DQAQqMpmhqPFaZpQV5tjgDc1QzTkIlfJ2R9hflVw=' => 'sha256']
+                        ['TP6Ulnz1kstJ8PYUKvowgJm0phHhtqJnJCnWxKLXkf0=' => 'sha256']
                     )
                 ]
             ],

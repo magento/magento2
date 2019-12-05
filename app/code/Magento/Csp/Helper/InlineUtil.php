@@ -97,7 +97,7 @@ class InlineUtil implements InlineUtilInterface
         $urlsFound = [[]];
         preg_match_all('/\@font\-face\s*?\{([^\}]*)[^\}]*?\}/im', $styleContent, $fontFaces);
         foreach ($fontFaces[1] as $fontFaceContent) {
-            preg_match_all('/url\((http(s)?\:[^\)]+)\)/i', $fontFaceContent, $urls);
+            preg_match_all('/url\([\'\"]?(http(s)?\:[^\)]+)[\'\"]?\)/i', $fontFaceContent, $urls);
             $urlsFound[] = $urls[1];
         }
 
