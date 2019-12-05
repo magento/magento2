@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
@@ -48,6 +49,7 @@ class MassUnsubscribe extends AbstractMassAction implements HttpPostActionInterf
      * @param CollectionFactory $collectionFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param SubscriptionManagerInterface $subscriptionManager
+     * @param StoreManagerInterface $storeManager
      * @param Share $shareConfig
      */
     public function __construct(
@@ -70,13 +72,13 @@ class MassUnsubscribe extends AbstractMassAction implements HttpPostActionInterf
      * Customer mass unsubscribe action
      *
      * @param AbstractCollection $collection
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     protected function massAction(AbstractCollection $collection)
     {
         $customersUpdated = 0;
         foreach ($collection->getAllIds() as $customerId) {
-            // Verify customer exists
+            // Verify that customer exists
             $customer = $this->customerRepository->getById($customerId);
             foreach ($this->getUnsubscribeStoreIds($customer) as $storeId) {
                 $this->subscriptionManager->unsubscribeCustomer((int)$customerId, $storeId);
@@ -87,7 +89,7 @@ class MassUnsubscribe extends AbstractMassAction implements HttpPostActionInterf
         if ($customersUpdated) {
             $this->messageManager->addSuccessMessage(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath($this->getComponentRefererUrl());
 
