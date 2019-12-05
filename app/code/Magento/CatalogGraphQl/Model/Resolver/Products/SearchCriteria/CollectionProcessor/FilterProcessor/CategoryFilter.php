@@ -9,11 +9,9 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Collecti
 
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Category filter allows to filter products collection using 'category_id' filter from search criteria.
@@ -50,21 +48,14 @@ class CategoryFilter implements CustomFilterInterface
      * @param Filter $filter
      * @param AbstractDb $collection
      * @return bool Whether the filter is applied
-     * @throws LocalizedException
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
         $conditionType = $filter->getConditionType();
-
-        if ($conditionType !== 'eq') {
-            throw new LocalizedException(__("'category_id' only supports 'eq' condition type."));
-        }
-
         $categoryId = $filter->getValue();
-        /** @var Collection $collection */
-        $category = $this->categoryFactory->create();
-        $this->categoryResourceModel->load($category, $categoryId);
-        $collection->addCategoryFilter($category);
+        $condition = [$conditionType => $categoryId];
+
+        $collection->addCategoriesFilter($condition);
 
         return true;
     }
