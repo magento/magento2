@@ -31,20 +31,20 @@
         <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
         <click selector="{{CatalogWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
-        <actionGroup ref="clickBrowseBtnOnUploadPopup" stepKey="clickBrowserBtn"/>
-        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="VerifyMediaGalleryStorageBtn"/>
-        <actionGroup ref="CreateImageFolder" stepKey="CreateImageFolder">
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
                 <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
-        <actionGroup ref="attachImage" stepKey="attachImage1">
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage1">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
-        <actionGroup ref="deleteImage" stepKey="deleteImage"/>
-        <actionGroup ref="attachImage" stepKey="attachImage2">
+        <actionGroup ref="DeleteImageActionGroup" stepKey="deleteImage"/>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage2">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
-        <actionGroup ref="saveImage" stepKey="insertImage"/>
-        <actionGroup ref="fillOutUploadImagePopup" stepKey="fillOutUploadImagePopup" />
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

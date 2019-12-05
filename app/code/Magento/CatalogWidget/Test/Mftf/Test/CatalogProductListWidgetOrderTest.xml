@@ -42,7 +42,7 @@
         </before>
         <!--Open created cms page-->
         <comment userInput="Open created cms page" stepKey="commentOpenCreatedCmsPage"/>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage1">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
             <argument name="CMSPage" value="$$createPreReqPage$$"/>
         </actionGroup>
         <!--Add widget to cms page-->

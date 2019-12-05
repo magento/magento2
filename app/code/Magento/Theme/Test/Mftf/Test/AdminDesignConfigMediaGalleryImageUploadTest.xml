@@ -35,14 +35,14 @@
         <!--Upload Image-->
         <comment userInput="Upload Image" stepKey="uploadImageComment"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
-        <actionGroup ref="VerifyMediaGalleryStorageActions" stepKey="verifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtn"/>
         <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
             <argument name="FolderName" value="Storage Root"/>
         </actionGroup>
-        <actionGroup ref="attachImage" stepKey="selectImageFromMediaStorage">
+        <actionGroup ref="AttachImageActionGroup" stepKey="selectImageFromMediaStorage">
             <argument name="Image" value="ImageUpload3"/>
         </actionGroup>
-        <actionGroup ref="saveImage" stepKey="insertImage"/>
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfiguration"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.successNotification}}" stepKey="waitForSuccessNotification"/>
         <waitForPageLoad stepKey="waitForPageloadSuccess"/>
