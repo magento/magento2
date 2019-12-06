@@ -36,7 +36,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.sku$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
             <argument name="productName" value="$createSimpleProduct.name$"/>
             <argument name="productUrlKey" value="$createSimpleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
@@ -106,7 +106,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="ThisShouldn'tReturnAnything"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmpty"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmpty"/>
     </test>
 
     <test name="QuickSearchWithTwoCharsEmptyResults" extends="QuickSearchEmptyResults">
@@ -254,11 +254,11 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{{_defaultProduct.name}}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="assertProduct1Position">
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
             <argument name="productName" value="$product1.name$"/>
             <argument name="index" value="2"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="assertProduct2Position">
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
             <argument name="productName" value="$product2.name$"/>
             <argument name="index" value="1"/>
         </actionGroup>
@@ -283,11 +283,11 @@
                 <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
             </actionGroup>
         </before>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="assertProduct1Position">
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
             <argument name="productName" value="$product1.name$"/>
             <argument name="index" value="1"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="assertProduct2Position">
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
             <argument name="productName" value="$product2.name$"/>
             <argument name="index" value="2"/>
         </actionGroup>
@@ -317,7 +317,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddToCartFromQuickSearchActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createSimpleProduct.name$"/>
         </actionGroup>
     </test>
@@ -349,7 +349,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createVirtualProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddToCartFromQuickSearchActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createVirtualProduct.name$"/>
         </actionGroup>
     </test>
@@ -387,7 +387,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{{_defaultProduct.name}}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
             <argument name="productName" value="{{_defaultProduct.name}}"/>
             <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
         </actionGroup>
@@ -430,7 +430,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddToCartFromQuickSearchActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
     </test>
@@ -467,7 +467,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="&quot;$createProduct.name$&quot;"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddToCartFromQuickSearch" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddToCartFromQuickSearchActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
     </test>
@@ -519,7 +519,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createBundleProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
             <argument name="productName" value="$createBundleProduct.name$"/>
             <argument name="productUrlKey" value="$createBundleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
@@ -589,7 +589,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createBundleProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenProductFromQuickSearch" stepKey="openAndCheckProduct">
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
             <argument name="productName" value="$createBundleProduct.name$"/>
             <argument name="productUrlKey" value="$createBundleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
@@ -676,7 +676,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createConfigProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGrid" stepKey="seeProductInGrid">
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="seeProductInGrid">
             <argument name="productName" value="$createConfigProduct.name$"/>
             <argument name="index" value="1"/>
         </actionGroup>
@@ -692,7 +692,7 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefrontAgain">
             <argument name="phrase" value="$createConfigProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGrid" stepKey="dontSeeProductAnymore">
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGridActionGroup" stepKey="dontSeeProductAnymore">
             <argument name="productName" value="$createConfigProduct.name$"/>
         </actionGroup>
     </test>
