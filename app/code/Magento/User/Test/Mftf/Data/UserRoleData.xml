@@ -99,4 +99,8 @@
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
         <data key="all">0</data>
     </entity>
+
+    <entity name="genericAdminRole" type="role">
+        <data key="name">Administrators</data>
+    </entity>
 </entities>
