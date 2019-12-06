@@ -382,33 +382,6 @@ QUERY;
 
     /**
      * @param string $maskedQuoteId
-     * @return string
-     */
-    private function getSetPaymentBraintreeQueryInvalidPaymentMethodInput(string $maskedQuoteId): string
-    {
-        return <<<QUERY
-mutation {
-  setPaymentMethodOnCart(input:{
-    cart_id:"{$maskedQuoteId}"
-    payment_method:{
-      code:"braintree"
-      braintree:{
-        payment_method_nonce:"fake-valid-nonce"
-      }
-    }
-  }) {
-    cart {
-      selected_payment_method {
-        code
-      }
-    }
-  }
-}
-QUERY;
-    }
-
-    /**
-     * @param string $maskedQuoteId
      * @param string $methodCode
      * @return string
      */
