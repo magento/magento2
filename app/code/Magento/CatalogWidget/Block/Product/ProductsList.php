@@ -47,8 +47,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     /**
      * Name of request parameter for page number value
      *
-     * @deprecated
-     * @see $this->getData('page_var_name')
+     * @deprecated @see $this->getData('page_var_name')
      */
     const PAGE_VAR_NAME = 'np';
 
