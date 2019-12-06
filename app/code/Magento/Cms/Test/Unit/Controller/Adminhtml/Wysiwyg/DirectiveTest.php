@@ -286,15 +286,18 @@ class DirectiveTest extends \PHPUnit\Framework\TestCase
         $placeholderPath = 'pub/static/adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
         $this->prepareExecuteTest();
 
-        $this->imageAdapterMock->expects($this->at(0))
+        $this->imageAdapterMock->expects($this->any())
             ->method('open')
             ->with(self::IMAGE_PATH)
             ->willThrowException($exception);
+
         $this->wysiwygConfigMock->expects($this->once())
             ->method('getSkinImagePlaceholderPath')
             ->willReturn($placeholderPath);
-        $this->imageAdapterMock->expects($this->at(1))
+
+        $this->imageAdapterMock->expects($this->any())
             ->method('open')
+            ->with($placeholderPath)
             ->willThrowException($exception);
 
         $this->loggerMock->expects($this->once())
