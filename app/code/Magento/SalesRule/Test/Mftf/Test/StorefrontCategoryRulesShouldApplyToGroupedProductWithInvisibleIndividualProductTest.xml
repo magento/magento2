@@ -76,7 +76,7 @@
             <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="TestSalesRule"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!-- Start to create new cart price rule via Category conditions -->

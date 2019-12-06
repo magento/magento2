@@ -88,7 +88,7 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerIndexPage"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCustomerGridFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

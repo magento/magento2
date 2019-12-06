@@ -27,7 +27,7 @@
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProductWithOptions"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductFilter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

@@ -50,7 +50,7 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <!-- Clear Filter Store -->
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="resetFiltersOnStorePage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetFiltersOnStorePage"/>
             <!-- Delete Category and Simple Product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

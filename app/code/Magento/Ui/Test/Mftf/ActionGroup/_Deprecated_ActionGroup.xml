@@ -6,8 +6,46 @@
   */
 -->
 
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="searchAdminDataGridByKeyword">
+        <annotations>
+            <description>Fills 'Search by keyword' on an Admin Grid page. Clicks on Submit Search.</description>
+        </annotations>
+        <arguments>
+            <argument name="keyword"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `SearchAdminDataGridByKeywordActionGroup` instead -->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+    </actionGroup>
+
+    <actionGroup name="resetAdminDataGridToDefaultView">
+        <annotations>
+            <description>Resets an Admin Grid page to the 'Default View'.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `ResetAdminDataGridToDefaultViewActionGroup` instead -->
+        <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
+        <click selector="{{AdminDataGridHeaderSection.bookmarkOption('Default View')}}" stepKey="selectDefaultGridView"/>
+        <see selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+    </actionGroup>
+
+    <actionGroup name="clearFiltersAdminDataGrid">
+        <annotations>
+            <description>Clicks on 'Clear Filters' on an Admin Grid page.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `ClearFiltersAdminDataGridActionGroup` instead -->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+    </actionGroup>
+
     <actionGroup name="adminDataGridSelectPerPage">
         <annotations>
             <description>Sets the provided preset 'per page' display setting on an Admin Grid page.</description>
@@ -16,6 +54,7 @@
             <argument name="perPage" type="string"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminDataGridSelectPerPageActionGroup` instead -->
         <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
         <click selector="{{AdminDataGridPaginationSection.perPageOption(perPage)}}" stepKey="selectCustomPerPage"/>
         <waitForPageLoad stepKey="waitForGridLoad"/>
@@ -29,6 +68,7 @@
             <argument name="perPage"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminDataGridSelectCustomPerPageActionGroup` instead -->
         <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown"/>
         <click selector="{{AdminDataGridPaginationSection.perPageOption('Custom')}}" stepKey="selectCustomPerPage"/>
         <waitForElementVisible selector="{{AdminDataGridPaginationSection.perPageInput}}" time="30" stepKey="waitForInputVisible"/>
@@ -46,6 +86,7 @@
             <argument name="perPage"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AdminDataGridDeleteCustomPerPageActionGroup` instead -->
         <click selector="{{AdminDataGridPaginationSection.perPageDropdown}}" stepKey="clickPerPageDropdown1"/>
         <click selector="{{AdminDataGridPaginationSection.perPageEditCustomValue(perPage)}}" stepKey="clickToEditCustomPerPage"/>
         <waitForElementVisible selector="{{AdminDataGridPaginationSection.perPageDeleteCustomValue(perPage)}}" time="30" stepKey="waitForDeleteButtonVisible"/>

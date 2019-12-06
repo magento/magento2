@@ -40,7 +40,7 @@
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
             <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="clickPrevPageOrderGrid"/>
-            <actionGroup ref="adminDataGridDeleteCustomPerPage" stepKey="deleteCustomAddedPerPage">
+            <actionGroup ref="AdminDataGridDeleteCustomPerPageActionGroup" stepKey="deleteCustomAddedPerPage">
                 <argument name="perPage" value="ProductPerPage.productCount"/>
             </actionGroup>
             <deleteData stepKey="deleteCategory1" createDataKey="category1"/>
@@ -51,7 +51,7 @@
         </after>
         <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="adminDataGridSelectCustomPerPage" stepKey="select1OrderPerPage">
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select1OrderPerPage">
             <argument name="perPage" value="ProductPerPage.productCount"/>
         </actionGroup>
         <!--Go to the next page and edit the product-->

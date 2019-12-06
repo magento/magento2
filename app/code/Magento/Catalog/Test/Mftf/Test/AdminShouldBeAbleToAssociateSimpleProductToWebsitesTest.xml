@@ -43,7 +43,7 @@
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageToResetFilters"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 

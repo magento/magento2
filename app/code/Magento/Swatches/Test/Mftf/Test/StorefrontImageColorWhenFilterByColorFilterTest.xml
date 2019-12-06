@@ -34,8 +34,8 @@
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearGridFilter"/>
-            <actionGroup ref="adminDataGridSelectPerPage" stepKey="selectNumberOfProductsPerPage">
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
                 <argument name="perPage" value="100"/>
             </actionGroup>
             <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>

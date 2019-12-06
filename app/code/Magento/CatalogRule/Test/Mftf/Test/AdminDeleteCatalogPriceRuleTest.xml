@@ -39,10 +39,10 @@
             <actionGroup ref="deleteProductBySku" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
             <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearCatalogRuleGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
             <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
