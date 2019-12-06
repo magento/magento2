@@ -25,11 +25,11 @@
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
             <!-- Go to tax rule page -->
-            <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="TaxRule1"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxWithZipCode"/>
             </actionGroup>
 
@@ -43,10 +43,10 @@
             <waitForPageLoad stepKey="waitForNewTaxRuleCreated"/>
 
             <!-- Go to tax rule page to create second Tax Rule-->
-            <actionGroup ref="addNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addSecondTaxRuleActionGroup"/>
             <fillField stepKey="fillSecondRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="TaxRule2"/>
 
-            <actionGroup ref="addNewTaxRateNoZip" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleSecondTaxWithZipCode"/>
             </actionGroup>
 
@@ -211,11 +211,11 @@
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <actionGroup ref="deleteProductTaxClass" stepKey="deleteFirstProductTaxClass">
+            <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteFirstProductTaxClass">
                 <argument name="taxClassName" value="TaxClasses1"/>
             </actionGroup>
 
-            <actionGroup ref="deleteProductTaxClass" stepKey="deleteSecondProductTaxClass">
+            <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteSecondProductTaxClass">
                 <argument name="taxClassName" value="TaxClasses2"/>
             </actionGroup>
 

@@ -90,7 +90,7 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!--Set Taxable Goods for Shipping Tax Class-->
-        <actionGroup ref="changeShippingTaxClass" stepKey="changeShippingTaxClass"/>
+        <actionGroup ref="ChangeShippingTaxClassActionGroup" stepKey="changeShippingTaxClass"/>
 
         <!--Adding Special price to product-->
         <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
