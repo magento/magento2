@@ -274,4 +274,33 @@ class DirectiveTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->imageAdapterMock);
     }
+
+    /**
+     * Test Execute With Deleted Image
+     *
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
+     */
+    public function testExecuteWithDeletedImage()
+    {
+        $exception = new \Exception('epic fail');
+        $placeholderPath = 'pub/static/adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
+        $this->prepareExecuteTest();
+
+        $this->imageAdapterMock->expects($this->at(0))
+            ->method('open')
+            ->with(self::IMAGE_PATH)
+            ->willThrowException($exception);
+        $this->wysiwygConfigMock->expects($this->once())
+            ->method('getSkinImagePlaceholderPath')
+            ->willReturn($placeholderPath);
+        $this->imageAdapterMock->expects($this->at(1))
+            ->method('open')
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception);
+
+        $this->wysiwygDirective->execute();
+    }
 }

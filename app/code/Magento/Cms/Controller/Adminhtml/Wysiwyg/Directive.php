@@ -4,6 +4,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 use Magento\Backend\App\Action;
@@ -13,6 +16,8 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Process template text for wysiwyg editor.
+ *
+ * Class Directive
  */
 class Directive extends Action implements HttpGetActionInterface
 {
@@ -73,10 +78,14 @@ class Directive extends Action implements HttpGetActionInterface
             /** @var Config $config */
             $config = $this->_objectManager->get(Config::class);
             $imagePath = $config->getSkinImagePlaceholderPath();
-            $image->open($imagePath);
-            $resultRaw->setHeader('Content-Type', $image->getMimeType());
-            $resultRaw->setContents($image->getImage());
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            try {
+                $image->open($imagePath);
+                $resultRaw->setHeader('Content-Type', $image->getMimeType());
+                $resultRaw->setContents($image->getImage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            } catch (\Exception $e) {
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            }
         }
         return $resultRaw;
     }
