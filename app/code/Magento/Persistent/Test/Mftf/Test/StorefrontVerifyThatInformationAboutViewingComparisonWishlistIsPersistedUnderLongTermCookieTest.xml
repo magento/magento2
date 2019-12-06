@@ -95,10 +95,10 @@
         </actionGroup>
         <!--The My Wishlist widget displays Simple Product 1 and Simple Product 2-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageToCheckProductsInWishlistSidebar"/>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductInWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductInWishlistSidebar">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSecondSimpleProductInWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSecondSimpleProductInWishlistSidebar">
             <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
 
@@ -150,7 +150,7 @@
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogout">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductInWishlistSidebarAfterLogout">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductInWishlistSidebarAfterLogout">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyComparedWidgetAfterLogout">
@@ -177,7 +177,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="openCategoryPageToCheckWidgets"/>
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="checkWelcomeMessageAfterLogin"/>
 
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProductNameInWishlistSidebarAfterLogin">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductNameInWishlistSidebarAfterLogin">
             <argument name="productVar" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogin">

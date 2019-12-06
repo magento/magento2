@@ -35,7 +35,7 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
         <openNewTab stepKey="openNewTab"/>
@@ -45,6 +45,6 @@
         <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
         <closeTab stepKey="closeSecondTab"/>
         <reloadPage stepKey="refreshPage"/>
-        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>
     </test>
 </tests>

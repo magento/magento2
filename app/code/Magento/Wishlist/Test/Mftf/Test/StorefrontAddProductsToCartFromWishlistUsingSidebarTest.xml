@@ -53,10 +53,10 @@
         <!--Add product to the cart from the Wishlist using the sidebar from the second category page-->
         <amOnPage url="{{StorefrontCategoryPage.url($$categorySecond.name$$)}}" stepKey="navigateToCategorySecondPage"/>
         <actionGroup ref="StorefrontSwitchCategoryViewToListMode" stepKey="switchCategoryViewToListMode"/>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebar" stepKey="checkSimpleProduct1InWishlistSidebar">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProduct1InWishlistSidebar">
             <argument name="productVar" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerAddProductToCartFromWishlistUsingSidebar" stepKey="addProduct1ToCartFromWishlistUsingSidebar">
+        <actionGroup ref="StorefrontCustomerAddProductToCartFromWishlistUsingSidebarActionGroup" stepKey="addProduct1ToCartFromWishlistUsingSidebar">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <!--Check that a customer on the same page as before-->

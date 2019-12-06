@@ -74,7 +74,7 @@
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        
+
         <!--  Add created product to Wishlist according to dataset and assert add product to wishlist success message -->
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
             <argument name="productVar" value="$$createBundleProduct$$"/>
@@ -90,6 +90,6 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.removeProduct}}" stepKey="clickRemoveButton"/>
 
         <!-- Assert Wishlist is empty -->
-        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="assertWishlistIsEmpty"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="assertWishlistIsEmpty"/>
     </test>
 </tests>
