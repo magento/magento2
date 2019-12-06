@@ -61,7 +61,7 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
         <!--Create a bundle product with ancillary data-->
-        <actionGroup ref="CreateBasicBundleProduct" stepKey="createBundledProduct">
+        <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProduct">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
 

@@ -6,24 +6,56 @@
   */
 -->
 
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AncillaryPrepBundleProduct">
+        <annotations>
+            <description>Requires Navigation to the Product Creation page. Fills out Name, Sku, and SEO information using the BundleProduct Data Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AncillaryPrepBundleProductActionGroup` instead -->
+        <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
+
+        <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="moveToSEOSection"/>
+        <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
+        <waitForPageLoad stepKey="WaitForDropDownSEO"/>
+
+        <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension"/>
+    </actionGroup>
+
+    <actionGroup name="FindProductToEdit">
+        <annotations>
+            <description>Clears the Backend Admin Grid Filters on the Backend Admin Product Grid page. Searches for the BundleProduct Data Entity. Then clicks on the first item in the Admin Grid. PLEASE NOTE: The Action Group values are Hardcoded.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `FindProductToEditActionGroup` instead -->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToProductCatalog"/>
+        <waitForPageLoad stepKey="WaitForCatalogProductPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <fillField userInput="{{BundleProduct.name}}" selector="#fulltext" stepKey="EnterProductNameInSearch"/>
+        <click stepKey="ClickSearch" selector="{{AdminProductFormBundleSection.searchButton}}"/>
+        <click stepKey="ClickOnProduct" selector="{{AdminProductFormBundleSection.firstCatalogProduct}}"/>
+        <waitForPageLoad stepKey="WaitForProductEditPageToLoad"/>
+    </actionGroup>
+
     <actionGroup name="CreateBasicBundleProduct">
         <annotations>
             <description>Requires Navigation to the Product Creation page. Fills out Name, Sku, and SEO information using the BundleProduct Data Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
         </annotations>
 
-        <!--PreReq: Go to bundle product creation page-->
-        <!--Product name and SKU-->
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateBasicBundleProductActionGroup` instead -->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
 
-        <!--Trigger SEO drop down-->
         <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSeoDropDown"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.seoDropdown}}" dependentSelector="{{AdminProductFormBundleSection.urlKey}}" visible="false" stepKey="openDropDownIfClosed"/>
         <waitForPageLoad stepKey="waitForDropDownSEO"/>
 
-        <!--Fill URL input-->
         <fillField userInput="{{BundleProduct.urlKey}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="fillsInSeoLinkExtension"/>
     </actionGroup>
 
@@ -31,6 +63,8 @@
         <annotations>
             <description>Requires Navigation to the Product Creation page. Adds Bundle Option with Two Products using the provided arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
         </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddBundleOptionWithTwoProductsActionGroup` instead -->
         <arguments>
             <argument name="x" type="string"/>
             <argument name="n" type="string"/>
@@ -70,6 +104,7 @@
             <description>Requires Navigation to the Product Creation page. Adds Bundle Option with One Product as specified in arguments. 'x' refers to Bundle option number. 'n' refers to the first number after x.</description>
         </annotations>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddBundleOptionWithOneProductActionGroup` instead -->
         <remove keyForRemoval="openProductFilters2"/>
         <remove keyForRemoval="fillProductSkuFilter2"/>
         <remove keyForRemoval="clickApplyFilters2"/>
@@ -89,6 +124,7 @@
             <argument name="prodTreeSku" type="string"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddBundleOptionWithThreeProductsActionGroup` instead -->
         <remove keyForRemoval="fillQuantity1"/>
         <remove keyForRemoval="fillQuantity2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters3" after="selectProduct2"/>
@@ -113,6 +149,7 @@
             <argument name="prodSixSku" type="string"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `AddBundleOptionWithSixProductsActionGroup` instead -->
         <remove keyForRemoval="fillQuantity1"/>
         <remove keyForRemoval="fillQuantity2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters3" after="selectProduct2"/>
@@ -155,8 +192,72 @@
             <argument name="deleteIndex" type="string"/>
         </arguments>
 
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `DeleteBundleOptionByIndexActionGroup` instead -->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <scrollTo selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" stepKey="scrollUpABit"/>
         <click selector="{{AdminProductFormBundleSection.deleteOption(deleteIndex)}}" stepKey="clickDeleteOption"/>
+    </actionGroup>
+
+    <actionGroup name="StorefrontAddBundleProductFromProductToCartWithMultiOption" extends="StorefrontAddBundleProductFromProductToCartActionGroup">
+        <annotations>
+            <description>Selects a Bundled Product option on the Bundled Product page. PLEASE NOTE: The Quantity selection is not available in the Action Group.</description>
+        </annotations>
+        <arguments>
+            <argument name="optionName" type="string"/>
+            <argument name="value" type="string"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `StorefrontAddBundleProductFromProductToCartWithMultiOptionActionGroup` instead -->
+        <selectOption selector="{{StorefrontBundledSection.multiselectOptionFourProducts(optionName)}}" userInput="{{value}}" stepKey="selectValue" before="clickAddBundleProductToCart"/>
+    </actionGroup>
+
+    <actionGroup name="fillMainBundleProductForm">
+        <annotations>
+            <description>Fills the Name, SKU and Stock Status fields.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="BundleProduct"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `FillMainBundleProductFormActionGroup` instead -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{product.name}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{product.sku}}" stepKey="fillProductName"/>
+        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{product.status}}" stepKey="selectStockStatus"/>
+    </actionGroup>
+
+    <actionGroup name="checkRequiredFieldsInBundleProductForm">
+        <annotations>
+            <description>Clears the Name and SKU fields when adding a Product and then verifies that they are required after attempting to Save.</description>
+        </annotations>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CheckRequiredFieldsInBundleProductFormActionGroup` instead -->
+        <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductSku"/>
+        <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductName"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeStillOnEditPage"/>
+        <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
+        <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
+    </actionGroup>
+
+    <actionGroup name="viewBundleProductInAdminGrid">
+        <annotations>
+            <description>Clears the Grid Filters on the Catalog Grid page and applies Filter by Name and Sku. Then checks to see if the Product exists in the 1st row. Then clears the Grid Filters again for future Tests.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="BundleProduct"/>
+            <argument name="thumbnail" defaultValue="ProductPlaceholderImage"/>
+        </arguments>
+
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `ViewBundleProductInAdminGridActionGroup` instead -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{product.name}}" stepKey="fillProductNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{product.type_id}}" stepKey="selectionProductType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.name}}"  stepKey="seeProductNameInGrid"/>
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
     </actionGroup>
 </actionGroups>

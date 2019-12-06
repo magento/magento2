@@ -46,9 +46,9 @@
             <!--Go to bundle product creation page-->
             <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
             <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
-            <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
+            <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
             <!-- Add Option, a "Radio Buttons" type option -->
-            <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts2">
+            <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
                 <argument name="x" value="0"/>
                 <argument name="n" value="1"/>
                 <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>

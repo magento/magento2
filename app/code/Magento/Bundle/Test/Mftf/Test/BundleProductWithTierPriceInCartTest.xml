@@ -37,8 +37,8 @@
         </after>
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
-        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainFieldsForBundle"/>
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption1">
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -46,7 +46,7 @@
             <argument name="optionTitle" value="Option1"/>
             <argument name="inputType" value="checkbox"/>
         </actionGroup>
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption2">
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption2">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$simpleProduct2.sku$$"/>

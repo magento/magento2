@@ -593,7 +593,7 @@
             <argument name="productName" value="$createBundleProduct.name$"/>
             <argument name="productUrlKey" value="$createBundleProduct.custom_attributes[url_key]$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAddBundleProductFromProductToCartWithMultiOption" stepKey="addProductToCart">
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartWithMultiOptionActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createBundleProduct.name$"/>
             <argument name="optionName" value="$createBundleOption1_1.name$"/>
             <argument name="value" value="$simpleProduct1.name$"/>
