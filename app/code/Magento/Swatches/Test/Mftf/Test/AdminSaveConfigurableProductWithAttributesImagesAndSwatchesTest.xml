@@ -89,7 +89,7 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <!-- Click "Create Configurations" button, select created product attribute using the same Quantity for all products. Click "Generate products" button -->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="addAttributeToProduct">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="addAttributeToProduct">
             <argument name="attributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
         </actionGroup>
         <!-- Using this action to concatenate 2 strings to have unique identifier for grid -->

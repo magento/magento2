@@ -98,7 +98,7 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
 
         <!-- Create configurations based off the visual swatch we created earlier -->
-        <actionGroup ref="createConfigurationsForAttributeWithImages" stepKey="createConfigurations">
+        <actionGroup ref="CreateConfigurationsForAttributeWithImagesActionGroup" stepKey="createConfigurations">
             <argument name="attributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
             <argument name="image" value="TestImageAdobe"/>
         </actionGroup>

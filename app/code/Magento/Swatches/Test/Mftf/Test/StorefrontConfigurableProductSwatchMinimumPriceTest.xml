@@ -60,59 +60,59 @@
             <argument name="option3" value="Large"/>
         </actionGroup>
         <!--Create configurable product with two attributes: Color and Size-->
-        <actionGroup ref="createConfigurableProductWithTwoAttributes" stepKey="createProduct">
+        <actionGroup ref="CreateConfigurableProductWithTwoAttributesActionGroup" stepKey="createProduct">
             <argument name="product" value="_defaultProduct"/>
             <argument name="category" value="$$createCategory$$"/>
             <argument name="attribute1" value="ProductColorAttribute"/>
             <argument name="attribute2" value="ProductSizeAttribute"/>
         </actionGroup>
         <!--Set Black-Small product price to 10-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeBlackSmallPrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlackSmallPrice">
             <argument name="productAttributes" value="Color: Black, Size: Small"/>
             <argument name="productPrice" value="10"/>
         </actionGroup>
         <!--Set Black-Medium product price to 11-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeBlackMediumPrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlackMediumPrice">
             <argument name="productAttributes" value="Color: Black, Size: Medium"/>
             <argument name="productPrice" value="11"/>
         </actionGroup>
         <!--Set Black-Large product price to 12-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeBlackLargePrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlackLargePrice">
             <argument name="productAttributes" value="Color: Black, Size: Large"/>
             <argument name="productPrice" value="12"/>
         </actionGroup>
         <!--Set White-Small product price to 14-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeWhiteSmallPrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeWhiteSmallPrice">
             <argument name="productAttributes" value="Color: White, Size: Small"/>
             <argument name="productPrice" value="14"/>
         </actionGroup>
         <!--Set White-Medium product price to 13-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeWhiteMediumPrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeWhiteMediumPrice">
             <argument name="productAttributes" value="Color: White, Size: Medium"/>
             <argument name="productPrice" value="13"/>
         </actionGroup>
         <!--Set White-Large product price to 15-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeWhiteLargePrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeWhiteLargePrice">
             <argument name="productAttributes" value="Color: White, Size: Large"/>
             <argument name="productPrice" value="15"/>
         </actionGroup>
         <!--Set Blue-Small product price to 18-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeBlueSmallPrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlueSmallPrice">
             <argument name="productAttributes" value="Color: Blue, Size: Small"/>
             <argument name="productPrice" value="18"/>
         </actionGroup>
         <!--Set Blue-Medium product price to 17-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeBlueMediumPrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlueMediumPrice">
             <argument name="productAttributes" value="Color: Blue, Size: Medium"/>
             <argument name="productPrice" value="17"/>
         </actionGroup>
         <!--Set Blue-Large product price to 16-->
-        <actionGroup ref="changeConfigurableProductChildProductPrice" stepKey="changeBlueLargePrice">
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeBlueLargePrice">
             <argument name="productAttributes" value="Color: Blue, Size: Large"/>
             <argument name="productPrice" value="16"/>
         </actionGroup>
         <!--Save configurable product-->
-        <actionGroup ref="saveConfigurableProduct" stepKey="saveProduct">
+        <actionGroup ref="SaveConfigurableProductActionGroup" stepKey="saveProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 

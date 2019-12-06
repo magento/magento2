@@ -54,12 +54,12 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
         <!--Add images to product attribute options-->
-        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionOne">
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionOne">
             <argument name="image" value="MagentoLogo"/>
             <argument name="frontend_label" value="{{visualSwatchAttribute.default_label}}"/>
             <argument name="label" value="{{visualSwatchOption1.default_label}}"/>
         </actionGroup>
-        <actionGroup ref="addUniqueImageToConfigurableProductOption" stepKey="addImageToConfigurableProductOptionTwo">
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionTwo">
             <argument name="image" value="TestImageNew"/>
             <argument name="frontend_label" value="{{visualSwatchAttribute.default_label}}"/>
             <argument name="label" value="{{visualSwatchOption2.default_label}}"/>

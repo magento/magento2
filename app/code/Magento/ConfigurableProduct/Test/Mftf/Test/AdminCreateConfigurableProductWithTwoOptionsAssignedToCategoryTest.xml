@@ -72,14 +72,14 @@
         <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
 
         <!--Create new attribute with two options -->
-        <actionGroup ref="addNewProductConfigurationAttribute" stepKey="createProductConfigurationAttribute">
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
 
         <!-- Change product configurations in grid -->
-        <actionGroup ref="changeProductConfigurationsInGrid" stepKey="changeProductConfigurationsInGrid">
+        <actionGroup ref="ChangeProductConfigurationsInGridActionGroup" stepKey="changeProductConfigurationsInGrid">
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
         </actionGroup>
@@ -88,7 +88,7 @@
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillConfigurableProductValues"/>
 
         <!-- Save configurable product; add product to new attribute set -->
-        <actionGroup ref="saveConfigurableProductWithNewAttributeSet" stepKey="saveConfigurableProduct"/>
+        <actionGroup ref="SaveConfigurableProductWithNewAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
 
         <!-- Assert child products in grid -->
         <actionGroup ref="viewProductInAdminGrid" stepKey="viewFirstChildProductInAdminGrid">
@@ -111,7 +111,7 @@
         <!--Assert configurable product in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="StorefrontCheckCategoryConfigurableProduct" stepKey="assertConfigurableProductInCategory">
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="assertConfigurableProductInCategory">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
         </actionGroup>
@@ -119,7 +119,7 @@
         <!--Assert configurable product on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage" after="assertConfigurableProductInCategory"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="storefrontCheckConfigurableProductOptions" stepKey="checkConfigurableProductOptions">
+        <actionGroup ref="StorefrontCheckConfigurableProductOptionsActionGroup" stepKey="checkConfigurableProductOptions">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
             <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
