@@ -22,31 +22,4 @@
         <fillField selector="{{AdminCartPriceRulesFormSection.maximumQtyDiscount}}" userInput="{{rule.maximumQtyDiscount}}" stepKey="fillMaximumQtyDiscount"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountStep}}" userInput="{{rule.discount_step}}" stepKey="fillDiscountStep"/>
     </actionGroup>
-
-    <actionGroup name="AdminCreateCartPriceRuleActionsSectionShippingAmountActionGroup">
-        <annotations>
-            <description>Clicks on the 'Apply to Shipping Amount' toggle.</description>
-        </annotations>
-
-        <click selector="{{AdminCartPriceRulesFormSection.applyToShippingAmount}}" stepKey="clickApplyToShipping"/>
-    </actionGroup>
-
-    <actionGroup name="AdminCreateCartPriceRuleActionsSectionSubsequentRulesActionGroup">
-        <annotations>
-            <description>Clicks on the 'Discard subsequent rules' toggle.</description>
-        </annotations>
-
-        <click selector="{{AdminCartPriceRulesFormSection.discardSubsequentRules}}" stepKey="clickApplyToShipping"/>
-    </actionGroup>
-
-    <actionGroup name="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup">
-        <annotations>
-            <description>Selects the provided option in the 'Free Shipping' dropdown menu.</description>
-        </annotations>
-        <arguments>
-            <argument name="freeShippingOption" type="string"/>
-        </arguments>
-
-        <selectOption selector="{{AdminCartPriceRulesFormSection.freeShipping}}" userInput="{{freeShippingOption}}" stepKey="selectForMatchingItemsOnly"/>
-    </actionGroup>
 </actionGroups>

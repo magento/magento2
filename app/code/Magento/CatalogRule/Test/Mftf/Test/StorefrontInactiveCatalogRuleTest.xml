@@ -25,7 +25,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
-            <actionGroup stepKey="selectLoggedInCustomers" ref="selectNotLoggedInCustomerGroup"/>
+            <actionGroup stepKey="selectLoggedInCustomers" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
             <scrollToTopOfPage stepKey="scrollToTop"/>
             <click stepKey="setInactive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
             <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
