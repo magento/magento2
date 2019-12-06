@@ -59,7 +59,7 @@
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeightForProduct"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
         <actionGroup ref="saveProductForm" stepKey="saveDownloadableProductForm"/>

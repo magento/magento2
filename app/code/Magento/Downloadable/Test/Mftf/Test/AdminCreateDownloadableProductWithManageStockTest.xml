@@ -76,12 +76,12 @@
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
 
         <!-- Add first downloadable link -->
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addFirstDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addFirstDownloadableProductLink">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
 
         <!-- Add second downloadable link -->
-        <actionGroup ref="addDownloadableProductLink" stepKey="addSecondDownloadableProductLink">
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addSecondDownloadableProductLink">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
