@@ -126,19 +126,19 @@
         </actionGroup>
 
         <!--Verify that Black option's minimum price is 16-->
-        <actionGroup ref="StorefrontAssertSwatchOptionPrice" stepKey="assertMinimumPriceForBlackOption">
+        <actionGroup ref="StorefrontAssertSwatchOptionPriceActionGroup" stepKey="assertMinimumPriceForBlackOption">
             <argument name="optionName" value="Black"/>
             <argument name="optionPrice" value="10.00"/>
         </actionGroup>
 
         <!--Verify that White option's minimum price is 16-->
-        <actionGroup ref="StorefrontAssertSwatchOptionPrice" stepKey="assertMinimumPriceForWhiteOption">
+        <actionGroup ref="StorefrontAssertSwatchOptionPriceActionGroup" stepKey="assertMinimumPriceForWhiteOption">
             <argument name="optionName" value="White"/>
             <argument name="optionPrice" value="13.00"/>
         </actionGroup>
 
         <!--Verify that Blue option's minimum price is 16-->
-        <actionGroup ref="StorefrontAssertSwatchOptionPrice" stepKey="assertMinimumPriceForBlueOption">
+        <actionGroup ref="StorefrontAssertSwatchOptionPriceActionGroup" stepKey="assertMinimumPriceForBlueOption">
             <argument name="optionName" value="Blue"/>
             <argument name="optionPrice" value="16.00"/>
         </actionGroup>
