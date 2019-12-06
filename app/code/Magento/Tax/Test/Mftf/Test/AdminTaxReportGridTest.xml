@@ -104,10 +104,10 @@
         <waitForPageLoad stepKey="waitForPage" time="60"/>
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seeNewOrderPageTitle"/>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addFirstProductToOrder" after="scrollToTopOfOrderFormPage">
             <argument name="product" value="$$firstProduct$$"/>
         </actionGroup>
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSecondProductToOrder" after="addFirstProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProductToOrder" after="addFirstProductToOrder">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
 
@@ -116,15 +116,15 @@
         <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail" after="selectCustomerGroup"/>
 
         <!--Fill customer address information-->
-        <actionGroup ref="fillOrderCustomerInformation" stepKey="fillCustomerAddress" after="fillCustomerEmail">
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="fillCustomerEmail">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
         <!-- Select shipping -->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping" after="fillCustomerAddress"/>
         <!-- Checkout select Check/Money Order payment -->
-        <actionGroup ref="SelectCheckMoneyPaymentMethod" after="selectFlatRateShipping" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" after="selectFlatRateShipping" stepKey="selectCheckMoneyPayment"/>
         <!--Submit Order and verify information-->
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" after="selectCheckMoneyPayment" stepKey="clickSubmitOrder"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="clickSubmitOrder"/>

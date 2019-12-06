@@ -149,7 +149,7 @@
         <see userInput="You saved the rule." stepKey="RuleSaved"/>
 
         <!--Create new order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="CreateNewOrder">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="storeView" value="customStoreView"/>
         </actionGroup>

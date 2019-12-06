@@ -66,7 +66,7 @@
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
@@ -83,7 +83,7 @@
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
         <waitForPageLoad stepKey="waitShipmentSectionToLoad"/>
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOption">
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOption">
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
 

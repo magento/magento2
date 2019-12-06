@@ -56,7 +56,7 @@
         <!-- Login as admin -->
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
         <!--Open order by Id-->
-        <actionGroup ref="OpenOrderById" stepKey="openOrderById">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
             <argument name="orderId" value="$createGuestCart.return$"/>
         </actionGroup>
         <!--Reorder-->

@@ -81,7 +81,7 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
 

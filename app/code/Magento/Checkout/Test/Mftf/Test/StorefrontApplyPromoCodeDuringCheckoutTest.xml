@@ -80,7 +80,7 @@
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
 
         <!-- Verify total on order page -->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>

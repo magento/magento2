@@ -98,17 +98,17 @@
         <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
 
         <!--Create New Order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!--Add a product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
         <!--Select FlatRate shipping method-->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
 
         <!--Select Braintree online Payment method -->
         <actionGroup ref="AdminOrderBraintreeFillActionGroup" stepKey="selectCreditCardPayment"/>
@@ -119,7 +119,7 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeOrderSuccessMessage" after="waitForSubmitOrder"/>
 
         <!-- Create New invoice-->
-        <actionGroup ref="adminFastCreateInvoice" stepKey="createInvoice"/>
+        <actionGroup ref="AdminFastCreateInvoiceActionGroup" stepKey="createInvoice"/>
 
         <!--Get access to Credit Memo page from Invoice page-->
         <click selector="{{AdminInvoiceMainActionsSection.openNewCreditMemoFromInvoice}}" stepKey="clickCreateNewCreditMemo"/>

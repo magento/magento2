@@ -76,7 +76,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Search for Order in the order grid -->
         <comment userInput="Search for Order in the order grid" stepKey="searchOrderInGrid"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchingOrder"/>

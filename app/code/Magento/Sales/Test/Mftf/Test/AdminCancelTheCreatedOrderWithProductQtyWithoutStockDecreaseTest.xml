@@ -47,12 +47,12 @@
         </after>
 
         <!--Create new customer order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!--Add Simple product to order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToTheOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -63,7 +63,7 @@
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
 
         <!--Verify order information-->
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Assert Simple Product Quantity in backend after order -->
@@ -80,13 +80,13 @@
         <waitForPageLoad stepKey="waitForPageLoad5"/>
 
         <!-- Filter Order using orderId -->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction"/>
 
         <!-- Cancel the Order -->
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelPendingOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
 
         <!-- Assert Simple Product Quantity in backend after Cancelling the order -->
         <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct1">
@@ -102,7 +102,7 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
 
         <!-- Filter Order using orderId -->
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById1">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById1">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
         <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction1"/>
