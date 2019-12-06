@@ -88,7 +88,6 @@ class ValidateCustomerData extends \PHPUnit\Framework\TestCase
     public function invalidEmailAddressDataProvider(): array
     {
         return [
-            ['t@rioe.d5'],
             ['plainaddress'],
             ['jØrgen@somedomain.com'],
             ['#@%^%#$@#$@#.com'],
@@ -98,7 +97,6 @@ class ValidateCustomerData extends \PHPUnit\Framework\TestCase
             ['email@example@example.com'],
             ['email@example.com (Joe Smith)'],
             ['email@example'],
-            ['email@111.222.333.44444'],
             ['“email”@example.com'],
         ];
     }
