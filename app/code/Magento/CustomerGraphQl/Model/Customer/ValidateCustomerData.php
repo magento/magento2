@@ -52,7 +52,7 @@ class ValidateCustomerData
      */
     public function execute(array $customerData): void
     {
-        if (!$this->emailIsValid($customerData['email'])) {
+        if (!$this->emailAddressValidator->isValid($customerData['email'])) {
             throw new GraphQlInputException(
                 __('"%1" is not a valid email address.', $customerData['email'])
             );
@@ -75,27 +75,5 @@ class ValidateCustomerData
                 __('Required parameters are missing: %1', [implode(', ', $errorInput)])
             );
         }
-    }
-
-    /**
-     * Validate if email address is valid
-     *
-     * In order to work the same as in admin panel, the patter for validation was selected from 'validate-email'
-     * function in app/code/Magento/Ui/view/base/web/js/lib/validation/rules.js
-     *
-     * @param string $email
-     *
-     * @return bool
-     */
-    private function emailIsValid(string $email): bool
-    {
-        $regex = "/^([a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.(["
-            . "a-z0-9,!\#$%&'\*\+\/=\?\^_`\{\|\}~-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+)*@([a-z0-9-"
-            . "]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}])+(\.([a-z0-9-]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDC"
-            . "F}\x{FDF0}-\x{FFEF}])+)*\.(([a-z]|[\x{00A0}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFEF}]){2,})$/iu";
-
-        return !empty($email)
-            && preg_match($regex, $email)
-            && $this->emailAddressValidator->isValid($email);
     }
 }
