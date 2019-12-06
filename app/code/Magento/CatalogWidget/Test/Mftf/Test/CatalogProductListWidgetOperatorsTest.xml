@@ -38,7 +38,7 @@
             <createData entity="_defaultBlock" stepKey="createPreReqBlock"/>
             <!--User log in on back-end as admin-->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
 
         <!--Open block with widget.-->
@@ -145,7 +145,7 @@
         <dontSeeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="dontSeeElementByPrice100s"/>
 
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
