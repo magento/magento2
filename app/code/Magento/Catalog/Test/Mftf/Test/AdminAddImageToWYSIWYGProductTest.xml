@@ -29,7 +29,7 @@
 
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="waitForPageLoadProductCreatePage"/>
-        <actionGroup ref="fillMainProductForm" stepKey="fillBasicProductInfo" />
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
 
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />

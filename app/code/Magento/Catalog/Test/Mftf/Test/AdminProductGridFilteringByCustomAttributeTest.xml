@@ -22,7 +22,7 @@
         <before>
             <!--Login as admin and delete all products -->
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <!--Create dropdown product attribute-->
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
             <!--Create attribute options-->
@@ -59,7 +59,7 @@
                 <argument name="product" value="$$createFirstProduct$$"/>
             </actionGroup>
             <selectOption selector="{{AdminProductFormSection.customSelectField($$createDropdownAttribute.attribute[attribute_code]$$)}}" userInput="$$createFirstProductAttributeOption.option[store_labels][0][label]$$" stepKey="setFirstAttributeValue"/>
-            <actionGroup ref="saveProductForm" stepKey="saveFirstProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
             <!--Update second product-->
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSecondProduct">
                 <argument name="product" value="$$createSecondProduct$$"/>
@@ -68,7 +68,7 @@
                 <argument name="product" value="$$createSecondProduct$$"/>
             </actionGroup>
             <selectOption selector="{{AdminProductFormSection.customSelectField($$createDropdownAttribute.attribute[attribute_code]$$)}}" userInput="$$createSecondProductAttributeOption.option[store_labels][0][label]$$" stepKey="setSecondAttributeValue"/>
-            <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
             <!--Update third product-->
             <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForThirdProduct">
                 <argument name="product" value="$$createThirdProduct$$"/>
@@ -77,7 +77,7 @@
                 <argument name="product" value="$$createThirdProduct$$"/>
             </actionGroup>
             <selectOption selector="{{AdminProductFormSection.customSelectField($$createDropdownAttribute.attribute[attribute_code]$$)}}" userInput="$$createThirdProductAttributeOption.option[store_labels][0][label]$$" stepKey="setThirdAttributeValue"/>
-            <actionGroup ref="saveProductForm" stepKey="saveThirdProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveThirdProduct"/>
         </before>
         <after>
             <!--Delete products-->
@@ -88,7 +88,7 @@
             <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
             <!--Delete category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultView" stepKey="NavigateToAndResetProductGridToDefaultViewAfterTest"/>
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultViewAfterTest"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>

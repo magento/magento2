@@ -41,8 +41,8 @@
         <openNewTab stepKey="openNewTab"/>
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
         <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
-        <actionGroup ref="AdminSetProductDisabled" stepKey="disableProduct"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeSecondTab"/>
         <reloadPage stepKey="refreshPage"/>
         <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>

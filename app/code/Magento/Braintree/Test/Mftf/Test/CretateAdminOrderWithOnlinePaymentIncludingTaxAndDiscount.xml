@@ -95,7 +95,7 @@
         <!--Adding Special price to product-->
         <amOnPage url="{{AdminProductEditPage.url($$simpleProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
         <!--Create New Order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">

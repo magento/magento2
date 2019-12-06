@@ -41,7 +41,7 @@
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName($$createAttributeSet.attribute_set_name$$)}}" stepKey="clickOnAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad"/>
         <!--Assign Attribute to the Group and save the attribute set -->
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttribute">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttribute">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="$$attribute.attribute_code$$"/>
         </actionGroup>
@@ -49,11 +49,12 @@
         <waitForPageLoad stepKey="waitForPageToSave"/>
         <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
         <!--Delete product attribute from product attribute grid -->
-        <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
+        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
             <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
         </actionGroup>
+        <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
         <!--Confirm Attribute is not present in Product Attribute Grid -->
-        <actionGroup ref="filterProductAttributeByAttributeCode" stepKey="filterAttribute">
+        <actionGroup ref="FilterProductAttributeByAttributeCodeActionGroup" stepKey="filterAttribute">
             <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <see selector="{{AdminProductAttributeGridSection.FirstRow}}" userInput="We couldn't find any records." stepKey="seeEmptyRow"/>

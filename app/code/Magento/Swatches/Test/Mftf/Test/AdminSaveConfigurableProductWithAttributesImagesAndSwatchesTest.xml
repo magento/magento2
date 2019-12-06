@@ -59,9 +59,10 @@
         </before>
         <after>
             <!-- Delete product attribute and clear grid filter -->
-            <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
                 <argument name="ProductAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearAttributesGridFilter"/>
             <!--Clear products grid filter-->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
@@ -73,19 +74,19 @@
         <!-- Add created product attribute to the Default set -->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
-        <actionGroup ref="AssignAttributeToGroup" stepKey="assignAttributeToGroup">
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
         </actionGroup>
-        <actionGroup ref="SaveAttributeSet" stepKey="saveAttributeSet"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
 
         <!-- Create configurable product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <!-- Fill all the necessary information such as weight, name, SKU etc -->
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <!-- Click "Create Configurations" button, select created product attribute using the same Quantity for all products. Click "Generate products" button -->
@@ -100,10 +101,10 @@
         <attachFile selector="{{AdminDataGridTableSection.rowTemplate({$attributeCodeAdobeSmall})}}{{AdminProductFormConfigurationsSection.fileUploaderInput}}" userInput="{{TestImageAdobe.file}}" stepKey="uploadImageForSecondProduct"/>
 
         <!-- Click "Save" button -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Delete all created product -->
-        <actionGroup ref="deleteProductBySku" stepKey="deleteCreatedProducts">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
         </actionGroup>
     </test>

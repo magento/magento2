@@ -21,7 +21,7 @@
         </before>
         <after>
             <!-- Remove attribute -->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="visualSwatchAttribute"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -103,7 +103,7 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}"
                                stepKey="waitForSuccessMessage"/>
 
-        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
             <argument name="ProductAttribute" value="visualSwatchAttribute"/>
         </actionGroup>
         <!-- Check attribute data -->

@@ -45,7 +45,7 @@
         </actionGroup>
         <!--Step 2: Open the Product Page and add the product to shopping cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsLoggedUser"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsLoggedUser">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsLoggedUser">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <!--Step 3: Log out, reset persistent cookie and go to homepage-->
@@ -56,7 +56,7 @@
         <waitForPageLoad stepKey="waitHomePageLoadAfterResetCookie"/>
         <!--Step 4: Add the product to shopping cart and open cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsGuestUser"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsGuestUser">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsGuestUser">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>

@@ -23,25 +23,25 @@
         </before>
         <after>
             <!-- Delete configurable product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="ApiConfigurableProduct"/>
             </actionGroup>
 
             <!-- Delete children products -->
-            <actionGroup ref="deleteProductBySku" stepKey="deleteFirstChildProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute1.sku}}"/>
             </actionGroup>
-            <actionGroup ref="deleteProductBySku" stepKey="deleteSecondChildProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
             </actionGroup>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="ProductAttribute" value="colorProductAttribute"/>
             </actionGroup>
 
             <!-- Delete attribute set -->
-            <actionGroup ref="deleteAttributeSetByLabel" stepKey="deleteAttributeSet">
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
                 <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
 
@@ -55,7 +55,7 @@
         <!-- Create configurable product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
         <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="createConfigurableProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 
@@ -90,7 +90,7 @@
         <!-- Find configurable product in grid -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
         <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedConfigurableProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
 

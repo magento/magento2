@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Delete grouped product -->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
 
@@ -47,7 +47,7 @@
         </after>
 
         <!-- Create new grouped product -->
-        <actionGroup ref="GoToSpecifiedCreateProductPage" stepKey="createGroupedProduct">
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createGroupedProduct">
             <argument name="productType" value="grouped"/>
         </actionGroup>
 
@@ -70,7 +70,7 @@
         <actionGroup ref="AdminSetProductDesignSettingsActionGroup" stepKey="setProductDesignSettings"/>
 
         <!-- Save grouped product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Open created simple product -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
@@ -86,7 +86,7 @@
         </actionGroup>
 
         <!-- Save simple product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveBtn"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveBtn"/>
 
         <!-- Open grouped product page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
@@ -100,7 +100,7 @@
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="{{ApiSimpleSingleQty.quantity}}" stepKey="fillFieldQtyInput"/>
 
         <!-- Assert Gift Option product settings is present -->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage6">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage6">
             <argument name="productName" value="GroupedProduct.name"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart"/>
@@ -120,7 +120,7 @@
         </actionGroup>
 
         <!-- Assert product is assigned to websites -->
-        <actionGroup ref="AssertProductIsAssignedToWebsite" stepKey="seeCustomWebsiteIsChecked">
+        <actionGroup ref="AssertProductIsAssignedToWebsiteActionGroup" stepKey="seeCustomWebsiteIsChecked">
             <argument name="website" value="$createWebsite.website[name]$"/>
         </actionGroup>
 
@@ -135,7 +135,7 @@
         </actionGroup>
 
         <!-- Save grouped product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Open created simple product -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct">
@@ -149,7 +149,7 @@
         <actionGroup ref="AdminSwitchProductGiftMessageStatusActionGroup" stepKey="disableGiftMessageSettings"/>
 
         <!-- Save product form -->
-        <actionGroup ref="saveProductForm" stepKey="clickSaveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveSimpleProduct"/>
 
         <!-- Verify Url Key after changing -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">

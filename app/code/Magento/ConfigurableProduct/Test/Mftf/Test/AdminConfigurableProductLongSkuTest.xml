@@ -44,7 +44,7 @@
 
         <after>
             <!--Clean up products-->
-            <actionGroup ref="deleteProductByName" stepKey="cleanUpProducts">
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="cleanUpProducts">
                 <argument name="sku" value="{{ProductWithLongNameSku.sku}}"/>
                 <argument name="name" value="{{ProductWithLongNameSku.name}}"/>
             </actionGroup>

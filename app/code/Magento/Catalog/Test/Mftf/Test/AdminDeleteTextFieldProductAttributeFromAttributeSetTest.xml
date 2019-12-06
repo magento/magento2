@@ -47,7 +47,7 @@
         <!--Open Product Index Page and filter the product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct2"/>
         </actionGroup>
         <!--Verify Created Product Attribute displayed in Product page -->
@@ -55,11 +55,12 @@
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <seeElement selector="{{AdminProductFormSection.newAddedAttribute($$attribute.attribute_code$$)}}" stepKey="seeProductAttributeIsAdded"/>
         <!--Delete product attribute from product attribute grid -->
-        <actionGroup ref="deleteProductAttributeByAttributeCode" stepKey="deleteProductAttribute">
+        <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute">
             <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
         </actionGroup>
+        <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
         <!-- Confirm attribute is not present in product attribute grid -->
-        <actionGroup ref="filterProductAttributeByAttributeCode" stepKey="filterAttribute">
+        <actionGroup ref="FilterProductAttributeByAttributeCodeActionGroup" stepKey="filterAttribute">
             <argument name="ProductAttributeCode" value="$$attribute.attribute_code$$"/>
         </actionGroup>
         <see stepKey="seeEmptyRow" selector="{{AdminProductAttributeGridSection.FirstRow}}" userInput="We couldn't find any records."/>
@@ -77,7 +78,7 @@
         <!--Verify Product Attribute is not present in Product Index Page -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductIndexPage"/>
         <waitForPageLoad stepKey="waitForProductIndexPageToLoad1"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProduct1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct1">
             <argument name="product" value="SimpleProduct2"/>
         </actionGroup>
         <!--Verify Product Attribute is not present in Product page -->

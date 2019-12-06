@@ -83,7 +83,7 @@
         <actionGroup ref="AdminFillProductCountryOfManufactureActionGroup" stepKey="fillCountryOfManufacture">
             <argument name="countryId" value="DE"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
         <!--Place for order using FedEx shipping method-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">

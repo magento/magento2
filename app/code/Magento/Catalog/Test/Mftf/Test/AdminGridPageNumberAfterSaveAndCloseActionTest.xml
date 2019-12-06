@@ -25,8 +25,8 @@
             <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
             <waitForPageLoad stepKey="waitForProductIndexPage"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridToDefaultView"/>
-            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteProductIfTheyExist"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProductIfTheyExist"/>
             <createData stepKey="category1" entity="SimpleSubCategory"/>
             <createData stepKey="product1" entity="SimpleProduct">
                 <requiredEntity createDataKey="category1"/>

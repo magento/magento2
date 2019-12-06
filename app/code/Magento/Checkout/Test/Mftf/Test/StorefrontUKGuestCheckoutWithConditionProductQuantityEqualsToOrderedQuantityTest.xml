@@ -29,7 +29,7 @@
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
@@ -83,7 +83,7 @@
         <actionGroup ref="AdminAssertOrderAvailableButtonsActionGroup" stepKey="assertOrderButtons"/>
 
         <!-- Assert Product Quantity in backend reduced after order processed -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
@@ -92,7 +92,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="seeProductStockStatus"/>
 
         <!-- Assert Product is Out of Stock in frontend -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="assertProductInStorefront">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="assertProductInStorefront">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="Out Of Stock" stepKey="seeProductDisplayedAsOutOfStock"/>

@@ -67,7 +67,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Assert Simple Product Quantity in backend after order -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
@@ -89,7 +89,7 @@
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
 
         <!-- Assert Simple Product Quantity in backend after Cancelling the order -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct1">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct1">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad1"/>
@@ -114,7 +114,7 @@
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder1"/>
 
         <!-- Assert Simple Product Quantity in backend after Reorder -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct2">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct2">
             <argument name="productSku" value="$$simpleProduct.sku$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad2"/>

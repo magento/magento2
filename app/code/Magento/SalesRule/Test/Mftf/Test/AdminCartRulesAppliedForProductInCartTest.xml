@@ -36,7 +36,7 @@
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
 
-            <actionGroup ref="deleteProductBySku" stepKey="deleteBundleProduct">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
@@ -52,10 +52,10 @@
         <!--Start creating a bundle product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="waitForProductList"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <pressKey selector="{{AdminProductFormSection.productSku}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="enter"/>
@@ -83,7 +83,7 @@
         </actionGroup>
         <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Fixed" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductFormBundleSection.bundlePriceValue}}" userInput="200" stepKey="fillPriceValue"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Create cart price rule-->
         <actionGroup ref="AdminCreateCartPriceRuleWithConditionsActionGroup" stepKey="createRule">

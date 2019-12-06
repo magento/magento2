@@ -95,21 +95,21 @@
         </after>
 
         <!-- Add special prices for products -->
-        <actionGroup ref="goToProductPageViaID" stepKey="goToFirstChildProduct">
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToFirstChildProduct">
             <argument name="productId" value="$$createFirstConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForFirstProduct">
             <argument name="price" value="{{specialProductPrice.price}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveFirstProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
 
-        <actionGroup ref="goToProductPageViaID" stepKey="goToSecondChildProduct">
+        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToSecondChildProduct">
             <argument name="productId" value="$$createSecondConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForSecondProduct">
             <argument name="price" value="{{specialProductPrice.price}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveSecondProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
 
         <!-- Create a new catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">

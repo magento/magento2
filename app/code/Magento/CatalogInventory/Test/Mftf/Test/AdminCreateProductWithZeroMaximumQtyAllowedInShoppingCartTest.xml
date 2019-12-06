@@ -75,6 +75,6 @@
             <argument name="qty" value="50"/>
         </actionGroup>
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" stepKey="waitForModalFormToDisappear"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
     </test>
 </tests>

@@ -37,7 +37,7 @@
             <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
                 <argument name="perPage" value="100"/>
             </actionGroup>
-            <actionGroup ref="deleteProductsIfTheyExist" stepKey="deleteAllProducts"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
 
             <!-- Delete additional store views -->
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFirstStoreView">
@@ -48,7 +48,7 @@
             </actionGroup>
 
             <!-- Delete category -->
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="Gear"/>
             </actionGroup>
 

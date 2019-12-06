@@ -39,7 +39,7 @@
         <!-- Create product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillMainProductForm">
@@ -50,11 +50,11 @@
         <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductSection"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForFilter"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku1">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption1"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridBySku2">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkOption2"/>
@@ -62,7 +62,7 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
 
         <!-- Save product -->
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToProducts"/>

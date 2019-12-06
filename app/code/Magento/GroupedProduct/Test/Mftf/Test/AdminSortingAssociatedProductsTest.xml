@@ -94,7 +94,7 @@
         </before>
         <after>
             <!--Delete created grouped product-->
-            <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteProduct">
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
@@ -129,8 +129,8 @@
         <!--Create grouped Product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
@@ -142,7 +142,7 @@
         <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterGroupedProducts">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
             <argument name="sku" value="api-simple-product"/>
         </actionGroup>
 
@@ -153,13 +153,13 @@
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
         <waitForPageLoad stepKey="waitForProductsAdded"/>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Open created Product group-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetFiltersIfExist"/>
-        <actionGroup ref="searchProductGridByKeyword" stepKey="searchProductGridForm">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGridForm">
             <argument name="keyword" value="GroupedProduct.name"/>
         </actionGroup>
         <click selector="{{AdminProductGridSection.selectRowBasedOnName(GroupedProduct.name)}}" stepKey="openGroupedProduct"/>

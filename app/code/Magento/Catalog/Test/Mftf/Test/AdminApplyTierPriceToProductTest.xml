@@ -32,7 +32,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
             <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -51,7 +51,7 @@
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="Discount" stepKey="selectProductTierPriceValueType1"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="10" stepKey="selectProductTierPricePriceInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin1">
             <argument name="Customer" value="$$createSimpleUSCustomer$$" />
         </actionGroup>
@@ -79,7 +79,7 @@
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" time="30" stepKey="waitForSelectCustomerGroupNameAttribute1"/>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="General" stepKey="selectCustomerGroupGeneral"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton2"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage3"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_1"/>
@@ -110,7 +110,7 @@
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('1')}}" userInput="Discount" stepKey="selectProductTierPriceValueType2"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="18" stepKey="selectProductTierPricePriceInput18"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton3"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct3"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage5"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_2"/>
@@ -132,7 +132,7 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '18')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow1"/>
         <fillField userInput="10" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="fillProductQuantity1"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCheckoutFromMinicart"/>
@@ -169,7 +169,7 @@
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton4"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="25" stepKey="selectProductTierPricePercentageValue2"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton4"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct4"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
         <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCartPage1"/>
         <waitForPageLoad time="30" stepKey="waitForShoppingCartPagePageLoad1"/>
         <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
@@ -239,7 +239,7 @@
         <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
         <click selector="//tr//button[@data-action='remove_row']" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct5"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton6"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton5"/>
@@ -291,7 +291,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -309,7 +309,7 @@
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="Discount" stepKey="selectProductTierPriceValueType"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="0.1" stepKey="selectProductTierPricePriceInput"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="goProductPageOnStorefront"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('99.90')}}" stepKey="assertProductFinalPriceProductPage"/>

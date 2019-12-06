@@ -11,7 +11,7 @@
         <!--Create Downloadable Product-->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitProductPageDownloadable" after="seeSimpleProductInGrid"/>
         <waitForPageLoad stepKey="waitForProductPageLoadDownloadable" after="visitProductPageDownloadable"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateDownloadableProduct" after="waitForProductPageLoadDownloadable">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
         <actionGroup ref="FillMainDownloadableProductFormActionGroup" stepKey="fillMainProductFormDownloadable" after="goToCreateDownloadableProduct">
@@ -45,14 +45,14 @@
         </actionGroup>
 
         <!--Save Product-->
-        <actionGroup ref="saveProductForm" stepKey="saveDownloadableProduct" after="addDownloadableSampleUrl"/>
-        <actionGroup ref="viewProductInAdminGrid" stepKey="viewDownloadableProductInGrid" after="saveDownloadableProduct">
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadableProduct" after="addDownloadableSampleUrl"/>
+        <actionGroup ref="ViewProductInAdminGridActionGroup" stepKey="viewDownloadableProductInGrid" after="saveDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
         <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
         <comment userInput="Clean up downloadable product" stepKey="cleanUpDownloadableProduct" after="deleteSimpleProduct"/>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteDownloadableProduct" after="cleanUpDownloadableProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteDownloadableProduct" after="cleanUpDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
     </test>

@@ -63,7 +63,7 @@
 
         <!--Proceed to store front and place an order with free shipping using created coupon-->
         <!--Add product to card-->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="AddProductToCard">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
             <argument name="product" value="$$simpleproduct$$"/>
         </actionGroup>
 

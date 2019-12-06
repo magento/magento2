@@ -30,17 +30,17 @@
         <after>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteDuplicatedProduct">
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteDuplicatedProduct">
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
-            <actionGroup ref="resetProductGridToDefaultView" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <!--Delete product attributes-->
             <comment userInput="Delete product attributes" stepKey="deleteCommentAttributes"/>
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductAttribute">
+            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="ProductAttribute" value="colorProductAttribute"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridFirst"/>
-            <actionGroup ref="deleteProductAttributeByLabel" stepKey="deleteProductSecondAttribute">
+            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductSecondAttribute">
                 <argument name="ProductAttribute" value="productAttributeColor"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridSecond"/>
@@ -51,11 +51,11 @@
         <comment userInput="Create attribute and options for product" stepKey="commentCreateAttributesAndOptions"/>
         <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct1">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct1">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProductForm"/>
-        <actionGroup ref="AdminCreateAttributeFromProductPageWithScope" stepKey="createAttributeForProduct">
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <actionGroup ref="AdminCreateAttributeFromProductPageWithScopeActionGroup" stepKey="createAttributeForProduct">
             <argument name="attributeName" value="{{colorProductAttribute.default_label}}"/>
             <argument name="attributeType" value="{{colorProductAttribute.input_type}}"/>
             <argument name="scope" value="Global"/>
@@ -111,7 +111,7 @@
         <waitForPageLoad stepKey="waitForSummaryPageLoad"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonToGenerateConfigs"/>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--Duplicate the product-->
         <comment userInput="Duplicate the product" stepKey="commentDuplicateProduct"/>
         <actionGroup ref="AdminFormSaveAndDuplicate" stepKey="saveAndDuplicateProductForm"/>
@@ -120,8 +120,8 @@
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="1" stepKey="selectInStock"/>
         <!--Change product image-->
         <comment userInput="Change product image" stepKey="commentChangeProductImage"/>
-        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+        <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="TestImageAdobe"/>
         </actionGroup>
         <!--Disable configurations-->
@@ -132,10 +132,10 @@
         <actionGroup ref="AdminConfigurableProductDisableConfigurationsActionGroup" stepKey="disableSecondConfig">
             <argument name="productName" value="{{colorConfigurableProductAttribute2.name}}"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveDuplicatedProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProductForm"/>
         <!--Create new configurations with another attribute-->
         <comment userInput="Create new configurations with another attribute" stepKey="commentCreateNewConfigurations"/>
-        <actionGroup ref="AdminCreateAttributeFromProductPageWithScope" stepKey="createAttributeForDuplicatedProduct">
+        <actionGroup ref="AdminCreateAttributeFromProductPageWithScopeActionGroup" stepKey="createAttributeForDuplicatedProduct">
             <argument name="attributeName" value="{{productAttributeColor.default_label}}"/>
             <argument name="attributeType" value="{{productAttributeColor.input_type}}"/>
             <argument name="scope" value="Global"/>
@@ -187,7 +187,7 @@
         <waitForPageLoad stepKey="waitForSummaryPageLoadForDuplicatedProduct"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
-        <actionGroup ref="saveProductForm" stepKey="saveDuplicatedProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProduct"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <!--Assert configurable product in category-->

@@ -39,7 +39,7 @@
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
@@ -56,7 +56,7 @@
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySku">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInGrid"/>
@@ -97,11 +97,11 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleProduct2.quantity}}" stepKey="fillProductQty"/>
         <clearField selector="{{AdminProductFormSection.productWeight}}" stepKey="clearWeightField"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeight"/>
-        <actionGroup ref="saveProductForm" stepKey="saveVirtualProductForm"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
         <!--Assert virtual product on Admin product page grid-->
         <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForVirtual"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySkuForVirtual">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForVirtual">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeVirtualProductNameInGrid"/>
@@ -143,7 +143,7 @@
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="deleteAllDuplicateProductUsingProductGrid" stepKey="deleteAllDuplicateProducts">
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
@@ -161,7 +161,7 @@
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigurableProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForConfigurable"/>
-        <actionGroup ref="filterProductGridBySku2" stepKey="filterProductGridBySkuForConfigurable">
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForConfigurable">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeConfigurableProductNameInGrid"/>

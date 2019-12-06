@@ -48,12 +48,12 @@
             </createData>
 
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProduct">
+            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct">
                 <argument name="productId" value="$$createBundleProduct.id$$"/>
             </actionGroup>
             <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
             <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
         <after>
             <!-- Delete data -->

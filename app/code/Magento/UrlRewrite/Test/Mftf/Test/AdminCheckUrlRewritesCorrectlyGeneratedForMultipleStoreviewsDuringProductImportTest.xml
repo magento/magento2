@@ -46,31 +46,31 @@
                 <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
-            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
         <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-english" stepKey="changeNameField"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="clickOnSectionHeader"/>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeSeoUrlKeyENStoreView">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
             <argument name="value" value="category-english"/>
         </actionGroup>
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewNl">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewNl">
             <argument name="Store" value="customStoreNLNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
         <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValue1"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-dutch" stepKey="changeNameFieldNLStoreView"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="clickOnSectionHeader2"/>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeSeoUrlKeyNLStoreView">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyNLStoreView">
             <argument name="value" value="category-dutch"/>
         </actionGroup>
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="navigateToSystemImport"/>
@@ -170,7 +170,7 @@
                 <argument name="storeViewName" value="{{customStoreNLNotUnique.name}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreGridFilters"/>
-            <actionGroup ref="deleteProductByName" stepKey="deleteImportedProduct">
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
@@ -180,24 +180,24 @@
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
         </after>
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewEn">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
         <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-english" stepKey="changeNameField"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="clickOnSectionHeader"/>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeSeoUrlKeyENStoreView">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
             <argument name="value" value="category-english"/>
         </actionGroup>
-        <actionGroup ref="switchCategoryStoreView" stepKey="switchToStoreViewNl">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewNl">
             <argument name="Store" value="customStoreNLNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
         <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValue1"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-dutch" stepKey="changeNameFieldNLStoreView"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="clickOnSectionHeader2"/>
-        <actionGroup ref="ChangeSeoUrlKeyForSubCategory" stepKey="changeSeoUrlKeyNLStoreView">
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyNLStoreView">
             <argument name="value" value="category-dutch"/>
         </actionGroup>
         <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="navigateToSystemImport"/>

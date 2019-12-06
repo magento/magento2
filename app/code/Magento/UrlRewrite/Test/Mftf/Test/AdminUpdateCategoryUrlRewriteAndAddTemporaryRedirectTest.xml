@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!-- Open Category Page and Get Category ID -->
-        <actionGroup ref="OpenCategoryFromCategoryTree" stepKey="getCategoryId">
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
             <argument name="category"  value="$$category.name$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>

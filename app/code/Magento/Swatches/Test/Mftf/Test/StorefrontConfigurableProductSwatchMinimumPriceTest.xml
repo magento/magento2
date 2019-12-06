@@ -26,17 +26,17 @@
         </before>
         <after>
             <!-- Delete configurable product and all child products -->
-            <actionGroup ref="deleteProductsByKeyword" stepKey="deleteProductsByKeyword">
+            <actionGroup ref="DeleteProductsByKeywordActionGroup" stepKey="deleteProductsByKeyword">
                 <argument name="keyword" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategoryAttribute"/>
             <!-- Delete color attribute -->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteColorAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
                 <argument name="ProductAttribute" value="ProductColorAttribute"/>
             </actionGroup>
             <!-- Delete size attribute -->
-            <actionGroup ref="deleteProductAttribute" stepKey="deleteSizeAttribute">
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSizeAttribute">
                 <argument name="ProductAttribute" value="ProductSizeAttribute"/>
             </actionGroup>
             <!-- Logout -->

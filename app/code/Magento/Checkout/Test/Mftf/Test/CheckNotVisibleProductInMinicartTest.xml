@@ -27,7 +27,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
 
         <!--Add simple product1 to Shopping Cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage1">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage1">
             <argument name="productName" value="$$createSimpleProduct1.name$$"/>
         </actionGroup>
 
@@ -47,7 +47,7 @@
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
 
         <!--Add simple product2 to Shopping Cart for updating cart items-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage2">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
             <argument name="productName" value="$$createSimpleProduct2.name$$"/>
         </actionGroup>
 

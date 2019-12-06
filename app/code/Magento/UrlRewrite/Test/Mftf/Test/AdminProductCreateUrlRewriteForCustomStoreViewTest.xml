@@ -44,7 +44,7 @@
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
         </after>
         <!--Step 1. Navigate as Admin on Product Page for edit product`s Url Key-->
-        <actionGroup ref="navigateToCreatedProductEditPage" stepKey="goToProductForUrlRewrite">
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToProductForUrlRewrite">
             <argument name="product" value="$$createProductForUrlRewrite$$"/>
         </actionGroup>
         <!--Step 2. As Admin switch on Custom Store View from Precondition -->
@@ -55,12 +55,12 @@
         <actionGroup ref="AdminProductFormUpdateUrlKeyActionGroup" stepKey="updateUrlKeyForProduct">
             <argument name="newUrlKey" value="U2"/>
         </actionGroup>
-        <actionGroup ref="saveProductForm" stepKey="saveProductWithNewUrl"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithNewUrl"/>
         <!--Step 4. Set URL Key for created category -->
-        <actionGroup ref="navigateToCreatedCategory" stepKey="navigateToCreatedSubCategory">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedSubCategory">
             <argument name="Category" value="$$createCategory$$"/>
         </actionGroup>
-        <actionGroup ref="ChangeSeoUrlKey" stepKey="updateUrlKeyForCategory">
+        <actionGroup ref="ChangeSeoUrlKeyActionGroup" stepKey="updateUrlKeyForCategory">
             <argument name="value" value="U1"/>
         </actionGroup>
         <!--Step 5. On Storefront Assert what URL Key for Category is changed and is correct as for Default Store View -->

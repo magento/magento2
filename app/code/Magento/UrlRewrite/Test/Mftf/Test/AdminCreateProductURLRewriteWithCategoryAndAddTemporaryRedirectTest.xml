@@ -51,7 +51,7 @@
         </actionGroup>
 
         <!--Filter Product in product page and get the Product ID -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
@@ -64,7 +64,7 @@
         </actionGroup>
 
         <!-- Open Category Page and Get Category ID -->
-        <actionGroup ref="OpenCategoryFromCategoryTree" stepKey="getCategoryId">
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
             <argument name="category" value="$$createCategory.name$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>

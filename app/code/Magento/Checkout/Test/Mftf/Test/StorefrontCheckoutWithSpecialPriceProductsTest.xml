@@ -24,7 +24,7 @@
                 <field key="price">10.00</field>
             </createData>
 
-            <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct">
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
                 <argument name="productSku" value="$$simpleProduct.sku$$"/>
             </actionGroup>
 
@@ -81,7 +81,7 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <actionGroup ref="filterAndSelectProduct" stepKey="filterAndSelectTheProduct2">
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct2">
                 <argument name="productSku" value="$$createConfigChildProduct2.sku$$"/>
             </actionGroup>
             <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceTopTheProduct2">
@@ -105,7 +105,7 @@
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 

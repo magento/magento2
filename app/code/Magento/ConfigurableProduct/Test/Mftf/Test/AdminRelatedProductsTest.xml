@@ -94,18 +94,18 @@
         <comment userInput="Filter and edit simple product 1" stepKey="filterAndEditComment1"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimple">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridSimple">
             <argument name="product" value="$$simple1Handle$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid"/>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
 
         <!-- TODO: move adding related product to a action group when nested action group is allowed (ref#: MQE-539)-->
         <comment userInput="Add related simple product to simple product" stepKey="addSimpleToSimpleComment"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimple1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridSimple1">
             <argument name="product" value="$$simple2Handle$$"/>
         </actionGroup>
         <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectSimpleTwo"/>
@@ -114,7 +114,7 @@
 
         <comment userInput="Add related config product to simple product" stepKey="addConfigToSimpleComment"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridSimpleForRelatedConfig1">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridSimpleForRelatedConfig1">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
         <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectConfigProduct"/>
@@ -122,16 +122,16 @@
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected2"/>
 
         <comment userInput="Save simple product" stepKey="saveSimpleProductComment"/>
-        <actionGroup ref="saveProductForm" stepKey="saveRelatedProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveRelatedProduct1"/>
 
         <comment userInput="Assert related simple products for simple product in Admin Product Form" stepKey="assertRelated1Comment"/>
-        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSection" stepKey="assertRelated1">
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="assertRelated1">
             <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText" value="$$simple2Handle.name$$"/>
         </actionGroup>
 
         <comment userInput="Assert related config products for simple product in Admin Product Form" stepKey="assertRelated2Comment"/>
-        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSection" stepKey="assertRelated2">
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="assertRelated2">
             <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText" value="$$baseConfigProductHandle.name$$"/>
         </actionGroup>
@@ -139,17 +139,17 @@
         <comment userInput="Filter and edit config product" stepKey="filterAndEditComment2"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial2"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridConfig">
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridConfig">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
-        <actionGroup ref="openProducForEditByClickingRowXColumnYInProductGrid" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid2"/>
         <conditionalClick selector="{{AdminProductFormSection.productFormTab('Related Products')}}" dependentSelector="{{AdminProductFormSection.productFormTabState('Related Products', 'closed')}}" visible="true" stepKey="openRelatedProductTab2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
 
         <comment userInput="Add related simple product to config product" stepKey="addSimpleToConfigComment"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton3"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="filterProductGridForConfig3">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridForConfig3">
             <argument name="product" value="$$simple2Handle$$"/>
         </actionGroup>
         <click selector="{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectSimpleTwo2"/>
@@ -157,10 +157,10 @@
         <click selector="{{AdminAddRelatedProductsModalSection.AddSelectedProductsButton}}" stepKey="addRelatedProductSelected3"/>
 
         <comment userInput="Save config product" stepKey="saveConfigProductComment"/>
-        <actionGroup ref="saveProductForm" stepKey="saveRelatedProduct2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveRelatedProduct2"/>
 
         <comment userInput="Assert related simple product for config product in Admin Product Form" stepKey="assertRelated3Comment"/>
-        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSection" stepKey="assertRelated3">
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="assertRelated3">
             <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
             <argument name="expectedText" value="$$simple2Handle.name$$"/>
         </actionGroup>
@@ -187,7 +187,7 @@
         <comment userInput="Check related product in product page" stepKey="checkRelatedProductInProductPageComment"/>
         <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$simple2Handle.name$$')}}" stepKey="checkRelatedProcut"/>
 
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$baseConfigProductHandle.name$$"/>
         </actionGroup>
 

@@ -43,7 +43,7 @@
             <deleteData createDataKey="simpleProduct9" stepKey="deleteSimpleProduct9"/>
             <deleteData createDataKey="simpleProduct10" stepKey="deleteSimpleProduct10"/>
             <!--delete created bundle product-->
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
             <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
@@ -54,10 +54,10 @@
         <!-- Start creating a bundle product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
         <waitForPageLoad stepKey="waitForProductList"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
@@ -97,7 +97,7 @@
         </actionGroup>
 
         <!-- Save product-->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Go to Storefront and open Bundle Product page-->
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
