@@ -6,6 +6,10 @@
   */
 -->
 
+<!--
+NOTICE: Action Groups in this file are DEPRECATED and SHOULD NOT BE USED anymore.
+        Please find the Comment with proper replacement for each of ActionGroups provided.
+-->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="createSystemBackup">
@@ -15,7 +19,7 @@
         <arguments>
             <argument name="backup" defaultValue="SystemBackup"/>
         </arguments>
-
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateSystemBackupActionGroup` instead -->
         <click selector="{{AdminMainActionsSection.systemBackup}}" stepKey="clickCreateBackupButton"/>
         <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
         <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
@@ -33,7 +37,7 @@
         <arguments>
             <argument name="backup" defaultValue="MediaBackup"/>
         </arguments>
-
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateMediaBackupActionGroup` instead -->
         <click selector="{{AdminMainActionsSection.mediaBackup}}" stepKey="clickCreateBackupButton"/>
         <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
         <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
@@ -51,7 +55,7 @@
         <arguments>
             <argument name="backup" defaultValue="DatabaseBackup"/>
         </arguments>
-
+        <!-- NOTICE: This ActionGroup is DEPRECATED! Use `CreateDatabaseBackupActionGroup` instead -->
         <click selector="{{AdminMainActionsSection.databaseBackup}}" stepKey="clickCreateBackupButton"/>
         <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
         <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
