@@ -23,7 +23,7 @@
         </before>
         <after>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
-            <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+            <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logout"/>
@@ -36,7 +36,7 @@
         <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
 
         <!-- Open UrlRewrite Edit page and update the fields and fill the created CMS Page Target Path -->
-        <actionGroup ref="AdminAddCustomUrlRewrite" stepKey="addCustomUrlRewrite">
+        <actionGroup ref="AdminAddCustomUrlRewriteActionGroup" stepKey="addCustomUrlRewrite">
             <argument name="customUrlRewriteValue" value="Custom"/>
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="{{defaultCmsPage.title}}"/>
@@ -46,14 +46,14 @@
         </actionGroup>
 
         <!-- Assert updated CMS page Url Rewrite in Grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
             <argument name="redirectPath" value="{{defaultCmsPage.title}}" />
             <argument name="redirectType" value="Temporary (302)" />
             <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
         </actionGroup>
 
         <!-- Assert initial CMS page Url Rewrite in Grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath1">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
             <argument name="redirectPath" value="$$createCMSPage.identifier$$" />
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
