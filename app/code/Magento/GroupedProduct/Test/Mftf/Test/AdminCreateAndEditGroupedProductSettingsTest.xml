@@ -52,12 +52,12 @@
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
         <!-- Add simple product to the Group -->
-        <actionGroup ref="AdminAssignProductToGroup" stepKey="addFirstSimpleToGroup">
+        <actionGroup ref="AdminAssignProductToGroupActionGroup" stepKey="addFirstSimpleToGroup">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 

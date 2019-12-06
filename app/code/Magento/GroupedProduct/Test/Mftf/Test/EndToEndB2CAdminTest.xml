@@ -14,8 +14,8 @@
         <actionGroup ref="goToCreateProductPage" stepKey="goToCreateGroupedProduct" after="waitForProductPageLoadGrouped">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
-        <actionGroup ref="checkRequiredFieldsInGroupedProductForm" stepKey="checkRequiredFieldsProductGrouped" after="goToCreateGroupedProduct"/>
-        <actionGroup ref="fillGroupedProductForm" stepKey="fillGroupedProductForm" after="checkRequiredFieldsProductGrouped">
+        <actionGroup ref="CheckRequiredFieldsInGroupedProductFormActionGroup" stepKey="checkRequiredFieldsProductGrouped" after="goToCreateGroupedProduct"/>
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillGroupedProductForm" after="checkRequiredFieldsProductGrouped">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection" after="fillGroupedProductForm"/>
@@ -29,7 +29,7 @@
         <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="checkFilterResult" after="filterGroupedProductOptions"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts" after="checkFilterResult"/>
         <actionGroup ref="saveProductForm" stepKey="saveGroupedProduct" after="clickAddSelectedGroupProducts"/>
-        <actionGroup ref="viewGroupedProductInAdminGrid" stepKey="viewGroupedProductInGrid" after="saveGroupedProduct">
+        <actionGroup ref="ViewGroupedProductInAdminGridActionGroup" stepKey="viewGroupedProductInGrid" after="saveGroupedProduct">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
 
