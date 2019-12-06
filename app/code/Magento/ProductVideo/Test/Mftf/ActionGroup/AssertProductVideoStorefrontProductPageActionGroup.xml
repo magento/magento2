@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Assert product video in Storefront Product page -->
-    <actionGroup name="assertProductVideoStorefrontProductPage">
+    <actionGroup name="AssertProductVideoStorefrontProductPageActionGroup">
         <annotations>
             <description>Validates that the provided Video is present on the Storefront Product page.</description>
         </annotations>
@@ -18,17 +18,5 @@
         </arguments>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(dataTypeAttribute)}}" stepKey="seeProductVideoDataType"/>
-    </actionGroup>
-
-    <!--Assert product video not in Storefront Product page -->
-    <actionGroup name="assertProductVideoNotInStorefrontProductPage">
-        <annotations>
-            <description>Validates that the provided Video is NOT present on the Storefront Product page.</description>
-        </annotations>
-        <arguments>
-            <argument name="dataTypeAttribute" defaultValue="'youtube'"/>
-        </arguments>
-
-        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productVideo(dataTypeAttribute)}}" stepKey="dontSeeProductVideoDataType"/>
     </actionGroup>
 </actionGroups>
