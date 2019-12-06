@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute\Delete;
 
-use Magento\Customer\Api\AddressMetadataManagementInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
-use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Error during delete attribute using catalog/product_attribute/delete controller action.
@@ -20,7 +19,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  */
-class DeleteAttributeControllerErrorTest extends AbstractBackendController
+class DeleteAttributeControllerErrorTest extends AbstractDeleteAttributeControllerTest
 {
     /**
      * @var Escaper
@@ -50,7 +49,7 @@ class DeleteAttributeControllerErrorTest extends AbstractBackendController
     public function testDispatchWithoutAttributeId(): void
     {
         $this->getRequest()->setMethod(Http::METHOD_POST);
-        $this->dispatch(sprintf(AbstractDeleteAttributeControllerTest::DELETE_ATTRIBUTE_URL, ''));
+        $this->dispatch(sprintf($this->uri, ''));
         $this->assertSessionMessages(
             $this->equalTo([$this->escaper->escapeHtml((string)__('We can\'t find an attribute to delete.'))]),
             MessageInterface::TYPE_ERROR
@@ -58,25 +57,20 @@ class DeleteAttributeControllerErrorTest extends AbstractBackendController
     }
 
     /**
-     * Try to delete customer attribute via controller action.
+     * Try to delete category attribute via controller action.
      *
-     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_address.php
+     * @magentoDataFixture Magento/Catalog/_files/category_attribute.php
      *
      * @return void
      */
     public function testDispatchWithNonProductAttribute(): void
     {
-        $customerAttribute = $this->attributeRepository->get(
-            AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS,
-            'address_user_attribute'
+        $categoryAttribute = $this->attributeRepository->get(
+            Category::ENTITY,
+            'test_attribute_code_666'
         );
         $this->getRequest()->setMethod(Http::METHOD_POST);
-        $this->dispatch(
-            sprintf(
-                AbstractDeleteAttributeControllerTest::DELETE_ATTRIBUTE_URL,
-                $customerAttribute->getAttributeId()
-            )
-        );
+        $this->dispatch(sprintf($this->uri, $categoryAttribute->getAttributeId()));
         $this->assertSessionMessages(
             $this->equalTo([$this->escaper->escapeHtml((string)__('We can\'t delete the attribute.'))]),
             MessageInterface::TYPE_ERROR

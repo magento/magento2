@@ -19,9 +19,9 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 abstract class AbstractDeleteAttributeControllerTest extends AbstractBackendController
 {
     /**
-     * Delete attribute URL template.
+     * @var string
      */
-    public const DELETE_ATTRIBUTE_URL = 'backend/catalog/product_attribute/delete/attribute_id/%s';
+    protected $uri = 'backend/catalog/product_attribute/delete/attribute_id/%s';
 
     /**
      * @var ProductAttributeRepositoryInterface
@@ -47,7 +47,7 @@ abstract class AbstractDeleteAttributeControllerTest extends AbstractBackendCont
     {
         $attribute = $this->productAttributeRepository->get($attributeCode);
         $this->getRequest()->setMethod(Http::METHOD_POST);
-        $this->dispatch(sprintf(self::DELETE_ATTRIBUTE_URL, $attribute->getAttributeId()));
+        $this->dispatch(sprintf($this->uri, $attribute->getAttributeId()));
         $this->assertSessionMessages(
             $this->equalTo([(string)__('You deleted the product attribute.')]),
             MessageInterface::TYPE_SUCCESS
@@ -60,7 +60,7 @@ abstract class AbstractDeleteAttributeControllerTest extends AbstractBackendCont
      * @param string $attributeCode
      * @return void
      */
-    protected function assertIsAttributeDeleted(string $attributeCode): void
+    protected function assertAttributeIsDeleted(string $attributeCode): void
     {
         $this->expectExceptionObject(
             new NoSuchEntityException(
@@ -71,5 +71,13 @@ abstract class AbstractDeleteAttributeControllerTest extends AbstractBackendCont
             )
         );
         $this->productAttributeRepository->get($attributeCode);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function testAclHasAccess()
+    {
+        $this->markTestIncomplete('AclHasAccess test is not complete');
     }
 }
