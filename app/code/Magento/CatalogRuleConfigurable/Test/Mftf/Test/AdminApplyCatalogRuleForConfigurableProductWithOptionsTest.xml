@@ -126,7 +126,7 @@
         </after>
 
         <!-- Create price rule for first configurable product option -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createFirstPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createFirstPriceRule">
             <argument name="catalogRule" value="CatalogRuleToFixed"/>
         </actionGroup>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForFirstPriceRule"/>
@@ -140,7 +140,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForFirstPriceRule"/>
 
         <!-- Create price rule for second configurable product option -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createSecondPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createSecondPriceRule">
             <argument name="catalogRule" value="_defaultCatalogRule"/>
         </actionGroup>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForSecondPriceRule"/>
@@ -154,7 +154,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccessMessageForSecondPriceRule"/>
 
         <!-- Create price rule for third configurable product option -->
-        <actionGroup ref="newCatalogPriceRuleByUI" stepKey="createThirdPriceRule">
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createThirdPriceRule">
             <argument name="catalogRule" value="CatalogRuleWithoutDiscount"/>
         </actionGroup>
         <actionGroup ref="selectNotLoggedInCustomerGroup" stepKey="selectNotLoggedInCustomerGroupForThirdPriceRule"/>
