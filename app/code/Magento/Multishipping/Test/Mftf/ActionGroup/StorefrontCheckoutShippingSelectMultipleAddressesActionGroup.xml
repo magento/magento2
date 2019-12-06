@@ -17,12 +17,5 @@
         <selectOption selector="{{StorefrontCheckoutShippingMultipleAddressesSection.selectedMultipleShippingAddress('2')}}" userInput="{{secondAddress}}" stepKey="selectShippingAddressForTheSecondItem"/>
         <click selector="{{CheckoutSuccessMainSection.continueShoppingButton}}" stepKey="clickToGoToInformationButton"/>
     </actionGroup>
-    <actionGroup name="StorefrontGoCheckoutWithMultipleAddresses">
-        <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
-    </actionGroup>
-    <actionGroup name="StorefrontGoToBillingInformationActionGroup">
-        <click selector="{{StorefrontMultipleShippingMethodSection.continueToBillingInformationButton}}" stepKey="clickToContinueToBillingInformationButton"/>
-        <waitForPageLoad stepKey="waitForBillingPage"/>
-    </actionGroup>
 </actionGroups>
 
