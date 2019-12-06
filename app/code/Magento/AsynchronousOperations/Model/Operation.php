@@ -10,7 +10,7 @@ use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\Framework\DataObject;
 
 /**
- * Class Operation
+ * Class Operation encapsulates methods for Operation Model Object
  */
 class Operation extends DataObject implements OperationInterface
 {
@@ -22,12 +22,12 @@ class Operation extends DataObject implements OperationInterface
     /**
      * Operation constructor.
      *
-     * @param array $data
      * @param OperationStatusValidator $operationStatusValidator
+     * @param array $data
      */
     public function __construct(
-        array $data = [],
-        OperationStatusValidator $operationStatusValidator
+        OperationStatusValidator $operationStatusValidator,
+        array $data = []
     ) {
         $this->operationStatusValidator = $operationStatusValidator;
         parent::__construct($data);

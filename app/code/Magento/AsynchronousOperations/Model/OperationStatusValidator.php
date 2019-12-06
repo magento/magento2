@@ -32,7 +32,9 @@ class OperationStatusValidator
     /**
      * Validate method
      *
-     * @param $status
+     * @param int $status
+     * @throws \InvalidArgumentException
+     * @return void
      */
     public function validate($status)
     {
@@ -41,7 +43,5 @@ class OperationStatusValidator
         if (!in_array($status, $statuses)) {
             throw new \InvalidArgumentException('Invalid Operation Status.');
         }
-
-        return;
     }
 }

@@ -12,7 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class OperationStatusValidatorTest
+ * Class OperationStatusValidatorTest implements logic for testing Operation::setStatus() method
  */
 class OperationStatusValidatorTest extends TestCase
 {
@@ -60,7 +60,7 @@ class OperationStatusValidatorTest extends TestCase
      * @param string $expectedResult
      * @dataProvider dataProviderForTestSetStatus
      */
-    public function testSetStatus (
+    public function testSetStatus(
         string $status,
         array $statusPool,
         string $expectedResult
