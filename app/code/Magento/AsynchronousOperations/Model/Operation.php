@@ -6,6 +6,7 @@
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Model\OperationStatusValidator;
 use Magento\Framework\DataObject;
 
 /**
@@ -13,6 +14,25 @@ use Magento\Framework\DataObject;
  */
 class Operation extends DataObject implements OperationInterface
 {
+    /**
+     * @var OperationStatusValidator
+     */
+    protected $operationStatusValidator;
+
+    /**
+     * Operation constructor.
+     *
+     * @param array $data
+     * @param OperationStatusValidator $operationStatusValidator
+     */
+    public function __construct(
+        array $data = [],
+        OperationStatusValidator $operationStatusValidator
+    ) {
+        $this->operationStatusValidator = $operationStatusValidator;
+        parent::__construct($data);
+    }
+
     /**
      * @inheritDoc
      */
@@ -106,6 +126,7 @@ class Operation extends DataObject implements OperationInterface
      */
     public function setStatus($status)
     {
+        $this->operationStatusValidator->validate($status);
         return $this->setData(self::STATUS, $status);
     }
 
