@@ -100,7 +100,7 @@
         <actionGroup ref="StorefrontAssertActiveProductImage" stepKey="StorefrontAssertActiveProductImage"/>
 
          <!--Click a swatch and expect to see the image from the swatch from the configurable product -->
-        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImage" stepKey="clickSwatchOption">
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImageActionGroup" stepKey="clickSwatchOption">
             <argument name="optionName" value="{{visualSwatchOption1.default_label}}"/>
             <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
@@ -109,7 +109,7 @@
             <argument name="fileName" value="{{TestImageNew.filename}}"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImage" stepKey="clickOnSwatchOption2">
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageAndCheckImageActionGroup" stepKey="clickOnSwatchOption2">
             <argument name="optionName" value="{{visualSwatchOption2.default_label}}"/>
             <argument name="fileName" value="{{ImageUpload3.filename}}"/>
         </actionGroup>
