@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class SaveTest
+ * Test ot to save currency symbol controller
  */
 class SaveTest extends TestCase
 {
