@@ -103,7 +103,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -113,7 +113,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxCA"/>
         </actionGroup>
 
@@ -220,7 +220,7 @@
         <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -230,7 +230,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxCA"/>
         </actionGroup>
 
@@ -330,7 +330,7 @@
         <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -340,7 +340,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxNY"/>
         </actionGroup>
 
@@ -441,7 +441,7 @@
         <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
             <argument name="taxCode" value="SimpleTaxSwiss"/>
         </actionGroup>
 
@@ -451,7 +451,7 @@
         <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$$$virtualProduct1.price$$"/>
 
         <!-- Change the address -->
-        <actionGroup ref="changeSummaryQuoteAddress" stepKey="changeAddress2">
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
             <argument name="taxCode" value="SimpleTaxNY"/>
         </actionGroup>
 

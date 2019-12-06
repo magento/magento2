@@ -193,11 +193,11 @@
 
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="2" stepKey="seeItemCounterInMiniCart"/>
 
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertOneProductNameInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertOneProductNameInMiniCart">
             <argument name="productName" value="$$baseConfigProductHandle.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertOneProductNameInMiniCart2">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertOneProductNameInMiniCart2">
             <argument name="productName" value="$$simple2Handle.name$$"/>
         </actionGroup>
     </test>
