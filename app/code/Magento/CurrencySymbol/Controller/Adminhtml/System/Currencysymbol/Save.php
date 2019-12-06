@@ -14,7 +14,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Filter\FilterManager;
 
 /**
- * Class Save
+ * Controller to save currency symbol
  */
 class Save extends CurrencysymbolController implements HttpPostActionInterface
 {
