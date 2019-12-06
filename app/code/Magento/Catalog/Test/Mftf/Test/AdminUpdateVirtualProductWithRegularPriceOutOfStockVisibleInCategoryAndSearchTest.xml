@@ -28,8 +28,9 @@
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
         </before>
         <after>
-            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <deleteData stepKey="deleteDefaultVirtualProduct" createDataKey="initialVirtualProduct"/>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
