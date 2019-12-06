@@ -71,7 +71,7 @@
             <argument name="errorMessage" value="Please enter a valid number in this field."/>
         </actionGroup>
         <!-- Fill correct value -->
-        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCart" stepKey="setProductMaxQtyAllowedInShoppingCartToCorrectNumber">
+        <actionGroup ref="AdminProductSetMaxQtyAllowedInShoppingCartActionGroup" stepKey="setProductMaxQtyAllowedInShoppingCartToCorrectNumber">
             <argument name="qty" value="50"/>
         </actionGroup>
         <waitForElementNotVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" stepKey="waitForModalFormToDisappear"/>
