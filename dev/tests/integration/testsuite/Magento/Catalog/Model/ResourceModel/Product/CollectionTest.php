@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Collection test
+ * Test for Magento\Catalog\Model\ResourceModel\Product\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
