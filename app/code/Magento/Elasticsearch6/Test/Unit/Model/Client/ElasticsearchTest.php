@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch6\Test\Unit\Model\Client;
 
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\Elasticsearch6\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 
@@ -88,7 +89,10 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
-                'elasticsearchClient' => $this->elasticsearchClientMock
+                'elasticsearchClient' => $this->elasticsearchClientMock,
+                'fieldsMappingPreprocessors' => [
+                    new AddDefaultSearchField()
+                ]
             ]
         );
     }
