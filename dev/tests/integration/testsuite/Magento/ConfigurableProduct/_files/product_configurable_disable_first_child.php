@@ -13,14 +13,11 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $childSku = 'simple_10';
-try {
-    $childProduct = $productRepository->get($childSku);
-    $productAction = Bootstrap::getObjectManager()->get(Action::class);
-    $productAction->updateAttributes(
-        [$childProduct->getEntityId()],
-        [ProductAttributeInterface::CODE_STATUS => Status::STATUS_DISABLED],
-        $childProduct->getStoreId()
-    );
-} catch (Exception $e) {
-    // Nothing to remove
-}
+
+$childProduct = $productRepository->get($childSku);
+$productAction = Bootstrap::getObjectManager()->get(Action::class);
+$productAction->updateAttributes(
+    [$childProduct->getEntityId()],
+    [ProductAttributeInterface::CODE_STATUS => Status::STATUS_DISABLED],
+    $childProduct->getStoreId()
+);
