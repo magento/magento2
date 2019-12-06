@@ -135,7 +135,7 @@
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <seeInField userInput="10" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField10"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}"  stepKey="grabTextFromSubtotalField1"/>
         <assertEquals message="Shopping cart should contain subtotal $1,000" stepKey="assertSubtotalField1">

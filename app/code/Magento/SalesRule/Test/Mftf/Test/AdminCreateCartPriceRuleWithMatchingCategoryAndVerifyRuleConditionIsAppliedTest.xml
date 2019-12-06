@@ -110,7 +110,7 @@
         </actionGroup>
 
         <!--Click on view and edit cart link-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <waitForPageLoad stepKey="waitForViewAndEditToOpen"/>
         <!--Verify AssertCartPriceRuleConditionIsApplied if condition category id is matching-->
         <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">

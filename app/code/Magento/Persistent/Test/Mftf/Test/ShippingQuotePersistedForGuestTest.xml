@@ -59,7 +59,7 @@
         <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProductToCartAsGuestUser">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>
         <!--Step 5: Open Estimate Shipping and Tax block and fill the sections-->
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
@@ -69,7 +69,7 @@
         <!--Step 6: Go to Homepage-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
         <!--Step 7: Go to shopping cart and check "Estimate Shipping and Tax" fields values are saved-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
         <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging" />
         <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
         <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />

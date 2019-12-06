@@ -137,10 +137,10 @@
         <!-- Assert products in mini cart for first customer -->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFrontHomePage"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertFirstProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertFirstProductInMiniCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="assertOneProductNameInMiniCart" stepKey="assertSecondProductInMiniCart">
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertSecondProductInMiniCart">
             <argument name="productName" value="$$createSimpleProductWithCustomOptions.name$$"/>
         </actionGroup>
         <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="assertMiniCartSubTotal">
