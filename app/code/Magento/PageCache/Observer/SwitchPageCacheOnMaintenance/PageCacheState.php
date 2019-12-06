@@ -13,8 +13,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Page Cache state.
- *
+ * Class PageCacheState
+ * @package Magento\PageCache\Observer\SwitchPageCacheOnMaintenance
  * @deprecated Originally used by now removed observer SwitchPageCacheOnMaintenance
  */
 class PageCacheState
