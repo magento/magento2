@@ -47,10 +47,10 @@
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainProductFields"/>
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields"/>
 
         <!-- Add the bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOption">
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$createSimpleProduct.sku$$"/>
@@ -189,10 +189,10 @@
         </actionGroup>
 
         <!-- Fill all main fields -->
-        <actionGroup ref="fillMainBundleProductForm" stepKey="fillMainProductFields"/>
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields"/>
 
         <!-- Add first bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addFirstBundleOption">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addFirstBundleOption">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
@@ -202,7 +202,7 @@
         </actionGroup>
 
         <!-- Add second bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addSecondBundleOption">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addSecondBundleOption">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
@@ -212,7 +212,7 @@
         </actionGroup>
 
         <!-- Add third bundle option to the product -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addThirdBundleOption">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addThirdBundleOption">
             <argument name="x" value="2"/>
             <argument name="n" value="3"/>
             <argument name="prodOneSku" value="$$createFirstSimpleProduct.sku$$"/>
@@ -238,7 +238,7 @@
         </actionGroup>
 
         <!-- Remove second option -->
-        <actionGroup ref="deleteBundleOptionByIndex" stepKey="deleteSecondOption">
+        <actionGroup ref="DeleteBundleOptionByIndexActionGroup" stepKey="deleteSecondOption">
             <argument name="deleteIndex" value="1"/>
         </actionGroup>
 
