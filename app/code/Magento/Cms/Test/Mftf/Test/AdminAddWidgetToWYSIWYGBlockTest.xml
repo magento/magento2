@@ -24,7 +24,7 @@
             <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
@@ -45,7 +45,7 @@
         <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
-        <actionGroup ref="navigateToCreatedCMSPage" stepKey="navigateToCreatedCMSPage">
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
