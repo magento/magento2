@@ -40,7 +40,7 @@
             <actionGroup ref="logout" stepKey="logout"/>
         </after>
         <!--Step 1: Login as a Customer with remember me checked-->
-        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeChecked" stepKey="loginToStorefrontAccountWithRememberMeChecked">
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeChecked">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--Step 2: Open the Product Page and add the product to shopping cart-->
