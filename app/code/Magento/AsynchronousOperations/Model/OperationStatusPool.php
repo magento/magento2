@@ -15,7 +15,7 @@ class OperationStatusPool
     /**
      * @var array
      */
-    protected $statuses;
+    private $statuses;
 
     /**
      * @param array $statuses

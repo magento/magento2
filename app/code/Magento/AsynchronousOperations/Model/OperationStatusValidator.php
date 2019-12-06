@@ -17,7 +17,7 @@ class OperationStatusValidator
     /**
      * @var OperationStatusPool
      */
-    protected $operationStatusPool;
+    private $operationStatusPool;
 
     /**
      * OperationStatusValidator constructor.

@@ -17,7 +17,7 @@ class Operation extends DataObject implements OperationInterface
     /**
      * @var OperationStatusValidator
      */
-    protected $operationStatusValidator;
+    private $operationStatusValidator;
 
     /**
      * Operation constructor.
