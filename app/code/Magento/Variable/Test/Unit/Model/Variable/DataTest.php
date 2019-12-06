@@ -58,7 +58,7 @@ class DataTest extends TestCase
     }
 
     /**
-     * @covers VariableDataModel::getDefaultVariables
+     * Test getDefaultVariables() function
      */
     public function testGetDefaultVariables()
     {
@@ -92,7 +92,7 @@ class DataTest extends TestCase
     }
 
     /**
-     * @covers VariableDataModel::getCustomVariables
+     * Test getCustomVariables() function
      */
     public function testGetCustomVariables()
     {
