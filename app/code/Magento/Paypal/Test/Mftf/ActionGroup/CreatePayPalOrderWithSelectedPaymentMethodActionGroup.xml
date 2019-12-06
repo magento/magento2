@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreatePayPalOrderWithSelectedPaymentMethodActionGroup" extends="CreateOrderToPrintPageActionGroup">
+        <annotations>
+            <description>EXTENDS: CreateOrderToPrintPageActionGroup. Clicks on PayPal. Fills the PayPay details in the modal. PLEASE NOTE: The PayPal Payment credentials are Hardcoded using 'Payer'.</description>
+        </annotations>
+        <arguments>
+            <argument name="payerName" defaultValue="MPI" type="string"/>
+            <argument name="credentials" defaultValue="_CREDS"/>
+        </arguments>
+
+        <!-- click on PayPal payment radio button -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="clickPlaceOrder"/>
+
+        <!--set ID for iframe of PayPal group button-->
+        <executeJS function="jQuery('.zoid-component-frame.zoid-visible').attr('id', 'myIframe')" stepKey="clickOrderLink"/>
+
+        <!--switch to iframe of PayPal group button-->
+        <switchToIFrame userInput="myIframe" stepKey="clickPrintOrderLink"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="waitForPayPalBtn"/>
+        <click selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="clickPayPalBtn"/>
+        <switchToIFrame stepKey="switchBack1"/>
+
+        <!--Check in-context-->
+        <switchToNextTab stepKey="switchToInContentTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
+        <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
+        <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{payerName}}" selector="{{PayPalPaymentSection.reviewUserInfo}}" stepKey="seePayerName"/>
+    </actionGroup>
+</actionGroups>
