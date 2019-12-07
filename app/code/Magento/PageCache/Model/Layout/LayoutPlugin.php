@@ -7,7 +7,8 @@ namespace Magento\PageCache\Model\Layout;
 
 /**
  * Class LayoutPlugin
- * @package Magento\PageCache\Model\Layout
+ *
+ * Plugin for Magento\Framework\View\Layout
  */
 class LayoutPlugin
 {
