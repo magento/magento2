@@ -38,11 +38,14 @@ class Password extends AbstractElement
     }
 
     /**
+     * Get field html
+     *
      * @return mixed
      */
     public function getHtml()
     {
         $this->addClass('input-text admin__control-text');
+
         return parent::getHtml();
     }
 }
