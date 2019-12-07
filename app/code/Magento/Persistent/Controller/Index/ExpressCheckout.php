@@ -9,6 +9,8 @@ use Magento\Persistent\Controller\Index;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
+ * ExpressCheckout Controller
+ *
  * @codeCoverageIgnore
  */
 class ExpressCheckout extends Index

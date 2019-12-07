@@ -7,6 +7,9 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class PreventExpressCheckoutObserver exectues prevent express checkout
+ */
 class PreventExpressCheckoutObserver implements ObserverInterface
 {
     /**
@@ -76,7 +79,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
          */
         $controllerAction = $observer->getEvent()->getControllerAction();
         if (!$controllerAction
-            || !$controllerAction instanceof \Magento\Checkout\Controller\Express\RedirectLoginInterface 
+            || !$controllerAction instanceof \Magento\Checkout\Controller\Express\RedirectLoginInterface
             || $controllerAction->getRedirectActionName() != $controllerAction->getRequest()->getActionName()
         ) {
             return;

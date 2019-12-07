@@ -7,6 +7,9 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
+/**
+ * Class Index executes integrations grid
+ */
 class Index extends \Magento\Integration\Controller\Adminhtml\Integration implements HttpGetActionInterface
 {
     /**
@@ -19,7 +22,8 @@ class Index extends \Magento\Integration\Controller\Adminhtml\Integration implem
         $unsecureIntegrationsCount = $this->_integrationCollection->addUnsecureUrlsFilter()->getSize();
         if ($unsecureIntegrationsCount > 0) {
             // @codingStandardsIgnoreStart
-            $this->messageManager->addNoticeMessage(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
+            $this->messageManager->addNoticeMessage(
+                __('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
             // @codingStandardsIgnoreEnd
             );
         }

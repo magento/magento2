@@ -8,6 +8,9 @@ namespace Magento\Integration\Controller\Adminhtml\Integration;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
+/**
+ * Class TokensExchange executes post consumer credentials for Oauth integration.
+ */
 class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**

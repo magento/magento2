@@ -6,9 +6,12 @@
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
-use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
 
+/**
+ * Import Index Controller
+ */
 class Index extends ImportController implements HttpGetActionInterface
 {
     /**

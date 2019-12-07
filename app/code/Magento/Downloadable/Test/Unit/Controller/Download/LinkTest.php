@@ -102,19 +102,22 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->session = $this->createPartialMock(
-            \Magento\Customer\Model\Session::class, [
+            \Magento\Customer\Model\Session::class,
+            [
                 'getCustomerId',
                 'authenticate',
                 'setBeforeAuthUrl'
             ]
         );
         $this->helperData = $this->createPartialMock(
-            \Magento\Downloadable\Helper\Data::class, [
+            \Magento\Downloadable\Helper\Data::class,
+            [
                 'getIsShareable'
             ]
         );
         $this->downloadHelper = $this->createPartialMock(
-            \Magento\Downloadable\Helper\Download::class, [
+            \Magento\Downloadable\Helper\Download::class,
+            [
                 'setResource',
                 'getFilename',
                 'getContentType',
@@ -124,7 +127,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class, [
+            \Magento\Catalog\Model\Product::class,
+            [
                 '_wakeup',
                 'load',
                 'getId',
@@ -133,7 +137,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->linkPurchasedItem = $this->createPartialMock(
-            \Magento\Downloadable\Model\Link\Purchased\Item::class, [
+            \Magento\Downloadable\Model\Link\Purchased\Item::class,
+            [
                 'load',
                 'getId',
                 'getProductId',
@@ -150,7 +155,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->linkPurchased = $this->createPartialMock(
-            \Magento\Downloadable\Model\Link\Purchased::class, [
+            \Magento\Downloadable\Model\Link\Purchased::class,
+            [
                 'load',
                 'getCustomerId'
             ]
@@ -159,7 +165,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->objectManager = $this->createPartialMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class, [
+            \Magento\Framework\ObjectManager\ObjectManager::class,
+            [
                 'create',
                 'get'
             ]
