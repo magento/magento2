@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,8 +13,8 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
     /**
      * Let the admin know that integration has been sent for activation and token exchange is in process.
      *
-     * @param bool   $isReauthorize
-     * @param string $integrationName
+     * @param  bool   $isReauthorize
+     * @param  string $integrationName
      * @return void
      */
     protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
@@ -28,7 +27,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
             "Integration '%1' has been sent for activation.",
             $integrationName
         );
-        $this->messageManager->addNotice($msg);
+        $this->messageManager->addNoticeMessage($msg);
     }
 
     /**
@@ -43,13 +42,17 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
             $isReauthorize = (bool)$this->getRequest()->getParam(self::PARAM_REAUTHORIZE, 0);
             $integration = $this->_integrationService->get($integrationId);
             if ($isReauthorize) {
-                /** Remove existing token associated with consumer before issuing a new one. */
+                /**
+                 * Remove existing token associated with consumer before issuing a new one.
+                 */
                 $this->_oauthService->deleteIntegrationToken($integration->getConsumerId());
                 $integration->setStatus(IntegrationModel::STATUS_INACTIVE)->save();
             }
             //Integration chooses to use Oauth for token exchange
             $this->_oauthService->postToConsumer($integration->getConsumerId(), $integration->getEndpoint());
-            /** Generate JS popup content */
+            /**
+             * Generate JS popup content
+             */
             $this->_view->loadLayout(false);
             // Activation or authorization is done only when the Oauth token exchange completes
             $this->_setActivationInProcessMsg($isReauthorize, $integration->getName());
@@ -64,7 +67,9 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
                     )
                 );
             }
-            /** Initialize response body */
+            /**
+             * Initialize response body
+             */
             $result = [
                 IntegrationModel::IDENTITY_LINK_URL => $integration->getIdentityLinkUrl(),
                 'oauth_consumer_key' => $consumer->getKey(),

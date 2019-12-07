@@ -25,15 +25,15 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Model\Context                        $context
+     * @param \Magento\Framework\Registry                             $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface      $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface          $cacheTypeList
+     * @param \Magento\Framework\Message\ManagerInterface             $messageManager
+     * @param \Magento\Framework\Escaper                              $escaper
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection
+     * @param array                                                   $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -77,7 +77,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
 
         $noticeMsg = implode(',', $noticeMsgArray);
         if (!empty($noticeMsgArray)) {
-            $this->messageManager->addNotice(
+            $this->messageManager->addNoticeMessage(
                 __(
                     __('The following invalid values cannot be saved: %values', ['values' => $noticeMsg])
                 )

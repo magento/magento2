@@ -31,7 +31,7 @@ class Link extends \Magento\Downloadable\Controller\Download
     /**
      * Download link action
      *
-     * @return void|ResponseInterface
+     * @return  void|ResponseInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -41,7 +41,9 @@ class Link extends \Magento\Downloadable\Controller\Download
         $session = $this->_getCustomerSession();
 
         $id = $this->getRequest()->getParam('id', 0);
-        /** @var PurchasedLink $linkPurchasedItem */
+        /**
+         * @var PurchasedLink $linkPurchasedItem
+         */
         $linkPurchasedItem = $this->_objectManager->create(
             \Magento\Downloadable\Model\Link\Purchased\Item::class
         )->load(
@@ -49,13 +51,15 @@ class Link extends \Magento\Downloadable\Controller\Download
             'link_hash'
         );
         if (!$linkPurchasedItem->getId()) {
-            $this->messageManager->addNotice(__("We can't find the link you requested."));
+            $this->messageManager->addNoticeMessage(__("We can't find the link you requested."));
             return $this->_redirect('*/customer/products');
         }
         if (!$this->_objectManager->get(\Magento\Downloadable\Helper\Data::class)->getIsShareable($linkPurchasedItem)) {
             $customerId = $session->getCustomerId();
             if (!$customerId) {
-                /** @var \Magento\Catalog\Model\Product $product */
+                /**
+                 * @var \Magento\Catalog\Model\Product $product
+                 */
                 $product = $this->_objectManager->create(
                     \Magento\Catalog\Model\Product::class
                 )->load(
@@ -70,7 +74,7 @@ class Link extends \Magento\Downloadable\Controller\Download
                 } else {
                     $notice = __('Please sign in to download your product.');
                 }
-                $this->messageManager->addNotice($notice);
+                $this->messageManager->addNoticeMessage($notice);
                 $session->authenticate();
                 $session->setBeforeAuthUrl(
                     $this->_objectManager->create(
@@ -82,14 +86,16 @@ class Link extends \Magento\Downloadable\Controller\Download
                 );
                 return;
             }
-            /** @var \Magento\Downloadable\Model\Link\Purchased $linkPurchased */
+            /**
+             * @var \Magento\Downloadable\Model\Link\Purchased $linkPurchased
+             */
             $linkPurchased = $this->_objectManager->create(
                 \Magento\Downloadable\Model\Link\Purchased::class
             )->load(
                 $linkPurchasedItem->getPurchasedId()
             );
             if ($linkPurchased->getCustomerId() != $customerId) {
-                $this->messageManager->addNotice(__("We can't find the link you requested."));
+                $this->messageManager->addNoticeMessage(__("We can't find the link you requested."));
                 return $this->_redirect('*/customer/products');
             }
         }
@@ -97,8 +103,8 @@ class Link extends \Magento\Downloadable\Controller\Download
             $linkPurchasedItem->getNumberOfDownloadsUsed();
 
         $status = $linkPurchasedItem->getStatus();
-        if ($status == PurchasedLink::LINK_STATUS_AVAILABLE && ($downloadsLeft ||
-            $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
+        if ($status == PurchasedLink::LINK_STATUS_AVAILABLE && ($downloadsLeft
+            || $linkPurchasedItem->getNumberOfDownloadsBought() == 0)
         ) {
             $resource = '';
             $resourceType = '';
@@ -128,10 +134,10 @@ class Link extends \Magento\Downloadable\Controller\Download
                 $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
             }
         } elseif ($status == PurchasedLink::LINK_STATUS_EXPIRED) {
-            $this->messageManager->addNotice(__('The link has expired.'));
+            $this->messageManager->addNoticeMessage(__('The link has expired.'));
         } elseif ($status == PurchasedLink::LINK_STATUS_PENDING || $status == PurchasedLink::LINK_STATUS_PAYMENT_REVIEW
         ) {
-            $this->messageManager->addNotice(__('The link is not available.'));
+            $this->messageManager->addNoticeMessage(__('The link is not available.'));
         } else {
             $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
         }

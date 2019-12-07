@@ -19,12 +19,12 @@ class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActi
     protected $catalogSession;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
-     * @param \Magento\SendFriend\Model\SendFriend $sendFriend
+     * @param \Magento\Framework\App\Action\Context           $context
+     * @param \Magento\Framework\Registry                     $coreRegistry
+     * @param \Magento\Framework\Data\Form\FormKey\Validator  $formKeyValidator
+     * @param \Magento\SendFriend\Model\SendFriend            $sendFriend
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Session $catalogSession
+     * @param \Magento\Catalog\Model\Session                  $catalogSession
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -54,19 +54,23 @@ class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActi
         $product = $this->_initProduct();
 
         if (!$product) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            /**
+             * @var \Magento\Framework\Controller\Result\Forward $resultForward
+             */
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             $resultForward->forward('noroute');
             return $resultForward;
         }
 
         if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
-            $this->messageManager->addNotice(
+            $this->messageManager->addNoticeMessage(
                 __('You can\'t send messages more than %1 times an hour.', $this->sendFriend->getMaxSendsToFriend())
             );
         }
 
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /**
+         * @var \Magento\Framework\View\Result\Page $resultPage
+         */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
         $this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
@@ -75,7 +79,9 @@ class Send extends \Magento\SendFriend\Controller\Product implements HttpGetActi
             $this->catalogSession->setSendfriendFormData(true);
             $block = $resultPage->getLayout()->getBlock('sendfriend.send');
             if ($block) {
-                /** @var \Magento\SendFriend\Block\Send $block */
+                /**
+                 * @var \Magento\SendFriend\Block\Send $block
+                 */
                 $block->setFormData($data);
             }
         }

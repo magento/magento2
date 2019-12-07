@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -40,11 +39,11 @@ class PreventExpressCheckoutObserver implements ObserverInterface
     protected $_expressRedirectHelper;
 
     /**
-     * @param \Magento\Persistent\Helper\Session $persistentSession
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Persistent\Helper\Session          $persistentSession
+     * @param \Magento\Customer\Model\Session             $customerSession
+     * @param \Magento\Framework\UrlInterface             $url
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Checkout\Helper\ExpressRedirect $expressRedirectHelper
+     * @param \Magento\Checkout\Helper\ExpressRedirect    $expressRedirectHelper
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -63,7 +62,7 @@ class PreventExpressCheckoutObserver implements ObserverInterface
     /**
      * Prevent express checkout
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param  \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -72,16 +71,18 @@ class PreventExpressCheckoutObserver implements ObserverInterface
             return;
         }
 
-        /** @var $controllerAction \Magento\Checkout\Controller\Express\RedirectLoginInterface*/
+        /**
+         * @var $controllerAction \Magento\Checkout\Controller\Express\RedirectLoginInterface
+         */
         $controllerAction = $observer->getEvent()->getControllerAction();
-        if (!$controllerAction ||
-            !$controllerAction instanceof \Magento\Checkout\Controller\Express\RedirectLoginInterface ||
-            $controllerAction->getRedirectActionName() != $controllerAction->getRequest()->getActionName()
+        if (!$controllerAction
+            || !$controllerAction instanceof \Magento\Checkout\Controller\Express\RedirectLoginInterface 
+            || $controllerAction->getRedirectActionName() != $controllerAction->getRequest()->getActionName()
         ) {
             return;
         }
 
-        $this->messageManager->addNotice(__('To check out, please sign in using your email address.'));
+        $this->messageManager->addNoticeMessage(__('To check out, please sign in using your email address.'));
         $customerBeforeAuthUrl = $this->_url->getUrl('persistent/index/expressCheckout');
 
         $this->_expressRedirectHelper->redirectLogin($controllerAction, $customerBeforeAuthUrl);

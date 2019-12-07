@@ -7,7 +7,7 @@
 /**
  * Admin abstract reports controller
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\Reports\Controller\Adminhtml\Report;
@@ -52,11 +52,11 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     private $backendHelper;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\App\Action\Context              $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param TimezoneInterface $timezone
-     * @param BackendHelper|null $backendHelperData
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date   $dateFilter
+     * @param TimezoneInterface                                $timezone
+     * @param BackendHelper|null                               $backendHelperData
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -107,7 +107,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     /**
      * Report action init operations
      *
-     * @param array|\Magento\Framework\DataObject $blocks
+     * @param  array|\Magento\Framework\DataObject $blocks
      * @return $this
      */
     public function _initReportAction($blocks)
@@ -131,8 +131,8 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     /**
      * Add refresh statistics links
      *
-     * @param string $flagCode
-     * @param string $refreshCode
+     * @param  string $flagCode
+     * @param  string $refreshCode
      * @return $this
      */
     protected function _showLastExecutionTime($flagCode, $refreshCode)
@@ -152,7 +152,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
         $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent');
 
-        $this->messageManager->addNotice(
+        $this->messageManager->addNoticeMessage(
             __(
                 'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
                 'click <a href="#2" data-post="%3">here</a>.',

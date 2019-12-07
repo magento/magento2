@@ -12,10 +12,14 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class LinkTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Downloadable\Controller\Download\Link */
+    /**
+     * @var \Magento\Downloadable\Controller\Download\Link
+     */
     protected $link;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
     /**
@@ -97,30 +101,39 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 'setHeader'
             ]
         );
-        $this->session = $this->createPartialMock(\Magento\Customer\Model\Session::class, [
+        $this->session = $this->createPartialMock(
+            \Magento\Customer\Model\Session::class, [
                 'getCustomerId',
                 'authenticate',
                 'setBeforeAuthUrl'
-            ]);
-        $this->helperData = $this->createPartialMock(\Magento\Downloadable\Helper\Data::class, [
+            ]
+        );
+        $this->helperData = $this->createPartialMock(
+            \Magento\Downloadable\Helper\Data::class, [
                 'getIsShareable'
-            ]);
-        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
+            ]
+        );
+        $this->downloadHelper = $this->createPartialMock(
+            \Magento\Downloadable\Helper\Download::class, [
                 'setResource',
                 'getFilename',
                 'getContentType',
                 'getFileSize',
                 'getContentDisposition',
                 'output'
-            ]);
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
+            ]
+        );
+        $this->product = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class, [
                 '_wakeup',
                 'load',
                 'getId',
                 'getProductUrl',
                 'getName'
-            ]);
-        $this->linkPurchasedItem = $this->createPartialMock(\Magento\Downloadable\Model\Link\Purchased\Item::class, [
+            ]
+        );
+        $this->linkPurchasedItem = $this->createPartialMock(
+            \Magento\Downloadable\Model\Link\Purchased\Item::class, [
                 'load',
                 'getId',
                 'getProductId',
@@ -134,18 +147,23 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                 'setNumberOfDownloadsUsed',
                 'setStatus',
                 'save',
-            ]);
-        $this->linkPurchased = $this->createPartialMock(\Magento\Downloadable\Model\Link\Purchased::class, [
+            ]
+        );
+        $this->linkPurchased = $this->createPartialMock(
+            \Magento\Downloadable\Model\Link\Purchased::class, [
                 'load',
                 'getCustomerId'
-            ]);
+            ]
+        );
         $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
         $this->redirect = $this->createMock(\Magento\Framework\App\Response\RedirectInterface::class);
         $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
+        $this->objectManager = $this->createPartialMock(
+            \Magento\Framework\ObjectManager\ObjectManager::class, [
                 'create',
                 'get'
-            ]);
+            ]
+        );
         $this->link = $this->objectManagerHelper->getObject(
             \Magento\Downloadable\Controller\Download\Link::class,
             [
@@ -175,7 +193,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(null);
         $this->messageManager->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with("We can't find the link you requested.");
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
@@ -217,7 +235,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->product->expects($this->once())->method('getProductUrl')->willReturn('product_url');
         $this->product->expects($this->once())->method('getName')->willReturn('product_name');
         $this->messageManager->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with('Please sign in to download your product or purchase <a href="product_url">product_name</a>.');
         $this->session->expects($this->once())->method('authenticate')->willReturn(true);
         $this->objectManager->expects($this->at(4))
@@ -266,7 +284,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->linkPurchased->expects($this->once())->method('load')->with('purchased_id')->willReturnSelf();
         $this->linkPurchased->expects($this->once())->method('getCustomerId')->willReturn('other_customer_id');
         $this->messageManager->expects($this->once())
-            ->method('addNotice')
+            ->method('addNoticeMessage')
             ->with("We can't find the link you requested.");
         $this->redirect->expects($this->once())->method('redirect')->with($this->response, '*/customer/products', []);
 
@@ -274,10 +292,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $mimeType
-     * @param string $disposition
+     * @param        string $mimeType
+     * @param        string $disposition
      * @dataProvider downloadTypesDataProvider
-     * @return void
+     * @return       void
      */
     public function testExceptionInUpdateLinkStatus($mimeType, $disposition)
     {
@@ -324,10 +342,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $resource
-     * @param string $resourceType
-     * @param string $mimeType
-     * @param string $disposition
+     * @param  string $resource
+     * @param  string $resourceType
+     * @param  string $mimeType
+     * @param  string $disposition
      * @return void
      */
     private function processDownload($resource, $resourceType, $mimeType, $disposition)
@@ -366,9 +384,9 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $messageType
-     * @param string $status
-     * @param string $notice
+     * @param        string $messageType
+     * @param        string $status
+     * @param        string $notice
      * @dataProvider linkNotAvailableDataProvider
      */
     public function testLinkNotAvailable($messageType, $status, $notice)
@@ -404,16 +422,17 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $mimeType
-     * @param string $disposition
+     * @param        string $mimeType
+     * @param        string $disposition
      * @dataProvider downloadTypesDataProvider
-     * @return void
+     * @return       void
      */
     public function testContentDisposition($mimeType, $disposition)
     {
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->willReturnMap([
+            ->willReturnMap(
+                [
                 [
                     \Magento\Customer\Model\Session::class,
                     $this->session,
@@ -426,7 +445,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
                     \Magento\Downloadable\Helper\Download::class,
                     $this->downloadHelper,
                 ],
-            ]);
+                ]
+            );
         
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
         $this->objectManager->expects($this->at(1))
@@ -479,9 +499,9 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function linkNotAvailableDataProvider()
     {
         return [
-            ['addNotice', 'expired', 'The link has expired.'],
-            ['addNotice', 'pending', 'The link is not available.'],
-            ['addNotice', 'payment_review', 'The link is not available.'],
+            ['addNoticeMessage', 'expired', 'The link has expired.'],
+            ['addNoticeMessage', 'pending', 'The link is not available.'],
+            ['addNoticeMessage', 'payment_review', 'The link is not available.'],
             ['addError', 'wrong_status', 'Something went wrong while getting the requested content.']
         ];
     }

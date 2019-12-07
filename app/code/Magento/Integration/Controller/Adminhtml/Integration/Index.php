@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -20,7 +19,7 @@ class Index extends \Magento\Integration\Controller\Adminhtml\Integration implem
         $unsecureIntegrationsCount = $this->_integrationCollection->addUnsecureUrlsFilter()->getSize();
         if ($unsecureIntegrationsCount > 0) {
             // @codingStandardsIgnoreStart
-            $this->messageManager->addNotice(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
+            $this->messageManager->addNoticeMessage(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
             // @codingStandardsIgnoreEnd
             );
         }
