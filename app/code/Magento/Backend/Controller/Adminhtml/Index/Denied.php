@@ -18,8 +18,5 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
  */
 class Denied extends DeniedController implements HttpGetActionInterface
 {
-    /**
-     * Authorization level of a basic admin session
-     */
-    const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
 }
