@@ -12,7 +12,8 @@ namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
  * Class Field
- * @package Magento\Config\Model\Config\Structure\Element\Dependency
+ *
+ * Fields are used to describe possible values for a type/interface.
  */
 class Field
 {
