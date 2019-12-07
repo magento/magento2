@@ -8,6 +8,8 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * Info
  *
+ * User role tab info
+ *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
